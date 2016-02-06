@@ -1,5 +1,4 @@
-<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html>
 <!--
 
 Generated from t-y-scheme.tex by tex2page, v 20060531
@@ -8,9 +7,11 @@ Generated from t-y-scheme.tex by tex2page, v 20060531
 http://www.ccs.neu.edu/~dorai/tex2page/tex2page-doc.html
 
 -->
+<html lang="ja">
 <head>
+<meta charset="utf-8">
 <title>
-�Ƚ� Scheme ������ Teach Yourself Scheme in Fixnum Days
+独習 Scheme 三週間 Teach Yourself Scheme in Fixnum Days
 </title>
 <link rel="stylesheet" type="text/css" href="t-y-scheme-Z-S.css" title=default>
 <meta name=robots content="noindex,follow">
@@ -28,52 +29,52 @@ introduction to the programming language Scheme">
 <a name="node_chap_Temp_2"></a>
 <h1 class=chapter>
 <div class=chapterheading>&nbsp;</div><br>
-<a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_Temp_2">�ޤ�����</a></h1>
+<a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_Temp_2">まえがき</a></h1>
 <p></p>
 <p>
-����ϡ�Scheme�ץ�����ߥ󥰤������Ǥ����鿴�Ԥ�Scheme�ˤĤ���
-�����ǤϤʤ�����ɼ���Ū���μ���������褦�ʥ����å��������ȼ�����
-�տޤ��Ƥ��ޤ���������ɤ���Τ����������Ū�ǡ���̩�ʶ��ʽ�˰ܤ��
-�褦�ˤȹͤ��Ƥ���ޤ���</p>
+これは、Schemeプログラミングの入門書です。初心者がSchemeについて
+自明ではないけれど実用的な知識が得られるようなクイックスタート手引書を
+意図しています。これを読んだのち、より総合的で、綿密な教科書に移れる
+ようにと考えてあります。</p>
 <p>
 </p>
 <p>
-�����Ǥϡ����ڤ�褯������Ū��Scheme��� <em>�ҤȤĤ�</em>
-���ץ���������⤷�ޤ���Scheme��<code class=scheme><span class=variable>abs</span></code>����<code class=scheme><span class=variable>zero?</span></code>�ޤ�������
-���С�����櫓�ǤϤ���ޤ��󤬡����Ω�ġ��Ȥ�����ʬ�Ǥ���ˤ�
-������餺���񤷤�����ä����ǡ���ɸ��Ū�ǡ�������ʤ������θ���
-��¦�̤��򤱤��̤�褦�ʤ��ȤϤ��ޤ��󡣤��Τ褦��¦�̤Ȥ����Τˤ�
-<code class=scheme><span class=variable>call-with-current-continuation</span></code>�������ƥ।�󥿥ե������������
-�����֤���㤬�ޤޤ�Ƥ��ޤ���
-�����Ǥε����ϡ�������˾��������Ƥ뤳�Ȥǳ����������ΤǤ��äơ�
-�᥿����Ū��ƶ����õ�椹�뤳�Ȥǳ���������櫓�ǤϤ���ޤ���
-����椨������Ū��Scheme�Υ��塼�ȥꥢ����濴Ū�˼�갷���Ƥ���
-��Τ�䰦���Ƥ��ޤ�����̩�ʶ���ء�Scheme�ΰ�̣����̥�Ϥ�¸�ߡ�
-Ķ�۴ĥ��󥿡��ץ꥿�����ä�ʤ������˴ؤ��������
-Scheme�������ˤĤ��Ƥ��۶��ʤɤϽФƤ��ޤ���
-�����λ��������פǤϤʤ��Ȥ������ȤǤϤ���ޤ���
-�������ʤ��顢�����Τ��Ȥ���ϡ������餯�ְ㤤�ʤ�����ڤ�
-�������Ȥ�Ƥ���ͤˤȤäƤ�ľ�ܤϴط��Τʤ���ΤǤ��礦��</p>
+ここでは、歯切れよく、実用的なSchemeを書く <em>ひとつの</em>
+アプローチを解説します。Schemeの<code class=scheme><span class=variable>abs</span></code>から<code class=scheme><span class=variable>zero?</span></code>まで全部を
+カバーするわけではありませんが、役に立つ、使える部分であるにも
+かかわらず、難しく、やっかいで、非標準的で、見慣れない、この言語
+の側面を避けて通るようなことはしません。このような側面というのには
+<code class=scheme><span class=variable>call-with-current-continuation</span></code>、システムインタフェース、それに
+方言間の相違が含まれています。
+ここでの議論は、問題解決に焦点を当てることで活性化されるのであって、
+メタ言語的な洞察を探究することで活性化するわけではありません。
+それゆえ、伝統的なSchemeのチュートリアルで中心的に取り扱われている
+ものを割愛しています。綿密な教育学、Schemeの意味論の魅力の存在、
+超循環インタープリタ、基礎をなす実装に関する議論、
+Schemeの美徳についての布教などは出てきません。
+これらの事柄が重要ではないということではありません。
+しかしながら、これらのことがらは、おそらく間違いなく、手軽な
+入門書をもとめている人にとっては直接は関係のないものでしょう。</p>
 <p>
 <a name="node_idx_2"></a><a name="node_idx_4"></a><a name="node_idx_6"></a></p>
 <p>
 </p>
 <p>
-�Ǥϡ��ɤΤ��餤���᤯�Ƚ��Ǥ���ΤǤ��礦��Scheme��3����
-(21��<a name="node_call_footnote_Temp_3"></a><sup><small><a href="#node_footnote_Temp_3">1</a></small></sup>)���Ƚ�
-�Ǥ���Τ��ɤ�����ʬ��ޤ��󤬡�Scheme�ν���Ϥ�������
-����ʬ����֤Τ��ٶ��Ȥ����Ȥ��������Ȥ����Τ�ʹ�������Ȥ�����ޤ���
-Scheme��ɸ��[<a href="t-y-scheme.hlog">cite{r5rs}</a>]���ȡ���̩�ˡ����Ū�ʤ�ΤǤ���ˤ⤫����餺��
-���ä�50�ڡ�����������ޤ��󡣤���Ҥ�᤭������С�
-�ޤ����������������ʤ���Ȥ����ΤϽ�ʬ���ꤨ�ޤ�����������
-�ɤΤ��餤�θ�夬���Ԥ��񤵤�뤫�Ϥ���ˤ�ʬ��ޤ���
-���θ��νִ֤�����ޤǤϡ����Τ䤵����������ɤ�����</p>
+では、どのくらい素早く独習できるのでしょう。Schemeが3週間
+(21日<a name="node_call_footnote_Temp_3"></a><sup><small><a href="#node_footnote_Temp_3">1</a></small></sup>)で独習
+できるのかどうかは分りませんが、Schemeの初歩はせいぜい
+一日分の昼間のお勉強というところだ、というのを聞いたことがあります。
+Schemeの標準[<a href="t-y-scheme.hlog">cite{r5rs}</a>]自身、厳密に、包括的なものであるにもかかわらず、
+たった50ページしかありません。あるひらめきがあれば、
+まる一日あれば全部こなせるというのは十分ありえます。しかし、
+どのくらいの午後が失敗に費されるかはだれにも分りません。
+その悟りの瞬間がくるまでは、このやさしい入門書をどうぞ。</p>
 <p>
 </p>
 <p>
-<em>�ռ�</em> ���Scheme�ȹⳬ�ץ�����ߥ󥰤򶵤��Ƥ��줿 Matthias
-Felleise �˴��դ��ޤ����ޤ��������ܤ��̤������Ѥ��Ƥ���MzScheme��
-���ǿ����ɤ�������Ԥä�Matthew Flatt�ˤⴶ�դ��ޤ���</p>
+<em>謝辞</em> 私にSchemeと高階プログラミングを教えてくれた Matthias
+Felleise に感謝します。また、この本を通じて利用しているMzSchemeの
+頑丈で心地良い実装を行ったMatthew Flattにも感謝します。</p>
 <p>
 </p>
 <p>
@@ -83,9 +84,9 @@ Felleise �˴��դ��ޤ����ޤ��������ܤ��̤������Ѥ��Ƥ���MzScheme��
 <p>
 </p>
 <div class=footnoterule><hr></div><p></p>
-<div class=footnote><p><a name="node_footnote_Temp_3"></a><sup><small><a href="#node_call_footnote_Temp_3">1</a></small></sup> <em>fixnum</em> (��ʸ)�Ȥ����Τϡ��־�������
-�����Ȥ����׻����γ�ǰ�Ǥ������줾��η׻������Ȥ�
-fixnum �������ĤޤǤ��Ȥ�����ǰ������ޤ���</p>
+<div class=footnote><p><a name="node_footnote_Temp_3"></a><sup><small><a href="#node_call_footnote_Temp_3">1</a></small></sup> <em>fixnum</em> (原文)というのは、「小さい」
+整数という計算機の概念です。それぞれの計算機ごとに
+fixnum がいくつまでかという概念があります。</p>
 </div>
 <div class=smallskip></div>
 <p style="margin-top: 0pt; margin-bottom: 0pt">

@@ -1,5 +1,4 @@
-<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html>
 <!--
 
 Generated from t-y-scheme.tex by tex2page, v 20060531
@@ -8,9 +7,11 @@ Generated from t-y-scheme.tex by tex2page, v 20060531
 http://www.ccs.neu.edu/~dorai/tex2page/tex2page-doc.html
 
 -->
+<html lang="ja">
 <head>
+<meta charset="utf-8">
 <title>
-�Ƚ� Scheme ������ Teach Yourself Scheme in Fixnum Days
+独習 Scheme 三週間 Teach Yourself Scheme in Fixnum Days
 </title>
 <link rel="stylesheet" type="text/css" href="t-y-scheme-Z-S.css" title=default>
 <meta name=robots content="noindex,follow">
@@ -28,9 +29,9 @@ introduction to the programming language Scheme">
 <a name="node_chap_4"></a>
 <h1 class=chapter>
 <div class=chapterheading><a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_4">Chapter 4</a></div><br>
-<a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_4">��Ｐ</a></h1>
-<p><a name="node_idx_256"></a><a name="node_idx_258"></a>���٤Ƥθ����Ʊ�ͤˡ�Scheme�ˤ�<em>��Ｐ</em>������ޤ���
-���ܥե������<code class=scheme><span class=keyword>if</span></code>�Ǥ���</p>
+<a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_4">条件式</a></h1>
+<p><a name="node_idx_256"></a><a name="node_idx_258"></a>すべての言語と同様に、Schemeには<em>条件式</em>があります。
+基本フォームは<code class=scheme><span class=keyword>if</span></code>です。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>if</span> <span class=variable>test-expression</span>
@@ -40,9 +41,9 @@ introduction to the programming language Scheme">
 <p>
 </p>
 <p>
-<code class=scheme><span class=variable>test-expression</span></code>��ɾ������ƿ�(���ʤ����<code class=scheme><span class=selfeval>#f</span></code>�ʳ�����)�ˤʤ�С�
-&#8220;then&#8221;�λޤ�ɾ������ޤ�������ʤ���С�&#8220;else&#8221;�λޤ�ɾ������ޤ���
-&#8220;else&#8221;�λޤϤʤ��Ƥ⤫�ޤ��ޤ���</p>
+<code class=scheme><span class=variable>test-expression</span></code>が評価されて真(すなわち、<code class=scheme><span class=selfeval>#f</span></code>以外の値)になれば、
+&#8220;then&#8221;の枝が評価されます。さもなければ、&#8220;else&#8221;の枝が評価されます。
+&#8220;else&#8221;の枝はなくてもかまいません。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define</span> <span class=variable>p</span> <span class=selfeval>80</span>)
@@ -59,19 +60,19 @@ introduction to the programming language Scheme">
 <p>
 </p>
 <p>
-Scheme�Ǥ����ؤΤ����¾�ˤ��Ｐ�ե����ब�Ѱդ���Ƥ��ޤ���
-�����Ϥ��٤ơ�<code class=scheme><span class=keyword>if</span></code>����Ÿ�������ޥ���(chap <a href="t-y-scheme-Z-H-10.html#node_chap_8">8</a>)�Ȥ���
-������뤳�Ȥ��Ǥ��ޤ���</p>
+Schemeでは利便のために他にも条件式フォームが用意されています。
+これらはすべて、<code class=scheme><span class=keyword>if</span></code>式に展開されるマクロ(chap <a href="t-y-scheme-Z-H-10.html#node_chap_8">8</a>)として
+定義することができます。</p>
 <p>
 <a name="node_idx_260"></a><a name="node_idx_262"></a></p>
 <p>
 </p>
 <a name="node_sec_4.1"></a>
-<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_4.1">4.1&nbsp;&nbsp;<code class=scheme><span class=keyword>when</span></code>��<code class=scheme><span class=keyword>unless</span></code></a></h2>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_4.1">4.1&nbsp;&nbsp;<code class=scheme><span class=keyword>when</span></code>と<code class=scheme><span class=keyword>unless</span></code></a></h2>
 <p></p>
 <p>
-<code class=scheme><span class=keyword>when</span></code>��<code class=scheme><span class=keyword>unless</span></code>�ϤҤȤĤλ�(&#8220;then&#8221;���뤤��&#8220;else&#8221;�λ�)�����ʤ�
-���ܾ�Ｐ��ɬ�פʤȤ��������Ǥ���</p>
+<code class=scheme><span class=keyword>when</span></code>と<code class=scheme><span class=keyword>unless</span></code>はひとつの枝(&#8220;then&#8221;あるいは&#8220;else&#8221;の枝)しかない
+基本条件式が必要なときに便利です。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>when</span> (<span class=variable>&lt;</span> (<span class=variable>pressure</span> <span class=variable>tube</span>) <span class=selfeval>60</span>)
@@ -84,11 +85,11 @@ Scheme�Ǥ����ؤΤ����¾�ˤ��Ｐ�ե����ब�Ѱդ���Ƥ��ޤ���
 <p>
 </p>
 <p>
-<code class=scheme><span class=variable>tube</span></code>��<code class=scheme><span class=variable>pressure</span></code>��<code class=scheme><span class=selfeval>60</span></code>̤���Ȳ��ꤹ��ȡ����ξ�Ｐ��
-<code class=scheme><span class=variable>floor-pump</span></code>��<code class=scheme><span class=variable>tube</span></code>�˼���դ���<code class=scheme><span class=selfeval>5</span></code>�󲡤��ޤ�
-(<code class=scheme><span class=variable>attach</span></code>��<code class=scheme><span class=variable>depress</span></code>�Ϥʤˤ�Ŭ���ʼ�³���Ǥ�)��</p>
+<code class=scheme><span class=variable>tube</span></code>の<code class=scheme><span class=variable>pressure</span></code>が<code class=scheme><span class=selfeval>60</span></code>未満と仮定すると、この条件式は
+<code class=scheme><span class=variable>floor-pump</span></code>を<code class=scheme><span class=variable>tube</span></code>に取り付け、<code class=scheme><span class=selfeval>5</span></code>回押します
+(<code class=scheme><span class=variable>attach</span></code>と<code class=scheme><span class=variable>depress</span></code>はなにか適当な手続きです)。</p>
 <p>
-Ʊ���ץ�������<code class=scheme><span class=keyword>if</span></code>��Ȥ��ȼ��Τ褦�ˤʤ�ޤ���</p>
+同じプログラムを<code class=scheme><span class=keyword>if</span></code>を使うと次のようになります。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>if</span> (<span class=variable>&lt;</span> (<span class=variable>pressure</span> <span class=variable>tube</span>) <span class=selfeval>60</span>)
@@ -104,13 +105,13 @@ Scheme�Ǥ����ؤΤ����¾�ˤ��Ｐ�ե����ब�Ѱդ���Ƥ��ޤ���
 <p>
 </p>
 <p>
-<code class=scheme><span class=keyword>when</span></code>�λޤϰ��ۤ�<code class=scheme><span class=keyword>begin</span></code>�Ǥ��ꡢ������<code class=scheme><span class=keyword>if</span></code>�Ǥ�
-�ɤ��餫�Υ֥�����2�İʾ�ե����ब����Ȥ��ˤ�
-����Ū��<code class=scheme><span class=keyword>begin</span></code>��ɬ�פǤ���</p>
+<code class=scheme><span class=keyword>when</span></code>の枝は暗黙の<code class=scheme><span class=keyword>begin</span></code>であり、一方、<code class=scheme><span class=keyword>if</span></code>では
+どちらかのブランチに2つ以上フォームがあるときには
+明示的な<code class=scheme><span class=keyword>begin</span></code>が必要です。</p>
 <p>
 </p>
 <p>
-Ʊ�����񤤤�<code class=scheme><span class=keyword>unless</span></code>��Ĥ��äƽ񤱤аʲ��Τ褦�ˤʤ�ޤ���</p>
+同じ振舞いを<code class=scheme><span class=keyword>unless</span></code>をつかって書けば以下のようになります。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>unless</span> (<span class=variable>&gt;=</span> (<span class=variable>pressure</span> <span class=variable>tube</span>) <span class=selfeval>60</span>)
@@ -125,16 +126,16 @@ Scheme�Ǥ����ؤΤ����¾�ˤ��Ｐ�ե����ब�Ѱդ���Ƥ��ޤ���
 <p>
 </p>
 
-<p class=noindent>���٤Ƥ�Scheme��<code class=scheme><span class=keyword>when</span></code>��<code class=scheme><span class=keyword>unless</span></code>���Ѱդ��Ƥ���櫓�ǤϤ���ޤ���
-���Ĥ�����Scheme�ˤʤ���С��ޥ���(<a href="t-y-scheme-Z-H-10.html#node_chap_8">8</a>�ϻ���)�Ȥ�������Ǥ��ޤ���</p>
+<p class=noindent>すべてのSchemeが<code class=scheme><span class=keyword>when</span></code>と<code class=scheme><span class=keyword>unless</span></code>を用意しているわけではありません。
+おつかいのSchemeになければ、マクロ(<a href="t-y-scheme-Z-H-10.html#node_chap_8">8</a>章参照)として定義できます。</p>
 <p>
 <a name="node_idx_266"></a></p>
 <a name="node_sec_4.2"></a>
 <h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_4.2">4.2&nbsp;&nbsp;<code class=scheme><span class=keyword>cond</span></code></a></h2>
 <p></p>
 <p>
-<code class=scheme><span class=keyword>cond</span></code>�ե����������Ҥˤʤä�<code class=scheme><span class=keyword>if</span></code>����ɽ������Τ������Ǥ���
-�Ǹ�ʳ���&#8220;else&#8221;�λޤˤϿ�����<code class=scheme><span class=keyword>if</span></code>��Ƴ������ޤ����������äơ�</p>
+<code class=scheme><span class=keyword>cond</span></code>フォームは入れ子になった<code class=scheme><span class=keyword>if</span></code>式を表現するのに便利です。
+最後以外の&#8220;else&#8221;の枝には新しい<code class=scheme><span class=keyword>if</span></code>が導入されます。したがって、</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>if</span> (<span class=variable>char&lt;?</span> <span class=variable>c</span> <span class=selfeval>#\c</span>) <span class=selfeval>-1</span>
@@ -142,7 +143,7 @@ Scheme�Ǥ����ؤΤ����¾�ˤ��Ｐ�ե����ब�Ѱդ���Ƥ��ޤ���
         <span class=selfeval>1</span>))
 </pre><p></p>
 <p>
-��<code class=scheme><span class=keyword>cond</span></code>��Ĥ��äơ����Τ褦�˽񤱤ޤ���</p>
+は<code class=scheme><span class=keyword>cond</span></code>をつかって、次のように書けます。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>cond</span> ((<span class=variable>char&lt;?</span> <span class=variable>c</span> <span class=selfeval>#\c</span>) <span class=selfeval>-1</span>)
@@ -152,20 +153,20 @@ Scheme�Ǥ����ؤΤ����¾�ˤ��Ｐ�ե����ब�Ѱդ���Ƥ��ޤ���
 <p>
 </p>
 <p>
-���Τ褦�ˡ�<code class=scheme><span class=keyword>cond</span></code>��<em>�ޥ���֥���</em>�ξ�Ｐ�Ǥ���
-����ˤϥƥ��ȤȤ���˷�ӤĤ���������󤬤���ޤ���
-�ǽ�����������ƥ��Ȥ�����˷�ӤĤ������������򵯤��ޤ���
-�Ǹ��<code class=scheme><span class=keyword>else</span></code>��ϤɤΥƥ��Ȥ��������ʤ��ä��������򤵤�ޤ���</p>
+このように、<code class=scheme><span class=keyword>cond</span></code>は<em>マルチブランチ</em>の条件式です。
+各節にはテストとそれに結びつくアクションがあります。
+最初に成功したテストがそれに結びついたアクションを起します。
+最後の<code class=scheme><span class=keyword>else</span></code>節はどのテストも成功しなかった場合に選択されます。</p>
 <p>
-<code class=scheme><span class=keyword>cond</span></code>�Υ��������ϰ��ۤ�<code class=scheme><span class=keyword>begin</span></code>�Ǥ���</p>
+<code class=scheme><span class=keyword>cond</span></code>のアクションは暗黙の<code class=scheme><span class=keyword>begin</span></code>です。</p>
 <p>
 <a name="node_idx_268"></a></p>
 <a name="node_sec_4.3"></a>
 <h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_4.3">4.3&nbsp;&nbsp;<code class=scheme><span class=keyword>case</span></code></a></h2>
 <p></p>
 <p>
-<code class=scheme><span class=keyword>cond</span></code>�����̤ʾ��ˤ�<code class=scheme><span class=keyword>case</span></code>���ǰ��̤���ɽ���ˤǤ��ޤ���
-����Ϥ��٤ƤΥƥ��Ȥ���°�ƥ��Ȥξ��Ǥ���</p>
+<code class=scheme><span class=keyword>cond</span></code>の特別な場合には<code class=scheme><span class=keyword>case</span></code>式で圧縮した表現にできます。
+これはすべてのテストが所属テストの場合です。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>case</span> <span class=variable>c</span>
@@ -176,21 +177,21 @@ Scheme�Ǥ����ؤΤ����¾�ˤ��Ｐ�ե����ब�Ѱդ���Ƥ��ޤ���
 <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>3</span>
 </pre><p></p>
 <p>
-<code class=scheme><span class=variable>c</span></code>���ͤ���Ƭ�ˤ���᤬���򤵤�ޤ���</p>
+<code class=scheme><span class=variable>c</span></code>の値を先頭にもつ節が選択されます。</p>
 <p>
 <a name="node_idx_270"></a><a name="node_idx_272"></a></p>
 <a name="node_sec_4.4"></a>
-<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_4.4">4.4&nbsp;&nbsp;<code class=scheme><span class=keyword>and</span></code>��<code class=scheme><span class=keyword>or</span></code></a></h2>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_4.4">4.4&nbsp;&nbsp;<code class=scheme><span class=keyword>and</span></code>と<code class=scheme><span class=keyword>or</span></code></a></h2>
 <p></p>
 <p>
-Scheme�ˤ�������(&#8220;and&#8221;)��������(&#8220;or&#8221;)���б����륹�ڥ����ե����ब
-�Ѱդ���Ƥ��ޤ�(<a href="t-y-scheme-Z-H-4.html#node_sec_2.1.1">2.1.1</a>��Ǹ��������<code class=scheme><span class=variable>not</span></code>�ϼ�³���Ǥ�)��</p>
+Schemeには論理積(&#8220;and&#8221;)と論理和(&#8220;or&#8221;)に対応するスペシャルフォームが
+用意されています(<a href="t-y-scheme-Z-H-4.html#node_sec_2.1.1">2.1.1</a>節で見た否定の<code class=scheme><span class=variable>not</span></code>は手続きです)。</p>
 <p>
 </p>
 <p>
-���ڥ����ե�����<code class=scheme><span class=keyword>and</span></code>�Ϥ��٤ƤΥ��֥ե����ब���ʤ�п����֤��ޤ���
-�ºݤ��֤äƤ����ͤϺǸ�Υ��֥ե�������ͤǤ������֥ե�����ΤҤȤĤǤ�
-���Ǥ���С�<code class=scheme><span class=keyword>and</span></code>��<code class=scheme><span class=selfeval>#f</span></code>���֤��ޤ���</p>
+スペシャルフォーム<code class=scheme><span class=keyword>and</span></code>はすべてのサブフォームが真ならば真を返します。
+実際に返ってくる値は最後のサブフォームの値です。サブフォームのひとつでも
+偽であれば、<code class=scheme><span class=keyword>and</span></code>は<code class=scheme><span class=selfeval>#f</span></code>を返します。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>and</span> <span class=selfeval>1</span> <span class=selfeval>2</span>)  <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>2</span>
@@ -201,8 +202,8 @@ Scheme�ˤ�������(&#8220;and&#8221;)��������(&#8220;or&#8221;)���б����륹�ڥ���
 <p>
 </p>
 
-<p class=noindent>���ڥ����ե�����<code class=scheme><span class=keyword>or</span></code>�Ϻǽ�˿��ˤʤä����֥ե�������ͤ��֤��ޤ���
-�⤷�����٤ƤΥ��֥ե����ब���ʤ��<code class=scheme><span class=keyword>or</span></code>��<code class=scheme><span class=selfeval>#f</span></code>���֤��ޤ���</p>
+<p class=noindent>スペシャルフォーム<code class=scheme><span class=keyword>or</span></code>は最初に真になったサブフォームの値を返します。
+もし、すべてのサブフォームが偽ならば<code class=scheme><span class=keyword>or</span></code>は<code class=scheme><span class=selfeval>#f</span></code>を返します。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>or</span> <span class=selfeval>1</span> <span class=selfeval>2</span>)  <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>1</span>
@@ -213,9 +214,9 @@ Scheme�ˤ�������(&#8220;and&#8221;)��������(&#8220;or&#8221;)���б����륹�ڥ���
 <p>
 </p>
 
-<p class=noindent><code class=scheme><span class=keyword>and</span></code>��<code class=scheme><span class=keyword>or</span></code>�ϤȤ�˥��֥ե�����򺸤��鱦��ɾ�����ޤ���
-��̤���ꤷ�����֤����Ȥ��Ǥ���Τ�<code class=scheme><span class=keyword>and</span></code>��<code class=scheme><span class=keyword>or</span></code>�ϤΤ����
-���֥ե������̵�뤹�뤳�Ȥ�����ޤ���</p>
+<p class=noindent><code class=scheme><span class=keyword>and</span></code>、<code class=scheme><span class=keyword>or</span></code>はともにサブフォームを左から右へ評価します。
+結果が決りしだい返すことができるので<code class=scheme><span class=keyword>and</span></code>と<code class=scheme><span class=keyword>or</span></code>はのこりの
+サブフォームを無視することがあります。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>and</span> <span class=selfeval>1</span> <span class=selfeval>#f</span> <span class=variable>expression-guaranteed-to-cause-error</span>)

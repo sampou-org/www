@@ -1,5 +1,4 @@
-<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html>
 <!--
 
 Generated from t-y-scheme.tex by tex2page, v 20060531
@@ -8,9 +7,11 @@ Generated from t-y-scheme.tex by tex2page, v 20060531
 http://www.ccs.neu.edu/~dorai/tex2page/tex2page-doc.html
 
 -->
+<html lang="ja">
 <head>
+<meta charset="utf-8">
 <title>
-ÆÈ½¬ Scheme »°½µ´Ö Teach Yourself Scheme in Fixnum Days
+ç‹¬ç¿’ Scheme ä¸‰é€±é–“ Teach Yourself Scheme in Fixnum Days
 </title>
 <link rel="stylesheet" type="text/css" href="t-y-scheme-Z-S.css" title=default>
 <meta name=robots content="noindex,follow">
@@ -32,7 +33,7 @@ introduction to the programming language Scheme">
 </p>
 <p>
 </p>
-<h1 class=title>ÆÈ½¬ Scheme »°½µ´Ö <br> Teach Yourself Scheme in Fixnum Days</h1>
+<h1 class=title>ç‹¬ç¿’ Scheme ä¸‰é€±é–“ <br> Teach Yourself Scheme in Fixnum Days</h1>
 <p>
 </p>
 <div class=smallskip></div>
@@ -56,13 +57,13 @@ for this document]</a>&nbsp;</div>
 
 <div align=center>&nbsp;Cover art by Margaret Wong&nbsp;</div>
 
-<div align=center>&nbsp;ÆüËÜ¸ìÌõ: Nobuo Yamashita&nbsp;</div>
+<div align=center>&nbsp;æ—¥æœ¬èªè¨³: Nobuo Yamashita&nbsp;</div>
 
 <div align=center>&nbsp;<code class=verbatim>nobsun</code> <em>at</em> <code class=verbatim>sampou.org</code>&nbsp;</div>
 
-<div align=center>&nbsp;<a href="t-y-scheme-html.tar.gz">[ÆüËÜ¸ìÌõ<em>Á´¥Ú¡¼¥¸</em>¤Î¥À¥¦¥ó¥í¡¼¥É]</a>&nbsp;</div>
+<div align=center>&nbsp;<a href="t-y-scheme-html.tar.gz">[æ—¥æœ¬èªè¨³<em>å…¨ãƒšãƒ¼ã‚¸</em>ã®ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰]</a>&nbsp;</div>
 
-<div align=center>&nbsp;<a href="t-y-scheme.tar.gz">[ÆüËÜ¸ìÌõ TeX ¥½¡¼¥¹¤Î¥À¥¦¥ó¥í¡¼¥É]</a>&nbsp;</div>
+<div align=center>&nbsp;<a href="t-y-scheme.tar.gz">[æ—¥æœ¬èªè¨³ TeX ã‚½ãƒ¼ã‚¹ã®ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰]</a>&nbsp;</div>
 
 <p>
 </p>
@@ -72,7 +73,7 @@ for this document]</a>&nbsp;</div>
 <p>
 </p>
 <p>
-<h1 class=beginsection>¤â¤¯¤¸</h1>
+<h1 class=beginsection>ã‚‚ãã˜</h1>
 <a name="node_toc_start"></a></p>
 
 <p class=noindent></p>
@@ -81,64 +82,64 @@ for this document]</a>&nbsp;</div>
 </p>
 
 <p class=noindent><b>
-&nbsp; &nbsp; <a name="node_toc_node_chap_Temp_2"></a><a href="t-y-scheme-Z-H-2.html#node_chap_Temp_2">¤Ş¤¨¤¬¤­</a></b><br>
+&nbsp; &nbsp; <a name="node_toc_node_chap_Temp_2"></a><a href="t-y-scheme-Z-H-2.html#node_chap_Temp_2">ã¾ãˆãŒã</a></b><br>
 </p>
 <div class=medskip></div>
 <p style="margin-top: 0pt; margin-bottom: 0pt">
 </p>
 
 <p class=noindent><b>
-&nbsp; &nbsp; <a name="node_toc_node_chap_1"></a><a href="t-y-scheme-Z-H-3.html#node_chap_1">1&nbsp;&nbsp;Scheme¤ËÆşÎÏ¤·¤è¤¦</a></b><br>
+&nbsp; &nbsp; <a name="node_toc_node_chap_1"></a><a href="t-y-scheme-Z-H-3.html#node_chap_1">1&nbsp;&nbsp;Schemeã«å…¥åŠ›ã—ã‚ˆã†</a></b><br>
 </p>
 <div class=medskip></div>
 <p style="margin-top: 0pt; margin-bottom: 0pt">
 </p>
 
 <p class=noindent><b>
-&nbsp; &nbsp; <a name="node_toc_node_chap_2"></a><a href="t-y-scheme-Z-H-4.html#node_chap_2">2&nbsp;&nbsp;¥Ç¡¼¥¿·¿</a></b><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_2.1"></a><a href="t-y-scheme-Z-H-4.html#node_sec_2.1">2.1&nbsp;&nbsp;Ã±½ã¥Ç¡¼¥¿·¿</a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_2.1.1"></a><a href="t-y-scheme-Z-H-4.html#node_sec_2.1.1">2.1.1&nbsp;&nbsp;¿¿ÍıÃÍ</a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_2.1.2"></a><a href="t-y-scheme-Z-H-4.html#node_sec_2.1.2">2.1.2&nbsp;&nbsp;¿ôÃÍ</a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_2.1.3"></a><a href="t-y-scheme-Z-H-4.html#node_sec_2.1.3">2.1.3&nbsp;&nbsp;Ê¸»ú</a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_2.1.4"></a><a href="t-y-scheme-Z-H-4.html#node_sec_2.1.4">2.1.4&nbsp;&nbsp;¥·¥ó¥Ü¥ë</a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_2.2"></a><a href="t-y-scheme-Z-H-4.html#node_sec_2.2">2.2&nbsp;&nbsp;¹çÀ®¥Ç¡¼¥¿·¿</a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_2.2.1"></a><a href="t-y-scheme-Z-H-4.html#node_sec_2.2.1">2.2.1&nbsp;&nbsp;Ê¸»úÎó</a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_2.2.2"></a><a href="t-y-scheme-Z-H-4.html#node_sec_2.2.2">2.2.2&nbsp;&nbsp;¥Ù¥¯¥¿</a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_2.2.3"></a><a href="t-y-scheme-Z-H-4.html#node_sec_2.2.3">2.2.3&nbsp;&nbsp;¥É¥Ã¥ÈÂĞ¤È¥ê¥¹¥È</a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_2.2.4"></a><a href="t-y-scheme-Z-H-4.html#node_sec_2.2.4">2.2.4&nbsp;&nbsp;¥Ç¡¼¥¿·¿´Ö¤ÎÊÑ´¹</a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_2.3"></a><a href="t-y-scheme-Z-H-4.html#node_sec_2.3">2.3&nbsp;&nbsp;¤½¤Î¤Û¤«¤Î¥Ç¡¼¥¿·¿</a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_2.4"></a><a href="t-y-scheme-Z-H-4.html#node_sec_2.4">2.4&nbsp;&nbsp;S¼°</a><br>
+&nbsp; &nbsp; <a name="node_toc_node_chap_2"></a><a href="t-y-scheme-Z-H-4.html#node_chap_2">2&nbsp;&nbsp;ãƒ‡ãƒ¼ã‚¿å‹</a></b><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_2.1"></a><a href="t-y-scheme-Z-H-4.html#node_sec_2.1">2.1&nbsp;&nbsp;å˜ç´”ãƒ‡ãƒ¼ã‚¿å‹</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_2.1.1"></a><a href="t-y-scheme-Z-H-4.html#node_sec_2.1.1">2.1.1&nbsp;&nbsp;çœŸç†å€¤</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_2.1.2"></a><a href="t-y-scheme-Z-H-4.html#node_sec_2.1.2">2.1.2&nbsp;&nbsp;æ•°å€¤</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_2.1.3"></a><a href="t-y-scheme-Z-H-4.html#node_sec_2.1.3">2.1.3&nbsp;&nbsp;æ–‡å­—</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_2.1.4"></a><a href="t-y-scheme-Z-H-4.html#node_sec_2.1.4">2.1.4&nbsp;&nbsp;ã‚·ãƒ³ãƒœãƒ«</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_2.2"></a><a href="t-y-scheme-Z-H-4.html#node_sec_2.2">2.2&nbsp;&nbsp;åˆæˆãƒ‡ãƒ¼ã‚¿å‹</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_2.2.1"></a><a href="t-y-scheme-Z-H-4.html#node_sec_2.2.1">2.2.1&nbsp;&nbsp;æ–‡å­—åˆ—</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_2.2.2"></a><a href="t-y-scheme-Z-H-4.html#node_sec_2.2.2">2.2.2&nbsp;&nbsp;ãƒ™ã‚¯ã‚¿</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_2.2.3"></a><a href="t-y-scheme-Z-H-4.html#node_sec_2.2.3">2.2.3&nbsp;&nbsp;ãƒ‰ãƒƒãƒˆå¯¾ã¨ãƒªã‚¹ãƒˆ</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_2.2.4"></a><a href="t-y-scheme-Z-H-4.html#node_sec_2.2.4">2.2.4&nbsp;&nbsp;ãƒ‡ãƒ¼ã‚¿å‹é–“ã®å¤‰æ›</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_2.3"></a><a href="t-y-scheme-Z-H-4.html#node_sec_2.3">2.3&nbsp;&nbsp;ãã®ã»ã‹ã®ãƒ‡ãƒ¼ã‚¿å‹</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_2.4"></a><a href="t-y-scheme-Z-H-4.html#node_sec_2.4">2.4&nbsp;&nbsp;Så¼</a><br>
 </p>
 <div class=medskip></div>
 <p style="margin-top: 0pt; margin-bottom: 0pt">
 </p>
 
 <p class=noindent><b>
-&nbsp; &nbsp; <a name="node_toc_node_chap_3"></a><a href="t-y-scheme-Z-H-5.html#node_chap_3">3&nbsp;&nbsp;¥Õ¥©¡¼¥à</a></b><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_3.1"></a><a href="t-y-scheme-Z-H-5.html#node_sec_3.1">3.1&nbsp;&nbsp;¼êÂ³¤­</a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_3.1.1"></a><a href="t-y-scheme-Z-H-5.html#node_sec_3.1.1">3.1.1&nbsp;&nbsp;¼êÂ³¤­¥Ñ¥é¥á¡¼¥¿</a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_3.1.2"></a><a href="t-y-scheme-Z-H-5.html#node_sec_3.1.2">3.1.2&nbsp;&nbsp;²ÄÊÑÄ¹¤Î°ú¿ô</a><br>
+&nbsp; &nbsp; <a name="node_toc_node_chap_3"></a><a href="t-y-scheme-Z-H-5.html#node_chap_3">3&nbsp;&nbsp;ãƒ•ã‚©ãƒ¼ãƒ </a></b><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_3.1"></a><a href="t-y-scheme-Z-H-5.html#node_sec_3.1">3.1&nbsp;&nbsp;æ‰‹ç¶šã</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_3.1.1"></a><a href="t-y-scheme-Z-H-5.html#node_sec_3.1.1">3.1.1&nbsp;&nbsp;æ‰‹ç¶šããƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_3.1.2"></a><a href="t-y-scheme-Z-H-5.html#node_sec_3.1.2">3.1.2&nbsp;&nbsp;å¯å¤‰é•·ã®å¼•æ•°</a><br>
 &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_3.2"></a><a href="t-y-scheme-Z-H-5.html#node_sec_3.2">3.2&nbsp;&nbsp;<code class=scheme><span class=variable>apply</span></code></a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_3.3"></a><a href="t-y-scheme-Z-H-5.html#node_sec_3.3">3.3&nbsp;&nbsp;Ä¾Îó²½</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_3.3"></a><a href="t-y-scheme-Z-H-5.html#node_sec_3.3">3.3&nbsp;&nbsp;ç›´åˆ—åŒ–</a><br>
 </p>
 <div class=medskip></div>
 <p style="margin-top: 0pt; margin-bottom: 0pt">
 </p>
 
 <p class=noindent><b>
-&nbsp; &nbsp; <a name="node_toc_node_chap_4"></a><a href="t-y-scheme-Z-H-6.html#node_chap_4">4&nbsp;&nbsp;¾ò·ï¼°</a></b><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_4.1"></a><a href="t-y-scheme-Z-H-6.html#node_sec_4.1">4.1&nbsp;&nbsp;<code class=scheme><span class=keyword>when</span></code>¤È<code class=scheme><span class=keyword>unless</span></code></a><br>
+&nbsp; &nbsp; <a name="node_toc_node_chap_4"></a><a href="t-y-scheme-Z-H-6.html#node_chap_4">4&nbsp;&nbsp;æ¡ä»¶å¼</a></b><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_4.1"></a><a href="t-y-scheme-Z-H-6.html#node_sec_4.1">4.1&nbsp;&nbsp;<code class=scheme><span class=keyword>when</span></code>ã¨<code class=scheme><span class=keyword>unless</span></code></a><br>
 &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_4.2"></a><a href="t-y-scheme-Z-H-6.html#node_sec_4.2">4.2&nbsp;&nbsp;<code class=scheme><span class=keyword>cond</span></code></a><br>
 &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_4.3"></a><a href="t-y-scheme-Z-H-6.html#node_sec_4.3">4.3&nbsp;&nbsp;<code class=scheme><span class=keyword>case</span></code></a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_4.4"></a><a href="t-y-scheme-Z-H-6.html#node_sec_4.4">4.4&nbsp;&nbsp;<code class=scheme><span class=keyword>and</span></code>¤È<code class=scheme><span class=keyword>or</span></code></a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_4.4"></a><a href="t-y-scheme-Z-H-6.html#node_sec_4.4">4.4&nbsp;&nbsp;<code class=scheme><span class=keyword>and</span></code>ã¨<code class=scheme><span class=keyword>or</span></code></a><br>
 </p>
 <div class=medskip></div>
 <p style="margin-top: 0pt; margin-bottom: 0pt">
 </p>
 
 <p class=noindent><b>
-&nbsp; &nbsp; <a name="node_toc_node_chap_5"></a><a href="t-y-scheme-Z-H-7.html#node_chap_5">5&nbsp;&nbsp;¥ì¥­¥·¥«¥ëÊÑ¿ô</a></b><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_5.1"></a><a href="t-y-scheme-Z-H-7.html#node_sec_5.1">5.1&nbsp;&nbsp;<code class=scheme><span class=keyword>let</span></code>¤È<code class=scheme><span class=keyword>let*</span></code></a><br>
+&nbsp; &nbsp; <a name="node_toc_node_chap_5"></a><a href="t-y-scheme-Z-H-7.html#node_chap_5">5&nbsp;&nbsp;ãƒ¬ã‚­ã‚·ã‚«ãƒ«å¤‰æ•°</a></b><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_5.1"></a><a href="t-y-scheme-Z-H-7.html#node_sec_5.1">5.1&nbsp;&nbsp;<code class=scheme><span class=keyword>let</span></code>ã¨<code class=scheme><span class=keyword>let*</span></code></a><br>
 &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_5.2"></a><a href="t-y-scheme-Z-H-7.html#node_sec_5.2">5.2&nbsp;&nbsp;<code class=scheme><span class=keyword>fluid-let</span></code></a><br>
 </p>
 <div class=medskip></div>
@@ -146,11 +147,11 @@ for this document]</a>&nbsp;</div>
 </p>
 
 <p class=noindent><b>
-&nbsp; &nbsp; <a name="node_toc_node_chap_6"></a><a href="t-y-scheme-Z-H-8.html#node_chap_6">6&nbsp;&nbsp;ºÆµ¢</a></b><br>
+&nbsp; &nbsp; <a name="node_toc_node_chap_6"></a><a href="t-y-scheme-Z-H-8.html#node_chap_6">6&nbsp;&nbsp;å†å¸°</a></b><br>
 &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_6.1"></a><a href="t-y-scheme-Z-H-8.html#node_sec_6.1">6.1&nbsp;&nbsp;<code class=scheme><span class=keyword>letrec</span></code></a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_6.2"></a><a href="t-y-scheme-Z-H-8.html#node_sec_6.2">6.2&nbsp;&nbsp;Ì¾Á°¤Ä¤­ <code class=scheme><span class=keyword>let</span></code></a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_6.3"></a><a href="t-y-scheme-Z-H-8.html#node_sec_6.3">6.3&nbsp;&nbsp;È¿Éü</a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_6.4"></a><a href="t-y-scheme-Z-H-8.html#node_sec_6.4">6.4&nbsp;&nbsp;¼êÂ³¤­¤Î¥ê¥¹¥È¾å¤Ø¤Î¼ÌÁü</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_6.2"></a><a href="t-y-scheme-Z-H-8.html#node_sec_6.2">6.2&nbsp;&nbsp;åå‰ã¤ã <code class=scheme><span class=keyword>let</span></code></a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_6.3"></a><a href="t-y-scheme-Z-H-8.html#node_sec_6.3">6.3&nbsp;&nbsp;åå¾©</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_6.4"></a><a href="t-y-scheme-Z-H-8.html#node_sec_6.4">6.4&nbsp;&nbsp;æ‰‹ç¶šãã®ãƒªã‚¹ãƒˆä¸Šã¸ã®å†™åƒ</a><br>
 </p>
 <div class=medskip></div>
 <p style="margin-top: 0pt; margin-bottom: 0pt">
@@ -158,21 +159,21 @@ for this document]</a>&nbsp;</div>
 
 <p class=noindent><b>
 &nbsp; &nbsp; <a name="node_toc_node_chap_7"></a><a href="t-y-scheme-Z-H-9.html#node_chap_7">7&nbsp;&nbsp;I/O</a></b><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_7.1"></a><a href="t-y-scheme-Z-H-9.html#node_sec_7.1">7.1&nbsp;&nbsp;ÆÉ¤ß¹ş¤ß</a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_7.2"></a><a href="t-y-scheme-Z-H-9.html#node_sec_7.2">7.2&nbsp;&nbsp;½ñ¤­½Ğ¤·</a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_7.3"></a><a href="t-y-scheme-Z-H-9.html#node_sec_7.3">7.3&nbsp;&nbsp;¥Õ¥¡¥¤¥ë¥İ¡¼¥È</a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_7.3.1"></a><a href="t-y-scheme-Z-H-9.html#node_sec_7.3.1">7.3.1&nbsp;&nbsp;¥Õ¥¡¥¤¥ë¥İ¡¼¥È¤Î¼«Æ°¥ª¡¼¥×¥ó¤È¼«Æ°¥¯¥í¡¼¥º</a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_7.4"></a><a href="t-y-scheme-Z-H-9.html#node_sec_7.4">7.4&nbsp;&nbsp;Ê¸»úÎó¥İ¡¼¥È</a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_7.5"></a><a href="t-y-scheme-Z-H-9.html#node_sec_7.5">7.5&nbsp;&nbsp;¥Õ¥¡¥¤¥ë¤Î¥í¡¼¥É</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_7.1"></a><a href="t-y-scheme-Z-H-9.html#node_sec_7.1">7.1&nbsp;&nbsp;èª­ã¿è¾¼ã¿</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_7.2"></a><a href="t-y-scheme-Z-H-9.html#node_sec_7.2">7.2&nbsp;&nbsp;æ›¸ãå‡ºã—</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_7.3"></a><a href="t-y-scheme-Z-H-9.html#node_sec_7.3">7.3&nbsp;&nbsp;ãƒ•ã‚¡ã‚¤ãƒ«ãƒãƒ¼ãƒˆ</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_7.3.1"></a><a href="t-y-scheme-Z-H-9.html#node_sec_7.3.1">7.3.1&nbsp;&nbsp;ãƒ•ã‚¡ã‚¤ãƒ«ãƒãƒ¼ãƒˆã®è‡ªå‹•ã‚ªãƒ¼ãƒ—ãƒ³ã¨è‡ªå‹•ã‚¯ãƒ­ãƒ¼ã‚º</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_7.4"></a><a href="t-y-scheme-Z-H-9.html#node_sec_7.4">7.4&nbsp;&nbsp;æ–‡å­—åˆ—ãƒãƒ¼ãƒˆ</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_7.5"></a><a href="t-y-scheme-Z-H-9.html#node_sec_7.5">7.5&nbsp;&nbsp;ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ­ãƒ¼ãƒ‰</a><br>
 </p>
 <div class=medskip></div>
 <p style="margin-top: 0pt; margin-bottom: 0pt">
 </p>
 
 <p class=noindent><b>
-&nbsp; &nbsp; <a name="node_toc_node_chap_8"></a><a href="t-y-scheme-Z-H-10.html#node_chap_8">8&nbsp;&nbsp;¥Ş¥¯¥í</a></b><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_8.1"></a><a href="t-y-scheme-Z-H-10.html#node_sec_8.1">8.1&nbsp;&nbsp;¥Æ¥ó¥×¥ì¡¼¥È¤È¤·¤Æ¤ÎÅ¸³«»ØÄê</a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_8.2"></a><a href="t-y-scheme-Z-H-10.html#node_sec_8.2">8.2&nbsp;&nbsp;¥Ş¥¯¥í¤ÎÆâÂ¦¤Ç¤ÎÊÑ¿ôÊáÂª¤Î²óÈò</a><br>
+&nbsp; &nbsp; <a name="node_toc_node_chap_8"></a><a href="t-y-scheme-Z-H-10.html#node_chap_8">8&nbsp;&nbsp;ãƒã‚¯ãƒ­</a></b><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_8.1"></a><a href="t-y-scheme-Z-H-10.html#node_sec_8.1">8.1&nbsp;&nbsp;ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã¨ã—ã¦ã®å±•é–‹æŒ‡å®š</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_8.2"></a><a href="t-y-scheme-Z-H-10.html#node_sec_8.2">8.2&nbsp;&nbsp;ãƒã‚¯ãƒ­ã®å†…å´ã§ã®å¤‰æ•°æ•æ‰ã®å›é¿</a><br>
 &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_8.3"></a><a href="t-y-scheme-Z-H-10.html#node_sec_8.3">8.3&nbsp;&nbsp;<code class=scheme><span class=keyword>fluid-let</span></code></a><br>
 </p>
 <div class=medskip></div>
@@ -180,101 +181,101 @@ for this document]</a>&nbsp;</div>
 </p>
 
 <p class=noindent><b>
-&nbsp; &nbsp; <a name="node_toc_node_chap_9"></a><a href="t-y-scheme-Z-H-11.html#node_chap_9">9&nbsp;&nbsp;¹½Â¤ÂÎ</a></b><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_9.1"></a><a href="t-y-scheme-Z-H-11.html#node_sec_9.1">9.1&nbsp;&nbsp;¥Ç¥Õ¥©¥ë¥È¤Î½é´ü²½</a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_9.2"></a><a href="t-y-scheme-Z-H-11.html#node_sec_9.2">9.2&nbsp;&nbsp;<code class=scheme><span class=keyword>defstruct</span></code> ¤ÎÄêµÁ</a><br>
+&nbsp; &nbsp; <a name="node_toc_node_chap_9"></a><a href="t-y-scheme-Z-H-11.html#node_chap_9">9&nbsp;&nbsp;æ§‹é€ ä½“</a></b><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_9.1"></a><a href="t-y-scheme-Z-H-11.html#node_sec_9.1">9.1&nbsp;&nbsp;ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®åˆæœŸåŒ–</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_9.2"></a><a href="t-y-scheme-Z-H-11.html#node_sec_9.2">9.2&nbsp;&nbsp;<code class=scheme><span class=keyword>defstruct</span></code> ã®å®šç¾©</a><br>
 </p>
 <div class=medskip></div>
 <p style="margin-top: 0pt; margin-bottom: 0pt">
 </p>
 
 <p class=noindent><b>
-&nbsp; &nbsp; <a name="node_toc_node_chap_10"></a><a href="t-y-scheme-Z-H-12.html#node_chap_10">10&nbsp;&nbsp;A-¥ê¥¹¥È¤È¥Æ¡¼¥Ö¥ë</a></b><br>
+&nbsp; &nbsp; <a name="node_toc_node_chap_10"></a><a href="t-y-scheme-Z-H-12.html#node_chap_10">10&nbsp;&nbsp;A-ãƒªã‚¹ãƒˆã¨ãƒ†ãƒ¼ãƒ–ãƒ«</a></b><br>
 </p>
 <div class=medskip></div>
 <p style="margin-top: 0pt; margin-bottom: 0pt">
 </p>
 
 <p class=noindent><b>
-&nbsp; &nbsp; <a name="node_toc_node_chap_11"></a><a href="t-y-scheme-Z-H-13.html#node_chap_11">11&nbsp;&nbsp;¥·¥¹¥Æ¥à¥¤¥ó¥¿¥Õ¥§¡¼¥¹</a></b><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_11.1"></a><a href="t-y-scheme-Z-H-13.html#node_sec_11.1">11.1&nbsp;&nbsp;¥Õ¥¡¥¤¥ë¤Î³ÎÇ§¤Èºï½ü</a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_11.2"></a><a href="t-y-scheme-Z-H-13.html#node_sec_11.2">11.2&nbsp;&nbsp;¥ª¥Ú¥ì¡¼¥Æ¥£¥ó¥°¥·¥¹¥Æ¥à¥³¥Ş¥ó¥É¤Î¸Æ¤Ó½Ğ¤·</a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_11.3"></a><a href="t-y-scheme-Z-H-13.html#node_sec_11.3">11.3&nbsp;&nbsp;´Ä¶­ÊÑ¿ô</a><br>
+&nbsp; &nbsp; <a name="node_toc_node_chap_11"></a><a href="t-y-scheme-Z-H-13.html#node_chap_11">11&nbsp;&nbsp;ã‚·ã‚¹ãƒ†ãƒ ã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹</a></b><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_11.1"></a><a href="t-y-scheme-Z-H-13.html#node_sec_11.1">11.1&nbsp;&nbsp;ãƒ•ã‚¡ã‚¤ãƒ«ã®ç¢ºèªã¨å‰Šé™¤</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_11.2"></a><a href="t-y-scheme-Z-H-13.html#node_sec_11.2">11.2&nbsp;&nbsp;ã‚ªãƒšãƒ¬ãƒ¼ãƒ†ã‚£ãƒ³ã‚°ã‚·ã‚¹ãƒ†ãƒ ã‚³ãƒãƒ³ãƒ‰ã®å‘¼ã³å‡ºã—</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_11.3"></a><a href="t-y-scheme-Z-H-13.html#node_sec_11.3">11.3&nbsp;&nbsp;ç’°å¢ƒå¤‰æ•°</a><br>
 </p>
 <div class=medskip></div>
 <p style="margin-top: 0pt; margin-bottom: 0pt">
 </p>
 
 <p class=noindent><b>
-&nbsp; &nbsp; <a name="node_toc_node_chap_12"></a><a href="t-y-scheme-Z-H-14.html#node_chap_12">12&nbsp;&nbsp;¥ª¥Ö¥¸¥§¥¯¥È¤È¥¯¥é¥¹</a></b><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_12.1"></a><a href="t-y-scheme-Z-H-14.html#node_sec_12.1">12.1&nbsp;&nbsp;Ã±½ã¤Ê¥ª¥Ö¥¸¥§¥¯¥È¥·¥¹¥Æ¥à</a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_12.2"></a><a href="t-y-scheme-Z-H-14.html#node_sec_12.2">12.2&nbsp;&nbsp;¥¯¥é¥¹¤Ï¥¤¥ó¥¹¥¿¥ó¥¹¤Ç¤â¤¢¤ë</a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_12.3"></a><a href="t-y-scheme-Z-H-14.html#node_sec_12.3">12.3&nbsp;&nbsp;Â¿½Å·Ñ¾µ</a><br>
+&nbsp; &nbsp; <a name="node_toc_node_chap_12"></a><a href="t-y-scheme-Z-H-14.html#node_chap_12">12&nbsp;&nbsp;ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¨ã‚¯ãƒ©ã‚¹</a></b><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_12.1"></a><a href="t-y-scheme-Z-H-14.html#node_sec_12.1">12.1&nbsp;&nbsp;å˜ç´”ãªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚·ã‚¹ãƒ†ãƒ </a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_12.2"></a><a href="t-y-scheme-Z-H-14.html#node_sec_12.2">12.2&nbsp;&nbsp;ã‚¯ãƒ©ã‚¹ã¯ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã§ã‚‚ã‚ã‚‹</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_12.3"></a><a href="t-y-scheme-Z-H-14.html#node_sec_12.3">12.3&nbsp;&nbsp;å¤šé‡ç¶™æ‰¿</a><br>
 </p>
 <div class=medskip></div>
 <p style="margin-top: 0pt; margin-bottom: 0pt">
 </p>
 
 <p class=noindent><b>
-&nbsp; &nbsp; <a name="node_toc_node_chap_13"></a><a href="t-y-scheme-Z-H-15.html#node_chap_13">13&nbsp;&nbsp;¥¸¥ã¥ó¥×</a></b><br>
+&nbsp; &nbsp; <a name="node_toc_node_chap_13"></a><a href="t-y-scheme-Z-H-15.html#node_chap_13">13&nbsp;&nbsp;ã‚¸ãƒ£ãƒ³ãƒ—</a></b><br>
 &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_13.1"></a><a href="t-y-scheme-Z-H-15.html#node_sec_13.1">13.1&nbsp;&nbsp;<code class=scheme><span class=variable>call-with-current-continuation</span></code></a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_13.2"></a><a href="t-y-scheme-Z-H-15.html#node_sec_13.2">13.2&nbsp;&nbsp;Ã¦½Ğ·ÑÂ³</a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_13.3"></a><a href="t-y-scheme-Z-H-15.html#node_sec_13.3">13.3&nbsp;&nbsp;¥Ä¥ê¡¼¥Ş¥Ã¥Á¥ó¥°</a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_13.4"></a><a href="t-y-scheme-Z-H-15.html#node_sec_13.4">13.4&nbsp;&nbsp;¥³¥ë¡¼¥Á¥ó</a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_13.4.1"></a><a href="t-y-scheme-Z-H-15.html#node_sec_13.4.1">13.4.1&nbsp;&nbsp;¥³¥ë¡¼¥Á¥ó¤ò»È¤Ã¤¿¥Ä¥ê¡¼¥Ş¥Ã¥Á¥ó¥°</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_13.2"></a><a href="t-y-scheme-Z-H-15.html#node_sec_13.2">13.2&nbsp;&nbsp;è„±å‡ºç¶™ç¶š</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_13.3"></a><a href="t-y-scheme-Z-H-15.html#node_sec_13.3">13.3&nbsp;&nbsp;ãƒ„ãƒªãƒ¼ãƒãƒƒãƒãƒ³ã‚°</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_13.4"></a><a href="t-y-scheme-Z-H-15.html#node_sec_13.4">13.4&nbsp;&nbsp;ã‚³ãƒ«ãƒ¼ãƒãƒ³</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_13.4.1"></a><a href="t-y-scheme-Z-H-15.html#node_sec_13.4.1">13.4.1&nbsp;&nbsp;ã‚³ãƒ«ãƒ¼ãƒãƒ³ã‚’ä½¿ã£ãŸãƒ„ãƒªãƒ¼ãƒãƒƒãƒãƒ³ã‚°</a><br>
 </p>
 <div class=medskip></div>
 <p style="margin-top: 0pt; margin-bottom: 0pt">
 </p>
 
 <p class=noindent><b>
-&nbsp; &nbsp; <a name="node_toc_node_chap_14"></a><a href="t-y-scheme-Z-H-16.html#node_chap_14">14&nbsp;&nbsp;Èó·èÄêÀ­</a></b><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_14.1"></a><a href="t-y-scheme-Z-H-16.html#node_sec_14.1">14.1&nbsp;&nbsp;<code class=scheme><span class=keyword>amb</span></code>¤Î²òÀâ</a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_14.2"></a><a href="t-y-scheme-Z-H-16.html#node_sec_14.2">14.2&nbsp;&nbsp;Scheme ¤Ë¤ª¤±¤ë <code class=scheme><span class=keyword>amb</span></code> ¤Î¼ÂÁõ</a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_14.3"></a><a href="t-y-scheme-Z-H-16.html#node_sec_14.3">14.3&nbsp;&nbsp;Scheme Ãæ¤Ç <code class=scheme><span class=keyword>amb</span></code> ¤ò»È¤¦</a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_14.4"></a><a href="t-y-scheme-Z-H-16.html#node_sec_14.4">14.4&nbsp;&nbsp;ÏÀÍı¥Ñ¥º¥ë</a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_14.4.1"></a><a href="t-y-scheme-Z-H-16.html#node_sec_14.4.1">14.4.1&nbsp;&nbsp;¥«¥í¥¿¥ó¥Ñ¥º¥ë</a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_14.4.2"></a><a href="t-y-scheme-Z-H-16.html#node_sec_14.4.2">14.4.2&nbsp;&nbsp;ÃÏ¿Ş¤ÎÅÉ¤êÊ¬¤±</a><br>
+&nbsp; &nbsp; <a name="node_toc_node_chap_14"></a><a href="t-y-scheme-Z-H-16.html#node_chap_14">14&nbsp;&nbsp;éæ±ºå®šæ€§</a></b><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_14.1"></a><a href="t-y-scheme-Z-H-16.html#node_sec_14.1">14.1&nbsp;&nbsp;<code class=scheme><span class=keyword>amb</span></code>ã®è§£èª¬</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_14.2"></a><a href="t-y-scheme-Z-H-16.html#node_sec_14.2">14.2&nbsp;&nbsp;Scheme ã«ãŠã‘ã‚‹ <code class=scheme><span class=keyword>amb</span></code> ã®å®Ÿè£…</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_14.3"></a><a href="t-y-scheme-Z-H-16.html#node_sec_14.3">14.3&nbsp;&nbsp;Scheme ä¸­ã§ <code class=scheme><span class=keyword>amb</span></code> ã‚’ä½¿ã†</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_14.4"></a><a href="t-y-scheme-Z-H-16.html#node_sec_14.4">14.4&nbsp;&nbsp;è«–ç†ãƒ‘ã‚ºãƒ«</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_14.4.1"></a><a href="t-y-scheme-Z-H-16.html#node_sec_14.4.1">14.4.1&nbsp;&nbsp;ã‚«ãƒ­ã‚¿ãƒ³ãƒ‘ã‚ºãƒ«</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_14.4.2"></a><a href="t-y-scheme-Z-H-16.html#node_sec_14.4.2">14.4.2&nbsp;&nbsp;åœ°å›³ã®å¡—ã‚Šåˆ†ã‘</a><br>
 </p>
 <div class=medskip></div>
 <p style="margin-top: 0pt; margin-bottom: 0pt">
 </p>
 
 <p class=noindent><b>
-&nbsp; &nbsp; <a name="node_toc_node_chap_15"></a><a href="t-y-scheme-Z-H-17.html#node_chap_15">15&nbsp;&nbsp;¥¨¥ó¥¸¥ó</a></b><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_15.1"></a><a href="t-y-scheme-Z-H-17.html#node_sec_15.1">15.1&nbsp;&nbsp;¥¯¥í¥Ã¥¯</a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_15.2"></a><a href="t-y-scheme-Z-H-17.html#node_sec_15.2">15.2&nbsp;&nbsp;¥Õ¥é¥Ã¥È¤Ê¥¨¥ó¥¸¥ó</a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_15.3"></a><a href="t-y-scheme-Z-H-17.html#node_sec_15.3">15.3&nbsp;&nbsp;Æş¤ì»Ò²ÄÇ½¤Ê¥¨¥ó¥¸¥ó</a><br>
+&nbsp; &nbsp; <a name="node_toc_node_chap_15"></a><a href="t-y-scheme-Z-H-17.html#node_chap_15">15&nbsp;&nbsp;ã‚¨ãƒ³ã‚¸ãƒ³</a></b><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_15.1"></a><a href="t-y-scheme-Z-H-17.html#node_sec_15.1">15.1&nbsp;&nbsp;ã‚¯ãƒ­ãƒƒã‚¯</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_15.2"></a><a href="t-y-scheme-Z-H-17.html#node_sec_15.2">15.2&nbsp;&nbsp;ãƒ•ãƒ©ãƒƒãƒˆãªã‚¨ãƒ³ã‚¸ãƒ³</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_15.3"></a><a href="t-y-scheme-Z-H-17.html#node_sec_15.3">15.3&nbsp;&nbsp;å…¥ã‚Œå­å¯èƒ½ãªã‚¨ãƒ³ã‚¸ãƒ³</a><br>
 </p>
 <div class=medskip></div>
 <p style="margin-top: 0pt; margin-bottom: 0pt">
 </p>
 
 <p class=noindent><b>
-&nbsp; &nbsp; <a name="node_toc_node_chap_16"></a><a href="t-y-scheme-Z-H-18.html#node_chap_16">16&nbsp;&nbsp;¥·¥§¥ë¥¹¥¯¥ê¥×¥È</a></b><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_16.1"></a><a href="t-y-scheme-Z-H-18.html#node_sec_16.1">16.1&nbsp;&nbsp;Hello, World! ¤Õ¤¿¤¿¤Ó</a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_16.2"></a><a href="t-y-scheme-Z-H-18.html#node_sec_16.2">16.2&nbsp;&nbsp;°ú¿ô¤ò¤â¤Ä¥¹¥¯¥ê¥×¥È</a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_16.3"></a><a href="t-y-scheme-Z-H-18.html#node_sec_16.3">16.3&nbsp;&nbsp;Îã</a><br>
+&nbsp; &nbsp; <a name="node_toc_node_chap_16"></a><a href="t-y-scheme-Z-H-18.html#node_chap_16">16&nbsp;&nbsp;ã‚·ã‚§ãƒ«ã‚¹ã‚¯ãƒªãƒ—ãƒˆ</a></b><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_16.1"></a><a href="t-y-scheme-Z-H-18.html#node_sec_16.1">16.1&nbsp;&nbsp;Hello, World! ãµãŸãŸã³</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_16.2"></a><a href="t-y-scheme-Z-H-18.html#node_sec_16.2">16.2&nbsp;&nbsp;å¼•æ•°ã‚’ã‚‚ã¤ã‚¹ã‚¯ãƒªãƒ—ãƒˆ</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_16.3"></a><a href="t-y-scheme-Z-H-18.html#node_sec_16.3">16.3&nbsp;&nbsp;ä¾‹</a><br>
 </p>
 <div class=medskip></div>
 <p style="margin-top: 0pt; margin-bottom: 0pt">
 </p>
 
 <p class=noindent><b>
-&nbsp; &nbsp; <a name="node_toc_node_chap_17"></a><a href="t-y-scheme-Z-H-19.html#node_chap_17">17&nbsp;&nbsp;CGI ¥¹¥¯¥ê¥×¥È</a></b><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_17.1"></a><a href="t-y-scheme-Z-H-19.html#node_sec_17.1">17.1&nbsp;&nbsp;Îã: ´Ä¶­ÊÑ¿ô¤ÎÉ½¼¨</a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_17.2"></a><a href="t-y-scheme-Z-H-19.html#node_sec_17.2">17.2&nbsp;&nbsp;Îã: ÁªÂò¤µ¤ì¤¿´Ä¶­ÊÑ¿ô¤ÎÉ½¼¨</a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_17.3"></a><a href="t-y-scheme-Z-H-19.html#node_sec_17.3">17.3&nbsp;&nbsp;CGI ¥¹¥¯¥ê¥×¥È¥æ¡¼¥Æ¥£¥ê¥Æ¥£</a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_17.4"></a><a href="t-y-scheme-Z-H-19.html#node_sec_17.4">17.4&nbsp;&nbsp;CGI ¤Ë¤è¤ëÅÅÂî</a><br>
+&nbsp; &nbsp; <a name="node_toc_node_chap_17"></a><a href="t-y-scheme-Z-H-19.html#node_chap_17">17&nbsp;&nbsp;CGI ã‚¹ã‚¯ãƒªãƒ—ãƒˆ</a></b><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_17.1"></a><a href="t-y-scheme-Z-H-19.html#node_sec_17.1">17.1&nbsp;&nbsp;ä¾‹: ç’°å¢ƒå¤‰æ•°ã®è¡¨ç¤º</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_17.2"></a><a href="t-y-scheme-Z-H-19.html#node_sec_17.2">17.2&nbsp;&nbsp;ä¾‹: é¸æŠã•ã‚ŒãŸç’°å¢ƒå¤‰æ•°ã®è¡¨ç¤º</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_17.3"></a><a href="t-y-scheme-Z-H-19.html#node_sec_17.3">17.3&nbsp;&nbsp;CGI ã‚¹ã‚¯ãƒªãƒ—ãƒˆãƒ¦ãƒ¼ãƒ†ã‚£ãƒªãƒ†ã‚£</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_17.4"></a><a href="t-y-scheme-Z-H-19.html#node_sec_17.4">17.4&nbsp;&nbsp;CGI ã«ã‚ˆã‚‹é›»å“</a><br>
 </p>
 <div class=medskip></div>
 <p style="margin-top: 0pt; margin-bottom: 0pt">
 </p>
 
 <p class=noindent><b>
-&nbsp; &nbsp; <a name="node_toc_node_chap_A"></a><a href="t-y-scheme-Z-H-20.html#node_chap_A">A&nbsp;&nbsp;Scheme ¤ÎÊı¸À</a></b><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_A.1"></a><a href="t-y-scheme-Z-H-20.html#node_sec_A.1">A.1&nbsp;&nbsp;µ¯Æ°¤È init ¥Õ¥¡¥¤¥ë</a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_A.2"></a><a href="t-y-scheme-Z-H-20.html#node_sec_A.2">A.2&nbsp;&nbsp;¥·¥§¥ë¥¹¥¯¥ê¥×¥È</a><br>
+&nbsp; &nbsp; <a name="node_toc_node_chap_A"></a><a href="t-y-scheme-Z-H-20.html#node_chap_A">A&nbsp;&nbsp;Scheme ã®æ–¹è¨€</a></b><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_A.1"></a><a href="t-y-scheme-Z-H-20.html#node_sec_A.1">A.1&nbsp;&nbsp;èµ·å‹•ã¨ init ãƒ•ã‚¡ã‚¤ãƒ«</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_A.2"></a><a href="t-y-scheme-Z-H-20.html#node_sec_A.2">A.2&nbsp;&nbsp;ã‚·ã‚§ãƒ«ã‚¹ã‚¯ãƒªãƒ—ãƒˆ</a><br>
 &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_A.3"></a><a href="t-y-scheme-Z-H-20.html#node_sec_A.3">A.3&nbsp;&nbsp;<code class=scheme><span class=keyword>define-macro</span></code></a><br>
 &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_A.4"></a><a href="t-y-scheme-Z-H-20.html#node_sec_A.4">A.4&nbsp;&nbsp;<code class=scheme><span class=variable>load-relative</span></code></a><br>
 </p>
@@ -283,24 +284,24 @@ for this document]</a>&nbsp;</div>
 </p>
 
 <p class=noindent><b>
-&nbsp; &nbsp; <a name="node_toc_node_chap_B"></a><a href="t-y-scheme-Z-H-21.html#node_chap_B">B&nbsp;&nbsp;Scheme ¤Ç½ñ¤¤¤¿ DOS ¤Î¥Ğ¥Ã¥Á¥Õ¥¡¥¤¥ë</a></b><br>
+&nbsp; &nbsp; <a name="node_toc_node_chap_B"></a><a href="t-y-scheme-Z-H-21.html#node_chap_B">B&nbsp;&nbsp;Scheme ã§æ›¸ã„ãŸ DOS ã®ãƒãƒƒãƒãƒ•ã‚¡ã‚¤ãƒ«</a></b><br>
 </p>
 <div class=medskip></div>
 <p style="margin-top: 0pt; margin-bottom: 0pt">
 </p>
 
 <p class=noindent><b>
-&nbsp; &nbsp; <a name="node_toc_node_chap_C"></a><a href="t-y-scheme-Z-H-22.html#node_chap_C">C&nbsp;&nbsp;¿ôÃÍ·×»»¤Î¥Æ¥¯¥Ë¥Ã¥¯</a></b><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_C.1"></a><a href="t-y-scheme-Z-H-22.html#node_sec_C.1">C.1&nbsp;&nbsp;¥·¥ó¥×¥½¥óË¡</a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_C.2"></a><a href="t-y-scheme-Z-H-22.html#node_sec_C.2">C.2&nbsp;&nbsp;Å¬ÍÑ²ÄÇ½¤Ê¶è´ÖÄ¹</a><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_C.3"></a><a href="t-y-scheme-Z-H-22.html#node_sec_C.3">C.3&nbsp;&nbsp;°Û¾ïÀÑÊ¬</a><br>
+&nbsp; &nbsp; <a name="node_toc_node_chap_C"></a><a href="t-y-scheme-Z-H-22.html#node_chap_C">C&nbsp;&nbsp;æ•°å€¤è¨ˆç®—ã®ãƒ†ã‚¯ãƒ‹ãƒƒã‚¯</a></b><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_C.1"></a><a href="t-y-scheme-Z-H-22.html#node_sec_C.1">C.1&nbsp;&nbsp;ã‚·ãƒ³ãƒ—ã‚½ãƒ³æ³•</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_C.2"></a><a href="t-y-scheme-Z-H-22.html#node_sec_C.2">C.2&nbsp;&nbsp;é©ç”¨å¯èƒ½ãªåŒºé–“é•·</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_C.3"></a><a href="t-y-scheme-Z-H-22.html#node_sec_C.3">C.3&nbsp;&nbsp;ç•°å¸¸ç©åˆ†</a><br>
 </p>
 <div class=medskip></div>
 <p style="margin-top: 0pt; margin-bottom: 0pt">
 </p>
 
 <p class=noindent><b>
-&nbsp; &nbsp; <a name="node_toc_node_chap_D"></a><a href="t-y-scheme-Z-H-23.html#node_chap_D">D&nbsp;&nbsp;Ìµ¸Â¤ËÂĞ±ş¤¹¤ë¥¯¥í¥Ã¥¯</a></b><br>
+&nbsp; &nbsp; <a name="node_toc_node_chap_D"></a><a href="t-y-scheme-Z-H-23.html#node_chap_D">D&nbsp;&nbsp;ç„¡é™ã«å¯¾å¿œã™ã‚‹ã‚¯ãƒ­ãƒƒã‚¯</a></b><br>
 </p>
 <div class=medskip></div>
 <p style="margin-top: 0pt; margin-bottom: 0pt">

@@ -1,5 +1,4 @@
-<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html>
 <!--
 
 Generated from t-y-scheme.tex by tex2page, v 20060531
@@ -8,9 +7,11 @@ Generated from t-y-scheme.tex by tex2page, v 20060531
 http://www.ccs.neu.edu/~dorai/tex2page/tex2page-doc.html
 
 -->
+<html lang="ja">
 <head>
+<meta charset="utf-8">
 <title>
-�Ƚ� Scheme ������ Teach Yourself Scheme in Fixnum Days
+独習 Scheme 三週間 Teach Yourself Scheme in Fixnum Days
 </title>
 <link rel="stylesheet" type="text/css" href="t-y-scheme-Z-S.css" title=default>
 <meta name=robots content="noindex,follow">
@@ -28,36 +29,36 @@ introduction to the programming language Scheme">
 <a name="node_chap_14"></a>
 <h1 class=chapter>
 <div class=chapterheading><a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_14">Chapter 14</a></div><br>
-<a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_14">�������</a></h1>
+<a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_14">非決定性</a></h1>
 <p><a name="node_idx_476"></a><a name="node_idx_478"></a><a name="node_idx_480"></a></p>
 <p>
 </p>
 <p>
-McCarthy ������������ڥ졼�� <code class=scheme><span class=keyword>amb</span></code> [<a href="t-y-scheme.hlog">cite{jmc:amb}</a>,&nbsp;<a href="t-y-scheme.hlog">cite{wc:amb}</a>,&nbsp;<a href="t-y-scheme.hlog">cite{zmc:amb}</a>] ��
-Lisp ���Ȥ�Ʊ�����餤�Ť���ΤǤ�����Lisp �ˤϤ���ޤ���<code class=scheme><span class=keyword>amb</span></code> ��
-���Ĥ��뤤�Ϥ���ʾ�μ�������Ȥ��ƤȤꡢ�����Ρ������Ū��
-(���뤤�ϡ֤����ޤ��ʡ�)���������ޤ����ץ��������̣�Τ����Τ�
-��«�����뤳��������򹥤�ǤĤ����ޤ��������ǡ�
-ۣ������ο���ͥ�������Ĥ�����¾��������õ�����뤿���
-�Хå��ȥ�å��� Scheme �����楪�ڥ졼�� <code class=scheme><span class=variable>call/cc</span></code> ��Ȥ�
-<code class=scheme><span class=keyword>amb</span></code> �� Scheme �ؤ������ߤˤĤ��Ƹ�Ƥ���ޤ��礦��
-��̤ϡ���ĥ����ˤ���뤳�Ȥʤ���Scheme ��ľ�ܽ񤱤�褦��
-õ�������ʬ��ǻ��ѤǤ��륨�쥬��ȤʥХå��ȥ�å�����ά��
-�Ǥ�������ޤ������������ߤ� Prolog ή�������ץ�����ߥ�
-[<a href="t-y-scheme.hlog">cite{logick}</a>,&nbsp;<a href="t-y-scheme.hlog">cite{mf:prolog}</a>] ���۵������ޤ���������Ϥ�괲��ʤ�ΤǤ���
-�Ȥ����Τ⡢���Υ��ڥ졼���� Scheme �ο����ͥ��ڥ졼���ˤ����ؤ�
-���Ƥ��ꡢ���Ѥˤ����äƤϡ��Ȥ��٤Ĥ�ʸ̮��ɬ�פȤ�����
-�����ѿ����˥ե����������Ȥ����褦�ʸ����δ��פ˰�¸���ޤ���</p>
+McCarthy の非決定性オペレータ <code class=scheme><span class=keyword>amb</span></code> [<a href="t-y-scheme.hlog">cite{jmc:amb}</a>,&nbsp;<a href="t-y-scheme.hlog">cite{wc:amb}</a>,&nbsp;<a href="t-y-scheme.hlog">cite{zmc:amb}</a>] は
+Lisp 自身と同じくらい古いものですが、Lisp にはありません。<code class=scheme><span class=keyword>amb</span></code> は
+０個あるいはそれ以上の式を引数としてとり、それらの、非決定的な
+(あるいは「あいまいな」)な選択を作ります。プログラムを意味のあるものに
+収束させるこれらの選択を好んでつかいます。ここで、
+曖昧選択の深さ優先選択をつかい、他の選択肢を探索するための
+バックトラックに Scheme の制御オペレータ <code class=scheme><span class=variable>call/cc</span></code> を使う
+<code class=scheme><span class=keyword>amb</span></code> の Scheme への埋め込みについて検討しましょう。
+結果は、拡張言語にたよることなく、Scheme で直接書けるような
+探索問題の分野で使用できるエレガントなバックトラッキング戦略が
+できあがります。この埋め込みは Prolog 流の論理プログラミング
+[<a href="t-y-scheme.hlog">cite{logick}</a>,&nbsp;<a href="t-y-scheme.hlog">cite{mf:prolog}</a>] を想起させますが、これはより寛大なものです。
+というのも、このオペレータは Scheme の真理値オペレータにたいへん
+似ており、利用にあたっては、とくべつな文脈を必要とせず、
+論理変数やユニフィケーションというような言語上の基盤に依存しません。</p>
 <p>
 </p>
 <a name="node_sec_14.1"></a>
-<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_14.1">14.1&nbsp;&nbsp;<code class=scheme><span class=keyword>amb</span></code>�β���</a></h2>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_14.1">14.1&nbsp;&nbsp;<code class=scheme><span class=keyword>amb</span></code>の解説</a></h2>
 <p></p>
 <p>
-<code class=scheme><span class=keyword>amb</span></code> �ΤȤäĤ��䤹������Ȥ�������λ�����ϡ����κǹ��
-Scheme �ζ��ʽ� SICP [<a href="t-y-scheme.hlog">cite{sicp}</a>] �ˤ���ޤ���������ˤϡ�
-<code class=scheme><span class=keyword>amb</span></code> �ϥ����İʾ�μ���Ȥꡢ���Τ�����<em>�ҤȤ�</em>���ͤ�
-<em>�����Ū��</em>�֤��ޤ����ʤΤǡ�</p>
+<code class=scheme><span class=keyword>amb</span></code> のとっつきやすい解説とたくさんの使用例は、かの最高の
+Scheme の教科書 SICP [<a href="t-y-scheme.hlog">cite{sicp}</a>] にあります。非公式には、
+<code class=scheme><span class=keyword>amb</span></code> はゼロ個以上の式をとり、そのうちの<em>ひとつ</em>の値を
+<em>非決定的に</em>返します。なので、</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>amb</span> <span class=selfeval>1</span> <span class=selfeval>2</span>)
@@ -65,12 +66,12 @@ Scheme �ζ��ʽ� SICP [<a href="t-y-scheme.hlog">cite{sicp}</a>] �ˤ���ޤ������
 <p>
 </p>
 
-<p class=noindent>�� 1 <em>���뤤��</em> 2 ��ɾ������ޤ���</p>
+<p class=noindent>は 1 <em>あるいは</em> 2 に評価されます。</p>
 <p>
 </p>
 <p>
-�����μ��ʤ��ǸƤФ줿 <code class=scheme><span class=keyword>amb</span></code> ���֤��٤��ͤ����ޤ��󡣤����
-<em>����</em>�ȴ��蘆��ޤ����ʤΤǡ�</p>
+引数の式なしで呼ばれた <code class=scheme><span class=keyword>amb</span></code> は返すべき値をもちません。これは
+<em>失敗</em>と看倣されます。なので、</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>amb</span>)
@@ -79,13 +80,13 @@ Scheme �ζ��ʽ� SICP [<a href="t-y-scheme.hlog">cite{sicp}</a>] �ˤ���ޤ������
 <p>
 </p>
 
-<p class=noindent>�Ǥ�(���顼��å�������ɤ����뤫�Ϥ��ȤǸ�Ƥ���ޤ�)��</p>
+<p class=noindent>です(エラーメッセージをどうするかはあとで検討します)。</p>
 <p>
 </p>
 <p>
-�⤷��<code class=scheme><span class=keyword>amb</span></code> �Ͼ����Ȥ��Ĥ���ʬ������«����ʤ顢�ͤ�ҤȤ��֤�
-�ʤ���Фʤ�ޤ��󡣤Ĥޤꡢ���ΤȤ��ϼ��ԤˤϤʤ�ޤ���
-�������ä�</p>
+もし、<code class=scheme><span class=keyword>amb</span></code> は少くとも一つの部分式が収束するなら、値をひとつ返さ
+なければなりません。つまり、このときは失敗にはなりません。
+したがって</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>amb</span> <span class=selfeval>1</span> (<span class=keyword>amb</span>))
@@ -93,7 +94,7 @@ Scheme �ζ��ʽ� SICP [<a href="t-y-scheme.hlog">cite{sicp}</a>] �ˤ���ޤ������
 <p>
 </p>
 
-<p class=noindent>��</p>
+<p class=noindent>と</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>amb</span> (<span class=keyword>amb</span>) <span class=selfeval>1</span>)
@@ -101,21 +102,21 @@ Scheme �ζ��ʽ� SICP [<a href="t-y-scheme.hlog">cite{sicp}</a>] �ˤ���ޤ������
 <p>
 </p>
 
-<p class=noindent>�ȤϤȤ�� 1 ���֤��ޤ���</p>
+<p class=noindent>とはともに 1 を返します。</p>
 <p>
 </p>
 <p>
-�����餫�ˡ�<code class=scheme><span class=keyword>amb</span></code> ��ñ�˺ǽ����ʬ�����֤��櫓�ˤϤ����ޤ���
-�������ǽ��������Ȥ���ʤ顢<em>���ԤǤϤʤ�</em>�ͤ��֤��ͤ�
-�ʤ�ʤ�����Ǥ��������������ʤ餺���������β�ǽ���Ȥ����櫓�Ǥ�
-����ޤ��󡣼�«���Ф�� <code class=scheme><span class=keyword>amb</span></code> ����ʬ���ζɽ�Ū���������
-������ΤǤ�������ˡ�<code class=scheme><span class=keyword>amb</span></code> �ϡ�<em>�ץ����������</em>���«
-������褦��<em>�ޤ��ˤ���</em>��«�ͤ��֤��٤��Ǥ�������Ū�ʸ�����
-�򤹤�ȡ�<code class=scheme><span class=keyword>amb</span></code> �� <em>ŷ�Ȥ�</em>���ڥ졼���Ǥ���</p>
+あきらかに、<code class=scheme><span class=keyword>amb</span></code> は単に最初の部分式を返すわけにはいきません。
+あらゆる可能性があるとするなら、<em>失敗ではない</em>値を返さねば
+ならないからです。しかし、かならずしも全部の可能性というわけでは
+ありません。収束の偏りは <code class=scheme><span class=keyword>amb</span></code> の部分式の局所的な選択よりも
+強いものです。さらに、<code class=scheme><span class=keyword>amb</span></code> は、<em>プログラム全体</em>を収束
+させるような<em>まさにその</em>収束値を返すべきです。外延的な言い方
+をすると、<code class=scheme><span class=keyword>amb</span></code> は <em>天使の</em>オペレータです。</p>
 <p>
 </p>
 <p>
-���Ȥ��С�</p>
+たとえば、</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>amb</span> <span class=selfeval>#f</span> <span class=selfeval>#t</span>)
@@ -123,8 +124,8 @@ Scheme �ζ��ʽ� SICP [<a href="t-y-scheme.hlog">cite{sicp}</a>] �ˤ���ޤ������
 <p>
 </p>
 
-<p class=noindent>�� <code class=scheme><span class=selfeval>#f</span></code> �� <code class=scheme><span class=selfeval>#t</span></code> �Τɤ��餫���֤����Ȥ��Ǥ��ޤ�����
-���Τ褦�ʥץ������</p>
+<p class=noindent>は <code class=scheme><span class=selfeval>#f</span></code> か <code class=scheme><span class=selfeval>#t</span></code> のどちらかを返すことができますが、
+次のようなプログラム</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>if</span> (<span class=keyword>amb</span> <span class=selfeval>#f</span> <span class=selfeval>#t</span>)
@@ -136,27 +137,27 @@ Scheme �ζ��ʽ� SICP [<a href="t-y-scheme.hlog">cite{sicp}</a>] �ˤ���ޤ������
 <p>
 </p>
 
-<p class=noindent>�Ǥϡ��ǽ�� <code class=scheme><span class=keyword>amb</span></code>-���� <code class=scheme><span class=selfeval>#t</span></code> ���֤�<em>�ʤ���Фʤ�ޤ���</em>��
-�⤷��<code class=scheme><span class=selfeval>#f</span></code> ���֤��ȡ�<code class=scheme><span class=keyword>if</span></code> �Ρ�else�פλޤ����򤵤졢�ץ������
-���Τϼ��Ԥ��Ƥ��ޤ�����Ǥ���</p>
+<p class=noindent>では、最初の <code class=scheme><span class=keyword>amb</span></code>-式は <code class=scheme><span class=selfeval>#t</span></code> を返さ<em>なければなりません</em>。
+もし、<code class=scheme><span class=selfeval>#f</span></code> を返すと、<code class=scheme><span class=keyword>if</span></code> の「else」の枝が選択され、プログラム
+全体は失敗してしまうからです。</p>
 <p>
 </p>
 <a name="node_sec_14.2"></a>
-<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_14.2">14.2&nbsp;&nbsp;Scheme �ˤ����� <code class=scheme><span class=keyword>amb</span></code> �μ���</a></h2>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_14.2">14.2&nbsp;&nbsp;Scheme における <code class=scheme><span class=keyword>amb</span></code> の実装</a></h2>
 <p></p>
 <p>
-�����Ǥ� <code class=scheme><span class=keyword>amb</span></code> �μ����Ǥϡ�<code class=scheme><span class=keyword>amb</span></code> ����ʬ���򺸤��鱦�����֤褦��
-���ޤ��礦���Ĥޤꡢ�ǽ����ʬ�������򤷤ơ��⤷�����줬�����Τ�
-���Ԥ�Ƴ�����ʤ顢�����ܤ����򤷤ơġ��Ȥ����褦�ˤ��ޤ���
-�ץ�����������ե����θ�Τۤ��ˤ��� <code class=scheme><span class=keyword>amb</span></code> �νи��ϡ�
-������ <code class=scheme><span class=keyword>amb</span></code> �˥Хå��ȥ�å����������̤�������õ���ޤ���
-����������С�<code class=scheme><span class=keyword>amb</span></code> ��<em>������</em>��<em>����ͥ��õ��</em>���ޤ���
-���Ԥˤ����ä��顢ɬ�������ڤΤ�����̤�����Τ���ľ��ΥΡ��ɤ�
-�Хå��ȥ�å����ޤ���(�����<em>���ֽ�Хå��ȥ�å�</em>�Ȥ����ޤ���)</p>
+ここでの <code class=scheme><span class=keyword>amb</span></code> の実装では、<code class=scheme><span class=keyword>amb</span></code> の部分式を左から右へ選ぶように
+しましょう。つまり、最初の部分式が選択して、もし、それが、全体を
+失敗に導いたなら、二番目を選択して…、というようにします。
+プログラムの制御フローの後のほうにある <code class=scheme><span class=keyword>amb</span></code> の出現は、
+手前の <code class=scheme><span class=keyword>amb</span></code> にバックトラックする前に別の選択肢を探します。
+いいかえれば、<code class=scheme><span class=keyword>amb</span></code> の<em>選択木</em>を<em>深さ優先探索</em>します。
+失敗にあたったら、必ずその木のさらに別の選択のある直近のノードに
+バックトラックします。(これを<em>時間順バックトラック</em>といいます。)</p>
 <p>
 </p>
 <p>
-�ޤ����١����ˤʤ뼺�Է�³�����ꤹ�뤿��ε�����������ޤ���</p>
+まず、ベースになる失敗継続を設定するための機構を定義します。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define</span> <span class=variable>amb-fail</span> <span class=keyword>'</span><span class=variable>*</span>)
@@ -174,12 +175,12 @@ Scheme �ζ��ʽ� SICP [<a href="t-y-scheme.hlog">cite{sicp}</a>] �ˤ���ޤ������
 <p>
 </p>
 
-<p class=noindent><code class=scheme><span class=keyword>amb</span></code> �����Ԥ����Ȥ��ˡ�����Ϥ��ΤȤ��� <code class=scheme><span class=variable>amb-fail</span></code> ��
-«������Ƥ����³��ƤӽФ��ޤ���</p>
+<p class=noindent><code class=scheme><span class=keyword>amb</span></code> が失敗したときに、これはそのときに <code class=scheme><span class=variable>amb-fail</span></code> に
+束縛されている継続を呼び出します。</p>
 <p>
 </p>
 <p>
-<code class=scheme><span class=keyword>amb</span></code> ������Ĥ���ʬ������������ޥ����Ȥ���������ޤ���</p>
+<code class=scheme><span class=keyword>amb</span></code> を不定個の部分式を受け入れるマクロとして定義します。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define-macro</span> <span class=keyword>amb</span>
@@ -205,43 +206,43 @@ Scheme �ζ��ʽ� SICP [<a href="t-y-scheme.hlog">cite{sicp}</a>] �ˤ���ޤ������
 <p>
 </p>
 
-<p class=noindent><code class=scheme><span class=keyword>amb</span></code> �θƤӽФ��ϡ��ޤ�������ȥ�����Ǻǿ���
-<code class=scheme><span class=variable>amb-fail</span></code> ���ͤ� <code class=scheme><span class=variable>+prev-amb-fail</span></code> �ˤ��ޤäƤ����ޤ���
-����ϡ�<code class=scheme><span class=variable>amb-fail</span></code> �ѿ��Ϥ������������������Ȥ���
-���Է�³�����åȤ���뤫��Ǥ���</p>
+<p class=noindent><code class=scheme><span class=keyword>amb</span></code> の呼び出しは、まず、エントリ時点で最新の
+<code class=scheme><span class=variable>amb-fail</span></code> の値を <code class=scheme><span class=variable>+prev-amb-fail</span></code> にしまっておきます。
+それは、<code class=scheme><span class=variable>amb-fail</span></code> 変数はいろいろな選択肢を試したときの
+失敗継続がセットされるからです。</p>
 <p>
 </p>
 <p>
-���줫�顢<code class=scheme><span class=keyword>amb</span></code> �� <em>����ȥ�</em>��³�� <code class=scheme><span class=variable>+sk</span></code>����ª���ޤ���
-��������ȡ������ΰ�Ĥ������ԤǤϤʤ��ͤ�ɾ�����줿�顢
-�������ˡ����� <code class=scheme><span class=keyword>amb</span></code> ��ȴ���Ф����Ȥ��Ǥ��ޤ���</p>
+それから、<code class=scheme><span class=keyword>amb</span></code> の <em>エントリ</em>継続を <code class=scheme><span class=variable>+sk</span></code>に捕捉します。
+そうすると、選択肢の一つが、失敗ではない値に評価されたら、
+ただちに、その <code class=scheme><span class=keyword>amb</span></code> を抜け出すことができます。</p>
 <p>
 </p>
 <p>
-���줾�������� <code class=scheme><span class=variable>alt</span></code> �Ͻ�(����ϡ�Scheme �Ǥΰ��ۤ�
-<code class=scheme><span class=keyword>begin</span></code> �Τʤ��)�ǻ��ޤ���</p>
+それぞれの選択肢 <code class=scheme><span class=variable>alt</span></code> は順(これは、Scheme での暗黙の
+<code class=scheme><span class=keyword>begin</span></code> のならび)で試されます。</p>
 <p>
 </p>
 <p>
-�ޤ������ߤη�³�� <code class=scheme><span class=variable>+fk</span></code> ����ª����������³������ߡ�
-<code class=scheme><span class=variable>amb-fail</span></code> �򤳤μ�³���˥��åȤ��ޤ������Τ��������ϡ�
-<code class=scheme>(<span class=variable>+sk</span> <span class=variable>alt</span>)</code> �Ȥ���ɾ������ޤ����⤷�� <code class=scheme><span class=variable>alt</span></code> �����Ԥʤ���
-ɾ�����줿�顢�����֤��ͤϡ���³ <code class=scheme><span class=variable>+sk</span></code> ���Ϥ��ꡢ¨�¤�
-<code class=scheme><span class=keyword>amb</span></code> �θƤӽФ�����æ�Ф��ޤ����⤷��<code class=scheme><span class=variable>alt</span></code> �����Ԥ�����
-<code class=scheme><span class=variable>amb-fail</span></code> ���ƤӽФ���ޤ���<code class=scheme><span class=variable>amb-fail</span></code> ���ǽ�ˤ��٤�
-���Ȥ� <code class=scheme><span class=variable>amb-fail</span></code> �򤳤줬����ȥ���˻��äƤ����ͤ˥��å�
-���ʤ������ȤǤ������줫�鼺�Է�³ <code class=scheme><span class=variable>+fk</span></code> ��Ƥӡ����줬
-���������Ȥʤꡢ����С�������ޤ���</p>
+まず、現在の継続を <code class=scheme><span class=variable>+fk</span></code> で捕捉し、これを手続きで包み、
+<code class=scheme><span class=variable>amb-fail</span></code> をこの手続きにセットします。このあと選択肢は、
+<code class=scheme>(<span class=variable>+sk</span> <span class=variable>alt</span>)</code> として評価されます。もし、 <code class=scheme><span class=variable>alt</span></code> が失敗なしに
+評価されたら、その返り値は、継続 <code class=scheme><span class=variable>+sk</span></code> に渡たり、即座に
+<code class=scheme><span class=keyword>amb</span></code> の呼び出しから脱出します。もし、<code class=scheme><span class=variable>alt</span></code> が失敗したら
+<code class=scheme><span class=variable>amb-fail</span></code> が呼び出されます。<code class=scheme><span class=variable>amb-fail</span></code> が最初にすべき
+ことは <code class=scheme><span class=variable>amb-fail</span></code> をこれがエントリ時に持っていた値にセット
+しなおすことです。それから失敗継続 <code class=scheme><span class=variable>+fk</span></code> を呼び、これが
+次の選択肢となり、あれば、それを試します。</p>
 <p>
 </p>
 <p>
-�⤷�����٤Ƥ�����褬���Ԥ���С�<code class=scheme><span class=variable>+prev-amb-fail</span></code> �˳�Ǽ
-���Ƥ����� <code class=scheme><span class=keyword>amb</span></code> ����ȥ���� <code class=scheme><span class=variable>amb-fail</span></code> ���ƤФ�ޤ���</p>
+もし、すべての選択肢が失敗すれば、<code class=scheme><span class=variable>+prev-amb-fail</span></code> に格納
+しておいた <code class=scheme><span class=keyword>amb</span></code> エントリ時の <code class=scheme><span class=variable>amb-fail</span></code> が呼ばれます。</p>
 <p>
 </p>
 <a name="node_sec_14.3"></a>
-<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_14.3">14.3&nbsp;&nbsp;Scheme ��� <code class=scheme><span class=keyword>amb</span></code> ��Ȥ�</a></h2>
-<p>1 ���� 10 �ޤǤο��������֤Ȥ���ȡ����Τ褦�˽񤱤ޤ���</p>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_14.3">14.3&nbsp;&nbsp;Scheme 中で <code class=scheme><span class=keyword>amb</span></code> を使う</a></h2>
+<p>1 から 10 までの数字を選ぶとすると、次のように書けます。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>amb</span> <span class=selfeval>1</span> <span class=selfeval>2</span> <span class=selfeval>3</span> <span class=selfeval>4</span> <span class=selfeval>5</span> <span class=selfeval>6</span> <span class=selfeval>7</span> <span class=selfeval>8</span> <span class=selfeval>9</span> <span class=selfeval>10</span>)
@@ -251,14 +252,14 @@ Scheme �ζ��ʽ� SICP [<a href="t-y-scheme.hlog">cite{sicp}</a>] �ˤ���ޤ������
 <p>
 </p>
 
-<p class=noindent>�ºݤΤȤ������ץ������Ȥ��Ƥ� 1 �ˤʤ�Ǥ��礦����
-����ϥ���ƥ����Ȥˤ��ޤ�����󤵤�Ƥ�����Τɤ�⤬
-��ǽ��������ޤ���</p>
+<p class=noindent>実際のところ、プログラムとしては 1 になるでしょうが、
+それはコンテキストによります。列挙されている数のどれもが
+可能性があります。</p>
 <p>
 </p>
 <p>
-��³�� <code class=scheme><span class=variable>number-between</span></code> ��Ϳ����줿 <code class=scheme><span class=variable>lo</span></code> �� <code class=scheme><span class=variable>hi</span></code> �δ֤ο�
-(ξü��ޤ�)���������������Ū����ˡ�Ǥ���</p>
+手続き <code class=scheme><span class=variable>number-between</span></code> は与えられた <code class=scheme><span class=variable>lo</span></code> と <code class=scheme><span class=variable>hi</span></code> の間の数
+(両端を含む)を生成するより抽象的な方法です。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define</span> <span class=variable>number-between</span>
@@ -272,19 +273,19 @@ Scheme �ζ��ʽ� SICP [<a href="t-y-scheme.hlog">cite{sicp}</a>] �ˤ���ޤ������
 <p>
 </p>
 
-<p class=noindent>����椨��<code class=scheme>(<span class=variable>number-between</span> <span class=selfeval>1</span> <span class=selfeval>6</span>)</code> �Ϻǽ�� 1 ���֤��ޤ���
-���줬���Ԥ���С�<code class=scheme><span class=variable>loop</span></code> �������֤���ơ�2 ����������ޤ���
-<em>����</em>�⼺�Ԥ���С�3 �������ޤ����ʤɤʤɡ�6 �ޤ�³���ޤ���
-6 �θ塢<code class=scheme><span class=variable>loop</span></code> �� 7 �ǸƤФ�ޤ���������� 6 ��ۤ��Ƥ���Τ�
-q(amb) ���ƤФ졢���줬�ǽ��μ��ԤȤʤ�ޤ���(<code class=scheme>(<span class=keyword>amb</span>)</code>) ��
-���줸����Ǽ��Ԥ��������뤳�Ȥ�פ��Ф��Ƥ���������)
-�����ˤ����äơ�<code class=scheme>(<span class=variable>number-between</span> <span class=selfeval>1</span> <span class=selfeval>6</span>)</code> ��ޤ�ץ�������
-����Ū��ľ���� <code class=scheme><span class=keyword>amb</span></code> �ƤӽФ��˥Хå��ȥ�å�����
-<em>����</em>��ӤӤ�����¾����ˡ���������ɤ������ޤ���</p>
+<p class=noindent>それゆえ、<code class=scheme>(<span class=variable>number-between</span> <span class=selfeval>1</span> <span class=selfeval>6</span>)</code> は最初は 1 を返します。
+これが失敗すれば、<code class=scheme><span class=variable>loop</span></code> が繰り返されて、2 が生成されます。
+<em>それ</em>も失敗すれば、3 が得られます。などなど、6 まで続きます。
+6 の後、<code class=scheme><span class=variable>loop</span></code> は 7 で呼ばれますが、これは 6 を越えているので
+q(amb) が呼ばれ、これが最終の失敗となります。(<code class=scheme>(<span class=keyword>amb</span>)</code>) は
+それじしんで失敗を生成することを思い出してください。)
+ここにいたって、<code class=scheme>(<span class=variable>number-between</span> <span class=selfeval>1</span> <span class=selfeval>6</span>)</code> を含むプログラムは
+時間的に直前の <code class=scheme><span class=keyword>amb</span></code> 呼び出しにバックトラックして
+<em>その</em>よびびだしを他の方法で満すかどうかを試します。</p>
 <p>
 </p>
 <p>
-<code class=scheme>(<span class=keyword>amb</span>)</code> ���ݾڤ��줿���Ԥϥץ�������<em>ɽ��</em>�˻Ȥ��ޤ���</p>
+<code class=scheme>(<span class=keyword>amb</span>)</code> の保証された失敗はプログラムの<em>表明</em>に使います。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define</span> <span class=variable>assert</span>
@@ -294,14 +295,14 @@ q(amb) ���ƤФ졢���줬�ǽ��μ��ԤȤʤ�ޤ���(<code class=scheme>(<span class=ke
 <p>
 </p>
 <p>
-<code class=scheme>(<span class=variable>assert</span> <span class=variable>pred</span>)</code> �θƤӽФ��� <code class=scheme><span class=variable>pred</span></code> �����Ǥ���Ȥ���ɽ���򤹤�
-��ΤǤ����⤷���Ǥʤ���С����ߤ� <code class=scheme><span class=keyword>amb</span></code> ����褬���Ԥ��ޤ���
+<code class=scheme>(<span class=variable>assert</span> <span class=variable>pred</span>)</code> の呼び出しは <code class=scheme><span class=variable>pred</span></code> が真であるという表明をする
+ものです。もし真でなければ、現在の <code class=scheme><span class=keyword>amb</span></code> 選択肢が失敗します。
 <a name="node_call_footnote_Temp_12"></a><sup><small><a href="#node_footnote_Temp_12">1</a></small></sup></p>
 <p>
 </p>
 <p>
-����ϡ�<code class=scheme><span class=variable>assert</span></code> ��Ĥ��äơ������� <code class=scheme><span class=variable>hi</span></code> �ʲ����ǿ�����������
-��³���Ǥ���</p>
+これは、<code class=scheme><span class=variable>assert</span></code> をつかって、引数の <code class=scheme><span class=variable>hi</span></code> 以下の素数を生成する
+手続きです。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define</span> <span class=variable>gen-prime</span>
@@ -315,15 +316,15 @@ q(amb) ���ƤФ졢���줬�ǽ��μ��ԤȤʤ�ޤ���(<code class=scheme>(<span class=ke
 <p>
 </p>
 
-<p class=noindent>���������ñ��Ǥ������ɤ�ʿ�(���Ȥ��� 20)�ǸƤФ�Ƥ⡢
-���ޤ����򤯤ʤ��ǽ�β򡢤Ĥޤ� 2 ���������ޤ���</p>
+<p class=noindent>これは非常に単純ですが、どんな数(たとえば 20)で呼ばれても、
+あまり面白くない最初の解、つまり 2 を生成します。</p>
 <p>
 </p>
 <p>
-�ߤ����Τϡ�<em>���٤Ƥ�</em>��Ǥ��äơ��ǽ�β�����ǤϤʤ��ΤǤ���
-���ޤξ��ˤ� 20 �ʲ���<em>���٤Ƥ�</em>�ǿ����ߤ����櫓�Ǥ����ҤȤĤ�
-��ˡ������Ū�ˡ��ǽ�β�������������ȤΤΤ���μ��Է�³��ƤӤ���
-���ȤǤ����Ĥޤꡢ</p>
+欲しいのは、<em>すべての</em>解であって、最初の解だけではないのです。
+いまの場合には 20 以下の<em>すべての</em>素数が欲しいわけです。ひとつの
+方法は明示的に、最初の解を生成したあとののこりの失敗継続を呼びだす
+ことです。つまり、</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>amb</span>)
@@ -334,8 +335,8 @@ q(amb) ���ƤФ졢���줬�ǽ��μ��ԤȤʤ�ޤ���(<code class=scheme>(<span class=ke
 <p>
 </p>
 
-<p class=noindent>�Ȥ��ޤ�������ǤϤޤ��̤μ��Է�³���ĤäƤ��ޤ��Τǡ��ƤӤ����
-�ƤӽФ��С�������̤β򤬤ǤƤ��ޤ���</p>
+<p class=noindent>とします。これではまだ別の失敗継続が残っていますので、再びそれを
+呼び出せば、さらに別の解がでてきます。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>amb</span>)
@@ -346,16 +347,16 @@ q(amb) ���ƤФ졢���줬�ǽ��μ��ԤȤʤ�ޤ���(<code class=scheme>(<span class=ke
 <p>
 </p>
 
-<p class=noindent>������ˡ������ϡ��ץ�������ǽ�� Scheme �Υץ���ץȤ���
-�ƤӽФ������Τ��Ȥǡ��ޤ���Scheme �Υץ���ץȤ��� <code class=scheme><span class=keyword>amb</span></code> ��
-�ƤӽФ��ư�Ϣ�β������Ȥ������ȤǤ��롣�ºݡ����������ʥץ������
-(�����Ĥ��Ȥ����Τ�����äƤ狼��ʤ���)��Ĥ����櫓�ǡ��������
-�ץ�����फ�鼡�ؤȾ��������ۤ��櫓�Ǥ������Τ褦�ˤ����ˡ�
-�ɤΤ褦�ʥ���ƥ����ȤǤǤ�ƤӽФ���ǽ�ʥե�������ͤȤ��ơ�
-�����β���֤���Ф����櫓�Ǥ��������¸����뤿��ˡ�
-<code class=scheme><span class=keyword>bag-of</span></code> �ޥ������������ޤ�������ϡ������������������󥹥���
-�򤹤٤��֤���ΤǤ�(�⤷���������ɤ���������ʤ���С����ꥹ�Ȥ�
-�֤��ޤ�)����������ȡ����Τ褦�˽񤯤��Ȥ��Ǥ��ơ�</p>
+<p class=noindent>この方法の問題は、プログラムを最初に Scheme のプロンプトから
+呼び出し、そのあとで、また、Scheme のプロンプトから <code class=scheme><span class=keyword>amb</span></code> を
+呼び出して一連の解を得るということである。実際、いろいろなプログラム
+(いくつかというのは前もってわからない！)をつかうわけで、一つ前の
+プログラムから次へと情報を持ち越すわけです。このようにせずに、
+どのようなコンテキストででも呼び出し可能なフォームの値として、
+これらの解を返せればいいわけです。これを実現するために、
+<code class=scheme><span class=keyword>bag-of</span></code> マクロをを定義します。これは、引数の成功したインスタンス
+をすべて返すものです(もし、引数がどれも成功しなければ、空リストを
+返します)。そうすると、次のように書くことができて、</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>bag-of</span>
@@ -364,7 +365,7 @@ q(amb) ���ƤФ졢���줬�ǽ��μ��ԤȤʤ�ޤ���(<code class=scheme>(<span class=ke
 <p>
 </p>
 
-<p class=noindent>�����</p>
+<p class=noindent>これは</p>
 <p>
 </p>
 <pre class=scheme>(<span class=selfeval>2</span> <span class=selfeval>3</span> <span class=selfeval>5</span> <span class=selfeval>7</span> <span class=selfeval>11</span> <span class=selfeval>13</span> <span class=selfeval>17</span> <span class=selfeval>19</span>)
@@ -372,7 +373,7 @@ q(amb) ���ƤФ졢���줬�ǽ��μ��ԤȤʤ�ޤ���(<code class=scheme>(<span class=ke
 <p>
 </p>
 
-<p class=noindent>���֤��ޤ������� <code class=scheme><span class=keyword>bag-of</span></code> �ޥ����ϰʲ��Τ褦��������ޤ���</p>
+<p class=noindent>を返します。この <code class=scheme><span class=keyword>bag-of</span></code> マクロは以下のように定義します。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define-macro</span> <span class=keyword>bag-of</span>
@@ -394,69 +395,69 @@ q(amb) ���ƤФ졢���줬�ǽ��μ��ԤȤʤ�ޤ���(<code class=scheme>(<span class=ke
 <p>
 </p>
 
-<p class=noindent><code class=scheme><span class=keyword>bag-of</span></code> �Ϻǽ�ˡ�����ȥ���� <code class=scheme><span class=variable>amb-fail</span></code> ����¸���ޤ���
-<code class=scheme><span class=variable>amb-fail</span></code> ��ɽ��³ <code class=scheme><span class=variable>+k</span></code> �� <code class=scheme><span class=keyword>if</span></code>-�ƥ��Ȥ������������褦��
-��������ޤ����ƥ��Ȥ���¦�ǡ�<code class=scheme><span class=keyword>bag-of</span></code> �ΰ��� <code class=scheme><span class=variable>e</span></code> ��ɾ������ޤ���
-<code class=scheme><span class=variable>e</span></code> �����������顢���η�̤� <code class=scheme><span class=variable>+results</span></code> �Ȥ����ꥹ�Ȥ˽�����ޤ���
-�����ơ��ɽ��³�ϡ��� <code class=scheme><span class=selfeval>#t</span></code> �ǸƤФ�ޤ�������ˤ�ꡢ<code class=scheme><span class=keyword>if</span></code>-�ƥ��Ȥ�
-��������<code class=scheme><span class=variable>e</span></code> �ϼ��ΥХå��ȥ�å��ݥ���Ȥ���ƻ�Ԥ���ޤ���
-����ʤ� <code class=scheme><span class=variable>e</span></code> �η�̤���������ˡ������졢����餬���٤� <code class=scheme><span class=variable>+results</span></code>
-�˽�����ޤ���</p>
+<p class=noindent><code class=scheme><span class=keyword>bag-of</span></code> は最初に、エントリ時の <code class=scheme><span class=variable>amb-fail</span></code> を保存します。
+<code class=scheme><span class=variable>amb-fail</span></code> を局所継続 <code class=scheme><span class=variable>+k</span></code> を <code class=scheme><span class=keyword>if</span></code>-テストの中で生成するように
+再定義します。テストの内側で、<code class=scheme><span class=keyword>bag-of</span></code> の引数 <code class=scheme><span class=variable>e</span></code> が評価されます。
+<code class=scheme><span class=variable>e</span></code> が成功したら、その結果は <code class=scheme><span class=variable>+results</span></code> というリストに集められます。
+そして、局所継続は、値 <code class=scheme><span class=selfeval>#t</span></code> で呼ばれます。これにより、<code class=scheme><span class=keyword>if</span></code>-テストは
+成功し、<code class=scheme><span class=variable>e</span></code> は次のバックトラックポイントから再試行されます。
+さらなる <code class=scheme><span class=variable>e</span></code> の結果が、この方法で得られ、それらがすべて <code class=scheme><span class=variable>+results</span></code>
+に集められます。</p>
 <p>
 </p>
 <p>
-�ǽ�Ū�� <code class=scheme><span class=variable>e</span></code> �����Ԥ����Ȥ��ˡ��١����� <code class=scheme><span class=variable>amb-fail</span></code> ���ƤФ�ޤ���
-ñ�ˡ��ɽ��³���� <code class=scheme><span class=selfeval>#f</span></code> �ǸƤ֤����Ǥ�������� <code class=scheme><span class=keyword>if</span></code> ���Ϥ��줿
-�����ץå��夷�ޤ���<code class=scheme><span class=variable>amb-fail</span></code> �򥨥�ȥ������ͤ��ᤷ��
-<code class=scheme><span class=variable>+result</span></code> ���֤��ޤ���(<code class=scheme><span class=variable>reverse!</span></code> �Ϸ�̤��������줿��ˤ�������Ǥ���)</p>
+最終的に <code class=scheme><span class=variable>e</span></code> が失敗したときに、ベースの <code class=scheme><span class=variable>amb-fail</span></code> が呼ばれます。
+単に、局所継続を値 <code class=scheme><span class=selfeval>#f</span></code> で呼ぶだけです。これは <code class=scheme><span class=keyword>if</span></code> に渡された
+制御をプッシュします。<code class=scheme><span class=variable>amb-fail</span></code> をエントリ前の値に戻し、
+<code class=scheme><span class=variable>+result</span></code> を返します。(<code class=scheme><span class=variable>reverse!</span></code> は結果を生成された順にするだけです。)</p>
 <p>
 <a name="node_idx_482"></a></p>
 <a name="node_sec_14.4"></a>
-<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_14.4">14.4&nbsp;&nbsp;�����ѥ���</a></h2>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_14.4">14.4&nbsp;&nbsp;論理パズル</a></h2>
 <p></p>
 <p>
-�Хå��ȥ�å���Ϣư��������ͥ��õ���Υѥ�������ѥ����򤤤Ƥߤ��
-�����ˤʤ�ޤ�������������ϡ���³��Ū�˲򤯤Τ������񤷤��Ǥ�����
-<code class=scheme><span class=keyword>amb</span></code> ��Ĥ��äơ��ʷ�ˡ����Ū�˲򤱤ޤ����ѥ����򤯡��ڤ��ߤ�
-���Ф��뤳�ȤϤ���ޤ���</p>
+バックトラックと連動した深さ優先探索のパワーは論理パズルを解いてみると
+明かになります。これらの問題は、手続き的に解くのは非常に難しいですが、
+<code class=scheme><span class=keyword>amb</span></code> をつかって、簡潔に、宣言的に解けます。パズルを解く、楽しみを
+うばわれることはありません。</p>
 <p>
 </p>
 <a name="node_sec_14.4.1"></a>
-<h3 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_14.4.1">14.4.1&nbsp;&nbsp;��������ѥ���</a></h3>
+<h3 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_14.4.1">14.4.1&nbsp;&nbsp;カロタンパズル</a></h3>
 <p></p>
 <p>
-��������ϴ�̯���ʤΤ����²�Ǥ���<a name="node_call_footnote_Temp_13"></a><sup><small><a href="#node_footnote_Temp_13">2</a></small></sup> �ˤϾ�˿��¤��ꡢ���Ϥ����ɤ��� 2 �Ĥο��¤ϸ���ʤ�
-���뤤�ϡ������ɤ��� 2 �Ĥα��ϸ���ʤ��Ȥ�����ΤǤ���</p>
+カロタンは奇妙な癖のある種族です。<a name="node_call_footnote_Temp_13"></a><sup><small><a href="#node_footnote_Temp_13">2</a></small></sup> 男は常に真実を語り、女はいちどきに 2 つの真実は言わない
+あるいは、いちどきに 2 つの嘘は言わないというものです。</p>
 <p>
 </p>
 <p>
-�������ؼ�(��򥦥���դȸƤӤޤ��礦)�����θ����Ϥ�ޤ�����
-������դϤޤ�����������θ��դ��Τ�ޤ��󡣤����������������
-���åץ�(����)�Ȥ��λҤɤ�Υ��ӤȽв񤤤ޤ�����������դϥ��Ӥ�
-�֤��ߤ��ˤλҡ��פȤ����ͤޤ��������Ӥϥ����������������Τǡ�
-������դˤ�ʬ��ޤ���Ǥ�����</p>
+ある人類学者(彼をウォルフと呼びましょう)が彼らの研究を始めました。
+ウォルフはまだ、カロタンの言葉を知りません。ある日、カロタンの
+カップル(異性)とその子どものキビと出会いました。ウォルフはキビに
+「きみは男の子？」とたずねました。キビはカロタン語で答えたので、
+ウォルフには分りませんでした。</p>
 <p>
 </p>
 <p>
-������դ�ξ��(�Ѹ���ΤäƤ���)����������ޤ�����
-�ҤȤ꤬���֥��Ӥϡ���ʬ���ˤλҤ��Ȥ��äƤ���פȸ���
-�⤦�ҤȤ꤬���֥��ӤϽ��λҡ����Ӥϱ���Ĥ����פ��դ��ä��ޤ�����</p>
+ウォルフは両親(英語を知っている)に説明を求めました。
+ひとりが、「キビは、自分は男の子だといっている」と言い
+もうひとりが、「キビは女の子。キビは嘘をついた」と付け加えました。</p>
 <p>
-����ξ�Ƥ����̤ȥ��Ӥ����̤򤢤ƤƤ���������</p>
+この両親の性別とキビの性別をあててください。</p>
 <p>
 </p>
 <div align=center>&nbsp;&#8212;&nbsp;</div>
 <p>
 </p>
 <p>
-����ѿ��ν����Ƴ�����뤳�Ȥˤ���ޤ����ͤ�������ǽ�ˤ�
-���ξ�ξ��� <code class=scheme><span class=variable>assert</span></code> �����¤ӤȤ�����󤹤뤳�ȤǤ���</p>
+解は変数の集りを導入することにあります。値の選択を可能にし
+その上の条件を <code class=scheme><span class=variable>assert</span></code> 式の並びとして列挙することです。</p>
 <p>
 </p>
 <p>
-�ѿ� <code class=scheme><span class=variable>parent1</span></code>��<code class=scheme><span class=variable>parent2</span></code> ����� <code class=scheme><span class=variable>kibi</span></code> ��ξ��(�ФƤ�����)��
-���Ӥ����̤Ǥ���<code class=scheme><span class=variable>kibi-self-desc</span></code> �� ���Ӥ���ʬ�Ǹ��ä�(����������)
-��ʬ�����̡�<code class=scheme><span class=variable>kibi-lied?</span></code> �ϥ��Ӥθ��ä����Ȥ������ɤ����ο����ͤǤ���</p>
+変数 <code class=scheme><span class=variable>parent1</span></code>、<code class=scheme><span class=variable>parent2</span></code> および <code class=scheme><span class=variable>kibi</span></code> は両親(出てきた順)と
+キビの性別です。<code class=scheme><span class=variable>kibi-self-desc</span></code> は キビが自分で言った(カロタン語で)
+自分の性別、<code class=scheme><span class=variable>kibi-lied?</span></code> はキビの言ったことが嘘かどうかの真理値です。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define</span> <span class=variable>solve-kalotan-puzzle</span>
@@ -506,35 +507,35 @@ q(amb) ���ƤФ졢���줬�ǽ��μ��ԤȤʤ�ޤ���(<code class=scheme>(<span class=ke
 <p>
 </p>
 
-<p class=noindent>�إ�Ѽ�³���ˤĤ��ơ�<code class=scheme><span class=variable>distinct?</span></code> �ϰ����Υꥹ�ȤΤ��٤Ƥ�
-���Ǥ��̡��Τ�ΤǤ���п����֤��������Ǥʤ���е����֤��ޤ���
-��³�� <code class=scheme><span class=variable>xor</span></code> ����Ĥΰ����ΰ����Τ߿��Ǥ���Ȥ������֤���
-�����Ǥʤ���е����֤��ޤ���</p>
+<p class=noindent>ヘルパ手続きについて：<code class=scheme><span class=variable>distinct?</span></code> は引数のリストのすべての
+要素が別々のものであれば真を返し、そうでなければ偽を返します。
+手続き <code class=scheme><span class=variable>xor</span></code> は二つの引数の一方のみ真であるとき真を返し、
+そうでなければ偽を返します。</p>
 <p>
-<code class=scheme>(<span class=variable>solve-kalotan-puzzle</span>)</code> �����Ϥ���Хѥ��뤬�򤱤ޤ���</p>
+<code class=scheme>(<span class=variable>solve-kalotan-puzzle</span>)</code> を入力すればパズルが解けます。</p>
 <p>
 </p>
 <a name="node_sec_14.4.2"></a>
-<h3 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_14.4.2">14.4.2&nbsp;&nbsp;�Ͽޤ��ɤ�ʬ��</a></h3>
+<h3 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_14.4.2">14.4.2&nbsp;&nbsp;地図の塗り分け</a></h3>
 <p></p>
 <p>
-�Ͽޤ��ɤ�ʬ���� &#8212; ���ʤ�����ٹ�Ȥ��̤ο��ˤʤ�褦�ɤ�ʬ����ˤ�
-4 ������Ф����Ȥ����Τϡ�Ĺ���Τ��(�������줿�Τ� 
-1976ǯ&nbsp;[<a href="t-y-scheme.hlog">cite{4cp}</a>]�ˤʤäƤΤ���)�Ƥ��ޤ������ºݤˤɤΤ褦���ɤ�ʬ��
-��Τ��ϡ�����äȤ����Ż��Ǥ����ʲ��Υץ������ϡ��������
-�ץ�����ߥ󥰤��ɤΤ褦����Ω�Ĥ��򼨤��Ƥ��ޤ���</p>
+地図を塗り分ける &#8212; すなわち、隣国とは別の色になるよう塗り分けるには
+4 色あればたりるというのは、長く知られ(証明されたのは 
+1976年&nbsp;[<a href="t-y-scheme.hlog">cite{4cp}</a>]になってのこと)ていました。実際にどのように塗り分け
+るのかは、ちょっとした仕事です。以下のプログラムは、非決定性
+プログラミングがどのように役立つかを示しています。</p>
 <p>
 </p>
 <p>
-�ʲ��Υץ����������衼���åѤ��Ͽޤ��ɤ�ʬ���������򤯤�ΤǤ���
-����� Prolog �Ǥβ����ϡ�<em>Prolog �ε���</em>��[<a href="t-y-scheme.hlog">cite{aop}</a>] �ˤ���ޤ���
-(�����Ǥβ�ˡ�Ȥ����ܤǤβ�ˡ����Ӥ���Τϡ�����ˤʤ�ޤ���)</p>
+以下のプログラムは西ヨーロッパの地図を塗り分ける問題を解くものです。
+問題と Prolog での解答は『<em>Prolog の技芸</em>』[<a href="t-y-scheme.hlog">cite{aop}</a>] にあります。
+(ここでの解法とこの本での解法を比較するのは、ためになります。)</p>
 <p>
 </p>
 <p>
 </p>
 <p>
-��³�� <code class=scheme><span class=variable>choose-color</span></code> �������Ū�� 4�Ĥο��ΤҤȤĤ��֤��ޤ���</p>
+手続き <code class=scheme><span class=variable>choose-color</span></code> は非決定的に 4つの色のひとつを返します。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define</span> <span class=variable>choose-color</span>
@@ -546,21 +547,21 @@ q(amb) ���ƤФ졢���줬�ǽ��μ��ԤȤʤ�ޤ���(<code class=scheme>(<span class=ke
 <p>
 </p>
 
-<p class=noindent>�����β�ˡ�Ǥϡ����줾��ι��ǡ�����¤�Ȥ����������ޤ���
-���Υǡ�����¤�� 3 �Ĥ����Ǥ���ʤ�ꥹ�Ȥǡ�������Ǥ�
-��̾���������Ǥϳ�����Ƥ�줿�����軰���Ǥ��ٹ�ο��Ǥ���
-���ι�ο��򤢤�魯�ѿ��ˤϤ��ι�Τʤޤ���Ƭʸ����Ȥ��ޤ���
+<p class=noindent>ここの解法では、それぞれの国をデータ構造として生成します。
+このデータ構造は 3 つの要素からなるリストで、第一要素は
+国名、第二要素は割り当てられた色、第三要素は隣国の色です。
+その国の色をあらわす変数にはその国のなまえの頭文字を使います。
 <a name="node_call_footnote_Temp_14"></a><sup><small><a href="#node_footnote_Temp_14">3</a></small></sup>
-���Ȥ��С��٥륮���Υꥹ�Ȥϡ�<code class=scheme>(<span class=variable>list</span> <span class=keyword>'</span><span class=variable>belgium</span> <span class=variable>b</span> (<span class=variable>list</span> <span class=variable>f</span> <span class=variable>h</span> <span class=variable>l</span> <span class=variable>g</span>))</code>
-�Ǥ�������ϡ�����ʸ�ˤ��С��٥륮�����ٹ�ϡ��ե�󥹡���������
-�륯����֥륯���ɥ��Ĥ�����Ǥ���</p>
+たとえば、ベルギーのリストは、<code class=scheme>(<span class=variable>list</span> <span class=keyword>'</span><span class=variable>belgium</span> <span class=variable>b</span> (<span class=variable>list</span> <span class=variable>f</span> <span class=variable>h</span> <span class=variable>l</span> <span class=variable>g</span>))</code>
+です。これは、問題文によれば、ベルギーの隣国は、フランス、オランダ、
+ルクセンブルク、ドイツだからです。</p>
 <p>
 </p>
 <p>
-���줾��ι�Υꥹ�Ȥ��Ǥ����顢����餬�����٤�(ͣ�졪)�ξ���
-ɽ�����ޤ����Ĥޤꡢ�ٹ��Ʊ�����Ǥ��äƤϤ����ʤ��Ȥ�����ΤǤ���
-����������С����٤Ƥι�Υꥹ�ȤˤĤ��Ƥ��������Ǥ��軰���Ǥ�
-���С��Ǥ��äƤϤʤ�ʤ��Ȥ������ȤǤ���</p>
+それぞれの国のリストができたら、これらが満すべき(唯一！)の条件を
+表明します。つまり、隣国と同じ色であってはいけないというものです。
+言い換えれば、すべての国のリストについての第二要素は第三要素の
+メンバーであってはならないということです。</p>
 <p>
 </p>
 <p>
@@ -568,7 +569,7 @@ q(amb) ���ƤФ졢���줬�ǽ��μ��ԤȤʤ�ޤ���(<code class=scheme>(<span class=ke
 <pre class=scheme>(<span class=keyword>define</span> <span class=variable>color-europe</span>
   (<span class=keyword>lambda</span> ()
 
-    <span class=comment>;�񤴤Ȥο��������</span>
+    <span class=comment>;国ごとの色の選択肢</span>
     (<span class=keyword>let</span> ((<span class=variable>p</span> (<span class=variable>choose-color</span>)) <span class=comment>;Portugal</span>
           (<span class=variable>e</span> (<span class=variable>choose-color</span>)) <span class=comment>;Spain</span>
           (<span class=variable>f</span> (<span class=variable>choose-color</span>)) <span class=comment>;France</span>
@@ -581,10 +582,10 @@ q(amb) ���ƤФ졢���줬�ǽ��μ��ԤȤʤ�ޤ���(<code class=scheme>(<span class=ke
           (<span class=variable>a</span> (<span class=variable>choose-color</span>)) <span class=comment>;Austria</span>
           )
 
-      <span class=comment>;�ƹ񤴤Ȥ����ܥꥹ�Ȥ��ۤ���</span>
-      <span class=comment>;������ǤϹ�̾</span>
-      <span class=comment>;�������ǤϤ��ι�ο�</span>
-      <span class=comment>;�軰���Ǥ��ٹ�ο��Υꥹ��</span>
+      <span class=comment>;各国ごとに隣接リストを構築する</span>
+      <span class=comment>;第一要素は国名</span>
+      <span class=comment>;第二要素はその国の色</span>
+      <span class=comment>;第三要素は隣国の色のリスト</span>
       (<span class=keyword>let</span> ((<span class=variable>portugal</span>
              (<span class=variable>list</span> <span class=keyword>'</span><span class=variable>portugal</span> <span class=variable>p</span>
                    (<span class=variable>list</span> <span class=variable>e</span>)))
@@ -623,9 +624,9 @@ q(amb) ���ƤФ졢���줬�ǽ��μ��ԤȤʤ�ޤ���(<code class=scheme>(<span class=ke
                      <span class=variable>italy</span> <span class=variable>switzerland</span>
                      <span class=variable>austria</span>)))
           
-          <span class=comment>;��ο���</span>
-	  <span class=comment>;�ٹ�ο���</span>
-	  <span class=comment>;�ɤ�Ǥ��äƤ⤤���ʤ�</span>
+          <span class=comment>;国の色は</span>
+	  <span class=comment>;隣国の色の</span>
+	  <span class=comment>;どれであってもいけない</span>
           (<span class=variable>for-each</span>
            (<span class=keyword>lambda</span> (<span class=variable>c</span>)
              (<span class=variable>assert</span>
@@ -633,7 +634,7 @@ q(amb) ���ƤФ졢���줬�ǽ��μ��ԤȤʤ�ޤ���(<code class=scheme>(<span class=ke
                          (<span class=variable>caddr</span> <span class=variable>c</span>)))))
            <span class=variable>countries</span>)
 
-          <span class=comment>;���γ�����Ƥν���</span>
+          <span class=comment>;色の割り当ての出力</span>
           (<span class=variable>for-each</span>
            (<span class=keyword>lambda</span> (<span class=variable>c</span>)
              (<span class=variable>display</span> (<span class=variable>car</span> <span class=variable>c</span>))
@@ -645,19 +646,19 @@ q(amb) ���ƤФ졢���줬�ǽ��μ��ԤȤʤ�ޤ���(<code class=scheme>(<span class=ke
 <p>
 </p>
 
-<p class=noindent><code class=scheme>(<span class=variable>color-europe</span>)</code> �����Ϥ���С����γ�����Ƥ������ޤ���</p>
+<p class=noindent><code class=scheme>(<span class=variable>color-europe</span>)</code> と入力すれば、色の割り当てが得られます。</p>
 <p>
 </p>
 <p>
 </p>
 <div class=footnoterule><hr></div><p></p>
-<div class=footnote><p><a name="node_footnote_Temp_12"></a><sup><small><a href="#node_call_footnote_Temp_12">1</a></small></sup> SICP �ǤϤ��μ�³���� <code class=scheme><span class=variable>require</span></code> �Ȥ���̾���Ǥ��������Ǥϡ�
-������Ǥ������褯���� <code class=scheme><span class=variable>require</span></code> ���̤λȤ����Ȥκ�����򤱤�
-����� <code class=scheme><span class=variable>assert</span></code> �Ȥ������̻Ҥ�Ȥ��ޤ���<code class=scheme><span class=variable>require</span></code> ��ɬ�פʤȤ���
-�⥸�塼�������ɤ��륪�ڥ졼���Ȥ��Ƥ褯�Ȥ��ޤ���</p>
-<p><a name="node_footnote_Temp_13"></a><sup><small><a href="#node_call_footnote_Temp_13">2</a></small></sup> ���Υѥ���ϥϥ󥿡�[<a href="t-y-scheme.hlog">cite{hunter}</a>]��
-����ΤǤ���</p>
-<p><a name="node_footnote_Temp_14"></a><sup><small><a href="#node_call_footnote_Temp_14">3</a></small></sup> ���ڥ���(Espa&ntilde;a) �� <code class=scheme><span class=variable>e</span></code> �Ǥ���ϥ������Ȥ֤Ĥ���ʤ��褦�ˤǤ���</p>
+<div class=footnote><p><a name="node_footnote_Temp_12"></a><sup><small><a href="#node_call_footnote_Temp_12">1</a></small></sup> SICP ではこの手続きは <code class=scheme><span class=variable>require</span></code> という名前です。ここでは、
+非公式ですが、よくある <code class=scheme><span class=variable>require</span></code> の別の使い方との混乱を避ける
+ために <code class=scheme><span class=variable>assert</span></code> という識別子を使います。<code class=scheme><span class=variable>require</span></code> は必要なときに
+モジュールをロードするオペレータとしてよく使います。</p>
+<p><a name="node_footnote_Temp_13"></a><sup><small><a href="#node_call_footnote_Temp_13">2</a></small></sup> このパズルはハンター[<a href="t-y-scheme.hlog">cite{hunter}</a>]に
+よるものです。</p>
+<p><a name="node_footnote_Temp_14"></a><sup><small><a href="#node_call_footnote_Temp_14">3</a></small></sup> スペイン(Espa&ntilde;a) は <code class=scheme><span class=variable>e</span></code> でこれはスイスとぶつからないようにです。</p>
 </div>
 <div class=smallskip></div>
 <p style="margin-top: 0pt; margin-bottom: 0pt">

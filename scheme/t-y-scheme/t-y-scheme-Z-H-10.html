@@ -1,5 +1,4 @@
-<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html>
 <!--
 
 Generated from t-y-scheme.tex by tex2page, v 20060531
@@ -8,9 +7,11 @@ Generated from t-y-scheme.tex by tex2page, v 20060531
 http://www.ccs.neu.edu/~dorai/tex2page/tex2page-doc.html
 
 -->
+<html lang="ja">
 <head>
+<meta charset="utf-8">
 <title>
-�Ƚ� Scheme ������ Teach Yourself Scheme in Fixnum Days
+独習 Scheme 三週間 Teach Yourself Scheme in Fixnum Days
 </title>
 <link rel="stylesheet" type="text/css" href="t-y-scheme-Z-S.css" title=default>
 <meta name=robots content="noindex,follow">
@@ -28,22 +29,22 @@ introduction to the programming language Scheme">
 <a name="node_chap_8"></a>
 <h1 class=chapter>
 <div class=chapterheading><a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_8">Chapter 8</a></div><br>
-<a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_8">�ޥ���</a></h1>
+<a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_8">マクロ</a></h1>
 <p></p>
 <p>
 <a name="node_idx_384"></a></p>
 <p>
-<em>�ޥ���</em>��Ȥ��ȡ���ʬ�ѤΥ��ڥ����ե������Ĥ��뤳�Ȥ��Ǥ��ޤ���
-�ޥ������Ѵ��Ҽ�³���˷�ӤĤ�������ܥ�Τ��ȤǤ���Scheme �ϥޥ�����
-(�Ĥޤꡢ��Ƭ���ޥ����Ǥ���ե�����)�ˤǤ����ȡ��ޥ����Ѵ��Ҥ�ޥ�������
-���֥ե������Ŭ�Ѥ��ѷ��η�̤�ɾ�����ޤ���</p>
+<em>マクロ</em>を使うと、自分用のスペシャルフォームをつくることができます。
+マクロは変換子手続きに結びついたシンボルのことです。Scheme はマクロ式
+(つまり、先頭がマクロであるフォーム)にであうと、マクロ変換子をマクロ式の
+サブフォームに適用し変形の結果を評価します。</p>
 <p>
 </p>
 <p>
-��ǰ�Ȥ��Ƥϡ��ޥ����ϡ����륳���ɤΥƥ����Ȥ��̤Υ����ɤΥƥ�����
-���ѷ�������˥ƥ����Ȥ��ѷ�����ꤹ���ΤǤ���
-���μ���ѷ��ϡ�ʣ�������ˤˤ������ƥ����Ⱦ�Υѥ������
-ά������Τ������Ǥ���</p>
+概念としては、マクロは、あるコードのテキストを別のコードのテキスト
+に変形する純粋にテキストの変形を指定するものです。
+この種の変形は、複雑で頻繁にあらわれるテキスト上のパターンを
+略記するのに便利です。</p>
 <p>
 </p>
 <p>
@@ -51,11 +52,11 @@ introduction to the programming language Scheme">
 <p>
 </p>
 <p>
-�ޥ����ϥ��ڥ����ե����� <code class=scheme><span class=keyword>define-macro</span></code> ��Ȥä�<em>���</em>���ޤ�
-(����<a href="t-y-scheme-Z-H-20.html#node_sec_A.3">A.3</a>��⻲�Ȥ��Ƥ�������)��<a name="node_call_footnote_Temp_5"></a><sup><small><a href="#node_footnote_Temp_5">1</a></small></sup>
-���Ȥ��С����Ĥ����ˤʤäƤ��� Scheme �˾��Υ��ڥ����ե�����
-<code class=scheme><span class=keyword>when</span></code> ���ʤ����ˤϡ�<code class=scheme><span class=keyword>when</span></code> ��ʲ��Τ褦�˥ޥ�����������뤳�Ȥ�
-�Ǥ��ޤ���</p>
+マクロはスペシャルフォーム <code class=scheme><span class=keyword>define-macro</span></code> を使って<em>定義</em>します
+(が、<a href="t-y-scheme-Z-H-20.html#node_sec_A.3">A.3</a>節も参照してください)。<a name="node_call_footnote_Temp_5"></a><sup><small><a href="#node_footnote_Temp_5">1</a></small></sup>
+たとえば、おつかいになっている Scheme に条件のスペシャルフォーム
+<code class=scheme><span class=keyword>when</span></code> がない場合には、<code class=scheme><span class=keyword>when</span></code> を以下のようにマクロで定義することが
+できます。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define-macro</span> <span class=keyword>when</span>
@@ -68,8 +69,8 @@ introduction to the programming language Scheme">
 <p>
 </p>
 
-<p class=noindent>����ϡ�<code class=scheme><span class=keyword>when</span></code>����Ʊ����<code class=scheme><span class=keyword>if</span></code>�����Ѵ�����<code class=scheme><span class=keyword>when</span></code>�Ѵ��Ҥ��������
-���ޤ�������������������Υޥ�����Ȥ��С�<code class=scheme><span class=keyword>when</span></code>��</p>
+<p class=noindent>これは、<code class=scheme><span class=keyword>when</span></code>式を同等の<code class=scheme><span class=keyword>if</span></code>式に変換する<code class=scheme><span class=keyword>when</span></code>変換子を定義して
+います。ここで定義したこのマクロを使えば、<code class=scheme><span class=keyword>when</span></code>式</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>when</span> (<span class=variable>&lt;</span> (<span class=variable>pressure</span> <span class=variable>tube</span>) <span class=selfeval>60</span>)
@@ -84,8 +85,8 @@ introduction to the programming language Scheme">
 <p>
 </p>
 
-<p class=noindent>���̤μ����Ѵ�����ޤ���<code class=scheme><span class=keyword>when</span></code>�Ѵ��Ҥ�<code class=scheme><span class=keyword>when</span></code>���Υ��֥ե������
-Ŭ�Ѥ�����̤ϰʲ��Τ褦�ˤʤ�ޤ���</p>
+<p class=noindent>は別の式に変換されます。<code class=scheme><span class=keyword>when</span></code>変換子を<code class=scheme><span class=keyword>when</span></code>式のサブフォームに
+適用した結果は以下のようになります。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=variable>apply</span>
@@ -102,7 +103,7 @@ introduction to the programming language Scheme">
 <p>
 </p>
 
-<p class=noindent>�ѷ��ϰʲ��Τ褦�ˤʤ�ޤ���</p>
+<p class=noindent>変形は以下のようになります。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>if</span> (<span class=variable>&lt;</span> (<span class=variable>pressure</span> <span class=variable>tube</span>) <span class=selfeval>60</span>)
@@ -118,13 +119,13 @@ introduction to the programming language Scheme">
 <p>
 </p>
 
-<p class=noindent>�������Ƥ��顢Scheme �Ϥ��μ���ۤ��Τ�Τ�Ʊ���褦��ɾ�����ޤ���</p>
+<p class=noindent>こうしてから、Scheme はこの式をほかのものと同じように評価します。</p>
 <p>
 <a name="node_idx_390"></a></p>
 <p>
 </p>
 <p>
-�̤��㡢<code class=scheme><span class=keyword>when</span></code> ���Ф� <code class=scheme><span class=keyword>unless</span></code> �ޥ�������Ϥ�������ˤʤ�ޤ���</p>
+別の例、<code class=scheme><span class=keyword>when</span></code> の対の <code class=scheme><span class=keyword>unless</span></code> マクロ定義はこんな風になります。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define-macro</span> <span class=keyword>unless</span>
@@ -136,8 +137,8 @@ introduction to the programming language Scheme">
 <p>
 </p>
 <p>
-�⤦�ҤȤĤ���ˡ�Ȥ��Ƥϡ�<code class=scheme><span class=keyword>when</span></code> �� <code class=scheme><span class=keyword>unless</span></code> �������ǸƤ֤��Ȥ���
-���ޤ���</p>
+もうひとつの方法としては、<code class=scheme><span class=keyword>when</span></code> を <code class=scheme><span class=keyword>unless</span></code> の定義内で呼ぶことがで
+きます。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define-macro</span> <span class=keyword>unless</span>
@@ -148,16 +149,16 @@ introduction to the programming language Scheme">
 <p>
 </p>
 
-<p class=noindent>�ޥ���Ÿ�����̤Υޥ����򻲾Ȥ��뤳�Ȥ��Ǥ��ޤ���</p>
+<p class=noindent>マクロ展開は別のマクロを参照することができます。</p>
 <p>
 </p>
 <a name="node_sec_8.1"></a>
-<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_8.1">8.1&nbsp;&nbsp;�ƥ�ץ졼�ȤȤ��Ƥ�Ÿ������</a></h2>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_8.1">8.1&nbsp;&nbsp;テンプレートとしての展開指定</a></h2>
 <p></p>
 <p>
-�ޥ����Ѵ��ҤϤ����Ĥ���S����Ȥꡢ�ե�����Ȥ��ƻȤ���
-�ҤȤĤ�S����������ޤ���ŵ��Ū�ʽ��Ϥϥꥹ�ȤǤ���
-<code class=scheme><span class=keyword>when</span></code>����Ǥϡ����ϤΥꥹ�Ȥ�</p>
+マクロ変換子はいくつかのS式をとり、フォームとして使える
+ひとつのS式を作りだします。典型的な出力はリストです。
+<code class=scheme><span class=keyword>when</span></code>の例では、出力のリストは</p>
 <p>
 </p>
 <pre class=scheme>(<span class=variable>list</span> <span class=keyword>'</span><span class=keyword>if</span> <span class=variable>test</span>
@@ -168,8 +169,8 @@ introduction to the programming language Scheme">
 <p>
 </p>
 
-<p class=noindent>��ȤäƤĤ���ޤ��������ǡ�<code class=scheme><span class=variable>test</span></code>�ϥޥ����κǽ�Υ��֥ե�����
-��«������Ƥ��ޤ����Ĥޤꡢ</p>
+<p class=noindent>を使ってつくります。ここで、<code class=scheme><span class=variable>test</span></code>はマクロの最初のサブフォーム
+に束縛されています。つまり、</p>
 <p>
 </p>
 <pre class=scheme>(<span class=variable>&lt;</span> (<span class=variable>pressure</span> <span class=variable>tube</span>) <span class=selfeval>60</span>)
@@ -179,8 +180,8 @@ introduction to the programming language Scheme">
 <p>
 </p>
 
-<p class=noindent>�Ǥ����ޤ���<code class=scheme><span class=variable>branch</span></code> �ϥޥ����ΤΤ���Υ��֥ե������«��
-����Ƥ��ޤ���</p>
+<p class=noindent>です。また、<code class=scheme><span class=variable>branch</span></code> はマクロののこりのサブフォームに束縛
+されています。</p>
 <p>
 </p>
 <pre class=scheme>((<span class=variable>open-valve</span> <span class=variable>tube</span>)
@@ -196,13 +197,13 @@ introduction to the programming language Scheme">
 
 <p class=noindent></p>
 <p>
-���Ϥ��줿�ꥹ�ȤϤ����֤�ʣ���ʤ�ΤǤ���<code class=scheme><span class=keyword>when</span></code>���
-��ä��Ū�ʥޥ����Ǥϡ����ϥꥹ�Ȥ�Ĥ���Τˡ�����
-�Ťä����ۥץ�������Ƨ�ޤʤ���Фʤ�ˤ��Ȥϡ��ưפ�������
-�Ĥ��ޤ������Τ褦�ʾ��ˤϡ��ޥ����ν��ϥե������
-<em>�ƥ�ץ졼��</em>�Ȥ��ƻ���Ǥ���������Ǥ����ޥ�����
-���줾������Ӥ��Ȥˡ��ޥ����ΰ�����Ŭ�ڤʾ�����������
-�ƥ�ץ졼�Ȥ����ޤ����������äơ�</p>
+出力されたリストはずいぶん複雑なものです。<code class=scheme><span class=keyword>when</span></code>より
+もっと野心的なマクロでは、出力リストをつくるのに、非常に
+凝った構築プロセスを踏まなければならにことは、容易に想像が
+つきます。このような場合には、マクロの出力フォームを
+<em>テンプレート</em>として指定できると便利です。マクロの
+それぞれの用途ごとに、マクロの引数を適切な場所に挿入して
+テンプレートを埋めます。したがって、</p>
 <p>
 </p>
 <pre class=scheme>(<span class=variable>list</span> <span class=keyword>'</span><span class=keyword>IF</span> <span class=variable>test</span>
@@ -211,14 +212,14 @@ introduction to the programming language Scheme">
 <p>
 </p>
 
-<p class=noindent>�ϼ��Τ�Τ��������˽񤤤���ΤǤ���</p>
+<p class=noindent>は次のものをより便利に書いたものです。</p>
 <p>
 </p>
 <pre class=scheme><span class=keyword>`</span>(<span class=keyword>IF</span> <span class=keyword>,</span><span class=variable>test</span>
   (<span class=keyword>BEGIN</span> <span class=keyword>,@</span><span class=variable>branch</span>))
 </pre><p></p>
 <p>
-<code class=scheme><span class=keyword>when</span></code> �Υޥ�������򼡤Τ褦�˲�¤���뤳�Ȥ��Ǥ��ޤ���</p>
+<code class=scheme><span class=keyword>when</span></code> のマクロ定義を次のように改造することができます。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define-macro</span> <span class=keyword>when</span>
@@ -231,28 +232,28 @@ introduction to the programming language Scheme">
 <p>
 </p>
 
-<p class=noindent>�ƥ�ץ졼�ȤΥե����ޥåȤ����ҤΥꥹ�ȹ��ۤȤ�
-�����äơ����ϥꥹ�Ȥη���ľ��Ū�˸�����褦��ɽ�����ޤ���
-�Хå�����������(<code class=scheme><span class=keyword>`</span></code>)�ϥꥹ�ȤΥƥ�ץ졼�Ȥ�Ƴ�����ޤ���
-�ƥ�ץ졼�Ȥ����Ǥϡ���̤Υꥹ�Ȥˡ�<em>���ΤȤ����</em>������
-�ޤ���<em>�㳰</em>�ϡ���Ƭ���Ȥ��ơ�<em>�����</em>(&#8216;<code class=scheme><span class=keyword>,</span></code>&#8217;)���뤤��
-<em>����ޥ��ץ饤��</em>(&#8216;<code class=scheme><span class=keyword>,@</span></code>&#8217;)���Ĥ��Ƥ�����Ǥ���
-(�����Τ���ˡ��ƥ�ץ졼�Ȥ���ǡ����ΤȤ���ˤ���������Ǥ�
-��ʸ���ǽ񤤤Ƥ���ޤ���)</p>
+<p class=noindent>テンプレートのフォーマットは前述のリスト構築とは
+ちがって、出力リストの形を直接的に見えるように表示します。
+バッククウォート(<code class=scheme><span class=keyword>`</span></code>)はリストのテンプレートを導入します。
+テンプレートの要素は、結果のリストに、<em>そのとおりに</em>あらわれ
+ます。<em>例外</em>は、接頭辞として、<em>コンマ</em>(&#8216;<code class=scheme><span class=keyword>,</span></code>&#8217;)あるいは
+<em>コンマスプライス</em>(&#8216;<code class=scheme><span class=keyword>,@</span></code>&#8217;)がついている場合です。
+(説明のために、テンプレートの中で、そのとおりにあらわれる要素を
+大文字で書いてあります。)</p>
 <p>
 </p>
 <p>
-����ޤȥ���ޥ��ץ饤���ϥޥ���������ƥ�ץ졼�ȤΤʤ���
-����뤿��˻Ȥ��ޤ�������ޤϡ�³������ɾ����̤��������ޤ���
-����ޥ��ץ饤����³������ɾ����̤�Ѥ����碌�����Ȥ��������ޤ���
-���ʤ�������֤��Ȥ���γ�̤�Ȥ�Τ����ޤ���(�Ȥ������Ȥϡ�
-����ޥ��ץ饤���ˤ�ä�Ƴ������뼰�ϥꥹ��<em>�Ǥʤ���Фʤ�ʤ�</em>
-�Ȥ������ȤǤ���)</p>
+コンマとコンマスプライスはマクロ引数をテンプレートのなかに
+入れるために使います。コンマは、続く式の評価結果を挿入します。
+コンマスプライスは続く式の評価結果を継ぎあわせたあとに挿入します。
+すなわち、一番そとがわの括弧をとりのぞきます。(ということは、
+コンマスプライスによって導入される式はリスト<em>でなければならない</em>
+ということです。)</p>
 <p>
 </p>
 <p>
-��Ǥϡ�<code class=scheme><span class=variable>test</span></code> �� <code class=scheme><span class=variable>branch</span></code> ��«�����줿�ͤ�Ϳ����ȡ�
-�ƥ�ץ졼�Ȥ����Τ褦�ˡ��׵�ɤ���Ÿ������Ƥ��뤳�Ȥ�ʬ��ޤ���</p>
+例では、<code class=scheme><span class=variable>test</span></code> と <code class=scheme><span class=variable>branch</span></code> に束縛された値を与えると、
+テンプレートが次のように、要求どおり展開されていることが分ります。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>IF</span> (<span class=variable>&lt;</span> (<span class=variable>pressure</span> <span class=variable>tube</span>) <span class=selfeval>60</span>)
@@ -266,10 +267,10 @@ introduction to the programming language Scheme">
 <p>
 </p>
 <a name="node_sec_8.2"></a>
-<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_8.2">8.2&nbsp;&nbsp;�ޥ�������¦�Ǥ��ѿ���ª�β���</a></h2>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_8.2">8.2&nbsp;&nbsp;マクロの内側での変数捕捉の回避</a></h2>
 <p><a name="node_idx_398"></a></p>
 <p>
-��Ĥΰ����������ե�����<code class=scheme><span class=keyword>my-or</span></code>�ϼ��Τ褦������Ǥ������Ǥ��롣</p>
+二つの引数の選言フォーム<code class=scheme><span class=keyword>my-or</span></code>は次のように定義できそうである。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define-macro</span> <span class=keyword>my-or</span>
@@ -281,9 +282,9 @@ introduction to the programming language Scheme">
 
 <p class=noindent></p>
 <p>
-<code class=scheme><span class=keyword>my-or</span></code>�Ϥդ��Ĥΰ�����Ȥꡢ�ǽ�˿�(��<code class=scheme><span class=selfeval>#f</span></code>)�ˤʤä��ͤ�
-�֤��ޤ����äˡ������ܤΰ����Ϻǽ�ΰ��������ˤʤä��Ȥ��ˤΤ�
-ɾ������ޤ���</p>
+<code class=scheme><span class=keyword>my-or</span></code>はふたつの引数をとり、最初に真(非<code class=scheme><span class=selfeval>#f</span></code>)になった値を
+返します。特に、二番目の引数は最初の引数が偽になったときにのみ
+評価されます。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>my-or</span> <span class=selfeval>1</span> <span class=selfeval>2</span>)
@@ -295,11 +296,11 @@ introduction to the programming language Scheme">
 <p>
 </p>
 <p>
-�����˽񤤤�<code class=scheme><span class=keyword>my-or</span></code>�ޥ����ˤ����꤬�ҤȤĤ���ޤ���
-�ǽ�ΰ����ϡ����줬���ξ�硢2��ɾ������ޤ���
-�����ܤ�<code class=scheme><span class=keyword>if</span></code>�ƥ��ȤǤ����ơ��⤦���٤ϡ���then�פλޤǤǤ���
-����ϡ��ǽ�ΰ����������Ѥ��ľ�硢˾�ޤ����ʤ����񤤤�
-ȯ�����ޤ������Ȥ��С�</p>
+ここに書いた<code class=scheme><span class=keyword>my-or</span></code>マクロには問題がひとつあります。
+最初の引数は、それが真の場合、2度評価されます。
+一度目は<code class=scheme><span class=keyword>if</span></code>テストでそして、もう一度は、「then」の枝でです。
+これは、最初の引数が副作用をもつ場合、望ましくない振舞いを
+発生します。たとえば、</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>my-or</span>
@@ -314,11 +315,11 @@ introduction to the programming language Scheme">
 <p>
 </p>
 
-<p class=noindent>��<code class=scheme><span class=selfeval>&quot;doing first argument&quot;</span></code>������ɽ�����ޤ���</p>
+<p class=noindent>は<code class=scheme><span class=selfeval>&quot;doing first argument&quot;</span></code>を二度表示します。</p>
 <p>
 </p>
 <p>
-����ϡ�<code class=scheme><span class=keyword>if</span></code>�ƥ��Ȥη�̤���������ѿ�����¸���뤳�Ȥǲ���Ǥ��ޤ���</p>
+これは、<code class=scheme><span class=keyword>if</span></code>テストの結果をローカル変数に保存することで回避できます。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define-macro</span> <span class=keyword>my-or</span>
@@ -331,9 +332,9 @@ introduction to the programming language Scheme">
 <p>
 </p>
 
-<p class=noindent>����ǤۤȤ�� OK �ʤΤǤ����������ܤΰ��������ޤ���
-�ޥ�������ǻȤäƤ���Τ�Ʊ��<code class=scheme><span class=variable>temp</span></code>�Ȥ������̻Ҥ�ޤ�Ǥ����
-���ޤä����Ȥˤʤ�ޤ������Ȥ��С�</p>
+<p class=noindent>これでほとんど OK なのですが、二番目の引数がたまたま
+マクロ定義で使っているのと同じ<code class=scheme><span class=variable>temp</span></code>という識別子を含んでいると
+こまったことになります。たとえば、</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define</span> <span class=variable>temp</span> <span class=selfeval>3</span>)
@@ -344,17 +345,17 @@ introduction to the programming language Scheme">
 <p>
 </p>
 <p>
-�ۤ�Ȥ� 3 �ˤʤ�٤��ʤΤˡ����Υ����ܤϺǽ�ΰ�������
-(<code class=scheme><span class=selfeval>#f</span></code>)����¸����Τ˥��������ѿ�<code class=scheme><span class=variable>temp</span></code>��Ȥä�����ˡ�
-����������ѿ�<code class=scheme><span class=variable>temp</span></code>�������Υޥ�����Ƴ������<code class=scheme><span class=variable>temp</span></code>��
-��ä���ª����Ƥ��ޤä�����Ǥ���</p>
+ほんとは 3 になるべきなのに。このチョンボは最初の引数の値
+(<code class=scheme><span class=selfeval>#f</span></code>)を保存するのにローカル変数<code class=scheme><span class=variable>temp</span></code>を使ったために、
+第二引数の変数<code class=scheme><span class=variable>temp</span></code>が、このマクロで導入した<code class=scheme><span class=variable>temp</span></code>に
+よって捕捉されてしまったからです。</p>
 <p>
 </p>
 <p>
-�������򤹤�ˤϡ��ޥ��������ǤĤ������������ѿ���
-���տ������򤹤�ɬ�פ�����ޤ������������ѿ��������ʤʤޤ�
-�����򤷡�����⤳��̾����Ȥ�ʤ��褦�˶����ͤ����Ȥ���
-���Ȥ⤢�꤫�⤷��ޤ���</p>
+これを回避するには、マクロ定義中でつかうローカル変数を
+注意深く選択する必要があります。こうした変数に突飛ななまえ
+を選択し、だれもこの名前を使わないように強くねがうという
+こともありかもしれません。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define-macro</span> <span class=keyword>my-or</span>
@@ -367,19 +368,19 @@ introduction to the programming language Scheme">
 <p>
 </p>
 
-<p class=noindent>�����<code class=scheme><span class=variable>+temp</span></code>��ޥ����γ�¦�Υ����ɤǤϻȤ�ʤ��Ȥ���
-���ۤι�դ��ʤꤿ�äƤ���Ф��ޤ�ư���Ǥ��礦��
-������󡢤���ʹ�դϤ��Ĥ�����þ���ޤ���</p>
+<p class=noindent>これは<code class=scheme><span class=variable>+temp</span></code>をマクロの外側のコードでは使わないという
+暗黙の合意がなりたっていればうまく動くでしょう。
+もちろん、こんな合意はいつかは破綻します。</p>
 <p>
 <a name="node_idx_400"></a><a name="node_idx_402"></a></p>
 <p>
 </p>
 <p>
-��Ĺ�Ǥ褱��С���äȡ����Ƥˤʤ�Τϡ�
-¾�μ��ʤ������ʤ����Ȥ��ݾڤ���Ƥ���<em>���줿����ܥ�</em>
-��Ȥ����ȤǤ�����³��<code class=scheme><span class=variable>gensym</span></code>�ϸƤФ�뤿�Ӥ˥�ˡ�����
-����ܥ�����������³���Ǥ������줬��<code class=scheme><span class=variable>gensym</span></code>��Ĥ��ä�
-������<code class=scheme><span class=keyword>my-or</span></code>������Ǥ���</p>
+冗長でよければ、もっと、あてになるのは、
+他の手段で得られないことが保証されている<em>作られたシンボル</em>
+を使うことです。手続き<code class=scheme><span class=variable>gensym</span></code>は呼ばれるたびにユニークな
+シンボルを生成する手続きです。これが、<code class=scheme><span class=variable>gensym</span></code>をつかった
+安全な<code class=scheme><span class=keyword>my-or</span></code>の定義です。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define-macro</span> <span class=keyword>my-or</span>
@@ -393,11 +394,11 @@ introduction to the programming language Scheme">
 <p>
 </p>
 
-<p class=noindent>����ʸ�����������줿�ޥ�������ˤϡ��ʷ�ˤ��뤿��ˡ�<code class=scheme><span class=variable>gensym</span></code>
-��Ȥ���ˡ�ϤȤ�ޤ����ѿ���ª�����ˤĤ��Ƥϡ����ˤߤ��褦�ˡ�
-���ޤꡢ�Ȥ���餫��ʤ�<code class=scheme><span class=variable>+</span></code>��Ƭ����Ȥ���ˡ�����Ѥ��뤳�Ȥˤ��ޤ���
-���Τ褦��<code class=scheme><span class=variable>+</span></code>��Ƭ�����̻Ҥ��ǳ��פ򼨤�����ˡ�� gensym �ˤ�������
-��Τ�˺��ʤ��褦�ˤ���Τϸ������ɼԤΤ����ˤ��ޤ������뤳�Ȥˤ��ޤ���</p>
+<p class=noindent>この文書中で定義されたマクロの中には、簡潔にするために、<code class=scheme><span class=variable>gensym</span></code>
+を使う方法はとりません。変数捕捉の点については、既にみたように、
+あまり、とりちらからない<code class=scheme><span class=variable>+</span></code>接頭辞を使う方法を利用することにします。
+このような<code class=scheme><span class=variable>+</span></code>接頭辞識別子を上で概要を示した方法で gensym におきかえ
+るのを忘れないようにするのは賢明な読者のかたにおまかせすることにします。</p>
 <p>
 <a name="node_idx_404"></a></p>
 <p>
@@ -408,8 +409,8 @@ introduction to the programming language Scheme">
 <p>
 </p>
 <p>
-�⤦��������ʣ���ʥޥ���<code class=scheme><span class=keyword>fluid-let</span></code> (&nbsp;<a href="t-y-scheme-Z-H-7.html#node_sec_5.2">5.2</a>��)
-�������ߤޤ��礦��</p>
+もうすこし、複雑なマクロ<code class=scheme><span class=keyword>fluid-let</span></code> (&nbsp;<a href="t-y-scheme-Z-H-7.html#node_sec_5.2">5.2</a>節)
+の定義をみましょう。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>fluid-let</span> ((<span class=variable>x</span> <span class=selfeval>9</span>) (<span class=variable>y</span> (<span class=variable>+</span> <span class=variable>y</span> <span class=selfeval>1</span>)))
@@ -418,7 +419,7 @@ introduction to the programming language Scheme">
 <p>
 </p>
 
-<p class=noindent>����򼡤Τ褦��Ÿ���������Ȥ��ޤ��礦��</p>
+<p class=noindent>これを次のように展開したいとしましょう。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>let</span> ((<span class=variable>OLD-X</span> <span class=variable>x</span>) (<span class=variable>OLD-Y</span> <span class=variable>y</span>))
@@ -434,13 +435,13 @@ introduction to the programming language Scheme">
 <p>
 </p>
 
-<p class=noindent>�����ǡ����̻�<code class=scheme><span class=variable>OLD-X</span></code>��<code class=scheme><span class=variable>OLD-Y</span></code>�������<code class=scheme><span class=variable>RESULT</span></code>��
-<code class=scheme><span class=keyword>fluid-let</span></code>�ե�����μ��������ª����ʤ��褦�ʥ���ܥ��
-�������櫓�Ǥ���</p>
+<p class=noindent>ここで、識別子<code class=scheme><span class=variable>OLD-X</span></code>、<code class=scheme><span class=variable>OLD-Y</span></code>、および<code class=scheme><span class=variable>RESULT</span></code>を
+<code class=scheme><span class=keyword>fluid-let</span></code>フォームの式の中で捕捉されないようなシンボルに
+したいわけです。</p>
 <p>
 </p>
 <p>
-�����ǡ��ߤ�����μ¸�����<code class=scheme><span class=keyword>fluid-let</span></code>�ޥ������ۤ���Τ���ǰ���ޤ���</p>
+ここで、欲しいもの実現する<code class=scheme><span class=keyword>fluid-let</span></code>マクロを構築するのに専念します。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define-macro</span> <span class=keyword>fluid-let</span>
@@ -463,29 +464,29 @@ introduction to the programming language Scheme">
 <p>
 </p>
 <p>
-���Υޥ����ΰ��� <code class=scheme><span class=variable>xexe</span></code> �� <code class=scheme><span class=keyword>fluid-let</span></code> �ˤ��Ƴ�������
-�ѿ�/�����ФΥꥹ�ȡ�qbody �� <code class=scheme><span class=keyword>fluid-let</span></code> �����Τμ��Υꥹ�ȤǤ���
-������Ǥϡ�<code class=scheme>((<span class=variable>x</span> <span class=selfeval>9</span>) (<span class=variable>y</span> (<span class=variable>+</span> <span class=variable>y</span> <span class=selfeval>1</span>)))</code> �� <code class=scheme>((<span class=variable>+</span> <span class=variable>x</span> <span class=variable>y</span>))</code> �����줾�졢
-<code class=scheme><span class=variable>xexe</span></code> �� <code class=scheme><span class=variable>body</span></code> �ˤʤ�ޤ���</p>
+このマクロの引数 <code class=scheme><span class=variable>xexe</span></code> は <code class=scheme><span class=keyword>fluid-let</span></code> により導入される
+変数/式の対のリスト、qbody は <code class=scheme><span class=keyword>fluid-let</span></code> の本体の式のリストです。
+この例では、<code class=scheme>((<span class=variable>x</span> <span class=selfeval>9</span>) (<span class=variable>y</span> (<span class=variable>+</span> <span class=variable>y</span> <span class=selfeval>1</span>)))</code> と <code class=scheme>((<span class=variable>+</span> <span class=variable>x</span> <span class=variable>y</span>))</code> がそれぞれ、
+<code class=scheme><span class=variable>xexe</span></code> と <code class=scheme><span class=variable>body</span></code> になります。</p>
 <p>
 </p>
 <p>
-�ޥ������Τϥ��������ѿ���«��Ƴ�����ޤ���<code class=scheme><span class=variable>xx</span></code> ���ѿ�/�����Ф���
-���Ф������ѿ��Υꥹ�ȤǤ���<code class=scheme><span class=variable>ee</span></code> ���б����뼰�Υꥹ�ȤǤ���
-<code class=scheme><span class=variable>old-xx</span></code> �Ͽ��������̻ҤΥꥹ�Ȥǡ����줾�줬��<code class=scheme><span class=variable>xx</span></code> ���ѿ�
-�ҤȤĤҤȤĤ��б����Ƥ��ޤ��������ϡ�<code class=scheme><span class=variable>xx</span></code> ���ͤȤ���
-<em>�Ϥ��äƤ���</em>�ͤ���¸���Ƥ����Τ˻Ȥ��ޤ�������ǡ�<code class=scheme><span class=keyword>fluid-let</span></code>
-�����Τ�ɾ������λ�������Ȥ� <code class=scheme><span class=variable>xx</span></code> �����ˤ�ɤ����Ȥ��Ǥ��ޤ���
-<code class=scheme><span class=variable>result</span></code>���̤ο��������̻Ҥǡ�<code class=scheme><span class=keyword>fluid-let</span></code>���Τ��ͤ���¸����Τ�
-�Ĥ����ޤ���������Ǥ� <code class=scheme><span class=variable>xx</span></code> �� <code class=scheme>(<span class=variable>x</span> <span class=variable>y</span>)</code>��qee �� <code class=scheme>(<span class=selfeval>9</span> (<span class=variable>+</span> <span class=variable>y</span> <span class=selfeval>1</span>))</code>
-�Ǥ������Ĥ����Υ����ƥ�� <code class=scheme><span class=variable>gensym</span></code> �μ����ˤ��ޤ�����
-<code class=scheme><span class=variable>old-xx</span></code> ���㤨�С�<code class=scheme>(<span class=variable>GEN-63</span> <span class=variable>GEN-64</span>)</code>�Ȥ����ꥹ�ȡ�qresult ��
-<code class=scheme><span class=variable>GEN-65</span></code> �ˤʤ�ޤ���</p>
+マクロ本体はローカル変数の束を導入します。<code class=scheme><span class=variable>xx</span></code> は変数/式の対から
+取り出した、変数のリストです。<code class=scheme><span class=variable>ee</span></code> は対応する式のリストです。
+<code class=scheme><span class=variable>old-xx</span></code> は新しい識別子のリストで、それぞれが、<code class=scheme><span class=variable>xx</span></code> の変数
+ひとつひとつに対応しています。これらは、<code class=scheme><span class=variable>xx</span></code> の値として
+<em>はいってきた</em>値を保存しておくのに使います。これで、<code class=scheme><span class=keyword>fluid-let</span></code>
+の本体の評価が終了したあとに <code class=scheme><span class=variable>xx</span></code> お元にもどすことができます。
+<code class=scheme><span class=variable>result</span></code>は別の新しい識別子で、<code class=scheme><span class=keyword>fluid-let</span></code>本体の値を保存するのに
+つかいます。この例では <code class=scheme><span class=variable>xx</span></code> は <code class=scheme>(<span class=variable>x</span> <span class=variable>y</span>)</code>、qee は <code class=scheme>(<span class=selfeval>9</span> (<span class=variable>+</span> <span class=variable>y</span> <span class=selfeval>1</span>))</code>
+です。おつかいのシステムの <code class=scheme><span class=variable>gensym</span></code> の実装によりますが、
+<code class=scheme><span class=variable>old-xx</span></code> は例えば、<code class=scheme>(<span class=variable>GEN-63</span> <span class=variable>GEN-64</span>)</code>というリスト、qresult は
+<code class=scheme><span class=variable>GEN-65</span></code> になります。</p>
 <p>
 </p>
 <p>
-������Ǥϡ����Υޥ����ˤ�ä��������줿���ϥꥹ�Ȥϡ����Τ褦��
-��ΤǤ��礦��</p>
+この例では、このマクロによって生成された出力リストは、次のような
+ものでしょう。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>let</span> ((<span class=variable>GEN-63</span> <span class=variable>x</span>) (<span class=variable>GEN-64</span> <span class=variable>y</span>))
@@ -499,15 +500,15 @@ introduction to the programming language Scheme">
 <p>
 </p>
 
-<p class=noindent>����ϡ����Ƥ�����Τ˥ޥå����Ƥ��ޤ���
+<p class=noindent>これは、求めていたものにマッチしています。
 </p>
 <p>
 </p>
 <div class=footnoterule><hr></div><p></p>
-<div class=footnote><p><a name="node_footnote_Temp_5"></a><sup><small><a href="#node_call_footnote_Temp_5">1</a></small></sup> MzScheme �Ǥ�
-<code class=scheme><span class=keyword>define-macro</span></code> ��<code class=verbatim>defmacro</code> �饤�֥����̤����󶡤���Ƥ��ޤ���
-<code class=scheme>(<span class=variable>require</span> (<span class=variable>lib</span> <span class=selfeval>&quot;defmacro.ss&quot;</span>))</code> ��ȤäƤ��Υ饤�֥��������
-���Ƥ���������</p>
+<div class=footnote><p><a name="node_footnote_Temp_5"></a><sup><small><a href="#node_call_footnote_Temp_5">1</a></small></sup> MzScheme では
+<code class=scheme><span class=keyword>define-macro</span></code> は<code class=verbatim>defmacro</code> ライブラリを通して提供されています。
+<code class=scheme>(<span class=variable>require</span> (<span class=variable>lib</span> <span class=selfeval>&quot;defmacro.ss&quot;</span>))</code> を使ってこのライブラリをロード
+してください。</p>
 </div>
 <div class=smallskip></div>
 <p style="margin-top: 0pt; margin-bottom: 0pt">

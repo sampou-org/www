@@ -1,5 +1,4 @@
-<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html>
 <!--
 
 Generated from t-y-scheme.tex by tex2page, v 20060531
@@ -8,9 +7,11 @@ Generated from t-y-scheme.tex by tex2page, v 20060531
 http://www.ccs.neu.edu/~dorai/tex2page/tex2page-doc.html
 
 -->
+<html lang="ja">
 <head>
+<meta charset="utf-8">
 <title>
-�Ƚ� Scheme ������ Teach Yourself Scheme in Fixnum Days
+独習 Scheme 三週間 Teach Yourself Scheme in Fixnum Days
 </title>
 <link rel="stylesheet" type="text/css" href="t-y-scheme-Z-S.css" title=default>
 <meta name=robots content="noindex,follow">
@@ -28,14 +29,14 @@ introduction to the programming language Scheme">
 <a name="node_chap_10"></a>
 <h1 class=chapter>
 <div class=chapterheading><a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_10">Chapter 10</a></div><br>
-<a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_10">A-�ꥹ�Ȥȥơ��֥�</a></h1>
+<a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_10">A-リストとテーブル</a></h1>
 <p><a name="node_idx_412"></a><a name="node_idx_414"></a><a name="node_idx_416"></a></p>
 <p>
 </p>
 <p>
-<em>Ϣ�ۥꥹ��</em>���뤤��<em>A-�ꥹ��</em>�ϡ����̤ʥե����ޥåȤ�
-Scheme �Υꥹ�ȤǤ����ꥹ�Ȥγ����Ǥϥ��󥹥���ǡ�car ����<em>����</em>��
-cdr ���Ϥ��Υ����˷�ӤĤ���<em>��</em>�Ǥ�����ϰʲ����̤ꡣ</p>
+<em>連想リスト</em>あるいは<em>A-リスト</em>は、特別なフォーマットの
+Scheme のリストです。リストの各要素はコンスセルで、car 部は<em>キー</em>、
+cdr 部はそのキーに結びついた<em>値</em>です。例は以下の通り。</p>
 <p>
 </p>
 <pre class=scheme>((<span class=variable>a</span> . <span class=selfeval>1</span>) (<span class=variable>b</span> . <span class=selfeval>2</span>) (<span class=variable>c</span> . <span class=selfeval>3</span>))
@@ -45,20 +46,20 @@ cdr ���Ϥ��Υ����˷�ӤĤ���<em>��</em>�Ǥ�����ϰʲ����̤ꡣ</p>
 <p>
 </p>
 <p>
-��³���ƤӽФ� <code class=scheme>(<span class=variable>assv</span> <span class=variable>k</span> <span class=variable>al</span>)</code> �� A-�ꥹ�� <code class=scheme><span class=variable>al</span></code> ��ǡ�
-���� <code class=scheme><span class=variable>k</span></code> �˷�ӤĤ��Ƥ��륳�󥹥����õ���ޤ���A-�ꥹ��
-��Υ����ϡ�Ʊ�����Ҹ� <code class=scheme><span class=variable>eqv?</span></code> ��Ĥ��äơ�Ϳ�����줿 <code class=scheme><span class=variable>k</span></code>
-����Ӥ���ޤ������̤ˤϡ�������Ӥ��̤νҸ줬�ߤ����ʤ뤫�⤷��ޤ���
-���Ȥ��С���������ʸ����ʸ������̤��ʤ�ʸ����Ǥ��ä����ˤ�
-<code class=scheme><span class=variable>eqv?</span></code> �ǤϤ��ޤ����Ω���ޤ���</p>
+手続き呼び出し <code class=scheme>(<span class=variable>assv</span> <span class=variable>k</span> <span class=variable>al</span>)</code> は A-リスト <code class=scheme><span class=variable>al</span></code> 中で、
+キー <code class=scheme><span class=variable>k</span></code> に結びついているコンスセルを探します。A-リスト
+中のキーは、同値性述語 <code class=scheme><span class=variable>eqv?</span></code> をつかって、与えれられた <code class=scheme><span class=variable>k</span></code>
+と比較されます。一般には、キー比較に別の述語が欲しくなるかもしれません。
+たとえば、キーが大文字小文字を区別しない文字列であった場合には
+<code class=scheme><span class=variable>eqv?</span></code> ではあまり役に立ちません。</p>
 <p>
 <a name="node_idx_420"></a><a name="node_idx_422"></a></p>
 <p>
 </p>
 <p>
-�����ǡ�<em>�ơ��֥�</em>(<code class=scheme><span class=variable>table</span></code>)�ȸƤФ�빽¤�Τ�������ޤ��礦��
-����ϡ������˴ؤ��ơ��桼������νҸ��Ȥ���褦�ˤ�����ΤǤ���
-�ե�����ɤ� <code class=scheme><span class=variable>equ</span></code> �� <code class=scheme><span class=variable>alist</span></code> �Ǥ���</p>
+ここで、<em>テーブル</em>(<code class=scheme><span class=variable>table</span></code>)と呼ばれる構造体を定義しましょう。
+これは、キーに関して、ユーザ定義の述語を使えるようにしたものです。
+フィールドは <code class=scheme><span class=variable>equ</span></code> と <code class=scheme><span class=variable>alist</span></code> です。</p>
 <p>
 </p>
 <p>
@@ -72,15 +73,15 @@ cdr ���Ϥ��Υ����˷�ӤĤ���<em>��</em>�Ǥ�����ϰʲ����̤ꡣ</p>
 <p>
 </p>
 
-<p class=noindent>(�ǥե���ȤνҸ�� <code class=scheme><span class=variable>eqv?</span></code> &#8212; �̾��A-�ꥹ�Ȥ�Ʊ�� &#8212; �ǡ�
-alist �Ϻǽ�϶��Ǥ���)</p>
+<p class=noindent>(デフォルトの述語は <code class=scheme><span class=variable>eqv?</span></code> &#8212; 通常のA-リストと同じ &#8212; で、
+alist は最初は空です。)</p>
 <p>
 </p>
 <p>
-��������줿�����˷�ӤĤ���(���󥹥���ǤϤʤ�)�ͤ�����Τ�
-<code class=scheme><span class=variable>table-get</span></code> �Ȥ�����³����Ȥ����Ȥˤ��ޤ��礦��
-<code class=scheme><span class=variable>table-get</span></code> �ϥơ��֥�ȥ���������Ȥ������������ꤷ��
-�ơ��֥���ˤʤ��ä������֤��ǥե�����ͤ򥪥ץ��������Ȥ��ޤ���</p>
+あたえられたキーに結びついた(コンスセルではなく)値を得るのに
+<code class=scheme><span class=variable>table-get</span></code> という手続きを使うことにしましょう。
+<code class=scheme><span class=variable>table-get</span></code> はテーブルとキーを引数とし、キーが指定した
+テーブル中になかった場合に返すデフォルト値をオプション引数とします。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define</span> <span class=variable>table-get</span>
@@ -92,7 +93,7 @@ alist �Ϻǽ�϶��Ǥ���)</p>
 <p>
 </p>
 <p>
-<code class=scheme><span class=variable>table-get</span></code> ��ǻȤ�����³�� <code class=scheme><span class=variable>lassoc</span></code> �ϰʲ��Τ褦��������ޤ���</p>
+<code class=scheme><span class=variable>table-get</span></code> 中で使う、手続き <code class=scheme><span class=variable>lassoc</span></code> は以下のように定義します。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define</span> <span class=variable>lassoc</span>
@@ -106,7 +107,7 @@ alist �Ϻǽ�϶��Ǥ���)</p>
 <p>
 </p>
 <p>
-��������줿�ơ��֥�Υ������ͤ򹹿�����Τˤ� <code class=scheme><span class=variable>table-put!</span></code> ��Ȥ��ޤ���</p>
+あたえられたテーブルのキーの値を更新するのには <code class=scheme><span class=variable>table-put!</span></code> を使います。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define</span> <span class=variable>table-put!</span>
@@ -119,8 +120,8 @@ alist �Ϻǽ�϶��Ǥ���)</p>
 <p>
 </p>
 <p>
-��³�� <code class=scheme><span class=variable>table-for-each</span></code> ��Ϳ����줿��³����ơ��֥����
-���٤ƤΥ���/�ͤ��ФˤĤ��ƸƤӤ����ޤ���</p>
+手続き <code class=scheme><span class=variable>table-for-each</span></code> は与えられた手続きをテーブル中の
+すべてのキー/値の対について呼びだします。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define</span> <span class=variable>table-for-each</span>

@@ -1,5 +1,4 @@
-<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html>
 <!--
 
 Generated from t-y-scheme.tex by tex2page, v 20060531
@@ -8,9 +7,11 @@ Generated from t-y-scheme.tex by tex2page, v 20060531
 http://www.ccs.neu.edu/~dorai/tex2page/tex2page-doc.html
 
 -->
+<html lang="ja">
 <head>
+<meta charset="utf-8">
 <title>
-�Ƚ� Scheme ������ Teach Yourself Scheme in Fixnum Days
+独習 Scheme 三週間 Teach Yourself Scheme in Fixnum Days
 </title>
 <link rel="stylesheet" type="text/css" href="t-y-scheme-Z-S.css" title=default>
 <meta name=robots content="noindex,follow">
@@ -28,13 +29,13 @@ introduction to the programming language Scheme">
 <a name="node_chap_17"></a>
 <h1 class=chapter>
 <div class=chapterheading><a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_17">Chapter 17</a></div><br>
-<a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_17">CGI ������ץ�</a></h1>
+<a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_17">CGI スクリプト</a></h1>
 <p></p>
 <p>
-<a name="node_idx_496"></a><span style="color: #ff0000">(<strong>�ٹ�:</strong> Ŭ�ڤʥ����ե����ɤ�ۤɤ����Ƥ��ʤ�
-CGI ������ץȤϥ����ȤΥ������ƥ�����������ޤ��������ˤ���
-������ץȤ�ñ�����Ǥ��äơ��ºݤΥ����֤����Ѥ�����Ȥ���
-�������ƥ���ͤ��Ƥ��ޤ���)</span></p>
+<a name="node_idx_496"></a><span style="color: #ff0000">(<strong>警告:</strong> 適切なセーフガードをほどこしていない
+CGI スクリプトはサイトのセキュリティを危うくします。ここにある
+スクリプトは単純な例であって、実際のウェブで利用を前提とする
+セキュリティを考えていません。)</span></p>
 <p>
 </p>
 <div class=medskip></div>
@@ -43,25 +44,25 @@ CGI ������ץȤϥ����ȤΥ������ƥ�����������ޤ��������ˤ���
 <p>
 </p>
 <p>
-CGI ������ץ� [<a href="t-y-scheme.hlog">cite{cgi}</a>] �ϥ����֥����Ф��֤��줿������ץȤ�
-���饤�����(�֥饦��)���鵯ư���뤳�Ȥ��Ǥ��ޤ���
-���饤����Ȥ��̾�Υڡ������������ʤ�����URL �ˤ�ä�
-CGI ������ץȤ˥����������ޤ��������Фϥꥯ�����Ȥ������ URL ��
-CGI ������ץȤǤ��뤳�Ȥ�ǧ��������������餻�ޤ��������Ф�
-�ɤ���äơ������ URL �򥹥���ץȤȤ���ǧ�����뤫�ϥ����Ф�
-�����Ԥ������Ǥ������Υƥ����ȤǤϥ�����ץȤ����Ѥ� <code class=verbatim>cgi-bin</code>
-�Ȥ����ǥ��쥯�ȥ���֤���Ƥ���Ȳ��ꤷ�Ƥ��ޤ����������äơ�
-������ <code class=verbatim>www.foo.org</code> ��Υ�����ץ� <code class=verbatim>testcgi.scm</code> ��
-<code class=verbatim>http://www.foo.org/cgi-bin/testcgi.scm</code> �Ȥ��ƥ������������
-���Ȥˤʤ�ޤ���</p>
+CGI スクリプト [<a href="t-y-scheme.hlog">cite{cgi}</a>] はウェブサーバに置かれたスクリプトで
+クライアント(ブラウザ)から起動することができます。
+クライアントは通常のページと全くおなじく、URL によって
+CGI スクリプトにアクセスします。サーバはリクエストを受けた URL が
+CGI スクリプトであることを認識し、それを走らせます。サーバが
+どうやって、特定の URL をスクリプトとして認識するかはサーバの
+管理者しだいです。このテキストではスクリプトは専用の <code class=verbatim>cgi-bin</code>
+というディレクトリに置かれていると仮定しています。したがって、
+サーバ <code class=verbatim>www.foo.org</code> 上のスクリプト <code class=verbatim>testcgi.scm</code> は
+<code class=verbatim>http://www.foo.org/cgi-bin/testcgi.scm</code> としてアクセスされる
+ことになります。</p>
 <p>
 </p>
 <p>
-�����Ф� CGI ������ץȤ� <code class=verbatim>nobody</code> �Ȥ��� <code class=verbatim>PATH</code> �ˤĤ���
-�ʤˤ��Τ�ʤ��Ϥ�(�Ȥ����ΤϤ����ؤ���Ū��Ƚ�ǤǤ�)�Υ桼���Ȥ���
-���餻�ޤ�������Τˡ�Scheme �ǽ񤤤� CGI ������ץȤ����֤���
-��ˡ�ιԤϡ����̤� Scheme ������ץȤ�꾯����������Ū�˽񤯤�Τ�
-�����ޤ������Ȥ��С�</p>
+サーバは CGI スクリプトを <code class=verbatim>nobody</code> という <code class=verbatim>PATH</code> について
+なにも知らないはず(というのはたいへん主観的な判断です)のユーザとして
+走らせます。それ故に、Scheme で書いた CGI スクリプトの前置きの
+魔法の行は、一般の Scheme スクリプトより少しだけ明示的に書くものが
+増えます。たとえば、</p>
 <p>
 </p>
 <pre class=scheme><span class=selfeval>&quot;:&quot;</span><span class=comment>;exec mzscheme -r $0 &quot;$@&quot;</span>
@@ -71,9 +72,9 @@ CGI ������ץȤǤ��뤳�Ȥ�ǧ��������������餻�ޤ��������Ф�
 <p>
 </p>
 
-<p class=noindent>�Ȥ����Ԥϰ��ۤˤ�������Υ�����(���Ȥ��� <code class=verbatim>bash</code>) ��
-<code class=verbatim>PATH</code> �Ȥ��Τʤ��� <code class=verbatim>mzscheme</code> �����뤳�Ȥ��ꤷ�Ƥ��ޤ���
-CGI ������ץȤǤϰʲ��Τ褦�ˡ��������Ū�˽�ɬ�פ�����ޤ���</p>
+<p class=noindent>という行は暗黙にある特定のシェル(たとえば <code class=verbatim>bash</code>) と
+<code class=verbatim>PATH</code> とそのなかに <code class=verbatim>mzscheme</code> があることを仮定しています。
+CGI スクリプトでは以下のように、より明示的に書く必要があります。</p>
 <p>
 </p>
 <pre class=scheme><span class=selfeval>#!/bin/sh</span>
@@ -82,22 +83,22 @@ CGI ������ץȤǤϰʲ��Τ褦�ˡ��������Ū�˽�ɬ�פ�����ޤ���</p>
 <p>
 </p>
 <p>
-����ϥ������ Scheme �Υե�ѥ���Ϳ���Ƥ��ޤ��������뤫��
-Scheme �ؤ�����μ��Ϥ����̾�Υ�����ץȤ�Ʊ���Ǥ���</p>
+これはシェルと Scheme のフルパスを与えています。シェルから
+Scheme への制御の受渡しは通常のスクリプトと同じです。</p>
 <p>
 </p>
 <a name="node_sec_17.1"></a>
-<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_17.1">17.1&nbsp;&nbsp;��: �Ķ��ѿ���ɽ��</a></h2>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_17.1">17.1&nbsp;&nbsp;例: 環境変数の表示</a></h2>
 <p></p>
 <p>
-���ơ�Scheme CGI ������ץȤ���Ǥ���<code class=verbatim>testcgi.scm</code> ��
-CGI �Ķ��ѿ��ǻȤ����ΤΤ����Ĥ����������Ϥ��륹����ץȤǤ���
-���ξ���ϡ����������줿�ڡ����Ȥ��ƥ֥饦�����֤���ޤ���
-�֤����ڡ�����ñ�� CGI ������ץȤ�ɸ����Ϥ˽Ф�����ΤǤ���
-���줬 CGI ������ץȤ������ƤӽФ����Ȥ����ر�������ˡ�Ǥ���
-����Ͽ������ڡ������֤����ȤǤ����ʤ��ޤ���</p>
+さて、Scheme CGI スクリプトの例です。<code class=verbatim>testcgi.scm</code> は
+CGI 環境変数で使われるもののいくつかの設定を出力するスクリプトです。
+この情報は、新しく作られたページとしてブラウザに返されます。
+返されるページは単に CGI スクリプトが標準出力に出したものです。
+これが CGI スクリプトがそれを呼び出したところへ応える方法です。
+これは新しいページを返すことでおこなわれます。</p>
 <p>
-���Υ�����ץȤϺǽ�ˡ�</p>
+このスクリプトは最初に、</p>
 <p>
 </p>
 <pre class=verbatim>content-type: text/plain&nbsp;
@@ -107,18 +108,18 @@ CGI �Ķ��ѿ��ǻȤ����ΤΤ����Ĥ����������Ϥ��륹����ץȤǤ���
 <p>
 </p>
 
-<p class=noindent>�Ȥ����Ԥ���Ϥ���<em>³���ƶ��Ԥ���Ϥ���</em>�Ȥ������Ȥ�
-���դ��Ƥ�������������ϥ����֥����Ф��ڡ����򥵡��ӥ�����
-ɸ��Ū�ʵ���Ǥ���������ĤιԤϼºݤ˥ڡ����Ȥ���ɽ��������Τ�
-��ʬ�ǤϤ���ޤ��󡣥֥饦���������Ƥ���ڡ�����
-(�ޡ������åפ���Ƥ��ʤ�)�ץ졼��ƥ����ȤǤ��뤳�Ȥ��Τ餻�뤿���
-��ΤǤ�������ˤ��֥饦����������ɽ�����Ǥ��ޤ����ƥ����Ȥ�
-HTML �ǥޡ������åפ����Τʤ顢<code class=verbatim>content-type</code> �� <code class=verbatim>text/html</code> ��
-�ʤ�Ǥ��礦��</p>
+<p class=noindent>という行を出力し、<em>続いて空行を出力する</em>ということに
+注意してください。これはウェブサーバがページをサービスする
+標準的な儀礼です。この二つの行は実際にページとして表示されるものの
+部分ではありません。ブラウザに送られてくるページが
+(マークアップされていない)プレーンテキストであることを知らせるための
+ものです。これによりブラウザは正しく表示ができます。テキストを
+HTML でマークアップしたのなら、<code class=verbatim>content-type</code> は <code class=verbatim>text/html</code> と
+なるでしょう。</p>
 <p>
 </p>
 <p>
-������ץ� <code class=verbatim>textcgi.scm</code> �ϰʲ��Τ褦�ˤʤ�ޤ���</p>
+スクリプト <code class=verbatim>textcgi.scm</code> は以下のようになります。</p>
 <p>
 </p>
 <p>
@@ -128,13 +129,13 @@ HTML �ǥޡ������åפ����Τʤ顢<code class=verbatim>content-type</code> �� <code
 <pre class=scheme><span class=selfeval>#!/bin/sh</span>
 <span class=selfeval>&quot;:&quot;</span><span class=comment>;exec /usr/local/bin/mzscheme -r $0 &quot;$@&quot;</span>
 
-<span class=comment>;content-type ���ץ졼��ƥ����ȤǤ��뤳�Ȥ��ǧ</span>
+<span class=comment>;content-type がプレーンテキストであることを確認</span>
 
 (<span class=variable>display</span> <span class=selfeval>&quot;content-type: text/plain&quot;</span>) (<span class=variable>newline</span>)
 (<span class=variable>newline</span>)
 
-<span class=comment>;�׵ᤵ�줿�����ޤ�ڡ���������</span>
-<span class=comment>;�����ñ��ɸ����Ϥ˽񤭽Ф�����</span>
+<span class=comment>;要求された情報を含むページを生成</span>
+<span class=comment>;これは単に標準出力に書き出すだけ</span>
 
 (<span class=variable>for-each</span>
  (<span class=keyword>lambda</span> (<span class=variable>env-var</span>)
@@ -165,8 +166,8 @@ HTML �ǥޡ������åפ����Τʤ顢<code class=verbatim>content-type</code> �� <code
    <span class=selfeval>&quot;SERVER_SOFTWARE&quot;</span>))
 </pre><p></p>
 <p>
-<code class=verbatim>testcgi.scm</code> �ϥ֥饦����ǳ������Ȥ�ľ�ܸƤӽФ����Ȥ��Ǥ��ޤ���
-���� URL �ϰʲ��ΤȤ���Ǥ���</p>
+<code class=verbatim>testcgi.scm</code> はブラウザ上で開くことで直接呼び出すことができます。
+その URL は以下のとおりです。</p>
 <p>
 </p>
 <pre class=verbatim>http://www.foo.org/cgi-bin/testcgi.scm&nbsp;
@@ -174,23 +175,23 @@ HTML �ǥޡ������åפ����Τʤ顢<code class=verbatim>content-type</code> �� <code
 <p>
 </p>
 <p>
-���Τۤ��ˡ�<code class=verbatim>testcgi.scm</code> �� HTML �ե�������Υ�󥯤Ȥ��Ƥ�
-�и���ǽ�ǡ�����򥯥�å����뤳�Ȥ�Ǥ��ޤ���</p>
+そのほかに、<code class=verbatim>testcgi.scm</code> は HTML ファイル内のリンクとしても
+出現可能で、これをクリックすることもできます。</p>
 <p>
 </p>
 <p>
 </p>
-<pre class=verbatim>... ����Ū�� CGI �Ķ��ѿ��Τ����Ĥ��򸫤뤿��ˤϡ�&nbsp;
-&lt;a href=&quot;http://www.foo.org/cgi-bin/testcgi.scm&quot;&gt;����&lt;/a&gt;&nbsp;
-�򥯥�å����Ƥ���������&nbsp;
+<pre class=verbatim>... 一般的な CGI 環境変数のいくつかを見るためには、&nbsp;
+&lt;a href=&quot;http://www.foo.org/cgi-bin/testcgi.scm&quot;&gt;ここ&lt;/a&gt;&nbsp;
+をクリックしてください。&nbsp;
 ...&nbsp;
 </pre><p></p>
 <p>
 </p>
 <p>
-����Ǥ⡢<code class=verbatim>testcgi.scm</code> �ϵ�ư���졢�Ķ��ѿ��������ޤ�
-�ץ졼��ƥ����ȤΥڡ���������ޤ������Ȥ��С��ʲ��Τ褦��
-���Ϥˤʤ�ޤ���</p>
+これでも、<code class=verbatim>testcgi.scm</code> は起動され、環境変数の設定を含む
+プレーンテキストのページが作られます。たとえば、以下のような
+出力になります。</p>
 <p>
 </p>
 <pre class=verbatim>AUTH_TYPE =&nbsp;
@@ -218,30 +219,30 @@ SERVER_SOFTWARE = Apache/1.2.4&nbsp;
 <p>
 </p>
 <a name="node_sec_17.2"></a>
-<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_17.2">17.2&nbsp;&nbsp;��: ���򤵤줿�Ķ��ѿ���ɽ��</a></h2>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_17.2">17.2&nbsp;&nbsp;例: 選択された環境変数の表示</a></h2>
 <p></p>
 <p>
 </p>
 <p>
-<code class=verbatim>testcgi.scm</code> �ϥ桼������ϲ������Ϥ�����ޤ��󡣥桼�������
-�Ķ��ѿ�����ꤹ�����������������ѿ��������ɽ����¾��ɽ�����ʤ�
-������ץȤ�ͤ��ޤ��礦�����Τ���ˤϡ�CGI ������ץȤ˰�����
-���碌�뤿��ε�����ɬ�פˤʤ�ޤ���
-HTML �� <code class=verbatim>form</code> �����Ϥ�����ǽ�ˤ��ޤ����ʲ��Ϥ���
-����ץ�Ǥ���</p>
+<code class=verbatim>testcgi.scm</code> はユーザからは何の入力も受けません。ユーザからの
+環境変数を指定する引数を受け、その変数の設定を表示し他は表示しない
+スクリプトを考えましょう。このためには、CGI スクリプトに引数を
+食わせるための機構が必要になります。
+HTML の <code class=verbatim>form</code> タグはこれを可能にします。以下はその
+サンプルです。</p>
 <p>
 </p>
 <p>
 </p>
 <pre class=verbatim>&lt;html&gt;&nbsp;
 &lt;head&gt;&nbsp;
-&lt;title&gt;�Ķ��ѿ�������å�����ե�����&lt;/title&gt;&nbsp;
+&lt;title&gt;環境変数をチェックするフォーム&lt;/title&gt;&nbsp;
 &lt;/head&gt;&nbsp;
 &lt;body&gt;&nbsp;
 &nbsp;
 &lt;form method=get &nbsp;
       action=&quot;http://www.foo.org/cgi-bin/testcgi2.scm&quot;&gt;&nbsp;
-�Ķ��ѿ������Ϥ��Ƥ�������: &lt;input type=text name=envvar size=30&gt;&nbsp;
+環境変数を入力してください: &lt;input type=text name=envvar size=30&gt;&nbsp;
 &lt;p&gt;&nbsp;
 &nbsp;
 &lt;input type=submit&gt;&nbsp;
@@ -255,32 +256,32 @@ HTML �� <code class=verbatim>form</code> �����Ϥ�����ǽ�ˤ��ޤ����ʲ��Ϥ���
 <p>
 </p>
 
-<p class=noindent>�桼�����Τꤿ���Ķ��ѿ�(���Ȥ��С�<code class=verbatim>GATEWAY_INTERFACE</code>)��
-�ƥ����ȥܥå��������Ϥ���subimt �ܥ���򥯥�å����ޤ���
-��������ȥե�������ξ��� &#8212; �����Ǥϡ�<code class=verbatim>envvar</code> �Ȥ����ѥ�᡼����
-<code class=verbatim>GATEWAY_INTERFACE</code> �Ȥ����ͤ����åȤ��� &#8212; ��������
-<code class=verbatim>form</code> �ˤ�äƻ��ꤵ�줿 CGI ������ץȡ����ʤ�� <code class=verbatim>testcgi2.scm</code>
-���Ϥ���ޤ������ξ�������̤����ˡ�Τɤ��餫�������ޤ���
-(1) <code class=verbatim>form</code> �� <code class=verbatim>method=get</code> (�ǥե����)�Ǥ���С������
-<code class=verbatim>QUERY_STRING</code> �Ȥ����Ķ��ѿ����̤��������ޤ���(2) <code class=verbatim>form</code> ��
-<code class=verbatim>method=post</code> �ʤ顢����ϥ�����ץȤ�ɸ�����ϥݡ���(<code class=verbatim>stdin</code>) ����
-���Ѳ�ǽ�ˤʤ�ޤ��������Υե�����Ǥ� <code class=scheme><span class=variable>QUERY_STRING</span></code> ��Ȥ��ޤ���</p>
+<p class=noindent>ユーザが知りたい環境変数(たとえば、<code class=verbatim>GATEWAY_INTERFACE</code>)を
+テキストボックスに入力し、subimt ボタンをクリックします。
+そうするとフォーム中の情報 &#8212; ここでは、<code class=verbatim>envvar</code> というパラメータに
+<code class=verbatim>GATEWAY_INTERFACE</code> という値がセットされ &#8212; が集められ
+<code class=verbatim>form</code> によって指定された CGI スクリプト、すなわち <code class=verbatim>testcgi2.scm</code>
+に渡されます。この情報は二通りの方法のどちらかで送られます。
+(1) <code class=verbatim>form</code> が <code class=verbatim>method=get</code> (デフォルト)であれば、情報は
+<code class=verbatim>QUERY_STRING</code> という環境変数を通じて送られます。(2) <code class=verbatim>form</code> が
+<code class=verbatim>method=post</code> なら、情報はスクリプトの標準入力ポート(<code class=verbatim>stdin</code>) から
+利用可能になります。ここのフォームでは <code class=scheme><span class=variable>QUERY_STRING</span></code> を使います。</p>
 <p>
 </p>
 <p>
-<code class=verbatim>QUERY_STRING</code> ��������Ȥ����������˱����������Υڡ�����
-���Ϥ�����Ǥ�� <code class=verbatim>testcgi2.scm</code> �ˤ���ޤ���</p>
+<code class=verbatim>QUERY_STRING</code> から情報をとりだし、それに応じた回答のページを
+出力する責任は <code class=verbatim>testcgi2.scm</code> にあります。</p>
 <p>
 </p>
 <p>
-CGI ������ץȤؤξ���ϡ��Ķ��ѿ���ͳ�Ǥ������ȡ�<code class=verbatim>stdin</code>
-��ͳ�Ǥ������ȡ��ѥ�᡼��/�������Ф��¤Ӥ���������Ƥ��ޤ���
-�����Фϡ�ʸ�� <code class=verbatim>&amp;</code> �Ƕ��̤���Ƥ��ޤ����Ф���Ǥϡ��ѥ�᡼����
-�ǽ�˽и�����ʸ�� <code class=verbatim>=</code> �ǡ����ΰ����ȶ��̤���Ƥ��ޤ���
-���ξ��ˤϡ��ѥ�᡼��/�������ФϤҤȤĤ����ǡ�
-<code class=verbatim>envvar=GATEWAY_INTERFACE</code> �Ǥ���</p>
+CGI スクリプトへの情報は、環境変数経由であろうと、<code class=verbatim>stdin</code>
+経由であろうと、パラメータ/引数の対の並びに整形されています。
+この対は、文字 <code class=verbatim>&amp;</code> で区別されています。対の中では、パラメータは
+最初に出現し、文字 <code class=verbatim>=</code> で、その引数と区別されています。
+この場合には、パラメータ/引数の対はひとつだけで、
+<code class=verbatim>envvar=GATEWAY_INTERFACE</code> です。</p>
 <p>
-������ץ� <code class=verbatim>testcgi2.scm</code> �ϰʲ����̤�Ǥ���</p>
+スクリプト <code class=verbatim>testcgi2.scm</code> は以下の通りです。</p>
 <p>
 </p>
 <p>
@@ -293,8 +294,8 @@ CGI ������ץȤؤξ���ϡ��Ķ��ѿ���ͳ�Ǥ������ȡ�<code class=verbatim>stdin</co
 (<span class=variable>display</span> <span class=selfeval>&quot;content-type: text/plain&quot;</span>) (<span class=variable>newline</span>)
 (<span class=variable>newline</span>)
 
-<span class=comment>;string-index ��ʸ���� s �ΰ��ֺ��ˤ������ ʸ�� c ��</span>
-<span class=comment>;����ǥå������֤�</span>
+<span class=comment>;string-index は文字列 s の一番左にあらわれる 文字 c の</span>
+<span class=comment>;インデックスを返す</span>
 
 (<span class=keyword>define</span> <span class=variable>string-index</span>
   (<span class=keyword>lambda</span> (<span class=variable>s</span> <span class=variable>c</span>)
@@ -304,7 +305,7 @@ CGI ������ץȤؤξ���ϡ��Ķ��ѿ���ͳ�Ǥ������ȡ�<code class=verbatim>stdin</co
               ((<span class=variable>char=?</span> (<span class=variable>string-ref</span> <span class=variable>s</span> <span class=variable>i</span>) <span class=variable>c</span>) <span class=variable>i</span>)
               (<span class=keyword>else</span> (<span class=variable>loop</span> (<span class=variable>+</span> <span class=variable>i</span> <span class=selfeval>1</span>))))))))
 
-<span class=comment>;split ��ʸ���� s ��ʸ�� c �Ƕ�ʬ���줿��ʬʸ�����ʬ�䤹��</span>
+<span class=comment>;split は文字列 s を文字 c で区分された部分文字列に分割する</span>
 
 (<span class=keyword>define</span> <span class=variable>split</span>
   (<span class=keyword>lambda</span> (<span class=variable>c</span> <span class=variable>s</span>)
@@ -334,35 +335,35 @@ CGI ������ץȤؤξ���ϡ��Ķ��ѿ���ͳ�Ǥ������ȡ�<code class=verbatim>stdin</co
 <p>
 </p>
 
-<p class=noindent>�����³�� <code class=scheme><span class=variable>split</span></code> ��Ĥ��ä� <code class=verbatim>QUERY_STRING</code> ��
-ʸ�� <code class=verbatim>&amp;</code> �ˤ������äơ��ѥ�᡼��/�������Ф�ʬ�䤷��
-����ˡ������Ȥäơ�ʸ�� <code class=verbatim>=</code> �ˤ������äơ��ѥ�᡼����
-������ʬ�䤷�Ƥ���Ȥ������Ȥ����դ��Ƥ���������
-(<code class=verbatim>get</code> �᥽�åɤ����� <code class=verbatim>post</code> �᥽�åɤ��Ȥ��Τʤ顢
-�ѥ�᡼���Ȱ�����ɸ�����Ϥ�����Ф�ɬ�פ�����ޤ���)</p>
+<p class=noindent>補助手続き <code class=scheme><span class=variable>split</span></code> をつかって <code class=verbatim>QUERY_STRING</code> を
+文字 <code class=verbatim>&amp;</code> にしたがって、パラメータ/引数の対に分割し、
+さらに、それを使って、文字 <code class=verbatim>=</code> にしたがって、パラメータと
+引数を分割しているということに注意してください。
+(<code class=verbatim>get</code> メソッドの代りに <code class=verbatim>post</code> メソッドをを使うのなら、
+パラメータと引数を標準入力から引出す必要があります。)</p>
 <p>
 </p>
 <p>
-<code class=verbatim>&lt;input type=text&gt;</code> ����� <code class=verbatim>&lt;input type=submit&gt;</code> ��
-HTML �� <code class=verbatim>form</code> �ǻȤ��뤤�������� <code class=verbatim>input</code> �����Τ�����
-�դ��Ĥˤ��������ޤ��������Υ�ѡ��ȥ꡼�ˤĤ��Ƥ�
-[<a href="t-y-scheme.hlog">cite{cgi}</a>] �򻲾Ȥ��Ƥ���������</p>
+<code class=verbatim>&lt;input type=text&gt;</code> および <code class=verbatim>&lt;input type=submit&gt;</code> は
+HTML の <code class=verbatim>form</code> で使えるいろいろな <code class=verbatim>input</code> タグのうちの
+ふたつにしかすぎません。全部のレパートリーについては
+[<a href="t-y-scheme.hlog">cite{cgi}</a>] を参照してください。</p>
 <p>
 </p>
 <a name="node_sec_17.3"></a>
-<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_17.3">17.3&nbsp;&nbsp;CGI ������ץȥ桼�ƥ���ƥ�</a></h2>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_17.3">17.3&nbsp;&nbsp;CGI スクリプトユーティリティ</a></h2>
 <p></p>
 <p>
-�����Ǥϥѥ�᡼����̾�����뤤�ϲ��ꤵ��뤽�ΰ����ϡ����켫�Ȥˤ�
-&#8216;<code class=verbatim>&amp;</code>&#8217; ���뤤�� &#8216;<code class=verbatim>=</code>&#8217; ��ʸ���ϴޤ�Ǥ��ޤ���Ǥ�������������Ū�ˤ�
-�ޤޤ���ǽ��������ޤ������Τ褦��ʸ�����б��������ѥ졼����
-�ְ㤦���ȤΤʤ��褦�ˡ�CGI �ΰ����ΰ����Ϥ������ϱѻ���������
-��������������ʳ��Τ��٤Ƥ�ʸ����<em>����</em>���Ĥ������������
-���󥳡��ɷ�������ã���ޤ�������� &#8216;<code class=verbatim>+</code>&#8217; �˥��󥳡��ɤ���ޤ���
-���Τۤ����ü�ʸ���ˤĤ��Ƥϡ����󥳡��ɤ� 3 ʸ�����¤Ӥˤʤ�ޤ���
-���� 3ʸ�����¤Ӥϡ�&#8216;<code class=verbatim>%</code>&#8217; �Ȥ����ü�ʸ����16�ʥ����ɤȤʤ�ޤ���
-�������äơ�ʸ���Τʤ�� &#8216;<code class=verbatim>20% + 30% = 50%, \&amp;c.</code>&#8217; �ϼ��Τ褦��
-���󥳡��ɤ���ޤ���</p>
+上の例ではパラメータの名前あるいは仮定されるその引数は、それ自身には
+&#8216;<code class=verbatim>&amp;</code>&#8217; あるいは &#8216;<code class=verbatim>=</code>&#8217; の文字は含んでいませんでした。が、一般的には
+含まれる可能性があります。そのような文字に対応し、セパレータと
+間違うことのないように、CGI の引数の引き渡し機構は英字、数字、
+アンダースコア以外のすべての文字を<em>特別</em>あつかいし、それを
+エンコード形式で伝達します。空白は &#8216;<code class=verbatim>+</code>&#8217; にエンコードされます。
+そのほかの特殊文字については、エンコードは 3 文字の並びになります。
+この 3文字の並びは、&#8216;<code class=verbatim>%</code>&#8217; とその特殊文字の16進コードとなります。
+したがって、文字のならび &#8216;<code class=verbatim>20% + 30% = 50%, \&amp;c.</code>&#8217; は次のように
+エンコードされます。</p>
 <p>
 </p>
 <pre class=verbatim>20%25+%2b+30%25+%3d+50%25%2c+%26c%2e&nbsp;
@@ -372,17 +373,17 @@ HTML �� <code class=verbatim>form</code> �ǻȤ��뤤�������� <code class=verbatim
 <p>
 </p>
 
-<p class=noindent>(����� &#8216;<code class=verbatim>+</code>&#8217;��&#8216;<code class=verbatim>%</code>&#8217; �� &#8216;<code class=verbatim>%25</code>&#8217;��
-&#8216;<code class=verbatim>+</code>&#8217; �� &#8216;<code class=verbatim>%2b</code>&#8217;��&#8216;<code class=verbatim>=</code>&#8217; �� &#8216;<code class=verbatim>%3d</code>&#8217;��
-&#8216;<code class=verbatim>,</code>&#8217; �� &#8216;<code class=verbatim>%2c</code>&#8217;��&#8216;<code class=verbatim>&amp;</code>&#8217; �� &#8216;<code class=verbatim>%26</code>&#8217;��
-������ &#8216;<code class=verbatim>.</code>&#8217; �� &#8216;<code class=verbatim>%2e</code>&#8217; �ˤʤäƤ��ޤ���)</p>
+<p class=noindent>(空白は &#8216;<code class=verbatim>+</code>&#8217;、&#8216;<code class=verbatim>%</code>&#8217; は &#8216;<code class=verbatim>%25</code>&#8217;、
+&#8216;<code class=verbatim>+</code>&#8217; は &#8216;<code class=verbatim>%2b</code>&#8217;、&#8216;<code class=verbatim>=</code>&#8217; は &#8216;<code class=verbatim>%3d</code>&#8217;、
+&#8216;<code class=verbatim>,</code>&#8217; は &#8216;<code class=verbatim>%2c</code>&#8217;、&#8216;<code class=verbatim>&amp;</code>&#8217; は &#8216;<code class=verbatim>%26</code>&#8217;、
+そして &#8216;<code class=verbatim>.</code>&#8217; は &#8216;<code class=verbatim>%2e</code>&#8217; になっています。)</p>
 <p>
 </p>
 <p>
-�� CGI ������ץ���Υե�����ǡ����γ����ȥǥ����ɤˤĤ��Ʋ����
-�Ȥꤢ�Ĥ�������ˤ����Ĥ���ͭ�Ѥʼ�³����饤�֥��ե�����
-<code class=verbatim>cgi.scm</code> �˽���Ƥ����Τ������Ǥ�����������ȡ�<code class=verbatim>testcgi2.scm</code> ��
-��ꥳ��ѥ��Ȥ˼��Τ褦�˽񤱤ޤ���</p>
+各 CGI スクリプト中のフォームデータの獲得とデコードについて改めて
+とりあつかう代わりにいくつかの有用な手続きをライブラリファイル
+<code class=verbatim>cgi.scm</code> に集めておくのが便利です。そうすると、<code class=verbatim>testcgi2.scm</code> は
+よりコンパクトに次のように書けます。</p>
 <p>
 </p>
 <p>
@@ -392,22 +393,22 @@ HTML �� <code class=verbatim>form</code> �ǻȤ��뤤�������� <code class=verbatim
 <pre class=scheme><span class=selfeval>#!/bin/sh</span>
 <span class=selfeval>&quot;:&quot;</span><span class=comment>;exec /usr/local/bin/mzscheme -r $0 &quot;$@&quot;</span>
 
-<span class=comment>;cgi �桼�ƥ���ƥ��Υ�����</span>
+<span class=comment>;cgi ユーティリティのロード</span>
 
 (<span class=variable>load-relatve</span> <span class=selfeval>&quot;cgi.scm&quot;</span>)
 
 (<span class=variable>display</span> <span class=selfeval>&quot;content-type: text/plain&quot;</span>) (<span class=variable>newline</span>)
 (<span class=variable>newline</span>)
 
-<span class=comment>;�ե������ͳ�Υǡ������Ϥ��ɤ߹���</span>
+<span class=comment>;フォーム経由のデータ入力の読み込み</span>
 
 (<span class=variable>parse-form-data</span>)
 
-<span class=comment>;envvar �ѥ�᡼���γ���</span>
+<span class=comment>;envvar パラメータの獲得</span>
 
 (<span class=keyword>define</span> <span class=variable>envvar</span> (<span class=variable>form-data-get/1</span> <span class=selfeval>&quot;envvar&quot;</span>))
 
-<span class=comment>;envvar ���ͤ�ɽ��</span>
+<span class=comment>;envvar の値の表示</span>
 
 (<span class=variable>display</span> <span class=variable>envvar</span>)
 (<span class=variable>display</span> <span class=selfeval>&quot; = &quot;</span>)
@@ -417,27 +418,27 @@ HTML �� <code class=verbatim>form</code> �ǻȤ��뤤�������� <code class=verbatim
 <p>
 </p>
 <p>
-����û������ CGI ������ץȤϡ�<code class=verbatim>cgi.scm</code> ���������Ƥ��롢�դ��Ĥ�
-�桼�ƥ���ƥ���³����ȤäƤ��ޤ���<code class=scheme><span class=variable>parse-form-data</span></code> ��
-�桼������ե������Ĥ����ƶ��뤵�줿�ǡ������ɤ�Τ˻Ȥ��ޤ���
-���Υǡ����ϥѥ�᡼���Ȥ���ˤह�ӤĤ����ͤ��鹽������Ƥ��ޤ���
-<code class=scheme><span class=variable>form-data-get/1</span></code> ������Υѥ�᡼���ˤह�ӤĤ����ͤ򸫤Ĥ��ޤ���</p>
+この短い方の CGI スクリプトは、<code class=verbatim>cgi.scm</code> で定義されている、ふたつの
+ユーティリティ手続きを使っています。<code class=scheme><span class=variable>parse-form-data</span></code> は
+ユーザからフォームをつうじて供給されたデータを読むのに使います。
+そのデータはパラメータとそれにむすびついた値から構成されています。
+<code class=scheme><span class=variable>form-data-get/1</span></code> は特定のパラメータにむすびついた値を見つけます。</p>
 <p>
 </p>
 <p>
-<code class=scheme><span class=variable>cgi.scm</span></code> �ϥե�����ǡ������Ǽ���뤿��� <code class=scheme><span class=global>*form-data-table*</span></code>
-�Ȥ����������Х�ơ��֥��������Ƥ��ޤ���</p>
+<code class=scheme><span class=variable>cgi.scm</span></code> はフォームデータを格納するための <code class=scheme><span class=global>*form-data-table*</span></code>
+というグローバルテーブルを定義しています。</p>
 <p>
 </p>
 <p>
 </p>
 <p>
 </p>
-<pre class=scheme><span class=comment>;�ơ��֥������Υ�����</span>
+<pre class=scheme><span class=comment>;テーブルの定義のロード</span>
 
 (<span class=variable>load-relative</span> <span class=selfeval>&quot;table.scm&quot;</span>)
 
-<span class=comment>;*form-data-table* �����</span>
+<span class=comment>;*form-data-table* の定義</span>
 
 (<span class=keyword>define</span> <span class=global>*form-data-table*</span> (<span class=variable>make-table</span> <span class=keyword>'</span><span class=variable>equ</span> <span class=variable>string=?</span>))
 </pre><p></p>
@@ -446,9 +447,9 @@ HTML �� <code class=verbatim>form</code> �ǻȤ��뤤�������� <code class=verbatim
 <p>
 </p>
 
-<p class=noindent><code class=scheme><span class=variable>parse-form-data</span></code> ��³���Τ褦�ʰ���Ū������Ȥ�Ĺ���
-�ɤ� <code class=verbatim>method</code> (<code class=verbatim>get</code> ���뤤�� <code class=verbatim>post</code>) ���Ȥ��Ƥ��뤫�Ȥ���
-�ܺ٤��ä��뤳�Ȥ��Ǥ���Ȥ�����ΤǤ���</p>
+<p class=noindent><code class=scheme><span class=variable>parse-form-data</span></code> 手続きのような一般的機構を使う長所は
+どの <code class=verbatim>method</code> (<code class=verbatim>get</code> あるいは <code class=verbatim>post</code>) が使われているかという
+詳細を隠蔽することができるというものです。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define</span> <span class=variable>parse-form-data</span>
@@ -462,12 +463,12 @@ HTML �� <code class=verbatim>form</code> �ǻȤ��뤤�������� <code class=verbatim
 <p>
 </p>
 
-<p class=noindent>�Ķ��ѿ� <code class=verbatim>REQUEST_METHOD</code> �ϥե�����ǡ�����ž������Τ�
-�ɤΥ᥽�åɤ��Ȥ��Ƥ��뤫�򶵤����ΤǤ����᥽�åɤ�
-<code class=verbatim>GET</code> �ξ�硢�ե�����ǡ����Ϥ⤦�ҤȤĤδĶ��ѿ�
-<code class=verbatim>QUERY_STRING</code> ���̤���������ʸ����Ȥ��������ޤ���
-�����³�� <code class=scheme><span class=variable>parse-from-data-using-query-string</span></code> ��
-<code class=verbatim>QUERY_STRING</code> ��Ф�Ф�˼��Ф�����˻Ȥ��ޤ���</p>
+<p class=noindent>環境変数 <code class=verbatim>REQUEST_METHOD</code> はフォームデータを転送するのに
+どのメソッドが使われているかを教えるものです。メソッドが
+<code class=verbatim>GET</code> の場合、フォームデータはもうひとつの環境変数
+<code class=verbatim>QUERY_STRING</code> を通じて正当な文字列として送られます。
+補助手続き <code class=scheme><span class=variable>parse-from-data-using-query-string</span></code> は
+<code class=verbatim>QUERY_STRING</code> をばらばらに取り出すために使われます。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define</span> <span class=variable>parse-form-data-using-query-string</span>
@@ -489,12 +490,12 @@ HTML �� <code class=verbatim>form</code> �ǻȤ��뤤�������� <code class=verbatim
 <p>
 </p>
 
-<p class=noindent>�إ�Ѽ�³�� <code class=scheme><span class=variable>split</span></code> �����<em>�����</em>���Υإ�� <code class=scheme><span class=variable>string-index</span></code>
-��&nbsp;<a href="#node_sec_17.2">17.2</a> ��Τ褦���������Ƥ��ޤ��������Ȥˤ���褦�ˡ�
-��äƤ����ե�����ǡ����� <code class=verbatim>&amp;</code> �Ƕ��ڤ�줿��̾��-���Ф��¤ӤǤ���
-���줾����Ф���Ǥϡ�̾������ˤ��ơ����Τ��Ȥ� <code class=verbatim>=</code> �����ơ������
-�ͤ����ޤ������줾��Ρ�̾��-�ͤ��Ȥ߹�碌�ϥ������Х�ơ��֥�
-<code class=scheme><span class=global>*form-data-table*</span></code> �˽�����ޤ���</p>
+<p class=noindent>ヘルパ手続き <code class=scheme><span class=variable>split</span></code> および<em>さらに</em>そのヘルパ <code class=scheme><span class=variable>string-index</span></code>
+は&nbsp;<a href="#node_sec_17.2">17.2</a> 節のように定義されています。コメントにあるように、
+やってきたフォームデータは <code class=verbatim>&amp;</code> で区切られた、名前-値対の並びです。
+それぞれの対の中では、名前が先にきて、そのあとに <code class=verbatim>=</code> がきて、さらに
+値がきます。それぞれの、名前-値の組み合わせはグローバルテーブル
+<code class=scheme><span class=global>*form-data-table*</span></code> に集められます。</p>
 <p>
 </p>
 <p>
@@ -504,8 +505,8 @@ HTML �� <code class=verbatim>form</code> �ǻȤ��뤤�������� <code class=verbatim
 <p>
 </p>
 
-<p class=noindent>̾�����ͤȤ�˥��󥳡��ɤ���Ƥ��ޤ��Τǡ�<code class=scheme><span class=variable>url-decode</span></code> ��³����
-�Ȥäƥǥ����ɤ���ɬ�פ�����ޤ���</p>
+<p class=noindent>名前、値ともにエンコードされていますので、<code class=scheme><span class=variable>url-decode</span></code> 手続きを
+使ってデコードする必要があります。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define</span> <span class=variable>url-decode</span>
@@ -526,9 +527,9 @@ HTML �� <code class=verbatim>form</code> �ǻȤ��뤤�������� <code class=verbatim
 <p>
 </p>
 
-<p class=noindent>&#8216;<code class=verbatim>+</code>&#8217; �϶�����Ѵ����ޤ���3 ʸ������ʤ� &#8216;<code class=verbatim>%xy</code>&#8217; �Ȥ���������
-��³�� <code class=scheme><span class=variable>hex-&gt;char</span></code> ��Ȥä� &#8216;<code class=verbatim>xy</code>&#8217; �Ȥ��� ASCII�����ɤ���ʸ����
-�Ѵ�����ޤ���</p>
+<p class=noindent>&#8216;<code class=verbatim>+</code>&#8217; は空白に変換します。3 文字からなる &#8216;<code class=verbatim>%xy</code>&#8217; という形式は
+手続き <code class=scheme><span class=variable>hex-&gt;char</span></code> を使って &#8216;<code class=verbatim>xy</code>&#8217; という ASCIIコードをもつ文字に
+変換されます。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define</span> <span class=variable>hex-&gt;char</span>
@@ -541,9 +542,9 @@ HTML �� <code class=verbatim>form</code> �ǻȤ��뤤�������� <code class=verbatim
 <p>
 </p>
 
-<p class=noindent>�ޤ����ꥯ�����ȥ᥽�åɤ� <code class=verbatim>POST</code> �Ǥ�����Υե�����ǡ���
-�ѡ�����ɬ�פǤ��������³�� <code class=scheme><span class=variable>parse-form-data-using-stdin</span></code> �ϼ��Τ褦
-�ˤʤ�ޤ���</p>
+<p class=noindent>また、リクエストメソッドが <code class=verbatim>POST</code> である場合のフォームデータ
+パーザも必要です。補助手続き <code class=scheme><span class=variable>parse-form-data-using-stdin</span></code> は次のよう
+になります。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define</span> <span class=variable>parse-form-data-using-stdin</span>
@@ -583,17 +584,17 @@ HTML �� <code class=verbatim>form</code> �ǻȤ��뤤�������� <code class=verbatim
 <p>
 </p>
 
-<p class=noindent><code class=verbatim>POST</code> �᥽�åɤϥե�����ǡ����򥹥���ץȤ� <code class=verbatim>stdin</code>
-��ͳ������ޤ�������줿ʸ���ο��ϡ��Ķ��ѿ� <code class=verbatim>CONTENT_LENGTH</code> ��
-����ޤ���<code class=scheme><span class=variable>parse-form-data-using-stdin</span></code> ��ɬ�פ�ʸ����ʬ����
-<code class=verbatim>stdin</code> ����ʸ�����ɤߤޤ��������ơ����Ȥ��ʤ��褦�ˡ�
-�ѥ�᡼����̾�����ͤ�ǥ����ɤ��������ǡ�<code class=scheme><span class=global>*form-data-table*</span></code> ��
-�񤭤��ߤޤ���</p>
+<p class=noindent><code class=verbatim>POST</code> メソッドはフォームデータをスクリプトと <code class=verbatim>stdin</code>
+経由で送ります。送られた文字の数は、環境変数 <code class=verbatim>CONTENT_LENGTH</code> に
+あります。<code class=scheme><span class=variable>parse-form-data-using-stdin</span></code> は必要な文字数分だけ
+<code class=verbatim>stdin</code> から文字を読みます。そして、前とおなじように、
+パラメータの名前と値をデコードしたうえで、<code class=scheme><span class=global>*form-data-table*</span></code> に
+書きこみます。</p>
 <p>
 </p>
 <p>
-<code class=scheme><span class=global>*form-data-table*</span></code> ��������Υѥ�᡼�����ͤ��äƤ���Τ�
-�ޤ��Τ��äƤ��ޤ���</p>
+<code class=scheme><span class=global>*form-data-table*</span></code> から特定のパラメータの値を取ってくるのが
+まだのこっています。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define</span> <span class=variable>form-data-get</span>
@@ -603,8 +604,8 @@ HTML �� <code class=verbatim>form</code> �ǻȤ��뤤�������� <code class=verbatim
 <p>
 </p>
 <p>
-<code class=scheme><span class=variable>form-data-get/1</span></code> �ϥѥ�᡼���ȷ�ӤĤ��Ƥ���ǽ��
-(���뤤�ϰ��ְ�̣�Τ���)�ͤ��֤��ޤ���</p>
+<code class=scheme><span class=variable>form-data-get/1</span></code> はパラメータと結びついている最初の
+(あるいは一番意味のある)値を返します。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define</span> <span class=variable>form-data-get/1</span>
@@ -617,15 +618,15 @@ HTML �� <code class=verbatim>form</code> �ǻȤ��뤤�������� <code class=verbatim
 <p>
 </p>
 <p>
-�����ޤǤ���Ǥϡ�CGI ������ץȤϥץ졼��ƥ����Ȥ��������Ƥ��ޤ�����
-�����������̤ˤϡ�HTML �Υڡ������������Ƥۤ����Ǥ���͡�
-HTML �ե������ CGI ������ץȤ��Ȥ߹礻�����ե�������İ�Ϣ��
-HTML �Υڡ����Τ��ä����ˤʤ뤳�Ȥ����������ȤǤϤ���ޤ���
-�����Τ��������ʥե�����˴ؤ�뤹�٤ƤΥ���������
-��Ĥ� CGI ������ץȤ���˥����ǥ��󥰤��뤳�Ȥ�褯���뤳�ȤǤ���
-������ˤ��衢HTML �ե����ޥåȡ����Ȥ��С�Ŭ�ڤ˥��󥳡��ɤ��줿
-HTML ���ü�ʸ���ʤɤ�ʸ�����񤭤����桼�ƥ���ƥ���³��
-�����Ω���ޤ���</p>
+ここまでの例では、CGI スクリプトはプレーンテキストを生成していました。
+しかし、一般には、HTML のページを生成してほしいですよね。
+HTML フォームと CGI スクリプトの組み合せが、フォームをもつ一連の
+HTML のページのきっかけになることは珍しいことではありません。
+これらのいろいろなフォームに関わるすべてのアクションを
+一つの CGI スクリプトの中にコーディングすることもよくあることです。
+いずれにせよ、HTML フォーマット、たとえば、適切にエンコードされた
+HTML の特殊文字などで文字列を書きだすユーティリティ手続き
+は役に立ちます。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define</span> <span class=variable>display-html</span>
@@ -648,11 +649,11 @@ HTML ���ü�ʸ���ʤɤ�ʸ�����񤭤����桼�ƥ���ƥ���³��
 <p>
 </p>
 <a name="node_sec_17.4"></a>
-<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_17.4">17.4&nbsp;&nbsp;CGI �ˤ������</a></h2>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_17.4">17.4&nbsp;&nbsp;CGI による電卓</a></h2>
 <p></p>
 <p>
-�����ˤ���Τ� CGI �������ץȡ�<code class=verbatim>cgicalc.scm</code> �Ǥ���
-����� Scheme ��Ǥ�����ٱ黻��ȤäƤ��ޤ���</p>
+ここにあるのは CGI 電卓スクリプト、<code class=verbatim>cgicalc.scm</code> です。
+これは Scheme の任意精度演算を使っています。</p>
 <p>
 </p>
 <p>
@@ -662,7 +663,7 @@ HTML ���ü�ʸ���ʤɤ�ʸ�����񤭤����桼�ƥ���ƥ���³��
 <pre class=scheme><span class=selfeval>#!/bin/sh</span>
 <span class=selfeval>&quot;:&quot;</span><span class=comment>;exec /usr/local/bin/mzscheme -r $0</span>
 
-<span class=comment>;CGI �桼�ƥ���ƥ��������</span>
+<span class=comment>;CGI ユーティリティをロード</span>
 (<span class=variable>load-relative</span> <span class=selfeval>&quot;cgi.scm&quot;</span>)
 
 (<span class=keyword>define</span> <span class=variable>uhoh</span> <span class=selfeval>#f</span>)

@@ -1,5 +1,4 @@
-<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html>
 <!--
 
 Generated from t-y-scheme.tex by tex2page, v 20060531
@@ -8,9 +7,11 @@ Generated from t-y-scheme.tex by tex2page, v 20060531
 http://www.ccs.neu.edu/~dorai/tex2page/tex2page-doc.html
 
 -->
+<html lang="ja">
 <head>
+<meta charset="utf-8">
 <title>
-�Ƚ� Scheme ������ Teach Yourself Scheme in Fixnum Days
+独習 Scheme 三週間 Teach Yourself Scheme in Fixnum Days
 </title>
 <link rel="stylesheet" type="text/css" href="t-y-scheme-Z-S.css" title=default>
 <meta name=robots content="noindex,follow">
@@ -28,28 +29,28 @@ introduction to the programming language Scheme">
 <a name="node_chap_12"></a>
 <h1 class=chapter>
 <div class=chapterheading><a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_12">Chapter 12</a></div><br>
-<a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_12">���֥������Ȥȥ��饹</a></h1>
+<a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_12">オブジェクトとクラス</a></h1>
 <p><a name="node_idx_440"></a><a name="node_idx_442"></a><a name="node_idx_444"></a><a name="node_idx_446"></a><a name="node_idx_448"></a><a name="node_idx_450"></a></p>
 <p>
-<em>���饹</em>�Ͽ��񤤤�ͭ����<em>���֥�������</em>�Τ��뽸���
-ɽ�������ΤǤ������饹�ˤ�ä�ɽ�����줿���֥������Ȥ򤽤Υ��饹��
-<em>���󥹥���</em>�Ȥ����ޤ������饹�Ϥ��Υ��󥹥��󥹤����
-<em>�����å�</em>��̾������ꤷ�ޤ����������Υ����åȤ�������ͤ�
-�⤿����Τϥ��󥹥��󥹼���Ǥ������饹�Ϥ��Υ��󥹥��󥹤�Ŭ�Ѥ���
-���ȤΤǤ���<em>�᥽�å�</em>����ꤷ�ޤ��������åȤ��ͤϤʤ�Ǥ��äƤ�
-���ޤ��ޤ��󤬡��᥽�åɤ��ͤϼ�³���Ǥʤ���Фʤ�ޤ���</p>
+<em>クラス</em>は振舞いを共有する<em>オブジェクト</em>のある集りを
+表現するものです。クラスによって表現されたオブジェクトをそのクラスの
+<em>インスタンス</em>といいます。クラスはそのインスタンスがもつ
+<em>スロット</em>の名前を指定しますが、これらのスロットに特定の値を
+もたせるのはインスタンス次第です。クラスはそのインスタンスに適用する
+ことのできる<em>メソッド</em>も指定します。スロットの値はなんであっても
+かまいませんが、メソッドの値は手続きでなければなりません。</p>
 <p>
 <a name="node_idx_452"></a><a name="node_idx_454"></a></p>
 <p>
 </p>
 <p>
-���饹�ϳ��ع�¤�ˤʤ�ޤ����������äơ��ҤȤĤΥ��饹���̤Υ��饹��
-<em>���֥��饹</em>�ˤʤ뤳�Ȥ��Ǥ��ޤ������ΤȤ����̤Υ��饹�Τۤ���
-<em>�����ѡ����饹</em>�Ȥ����ޤ������֥��饹�ϼ�ʬ���Ȥ�<em>ľ��</em>��
-�����åȤ�᥽�åɤ��Ĥ����ǤϤʤ��������ѡ����饹�Τ��٤Ƥ�
-�����åȤ�᥽�åɤ�Ѿ����ޤ������饹�������ѡ����饹�Υ����åȤ�
-�᥽�åɤ�Ʊ��̾���Υ����åȤ�᥽�åɤ��ľ��ˤϥ��֥��饹��
-�����åȤ�᥽�åɤ����Τޤ޻Ȥ��ޤ���</p>
+クラスは階層構造になります。したがって、ひとつのクラスは別のクラスの
+<em>サブクラス</em>になることができます。このとき、別のクラスのほうは
+<em>スーパークラス</em>といいます。サブクラスは自分自身の<em>直接</em>の
+スロットやメソッドをもつだけではなく、スーパークラスのすべての
+スロットやメソッドを継承します。クラスがスーパークラスのスロットや
+メソッドと同じ名前のスロットやメソッドをもつ場合にはサブクラスの
+スロットやメソッドがそのまま使われます。</p>
 <p>
 </p>
 <p>
@@ -57,25 +58,25 @@ introduction to the programming language Scheme">
 <p>
 </p>
 <a name="node_sec_12.1"></a>
-<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_12.1">12.1&nbsp;&nbsp;ñ��ʥ��֥������ȥ����ƥ�</a></h2>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_12.1">12.1&nbsp;&nbsp;単純なオブジェクトシステム</a></h2>
 <p><a name="node_idx_456"></a></p>
 <p>
-Scheme �Ǵ���Ū�ʥ��֥������ȥ����ƥ��������Ƥߤޤ��礦��
-���饹�ҤȤĤˤĤ��ƤҤȤĤ��������ѡ����饹���������褦
-�ˤ��ޤ�(<em>ñ��Ѿ�</em>)�������ѡ����饹����ꤷ�����ʤ���С�
-�֥�����(�����åȤ�᥽�åɤ�⤿�ʤ�)�����ѡ����饹�Ȥ��� <code class=scheme><span class=selfeval>#t</span></code>
-��Ȥ��ޤ��礦��<code class=scheme><span class=selfeval>#t</span></code> �Υ����ѡ����饹�ϼ�ʬ���Ȥ��ȴ��路�ޤ��礦��</p>
+Scheme で基本的なオブジェクトシステムを実装してみましょう。
+クラスひとつについてひとつだけスーパークラスが許されるよう
+にします(<em>単一継承</em>)。スーパークラスを指定したくなければ、
+「ゼロ」(スロットもメソッドももたない)スーパークラスとして <code class=scheme><span class=selfeval>#t</span></code>
+を使いましょう。<code class=scheme><span class=selfeval>#t</span></code> のスーパークラスは自分自身だと看倣しましょう。</p>
 <p>
 </p>
 <p>
-�ǽ�ζ���Ȥ��ơ�<code class=scheme><span class=variable>standard-class</span></code> �ȸƤֹ�¤�Τ�Ȥä����饹�Ĥ��äơ�
-�����å�̾�������ѥ��饹���᥽�åɤΥե�����ɤ��ĥ��饹���������
-�����������Ǥ����ǽ�� 2 �ĤΥե�����ɤ򤽤줾�� <code class=scheme><span class=variable>slots</span></code>��
-<code class=scheme><span class=variable>superclass</span></code> �ȸƤ֤��Ȥˤ��ޤ��礦���Ĥ��ˡ��᥽�å��Ѥ�<em>2 ��</em>��
-�ե�����ɤ�Ȥ��ޤ��礦���ҤȤĤϡ����饹�Υ᥽�åɤ�̾���Υꥹ�Ȥ�
-�ݻ����� <code class=scheme><span class=variable>method-names</span></code>���⤦�ҤȤĤϡ����饹�᥽�åɤ��ͤ���
-�٥������ݻ����� <code class=scheme><span class=variable>method-vector</span></code> �Ǥ�<a name="node_call_footnote_Temp_10"></a><sup><small><a href="#node_footnote_Temp_10">1</a></small></sup>��
-<code class=scheme><span class=variable>standard-class</span></code> ������Ϥ���ʤդ��ˤʤ�ޤ���</p>
+最初の近似として、<code class=scheme><span class=variable>standard-class</span></code> と呼ぶ構造体を使ったクラスつかって、
+スロット名、スーパクラス、メソッドのフィールドをもつクラスを定義して
+おくと便利です。最初の 2 つのフィールドをそれぞれ <code class=scheme><span class=variable>slots</span></code>、
+<code class=scheme><span class=variable>superclass</span></code> と呼ぶことにしましょう。つぎに、メソッド用に<em>2 つ</em>の
+フィールドを使いましょう。ひとつは、クラスのメソッドの名前のリストを
+保持する <code class=scheme><span class=variable>method-names</span></code>、もうひとつは、クラスメソッドの値をもつ
+ベクタを保持する <code class=scheme><span class=variable>method-vector</span></code> です<a name="node_call_footnote_Temp_10"></a><sup><small><a href="#node_footnote_Temp_10">1</a></small></sup>。
+<code class=scheme><span class=variable>standard-class</span></code> の定義はこんなふうになります。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>defstruct</span> <span class=variable>standard-class</span>
@@ -86,8 +87,8 @@ Scheme �Ǵ���Ū�ʥ��֥������ȥ����ƥ��������Ƥߤޤ��礦��
 <p>
 </p>
 
-<p class=noindent><code class=scheme><span class=variable>make-standard-class</span></code>�Ȥ��� <code class=scheme><span class=variable>standard-class</span></code> �κ�����³����
-�Ĥ��äơ����������饹���뤳�Ȥ��Ǥ��ޤ���</p>
+<p class=noindent><code class=scheme><span class=variable>make-standard-class</span></code>という <code class=scheme><span class=variable>standard-class</span></code> の作成手続きを
+つかって、新しいクラスを作ることができます。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define</span> <span class=variable>trivial-bike-class</span>
@@ -102,11 +103,11 @@ Scheme �Ǵ���Ū�ʥ��֥������ȥ����ƥ��������Ƥߤޤ��礦��
 <p>
 </p>
 
-<p class=noindent>����ϡ������ؤ󥷥�ץ�ʥ��饹�Ǥ������ʣ���ʥ��饹��
-�����ǤϤʤ������ѥ��饹��᥽�åɤ��Ĥ��Ȥˤʤ�Ǥ��礦��
-���饹�������ץ������Τʤ��˱��ä������ʤ�褦�ʡ�ɸ��Ū�ʽ����
-��ʬ������������ɬ�פˤʤ�Ǥ��礦������Ρ�<code class=scheme><span class=variable>make-standard-class</span></code>
-��Ŭ�ڤ˸Ƥ� <code class=scheme><span class=variable>create-class</span></code> �Ȥ����ޥ�����������ޤ��礦��</p>
+<p class=noindent>これは、たいへんシンプルなクラスです。より複雑なクラスは
+自明ではないスーパクラスやメソッドをもつことになるでしょう。
+クラスの生成プロセスのなかに隠蔽したくなるような、標準的な初期化
+部分がいろいろと必要になるでしょう。それ故、<code class=scheme><span class=variable>make-standard-class</span></code>
+を適切に呼ぶ <code class=scheme><span class=variable>create-class</span></code> というマクロを定義しましょう。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define-macro</span> <span class=variable>create-class</span>
@@ -122,16 +123,16 @@ Scheme �Ǵ���Ū�ʥ��֥������ȥ����ƥ��������Ƥߤޤ��礦��
 <p>
 </p>
 
-<p class=noindent><code class=scheme><span class=variable>create-class-proc</span></code> ��³��������Ϥ��Ȥޤ路�ˤ��ޤ��礦��</p>
+<p class=noindent><code class=scheme><span class=variable>create-class-proc</span></code> 手続きの定義はあとまわしにしましょう。</p>
 <p>
 </p>
 <p>
-��³�� <code class=scheme><span class=variable>make-instance</span></code> �Ϥ��Υ��饹��������˵��Ҥ���Ƥ�������
-��ȤŤ��ƿ������٥������������뤳�Ȥˤ�ä�<em>���󥹥���</em>��
-�������ޤ������󥹥��󥹥٥����Υե����ޥåȤϤ����ؤ󥷥�ץ��
-��ΤǤ����ǽ�����Ǥϥ��饹�ؤλ��ȡ��Τ���ϥ����åȤ��ͤǤ���
-<code class=scheme><span class=variable>make-instance</span></code> �ΰ����ϥ��饹�Ȥ���ˤĤŤ���2 �ĤҤȤ��ߤ�
-�ʤ�ӤǤ������줾��Τ��ߤϥ����å�̾�ȥ��󥹥�����Ǥ��ͤǤ���</p>
+手続き <code class=scheme><span class=variable>make-instance</span></code> はこのクラス中で正式に記述されている情報に
+もとづいて新しいベクタを生成することによって<em>インスタンス</em>を
+作りだします。インスタンスベクタのフォーマットはたいへんシンプルな
+ものです。最初の要素はクラスへの参照、のこりはスロットの値です。
+<code class=scheme><span class=variable>make-instance</span></code> の引数はクラスとそれにつづく、2 つひとくみの
+ならびです。それぞれのくみはスロット名とインスタンス中での値です。</p>
 <p>
 </p>
 <p>
@@ -139,17 +140,17 @@ Scheme �Ǵ���Ū�ʥ��֥������ȥ����ƥ��������Ƥߤޤ��礦��
 <pre class=scheme>(<span class=keyword>define</span> <span class=variable>make-instance</span>
   (<span class=keyword>lambda</span> (<span class=variable>class</span> . <span class=variable>slot-value-twosomes</span>)
 
-    <span class=comment>;�֥��饹����Υ����åȤο���n ��õ����</span>
-    <span class=comment>;Ĺ����n + 1�פΥ��󥹥��󥹥٥������������롣</span>
-    <span class=comment>;���󥹥��󥹤���˥��饹��ޤ�⤦�ҤȤĤ����Ǥ�ɬ�פ����顣</span>
+    <span class=comment>;「クラス」中のスロットの数、n を探す。</span>
+    <span class=comment>;長さ「n + 1」のインスタンスベクタを生成する。</span>
+    <span class=comment>;インスタンスの中にクラスを含むもうひとつの要素が必要だから。</span>
 
     (<span class=keyword>let*</span> ((<span class=variable>slotlist</span> (<span class=variable>standard-class.slots</span> <span class=variable>class</span>))
            (<span class=variable>n</span> (<span class=variable>length</span> <span class=variable>slotlist</span>))
            (<span class=variable>instance</span> (<span class=variable>make-vector</span> (<span class=variable>+</span> <span class=variable>n</span> <span class=selfeval>1</span>))))
       (<span class=variable>vector-set!</span> <span class=variable>instance</span> <span class=selfeval>0</span> <span class=variable>class</span>)
 
-      <span class=comment>;���󥹥��󥹤γƥ����åȤ��make-instance�פθƤӽФ���</span>
-      <span class=comment>;���ꤵ�줿�ͤˤ���</span>
+      <span class=comment>;インスタンスの各スロットを「make-instance」の呼び出しで</span>
+      <span class=comment>;指定された値にする</span>
 
       (<span class=keyword>let</span> <span class=variable>loop</span> ((<span class=variable>slot-value-twosomes</span> <span class=variable>slot-value-twosomes</span>))
         (<span class=keyword>if</span> (<span class=variable>null?</span> <span class=variable>slot-value-twosomes</span>) <span class=variable>instance</span>
@@ -162,7 +163,7 @@ Scheme �Ǵ���Ū�ʥ��֥������ȥ����ƥ��������Ƥߤޤ��礦��
 <p>
 </p>
 
-<p class=noindent>���ϥ��饹�Υ��󥹥��󥹲�����Ǥ���</p>
+<p class=noindent>次はクラスのインスタンス化の例です。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define</span> <span class=variable>my-bike</span>
@@ -174,7 +175,7 @@ Scheme �Ǵ���Ū�ʥ��֥������ȥ����ƥ��������Ƥߤޤ��礦��
 <p>
 </p>
 
-<p class=noindent>����� <code class=scheme><span class=variable>my-bike</span></code> �򼡤Υ��󥹥��󥹤�«�����ޤ���</p>
+<p class=noindent>これは <code class=scheme><span class=variable>my-bike</span></code> を次のインスタンスに束縛します。</p>
 <p>
 </p>
 <pre class=scheme><span class=selfeval>#</span>(<span class=variable>&lt;trivial-bike-class&gt;</span> <span class=variable>cromoly</span> <span class=selfeval>18.5</span> <span class=variable>alivio</span>)
@@ -184,11 +185,11 @@ Scheme �Ǵ���Ū�ʥ��֥������ȥ����ƥ��������Ƥߤޤ��礦��
 <p>
 </p>
 
-<p class=noindent>�����ǡ�<code class=scheme><span class=variable>&lt;trivial-bike-class&gt;</span></code> �� Scheme �Υǡ���
-(�⤦�ҤȤĤΥ٥���)�ǡ����������줿 <code class=scheme><span class=variable>trivial-bike-class</span></code> �Υǡ���
-�Ǥ���</p>
+<p class=noindent>ここで、<code class=scheme><span class=variable>&lt;trivial-bike-class&gt;</span></code> は Scheme のデータ
+(もうひとつのベクタ)で、上で定義された <code class=scheme><span class=variable>trivial-bike-class</span></code> のデータ
+です。</p>
 <p>
-��³�� <code class=scheme><span class=variable>class-of</span></code> �ϥ��󥹥��󥹤Υ��饹���֤��ޤ���</p>
+手続き <code class=scheme><span class=variable>class-of</span></code> はインスタンスのクラスを返します。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define</span> <span class=variable>class-of</span>
@@ -200,11 +201,11 @@ Scheme �Ǵ���Ū�ʥ��֥������ȥ����ƥ��������Ƥߤޤ��礦��
 <p>
 </p>
 
-<p class=noindent>����ϡ�<code class=scheme><span class=variable>class-of</span></code> �ΰ��������饹���󥹥��󥹤Ǥ��뤳�ȡ����ʤ����
-�ǽ�����Ǥ� <code class=scheme><span class=variable>standard-class</span></code> �Υ��󥹥��󥹲���ؤ��褦�ʥ٥�����
-���뤳�Ȥ��ꤷ�Ƥ��ޤ���
-<code class=scheme><span class=variable>class-of</span></code> �������ꤳ������������� Scheme �Υ��֥������Ȥ˴ؤ���
-Ŭ�ڤ��ͤ��֤��褦�������Ȥ��⤤�ޤ���</p>
+<p class=noindent>これは、<code class=scheme><span class=variable>class-of</span></code> の引数がクラスインスタンスであること、すなわち、
+最初の要素が <code class=scheme><span class=variable>standard-class</span></code> のインスタンス化を指すようなベクタで
+あることを仮定しています。
+<code class=scheme><span class=variable>class-of</span></code> が、送りこんだあらゆる種類の Scheme のオブジェクトに関して
+適切な値を返すようしたいとおもいます。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define</span> <span class=variable>class-of</span>
@@ -222,13 +223,13 @@ Scheme �Ǵ���Ū�ʥ��֥������ȥ����ƥ��������Ƥߤޤ��礦��
 <p>
 </p>
 
-<p class=noindent><code class=scheme><span class=variable>standard-class</span></code> ����Ѥ��ƺ�������ʤ� Scheme ���֥������Ȥ�
-���饹�ϡ�<code class=scheme><span class=selfeval>#t</span></code>���Ĥޤꥼ�����饹�ȴ��路�ޤ���</p>
+<p class=noindent><code class=scheme><span class=variable>standard-class</span></code> を使用して作成されない Scheme オブジェクトの
+クラスは、<code class=scheme><span class=selfeval>#t</span></code>、つまりゼロクラスと看倣します。</p>
 <p>
 </p>
 <p>
-��³����<code class=scheme><span class=variable>slot-value</span></code> ����� <code class=scheme><span class=variable>set!slot-value</span></code> �ϥ��饹���󥹥��󥹤�
-�ͤ˥�������������ͤ��ѹ����ޤ���</p>
+手続き、<code class=scheme><span class=variable>slot-value</span></code> および <code class=scheme><span class=variable>set!slot-value</span></code> はクラスインスタンスの
+値にアクセスおよび値を変更します。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define</span> <span class=variable>slot-value</span>
@@ -250,14 +251,14 @@ Scheme �Ǵ���Ū�ʥ��֥������ȥ����ƥ��������Ƥߤޤ��礦��
 <p>
 </p>
 
-<p class=noindent>����ǡ�<code class=scheme><span class=variable>create-class-proc</span></code> ������ˤȤ꤫����������Ǥ��ޤ�����
-���Υץ���������ϡ������ѥ��饹�ȥ����åȤΥꥹ�ȡ��᥽�å�̾�Υꥹ�ȡ�
-�᥽�åɤΥ٥���������ˤȤꡢ<code class=scheme><span class=variable>make-standard-class</span></code> ��Ŭ�ڤ���ˡ��
-�ƤӽФ��ޤ���ͣ����̯����ʬ�ϡ�<code class=scheme><span class=variable>slots</span></code> �ե�����ɤˤ���������
-�ͤǤ���<code class=scheme><span class=variable>create-class</span></code> ���̤��ƶ��뤵�줿�����åȰ��������Ǥ�
-����ޤ��󡣤��Υ����ѡ����饹�Υ����åȤ�Ʊ�ͤ˴ޤޤ�Ƥ��ʤ����
-�ʤ�ޤ��󡣥����ѡ����饹�Υ����å��ѤΥ����åȤ�Ϣ�뤷�ʤ����
-�ʤ�ޤ��󡣤���ˤ�ꥹ���åȤ�ʣ����Ĥ��餺�ˤ��ޤ����Ȥ��Ǥ��ޤ���</p>
+<p class=noindent>これで、<code class=scheme><span class=variable>create-class-proc</span></code> の定義にとりかかる準備ができました。
+このプロシージャは、スーパクラスとスロットのリスト、メソッド名のリスト、
+メソッドのベクタを引数にとり、<code class=scheme><span class=variable>make-standard-class</span></code> を適切な方法で
+呼び出します。唯一微妙な部分は、<code class=scheme><span class=variable>slots</span></code> フィールドにあたえられる
+値です。<code class=scheme><span class=variable>create-class</span></code> を通じて供給されたスロット引数だけでは
+ありません。そのスーパークラスのスロットも同様に含まれていなければ
+なりません。スーパークラスのスロット用のスロットを連結しなければ
+なりません。これによりスロットの複製をつくらずにすますことができます。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define</span> <span class=variable>create-class-proc</span>
@@ -280,9 +281,9 @@ Scheme �Ǵ���Ū�ʥ��֥������ȥ����ƥ��������Ƥߤޤ��礦��
 <p>
 </p>
 
-<p class=noindent>��³�� <code class=scheme><span class=variable>delete-duplicates</span></code> �ϥꥹ�� <code class=scheme><span class=variable>s</span></code> ���Ф��ƸƤӽФ��졢
-�ꥹ�� <code class=scheme><span class=variable>s</span></code> �γ����ǤκǸ�˸��줿��ΤΤߤ�ޤ࿷�����ꥹ�Ȥ�
-�֤��ޤ���</p>
+<p class=noindent>手続き <code class=scheme><span class=variable>delete-duplicates</span></code> はリスト <code class=scheme><span class=variable>s</span></code> に対して呼び出され、
+リスト <code class=scheme><span class=variable>s</span></code> の各要素の最後に現れたもののみを含む新しいリストを
+返します。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define</span> <span class=variable>delete-duplicates</span>
@@ -295,14 +296,14 @@ Scheme �Ǵ���Ū�ʥ��֥������ȥ����ƥ��������Ƥߤޤ��礦��
 <p>
 </p>
 <p>
-���˥᥽�åɤ�Ŭ�Ѥˤ��Ĥ�ޤ��礦����³�� <code class=scheme><span class=variable>send</span></code> ��Ĥ��ä�
-���󥹥��󥹾�Υ᥽�åɤ�ƤӽФ��ޤ���<code class=scheme><span class=variable>send</span></code> �ΰ����ϡ�
-�᥽�å�̾�ȥ��󥹥��󥹤��Τ�Τ˲ä��ơ��᥽�åɤΰ����Ǥ���
-�᥽�åɤϡ����󥹥��󥹤��Τ�ΤǤϤʤ������󥹥��󥹤Υ��饹��
-��Ǽ����Ƥ��ޤ����顢<code class=scheme><span class=variable>send</span></code> �ϥ��󥹥��󥹤Υ��饹�򸡺�����
-�����Υ᥽�åɤ�ߤĤ��ʤ���Фʤ�ޤ��󡣤⤷���᥽�åɤ�
-�����ˤʤ���С����Υ��饹�Υ����ѡ����饹�Τ��õ���������
-������Υ����ѡ����饹�Υ��������õ���ޤ���</p>
+次にメソッドの適用にうつりましょう。手続き <code class=scheme><span class=variable>send</span></code> をつかって
+インスタンス上のメソッドを呼び出します。<code class=scheme><span class=variable>send</span></code> の引数は、
+メソッド名とインスタンスそのものに加えて、メソッドの引数です。
+メソッドは、インスタンスそのものではなく、インスタンスのクラスに
+格納されていますから、<code class=scheme><span class=variable>send</span></code> はインスタンスのクラスを検索して
+当該のメソッドをみつけなければなりません。もし、メソッドが
+そこになければ、そのクラスのスーパークラスのをを探し、さらに
+その先のスーパークラスのチェーンを探します。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define</span> <span class=variable>send</span>
@@ -321,7 +322,7 @@ Scheme �Ǵ���Ū�ʥ��֥������ȥ����ƥ��������Ƥߤޤ��礦��
 <p>
 </p>
 <p>
-����˶�̣���륯�饹�򤤤��Ĥ�������ޤ��礦��</p>
+さらに興味あるクラスをいくつか定義しましょう。</p>
 <p>
 </p>
 <p>
@@ -344,13 +345,13 @@ Scheme �Ǵ���Ū�ʥ��֥������ȥ����ƥ��������Ƥߤޤ��礦��
 <p>
 </p>
 
-<p class=noindent>�����ǡ�<code class=scheme><span class=variable>bike-class</span></code> �ˤ� �᥽�å� <code class=scheme><span class=variable>check-fit</span></code> ���ޤޤ��
-���ޤ�������ϡ��Х����Ȥ�����ˡ��Ȥꡢ���ΥХ����ȿͤ���ˡ�Ȥ�
-Ŭ��������𤷤ޤ���</p>
+<p class=noindent>ここで、<code class=scheme><span class=variable>bike-class</span></code> には メソッド <code class=scheme><span class=variable>check-fit</span></code> が含まれて
+います。これは、バイクとその寸法をとり、そのバイクと人の寸法との
+適合性を報告します。</p>
 <p>
 </p>
 <p>
-�Ǥ� <code class=scheme><span class=variable>my-bike</span></code> ���������ޤ��礦��</p>
+では <code class=scheme><span class=variable>my-bike</span></code> を再定義しましょう。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define</span> <span class=variable>my-bike</span>
@@ -364,14 +365,14 @@ Scheme �Ǵ���Ū�ʥ��֥������ȥ����ƥ��������Ƥߤޤ��礦��
 <p>
 </p>
 <p>
-���줬���Բ� 32 �οͤ˥ե��åȤ��뤫�ɤ�����Τ����ˤϡ�
-�ʲ��Τ褦�ˤ��ޤ���</p>
+これが、股下 32 の人にフィットするかどうかを確かめるには、
+以下のようにします。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=variable>send</span> <span class=keyword>'</span><span class=variable>check-fit</span> <span class=variable>my-bike</span> <span class=selfeval>32</span>)
 </pre><p></p>
 <p>
-<code class=scheme><span class=variable>bike-class</span></code> �Υ��֥��饹���ǽ�Ǥ���</p>
+<code class=scheme><span class=variable>bike-class</span></code> のサブクラスも可能です。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define</span> <span class=variable>mtn-bike-class</span>
@@ -392,8 +393,8 @@ Scheme �Ǵ���Ū�ʥ��֥������ȥ����ƥ��������Ƥߤޤ��礦��
 <p>
 </p>
 
-<p class=noindent><code class=scheme><span class=variable>mtn-bike-class</span></code> �� <code class=scheme><span class=variable>suspension</span></code> �Ȥ��������åȤ��ɲä���
-�᥽�å� <code class=scheme><span class=variable>check-fit</span></code> �Τ������̤������Ȥ��ޤ���
+<p class=noindent><code class=scheme><span class=variable>mtn-bike-class</span></code> は <code class=scheme><span class=variable>suspension</span></code> というスロットを追加し、
+メソッド <code class=scheme><span class=variable>check-fit</span></code> のすこし別の定義を使います。
 </p>
 <p>
 </p>
@@ -406,40 +407,40 @@ Scheme �Ǵ���Ū�ʥ��֥������ȥ����ƥ��������Ƥߤޤ��礦��
 <p>
 </p>
 <a name="node_sec_12.2"></a>
-<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_12.2">12.2&nbsp;&nbsp;���饹�ϥ��󥹥��󥹤Ǥ⤢��</a></h2>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_12.2">12.2&nbsp;&nbsp;クラスはインスタンスでもある</a></h2>
 <p></p>
 <p>
-<a name="node_idx_460"></a>�������ɼԤʤ顢���饹���Τ�Τ��ʤˤ��Υ��饹(<em>�᥿���饹</em>)��
-���󥹥��󥹤ˤʤꤦ�뤳�Ȥ�ƨ�������ȤϤʤ��Ǥ��礦��
-���٤ƤΥ��饹�Ϥ��붦�̤ο��񤤤򤷤ޤ������줾��Υ��饹��
-�����åȡ������ѥ��饹���᥽�å�̾�Υꥹ�ȡ��᥽�åɥ٥�����
-���äƤ��ޤ���<code class=scheme><span class=variable>make-instance</span></code> �Ϥ���餬��ͭ���Ƥ���᥽�å�
-�Τ褦�˸����ޤ������Τ��Ȥϡ������ζ��̤������񤤤�⤦�ҤȤ�
-�̤Υ��饹(���켫�Ȥ������󤽤Υ��饹�Υ��󥹥���)��Ĥ��ä�
-����Ǥ��뤳�Ȥ򼨺����Ƥ��ޤ���</p>
+<a name="node_idx_460"></a>賢明な読者なら、クラスそのものがなにかのクラス(<em>メタクラス</em>)の
+インスタンスになりうることを見逃がすことはないでしょう。
+すべてのクラスはある共通の振舞いをします。それぞれのクラスは
+スロット、スーパクラス、メソッド名のリスト、メソッドベクタを
+持っています。<code class=scheme><span class=variable>make-instance</span></code> はこれらが共有しているメソッド
+のように見えます。このことは、これらの共通した振舞いをもうひとつ
+別のクラス(それ自身ももちろんそのクラスのインスタンス)をつかって
+指定できることを示唆しています。</p>
 <p>
 </p>
 <p>
-����Ū�ˤϡ��ַܤ��褫�����褫�פε����򤷤ʤ��Ȥ�������
-���饹�μ�����񴹤��ơ����֥������Ȼظ��Υ��ץ����������Ѥ��ޤ���
-�褦����ˡ�<code class=scheme><span class=variable>class</span></code> ��¤�ΤȤ�����տ魯���³���Ȥ����Τ�ߤᡢ
-���饹�򥪥֥������ȤȤ���������뵡���λĤ����ʬ�����褦�ˤ���
-�Ȥ������ȤǤ���</p>
+具体的には、「鶏が先か、卵が先か」の議論をしないという条件で
+クラスの実装を書換えて、オブジェクト指向のアプローチを利用します。
+ようするに、<code class=scheme><span class=variable>class</span></code> 構造体とそれに付随する手続きというのを止め、
+クラスをオブジェクトとして定義する機構の残りの部分に頼るようにする
+ということです。</p>
 <p>
 </p>
 <p>
-<code class=scheme><span class=variable>standard-class</span></code> ��¾�Υ��饹�����Υ��󥹥��󥹤Ǥ���褦��
-���饹�Ǥ���Ȥ��ޤ��礦���Ȥ��ˡ�<code class=scheme><span class=variable>standard-class</span></code> �Ϥ��켫�Ȥ�
-���󥹥��󥹤Ǥʤ���Фʤ�ޤ���<code class=scheme><span class=variable>standard-class</span></code> �ϤɤΤ褦�ˤʤä�
-����Ф褤�Ǥ��礦��</p>
+<code class=scheme><span class=variable>standard-class</span></code> を他のクラスがそのインスタンスであるような
+クラスであるとしましょう。とくに、<code class=scheme><span class=variable>standard-class</span></code> はそれ自身の
+インスタンスでなければなりません。<code class=scheme><span class=variable>standard-class</span></code> はどのようになって
+いればよいでしょう。</p>
 <p>
 </p>
 <p>
-<code class=scheme><span class=variable>standard-class</span></code> �ϤҤȤĤΥ��󥹥��󥹤ǡ����󥹥��󥹤�
-�٥�����ɽ�����Ƥ��ޤ�������ǡ��ǽ�����Ǥ����Υ��饹�Ĥޤꡢ
-��ʬ���ȤǤ���褦�ʥ٥����Ȥ����Τ�������Ǥϡ������å��ͤǤ���褦��
-���ޤ������٤ƤΥ��饹�� 4 �ĤΥ����åȤ�⤿�ʤ���Фʤ�ʤ��Ȥ��ޤ�����
-����ǡ�<code class=scheme><span class=variable>standard-class</span></code> �� 5 �Ĥ����Ǥ��ĥ٥����Ȥ��ޤ���</p>
+<code class=scheme><span class=variable>standard-class</span></code> はひとつのインスタンスで、インスタンスは
+ベクタで表現しています。それで、最初の要素がそのクラスつまり、
+自分自身であるようなベクタとし、のこりの要素は、スロット値であるように
+します。すべてのクラスは 4 つのスロットをもたなければならないとしました。
+それで、<code class=scheme><span class=variable>standard-class</span></code> は 5 つの要素をもつベクタとします。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define</span> <span class=variable>standard-class</span>
@@ -457,10 +458,10 @@ Scheme �Ǵ���Ū�ʥ��֥������ȥ����ƥ��������Ƥߤޤ��礦��
 <p>
 </p>
 
-<p class=noindent><code class=scheme><span class=variable>standard-class</span></code> �٥����Ϥϴ�����������Ƥ���٥����ǤϤʤ����Ȥ�
-���դ��Ƥ�������������ܥ� <code class=scheme><span class=variable>value-of-standard-class-goes-here</span></code> ��
-�ץ졼���ۥ���Ȥ��Ƶ�ǽ���ޤ�������ǡ�<code class=scheme><span class=variable>standard-class</span></code> ���ͤ����
-���ޤ����Τǡ������ʬ���ȤΥ��饹�Ȥ��ƻȤ��ޤ���</p>
+<p class=noindent><code class=scheme><span class=variable>standard-class</span></code> ベクタはは完全に満されているベクタではないことに
+注意してください。シンボル <code class=scheme><span class=variable>value-of-standard-class-goes-here</span></code> は
+プレースホルダとして機能します。これで、<code class=scheme><span class=variable>standard-class</span></code> の値を定義
+しましたので、これを自分自身のクラスとして使えます。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=variable>vector-set!</span> <span class=variable>standard-class</span> <span class=selfeval>0</span> <span class=variable>standard-class</span>)
@@ -468,8 +469,8 @@ Scheme �Ǵ���Ū�ʥ��֥������ȥ����ƥ��������Ƥߤޤ��礦��
 <p>
 </p>
 <p>
-��Ϥ䡢���饹��¤�ξ�μ�³���ˤ���뤳�Ȥ��Ǥ��ʤ��Ȥ������Ȥ�
-���դ��Ƥ����������ʲ��Τ��٤ƤΥե�����θƤӽФ���</p>
+もはや、クラス構造体上の手続きにたよることができないということに
+注意してください。以下のすべてのフォームの呼び出しを</p>
 <p>
 </p>
 <pre class=scheme>(<span class=variable>standard-class?</span> <span class=variable>x</span>)
@@ -482,7 +483,7 @@ Scheme �Ǵ���Ū�ʥ��֥������ȥ����ƥ��������Ƥߤޤ��礦��
 <p>
 </p>
 
-<p class=noindent>�ʲ����֤������ʤ���Фʤ�ޤ���</p>
+<p class=noindent>以下に置き換えなければなりません。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>and</span> (<span class=variable>vector?</span> <span class=variable>x</span>) (<span class=variable>eqv?</span> (<span class=variable>vector-ref</span> <span class=variable>x</span> <span class=selfeval>0</span>) <span class=variable>standard-class</span>))
@@ -506,19 +507,19 @@ Scheme �Ǵ���Ū�ʥ��֥������ȥ����ƥ��������Ƥߤޤ��礦��
 <p>
 </p>
 <a name="node_sec_12.3"></a>
-<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_12.3">12.3&nbsp;&nbsp;¿�ŷѾ�</a></h2>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_12.3">12.3&nbsp;&nbsp;多重継承</a></h2>
 <p></p>
 <p>
-���饹���դ��İʾ�Υ����ѥ��饹���Ƥ�褦���֥������ȥ����ƥ��
-�ѹ�����ΤϤ��䤹�����ȤǤ���<code class=scheme><span class=variable>superclass</span></code> �Τ����� 
-<code class=scheme><span class=variable>class-precedence-list</span></code> ��Ȥ��������åȤ��Ĥ褦��
-<code class=scheme><span class=variable>standard-class</span></code> ���������ޤ������륯�饹��
-<code class=scheme><span class=variable>class-precedence-list</span></code> �Ϥ��Υ��饹��<em>���٤Ƥ�</em>
-�����ѥ��饹�Υꥹ�ȤǤ���<code class=scheme><span class=variable>create-class</span></code> �ˤ�륯�饹����������
-<em>ľ�ܤ�</em>�����ѥ��饹�Ȥ��ƻ��ꤵ�줿��Τ����ǤϤ���ޤ���
-����̾���ϥ����ѥ��饹��������֤ǥꥹ�ȤˤʤäƤ��ꡢ
-���ˤ��륹���ѥ��饹�ϸ�ˤ����Τ���ͥ���̤��⤤���Ȥ�
-�ż����Ƥ��롣</p>
+クラスがふたつ以上のスーパクラスをもてるようオブジェクトシステムを
+変更するのはたやすいことです。<code class=scheme><span class=variable>superclass</span></code> のかわりに 
+<code class=scheme><span class=variable>class-precedence-list</span></code> をというスロットをもつように
+<code class=scheme><span class=variable>standard-class</span></code> を再定義します。あるクラスの
+<code class=scheme><span class=variable>class-precedence-list</span></code> はそのクラスの<em>すべての</em>
+スーパクラスのリストです。<code class=scheme><span class=variable>create-class</span></code> によるクラスの生成時に
+<em>直接の</em>スーパクラスとして指定されたものだけではありません。
+この名前はスーパクラスがある順番でリストになっており、
+前にあるスーパクラスは後にあるものよりも優先順位が高いことを
+暗示している。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define</span> <span class=variable>standard-class</span>
@@ -535,17 +536,17 @@ Scheme �Ǵ���Ū�ʥ��֥������ȥ����ƥ��������Ƥߤޤ��礦��
 <p>
 </p>
 
-<p class=noindent>�����åȤΥꥹ�Ȥ򿷤��������åȤ�ޤ�褦�ѹ���������ǤϤʤ���
-���ĤƤ� <code class=scheme><span class=variable>superclass</span></code> �����åȤ� <code class=scheme><span class=selfeval>#f</span></code> �����ˡ�<code class=scheme>()</code> �Ȥʤ�ޤ���
-����ϡ�<code class=scheme><span class=variable>standard-class</span></code> �� <code class=scheme><span class=variable>class-precedence-list</span></code> ���ꥹ�Ȥ�
-�ʤ���Фʤ�ʤ�����Ǥ���<code class=scheme>(<span class=selfeval>#t</span>)</code> �Ȥ��뤳�Ȥ�Ǥ��ޤ�������
-�ƥ��饹�� <code class=scheme><span class=variable>class-precedence-list</span></code>�ˤ���Τǡ��������饹�ˤĤ���
-���ڤ���Ĥ��Ϥ���ޤ���</p>
+<p class=noindent>スロットのリストを新しいスロットを含むよう変更するだけではなく、
+かつての <code class=scheme><span class=variable>superclass</span></code> スロットは <code class=scheme><span class=selfeval>#f</span></code> の代りに、<code class=scheme>()</code> となります。
+これは、<code class=scheme><span class=variable>standard-class</span></code> の <code class=scheme><span class=variable>class-precedence-list</span></code> がリストで
+なければならないからです。<code class=scheme>(<span class=selfeval>#t</span>)</code> とすることもできましたが、
+各クラスの <code class=scheme><span class=variable>class-precedence-list</span></code>にあるので、ゼロクラスについて
+言及するつもりはありません。</p>
 <p>
 </p>
 <p>
-<code class=scheme><span class=variable>create-class</span></code> �ޥ�����ñ��Υ����ѥ��饹�Τ����ˡ�ľ�ܤ�
-�����ѥ��饹�Υꥹ�Ȥ���������褦���ѹ�����ɬ�פ�����ޤ���</p>
+<code class=scheme><span class=variable>create-class</span></code> マクロは単一のスーパクラスのかわりに、直接の
+スーパクラスのリストを受け入れるように変更する必要があります。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define-macro</span> <span class=variable>create-class</span>
@@ -560,9 +561,9 @@ Scheme �Ǵ���Ū�ʥ��֥������ȥ����ƥ��������Ƥߤޤ��礦��
 <p>
 </p>
 <p>
-<code class=scheme><span class=variable>create-class-proc</span></code> ��Ϳ����줿ľ�ܤΥ����ѥ��饹���饯�饹��ͥ��
-�ꥹ�Ȥ򡢤��Υ��饹��ͥ��ꥹ�Ȥ��饹���åȤΥꥹ�Ȥ�׻����ʤ����
-�ʤ�ޤ���</p>
+<code class=scheme><span class=variable>create-class-proc</span></code> は与えられた直接のスーパクラスからクラスの優先
+リストを、そのクラスの優先リストからスロットのリストを計算しなければ
+なりません。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define</span> <span class=variable>create-class-proc</span>
@@ -587,7 +588,7 @@ Scheme �Ǵ���Ū�ʥ��֥������ȥ����ƥ��������Ƥߤޤ��礦��
 <p>
 </p>
 
-<p class=noindent>��³�� <code class=scheme><span class=variable>append-map</span></code> �� <code class=scheme><span class=variable>append</span></code> �� <code class=scheme><span class=variable>map</span></code> �ι����Ǥ���</p>
+<p class=noindent>手続き <code class=scheme><span class=variable>append-map</span></code> は <code class=scheme><span class=variable>append</span></code> と <code class=scheme><span class=variable>map</span></code> の合成です。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define</span> <span class=variable>append-map</span>
@@ -600,8 +601,8 @@ Scheme �Ǵ���Ū�ʥ��֥������ȥ����ƥ��������Ƥߤޤ��礦��
 <p>
 </p>
 <p>
-��³�� <code class=scheme><span class=variable>send</span></code> �ϥ᥽�åɤκ߽��õ�������ˡ����饹ͥ��ꥹ�����Τ�
-�����鱦��õ������ɬ�פ�����ޤ���</p>
+手続き <code class=scheme><span class=variable>send</span></code> はメソッドの在処を探すさいに、クラス優先リスト全体を
+左から右へ探索する必要があります。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define</span> <span class=variable>send</span>
@@ -634,12 +635,12 @@ Scheme �Ǵ���Ū�ʥ��֥������ȥ����ƥ��������Ƥߤޤ��礦��
 <p>
 </p>
 <div class=footnoterule><hr></div><p></p>
-<div class=footnote><p><a name="node_footnote_Temp_10"></a><sup><small><a href="#node_call_footnote_Temp_10">1</a></small></sup> ������ϥ᥽�åɤ�(���ޤ���
-�����ͤ���³���Ǥ���褦��)�����åȤȤ�������Ǥ���ΤǤ������������ʤ�
-�����Ȥ�����ͳ������ޤ������饹�Υ��󥹥��󥹤ϥ᥽�åɤ�
-��ͭ���ޤ����������åȤ��ͤϥ��󥹥��󥹤��Ȥ˰㤦�Τ����̤Ǥ���
-����������С��᥽�åɤϥ��饹������˴ޤ�뤳�Ȥ��Ǥ��ޤ�����
-�����åȤΤ褦�˥��󥹥��󥹤��Ȥ˥���ˤ�ꤢ�Ƥ�ɬ�פ�����ޤ���</p>
+<div class=footnote><p><a name="node_footnote_Temp_10"></a><sup><small><a href="#node_call_footnote_Temp_10">1</a></small></sup> 理論上はメソッドを(たまたま
+その値が手続きであるような)スロットとして定義できるのですが、そうしない
+ちゃんとした理由があります。クラスのインスタンスはメソッドを
+共有しますが、スロットの値はインスタンスごとに違うのが普通です。
+いいかえれば、メソッドはクラスの定義に含めることができますし、
+スロットのようにインスタンスごとにメモリにわりあてる必要がありません。</p>
 </div>
 <div class=smallskip></div>
 <p style="margin-top: 0pt; margin-bottom: 0pt">

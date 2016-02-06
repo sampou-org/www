@@ -1,5 +1,4 @@
-<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html>
 <!--
 
 Generated from t-y-scheme.tex by tex2page, v 20060531
@@ -8,9 +7,11 @@ Generated from t-y-scheme.tex by tex2page, v 20060531
 http://www.ccs.neu.edu/~dorai/tex2page/tex2page-doc.html
 
 -->
+<html lang="ja">
 <head>
+<meta charset="utf-8">
 <title>
-�Ƚ� Scheme ������ Teach Yourself Scheme in Fixnum Days
+独習 Scheme 三週間 Teach Yourself Scheme in Fixnum Days
 </title>
 <link rel="stylesheet" type="text/css" href="t-y-scheme-Z-S.css" title=default>
 <meta name=robots content="noindex,follow">
@@ -28,46 +29,46 @@ introduction to the programming language Scheme">
 <a name="node_chap_D"></a>
 <h1 class=chapter>
 <div class=chapterheading><a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_D">Appendix D</a></div><br>
-<a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_D">̵�¤��б����륯���å�</a></h1>
+<a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_D">無限に対応するクロック</a></h1>
 <p></p>
 <p>
 <a name="node_idx_540"></a><a name="node_idx_542"></a></p>
 <p>
 </p>
 <p>
-Guile [<a href="t-y-scheme.hlog">cite{guile}</a>] �μ�³�� <code class=scheme><span class=variable>alarm</span></code> �ϳ����߲�ǽ�ʥ����޵�����
-�󶡤��Ƥ��ޤ����桼���Ϥ����餫�λ���ñ�̸�Υ��顼������ꤷ����
-���������Ǥ��ޤ����ޤ����ߤ�뤳�Ȥ�Ǥ��ޤ������顼��Υ����ޤ�
-��ʬ�λ������֤�Ȥ��ڤ�С����顼��ϥ��դ˥��åȤ���ޤ������줬
-���פʤΤϡ��桼���������ǽ�Ǥ���Ȥ������ȤǤ���Guile �� <code class=scheme><span class=variable>alarm</span></code> ��
-<a href="t-y-scheme-Z-H-17.html#node_sec_15.1">15.1</a> ��Υ����å��Ȥϴ�����Ʊ����ΤȤ����櫓�Ǥ�
-����ޤ��󡣤���������ñ���ѹ����뤳�Ȥ���ǽ�Ǥ���</p>
+Guile [<a href="t-y-scheme.hlog">cite{guile}</a>] の手続き <code class=scheme><span class=variable>alarm</span></code> は割り込み可能なタイマ機構を
+提供しています。ユーザはいくらかの時間単位後のアラームを設定したり
+解除したりできます。また、止めることもできます。アラームのタイマが
+自分の持ち時間を使い切れば、アラームはオフにセットされます。これが
+重要なのは、ユーザが設定可能であるということです。Guile の <code class=scheme><span class=variable>alarm</span></code> は
+<a href="t-y-scheme-Z-H-17.html#node_sec_15.1">15.1</a> 節のクロックとは完全に同じものというわけでは
+ありません。しかし、簡単に変更することが可能です。</p>
 <p>
 </p>
 <p>
-���� alarm �Υ����ޤϡ��ǽ��<em>���</em>���Ƥ��뤫�����뤤�ϡ�
-<em>�Ż�</em>���Ƥ��ޤ������ʤ�������֤��᤮�⡢���顼���
-���դ˥��åȤ��뤳�ȤϤ���ޤ��󡣥��顼��Υ��顼�बȯ������ޤǤ�
-���֤� <code class=scheme><span class=variable>n</span></code> �ä˥��åȤ��뤿��ˤϡ������Ǥ� <code class=scheme><span class=variable>n</span></code> �� <code class=scheme><span class=selfeval>0</span></code> �ǤϤʤ�
-�Ȥ��ޤ�����<code class=scheme>(<span class=variable>alarm</span> <span class=variable>n</span>)</code> �����餻�ޤ��������ޤ����Ǥ����ꤵ��Ƥ���ʤ�
-(�����ơ����顼�ब���դˤʤäƤ��ʤ��ʤ�)��<code class=scheme>(<span class=variable>alarm</span> <span class=variable>n</span>)</code> ��
-��³���ƤӽФ��ϰ��������ꤵ�줿�Ȥ�����λĤ���ÿ����֤��ޤ���
-�⤷�������˥��顼�ब���ꤵ��Ƥ��ʤ���С�<code class=scheme>(<span class=variable>alarm</span> <span class=variable>n</span>)</code> �� <code class=scheme><span class=selfeval>0</span></code> ��
-�֤��ޤ���</p>
+この alarm のタイマは、最初は<em>停止</em>しているか、あるいは、
+<em>静止</em>しています。すなわち、時間が過ぎも、アラームを
+オフにセットすることはありません。アラームのアラームが発生するまでの
+時間を <code class=scheme><span class=variable>n</span></code> 秒にセットするためには、ここでは <code class=scheme><span class=variable>n</span></code> は <code class=scheme><span class=selfeval>0</span></code> ではない
+としますが、<code class=scheme>(<span class=variable>alarm</span> <span class=variable>n</span>)</code> を走らせます。タイマがすでに設定されているなら
+(そして、アラームがオフになっていないなら)、<code class=scheme>(<span class=variable>alarm</span> <span class=variable>n</span>)</code> の
+手続き呼び出しは以前に設定されたときからの残りの秒数を返します。
+もし、以前にアラームが設定されていなければ、<code class=scheme>(<span class=variable>alarm</span> <span class=variable>n</span>)</code> は <code class=scheme><span class=selfeval>0</span></code> を
+返します。</p>
 <p>
 </p>
 <p>
-��³���ƤӽФ� <code class=scheme>(<span class=variable>alarm</span> <span class=selfeval>0</span>)</code> �ϥ��顼��Υ����ޤ�<em>���</em>���ޤ���
-���ʤ�������֤Υ�����ȥ��������ߤ��ޤ��������ޤ�<em>�Ż�</em>����
-���顼��Ϥɤ�⥪�դˤϤʤ�ޤ���<code class=scheme>(<span class=variable>alarm</span> <span class=selfeval>0</span>)</code> �ϡ��⤷����С�
-�����Υ��顼������꤫��λĤ��ÿ����֤��ޤ���</p>
+手続き呼び出し <code class=scheme>(<span class=variable>alarm</span> <span class=selfeval>0</span>)</code> はアラームのタイマを<em>停止</em>します。
+すなわち、時間のカウントダウンは停止します。タイマは<em>静止</em>し、
+アラームはどれもオフにはなりません。<code class=scheme>(<span class=variable>alarm</span> <span class=selfeval>0</span>)</code> は、もしあれば、
+以前のアラームの設定からの残り秒数も返します。</p>
 <p>
 </p>
 <p>
-�ǥե���ȤǤϡ����顼��Υ�����ȥ����� 0 ����ã�����顢
-Guile �ϥ��󥽡���˥�å�������ɽ������ȴ���Ƥ��ޤ��ޤ���
-��ä�ͭ�Ѥʿ��񤤤ϡ���³�� <code class=scheme><span class=variable>sigaction</span></code> ��ʲ��Τ褦��
-�Ȥ����Ȥ������ޤ���</p>
+デフォルトでは、アラームのカウントダウンが 0 に到達したら、
+Guile はコンソールにメッセージを表示して抜けてしまいます。
+もっと有用な振舞いは、手続き <code class=scheme><span class=variable>sigaction</span></code> を以下のように
+使うことで得られます。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=variable>sigaction</span> <span class=variable>SIGALRM</span>
@@ -82,43 +83,43 @@ Guile �ϥ��󥽡���˥�å�������ɽ������ȴ���Ƥ��ޤ��ޤ���
 
 <p class=noindent></p>
 <p>
-������ <code class=scheme><span class=variable>SIGALRM</span></code> (����� q14 �ˤʤäƤ��ޤ�) �� <code class=scheme><span class=variable>sigaction</span></code> ��
-���꤬ɬ�פʤ�Τ������顼��ϥ�ɥ�Ǥ��뤳�Ȥ��ǧ�����ޤ���
+第一引数 <code class=scheme><span class=variable>SIGALRM</span></code> (これは q14 になっています) は <code class=scheme><span class=variable>sigaction</span></code> に
+設定が必要なものが、アラームハンドラであることを確認させます。
 <a name="node_call_footnote_Temp_22"></a><sup><small><a href="#node_footnote_Temp_22">1</a></small></sup>
-��������ϡ��桼�������򤷤�������Υ��顼��ϥ�ɥ�󥰼�³���Ǥ���
-������Ǥϡ�alarm ���Ȥ�Τ����줿�Ȥ����ϥ�ɥ�� Scheme ��
-ȴ���뤳�Ȥʤ������󥽡���� <code class=scheme><span class=selfeval>&quot;Signal 14 raised. Continuing...&quot;</span></code>
-��ɽ�����ޤ���(<code class=scheme><span class=selfeval>14</span></code> �ϥ��顼�ब�ϥ�ɥ���Ϥ� <code class=scheme><span class=variable>SIGALRM</span></code> ���ͤǤ���
-�����ͤˤĤ��ƺ��Ͽ��ۤ���ɬ�פϤ���ޤ���)</p>
+第二引数は、ユーザが選択した一引数のアラームハンドリング手続きです。
+この例では、alarm がとりのぞかれたとき、ハンドラは Scheme を
+抜けることなく、コンソールに <code class=scheme><span class=selfeval>&quot;Signal 14 raised. Continuing...&quot;</span></code>
+を表示します。(<code class=scheme><span class=selfeval>14</span></code> はアラームがハンドラに渡す <code class=scheme><span class=variable>SIGALRM</span></code> の値です。
+この値について今は心配する必要はありません。)</p>
 <p>
 </p>
 <p>
-�����Ǥ����Ѥδ�������ϡ�����ñ��ʥ����ޤΥᥫ�˥���ˤϡ�
-�ҤȤ����꤬����ޤ�����³�� <code class=scheme><span class=variable>alarm</span></code> �θƤӽФ����֤������ <code class=scheme><span class=selfeval>0</span></code> 
-��ۣ��Ǥ���Ȥ������ȤǤ��������ͤϡ�alarm ���Żߤ��Ƥ��뤳�Ȥ�
-��̣������ȡ������ڤ�ˤʤä����Ȥ��̣�����礬����ޤ���
-����ۣ�椵�ϡ���<code class=scheme><span class=global>*infinity*</span></code>�פ򥢥顼��λ��ѱ黻�˴ޤ�뤳�Ȥ�
-�Ǥ���С���ǽ�ˤʤ�ޤ�������������С��Żߤ��������å���
-<code class=scheme><span class=global>*infinity*</span></code> �ä��Ĥ�ΤǤ��뤳�Ȥ�����С�<code class=scheme><span class=variable>alarm</span></code> �Τ褦��Ư��
-<em>�����å�</em>���ߤ����ΤǤ�������ˤ�ꡢ���������ʤ��Ȥ�������
-��Τˤʤ�ޤ���</p>
+ここでの利用の観点からは、この単純なタイマのメカニズムには、
+ひとつ問題があります。手続き <code class=scheme><span class=variable>alarm</span></code> の呼び出しで返される値 <code class=scheme><span class=selfeval>0</span></code> 
+が曖昧であるということです。この値は、alarm が静止していることを
+意味する場合と、時間切れになったことを意味する場合があります。
+この曖昧さは、「<code class=scheme><span class=global>*infinity*</span></code>」をアラームの算術演算に含めることが
+できれば、可能になります。言い換えれば、静止したクロックは
+<code class=scheme><span class=global>*infinity*</span></code> 秒をもつものであることを除けば、<code class=scheme><span class=variable>alarm</span></code> のように働く
+<em>クロック</em>が欲しいのです。これにより、いろいろなことが自然な
+ものになります。</p>
 <p>
-(1) �Żߤ��������å���� <code class=scheme>(<span class=variable>clock</span> <span class=variable>n</span>)</code> �� <code class=scheme><span class=selfeval>0</span></code> �ǤϤʤ���
-<code class=scheme><span class=global>*infinity*</span></code>���֤���</p>
+(1) 静止したクロック上の <code class=scheme>(<span class=variable>clock</span> <span class=variable>n</span>)</code> は <code class=scheme><span class=selfeval>0</span></code> ではなく、
+<code class=scheme><span class=global>*infinity*</span></code>を返す。</p>
 <p>
-(2) �����å���ߤ��ˤϡ�<code class=scheme>(<span class=variable>clock</span> <span class=selfeval>0</span>)</code> <em>�ǤϤʤ�</em>
-<code class=scheme>(<span class=variable>clock</span> <span class=global>*infinity*</span>)</code> ��Ƥ֡�</p>
+(2) クロックを止めるには、<code class=scheme>(<span class=variable>clock</span> <span class=selfeval>0</span>)</code> <em>ではなく</em>
+<code class=scheme>(<span class=variable>clock</span> <span class=global>*infinity*</span>)</code> を呼ぶ。</p>
 <p>
-(3) <code class=scheme>(<span class=variable>clock</span> <span class=selfeval>0</span>)</code> ��̵�¾����֤����ꤵ�줿�����å������ꤹ��Τ�
-Ʊ���ǡ�¨���˥��顼��򵯤���</p>
+(3) <code class=scheme>(<span class=variable>clock</span> <span class=selfeval>0</span>)</code> は無限小時間を設定されたクロックに設定するのと
+同等で、即時にアラームを起す。</p>
 <p>
-Guile �Ǥ� <code class=scheme><span class=global>*infinity*</span></code> �ϰʲ��Τ褦�ʡֿ��͡פȤ�������Ǥ��ޤ���</p>
+Guile では <code class=scheme><span class=global>*infinity*</span></code> は以下のような「数値」として定義できます。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define</span> <span class=global>*infinity*</span> (<span class=variable>/</span> <span class=selfeval>1</span> <span class=selfeval>0</span>))
 </pre><p></p>
 <p>
-<code class=scheme><span class=variable>clock</span></code> �� <code class=scheme><span class=variable>alarm</span></code> ��Ȥä�����Ǥ��ޤ���</p>
+<code class=scheme><span class=variable>clock</span></code> は <code class=scheme><span class=variable>alarm</span></code> を使って定義できます。</p>
 <p>
 </p>
 <p>
@@ -139,10 +140,10 @@ Guile �Ǥ� <code class=scheme><span class=global>*infinity*</span></code> �ϰʲ�
            (<span class=keyword>set!</span> <span class=variable>clock-interrupt-handler</span> <span class=variable>val</span>))
           ((<span class=variable>set</span>)
            (<span class=keyword>cond</span> ((<span class=variable>=</span> <span class=variable>val</span> <span class=global>*infinity*</span>)
-                  <span class=comment>;����ϥ����å���ߤ�뤳�Ȥ�Ʊ����</span>
-                  <span class=comment>;����Ϥ⤷�������å������Ǥ˻ߤäƤ�����</span>
-		  <span class=comment>; *infinity* ���֤����Ȥ�Τ����С�</span>
-		  <span class=comment>; (alarm 0) �Ȥۤ�Ʊ����</span>
+                  <span class=comment>;これはクロックを止めることと同等。</span>
+                  <span class=comment>;これはもし、クロックがすでに止っていたら</span>
+		  <span class=comment>; *infinity* を返すことをのぞけば、</span>
+		  <span class=comment>; (alarm 0) とほぼ同等。</span>
 
                   (<span class=keyword>let</span> ((<span class=variable>time-remaining</span> (<span class=variable>alarm</span> <span class=selfeval>0</span>)))
                     (<span class=keyword>if</span> <span class=variable>stopped?</span> <span class=global>*infinity*</span>
@@ -150,9 +151,9 @@ Guile �Ǥ� <code class=scheme><span class=global>*infinity*</span></code> �ϰʲ�
                           <span class=variable>time-remaining</span>))))
 
                  ((<span class=variable>=</span> <span class=variable>val</span> <span class=selfeval>0</span>)
-                  <span class=comment>;����ϡ����顼���ľ����ȯ�����������Ʊ����</span>
-                  <span class=comment>;����ϡ����顼��ϥ�ɥ�򵯤������Ȥ�Τ����С�</span>
-                  <span class=comment>;(alarm 0) �Ȥۤ�Ʊ����</span>
+                  <span class=comment>;これは、アラームを直ちに発生する設定と同等。</span>
+                  <span class=comment>;これは、アラームハンドラを起こすことをのぞけば、</span>
+                  <span class=comment>;(alarm 0) とほぼ同等。</span>
 
                   (<span class=keyword>let</span> ((<span class=variable>time-remaining</span> (<span class=variable>alarm</span> <span class=selfeval>0</span>)))
                     (<span class=keyword>if</span> <span class=variable>stopped?</span>
@@ -162,9 +163,9 @@ Guile �Ǥ� <code class=scheme><span class=global>*infinity*</span></code> �ϰʲ�
                           <span class=variable>time-remaining</span>))))
 
                  (<span class=keyword>else</span>
-		  <span class=comment>;����� n != 0 �ξ��� (alarm n) ��Ʊ����</span>
-                  <span class=comment>;�������������å������������Ż߾��֤ˤʤäƤ���С�</span>
-		  <span class=comment>;*infinity* ���֤����Ȥ�פ��������ȡ�</span>
+		  <span class=comment>;これは n != 0 の場合の (alarm n) と同等。</span>
+                  <span class=comment>;ただし、クロックがこの前で静止状態になっていれば、</span>
+		  <span class=comment>;*infinity* を返すことを思いだすこと。</span>
 
                   (<span class=keyword>let</span> ((<span class=variable>time-remaining</span> (<span class=variable>alarm</span> <span class=variable>val</span>)))
                     (<span class=keyword>if</span> <span class=variable>stopped?</span>
@@ -176,32 +177,32 @@ Guile �Ǥ� <code class=scheme><span class=global>*infinity*</span></code> �ϰʲ�
 
 <p class=noindent></p>
 <p>
-<code class=scheme><span class=variable>clock</span></code> ��³���� 3 �Ĥ����������ѿ���Ȥ��ޤ���</p>
+<code class=scheme><span class=variable>clock</span></code> 手続きは 3 つの内部状態変数を使います。</p>
 <p>
-(1) <code class=scheme><span class=variable>stopped?</span></code> �ϥ����å�����ߤ��Ƥ��뤫�ɤ����򼨤��ޤ���</p>
+(1) <code class=scheme><span class=variable>stopped?</span></code> はクロックが停止しているかどうかを示します。</p>
 <p>
-(2) <code class=scheme><span class=variable>clock-interrupt-handler</span></code> �ϥ桼���λ��ꤷ�����顼��ϥ�ɥ��
-ư����ʬ�򤢤�魯���󥯤Ǥ���</p>
-<p>
-</p>
-<p>
-(3) <code class=scheme><span class=variable>generate-clock-interrupt</span></code> �ϥ桼���λ��ꤷ�����顼��ϥ�ɥ��
-���餻������ <code class=scheme><span class=variable>stopped?</span></code> �򵶤����ꤹ�롢�⤦�ҤȤĤΥ��󥯤Ǥ���</p>
+(2) <code class=scheme><span class=variable>clock-interrupt-handler</span></code> はユーザの指定したアラームハンドラの
+動作部分をあらわすサンクです。</p>
 <p>
 </p>
 <p>
-<code class=scheme><span class=variable>clock</span></code> ��³���Ϥդ��Ĥΰ�������ޤ����ǽ��
-������ <code class=scheme><span class=variable>set-handler</span></code> �Ǥ���С����顼��ϥ�ɥ��
-���������ܤΰ�����Ȥ��ޤ���</p>
+(3) <code class=scheme><span class=variable>generate-clock-interrupt</span></code> はユーザの指定したアラームハンドラを
+走らせる前に <code class=scheme><span class=variable>stopped?</span></code> を偽に設定する、もうひとつのサンクです。</p>
 <p>
 </p>
 <p>
-�ǽ�ΰ����� <code class=scheme><span class=variable>set</span></code> �ʤ顢���顼��ޤǤλ��֤�
-�����ܤΰ����Τ����������ꤷ����������꤫���
-�Ĥ���֤��֤��ޤ������Υ����ɤ� <code class=scheme><span class=selfeval>0</span></code>��<code class=scheme><span class=global>*infinity*</span></code>��
-����ӡ�¾���ͤ���֤򤢤�魯�Τ��̡��˻Ȥ��ޤ���
-����ˤ��桼���ϡ�<code class=scheme><span class=variable>alarm</span></code> �ؤο���Ū��Ʃ����
-���󥿥ե������������ޤ���</p>
+<code class=scheme><span class=variable>clock</span></code> 手続きはふたつの引数を取ります。最初の
+引数が <code class=scheme><span class=variable>set-handler</span></code> であれば、アラームハンドラと
+して二番目の引数を使います。</p>
+<p>
+</p>
+<p>
+最初の引数が <code class=scheme><span class=variable>set</span></code> なら、アラームまでの時間を、
+二番目の引数のあたいに設定し、前回の設定からの
+残り時間を返します。このコードは <code class=scheme><span class=selfeval>0</span></code>、<code class=scheme><span class=global>*infinity*</span></code>、
+および、他の値を時間をあらわすのに別々に使います。
+これによりユーザは、<code class=scheme><span class=variable>alarm</span></code> への数学的に透明な
+インタフェースが得られます。</p>
 <p>
 
 </p>
@@ -210,8 +211,8 @@ Guile �Ǥ� <code class=scheme><span class=global>*infinity*</span></code> �ϰʲ�
 <p>
 </p>
 <div class=footnoterule><hr></div><p></p>
-<div class=footnote><p><a name="node_footnote_Temp_22"></a><sup><small><a href="#node_call_footnote_Temp_22">1</a></small></sup> ¾�ˤ⥷���ʥ�Ϥ��äơ����줾���б�����ϥ�ɥ餬���ꡢ
-<code class=scheme><span class=variable>sigaction</span></code> �Ϥ����򥻥åȤ��뤳�Ȥ�Ǥ��ޤ���</p>
+<div class=footnote><p><a name="node_footnote_Temp_22"></a><sup><small><a href="#node_call_footnote_Temp_22">1</a></small></sup> 他にもシグナルはあって、それぞれ対応するハンドラがあり、
+<code class=scheme><span class=variable>sigaction</span></code> はそれらをセットすることもできます。</p>
 </div>
 <div class=smallskip></div>
 <p style="margin-top: 0pt; margin-bottom: 0pt">

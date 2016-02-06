@@ -1,5 +1,4 @@
-<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html>
 <!--
 
 Generated from t-y-scheme.tex by tex2page, v 20060531
@@ -8,9 +7,11 @@ Generated from t-y-scheme.tex by tex2page, v 20060531
 http://www.ccs.neu.edu/~dorai/tex2page/tex2page-doc.html
 
 -->
+<html lang="ja">
 <head>
+<meta charset="utf-8">
 <title>
-�Ƚ� Scheme ������ Teach Yourself Scheme in Fixnum Days
+独習 Scheme 三週間 Teach Yourself Scheme in Fixnum Days
 </title>
 <link rel="stylesheet" type="text/css" href="t-y-scheme-Z-S.css" title=default>
 <meta name=robots content="noindex,follow">
@@ -28,32 +29,32 @@ introduction to the programming language Scheme">
 <a name="node_chap_9"></a>
 <h1 class=chapter>
 <div class=chapterheading><a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_9">Chapter 9</a></div><br>
-<a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_9">��¤��</a></h1>
+<a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_9">構造体</a></h1>
 <p><a name="node_idx_406"></a></p>
 <p>
-�ǡ��������˥��롼�ײ�������Τ�<em>��¤��</em>�ȸƤӤޤ���
-Scheme �ι����ǡ������Ȥ��Ƥ��Ȥ��С��٥������ꥹ�Ȥ�Ĥ��ä�
-��¤�Τ�ɽ���Ǥ��ޤ������Ȥ��С�(��ʪ��Ū��)<em>����</em>�˴�Ϣ����
-���롼�ײ������ǡ����򰷤��Ȥ��ޤ��礦�����Υǡ����θ��̤����ǡ�
-���뤤��<em>�ե������</em>�ϡ�<em>�⤵</em>��<em>ƹ�ޤ��</em>��<em>����</em>��
-<em>�շ�</em>��<em>�տ�</em>�ʤɡ������� 5 �ĤΥե�����ɤ�Ĥ���Ȥ��ޤ��礦��
-���Τʥǡ����ϡ�5 ���ǤΥ٥�����ɽ�����뤳�Ȥ��Ǥ���Ǥ��礦��
-���줾��Υե�����ɤ� <code class=scheme><span class=variable>vector-ref</span></code> ��Ĥ��äƥ�����������
-<code class=scheme><span class=variable>vector-set!</span></code> ��Ĥ��ä��ѹ����뤳�Ȥ�Ǥ���Ǥ��礦��
-���������ɤΥե�����ɤ��ɤΥ���ǥå����˷�ӤĤ��Ƥ��뤫��
-�Ф��ʤ��ƤϤʤ�ʤ��ʤ�����ݤ򤷤礤����ΤϷ��Ǥ���͡�
-����Ǥϡ����꤬�����ʤ��Ǥ��������Τ������ե�����ɤ��������ꡢ���ä���
-����ȡ��Ҥɤ��ְ㤤�θ����ˤ�ʤäƤ��ޤ��ޤ���</p>
+データを自然にグループ化したものを<em>構造体</em>と呼びます。
+Scheme の合成データ型としてたとえば、ベクタ、リストをつかって
+構造体を表現できます。たとえば、(生物学的な)<em>樹木</em>に関連した
+グループ化したデータを扱うとしましょう。このデータの個別の要素、
+あるいは<em>フィールド</em>は、<em>高さ</em>、<em>胴まわり</em>、<em>樹齢</em>、
+<em>葉形</em>、<em>葉色</em>など、全部で 5 つのフィールドをつくるとしましょう。
+このなデータは、5 要素のベクタで表現することができるでしょう。
+それぞれのフィールドは <code class=scheme><span class=variable>vector-ref</span></code> をつかってアクセスし、
+<code class=scheme><span class=variable>vector-set!</span></code> をつかって変更することもできるでしょう。
+しかし、どのフィールドがどのインデックスに結びついているかを
+覚えなくてはならないなんて面倒をしょいこむのは嫌ですよね。
+それでは、ありがたくないですし、そのうち、フィールドが増えたり、減ったり
+すると、ひどく間違いの原因にもなってしまいます。</p>
 <p>
 <a name="node_idx_408"></a><a name="node_idx_410"></a></p>
 <p>
 </p>
 <p>
-����Ρ���¤�Υǡ��������������Τ� Scheme �Υޥ��� <code class=scheme><span class=keyword>defstruct</span></code>
-��Ȥ��ޤ�������ϴ���Ū�ˤϥ٥����Ǥ�������¤�ΤΥ��󥹥��󥹤�
-���������ե�����ɤ˥������������ե�����ɤ��ѹ�����Ŭ�ڤʼ�³������
-�Ȥ�ʤäƤ��ޤ�������椨�����ڹ�¤�� <code class=scheme><span class=variable>tree</span></code> �ϰʲ��Τ褦�����
-�Ǥ��ޤ���</p>
+それ故、構造体データ型を定義するのに Scheme のマクロ <code class=scheme><span class=keyword>defstruct</span></code>
+を使います。これは基本的にはベクタですが、構造体のインスタンスを
+生成し、フィールドにアクセスし、フィールドを変更する適切な手続き群を
+ともなっています。それゆえ、樹木構造体 <code class=scheme><span class=variable>tree</span></code> は以下のように定義
+できます。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>defstruct</span> <span class=variable>tree</span> <span class=variable>height</span> <span class=variable>girth</span> <span class=variable>age</span> <span class=variable>leaf-shape</span> <span class=variable>leaf-color</span>)
@@ -61,10 +62,10 @@ Scheme �ι����ǡ������Ȥ��Ƥ��Ȥ��С��٥������ꥹ�Ȥ�Ĥ��ä�
 <p>
 </p>
 <p>
-��������� <code class=scheme><span class=variable>make-tree</span></code> �Ȥ���̾���Υ��󥹥ȥ饯����³���ȡ�
-<code class=scheme><span class=variable>tree.height</span></code>��<code class=scheme><span class=variable>tree.girth</span></code>���ʤɤ�̾���Ρ��ƥե�����ɤ�
-�������������³����<code class=scheme><span class=variable>set!tree.height</span></code>��<code class=scheme><span class=variable>set!tree.girth</span></code>���ʤɤ�
-̾�����ѹ��Ѽ�³�����Ǥ��ޤ������󥹥ȥ饯���ϼ��Τ褦�˻Ȥ��ޤ���</p>
+こうすると <code class=scheme><span class=variable>make-tree</span></code> という名前のコンストラクタ手続きと、
+<code class=scheme><span class=variable>tree.height</span></code>、<code class=scheme><span class=variable>tree.girth</span></code>、などの名前の、各フィールドに
+アクセスする手続き、<code class=scheme><span class=variable>set!tree.height</span></code>、<code class=scheme><span class=variable>set!tree.girth</span></code>、などの
+名前の変更用手続きができます。コンストラクタは次のように使います。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define</span> <span class=variable>coconut</span> 
@@ -77,13 +78,13 @@ Scheme �ι����ǡ������Ȥ��Ƥ��Ȥ��С��٥������ꥹ�Ȥ�Ĥ��ä�
 <p>
 </p>
 
-<p class=noindent>���󥹥ȥ饯���ΰ�������İ��ȤˤʤäƤ��ޤ����ե������̾��
-���θ�ˤĤŤ�����ͤǤ����ե�����ɤϤɤν��֤Ǥ�褯�����ˤ�äƤ�
-�ʤ��Ƥ⤫�ޤ��ޤ��󡣤��ξ��ˤ��Υե�����ɤ��ͤ�̤����ˤʤ�ޤ���</p>
+<p class=noindent>コンストラクタの引数は二つ一組になっています。フィールド名と
+その後につづく初期値です。フィールドはどの順番でもよく、場合によっては
+なくてもかまいません。その場合にそのフィールドの値は未定義になります。</p>
 <p>
 </p>
 <p>
-����������³���ϰʲ��Τ褦�˸ƤӽФ��ޤ���</p>
+アクセサ手続きは以下のように呼び出します。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=variable>tree.height</span> <span class=variable>coconut</span>) <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>30</span>
@@ -95,12 +96,12 @@ Scheme �ι����ǡ������Ȥ��Ƥ��Ȥ��С��٥������ꥹ�Ȥ�Ĥ��ä�
 <p>
 </p>
 
-<p class=noindent><code class=scheme><span class=variable>tree.girth</span></code> ����������̤����ͤ��֤��ޤ�������ϡ�
-<code class=scheme><span class=variable>coconut</span></code> ��(<code class=scheme><span class=variable>tree</span></code>)�ˤϡ�<code class=scheme><span class=variable>girth</span></code> ����ꤷ�ʤ��ä�����Ǥ���</p>
+<p class=noindent><code class=scheme><span class=variable>tree.girth</span></code> アクセサは未定義値を返します。それは、
+<code class=scheme><span class=variable>coconut</span></code> 木(<code class=scheme><span class=variable>tree</span></code>)には、<code class=scheme><span class=variable>girth</span></code> を指定しなかったからです。</p>
 <p>
 </p>
 <p>
-�ѹ��Ҽ�³���ϰʲ��Τ褦�˸ƤӽФ��ޤ���</p>
+変更子手続きは以下のように呼び出します。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=variable>set!tree.height</span> <span class=variable>coconut</span> <span class=selfeval>40</span>)
@@ -109,8 +110,8 @@ Scheme �ι����ǡ������Ȥ��Ƥ��Ȥ��С��٥������ꥹ�Ȥ�Ĥ��ä�
 <p>
 </p>
 <p>
-�����ǡ������Υե�����ɤ��б����륢��������³���ǥ������������
-�������ͤ������ޤ���</p>
+ここで、これらのフィールドに対応するアクセサ手続きでアクセスすると
+新しい値が得られます。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=variable>tree.height</span> <span class=variable>coconut</span>) <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>40</span>
@@ -119,15 +120,15 @@ Scheme �ι����ǡ������Ȥ��Ƥ��Ȥ��С��٥������ꥹ�Ȥ�Ĥ��ä�
 <p>
 </p>
 <a name="node_sec_9.1"></a>
-<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_9.1">9.1&nbsp;&nbsp;�ǥե���Ȥν����</a></h2>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_9.1">9.1&nbsp;&nbsp;デフォルトの初期化</a></h2>
 <p></p>
 <p>
-���󥹥��󥹤��ȤǤϤʤ��ơ���¤�Τ��Τ�Τ������˽�������뤳�Ȥ�
-��ǽ�Ǥ�������椨��<code class=scheme><span class=variable>leaf-shape</span></code> �� <code class=scheme><span class=variable>leaf-color</span></code> ���ǥե���Ȥ�
-���줾�졢<code class=scheme><span class=variable>frond</span></code> �� <code class=scheme><span class=variable>green</span></code> �Ǥ���Ȳ��ꤹ�뤳�Ȥ��Ǥ��ޤ���
-�����Υǥե���Ȥ��ͤϡ�<code class=scheme><span class=variable>make-tree</span></code> �ƤӽФ��Τʤ�������Ū��
-��������뤤�ϡ���¤�ΤΥ��󥹥��󥹤����������Τ��ˡ��ѹ��Ҥ�
-�Ĥ��äƤ��ĤǤ��񤭤���ǽ�Ǥ���</p>
+インスタンスごとではなくて、構造体そのものの定義中に初期化することが
+可能です。それゆえ、<code class=scheme><span class=variable>leaf-shape</span></code> や <code class=scheme><span class=variable>leaf-color</span></code> がデフォルトで
+それぞれ、<code class=scheme><span class=variable>frond</span></code> や <code class=scheme><span class=variable>green</span></code> であると仮定することができます。
+これらのデフォルトの値は、<code class=scheme><span class=variable>make-tree</span></code> 呼び出しのなかの明示的な
+初期化あるいは、構造体のインスタンスを生成したのちに、変更子を
+つかっていつでも上書きが可能です。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>defstruct</span> <span class=variable>tree</span> <span class=variable>height</span> <span class=variable>girth</span> <span class=variable>age</span>
@@ -158,8 +159,8 @@ Scheme �ι����ǡ������Ȥ��Ƥ��Ȥ��С��٥������ꥹ�Ȥ�Ĥ��ä�
 <p>
 </p>
 <a name="node_sec_9.2"></a>
-<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_9.2">9.2&nbsp;&nbsp;<code class=scheme><span class=keyword>defstruct</span></code> �����</a></h2>
-<p><code class=scheme><span class=keyword>defstruct</span></code> �ޥ���������ϰʲ��Τ褦�ˤʤäƤ��ޤ���</p>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_9.2">9.2&nbsp;&nbsp;<code class=scheme><span class=keyword>defstruct</span></code> の定義</a></h2>
+<p><code class=scheme><span class=keyword>defstruct</span></code> マクロの定義は以下のようになっています。</p>
 <p>
 </p>
 <p>

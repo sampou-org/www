@@ -1,5 +1,4 @@
-<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html>
 <!--
 
 Generated from t-y-scheme.tex by tex2page, v 20060531
@@ -8,9 +7,11 @@ Generated from t-y-scheme.tex by tex2page, v 20060531
 http://www.ccs.neu.edu/~dorai/tex2page/tex2page-doc.html
 
 -->
+<html lang="ja">
 <head>
+<meta charset="utf-8">
 <title>
-�Ƚ� Scheme ������ Teach Yourself Scheme in Fixnum Days
+独習 Scheme 三週間 Teach Yourself Scheme in Fixnum Days
 </title>
 <link rel="stylesheet" type="text/css" href="t-y-scheme-Z-S.css" title=default>
 <meta name=robots content="noindex,follow">
@@ -28,62 +29,62 @@ introduction to the programming language Scheme">
 <a name="node_chap_3"></a>
 <h1 class=chapter>
 <div class=chapterheading><a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_3">Chapter 3</a></div><br>
-<a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_3">�ե�����</a></h1>
+<a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_3">フォーム</a></h1>
 <p></p>
 <p>
-�ɼԤΤߤʤ���ϡ�����ޤǸ��Ƥ���Scheme������ץ�������
-��Ϥ�S���Ǥ���Ȥ˵��Ť����Ȥˤʤ�Ǥ��礦�����Τ��Ȥ�
-���Ƥ�Scheme�ץ������˸����뤳�ȤǤ����ץ������ϥǡ����Ǥ���</p>
+読者のみなさんは、これまで見てきたSchemeの例題プログラムも
+やはりS式であるとに気づくことになるでしょう。このことは
+全てのSchemeプログラムに言えることです。プログラムはデータです。</p>
 <p>
 </p>
 <p>
-���ʤ����ʸ���ǡ��� <code class=scheme><span class=selfeval>#\c</span></code>�ϥץ�����ढ�뤤��
-<em>�ե�����</em>�Ǥ���<em>�ץ������</em>�Ȥ���������
-<em>�ե�����</em>�Ȥ���������Ū�ʸ��դ�Ĥ����ޤ���
-�������뤳�Ȥˤ�ꡢ�ץ����������Ҥ�Ȥꤢ���뤳�Ȥ�
-�Ǥ��ޤ���</p>
+すなわち、文字データ <code class=scheme><span class=selfeval>#\c</span></code>はプログラムあるいは
+<em>フォーム</em>です。<em>プログラム</em>というかわりに
+<em>フォーム</em>というより一般的な言葉をつかいます。
+こうすることにより、プログラムの断片もとりあげることが
+できます。</p>
 <p>
 </p>
 <p>
-Scheme�ϥե�����<code class=scheme><span class=selfeval>#\c</span></code>��ɾ�����ơ���<code class=scheme><span class=selfeval>#\c</span></code>�Ȥ��ޤ���
-����ϡ�<code class=scheme><span class=selfeval>#\c</span></code>�ϼ���ɾ��Ū�Ǥ��뤫��Ǥ������٤Ƥ�
-S��������ɾ��Ū�Ǥ���櫓�ǤϤ���ޤ��󡣤��Ȥ��С�
-����ܥ��S��<code class=scheme><span class=variable>xyz</span></code>��ɾ������Τ�<em>�ѿ�</em><code class=scheme><span class=variable>xyz</span></code>��
-�ݻ����Ƥ����ͤˤʤ�ޤ����ꥹ�Ȥ�S��<code class=scheme>(<span class=variable>string-&gt;number</span> <span class=selfeval>&quot;16&quot;</span>)</code>��
-ɾ������ȿ��ͤ�16�ˤʤ�ޤ���</p>
+Schemeはフォーム<code class=scheme><span class=selfeval>#\c</span></code>を評価して、値<code class=scheme><span class=selfeval>#\c</span></code>とします。
+これは、<code class=scheme><span class=selfeval>#\c</span></code>は自己評価的であるからです。すべての
+S式が自己評価的であるわけではありません。たとえば、
+シンボルのS式<code class=scheme><span class=variable>xyz</span></code>は評価するのと<em>変数</em><code class=scheme><span class=variable>xyz</span></code>が
+保持していた値になります。リストのS式<code class=scheme>(<span class=variable>string-&gt;number</span> <span class=selfeval>&quot;16&quot;</span>)</code>は
+評価すると数値の16になります。</p>
 <p>
 </p>
 <p>
-���٤Ƥ�S�����������ץ������Ǥ���ȤϤ�����ޤ���
-�ɥå��Ф�S��<code class=scheme>(<span class=selfeval>1</span> . <span class=selfeval>2</span>)</code>��Scheme�Υꥹ�ʡ��������Ϥ����
-���顼�ˤʤ�Ǥ��礦��</p>
+すべてのS式が正しいプログラムであるとはかぎりません。
+ドット対のS式<code class=scheme>(<span class=selfeval>1</span> . <span class=selfeval>2</span>)</code>をSchemeのリスナーから入力すると
+エラーになるでしょう。</p>
 <p>
 </p>
 <p>
-Scheme�ϥꥹ�ȥե������ɾ������Ȥ������Υե�����κǽ�����ǡ�
-<em>��Ƭ</em>�򸡺����ޤ�����Ƭ��ɾ�����Ƽ�³���Ǥʤ�С��ե������
-�Τ������ʬ��ɾ�����ơ����ΰ������ͤ����������ǡ���³���򤽤�
-������<em>Ŭ��</em>���ޤ���</p>
+Schemeはリストフォームを評価するとき、そのフォームの最初の要素、
+<em>先頭</em>を検査します。先頭を評価して手続きでなれば、フォームの
+のこりの部分を評価して、その引数の値を得たうえで、手続きをその
+引数に<em>適用</em>します。</p>
 <p>
 </p>
 <p>
-�⤷����Υե��������Ƭ��<em>���ڥ����ե�����</em>�Ǥ��ä��顢
-ɾ���Ϥ��Υե��������ͭ����ˡ�ǿʤߤޤ���
-�����Ĥ��Υ��ڥ����ե�����Ϥ��Ǥ˸��Ƥ��ޤ�����
-<code class=scheme><span class=keyword>begin</span></code>��<code class=scheme><span class=keyword>define</span></code>��<code class=scheme><span class=keyword>set!</span></code>�Ǥ���<code class=scheme><span class=keyword>begin</span></code>�Ϥ���
-���֥ե��������ɾ�������Ǹ�Υ��֥ե�����η�̤��ͤ�
-���Τη�̤ΤȤ����֤��ޤ���<code class=scheme><span class=keyword>define</span></code>���ѿ���Ƴ�����������
-��������ޤ���<code class=scheme><span class=keyword>set!</span></code>���ѿ���«�����ѹ����ޤ���</p>
+もし、上のフォームの先頭が<em>スペシャルフォーム</em>であったら、
+評価はそのフォームに特有の方法で進みます。
+いくつかのスペシャルフォームはすでに見てきました。
+<code class=scheme><span class=keyword>begin</span></code>、<code class=scheme><span class=keyword>define</span></code>、<code class=scheme><span class=keyword>set!</span></code>です。<code class=scheme><span class=keyword>begin</span></code>はその
+サブフォームを順に評価し、最後のサブフォームの結果の値を
+全体の結果のとして返します。<code class=scheme><span class=keyword>define</span></code>は変数を導入し、それを
+初期化します。<code class=scheme><span class=keyword>set!</span></code>は変数の束縛を変更します。</p>
 <p>
 <a name="node_idx_244"></a><a name="node_idx_246"></a></p>
 <a name="node_sec_3.1"></a>
-<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_3.1">3.1&nbsp;&nbsp;��³��</a></h2>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_3.1">3.1&nbsp;&nbsp;手続き</a></h2>
 <p></p>
 <p>
-���Ǥ˸��Ƥ�����³���ϡ�<code class=scheme><span class=variable>cons</span></code>��<code class=scheme><span class=variable>string-&gt;list</span></code>�ʤɤΤ褦��
-Scheme�Υץ�ߥƥ��֤ʼ�³���Ǥ������桼���ϥ��ڥ����ե�����
-<code class=scheme><span class=keyword>lambda</span></code>��Ĥ��äơ��ȼ��μ�³����Ĥ���������Ȥ��Ǥ��ޤ���
-���Ȥ��С����Τ�Τϡ�������<code class=scheme><span class=selfeval>2</span></code>��ä����³����������Ƥ��ޤ���</p>
+すでに見てきた手続きは、<code class=scheme><span class=variable>cons</span></code>、<code class=scheme><span class=variable>string-&gt;list</span></code>などのような
+Schemeのプリミティブな手続きでした。ユーザはスペシャルフォーム
+<code class=scheme><span class=keyword>lambda</span></code>をつかって、独自の手続きをつくりだすことができます。
+たとえば、次のものは、引数に<code class=scheme><span class=selfeval>2</span></code>を加える手続きを定義しています。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>lambda</span> (<span class=variable>x</span>) (<span class=variable>+</span> <span class=variable>x</span> <span class=selfeval>2</span>))
@@ -91,10 +92,10 @@ Scheme�Υץ�ߥƥ��֤ʼ�³���Ǥ������桼���ϥ��ڥ����ե�����
 <p>
 </p>
 <p>
-�ǽ�Υ��֥ե����ࡢ<code class=scheme>(<span class=variable>x</span>)</code>�ϥѥ�᡼���Υꥹ�ȤǤ���
-�Τ���Υ��֥ե�����ϼ�³�������Τ��������ΤǤ���
-���μ�³���ϰ�Ĥΰ������Ф��ƸƤ֤��Ȥ��Ǥ����ץ�ߥƥ���
-��³����Ʊ���褦�˿��񤤤ޤ���</p>
+最初のサブフォーム、<code class=scheme>(<span class=variable>x</span>)</code>はパラメータのリストです。
+のこりのサブフォームは手続きの本体を構成するものです。
+この手続きは一つの引数に対して呼ぶことができ、プリミティブ
+手続きと同じように振舞います。</p>
 <p>
 </p>
 <pre class=scheme>((<span class=keyword>lambda</span> (<span class=variable>x</span>) (<span class=variable>+</span> <span class=variable>x</span> <span class=selfeval>2</span>)) <span class=selfeval>5</span>)
@@ -103,17 +104,17 @@ Scheme�Υץ�ߥƥ��֤ʼ�³���Ǥ������桼���ϥ��ڥ����ե�����
 <p>
 </p>
 <p>
-�⤷������Ʊ����³�����٤�ƤӤ�����С�<code class=scheme><span class=keyword>lambda</span></code>��ʣ����
-���Τ��Ӥ˸Ƥ�Ǥ⤤���ΤǤ�������äȤ褤��ˡ������ޤ���
-���μ�³�����ͤ��ݻ������ѿ���Ȥ����Ȥ��Ǥ��ޤ���</p>
+もし、この同じ手続きを何度も呼びたければ、<code class=scheme><span class=keyword>lambda</span></code>の複製を
+そのたびに呼んでもいいのですが、もっとよい方法があります。
+この手続きの値を保持する変数を使うことができます。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define</span> <span class=variable>add2</span>
   (<span class=keyword>lambda</span> (<span class=variable>x</span>) (<span class=variable>+</span> <span class=variable>x</span> <span class=selfeval>2</span>)))
 </pre><p></p>
 <p>
-��������ȡ������ѿ�<code class=scheme><span class=variable>add2</span></code>�������2��­��ɬ�פ����뤿�Ӥ�
-�ƤӤ������Ȥ��Ǥ��ޤ���</p>
+こうすると、この変数<code class=scheme><span class=variable>add2</span></code>を引数に2を足す必要があるたびに
+呼びだすことができます。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=variable>add2</span> <span class=selfeval>4</span>) <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>6</span>
@@ -122,21 +123,21 @@ Scheme�Υץ�ߥƥ��֤ʼ�³���Ǥ������桼���ϥ��ڥ����ե�����
 <p>
 <a name="node_idx_248"></a></p>
 <a name="node_sec_3.1.1"></a>
-<h3 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_3.1.1">3.1.1&nbsp;&nbsp;��³���ѥ�᡼��</a></h3>
+<h3 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_3.1.1">3.1.1&nbsp;&nbsp;手続きパラメータ</a></h3>
 <p></p>
 <p>
-<code class=scheme><span class=keyword>lambda</span></code>��³���Υѥ�᡼���Ϻǽ�Υ��֥ե�����(��Ƭ������ܥ�
-<code class=scheme><span class=keyword>lambda</span></code>��ľ��)�ǻ��ꤷ�ޤ���<code class=scheme><span class=variable>add2</span></code>��ñ�����(<em>ñ��</em>)��³��
-�ʤΤǥѥ�᡼���ꥹ�Ȥϥ��󥰥�ȥ�ꥹ��<code class=scheme>(<span class=variable>x</span>)</code>�Ǥ�������ܥ�<code class=scheme><span class=variable>x</span></code>��
-��³���������ݻ������ѿ��Ȥ��ƿ��񤤤ޤ����ѿ�<code class=scheme><span class=variable>x</span></code>�ϼ�³�����ΤˤĤ���
-<em>�ɽ�Ū(��������)</em>�Ǥ���Ȥ����ޤ���</p>
+<code class=scheme><span class=keyword>lambda</span></code>手続きのパラメータは最初のサブフォーム(先頭、シンボル
+<code class=scheme><span class=keyword>lambda</span></code>の直後)で指定します。<code class=scheme><span class=variable>add2</span></code>は単一引数(<em>単項</em>)手続き
+なのでパラメータリストはシングルトンリスト<code class=scheme>(<span class=variable>x</span>)</code>です。シンボル<code class=scheme><span class=variable>x</span></code>は
+手続き引数を保持する変数として振舞います。変数<code class=scheme><span class=variable>x</span></code>は手続き本体について
+<em>局所的(ローカル)</em>であるといいます。</p>
 <p>
 </p>
 <p>
-2������³���ˤĤ��Ƥ�2���ǥꥹ�Ȥ�Ȥ����Ȥ��Ǥ��ޤ���
-���̤�n������³���ˤĤ��Ƥ�n���ǥꥹ�Ȥ�Ȥ��ޤ���
-�������Ĺ���������Ѥ�׻�����2������³���Ǥ���
-�դ��Ĥΰ�����Ĺ�����Τ��ƤȤ褳�Ǥ���</p>
+2引数手続きについては2要素リストを使うことができます。
+一般にn引数手続きについてはn要素リストを使えます。
+次の例は長方形の面積を計算する2引数手続きです。
+ふたつの引数は長方形のたてとよこです。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define</span> <span class=variable>area</span>
@@ -146,8 +147,8 @@ Scheme�Υץ�ߥƥ��֤ʼ�³���Ǥ������桼���ϥ��ڥ����ե�����
 <p>
 </p>
 <p>
-<code class=scheme><span class=variable>area</span></code>�Ϥ��ΰ����򤫤����碌�Ƥ��ޤ��Τǡ��ץ�ߥƥ��ּ�³��
-<code class=scheme><span class=variable>*</span></code>��Ʊ���Ǥ���ñ��</p>
+<code class=scheme><span class=variable>area</span></code>はその引数をかけあわせていますので、プリミティブ手続き
+<code class=scheme><span class=variable>*</span></code>と同じです。単に</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define</span> <span class=variable>area</span> <span class=variable>*</span>)
@@ -155,26 +156,26 @@ Scheme�Υץ�ߥƥ��֤ʼ�³���Ǥ������桼���ϥ��ڥ����ե�����
 <p>
 </p>
 
-<p class=noindent>�Ƚ񤤤Ƥ�褫�ä��櫓�Ǥ���</p>
+<p class=noindent>と書いてもよかったわけです。</p>
 <p>
 </p>
 <a name="node_sec_3.1.2"></a>
-<h3 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_3.1.2">3.1.2&nbsp;&nbsp;����Ĺ�ΰ���</a></h3>
+<h3 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_3.1.2">3.1.2&nbsp;&nbsp;可変長の引数</a></h3>
 <p></p>
 <p>
-��³���Τʤ��ˤϤȤ��˰ۤä����ΰ�����Ȥ��Τ�����ޤ���
-���Τ褦�ˤ��뤿��ˤ�<code class=scheme><span class=keyword>lambda</span></code>�ѥ�᡼���ꥹ�Ȥ�ñ���
-����ܥ���֤������ޤ������Υ���ܥ�Ϥ��μ�³�����ƤФ��
-�����Υꥹ�ȤȤ��ƿ��񤤤ޤ���</p>
+手続きのなかにはときに異った数の引数をとるものがあります。
+このようにするためには<code class=scheme><span class=keyword>lambda</span></code>パラメータリストを単一の
+シンボルに置き換えます。このシンボルはその手続きが呼ばれる
+引数のリストとして振舞います。</p>
 <p>
 </p>
 <p>
-����Ū�ˤϡ�����<code class=scheme><span class=keyword>lambda</span></code>�ѥ�᡼���ꥹ�Ȥ�<code class=scheme>(<span class=variable>x</span> ...)</code>�Ȥ���
-�ե����ढ�뤤�ϡ�ñ��Υ���ܥ�ޤ��ϥɥå���<code class=scheme>(<span class=variable>x</span> ... . <span class=variable>z</span>)</code>�Ȥ���
-�ե�����Ǥ����ɥå��Фξ�硢�ɥåȤ����Τ��٤Ƥ��ѿ���
-��³���ƤӽФ��ǡ��б����뤹�٤Ƥΰ�����«�����졢�ɥåȤ�
-��ΰ�Ĥ��ѿ��ϡ��Τ���Τ��٤Ƥΰ�����ҤȤĤΥꥹ�Ȥ�
-���������ޤ���</p>
+一般的には、この<code class=scheme><span class=keyword>lambda</span></code>パラメータリストは<code class=scheme>(<span class=variable>x</span> ...)</code>という
+フォームあるいは、単一のシンボルまたはドット対<code class=scheme>(<span class=variable>x</span> ... . <span class=variable>z</span>)</code>という
+フォームです。ドット対の場合、ドットの前のすべての変数は
+手続き呼び出しで、対応するすべての引数に束縛され、ドットの
+後の一個の変数は、のこりのすべての引数をひとつのリストに
+拾いあげます。</p>
 <p>
 <a name="node_idx_250"></a></p>
 <p>
@@ -183,7 +184,7 @@ Scheme�Υץ�ߥƥ��֤ʼ�³���Ǥ������桼���ϥ��ڥ����ե�����
 <h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_3.2">3.2&nbsp;&nbsp;<code class=scheme><span class=variable>apply</span></code></a></h2>
 <p></p>
 <p>
-Scheme��³��<code class=scheme><span class=variable>apply</span></code>�ϼ�³���������<em>�ꥹ��</em>��Ŭ�Ѥ��ޤ���</p>
+Scheme手続き<code class=scheme><span class=variable>apply</span></code>は手続きを引数の<em>リスト</em>に適用します。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define</span> <span class=variable>x</span> <span class=keyword>'</span>(<span class=selfeval>1</span> <span class=selfeval>2</span> <span class=selfeval>3</span>))
@@ -194,10 +195,10 @@ Scheme��³��<code class=scheme><span class=variable>apply</span></code>�ϼ�³���
 <p>
 </p>
 <p>
-���̤ˤϡ�<code class=scheme><span class=variable>apply</span></code>�ϡ��ҤȤĤμ�³���ȡ��̤˲���Ĺ�ΰ�����Ȥ�ޤ���
-���ΰ����κǸ�ϥꥹ�ȤǤʤ���Фʤ�ޤ��󡣺Ǹ�ΰ��������˴֤ΰ���
-���դ��ư����ꥹ�Ȥ�Ĥ���ޤ����������ơ����ΰ����ꥹ�Ȥ��Ф��ơ�
-��³����Ƥ�ǡ����η�̤��֤��ޤ���</p>
+一般には、<code class=scheme><span class=variable>apply</span></code>は、ひとつの手続きと、別に可変長の引数をとります。
+この引数の最後はリストでなければなりません。最後の引数の前に間の引数
+を付けて引数リストをつくります。そうして、この引数リストに対して、
+手続きを呼んで、その結果を返します。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=variable>apply</span> <span class=variable>+</span> <span class=selfeval>1</span> <span class=selfeval>2</span> <span class=selfeval>3</span> <span class=variable>x</span>)
@@ -208,11 +209,11 @@ Scheme��³��<code class=scheme><span class=variable>apply</span></code>�ϼ�³���
 <p>
 </p>
 <a name="node_sec_3.3"></a>
-<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_3.3">3.3&nbsp;&nbsp;ľ��</a></h2>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_3.3">3.3&nbsp;&nbsp;直列化</a></h2>
 <p></p>
 <p>
-���ڥ����ե�����<code class=scheme><span class=keyword>begin</span></code>��Ȥäơ����֤�ɾ������ɬ�פΤ����Ϣ��
-���֥ե������ҤȤĤˤޤȤ�ޤ���</p>
+スペシャルフォーム<code class=scheme><span class=keyword>begin</span></code>を使って、順番に評価する必要のある一連の
+サブフォームをひとつにまとめます。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define</span> <span class=variable>display3</span>
@@ -230,9 +231,9 @@ Scheme��³��<code class=scheme><span class=variable>apply</span></code>�ϼ�³���
 <p>
 </p>
 <p>
-Scheme�Ǥϡ�<code class=scheme><span class=keyword>lambda</span></code>-���Τϰ��ۤ�<code class=scheme><span class=keyword>begin</span></code>�Ǥ����������äơ�
-<code class=scheme><span class=variable>display3</span></code>�����Τ�<code class=scheme><span class=keyword>begin</span></code>�Ϥʤ��Ƥ⤫�ޤ��ޤ��󡣤�������
-���äƺ����ΤǤ⤢��ޤ���<code class=scheme><span class=variable>display3</span></code>�Ϥ�ä�ñ��ˤʤ�ޤ���</p>
+Schemeでは、<code class=scheme><span class=keyword>lambda</span></code>-本体は暗黙の<code class=scheme><span class=keyword>begin</span></code>です。したがって、
+<code class=scheme><span class=variable>display3</span></code>の本体の<code class=scheme><span class=keyword>begin</span></code>はなくてもかまいません。しかし、
+あって困るものでもありません。<code class=scheme><span class=variable>display3</span></code>はもっと単純になります。</p>
 <p>
 </p>
 <pre class=scheme>(<span class=keyword>define</span> <span class=variable>display3</span>
