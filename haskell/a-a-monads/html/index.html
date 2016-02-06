@@ -1,7 +1,7 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
+<!DOCTYPE html>
+<html lang="ja">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=EUC-JP">
+<meta charset="utf-8">
 <meta name="description" content="A tutorial on Monads in Haskell">
 <title>All About Monads</title>
 </head>
@@ -23,7 +23,7 @@
  <td align="left"></td>
  <td align="center"></td>
  <td align="right">Next:
- <a href="introduction.html">����ȥ����������</a></td>
+ <a href="introduction.html">イントロダクション</a></td>
 </tr>
 </table>
 </p>
@@ -40,8 +40,8 @@ Version 1.1.0
 -->
 <p lang="ja">
 <center>
-<font size="+3"><b>��ʥɤΤ��٤�</b></font><br/>
-<i>Haskell �ˤ������ʥɥץ�����ߥ󥰤������ȼ����˴ؤ������Ū������
+<font size="+3"><b>モナドのすべて</b></font><br/>
+<i>Haskell におけるモナドプログラミングの理論と実践に関する包括的ガイド
 </i><br/>
 Version 1.1.0
 </center>
@@ -62,14 +62,14 @@ of the material in a single reading.
 </p>
 -->
 <p lang="ja">
-���Υ��塼�ȥꥢ��ϡ���ʥɤγ�ǰ�Ȥ��δؿ��ץ�����ߥ󥰤ˤ�������Ѥ�
-�Ĥ��ơ������� Haskell �ץ�����ޤˤ狼��䤹�������Ѳ��ͤ�����褦��
-����򤹤뤳�Ȥ�ݤȤ��Ƥ��ޤ����ɼԤ� Haskell �ˤʤ�Ƥ��뤳�Ȥ������
-���ޤ�������ʥɤ˴ؤ���и����׵ᤷ�Ƥ��ޤ��󡣤��Υ��塼�ȥꥢ��ϡ�¿
-�������򥫥С����Ƥ��ޤ�����Ⱦ�Υ��������Ǥϡ���Ⱦ������褯����
-�Ƥ��뤳�Ȥ�����Ȥ��ޤ�����򤪤äơ���ʥɥץ�����ߥ󥰤��㼨���뤿��
-�Υ���ץ륳���ɤ����������Ѱդ���Ƥ��ޤ������ɤǡ����٤Ƥ�����ۼ���
-�褦�Ȥ����ΤϤ�����Ǥ��ޤ���
+このチュートリアルは、モナドの概念とその関数プログラミングにおける応用に
+ついて、初中級の Haskell プログラマにわかりやすく、利用価値があるような
+解説をすることを旨としています。読者は Haskell になれていることを前提と
+しますが、モナドに関する経験は要求していません。このチュートリアルは、多
+くの題材をカバーしています。後半のセクションでは、前半の題材をよく理解し
+ていることを前提とします。順をおって、モナドプログラミングを例示するため
+のサンプルコードがたくさん用意されています。一読で、すべての題材を吸収し
+ようというのはお勧めできません。
 </p>
 <!--
 <p lang="en">
@@ -83,13 +83,13 @@ real-world issues encountered when programming with monads.
 </p>
 -->
 <p lang="ja">
-���Υ��塼�ȥꥢ��� 3 �Ĥ���ʬ�ǹ�������Ƥ��ޤ����ǽ����ʬ�ϡ�
-�ؿ��ץ�����ߥ󥰤ˤ������ʥɤδ���Ū�����ˤĤ��Ƥ�������ܻؤ��ޤ���
-�ɤΤ褦�˥�ʥɤ����뤫��Haskell �Ǥϡ��ɤΤ褦����������ɤΤ褦��
-�Ȥ��Τ��Ȥ������Ȥ�ؤӤޤ���2 ���ܤ���ʬ�ϡ�Haskell ��ɸ��Ū��ʥɤ�
-���С����ޤ�����ʥɤ������Ϳ������ʥɤλȤ������ˤĤ��Ƶ������ޤ���
-�Ǹ� 3 ���ܤ���ʬ�ϡ���ʥ��Ѵ��Ҥ˴�Ϣ������٤����ȥ�ʥɤ�Ȥä�
-�ץ�����ߥ󥰤�����ˤǤ��魯����Ū������򥫥С����ޤ���
+このチュートリアルは 3 つの部分で構成されています。最初の部分は、
+関数プログラミングにおけるモナドの基本的な役割についての理解を目指します。
+どのようにモナドを操作するか。Haskell では、どのように宣言し、どのように
+使うのかということを学びます。2 番目の部分は、Haskell の標準的モナドを
+カバーします。モナドの定義を与え、モナドの使いかたについて議論します。
+最後 3 つ目の部分は、モナド変換子に関連する高度な題材とモナドを使って
+プログラミングする場合にでくわす現実的な問題をカバーします。
 </p>
 <!--
 <p lang="en">
@@ -100,11 +100,11 @@ or as a
 </p>
 -->
 <p lang="ja">
-���Υ��塼�ȥꥢ�����Τϡ�
+このチュートリアル全体は、
 <a href="http://www.haskell.org/all_about_monads/monad_tutorial.tgz">
-tgz �����Υ��������֥ե�����</a>���뤤��
+tgz 形式のアーカイブファイル</a>あるいは
 <a href="http://www.haskell.org/all_about_monads/monad_tutorial.zip">
-zip �����Υ���������</a>�ǥ���������ɤǤ��ޤ���
+zip 形式のアーカイブ</a>でダウンロードできます。
 </p>
 <!--
 <p lang="en">
@@ -119,14 +119,14 @@ look ahead at Part III to see how it is overcome.</em>
 </p>
 -->
 <p lang="ja">
-�ۤ�Ȥ��˥�ʥɤ����򤹤�ˤϡ���ʥɤ�Ȥä������ɤ�и����뤳�Ȥ�����
-����ˡ�Ǥ������Υ��塼�ȥꥢ��Ǥϡ�ñ��ʤ�Τ���ۤɤ褯ʣ���ʤ�Τޤǡ�
-���������<a href="examples.html">��������</a>���Ѱդ���Ƥ��ޤ��������
-�Υ����ɤ򸦵椷��ͷ����ꡢ�ѹ������ꤷ�Ƥߤ뤳�Ȥ򤪴��ᤷ�ޤ���
-<em>��ǰ�ʤ��顢�ǽ���������ʣ���Υ�ʥɤι����ˤޤĤ��������򤱤뤿
-����Լ����ʤ�Τˤ�����򤨤ޤ���Ǥ�������������򤤤���Τˤ���
-���󤬤��äȤ�������С�III���Ǥ������꤬�ɤΤ褦�˹�������Ƥ��뤫����
-�˸��Ƥ���������</em>
+ほんとうにモナドを理解するには、モナドを使ったコードを経験することが最良
+の方法です。このチュートリアルでは、単純なものからほどよく複雑なものまで、
+たくさんの<a href="examples.html">コード例</a>が用意されています。これら
+のコードを研究し、遊んだり、変更したりしてみることをお勧めします。
+<em>残念ながら、最初の方の例は複数のモナドの合成にまつわる問題を避けるた
+めに不自然なものにせざるをえませんでした。コード例をいじるのにこの
+制約がうっとうしければ、III部でこの問題がどのように克服されているかを先
+に見てください。</em>
 </p>
 <!--
 <p lang="en">
@@ -136,19 +136,19 @@ Jeff Newbern at
 </p>
 -->
 <p lang="ja">
-�Ѹ츶ʸ�ˤĤ��ƤΥ����ȡ������������Ϥʤ�Ǥ� Jeff Newbern 
+英語原文についてのコメント、訂正、示唆はなんでも Jeff Newbern 
 <a href="mailto:jnewbern@yahoo.com?Subject=Monad Tutorial">
-jnewbern@yahoo.com</a> �ء�
+jnewbern@yahoo.com</a> へ。
 <br />
-[��������ʸ�ϸ����Ԥξ��������Ƥ����Ǹ������Ƥ����ΤǤ�����������ʸ��
-�δ��ۡ�����λ�Ŧ�ʤɤϡ�
+[この翻訳文は原著者の承諾を得てここで公開しているものです。この翻訳文へ
+の感想、誤りの指摘などは、
 <a href="http://www.sampou.org/cgi-bin/haskell.cgi?AllAboutMonads&l=jp">
-������</a>�ޤǤ��ꤤ���ޤ���]
+こちら</a>までお願いします。]
 </p>
 <!--
 <h1>Contents</h1>
 -->
-<h1>�ܼ�</h1>
+<h1>目次</h1>
 <!--
 <p lang="en">
 <h2>Part I - Understanding Monads</h2>
@@ -199,48 +199,48 @@ jnewbern@yahoo.com</a> �ء�
 </p>
 -->
 <p lang="ja">
-<h2>�� I ������ʥɤ����򤹤�</h2>
+<h2>第 I 部：モナドを理解する</h2>
 <ul>
-<li><a href="introduction.html">����ȥ����������</a>
+<li><a href="introduction.html">イントロダクション</a>
   <ul>
-  <li><a href="introduction.html#what">��ʥɤȤϲ���</a></li>
-  <li><a href="introduction.html#why">�ʤ���ʥɤ����򤷤褦�Ȥ���Τ�</li>
+  <li><a href="introduction.html#what">モナドとは何か</a></li>
+  <li><a href="introduction.html#why">なぜモナドを理解しようとするのか</li>
   </ul>
 </li>
-<li><a href="meet.html">��ʥɤ˿����</a>
+<li><a href="meet.html">モナドに触れる</a>
   <ul>
-  <li><a href="meet.html#typeconstructors">�����ۻ�</a></li>
-  <li><a href="meet.html#maybe">Maybe �Ȥ�����ʥ�</a></li>
-  <li><a href="meet.html#example1">��</a></li>
-  <li><a href="meet.html#list">�ꥹ�Ȥ��ʥ�</a></li>
-  <li><a href="meet.html#summary">����</a></li>
+  <li><a href="meet.html#typeconstructors">型構築子</a></li>
+  <li><a href="meet.html#maybe">Maybe というモナド</a></li>
+  <li><a href="meet.html#example1">例</a></li>
+  <li><a href="meet.html#list">リストもモナド</a></li>
+  <li><a href="meet.html#summary">要約</a></li>
   </ul>
 </li>
-<li><a href="class.html">class �ǻȤ�</a>
+<li><a href="class.html">class で使う</a>
   <ul>
-  <li><a href="class.html#classes">Haskell �η����饹</a></li>
-  <li><a href="class.html#monad">Monad ���饹</a></li>
-  <li><a href="class.html#example2">��ΤĤŤ�</a></li>
-  <li><a href="class.html#donotation">do ��ˡ</a></li>
-  <li><a href="class.html#summary">����</a></li>
+  <li><a href="class.html#classes">Haskell の型クラス</a></li>
+  <li><a href="class.html#monad">Monad クラス</a></li>
+  <li><a href="class.html#example2">例のつづき</a></li>
+  <li><a href="class.html#donotation">do 記法</a></li>
+  <li><a href="class.html#summary">要約</a></li>
   </ul>
 </li>
-<li><a href="laws.html">��ʥ�§</a>
+<li><a href="laws.html">モナド則</a>
   <ul>
-  <li><a href="laws.html#laws">���Ĥδ���§</a></li>
-  <li><a href="laws.html#fail">���Ԥ��դ�����</a></li>
-  <li><a href="laws.html#nowayout">�и��Ϥʤ�</a></li>
-  <li><a href="laws.html#zero">Zero �� Plus</a></li>
-  <li><a href="laws.html#summary">����</a></li>
+  <li><a href="laws.html#laws">三つの基本則</a></li>
+  <li><a href="laws.html#fail">失敗は付けたし</a></li>
+  <li><a href="laws.html#nowayout">出口はない</a></li>
+  <li><a href="laws.html#zero">Zero と Plus</a></li>
+  <li><a href="laws.html#summary">要約</a></li>
   </ul>
 </li>
-<li><a href="exercises.html">��������</a>
+<li><a href="exercises.html">練習問題</a>
 </li>
-<li><a href="monadfns.html">Haskell �ˤ������ʥɤΥ��ݡ���</a>
+<li><a href="monadfns.html">Haskell におけるモナドのサポート</a>
   <ul>
-  <li><a href="monadfns.html#prelude">ɸ��ץ��塼�ɤǤ�</a></li>
-  <li><a href="monadfns.html#monad">Monad �⥸�塼��Ǥ�</a></li>
-  <li><a href="monadfns.html#summary">����</a></li>
+  <li><a href="monadfns.html#prelude">標準プレリュードでは</a></li>
+  <li><a href="monadfns.html#monad">Monad モジュールでは</a></li>
+  <li><a href="monadfns.html#summary">要約</a></li>
   </ul>
 </li>
 </ul>
@@ -327,80 +327,80 @@ jnewbern@yahoo.com</a> �ء�
 </p>
 -->
 <p lang="ja">
-<h2>�� II ����ɸ��Ū��ʥɤΥ�������</h2>
+<h2>第 II 部：標準的モナドのカタログ</h2>
 <ul>
-<li><a href="introII.html">����ȥ����������</a>
+<li><a href="introII.html">イントロダクション</a>
 </li>
-<li><a href="identitymonad.html">Identity ��ʥ�</a>
+<li><a href="identitymonad.html">Identity モナド</a>
   <ul>
-  <li><a href="identitymonad.html#overview">����</a></li>
-  <li><a href="identitymonad.html#motivation">ư��</a></li>
-  <li><a href="identitymonad.html#definition">���</a></li>
-  <li><a href="identitymonad.html#example">��</a></li>
+  <li><a href="identitymonad.html#overview">概観</a></li>
+  <li><a href="identitymonad.html#motivation">動機</a></li>
+  <li><a href="identitymonad.html#definition">定義</a></li>
+  <li><a href="identitymonad.html#example">例</a></li>
   </ul>
 </li>
-<li><a href="maybemonad.html">Maybe ��ʥ�</a>
+<li><a href="maybemonad.html">Maybe モナド</a>
   <ul>
-  <li><a href="maybemonad.html#overview">����</a></li>
-  <li><a href="maybemonad.html#motivation">ư��</a></li>
-  <li><a href="maybemonad.html#definition">���</a></li>
-  <li><a href="maybemonad.html#example">��</a></li>
+  <li><a href="maybemonad.html#overview">概観</a></li>
+  <li><a href="maybemonad.html#motivation">動機</a></li>
+  <li><a href="maybemonad.html#definition">定義</a></li>
+  <li><a href="maybemonad.html#example">例</a></li>
   </ul>
 </li>
-<li><a href="errormonad.html">Error ��ʥ�</a>
+<li><a href="errormonad.html">Error モナド</a>
   <ul>
-  <li><a href="errormonad.html#overview">����</a></li>
-  <li><a href="errormonad.html#motivation">ư��</a></li>
-  <li><a href="errormonad.html#definition">���</a></li>
-  <li><a href="errormonad.html#example">��</a></li>
+  <li><a href="errormonad.html#overview">概観</a></li>
+  <li><a href="errormonad.html#motivation">動機</a></li>
+  <li><a href="errormonad.html#definition">定義</a></li>
+  <li><a href="errormonad.html#example">例</a></li>
   </ul>
 </li>
-<li><a href="listmonad.html">List ��ʥ�</a>
+<li><a href="listmonad.html">List モナド</a>
   <ul>
-  <li><a href="listmonad.html#overview">����</a></li>
-  <li><a href="listmonad.html#motivation">ư��</a></li>
-  <li><a href="listmonad.html#definition">���</a></li>
-  <li><a href="listmonad.html#example">��</a></li>
+  <li><a href="listmonad.html#overview">概観</a></li>
+  <li><a href="listmonad.html#motivation">動機</a></li>
+  <li><a href="listmonad.html#definition">定義</a></li>
+  <li><a href="listmonad.html#example">例</a></li>
   </ul>
 </li>
-<li><a href="iomonad.html">IO ��ʥ�</a>
+<li><a href="iomonad.html">IO モナド</a>
   <ul>
-  <li><a href="iomonad.html#overview">����</a></li>
-  <li><a href="iomonad.html#motivation">ư��</a></li>
-  <li><a href="iomonad.html#definition">���</a></li>
-  <li><a href="iomonad.html#example">��</a></li>
+  <li><a href="iomonad.html#overview">概観</a></li>
+  <li><a href="iomonad.html#motivation">動機</a></li>
+  <li><a href="iomonad.html#definition">定義</a></li>
+  <li><a href="iomonad.html#example">例</a></li>
   </ul>
 </li>
-<li><a href="statemonad.html">State ��ʥ�</a>
+<li><a href="statemonad.html">State モナド</a>
   <ul>
-  <li><a href="statemonad.html#overview">����</a></li>
-  <li><a href="statemonad.html#motivation">ư��</a></li>
-  <li><a href="statemonad.html#definition">���</a></li>
-  <li><a href="statemonad.html#example">��</a></li>
+  <li><a href="statemonad.html#overview">概観</a></li>
+  <li><a href="statemonad.html#motivation">動機</a></li>
+  <li><a href="statemonad.html#definition">定義</a></li>
+  <li><a href="statemonad.html#example">例</a></li>
   </ul>
 </li>
-<li><a href="readermonad.html">Reader ��ʥ�</a>
+<li><a href="readermonad.html">Reader モナド</a>
   <ul>
-  <li><a href="readermonad.html#overview">����</a></li>
-  <li><a href="readermonad.html#motivation">ư��</a></li>
-  <li><a href="readermonad.html#definition">���</a></li>
-  <li><a href="readermonad.html#example">��</a></li>
+  <li><a href="readermonad.html#overview">概観</a></li>
+  <li><a href="readermonad.html#motivation">動機</a></li>
+  <li><a href="readermonad.html#definition">定義</a></li>
+  <li><a href="readermonad.html#example">例</a></li>
   </ul>
 </li>
-<li><a href="writermonad.html">Writer ��ʥ�</a>
+<li><a href="writermonad.html">Writer モナド</a>
   <ul>
-  <li><a href="writermonad.html#overview">����</a></li>
-  <li><a href="writermonad.html#motivation">ư��</a></li>
-  <li><a href="writermonad.html#definition">���</a></li>
-  <li><a href="writermonad.html#example">��</a></li>
+  <li><a href="writermonad.html#overview">概観</a></li>
+  <li><a href="writermonad.html#motivation">動機</a></li>
+  <li><a href="writermonad.html#definition">定義</a></li>
+  <li><a href="writermonad.html#example">例</a></li>
   </ul>
 </li>
-<li><a href="contmonad.html">Continuation ��ʥ�</a>
+<li><a href="contmonad.html">Continuation モナド</a>
   <ul>
-  <li><a href="contmonad.html#overview">����</a></li>
-  <li><a href="contmonad.html#motivation">ư��</a></li>
-  <li><a href="contmonad.html#definition">���</a></li>
-  <li><a href="contmonad.html#example">��</a></li>
+  <li><a href="contmonad.html#overview">概観</a></li>
+  <li><a href="contmonad.html#motivation">動機</a></li>
+  <li><a href="contmonad.html#definition">定義</a></li>
+  <li><a href="contmonad.html#example">例</a></li>
   </ul>
 </li>
 </ul>
@@ -455,50 +455,50 @@ jnewbern@yahoo.com</a> �ء�
 </p>
 -->
 <p lang="ja">
-<h2>�� III �������¤Υ�ʥ�</h2>
+<h2>第 III 部：現実のモナド</h2>
 <ul>
-<li><a href="introIII.html">����ȥ����������</a></li>
-<li><a href="hardway.html">��ʥɤι������񤷤�</a>
+<li><a href="introIII.html">イントロダクション</a></li>
+<li><a href="hardway.html">モナドの合成は難しい</a>
   <ul>
-  <li><a href="hardway.html#nested">����Ҥˤʤä���ʥ�</a></li>
-  <li><a href="hardway.html#combined">�������줿��ʥ�</a></li>
+  <li><a href="hardway.html#nested">入れ子になったモナド</a></li>
+  <li><a href="hardway.html#combined">合成されたモナド</a></li>
   </ul>  
 </li>
-<li><a href="transformers.html">��ʥ��Ѵ���</a>
+<li><a href="transformers.html">モナド変換子</a>
   <ul>
-  <li><a href="transformers.html#type">�Ѵ��Ҥη����ۻ�</a></li>
-  <li><a href="transformers.html#lifting">�������</a></li>
+  <li><a href="transformers.html#type">変換子の型構築子</a></li>
+  <li><a href="transformers.html#lifting">もちあげ</a></li>
   </ul>
 </li>
-<li><a href="standardxformers.html">ɸ���ʥ��Ѵ���</a>
+<li><a href="standardxformers.html">標準モナド変換子</a>
   <ul>
-  <li><a href="standardxformers.html#classes">MonadTrans ���饹�����
-       MonadIO ���饹</a></li>
-  <li><a href="standardxformers.html#library">ɸ���ʥɤ��Ѵ��ҥС������</a></li>
+  <li><a href="standardxformers.html#classes">MonadTrans クラスおよび
+       MonadIO クラス</a></li>
+  <li><a href="standardxformers.html#library">標準モナドの変換子バージョン</a></li>
   </ul>  
 </li>
-<li><a href="xformeranatomy.html">��ʥ��Ѵ��Ҥβ�˶</a>
+<li><a href="xformeranatomy.html">モナド変換子の解剖</a>
   <ul>
-  <li><a href="xformeranatomy.html#monad">��ʥ�����ι���</a></li>
-  <li><a href="xformeranatomy.html#lift">��������ؿ����������</a></li>
-  <li><a href="xformeranatomy.html#functor">�ե��󥯥�</a></li>
+  <li><a href="xformeranatomy.html#monad">モナド定義の合成</a></li>
+  <li><a href="xformeranatomy.html#lift">もちあげ関数を定義する</a></li>
+  <li><a href="xformeranatomy.html#functor">ファンクタ</a></li>
   </ul>
 </li>
-<li><a href="xformerexamples.html">����˥�ʥ��Ѵ��Ҥ���</a>
+<li><a href="xformerexamples.html">さらにモナド変換子の例</a>
   <ul>
-  <li><a href="xformerexamples.html#example22">IO �� WriterT</a></li>
-  <li><a href="xformerexamples.html#example23">IO �� ReaderT</a></li>
-  <li><a href="xformerexamples.html#example24">List �� StateT</a></li>
+  <li><a href="xformerexamples.html#example22">IO と WriterT</a></li>
+  <li><a href="xformerexamples.html#example23">IO と ReaderT</a></li>
+  <li><a href="xformerexamples.html#example24">List と StateT</a></li>
   </ul>
 </li>
-<li><a href="stacking.html">�Ѵ��ҥ����å��δ���</a>
+<li><a href="stacking.html">変換子スタックの管理</a>
   <ul>
-  <li><a href="stacking.html#order">���������������</a></li>
-  <li><a href="stacking.html#example">ʣ�����Ѵ��Ҥ�Ȥ���</a></li>
-  <li><a href="stacking.html#lifting">¿�ʤ������</a></li>
+  <li><a href="stacking.html#order">正しい順序の選択</a></li>
+  <li><a href="stacking.html#example">複数の変換子を使う例</a></li>
+  <li><a href="stacking.html#lifting">多段もちあげ</a></li>
   </ul>
 </li>  
-<li><a href="beyond.html">����ʤ�õ��</a>
+<li><a href="beyond.html">さらなる探究</a>
 </li>  
 </ul>
 </p>
@@ -514,8 +514,8 @@ jnewbern@yahoo.com</a> �ء�
 <p lang="ja">
 <h2>Appendices</h2>
 <ul>
-<li><a href="analogy.html">��Ͽ I - ��ʥɤ�ʪ��Ū�ʥ��ʥ�����</a></li>
-<li><a href="examples.html">��Ͽ II - Haskell �Υ�������</a></li>
+<li><a href="analogy.html">付録 I - モナドの物理的なアナロジー</a></li>
+<li><a href="examples.html">付録 II - Haskell のコード例</a></li>
 </ul>
 </p>
 
@@ -538,7 +538,7 @@ jnewbern@yahoo.com</a> �ء�
 	<td align="left"></td>
 	<td align="center"></td>
 	<td align="right">Next:
-         <a href="introduction.html">����ȥ����������</a></td>
+         <a href="introduction.html">イントロダクション</a></td>
 </tr>
 </table>
 </p>
