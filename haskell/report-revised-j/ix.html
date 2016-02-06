@@ -1,6 +1,7 @@
-<html>
+<!DOCTYPE html>
+<html lang="ja">
  <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
+  <meta charset="utf-8">
   <title>The Haskell 98 Library Report: Indexing Operations</title>
  </head>
 
@@ -14,7 +15,7 @@
 
   <p><a name="sect15"></a></p>
   <!--<h2>15<tt>&nbsp;&nbsp;</tt>Indexing Operations</h2>-->
-  <h2>15<tt>&nbsp;&nbsp;</tt>����ǥå����黻</h2>
+  <h2>15<tt>&nbsp;&nbsp;</tt>インデックス演算</h2>
   <p>
   <table border="2" cellpadding="3">
    <tr>
@@ -50,14 +51,14 @@
    in the range defined by a bounding pair.</p>
   -->
   <p>
-   <tt>Ix</tt> ���饹�Ϥ��뷿���ͤ�Ϣ³������ʬ�ϰϤ������ξ�˼�������
-   �Τ��Ѥ����롣���Υ��饹�ϼ������Υ���ǥå����Ȥ����Ѥ�����
-   (<a href="array.html#arrays">16</a> ��򸫤�)��<tt>Ix</tt> ���饹��
-   �᥽�å� <tt>range</tt>��<tt>index</tt> ����� <tt>inRange</tt> 
-   ��ޤࡣ<tt>index</tt> �黻�ϡ��ϰϤβ����Ⱦ峦��������붭�����Ȥ�
-   ź���������˼������롣<tt>range</tt> �黻�Ϥ��٤Ƥ�ź������󤹤롣
-   <tt>inRange</tt> �黻�Ϥ��������ź�����������Ȥ�������줿�ϰϤ����
-   ���äƤ��뤫�ɤ�����Ƚ�ꤹ�롣
+   <tt>Ix</tt> クラスはある型の値の連続した部分範囲を整数の上に写像する
+   のに用いられる。このクラスは主に配列のインデックスとして用いられる
+   (<a href="array.html#arrays">16</a> 節を見よ)。<tt>Ix</tt> クラスは
+   メソッド <tt>range</tt>、<tt>index</tt> および <tt>inRange</tt> 
+   を含む。<tt>index</tt> 演算は、範囲の下界と上界を定義する境界の組と
+   添字を整数に写像する。<tt>range</tt> 演算はすべての添字を列挙する。
+   <tt>inRange</tt> 演算はある特定の添字が境界の組で定義された範囲の中に
+   入っているかどうかを判定する。
   </p>
   <!--
   <p> An implementation is entitled to assume the following laws about
@@ -71,8 +72,8 @@
    </tt></p>
   -->
   <p>
-   �����Ϥ����α黻�ˤĤ��ưʲ��Τ褦��ˡ§���ꤷ���ɤ����Ȥˤʤä�
-   ���롣
+   実装はこれらの演算について以下のような法則を仮定して良いことになって
+   いる。
    <tt><br />
    <br />
    &nbsp;&nbsp;&nbsp;range&nbsp;(l,u)&nbsp;!!&nbsp;index&nbsp;(l,u)&nbsp;i&nbsp;==&nbsp;i&nbsp;&nbsp;&nbsp;--&nbsp;when&nbsp;i&nbsp;is&nbsp;in&nbsp;range<br />
@@ -85,7 +86,7 @@
 
   <p> <a name="sect15.1"></a></p>
   <!--<h3>15.1<tt>&nbsp;&nbsp;</tt>Deriving Instances of <tt>Ix</tt></h3>-->
-  <h3>15.1<tt>&nbsp;&nbsp;</tt><tt>Ix</tt> ���󥹥��󥹤�Ƴ��</h3>
+  <h3>15.1<tt>&nbsp;&nbsp;</tt><tt>Ix</tt> インスタンスの導出</h3>
   <!--
   <p> It is possible to derive an instance of <tt>Ix</tt> automatically,
    using a <tt>deriving</tt> clause on a <tt>data</tt> declaration (Section
@@ -97,15 +98,15 @@
    for tuples up to at least size 15.</p>
   -->
   <p>
-   <tt>data</tt> ������ <tt>deriving</tt> ������Ѥ���ȡ���ưŪ��
-   <tt>Ix</tt> ���󥹥��󥹤�Ƴ�Ф��뤳�Ȥ��Ǥ���
-   (<a href="decls.html#derived-decls">4.3.3</a> ��)�����Τ褦��Ƴ��
-   ���줿 <tt>Ix</tt> ���饹���Ф��륤�󥹥�����������(���ʤ����
-   ̵�����ι����ҤǤΤ߹�������Ƥ���ǡ�����)������ӡ�ñ�칽���Ҥ�
-   �ǡ�����(����ˤϤ��ι������Ǥ� <tt>Ix</tt> �Υ��󥹥��󥹤Ǥ���
-   �褦��Ǥ�դ��礭�ʥ��ץ��ޤޤ��)���Ф��ƤΤ߲�ǽ�Ǥ��롣
-   Haskell �μ����Ͼ��ʤ��Ȥ⥵���� 15 �ޤǤΥ��ץ�ˤĤ��ơ�<tt>Ix</tt>
-   ���󥹥��󥹤��󶡤��ʤ���Фʤ�ʤ���
+   <tt>data</tt> 宣言上の <tt>deriving</tt> 節を利用すると、自動的に
+   <tt>Ix</tt> インスタンスを導出することができる
+   (<a href="decls.html#derived-decls">4.3.3</a> 節)。このように導出
+   された <tt>Ix</tt> クラスに対するインスタンス宣言は列挙型(すなわち、
+   無引数の構成子でのみ構成されているデータ型)、および、単一構成子の
+   データ型(これにはその構成要素が <tt>Ix</tt> のインスタンスである
+   ような任意の大きなタプルも含まれる)に対してのみ可能である。
+   Haskell の実装は少なくともサイズ 15 までのタプルについて、<tt>Ix</tt>
+   インスタンスを提供しなければならない。
   </p>
   <!--
   <p>
@@ -135,16 +136,16 @@
    <ul>
     <li>
      <p>
-      ����<em>���</em>���Ф��Ƥ���̵���������ҤϺ����鱦�ؽ�� 0 ����
-      n - 1 �ޤǽ���ֹ椬�����Ƥ����ΤȲ��ꤹ�롣����ϡ�
-      <tt>Enum</tt> ���饹���������Ƥ����ֹ��դ���Ʊ���Ǥ��롣
-      ���Ȥ��С��ʲ��Υǡ�����
+      ある<em>列挙型</em>に対してその無引数構成子は左から右へ順に 0 から
+      n - 1 まで順に番号が振られているものと仮定する。これは、
+      <tt>Enum</tt> クラスで定義されている番号付けと同じである。
+      たとえば、以下のデータ型
       <tt><br />
       <br />
       data&nbsp;Colour&nbsp;=&nbsp;Red&nbsp;|&nbsp;Orange&nbsp;|&nbsp;Yellow&nbsp;|&nbsp;Green&nbsp;|&nbsp;Blue&nbsp;|&nbsp;Indigo&nbsp;|&nbsp;Violet<br />
       <br />
       </tt>
-      ������Ȥ���ȡ����Τ褦�ˤʤ롣
+      があるとすると、次のようになる。
       <tt><br />
       <br />
       range&nbsp;&nbsp;&nbsp;(Yellow,Blue)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;==&nbsp;&nbsp;[Yellow,Green,Blue]<br />
@@ -156,8 +157,8 @@
     </li>
     <li>
      <p>
-      <em>ñ�칽���ҥǡ�����</em>���Ф��ơ�Ƴ�Х��󥹥�������Ͽ�
-     <a href="ix.html#prelude-index">15.1</a> �Υ��ץ�Ǽ������褦�ˤʤ롣
+      <em>単一構成子データ型</em>に対して、導出インスタンス宣言は図
+     <a href="ix.html#prelude-index">15.1</a> のタプルで示したようになる。
      </p>
     </li>
    </ul>   
@@ -200,7 +201,7 @@
      </table>
      <div align="center">
       <!--<h3>Derivation of Ix instances</h3>-->
-      <h3>Ix ���󥹥��󥹤�Ƴ��</h3>
+      <h3>Ix インスタンスの導出</h3>
      </div>
      <a name="prelude-index"></a></td>
    </tr>
@@ -209,7 +210,7 @@
  
   <p><a name="sect15.2"></a></p>
   <!--<h3>15.2<tt>&nbsp;&nbsp;</tt>Library <tt>Ix</tt></h3>-->
-  <h3>15.2<tt>&nbsp;&nbsp;</tt><tt>Ix</tt> �饤�֥��</h3>
+  <h3>15.2<tt>&nbsp;&nbsp;</tt><tt>Ix</tt> ライブラリ</h3>
 
   <p><tt><br />
    module&nbsp;Ix&nbsp;(&nbsp;Ix(range,&nbsp;index,&nbsp;inRange,&nbsp;rangeSize)&nbsp;)&nbsp;where<br />

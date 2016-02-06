@@ -1,8 +1,9 @@
-<html>
+<!DOCTYPE html>
+<html lang="ja">
  <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
+  <meta charset="utf-8">
   <!--<title>The Haskell 98 Report: Declarations</title>-->
-  <title>The Haskell 98 Report: ���</title>
+  <title>The Haskell 98 Report: 宣言</title>
  </head>
 
  <body bgcolor="#ffffff">
@@ -15,13 +16,13 @@
   <p><a name="declarations"></a></p>
   <p><a name="sect4"></a></p>
   <!--<h2>4<tt>&nbsp;&nbsp;</tt>Declarations and Bindings</h2>-->
-  <h2>4<tt>&nbsp;&nbsp;</tt>�����«��</h2>
+  <h2>4<tt>&nbsp;&nbsp;</tt>宣言と束縛</h2>
   <!--
   <p> In this chapter, we describe the syntax and informal semantics of
    Haskell <i>declarations</i>.</p>
   -->
-  <p>���ξϤǤϡ�Haskell ��<em>���</em>�ι�ʸ�������Ū���ޥ�ƥ�������
-  �Ĥ��Ʋ��⤹�롣
+  <p>この章では、Haskell の<em>宣言</em>の構文と非形式的セマンティクスに
+  ついて解説する。
   </p>
 
   <table cellspacing="0" cellspacing="0">
@@ -158,26 +159,26 @@
     <td> <tt>|</tt></td>
     <td></td>
     <!--<td> (empty)</td>-->
-    <td> (��)</td>
+    <td> (空)</td>
    </tr>
    <tr>
     <td> gendecl</td>
     <td> <tt>-&gt;</tt></td>
     <td> vars <tt>::</tt> [context <tt>=&gt;</tt>] type</td>
     <!--<td> (type signature)</td>-->
-    <td> (�������ͥ��㡼)</td>
+    <td> (型シグネチャー)</td>
    </tr>
    <tr>
     <td></td>
     <td> <tt>|</tt></td>
     <td> fixity [integer] ops</td>
-    <td> (��������)</td>
+    <td> (結合性宣言)</td>
    </tr>
    <tr>
     <td></td>
     <td> <tt>|</tt></td>
     <td></td>
-    <td> (�����)</td>
+    <td> (空宣言)</td>
    </tr>
    <tr>
     <td> ops</td>
@@ -204,10 +205,10 @@
    either at the top level or in nested scopes (i.e. those within a
    <tt>let</tt> or <tt>where</tt> construct).</p>
   -->
-  <p>��ʸ���� <i>topdecls</i> ������� Haskell �Υ⥸�塼�� (<a
-   href="modules.html#modules">5</a> ��)�Υȥåץ�٥�ǤΤߵ�����Ƥ��롣
-   ������<i>decls</i> �ϥȥåץ�٥�Ǥ⡢����Ҥˤʤä���������(���Ȥ��С�
-   <tt>let</tt> �� <tt>where</tt> �ι�������)�Ǥ���Ѥ�������Ƥ��롣
+  <p>構文範疇 <i>topdecls</i> の宣言は Haskell のモジュール (<a
+   href="modules.html#modules">5</a> 章)のトップレベルでのみ許されている。
+   一方、<i>decls</i> はトップレベルでも、入れ子になったスコープ(たとえば、
+   <tt>let</tt> や <tt>where</tt> の構成の中)でも使用が許されている。
   </p>
   <!--
   <p> For exposition, we divide the declarations into three groups:
@@ -220,17 +221,17 @@
    consisting of value bindings, type signatures, and fixity declarations
    (Section <a href="decls.html#nested">4.4</a>).</p>
   -->
-  <p>�����Τ���ˡ�����򼡤� 3 �ĤΥ��롼�פˤ櫓��: 
+  <p>説明のために、宣言を次の 3 つのグループにわける: 
    <ul>
-    <li> <tt>type</tt>��<tt>newtype</tt> ����� <tt>data</tt> ������鹽��
-      ����롢�桼������η�(
-      <a href="decls.html#user-defined-datatypes">4.2</a> ��)��
-    <li> <tt>class</tt>��<tt>instance</tt> ����� <tt>default</tt> �������
-      ��������롢�����饹�����¿�����(
-      <a href="decls.html#overloading">4.3</a> ��)��
-    <li> �ͤ�«�����������ͥ��㤪��ӷ�������(
-      <a href="decls.html#nested">4.4</a> ��)���鹽�����������Ҥˤʤ�
-      �������
+    <li> <tt>type</tt>、<tt>newtype</tt> および <tt>data</tt> 宣言から構成
+      される、ユーザ定義の型(
+      <a href="decls.html#user-defined-datatypes">4.2</a> 節)。
+    <li> <tt>class</tt>、<tt>instance</tt> および <tt>default</tt> 宣言から
+      構成される、型クラスおよび多重定義(
+      <a href="decls.html#overloading">4.3</a> 節)。
+    <li> 値の束縛、型シグネチャおよび結合性宣言(
+      <a href="decls.html#nested">4.4</a> 節)から構成される入れ子になっ
+      た宣言。
    </ul>
   </p>
   <!--
@@ -241,16 +242,16 @@
    detail in Section <a href="basic.html#basic-types">6.1</a>.<a
    name="types-overview"></a></p>
   -->
-  <p>Haskell �ˤ� (��������ư�����Τ褦�ˤ�)�ֽ����Ϥ�ľ���Ȥ߹��ޤ줿��
-   �ץ�ߥƥ��ַ������뤬���ۤȤ�ɤΡ��ȹ��ߡץǡ�������<tt>type</tt>��
-   ����<tt>data</tt>������Ѥ���ɸ���Haskell�����ɤ��������Ƥ��롥��
-   ���Ρ��Ȥ߹��ߡץǡ������ˤĤ��Ƥ�
-   <a href="basic.html#basic-types">6.1</a>��Ǿܤ����������롥
+  <p>Haskell には (整数や浮動小数のようにな)「処理系に直接組み込まれた」
+   プリミティブ型があるが、ほとんどの「組込み」データ型は<tt>type</tt>宣
+   言や<tt>data</tt>宣言を用いた標準のHaskellコードで定義されている．こ
+   れらの「組み込み」データ型については
+   <a href="basic.html#basic-types">6.1</a>節で詳しく説明する．
   </p>  
 
   <p> <a name="sect4.1"></a></p>
   <!--<h3>4.1<tt>&nbsp;&nbsp;</tt>Overview of Types and Classes</h3>-->
-  <h3>4.1<tt>&nbsp;&nbsp;</tt>������ӥ��饹�γ���</h3>
+  <h3>4.1<tt>&nbsp;&nbsp;</tt>型およびクラスの概要</h3>
   <!--
   <p> Haskell uses a traditional Hindley-Milner polymorphic type system to
    provide a static type semantics [<a
@@ -259,12 +260,12 @@
    extended with <i>type classes</i> (or just <i>classes</i>) that provide
    a structured way to introduce <i>overloaded</i> functions.</p>
   -->
-  <p>Haskell �ϡ�������Ū���ޥ�ƥ�������Ϳ����Τˡ�����Ū��
-   Hindley-Milner ��¿�귿�����ƥ�[<a
-   href="haskell.html#$damas-milner82">3</a>��
-   <a href="haskell.html#$hindley69">5</a>]���Ѥ��뤬�������<em>¿�����
-   </em>�ؿ���Ƴ�����뤿��ι�¤Ū��ˡ��⤿�餹��<em>��</em>���饹(����
-   ����ñ�˥��饹)�ǳ�ĥ����������Ѥ��롣</p>
+  <p>Haskell は、型の静的セマンティクスを与えるのに、伝統的な
+   Hindley-Milner の多相型システム[<a
+   href="haskell.html#$damas-milner82">3</a>、
+   <a href="haskell.html#$hindley69">5</a>]を用いるが、これを<em>多重定義
+   </em>関数を導入するための構造的方法をもたらす、<em>型</em>クラス(ある
+   いは単にクラス)で拡張し、それを用いる。</p>
   <!--
   <p> A <tt>class</tt> declaration (Section <a
    href="decls.html#class-decls">4.3.1</a>) introduces a new <i>type
@@ -275,22 +276,22 @@
    the overloaded operations---called <i>class methods</i>---instantiated
    on the named type.</p>
   -->
-  <p><tt>class</tt> ���(<a href="decls.html#class-decls">4.3.1</a> ��)
-   �Ͽ�����<em>�����饹</em>��Ƴ�������ΤǤ��ꡢ����¿������黻�ϡ���
-   �η����饹�Υ��󥹥��󥹤Ǥ��뤹�٤Ƥη��ǥ��ݡ��Ȥ���ʤ���Фʤ��
-   ����<tt>instance</tt> ���
-   (<a href="decls.html#instance-decls">4.3.2</a> ��)�Ϥ��뷿�������륯
-   �饹��<em>���󥹥���</em>�Ǥ��뤳�ȡ�����̾���η��ǥ��󥹥��󥹲���
-   �줿����<em>���饹�᥽�å�</em>�ȸƤФ�롽��¿������黻�������ޤࡣ
+  <p><tt>class</tt> 宣言(<a href="decls.html#class-decls">4.3.1</a> 節)
+   は新たな<em>型クラス</em>を導入するものであり、その多重定義演算は、そ
+   の型クラスのインスタンスであるすべての型でサポートされなければならな
+   い。<tt>instance</tt> 宣言
+   (<a href="decls.html#instance-decls">4.3.2</a> 節)はある型が、あるク
+   ラスの<em>インスタンス</em>であること、その名前の型でインスタンス化さ
+   れた——<em>クラスメソッド</em>と呼ばれる——多重定義演算の定義を含む。
    </p>
   <!--
   <p> For example, suppose we wish to overload the operations <tt>(+)</tt>
    and <tt>negate</tt> on types <tt>Int</tt> and <tt>Float</tt>. We
    introduce a new type class called <tt>Num</tt>:
   -->
-  <p>���Ȥ��С��黻 <tt>(+)</tt> ����� <tt>nagate</tt> ��
-   <tt>Int</tt> ����� <tt>Float</tt> ���¿������������Ȥ��褦��
-   <tt>Num</tt> �Ȥ�Ф�뿷�������饹��Ƴ������: 
+  <p>たとえば、演算 <tt>(+)</tt> および <tt>nagate</tt> を型
+   <tt>Int</tt> および <tt>Float</tt> 上で多重定義したいとしよう。
+   <tt>Num</tt> とよばれる新しいクラスを導入する: 
    <tt><br />
    <br />
    &nbsp;&nbsp;class&nbsp;Num&nbsp;a&nbsp;&nbsp;where&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;simplified&nbsp;class&nbsp;declaration&nbsp;for&nbsp;Num<br />
@@ -303,15 +304,15 @@
    the class <tt>Num</tt> if there are class methods <tt>(+)</tt> and
    <tt>negate</tt>, of the given types, defined on it."</p>
   -->
-   ��������ϡ����Τ褦���ɤळ�Ȥ��Ǥ��롣�֤��뷿 <tt>a</tt> �����饹
-   <tt>Num</tt> �Υ��󥹥��󥹤Ǥ���Τϡ����η��ξ�ǡ�Ŭ�ڤʷ���(¿��
-   ���)���饹�᥽�åɤ�¸�ߤ���Ȥ��Ǥ��롣��</p>
+   この宣言は、このように読むことができる。「ある型 <tt>a</tt> がクラス
+   <tt>Num</tt> のインスタンスであるのは、その型の上で、適切な型の(多重
+   定義)クラスメソッドが存在するときである。」</p>
   <!--
   <p> We may then declare <tt>Int</tt> and <tt>Float</tt> to be instances
    of this class: 
   -->
-  <p>�����ơ�<tt>Int</tt> �� <tt>Float</tt> �����Υ��饹�Υ��󥹥��󥹤�
-  ���뤳�Ȥ�������뤳�Ȥ��Ǥ���: 
+  <p>そして、<tt>Int</tt> と <tt>Float</tt> がこのクラスのインスタンスで
+  あることを宣言することができる: 
    <tt><br />
    <br />
    &nbsp;&nbsp;instance&nbsp;Num&nbsp;Int&nbsp;&nbsp;where&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;simplified&nbsp;instance&nbsp;of&nbsp;Num&nbsp;Int<br />
@@ -331,12 +332,12 @@
    as witnessed by these definitions (i.e. class methods) for <tt>(+)</tt>
    and <tt>negate</tt>."</p>
   -->
-   ������ <tt>addInt</tt>��<tt>negateInt</tt>��<tt>addFloat</tt> �����
-   <tt>negateFloat</tt> �Ϥ����Ǥ��Ȥ߹��ߴؿ��Ǥ���Ȥ��Ƥ�������������
-   ���̤ˤϡ��ɤΤ褦�ʥ桼������δؿ��Ǥ��äƤ�褤����κǽ������ϡ�
-   ��<tt>Int</tt> �ϥ��饹 <tt>Num</tt> �Υ��󥹥��󥹤ΤҤȤĤǤ��뤳��
-   �ϡ�(���饹�᥽�å�) <tt>(+)</tt> ����� <tt>negate</tt> ������ˤ��
-   �Τ����ɾ��������פ��ɤळ�Ȥ��Ǥ��롣</p>
+   ここで <tt>addInt</tt>、<tt>negateInt</tt>、<tt>addFloat</tt> および
+   <tt>negateFloat</tt> はここでは組み込み関数であるとしておく。しかし、
+   一般には、どのようなユーザ定義の関数であってもよい。上の最初の宣言は、
+   「<tt>Int</tt> はクラス <tt>Num</tt> のインスタンスのひとつであること
+   は、(クラスメソッド) <tt>(+)</tt> および <tt>negate</tt> の定義により
+   確かたど証明される」と読むことができる。</p>
   <!--
   <p> More examples of type classes can be found in the papers by Jones [<a
    href="haskell.html#$jones:cclasses">7</a>] or Wadler and Blott [<a
@@ -347,32 +348,32 @@
    report, `type class' includes both the original Haskell type classes and
    the constructor classes introduced by Jones.</p>
   -->
-  <p>���ȹ����ҥ��饹�Τ���ʤ���ϡ�Jones ����ʸ
-   [<a href="haskell.html#$jones:cclasses">7</a>]�����뤤�ϡ�Wadler ��
-   Blott ����ʸ[<a href="haskell.html#$wadler:classes">12</a>]�˸��뤳��
-   ���Ǥ��롣�ַ����饹�פȤ����Ѹ�ϡ������� Haskell 1.0 �η������ƥ��
-   ���Ҥ���Τ��Ѥ����Ƥ�����ΤǤ��ꡢ�ֹ����ҥ��饹�פ��Ѹ�ϸ�����
-   �����饹���ĥ�򵭽Ҥ���Τ��Ѥ����Ƥ�����ΤǤ��롣���Υ�ݡ��Ȥ�
-   �Ϥ��Ǥˡ��������Ѹ��ʬ�����Ѥ�����ͳ�Ϥʤ����ַ����饹�פϸ�����
-   Haskell �����饹��Jones �ˤ�ä�Ƴ�����줿�����ҥ��饹��ξ����ޤ��
-   ���롣</p>
+  <p>型と構成子クラスのさらなる例は、Jones の論文
+   [<a href="haskell.html#$jones:cclasses">7</a>]、あるいは、Wadler と
+   Blott の論文[<a href="haskell.html#$wadler:classes">12</a>]に見ること
+   ができる。「型クラス」という用語は、元々は Haskell 1.0 の型システムを
+   記述するのに用いられていたものであり、「構成子クラス」の用語は元々の
+   型クラスを拡張を記述するのに用いられていたものである。このレポートで
+   はすでに、これらの用語を分けて用いる理由はなく、「型クラス」は元々の
+   Haskell 型クラスとJones によって導入された構成子クラスの両方を含んで
+   いる。</p>
 
   <p> <a name="sect4.1.1"></a></p>
   <!--<h4>4.1.1<tt>&nbsp;&nbsp;</tt>Kinds</h4>-->
-  <h4>4.1.1<tt>&nbsp;&nbsp;</tt>��</h4>
+  <h4>4.1.1<tt>&nbsp;&nbsp;</tt>種</h4>
   <!--
   <p> To ensure that they are valid, type expressions are classified into
    different <i>kinds</i>, which take one of two possible forms:</p>
   -->
-  <p>���μ�����������Τ���뤿��ˡ��������̤�<em>��</em>��ʬ�ह�롣
-  ��ϼ��� 2 �Ĥβ�ǽ���Τɤ��餫�η����Ǥ��롣</p>
+  <p>型の式の正当性を確かめるために、これらを別の<em>種</em>に分類する。
+  種は次の 2 つの可能性のどちらかの形式である。</p>
   <ul>
    <!--
    <li>The symbol * represents the kind of all nullary type constructors.
     <p></p>
    </li>
    -->
-   <li><p>���� * �Ϥ��٤Ƥΰ����ʤ��η������Ҥ�ɽ����</p></li>
+   <li><p>記号 * はすべての引数なしの型構成子を表す。</p></li>
    <!--
    <li>If <font face="symbol">k</font><sub>1</sub> and <font
     face="symbol">k</font><sub>2</sub> are kinds, then <font
@@ -381,13 +382,13 @@
     type of kind <font face="symbol">k</font><sub>1</sub> and return a type
     of kind <font face="symbol">k</font><sub>2</sub>.</li>
    -->
-   <li><p> �⤷��<font face="symbol">k</font><sub>1</sub> ����� 
-    <font face="symbol">k</font><sub>2</sub> ����ʤ�С�
+   <li><p> もし、<font face="symbol">k</font><sub>1</sub> および 
+    <font face="symbol">k</font><sub>2</sub> が種ならば、
     <font face="symbol">k</font><sub>1</sub>-&gt;
-    <font face="symbol">k</font><sub>2</sub> �ϼ�
-    <font face="symbol">k</font><sub>1</sub> �Τ��뷿������Ȥ��ƤȤꡢ
-    ��̤Ȥ��ơ��� <font face="symbol">k</font><sub>2</sub> �Τ��뷿���֤�
-    �褦�ʴؿ��η��μ�Ǥ���</p></li>
+    <font face="symbol">k</font><sub>2</sub> は種
+    <font face="symbol">k</font><sub>1</sub> のある型を引数としてとり、
+    結果として、種 <font face="symbol">k</font><sub>2</sub> のある型を返す
+    ような関数の型の種である</p></li>
   </ul>
   <!--
   <p>Kind inference checks the validity of type expressions in a similar
@@ -396,15 +397,15 @@
    part of the language. Kind inference is discussed in Section <a
    href="decls.html#kindinference">4.6</a>.<a name="type-syntax"></a></p>
   -->
-  <p>�ͤμ������������������ˤ�긡�������Τ�Ʊ�ͤ���ˡ�ǡ����μ�����
-   �����ϡ���ο����ˤ�긡������롣 �������ʤ��鷿�����ξ��Ȥ�������
-   ��ο���������Ū�˰��ۤΤ����˹Ԥ�졢���θ�����ܤ˸�������ʬ�ǤϤ�
-   ������ο����� <a href="decls.html#kindinference">4.6</a> ��ǵ�����
-   �롣</p>
+  <p>値の式の正当性が型推論により検査されるのと同様の方法で、型の式の正
+   当性は、種の推論により検査される。 しかしながら型推論の場合とちがい、
+   種の推論は全面的に暗黙のうちに行われ、この言語の目に見える部分ではな
+   い。種の推論は <a href="decls.html#kindinference">4.6</a> 節で議論す
+   る。</p>
 
   <p> <a name="sect4.1.2"></a></p>
   <!--<h4>4.1.2<tt>&nbsp;&nbsp;</tt>Syntax of Types</h4>-->
-  <h4>4.1.2<tt>&nbsp;&nbsp;</tt>���ι�ʸ</h4>
+  <h4>4.1.2<tt>&nbsp;&nbsp;</tt>型の構文</h4>
   <p><a name="types"></a></p>
   <p></p>
   <table cellspacing="0" cellspacing="0">
@@ -420,14 +421,14 @@
     <td> <tt>-&gt;</tt></td>
     <td> btype [<tt>-&gt;</tt> type]</td>
     <!--<td> (function type)</td>-->
-    <td> (�ؿ��η�)</td>
+    <td> (関数の型)</td>
    </tr>
    <tr>
     <td> btype</td>
     <td> <tt>-&gt;</tt></td>
     <td> [btype] atype</td>
     <!--<td> (type application)</td>-->
-    <td> (����Ŭ��)</td>
+    <td> (型の適用)</td>
    </tr>
    <tr>
     <td> atype</td>
@@ -445,21 +446,21 @@
     <td> <tt>(</tt> type<sub>1</sub> <tt>,</tt> ... <tt>,</tt>
      type<sub>k</sub> <tt>)</tt></td>
     <!--<td> (tuple type, k&gt;=2)</td>-->
-    <td> (���ץ�η���k&gt;=2)</td>
+    <td> (タプルの型、k&gt;=2)</td>
    </tr>
    <tr>
     <td></td>
     <td> <tt>|</tt></td>
     <td> <tt>[</tt> type <tt>]</tt></td>
     <!--<td> (list type)</td>-->
-    <td> (�ꥹ�Ȥη�)</td>
+    <td> (リストの型)</td>
    </tr>
    <tr>
     <td></td>
     <td> <tt>|</tt></td>
     <td> <tt>(</tt> type <tt>)</tt></td>
     <!--<td> (parenthesised constructor)</td>-->
-    <td> (��̤Ǥ�����줿������)</td>-->
+    <td> (括弧でくくられた構成子)</td>-->
    </tr>
    <tr>
     <td> gtycon</td>
@@ -471,28 +472,28 @@
     <td> <tt>|</tt></td>
     <td> <tt>()</tt></td>
     <!--<td> (unit type)</td>-->
-    <td> (��˥åȤη�)</td>
+    <td> (ユニットの型)</td>
    </tr>
    <tr>
     <td></td>
     <td> <tt>|</tt></td>
     <td> <tt>[]</tt></td>
     <!--<td> (list constructor)</td>-->
-    <td> (�ꥹ�Ȥι�����)</td>
+    <td> (リストの構成子)</td>
    </tr>
    <tr>
     <td></td>
     <td> <tt>|</tt></td>
     <td> <tt>(-&gt;)</tt></td>
     <!--<td> (function constructor)</td>-->
-    <td> (�ؿ��ι�����)</td>
+    <td> (関数の構成子)</td>
    </tr>
    <tr>
     <td></td>
     <td> <tt>|</tt></td>
     <td> <tt>(,</tt>{<tt>,</tt>}<tt>)</tt></td>
     <td> (tupling constructor)</td>
-    <td> (���ץ�ι�����)</td>
+    <td> (タプルの構成子)</td>
    </tr>
   </table>
   <!--
@@ -502,15 +503,15 @@
    constructors start with uppercase letters. Unlike data constructors,
    infix type constructors are not allowed (other than <tt>(-&gt;)</tt>).</p>
   -->
-  <p>Haskell �η��μ��ι�ʸ�Ͼ嵭��Ϳ�����롣�ǡ������ͤ��ǡ���������
-   �ˤ�깽�ۤ����ΤȤ��礦��Ʊ���褦�ˡ������ͤϡ��������Ҥˤ�깽��
-   ����롣�ǡ��������Ҥ�Ʊ�ͤˡ��������Ҥ�̾������ʸ���ǤϤ��ޤ롣�ǡ�
-   �������ҤȤϤ����������ַ������Ҥ�ǧ����Ƥ��ʤ�(��������
-   <tt>(-&gt;)</tt> ���㳰)��</p>
+  <p>Haskell の型の式の構文は上記で与えられる。データの値がデータ構成子
+   により構築されるのとちょうど同じように、型の値は、型構成子により構築
+   される。データ構成子と同様に、型構成子の名前は大文字ではじまる。デー
+   タ構成子とはちがい、中置型構成子は認められていない(ただし、
+   <tt>(-&gt;)</tt> は例外)。</p>
   <!--
   <p> The main forms of type expression are as follows:</p>
   -->
-  <p>���μ��δ��ܷ����ϰʲ��ΤȤ���Ǥ��롣</p>
+  <p>型の式の基本形式は以下のとおりである。</p>
   <ol>
    <!--
    <li>Type variables, written as identifiers beginning with a lowercase
@@ -519,41 +520,41 @@
     <p></p>
    </li>
    -->
-   <li><p>���ѿ��Ͼ�ʸ���ǤϤ��ޤ뼱�̻ҤȤ��ƽ񤯡����ѿ��μ�Ϥ��줬��
-       ������ʸ̮�ˤ�����Σ�˷��ꤵ��롣</p></li>
+   <li><p>型変数は小文字ではじまる識別子として書く。型変数の種はそれが出
+       現した文脈により暗黙裡に決定される。</p></li>
    <!--
    <li>Type constructors. Most type constructors are written as an
     identifier beginning with an uppercase letter. For example:
    -->
-   <li><p> �������ҡ��ؤɤη������Ҥ���ʸ���ǤϤ��ޤ�ǧ���ҤȤ��ƽ񤯡�
-   ���Ȥ��С�
+   <li><p> 型構成子。殆どの型構成子は大文字ではじまる認識子として書く。
+   たとえば、
     <ul>
      <!--
      <li><tt>Char</tt>, <tt>Int</tt>, <tt>Integer</tt>, <tt>Float</tt>,
       <tt>Double</tt> and <tt>Bool</tt> are type constants with kind *.</li>
      -->
-     <li><tt>Char</tt>��<tt>Int</tt>��<tt>Integer</tt>��<tt>Float</tt>��
-      <tt>Double</tt> ����� <tt>Bool</tt> �ϼ� * �η�����Ǥ��롣</li>
+     <li><tt>Char</tt>、<tt>Int</tt>、<tt>Integer</tt>、<tt>Float</tt>、
+      <tt>Double</tt> および <tt>Bool</tt> は種 * の型定数である。</li>
      <!--
      <li><tt>Maybe</tt> and <tt>IO</tt> are unary type constructors, and
       treated as types with kind *-&gt;*.</li>
      -->
-     <li><tt>Maybe</tt> ����� <tt>IO</tt> �� 1 �����η������ҤǤ��ꡢ��
-      * -&gt; * �η��Ȥ��ư�����</li>
+     <li><tt>Maybe</tt> および <tt>IO</tt> は 1 引数の型構成子であり、種
+      * -&gt; * の型として扱う。</li>
      <!--
      <li>The declarations <tt>data&nbsp;T&nbsp;...</tt> or
       <tt>newtype&nbsp;T&nbsp;...</tt> add the type constructor <tt>T</tt>
       to the type vocabulary. The kind of <tt>T</tt> is determined by kind
       inference.</li>
      -->
-     <li>��� <tt>data&nbsp;T&nbsp;...</tt> �ޤ���
-      <tt>newtype&nbsp;T&nbsp;...</tt> �Ϸ������� <tt>T</tt> �򷿤θ���
-      ���ɲä��롣<tt>T</tt> �μ�ϼ�ο����ˤ����ꤵ��롣</li>
+     <li>宣言 <tt>data&nbsp;T&nbsp;...</tt> または
+      <tt>newtype&nbsp;T&nbsp;...</tt> は型構成子 <tt>T</tt> を型の語彙
+      に追加する。<tt>T</tt> の種は種の推論により決定される。</li>
     </ul>
     <!--
     Special syntax is provided for certain built-in type constructors:
     -->
-    �������ҤΤʤ��ˤ����̤ʹ�ʸ���Ĥ�Τ⤢�롣
+    型構成子のなかには特別な構文をもつものもある。
     <ul>
      <!--
      <li>The <i>trivial type</i> is written as <tt>()</tt> and has kind *.
@@ -562,37 +563,37 @@
       href="exps.html#unit-expression">3.9</a> and <a
       href="basic.html#basic-trivial">6.1.5</a>).</li>
      -->
-     <li><em>������</em>�� <tt>()</tt> �Ƚ񤭡���� * �Ǥ��롣����ϡ�̵
-      �����ץ��ץ�η���ɽ���������ͤϤ�����Ĥǡ�<tt>()</tt> (<a
-      href="exps.html#unit-expression">3.9</a> �ᤪ��� <a
-      href="basic.html#basic-trivial">6.1.5</a> ��򸫤�)�Ƚ񤯡�</li>
+     <li><em>自明型</em>は <tt>()</tt> と書き、種は * である。これは「無
+      引数」タプルの型を表し、その値はただ一つで、<tt>()</tt> (<a
+      href="exps.html#unit-expression">3.9</a> 節および <a
+      href="basic.html#basic-trivial">6.1.5</a> 節を見よ)と書く。</li>
      <!--
      <li>The <i>function type</i> is written as <tt>(-&gt;)</tt> and has
       kind *-&gt;*-&gt;*.</li>
      -->
-     <li><em>�ؿ��η�</em>�� <tt>(-&gt;)</tt> �Ƚ񤭡����
-      * -&gt; * -&gt; * �Ǥ��롣</li>
+     <li><em>関数の型</em>は <tt>(-&gt;)</tt> と書き、種は
+      * -&gt; * -&gt; * である。</li>
      <!--
      <li>The <i>list type</i> is written as <tt>[]</tt> and has kind
       *-&gt;*.</li>
      -->
-     <li><em>�ꥹ�Ȥη�</em>�ϡ�<tt>[]</tt> �Ƚ񤭡���� * -&gt; * �Ǥ�
-     �롣</li>
+     <li><em>リストの型</em>は、<tt>[]</tt> と書き、種は * -&gt; * であ
+     る。</li>
      <!--
      <li>The <i>tuple types</i> are written as <tt>(,)</tt>, <tt>(,,)</tt>,
       and so on. Their kinds are *-&gt;*-&gt;*, *-&gt;*-&gt;*-&gt;*, and so
       on.</li>
      -->
-     <li><em>���ץ�η�</em>�ϡ�<tt>(,)</tt>��<tt>(,,)</tt> �ʤɤȽ񤭡���
-      ���μ�ϡ�* -&gt; * -&gt; * ��* -&gt; * -&gt; * -&gt; * ���ʤɤ�
-      ���롣</li>
+     <li><em>タプルの型</em>は、<tt>(,)</tt>、<tt>(,,)</tt> などと書き、そ
+      れらの種は、* -&gt; * -&gt; * 、* -&gt; * -&gt; * -&gt; * 、などで
+      ある。</li>
     </ul>
     <!--
     Use of the <tt>(-&gt;)</tt> and <tt>[]</tt> constants is described in
     more detail below.
     -->
-    ��� <tt>(-&gt;)</tt> ����� <tt>[]</tt> �λȤ����ˤĤ��ưʲ��Ǿܤ�
-    ���Τ٤롣
+    定数 <tt>(-&gt;)</tt> および <tt>[]</tt> の使い方について以下で詳し
+    くのべる。
     </p>
    </li>
    <!--
@@ -605,20 +606,20 @@
     <p></p>
    </li>
    -->
-   <li><p> ��Ŭ�ѡ��⤷��t<sub>1</sub> ����
+   <li><p> 型適用。もし、t<sub>1</sub> が種
     <font face="symbol">k</font><sub>1</sub> -&gt;
-    <font face="symbol">k</font><sub>2</sub> �η���
-    t<sub>2</sub> ���� <font face="symbol">k</font><sub>1</sub> �η��ʤ�С�
-    t<sub>1</sub> t<sub>2</sub> �� ��
-    <font face="symbol">k</font><sub>2</sub> �η����Ǥ��롣</p></li>
+    <font face="symbol">k</font><sub>2</sub> の型で
+    t<sub>2</sub> が種 <font face="symbol">k</font><sub>1</sub> の型ならば、
+    t<sub>1</sub> t<sub>2</sub> は 種
+    <font face="symbol">k</font><sub>2</sub> の型式である。</p></li>
    <!--
    <li>A <i>parenthesized type</i>, having form
     <tt>(</tt><i>t</i><tt>)</tt>, is identical to the type <i>t</i>.
     <p></p>
    </li>
    -->
-   <li><p> <tt>(</tt><i>t</i><tt>)</tt> �Ȥ���������<em>��̤Ǥ�����줿
-       ��</em>�ϡ��� <i>t</i> ��Ʊ��Ǥ��롣</p></li>
+   <li><p> <tt>(</tt><i>t</i><tt>)</tt> という形式の<em>括弧でくくられた
+       型</em>は、型 <i>t</i> と同一である。</p></li>
   </ol>
   <!--
   <p>For example, the type expression <tt>IO&nbsp;a</tt> can be understood
@@ -630,18 +631,18 @@
    is needed to determine appropriate kinds for user-defined datatypes,
    type synonyms, and classes.</p>
   -->
-  <p>�㤨�С����� <tt>IO&nbsp;a</tt> ����� <tt>IO</tt> ���ѿ�
-   <tt>a</tt> �ؤ�Ŭ�Ѥ����򤹤뤳�Ȥ��Ǥ��롣<tt>IO</tt> �������Ҥϼ� *
-   -&gt; * �Ǥ��뤫�顢�ѿ� <tt>a</tt> ����ӡ������� <tt>IO&nbsp;a</tt>
-   �μ�� * �ˤʤ�Ϥ��Ǥ��롣���̤�<em>��ο���</em>(<a
-   href="decls.html#kindinference">4.6</a> ��򸫤�)�β����ϥ桼������ǡ�
-   �����������Υ˥प��ӥ��饹�μ�����������ꤹ��Τ�ɬ�פǤ��롣</p>
+  <p>例えば、型式 <tt>IO&nbsp;a</tt> は定数 <tt>IO</tt> の変数
+   <tt>a</tt> への適用と理解することができる。<tt>IO</tt> 型構成子は種 *
+   -&gt; * であるから、変数 <tt>a</tt> および、式全体 <tt>IO&nbsp;a</tt>
+   の種は * になるはずである。一般に<em>種の推論</em>(<a
+   href="decls.html#kindinference">4.6</a> 節を見よ)の過程はユーザ定義デー
+   タ型、型シノニムおよびクラスの種を正しく決定するのに必要である。</p>
   <!--
   <p> Special syntax is provided to allow certain type expressions to be
    written in a more traditional style:</p>
   -->
-  <p>�����Ĥ��η�����������ˡ��ɽ�����뤿������̤ʹ�ʸ���Ѱդ���Ƥ�
-  �롣</p>
+  <p>いくつかの型式を旧来の方法で表記するための特別な構文が用意されてい
+  る。</p>
   <ol>
    <!--
    <li>A <i>function type</i> has the form <i>t</i><sub><i>1</i></sub><i>
@@ -653,12 +654,12 @@
     <p></p>
    </li>
    -->
-   <li><p> <em>�ؿ��η�</em> ��
+   <li><p> <em>関数の型</em> は
     <i>t</i><sub><i>1</i></sub><i> 
     </i><tt>-&gt;</tt><i> t</i><sub><i>2</i></sub>
-    �Ȥ��������ǡ�����ϡ��� 
+    という形式で、これは、型 
     <tt>(-&gt;)</tt><i> t</i><sub><i>1</i></sub>
-    <i> t</i><sub><i>2</i></sub> ��Ʊ���Ǥ��롣�ؿ�������ϱ����Ǥ��롣
+    <i> t</i><sub><i>2</i></sub> と同等である。関数の矢印は右結合である。
     </p></li>
    <!--
    <li>A <i>tuple type</i> has the form
@@ -675,16 +676,16 @@
     <p></p>
    </li>
    -->
-   <li><p> <em>���ץ뷿</em> ��
+   <li><p> <em>タプル型</em> は
     <tt>(</tt><i>t</i><sub><i>1</i></sub><tt>,</tt><i>...</i><tt>,</tt>
-    <i>t</i><sub><i>k</i></sub><tt>)</tt> (���ΤȤ� <i>k&gt;=2</i>)
-    �Ȥ��������ǡ�����ϡ��� 
+    <i>t</i><sub><i>k</i></sub><tt>)</tt> (このとき <i>k&gt;=2</i>)
+    という形式で、これは、型 
     <tt>(,</tt><i>...</i><tt>,)</tt><i> t</i><sub><i>1</i></sub><i>
-    ... t</i><sub><i>k</i></sub> (�����Ǥϳ�̤Τʤ��ˤ� k-1 �ĤΥ���ޤ���
-    ��)��Ʊ���Ǥ��롣����ϡ�<i>k</i>-���ץ�η���ɽ���Ƥ��ꡢ�ǽ�����Ǥ�
-    ���� <i>t</i><sub><i>1</i></sub>�������ܤ� <i>t</i><sub><i>2</i></sub>��
-    �ʤɤȤʤäƤ���(<a href="exps.html#tuples">3.8</a> �ᤪ���
-    <a href="basic.html#basic-tuples">6.1.4</a> ��򸫤�)��</p></li>
+    ... t</i><sub><i>k</i></sub> (ここでは括弧のなかには k-1 個のコンマがあ
+    る)と同等である。これは、<i>k</i>-タプルの型を表しており、最初の要素の
+    型は <i>t</i><sub><i>1</i></sub>、二番目は <i>t</i><sub><i>2</i></sub>、
+    などとなっている(<a href="exps.html#tuples">3.8</a> 節および
+    <a href="basic.html#basic-tuples">6.1.4</a> 節を見よ)。</p></li>
    <!--
    <li>A <i>list type</i> has the form <tt>[</tt><i>t</i><tt>]</tt>, which
     is equivalent to the type <tt>[]</tt><i> t</i>. It denotes the type of
@@ -694,11 +695,11 @@
     <p></p>
    </li>
    -->
-   <li><p> <em>�ꥹ�ȷ�</em>��  <tt>[</tt><i>t</i><tt>]</tt> �Ȥ�������
-    �Ǥ���ϡ�<tt>[]</tt><i> t</i> �η���Ʊ���Ǥ��롣����Ϸ�
-    <i>t</i> �����ǤΥꥹ�Ȥη���ɽ��(<a
-    href="exps.html#lists">3.7</a> �ᤪ��� <a
-    href="basic.html#basic-lists">6.1.3</a> ��򸫤�)��</p></li>
+   <li><p> <em>リスト型</em>は  <tt>[</tt><i>t</i><tt>]</tt> という形式
+    でこれは、<tt>[]</tt><i> t</i> の型と同等である。これは型
+    <i>t</i> の要素のリストの型を表す(<a
+    href="exps.html#lists">3.7</a> 節および <a
+    href="basic.html#basic-lists">6.1.3</a> 節を見よ)。</p></li>
   </ol>
   <!-- 
   <p>These special syntactic forms always denote the built-in type
@@ -709,20 +710,20 @@
    import or export lists (Chapter <a href="modules.html#modules">5</a>).
    (Hence the special production, "gtycon", above.)</p>
   -->
-  <p>���������̤ʹ�ʸ�����ϡ��ɤΥ������פˤ��뤫�ˤ�����餺���Ĥͤ�
-   �ؿ������ץ롢�ꥹ�Ȥ��Ф����Ȥ߹��ߤη������Ҥ�ɽ���Ƥ��롣Ʊ�ͤ�
-   ���֤η������� <tt>(-&gt;)</tt>��<tt>[]</tt>��<tt>()</tt>��
-   <tt>(,)</tt> �ʤɤ����Ȥ߹��ߤη������Ҥ�ɽ�魯�������˽����Ҥ���
-   �����ȡ�����ӡ�����ݡ��Ȥ���ӥ������ݡ��ȤΥꥹ�ȤǸ��ڤ��뤳�Ȥ�
-   �Ǥ��ʤ�(<a href="modules.html#modules">5</a> ��)��(����椨����Τ�
-   �������̤�������§ "gtycon" �����롣)</p>
+  <p>これらの特別な構文形式は、どのスコープにあるかにかかわらず、つねに
+   関数、タプル、リストに対する組み込みの型構成子を表している。同様に
+   前置の型構成子 <tt>(-&gt;)</tt>、<tt>[]</tt>、<tt>()</tt>、
+   <tt>(,)</tt> なども常に組み込みの型構成子を表わす。これらに修飾子を付
+   けこと、および、インポートおよびエクスポートのリストで言及することは
+   できない(<a href="modules.html#modules">5</a> 章)。(それゆえ、上のよ
+   うな特別な生成規則 "gtycon" がある。)</p>
   <!--
   <p> Although the list and tuple types have special syntax, their
    semantics is the same as the equivalent user-defined algebraic data
    types.</p>
   -->
-  <p>���ץ롢�ꥹ�ȡ��ؿ��η������̤ʹ�ʸ����Ĥ���Ʊ���ε�ǽ���ĥ桼
-   ��������������Ʊ�����ޥ�ƥ��������ġ�</p>
+  <p>タプル、リスト、関数の型は特別な構文を持つが、同等の機能をもつユー
+   ザ定義の代数型と同じセマンティクスをもつ。</p>
   <!--
   <p> Notice that expressions and types have a consistent syntax. If
    <i>t</i><sub><i>i</i></sub> is the type of expression or pattern
@@ -737,18 +738,18 @@
    <tt>(</tt><i>t</i><sub><i>1</i></sub><i>,t</i><sub><i>2</i></sub><tt>)</tt>,
    respectively.</p>
   -->
-  <p>���ȷ��ϰ�Ӥ�����ʸ����Ĥ��Ȥ����դ��衣�⤷��
-   <i>t</i><sub><i>i</i></sub> �������뤤�ϥѥ�����
-   <i>e</i><sub><i>i</i></sub> �η��Ǥ���ʤ顢��
+  <p>式と型は一貫した構文を持つことに注意せよ。もし、
+   <i>t</i><sub><i>i</i></sub> が式あるいはパターン
+   <i>e</i><sub><i>i</i></sub> の型であるなら、式
    <tt>(\</tt><i>e</i><sub><i>1</i></sub><i> </i><tt>-&gt;</tt>
    <i>e</i><sub><i>2</i></sub><tt>)</tt>,
-   <tt>[</tt><i>e</i><sub><i>1</i></sub><tt>]</tt> �����
+   <tt>[</tt><i>e</i><sub><i>1</i></sub><tt>]</tt> および
    <tt>(</tt><i>e</i><sub><i>1</i></sub><i>,e</i><sub><i>2</i></sub><tt>)</tt>
-   �η��Ϥ��줾�졢<tt>(</tt><i>t</i><sub><i>1</i></sub><i>
+   の型はそれぞれ、<tt>(</tt><i>t</i><sub><i>1</i></sub><i>
    </i><tt>-&gt;</tt><i> t</i><sub><i>2</i></sub><tt>)</tt>,
-   <tt>[</tt><i>t</i><sub><i>1</i></sub><tt>]</tt> �����
+   <tt>[</tt><i>t</i><sub><i>1</i></sub><tt>]</tt> および
    <tt>(</tt><i>t</i><sub><i>1</i></sub><i>,t</i><sub><i>2</i></sub><tt>)</tt>
-   �Ǥ��롣
+   である。
   </p>
   <!--
   <p> With one exception (that of the distinguished type variable in a
@@ -763,21 +764,21 @@
    </i> extends as far to the right as possible; for example, <i>forall a.
    a -&gt;a</i> means <i>forall a. (a -&gt;a)</i>.</p>
   -->
-  <p>�ҤȤĤ��㳰(���饹���(<a href="decls.html#class-decls">4.3.1</a>
-   ��)��ζ��̤��줿���ѿ�)��Τ�����Haskell �η�������ѿ����������ν�
-   ������Ƥ���ȴ��蘆��롣���ν������б���������Ū�ʹ�ʸ�Ϥʤ� [<a
-   href="haskell.html#$damas-milner82">3</a>]�����Ȥ��С����μ� 
-   <tt>a&nbsp;-&gt;&nbsp;a</tt> �Ϸ� <i>forall a. a -&gt;a</i> ��ɽ����
-   ���롣Haskell �Υץ������η��ε����򤹤�ݡ����ν�������Ƥ��뤳��
-   ��Ϥä���ȼ������������Ū�˽����Ҥ�񤯤��Ȥ�¿�����롣����Ū�˽�
-   �����줿����񤯾��ˤ� <i>forall a</i> �Υ������פϱ��ز�ǽ�ʤ�����
-   ��ĥ����롣���Ȥ��С�<i>forall a . a -&gt; a</i> ��
-   <i>forall a . (a -&gt; a)</i> ���̣���롣</p>
+  <p>ひとつの例外(クラス宣言(<a href="decls.html#class-decls">4.3.1</a>
+   節)中の区別された型変数)をのぞき、Haskell の型式中の変数は全て全称修
+   飾されていると看倣される。全称修飾に対応する明示的な構文はない [<a
+   href="haskell.html#$damas-milner82">3</a>]。たとえば、型の式 
+   <tt>a&nbsp;-&gt;&nbsp;a</tt> は型 <i>forall a. a -&gt;a</i> を表して
+   いる。Haskell のプログラムの型の議論をする際、全称修飾されていること
+   をはっきりと示すために明示的に修飾子を書くことは多々ある。明示的に修
+   飾された型を書く場合には <i>forall a</i> のスコープは右へ可能なかぎり
+   拡張される。たとえば、<i>forall a . a -&gt; a</i> は
+   <i>forall a . (a -&gt; a)</i> を意味する。</p>
 
   <p><a name="classes&contexts"></a></p>
   <p> <a name="sect4.1.3"></a></p>
   <!--<h4>4.1.3<tt>&nbsp;&nbsp;</tt>Syntax of Class Assertions and Contexts</h4>-->
-  <h4>4.1.3<tt>&nbsp;&nbsp;</tt>���饹ɽ�������ʸ̮�ι�ʸ</h4>
+  <h4>4.1.3<tt>&nbsp;&nbsp;</tt>クラス表明および文脈の構文</h4>
   <p></p>
   <table cellspacing="0" cellspacing="0">
    <tr>
@@ -826,10 +827,10 @@
    class identifier begins with an uppercase letter. A <i>context</i>
    consists of zero or more class assertions, and has the general form</p>
   -->
-  <p><em>���饹ɽ��</em>�� <i>qtycls tyvar</i> �η����ǡ��ѥ�᥿�η�
-   <i>tyvar</i> �����饹 <i>qtycls</i> �Υ��ФǤ��뤳�Ȥ򼨤������饹
-   ���̻Ҥ���ʸ���ǻϤޤ롣<em>ʸ̮</em>�� 0 �Ĥ��뤤�Ϥ���ʾ�Υ��饹
-   ɽ������ʤꡢ���Τ褦�ʰ��̷���Ȥ롣</p> 
+  <p><em>クラス表明</em>は <i>qtycls tyvar</i> の形式で、パラメタの型
+   <i>tyvar</i> がクラス <i>qtycls</i> のメンバであることを示す。クラス
+   識別子は大文字で始まる。<em>文脈</em>は 0 個あるいはそれ以上のクラス
+   表明からなり、次のような一般形をとる。</p> 
 
   <p> <tt>(</tt><i> C</i><sub><i>1</i></sub><i>
    u</i><sub><i>1</i></sub><i>, ..., C</i><sub><i>n</i></sub><i>
@@ -848,31 +849,31 @@
    context <i>cx</i> is empty, although in this case the concrete syntax
    contains no <tt>=&gt;</tt>.</p>
   -->
-  <p>�����ǡ�<i>C</i><sub><i>1</i></sub><i>, ...,
-   C</i><sub><i>n</i></sub> �ϥ��饹���̻ҤǤ��ꡢ��
-   <i>u</i><sub><i>1</i></sub><i>, ..., u</i><sub><i>n</i></sub> �Ϸ���
-   ���⤷���Ϸ��ѿ����İʾ�η���Ŭ�Ѥ�����ΤǤ��롣<i>n=1</i> �ξ��
-   �ϳ�¦�γ�̤��ά���Ƥ�褤�����̤ˡ�ʸ̮��ɽ���Τ� <i>cx</i> ���Ѥ���
-   �� <i>t</i> ��ʸ̮ <i>cx</i> �����¤���뤳�Ȥ�ɽ���Τ� <i>cx
-   </i><tt>=&gt;</tt><i> t</i> �Ƚ񤯡�ʸ̮ <i>cx</i> �� <i>t</i> �ǻ���
-   ����뷿�ѿ��� 1 �Ĥ����ޤ��ΤǤʤ���Фʤ�ʤ������ؤΤ���ˡ�ʸ̮
-   <i>cx</i> �����ξ��ˤ�<i>cx </i><tt>=&gt;</tt><i> t</i> �Ƚ񤯤���
-   ���ξ��ˤ϶�ݹ�ʸ�Ǥ�<tt>=&gt;</tt> �ϴޤޤ�ʤ���</p> 
+  <p>ここで、<i>C</i><sub><i>1</i></sub><i>, ...,
+   C</i><sub><i>n</i></sub> はクラス識別子であり、各
+   <i>u</i><sub><i>1</i></sub><i>, ..., u</i><sub><i>n</i></sub> は型変
+   数もしくは型変数を一つ以上の型に適用したものである。<i>n=1</i> の場合
+   は外側の括弧を省略してもよい。一般に、文脈を表すのに <i>cx</i> を用い、
+   型 <i>t</i> が文脈 <i>cx</i> で制限されることを表すのに <i>cx
+   </i><tt>=&gt;</tt><i> t</i> と書く。文脈 <i>cx</i> は <i>t</i> で参照
+   される型変数を 1 つだけ含むものでなければならない。利便のために、文脈
+   <i>cx</i> が空の場合にも<i>cx </i><tt>=&gt;</tt><i> t</i> と書くが、
+   この場合には具象構文では<tt>=&gt;</tt> は含まれない。</p> 
 
   <p><a name="type-semantics"></a></p>
   <p> <a name="sect4.1.4"></a></p>
   <!--<h4>4.1.4<tt>&nbsp;&nbsp;</tt>Semantics of Types and Classes</h4>-->
-  <h4>4.1.4<tt>&nbsp;&nbsp;</tt>������ӥ��饹�Υ��ޥ�ƥ�����</h4>
+  <h4>4.1.4<tt>&nbsp;&nbsp;</tt>型およびクラスのセマンティクス</h4>
   <!--
   <p> In this section, we provide informal details of the type system.
    (Wadler and Blott [<a href="haskell.html#$wadler:classes">12</a>] and
    Jones [<a href="haskell.html#$jones:cclasses">7</a>] discuss type and
    constructor classes, respectively, in more detail.)</p>
   -->
-  <p>������Ǥϡ��������ƥ�������Ū�ʾܺ٤򼨤���(Wadler and Blott [<a
-   href="haskell.html#$wadler:classes">12</a>] �� Jones [<a
-   href="haskell.html#$jones:cclasses">7</a>] �Ȥǡ����ȹ����ҥ��饹�Ȥ�
-   �Ĥ��Ƥ��줾����ܤ�����������Ƥ��롣)</p>
+  <p>この節では、型システムの非形式的な詳細を示す。(Wadler and Blott [<a
+   href="haskell.html#$wadler:classes">12</a>] と Jones [<a
+   href="haskell.html#$jones:cclasses">7</a>] とで、型と構成子クラスとに
+   ついてそれぞれより詳しく議論されている。)</p>
   <!--
   <p> The Haskell type system attributes a <i>type</i> to each expression
    in the program. In general, a type is of the form <i>forall
@@ -884,15 +885,15 @@
    given above in Section <a href="decls.html#classes&contexts">4.1.3</a>.
    For example, here are some valid types: 
   -->
-  <p>Haskell �η������ƥ�ϥץ��������Τ��줾��μ���<em>��</em>����Ϳ
-   �����ΤǤ��롣���̤ˤϷ��� <i>forall </i><u>u</u><i>. cx =&gt;t</i>
-   �Τ褦�ʷ�����Ȥ롣�����Ǥ� <u>u</u> �Ϸ��ѿ�
-   <i>u</i><sub><i>1</i></sub><i>, ..., u</i><sub><i>n</i></sub> �ν���
-   �Ǥ��롣���Τ褦�ʷ��Ǥϡ�<i>u</i><sub><i>i</i></sub> ��ʸ̮
-   <i>cx</i> ����Ǽ�ͳ�����ν������줿���ѿ��Ϥɤ�⡢�� <i>t</i> �Τ�
-   ���Ǽ�ͳ�Ǥʤ���Фʤ�ʤ�������ˡ�ʸ̮ <i>cx</i> �Ͼ�� <a
-   href="decls.html#classes&contexts">4.1.3</a> ���Ϳ���������Ǥʤ����
-   �ʤ�ʤ������Ȥ��С��ʲ��������ʷ��Ǥ��롣
+  <p>Haskell の型システムはプログラム中のそれぞれの式に<em>型</em>を付与
+   するものである。一般には型は <i>forall </i><u>u</u><i>. cx =&gt;t</i>
+   のような形式をとる。ここでは <u>u</u> は型変数
+   <i>u</i><sub><i>1</i></sub><i>, ..., u</i><sub><i>n</i></sub> の集合
+   である。このような型では、<i>u</i><sub><i>i</i></sub> で文脈
+   <i>cx</i> の中で自由な全称修飾された型変数はどれも、型 <i>t</i> のな
+   かで自由でなければならない。さらに、文脈 <i>cx</i> は上の <a
+   href="decls.html#classes&contexts">4.1.3</a> 節で与えた形式でなければ
+   ならない。たとえば、以下は正当な型である。
    <tt><br />
    <br />
    &nbsp;&nbsp;Eq&nbsp;a&nbsp;=&gt;&nbsp;a&nbsp;-&gt;&nbsp;a<br />
@@ -904,8 +905,8 @@
    In the third type, the constraint <tt>Eq&nbsp;(f&nbsp;a)</tt>
    cannot be made simpler because <tt>f</tt> is universally quantified.</p>
   -->
-   �軰�η��Ǥϡ����� <tt>Eq&nbsp;(f&nbsp;a)</tt> �Ϥ���ʾ��ñ�ˤ��뤳
-   �ȤϤǤ��ʤ�������ϡ�<tt>f</tt> �����ν�������Ƥ��뤫��Ǥ��롣</p>
+   第三の型では、制約 <tt>Eq&nbsp;(f&nbsp;a)</tt> はこれ以上簡単にするこ
+   とはできない。それは、<tt>f</tt> が全称修飾されているからである。</p>
   <!--
   <p> The type of an expression <i>e</i> depends on a <i>type
    environment</i> that gives types for the free variables in <i>e</i>, and
@@ -914,11 +915,11 @@
    presence of an <tt>instance</tt> declaration or a <tt>deriving</tt>
    clause).</p>
   -->
-  <p>�� <i>e</i> �η��� <i>e</i> �Τʤ��μ�ͳ�ѿ��η���Ϳ����<em>���Ķ�
-   </em>����ӡ��ɤη����ɤΥ��饹�Υ��󥹥��󥹤Ǥ��뤫���������<em>��
-   �饹�Ķ�</em>�˰�¸���롣(���뷿�����륯�饹�Υ��󥹥��󥹤ˤʤ뤿��
-   �ˤ� <tt>instance</tt> ������뤤�� <tt>deriving</tt> ����̤��ƤΤ�
-   �Ǥ��롣) </p>
+  <p>式 <i>e</i> の型は <i>e</i> のなかの自由変数の型を与える<em>型環境
+   </em>および、どの型がどのクラスのインスタンスであるかを宣言する<em>ク
+   ラス環境</em>に依存する。(ある型があるクラスのインスタンスになるため
+   には <tt>instance</tt> 宣言あるいは <tt>deriving</tt> 節を通じてのみ
+   である。) </p>
   <!--
   <p> Types are related by a generalization preorder (specified below); the
    most general type, up to the equivalence induced by the generalization
@@ -932,15 +933,15 @@
    (see Sections <a href="exps.html#expression-type-sigs">3.16</a> and <a
    href="decls.html#type-signatures">4.4.1</a>).</p>
   -->
-  <p>����(�ʲ��˻��ꤹ��)���̲�����ˤ��ط��Ť����롣(Ϳ����줿�Ķ�
-   ��)����μ��˳�����Ƥ���Ǥ����Ū�ʷ��򤽤μ���<em>�緿
-   </em>(principal type)�ȸƤ֡�Haskell �γ�ĥ Hindley-Milner �������ƥ�
-   �Ϥ��٤Ƥμ��μ緿������Ǥ��롣����ˤ��������Ȥ���¿��������줿
-   ���饹�᥽�åɤ�ޤޤ��(<a href="decls.html#default-decls">4.3.4</a>
-   ��ǽҤ٤�褦�ˡ����饹�᥽�åɤǤ�ۣ��ʤ�Τ������ꤦ�뤬)�������
-   ������Ū�ʷ��դ�(<em>�������ͥ���</em>)�����̤�ɬ�ܤǤϤʤ�(<a
-   href="exps.html#expression-type-sigs">3.16</a> �ᤪ��� <a
-   href="decls.html#type-signatures">4.4.1</a> ��򸫤�)��</p> 
+  <p>型は(以下に指定する)一般化順序により関係づけられる。(与えられた環境
+   で)特定の式に割り当てうる最も一般的な型をその式の<em>主型
+   </em>(principal type)と呼ぶ。Haskell の拡張 Hindley-Milner 型システム
+   はすべての式の主型を推論できる。これには正しく使われる多重定義された
+   クラスメソッドも含まれる(<a href="decls.html#default-decls">4.3.4</a>
+   節で述べるように、クラスメソッドでは曖昧なものが起こりうるが)。それ故
+   に明示的な型付け(<em>型シグネチャ</em>)は普通は必須ではない(<a
+   href="exps.html#expression-type-sigs">3.16</a> 節および <a
+   href="decls.html#type-signatures">4.4.1</a> 節を見よ)。</p> 
   <!--
   <p> The type <i>forall </i><u>u</u><i>. cx</i><sub><i>1</i></sub><i>
    =&gt;t</i><sub><i>1</i></sub> is <i>more general than</i> the type
@@ -948,21 +949,21 @@
    =&gt;t</i><sub><i>2</i></sub> if and only if there is a substitution
    <i>S</i> whose domain is <u>u</u> such that:</p>
   -->
-  <p>�� <i>forall </i><u>u</u><i>. cx</i><sub><i>1</i></sub>
-   <i>=&gt;t</i><sub><i>1</i></sub> �ϼ��Τ褦�ʾ�礫�Ĥ��ξ��ˤ����ꡢ
-   �� <i>forall </i><u>w</u><i>. cx</i><sub><i>2</i></sub>
-   <i>=&gt;t</i><sub><i>2</i></sub> ���椷��<em>������Ū</em>�Ȥ�����
-   ���ʤ���������ִ� <i>S</i> ��¸�ߤ������Υɥᥤ��</p>
+  <p>型 <i>forall </i><u>u</u><i>. cx</i><sub><i>1</i></sub>
+   <i>=&gt;t</i><sub><i>1</i></sub> は次のような場合かつその場合にかぎり、
+   型 <i>forall </i><u>w</u><i>. cx</i><sub><i>2</i></sub>
+   <i>=&gt;t</i><sub><i>2</i></sub> に比して<em>より一般的</em>という。
+   すなわち、ある置換 <i>S</i> が存在し、そのドメインが</p>
   <ul>
    <!--<li><i>t</i><sub><i>2</i></sub> is identical to
     <i>S(t</i><sub><i>1</i></sub><i>)</i>.</li>-->
-   <li><i>t</i><sub><i>2</i></sub> ��
-     <i>S(t</i><sub><i>1</i></sub><i>)</i> ��Ʊ���ξ��</li>
+   <li><i>t</i><sub><i>2</i></sub> が
+     <i>S(t</i><sub><i>1</i></sub><i>)</i> と同等の場合</li>
    <!--<li>Whenever <i>cx</i><sub><i>2</i></sub> holds in the class
     environment, <i>S(cx</i><sub><i>1</i></sub><i>)</i> also
    holds.</li>-->
-   <li><i>cx</i><sub><i>2</i></sub> �����Υ��饹�Ķ�����¸���줫�ġ�
-     <i>S(cx</i><sub><i>1</i></sub><i>)</i> ����¸������硣</li>
+   <li><i>cx</i><sub><i>2</i></sub> がそのクラス環境で保存されかつ、
+     <i>S(cx</i><sub><i>1</i></sub><i>)</i> も保存される場合。</li>
   </ul>
   <!--
   <p> A value of type <i>forall </i><u>u</u><i>. cx =&gt;t</i>, may be
@@ -970,11 +971,11 @@
    <i>cx[</i><u>s</u><i>/</i><u>u</u><i>]</i> holds. For example, consider
    the function <tt>double</tt>:
   -->
-  <p>���ʸ̮�μ�������ϡ��� <i>forall </i><u>u</u><i>. cx =&gt;t</i>
-   ���ͤ��� <u>s</u> �ˤ����ƥ��󥹥��󥹲������Τϡ�ʸ̮
-   <i>cx[</i><u>s</u><i>/</i><u>u</u><i>]</i> ����¸�������Ǥ��ξ��
-   �ˤ�����Ȥ������ȤǤ��롣���Ȥ��С�<tt>double</tt> �Ȥ����ؿ���ͤ�
-   �Ƥߤ褦��
+  <p>上の文脈の主な要点は、型 <i>forall </i><u>u</u><i>. cx =&gt;t</i>
+   の値が型 <u>s</u> においてインスタンス化されるのは、文脈
+   <i>cx[</i><u>s</u><i>/</i><u>u</u><i>]</i> が保存される場合でその場合
+   にかぎるということである。たとえば、<tt>double</tt> という関数を考え
+   てみよう。
    <tt><br />
    <br />
    &nbsp;&nbsp;double&nbsp;x&nbsp;=&nbsp;x&nbsp;+&nbsp;x<br />
@@ -991,38 +992,38 @@
    declare such an instance, in which case <tt>double</tt> may indeed be
    applied to a <tt>Char</tt>.</p>
   -->
-   <tt>double</tt> �κǤ����Ū�ʷ���
-   <i>forall a. </i><tt>Num</tt><i> a =&gt;a -&gt;a</i> �Ǥ��롣
-   <tt>double</tt> �� <tt>Int</tt> �����ͤ�(<i>a</i> �� <tt>Int</tt>) ��
-   ���󥹥��󥹲����뤳�Ȥˤ��)Ŭ�Ѥ��뤳�Ȥ��Ǥ��롣����ϡ�
-   <tt>Int</tt> �ϥ��饹 <tt>Num</tt> �Υ��󥹥��󥹸Τ�
-   <tt>Num&nbsp;Int</tt> ����¸����뤫��Ǥ��롣
-   �������ʤ��顢<tt>double</tt> �Ϸ� <tt>Char</tt> ���ͤ��̾��Ŭ�Ѥ���
-   ���ȤϤǤ��ʤ�������� <tt>Char</tt> ���̾�Ǥϥ��饹 <tt>Num</tt> ��
-   ���󥹥��󥹤ǤϤʤ�����Ǥ��롣�桼���ϥ��󥹥���������ơ�
-   <tt>double</tt> �� <tt>Char</tt> ��Ŭ�ѤǤ���褦�ˤ���Ȥ������Ȥ��
-   ���롣</p> 
+   <tt>double</tt> の最も一般的な型は
+   <i>forall a. </i><tt>Num</tt><i> a =&gt;a -&gt;a</i> である。
+   <tt>double</tt> は <tt>Int</tt> 型の値に(<i>a</i> を <tt>Int</tt>) に
+   インスタンス化することにより)適用することができる。それは、
+   <tt>Int</tt> はクラス <tt>Num</tt> のインスタンス故に
+   <tt>Num&nbsp;Int</tt> が保存されるからである。
+   しかしながら、<tt>double</tt> は型 <tt>Char</tt> の値に通常は適用する
+   ことはできない。それは <tt>Char</tt> は通常ではクラス <tt>Num</tt> の
+   インスタンスではないからである。ユーザはインスタンス宣言して、
+   <tt>double</tt> が <tt>Char</tt> に適用できるようにするということもで
+   きる。</p> 
 
   <p><a name="user-defined-datatypes"></a></p>
   <p> <a name="sect4.2"></a></p>
 
   <!--<h3>4.2<tt>&nbsp;&nbsp;</tt>User-Defined Datatypes</h3>-->
-  <h3>4.2<tt>&nbsp;&nbsp;</tt>�桼������Υǡ�����</h3>
+  <h3>4.2<tt>&nbsp;&nbsp;</tt>ユーザ定義のデータ型</h3>
   <!--
   <p> In this section, we describe algebraic datatypes (<tt>data
    </tt>declarations), renamed datatypes (<tt>newtype</tt> declarations),
    and type synonyms (<tt>type</tt> declarations). These declarations may
    only appear at the top level of a module.</p>
   -->
-  <p>������Ǥϡ����Ū�ǡ�����(<tt>data</tt> ���)��̾�����إǡ�����
-   (<tt>newtype</tt> �������ӷ����Υ˥�(<tt>type</tt> ���)�ˤĤ��Ʋ�
-   �⤹�롣����������ϥ⥸�塼��Υȥåץ�٥�ˤ�������ʤ���</p>
+  <p>この節では、代数的データ型(<tt>data</tt> 宣言)、名前付替データ型
+   (<tt>newtype</tt> 宣言および型シノニム(<tt>type</tt> 宣言)について解
+   説する。これらの宣言はモジュールのトップレベルにしか現れない。</p>
 
   <p><a name="datatype-decls"></a></p>
   <p> <a name="sect4.2.1"></a></p>
 
   <!--<h4>4.2.1<tt>&nbsp;&nbsp;</tt>Algebraic Datatype Declarations</h4>-->
-  <h4>4.2.1<tt>&nbsp;&nbsp;</tt>���Ū�ǡ��������</h4>
+  <h4>4.2.1<tt>&nbsp;&nbsp;</tt>代数的データ型宣言</h4>
 
   <p></p>
   <table cellspacing="0" cellspacing="0">
@@ -1095,14 +1096,14 @@
    infix constructor application (thus <tt>a&nbsp;:&nbsp;Foo&nbsp;a</tt>
    parses as <tt>a&nbsp;:&nbsp;(Foo&nbsp;a)</tt>).</p>
   -->
-  <p><i>constr</i> ��ͥ���̤ϼ��Τ����Ʊ���Ǥ��롣���̤ι����Ҥ�Ŭ��
-   �ϡ����ֹ����Ҥ�Ŭ�Ѥ��ͥ���̤��⤤(�Τǡ�
-   <tt>a&nbsp;:&nbsp;Foo&nbsp;a</tt> ��
-   <tt>a&nbsp;:&nbsp;(Foo&nbsp;a)</tt>)�ȹ�ʸ���Ϥ���롣</p>
+  <p><i>constr</i> の優先順位は式のそれと同じである。普通の構成子の適用
+   は、中置構成子の適用より優先順位が高い(ので、
+   <tt>a&nbsp;:&nbsp;Foo&nbsp;a</tt> は
+   <tt>a&nbsp;:&nbsp;(Foo&nbsp;a)</tt>)と構文解析される。</p>
   <!--
   <p> An algebraic datatype declaration has the form:</p>
   -->
-  <p>���Ū�ǡ�������ϡ��ʲ��η������ġ�</p> 
+  <p>代数的データ宣言は、以下の形式をもつ。</p> 
   <p> <tt>data</tt><i> cx </i><tt>=&gt;</tt><i> T
    u</i><sub><i>1</i></sub><i> ... u</i><sub><i>k</i></sub><i>
    </i><tt>=</tt><i> K</i><sub><i>1</i></sub><i>
@@ -1118,15 +1119,15 @@
    K</i><sub><i>n</i></sub>. In this Report, the unqualified term
    "constructor" always means "data constructor".</p>
   -->
-  <p>�����ǡ�<i>cx</i> ��ʸ̮�Ǥ��롣��������ϡ��ʲ��Τ褦��Ϳ����줿
-   ��Ϣ��<em>�ǡ���������</em> <i>K</i><sub><i>1</i></sub><i>, ...,
-   K</i><sub><i>n</i></sub> �ǹ�������뿷������������ <i>T</i> ��Ƴ����
-   �롣���Υ�ݡ��ȤǤ��ä˽��������˻Ȥ��ֹ����ҡפϡ���ˡ֥ǡ�������
-   �ҡפ��̣���롣</p> 
+  <p>ここで、<i>cx</i> は文脈である。この宣言は、以下のように与えられた
+   一連の<em>データ構成子</em> <i>K</i><sub><i>1</i></sub><i>, ...,
+   K</i><sub><i>n</i></sub> で構成される新しい型構成子 <i>T</i> を導入す
+   る。このレポートでは特に修飾せずに使う「構成子」は、常に「データ構築
+   子」を意味する。</p> 
   <!--
   <p> The types of the data constructors are given by:</p>
   -->
-  <p>�ǡ��������Ҥ˷��ϰʲ��Τ褦��Ϳ�����롣</p>
+  <p>データ構成子に型は以下のように与えられる。</p>
 
   <p> <i>K</i><sub><i>i</i></sub><i> :: forall u</i><sub><i>1</i></sub><i>
    ... u</i><sub><i>k</i></sub><i>. cx</i><sub><i>i</i></sub><i>
@@ -1151,25 +1152,25 @@
    means that <i>T</i> may be used in type expressions with anywhere
    between <i>0</i> and <i>k</i> arguments.</p>
   -->
-  <p>������ <i>cx</i><sub><i>i</i></sub> �Ϥ����η��ѿ��Τߤ�����
+  <p>ここで <i>cx</i><sub><i>i</i></sub> はこれらの型変数のみが、型
    <i>t</i><sub><i>i1</i></sub><i>,
-   ...,t</i><sub><i>ik</i><sub><i>i</i></sub></sub> �Ǽ�ͳ�ˤʤ�褦��
-   <i>cx</i> �κ�����ʬ����Ǥ��롣���ѿ� <i>u</i><sub><i>1</i></sub> ��
-   �� <i>u</i><sub><i>k</i></sub> ���̤Τ�ΤǤ��ꡢ<i>cx</i> �����
-   <i>t</i><sub><i>ij</i></sub> �ǽи����롣����¾�η��ѿ�����<i>cx</i>
-   �椢�뤤�ϱ��դˤ����줿���ϡ���Ū���顼�Ȥʤ롣�����ʷ����
-   <i>T</i> �� <font
+   ...,t</i><sub><i>ik</i><sub><i>i</i></sub></sub> で自由になるような
+   <i>cx</i> の最大部分集合である。型変数 <i>u</i><sub><i>1</i></sub> か
+   ら <i>u</i><sub><i>k</i></sub> は別のものであり、<i>cx</i> および
+   <i>t</i><sub><i>ij</i></sub> で出現する。その他の型変数が、<i>cx</i>
+   中あるいは右辺にあらわれた場合は、静的エラーとなる。新たな型定数
+   <i>T</i> は <font
    face="symbol">k</font><sub>1</sub>-&gt;...-&gt;<font
-   face="symbol">k</font><sub>k</sub>-&gt;* �Ȥ��������μ�Ǥ��롣�����ǡ�
-   �����ѿ� <i>u</i><sub><i>i</i></sub> �μ� <font
-   face="symbol">k</font><sub><i>i</i></sub> �ϼ�ο����ˤ��<a
-   href="decls.html#kindinference">4.6</a> �����������褦�˷��ꤵ��롣
-   ���ʤ����<i>T</i> �� <i>0</i> �� <i>k</i> �Ȥδ֤ΰ����Τɤ��η�����
-   �ʤ��ǻȤäƤ�褤��</p> 
+   face="symbol">k</font><sub>k</sub>-&gt;* という形式の種である。ここで、
+   引数変数 <i>u</i><sub><i>i</i></sub> の種 <font
+   face="symbol">k</font><sub><i>i</i></sub> は種の推論により<a
+   href="decls.html#kindinference">4.6</a> 節で説明するように決定される。
+   すなわち、<i>T</i> は <i>0</i> と <i>k</i> との間の引数のどこの型式の
+   なかで使ってもよい。</p> 
   <!--
   <p> For example, the declaration 
   -->
-  <p> ���Ȥ��С����
+  <p> たとえば、宣言
    <tt><br />
    <br />
    &nbsp;&nbsp;data&nbsp;Eq&nbsp;a&nbsp;=&gt;&nbsp;Set&nbsp;a&nbsp;=&nbsp;NilSet&nbsp;|&nbsp;ConsSet&nbsp;a&nbsp;(Set&nbsp;a)<br />
@@ -1179,8 +1180,8 @@
    introduces a type constructor <tt>Set</tt> of kind *-&gt;*, and
    constructors <tt>NilSet</tt> and <tt>ConsSet</tt> with types</p>
   -->
-   �ϼ郎 *-&gt;* �Ǥ��뷿������ <tt>Set</tt> ��Ƴ�������ޤ����ʲ��Τ褦
-   �ʷ��ι����� <tt>NilSet</tt> ����� <tt>ConsSet</tt> ��Ƴ�����롣</p>
+   は種が *-&gt;* である型構成子 <tt>Set</tt> を導入し、また、以下のよう
+   な型の構成子 <tt>NilSet</tt> および <tt>ConsSet</tt> を導入する。</p>
   <p></p>
   <table>
    <tr>
@@ -1200,10 +1201,10 @@
    <tt>ConsSet</tt> also gives rise to an <tt>Eq&nbsp;a</tt> constraint.
    For example: 
   -->
-  <p>��ǡ�<tt>ConsSet</tt> ���Ф���¿��������� <tt>ConsSet</tt>
-   �����饹 <tt>Eq</tt> �Υ��󥹥��󥹤Ǥ��뷿���ͤΤߤ�Ŭ�ѤǤ��뤳�Ȥ�
-   �ݾڤ��롣<tt>ConsSet</tt> ���Ф���ȹ�ϡ�����
-   <tt>Eq&nbsp;a</tt> ���ڤ������Ȥ��С�
+  <p>例で、<tt>ConsSet</tt> に対する多重定義型は <tt>ConsSet</tt>
+   がクラス <tt>Eq</tt> のインスタンスである型の値のみに適用できることを
+   保証する。<tt>ConsSet</tt> に対する照合は、制約
+   <tt>Eq&nbsp;a</tt> も齎す。たとえば、
    <tt><br />
    <br />
    &nbsp;&nbsp;f&nbsp;(ConsSet&nbsp;a&nbsp;s)&nbsp;=&nbsp;a<br />
@@ -1214,33 +1215,33 @@
    <tt>Eq&nbsp;a&nbsp;=&gt;&nbsp;Set&nbsp;a&nbsp;-&gt;&nbsp;a</tt>. The
    context in the <tt>data</tt> declaration has no other effect whatsoever.</p>
   -->
-   �ǡ��ؿ� <tt></tt> ��
-   <tt>Eq&nbsp;a&nbsp;=&gt;&nbsp;Set&nbsp;a&nbsp;-&gt;&nbsp;a</tt> �ȿ�
-   �����줿�����ġ����� <tt>data</tt> �����ʸ̮�Ϥ���ʳ��ɤ��ˤ�ƶ�
-   �򤢤����ʤ���</p>
+   で、関数 <tt></tt> は
+   <tt>Eq&nbsp;a&nbsp;=&gt;&nbsp;Set&nbsp;a&nbsp;-&gt;&nbsp;a</tt> と推
+   論された型をもつ。この <tt>data</tt> 宣言の文脈はこれ以外どこにも影響
+   をあたえない。</p>
   <!--
   <p> The visibility of a datatype's constructors (i.e. the "abstractness"
    of the datatype) outside of the module in which the datatype is defined
    is controlled by the form of the datatype's name in the export list as
    described in Section <a href="modules.html#abstract-types">5.8</a>.</p>
   -->
-  <p>�ǡ������ι����ҤβĻ���(���ʤ�����ǡ������Ρ��������)�ϡ����Υǡ�
-   ������������줿�⥸�塼��γ����Ф��Ƥϡ�<a
-   href="modules.html#abstract-types">5.8</a> ��ǲ��⤹�롢�������ݡ���
-   �ꥹ����Υǡ�������̾���ˤ�����椵��롣</p> 
+  <p>データ型の構成子の可視性(すなわち、データ型の「抽象性」)は、そのデー
+   タ型が定義されたモジュールの外に対しては、<a
+   href="modules.html#abstract-types">5.8</a> 節で解説する、エクスポート
+   リスト中のデータ型の名前により制御される。</p> 
   <!--
   <p> The optional <tt>deriving</tt> part of a <tt>data</tt> declaration
    has to do with <i>derived instances</i>, and is described in Section <a
    href="decls.html#derived-decls">4.3.3</a>.</p>
   -->
-  <p><tt>data</tt> ����� <tt>deriving</tt> ����ɬ�ܤǤϤʤ����������
-   <em>Ƴ�Ф��줿���󥹥���</em>������Ǥ��ꡢ����ˤĤ��Ƥ� <a
-   href="decls.html#derived-decls">4.3.3</a> ��Ʋ��⤹�롣</p>
+  <p><tt>data</tt> 宣言の <tt>deriving</tt> 部は必須ではないが、これは
+   <em>導出されたインスタンス</em>の宣言であり、これについては <a
+   href="decls.html#derived-decls">4.3.3</a> 節て解説する。</p>
 
   <p><a name="field-labels"></a></p>
   <p></p>
   <!--<h3>Labelled Fields</h3>-->
-  <h3>��٥��եե������</h3>
+  <h3>ラベル付フィールド</h3>
   <!--
   <p>A data constructor of arity <i>k</i> creates an object with <i>k</i>
    components. These components are normally accessed positionally as
@@ -1249,12 +1250,12 @@
    of a data object. This allows a specific field to be referenced
    independently of its location within the constructor.</p>
   -->
-  <p><i>k</i> �����Υǡ��������Ҥϡ�<i>k</i> �Ĥι������Ǥ���ĥ��֥���
-   ���Ȥ��Ϥ롣�����ι������Ǥ��̾����ѥ�����Τʤ��ǹ����Ҥΰ���
-   �Ȥ��Ƥΰ��֤ˤ�ꥢ����������롣�絬�Ϥʥǡ������ˤĤ��ƤϤ��Υǡ�
-   �����֥������Ȥγƹ������Ǥ�<em>�ե�����ɥ�٥�</em>����Ϳ����Τ���
-   ���Ǥ��롣��������С�����Υե�����ɤ򤽤Υե�����ɤι�������ΰ�
-   �֤Ȥ�̵�ط��˻��Ȥ��뤳�Ȥ��Ǥ��롣</p>
+  <p><i>k</i> 引数のデータ構成子は、<i>k</i> 個の構成要素を持つオブジェ
+   クトを創る。これらの構成要素は通常、式やパターンのなかで構成子の引数
+   としての位置によりアクセスされる。大規模なデータ型についてはそのデー
+   タオブジェクトの各構成要素に<em>フィールドラベル</em>を付与するのが便
+   利である。こうすれば、特定のフィールドをそのフィールドの構成子中の位
+   置とは無関係に参照することができる。</p>
   <!--
   <p> A constructor definition in a <tt>data</tt> declaration may assign
    labels to the fields of the constructor, using the record syntax
@@ -1266,13 +1267,13 @@
    constructor occur in the same order as the labeled fields. For example,
    the declaration 
   -->
-  <p><tt>data</tt> ����ˤ����� <tt>{</tt> <tt>}</tt> ��ʸ���Ѥ���������
-   ����Ϥ��ι����Ҥι������Ǥ˥�٥�������Ƥ롣�ե�����ɥ�٥����
-   ���������ҤϤ�����Ѥ��ʤ������Ҥȼ�ͳ�˺��ߤ��ƻ��Ѥ��뤳�Ȥ��Ǥ��롣
-   �б�����ե�����ɥ�٥���Ĺ����Ҥϡ����̤ι����ҤȤ��Ƥ���Ѥ���
-   ���Ȥ��Ǥ��롣��٥��Ȥ��Ȥ����Τϡ�������������Ҥؤ������Ф�
-   ��ñ�ʤ����ˡ�Ǥ���Ȥ����롣������������Ҥؤΰ����ϥ�٥�ե���
-   ��ɤνи����Ʊ����Ǥ�����롣���Ȥ��С�
+  <p><tt>data</tt> 宣言における <tt>{</tt> <tt>}</tt> 構文を用いた構成子
+   定義はその構成子の構成要素にラベルを割り当てる。フィールドラベルを用
+   いた構成子はそれを用いない構成子と自由に混在して使用することができる。
+   対応するフィールドラベルをもつ構成子は、普通の構成子としても使用する
+   ことができる。ラベルを使うというのは、場所指定形構成子への操作に対す
+   る単なる簡便法であるといえる。場所指定形構成子への引数はラベルフィー
+   ルドの出現順と同じ順であらわれる。たとえば、
    <tt><br />
    <br />
    &nbsp;&nbsp;data&nbsp;C&nbsp;=&nbsp;F&nbsp;{&nbsp;f1,f2&nbsp;::&nbsp;Int,&nbsp;f3&nbsp;::&nbsp;Bool&nbsp;}<br />
@@ -1281,7 +1282,7 @@
   <!--
    defines a type and constructor identical to the one produced by
   -->
-   ��������뷿�ȹ����Ҥϰʲ�������ˤ���Τ�Ʊ��Ǥ��롣
+   が定義する型と構成子は以下の定義によるものと同一である。
    <tt><br />
    <br />
    &nbsp;&nbsp;data&nbsp;C&nbsp;=&nbsp;F&nbsp;Int&nbsp;Int&nbsp;Bool<br />
@@ -1296,25 +1297,25 @@
    top level namespace with ordinary variables and class methods and must
    not conflict with other top level names in scope.</p>
   -->
-   �ե�����ɥ�٥���Ѥ������ˤĤ��Ƥϡ�<a
-   href="exps.html#field-ops">3.15</a> ��ǲ��⤷����<tt>data</tt> ���
-   �Ǥϡ�ʣ���ι����Ҥ��Ф��ơ��ե�����ɤη��������Υ˥�ˤ�ꤹ�٤Ƥ�
-   �ʤ��ʤ顢Ʊ���ե�����ɥ�٥����Ѥ��뤳�Ȥ��Ǥ��롣��٥��ͭ����
-   �����2�İʾ�η��ˤ�궦ͭ���뤳�ȤϤǤ��ʤ����ե������̾���̾����
-   ������ӥ��饹�᥽�åɤȥȥåץ�٥��̾�����֤�ͭ���Ƥ��ꡢͭ����
-   �����¾�Υȥåץ�٥��̾���Ⱦ��ͤ��ƤϤʤ�ʤ���</p> 
+   フィールドラベルを用いた操作については、<a
+   href="exps.html#field-ops">3.15</a> 節で解説した。<tt>data</tt> 宣言
+   では、複数の構成子に対して、フィールドの型が型シノニムによりすべてお
+   なじなら、同じフィールドラベルを使用することができる。ラベルは有効範
+   囲内で2つ以上の型により共有することはできない。フィールド名は通常の変
+   数およびクラスメソッドとトップレベルの名前空間を共有しており、有効範
+   囲内の他のトップレベルの名前と衝突してはならない。</p> 
   <!--
   <p> The pattern <tt>F&nbsp;{}</tt> matches any value built with
    constructor <tt>F</tt>, <i>whether or not </i><tt>F</tt><i> was declared
    with record syntax</i>.</p>
   -->
-  <p>�ѥ����� <tt>F&nbsp;{}</tt> �� <tt>F</tt> <em>�쥳���ɹ�ʸ�������
-   �줿���ɤ����ˤ�����餺</em>�������� <tt>F</tt> �ǹ��ۤ��줿���٤Ƥ�
-   �ͤ˾ȹ礹�롣</p>
+  <p>パターン <tt>F&nbsp;{}</tt> は <tt>F</tt> <em>レコード構文で宣言さ
+   れたかどうかにかかわらず</em>、構成子 <tt>F</tt> で構築されたすべての
+   値に照合する。</p>
 
   <p><a name="strictness-flags"></a></p>
   <!-- <h3>Strictness Flags</h3> -->
-  <h3>�������ե饰</h3>
+  <h3>正格性フラグ</h3>
   <!--
   <p>Whenever a data constructor is applied, each argument to the
    constructor is evaluated if and only if the corresponding type in the
@@ -1323,22 +1324,22 @@
    varsym not a <i>reservedop</i>; it has special significance only in the
    context of the argument types of a data declaration.</p>
   -->
-  <p>�ǡ��������Ҥ�Ŭ�ѻ��˾�ˡ������Ҥγư�����ɾ�������Τ����Ū�ǡ�
-   �����������б����뷿�����ʥե饰����ľ��Ǥ��ꤽ�ξ��˸¤롣��
-   �Υե饰�� �� <tt>!</tt> �פ�ɽ������롣����Ȥ��Ƥ� �� <tt>!</tt>
-   �פ��̾���ѿ�����Ǥ��ä�<em>ͽ��Ѥ߱黻��</em>�ǤϤʤ����ǡ������
-   �ΰ�������ʸ̮��ǤΤ����̤ʰ�̣���ġ�</p> 
+  <p>データ構成子の適用時に常に、構成子の各引数が評価されるのは代数的デー
+   タ型宣言中の対応する型が正格フラグを持つ場合でありその場合に限る。こ
+   のフラグは 「 <tt>!</tt> 」で表現される。字句としては 「 <tt>!</tt>
+   」は通常の変数記号であって<em>予約済み演算子</em>ではない。データ宣言
+   の引数型の文脈内でのみ特別な意味をもつ。</p> 
   <p></p>
 
   <table border="2" cellpadding="3">
    <tr>
     <td>
      <!--<h3>Translation:</h3>-->
-     <h3>�Ѵ�:</h3>
+     <h3>変換:</h3>
      <!--
      A declaration of the form
      -->
-     �ʲ��η���
+     以下の形式
      <p> <tt>data</tt><i> cx </i><tt>=&gt;</tt><i> T
       u</i><sub><i>1</i></sub><i> ... u</i><sub><i>k</i></sub><i>
       </i><tt>=</tt><i> ... </i><tt>|</tt><i> K s</i><sub><i>1</i></sub><i>
@@ -1350,9 +1351,9 @@
       an expression by</p>
      -->
      <p>
-      �����ǡ��� <i>s</i><sub><i>i</i></sub> �� <tt>!</tt><i>
-      t</i><sub><i>i</i></sub> �ޤ��� <i>t</i><sub><i>i</i></sub>
-      �η����Ǥ��롣������� <i>K</i> �Τ��٤Ƥνи���<br>
+      ここで、各 <i>s</i><sub><i>i</i></sub> は <tt>!</tt><i>
+      t</i><sub><i>i</i></sub> または <i>t</i><sub><i>i</i></sub>
+      の形式である。式の中の <i>K</i> のすべての出現を<br>
      <p> <tt>(\&nbsp;</tt><i>x</i><sub><i>1</i></sub><i> ...
       x</i><sub><i>n</i></sub><i> </i><tt>-&gt;</tt><i> ( ((K
       op</i><sub><i>1</i></sub><i> x</i><sub><i>1</i></sub><i>)
@@ -1367,12 +1368,12 @@
       is of the form <tt>!</tt><i> t</i><sub><i>i</i></sub>. Pattern
       matching on <i>K</i> is not affected by strictness flags.</p>
      -->
-     <p>���֤������롣�����ǡ�<i>op</i><sub><i>i</i></sub> �ϡ��⤷��
-      <i>s</i><sub><i>i</i></sub> �� <i>t</i><sub><i>i</i></sub> �η���
-      �Ǥ���С��ٱ�Ŭ�Ѵؿ� <tt>$</tt> �Ǥ��ꡢ�⤷��<tt>!</tt><i>
-      t</i><sub><i>i</i></sub> �η����Ǥ���С�����Ŭ�Ѵؿ� <tt>$!</tt>
-      (<a href="basic.html#strict-eval">6.2</a> ��򸫤�)�Ǥ��롣
-      <i>K</i> �ؤΥѥ�����ȹ�ϡ����ʥե饰�ˤϱƶ����ʤ���</p>
+     <p>で置き換える。ここで、<i>op</i><sub><i>i</i></sub> は、もし、
+      <i>s</i><sub><i>i</i></sub> が <i>t</i><sub><i>i</i></sub> の形式
+      であれば、遅延適用関数 <tt>$</tt> であり、もし、<tt>!</tt><i>
+      t</i><sub><i>i</i></sub> の形式であれば、正格適用関数 <tt>$!</tt>
+      (<a href="basic.html#strict-eval">6.2</a> 節を見よ)である。
+      <i>K</i> へのパターン照合は、正格フラグには影響しない。</p>
     </td>
    </tr>
   </table>
@@ -1380,7 +1381,7 @@
   <p><a name="type-synonym-decls"></a></p>
   <p> <a name="sect4.2.2"></a></p>
   <!--<h4>4.2.2<tt>&nbsp;&nbsp;</tt>Type Synonym Declarations</h4>-->
-  <h4>4.2.2<tt>&nbsp;&nbsp;</tt>�����Υ˥����</h4>
+  <h4>4.2.2<tt>&nbsp;&nbsp;</tt>型シノニム宣言</h4>
 
   <p></p>
 
@@ -1401,8 +1402,8 @@
   <p>A type synonym declaration introduces a new type that is equivalent to
    an old type. It has the form</p>
   -->
-  <p>�����Υ˥�����Ͻ���η���Ʊ��ȿ���������Ƴ�����롣�����ϰʲ�����
-  �ꡣ</p>
+  <p>型シノニム宣言は従来の型と同一と新しい型を導入する。形式は以下の通
+  り。</p>
   <p> <tt>type</tt><i> T u</i><sub><i>1</i></sub><i> ...
    u</i><sub><i>k</i></sub><i> </i><tt>=</tt><i> t </i></p>
   <!--
@@ -1424,22 +1425,22 @@
    example, the following definition can be used to provide an alternative
    way of writing the list type constructor: 
   -->
-  <p>����ˤ�ꡢ�������������� <i>T</i> ��Ƴ������롣�� <i>(T
-   t</i><sub><i>1</i></sub><i> ... t</i><sub><i>k</i></sub><i>)</i> �Ϸ�
+  <p>これにより、新しい型構成子 <i>T</i> が導入される。型 <i>(T
+   t</i><sub><i>1</i></sub><i> ... t</i><sub><i>k</i></sub><i>)</i> は型
    <i>t[t</i><sub><i>1</i></sub><i>/u</i><sub><i>1</i></sub><i>, ...,
-   t</i><sub><i>k</i></sub><i>/u</i><sub><i>k</i></sub><i>]</i> ��Ʊ���Ǥ�
-   �롣���ѿ� <i>u</i><sub><i>1</i></sub> ���� <i>u</i><sub><i>k</i></sub>
-   �Ϥ��줾���̤Τ�ΤǤʤ���Фʤ餺������ͭ���ϰϤ� <i>t</i> �Ǥʤ���
-   �Фʤ�ʤ���<i>t</i> �ˤ����Ƥ���ʳ��η��ѿ��������줿�Ȥ��ˤϡ���
-   Ū���顼�Ȥʤ롣�������������� <i>T</i> �μ�� <font
+   t</i><sub><i>k</i></sub><i>/u</i><sub><i>k</i></sub><i>]</i> と同等であ
+   る。型変数 <i>u</i><sub><i>1</i></sub> から <i>u</i><sub><i>k</i></sub>
+   はそれぞれ別のものでなければならず、その有効範囲は <i>t</i> でなけれ
+   ばならない。<i>t</i> においてこれ以外の型変数があらわれたときには、静
+   的エラーとなる。新しい型構成子 <i>T</i> の種は <font
    face="symbol">k</font><sub>1</sub>-&gt;...-&gt;<font
    face="symbol">k</font><sub>k</sub>-&gt;<font face="symbol">k</font>
-   �Ȥ��������Ǥ��롣�����ǡ����� <i>u</i><sub><i>i</i></sub> �μ� <font
-   face="symbol">k</font><sub><i>i</i></sub> ����ӱ��դ� <i>t</i> �μ�
-   <font face="symbol">k</font> �� <a
-   href="decls.html#kindinference">4.6</a> ��ǲ��⤹���ο����ˤ���
-   �ꤵ��롣���Ȥ��С��ʲ�������ϥꥹ�Ȥη������Ҥ��̤�ɽ�����󶡤���
-   ������Ѥ��뤳�Ȥ��Ǥ��롣
+   という形式である。ここで、引数 <i>u</i><sub><i>i</i></sub> の種 <font
+   face="symbol">k</font><sub><i>i</i></sub> および右辺の <i>t</i> の種
+   <font face="symbol">k</font> は <a
+   href="decls.html#kindinference">4.6</a> 節で解説する種の推論により決
+   定される。たとえば、以下の定義はリストの型構成子の別の表記を提供する
+   ために用いることができる。
    <tt><br />
    <br />
    &nbsp;&nbsp;type&nbsp;List&nbsp;=&nbsp;[]<br />
@@ -1450,16 +1451,16 @@
    declarations cannot be partially applied; it is a static error to use
    <i>T</i> without the full number of arguments.</p>
   -->
-   �����Υ˥�����ˤ��Ƴ�����줿�������ҵ��� <i>T</i> ����ʬŬ�Ѥ��뤳
-   �ȤϤǤ��ʤ���<i>T</i> �򤹤٤Ƥΰ�����Ϳ���뤳�Ȥʤ����Ѥ������Ū��
-   �顼�Ȥʤ롣</p>
+   型シノニム宣言により導入された型構成子記号 <i>T</i> は部分適用するこ
+   とはできない。<i>T</i> をすべての引数を与えることなく使用すると静的エ
+   ラーとなる。</p>
   <!--
   <p> Although recursive and mutually recursive datatypes are allowed, this
    is not so for type synonyms, <i>unless an algebraic datatype
    intervenes</i>. For example, 
   -->
-  <p>�Ƶ�Ū�������ߺƵ��ǡ������ϵ�����ƤϤ��뤬�������Υ˥�Ǥϵ���
-   �줺��<em>���Ū�ǡ���������ˤ����ƤΤߵ�����롣</em>���Ȥ��С�
+  <p>再帰的および相互再帰データ型は許されてはいるが、型シノニムでは許さ
+   れず、<em>代数的データ型定義においてのみ許される。</em>たとえば、
    <tt><br />
    <br />
    &nbsp;&nbsp;type&nbsp;Rec&nbsp;a&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;[Circ&nbsp;a]<br />
@@ -1467,7 +1468,7 @@
    <br />
    </tt>
    <!-- is allowed, whereas -->
-   �ϵ�����뤬�������ǡ�
+   は許されるが、一方で、
    <tt><br />
    <br />
    &nbsp;&nbsp;type&nbsp;Rec&nbsp;a&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;[Circ&nbsp;a]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;invalid<br />
@@ -1475,11 +1476,11 @@
    <br />
    </tt>
    <!-- is not. Similarly, --> 
-   �ϵ�����ʤ���Ʊ�ͤ�
+   は許されない。同様に
   <!--
    <tt>type&nbsp;Rec&nbsp;a&nbsp;=&nbsp;[Rec&nbsp;a]</tt> is not allowed.</p>
   -->
-   <tt>type&nbsp;Rec&nbsp;a&nbsp;=&nbsp;[Rec&nbsp;a]</tt> �ϵ�����ʤ���</p>
+   <tt>type&nbsp;Rec&nbsp;a&nbsp;=&nbsp;[Rec&nbsp;a]</tt> は許されない。</p>
   <!--
   <p> Type synonyms are a convenient, but strictly syntactic, mechanism to
    make type signatures more readable. A synonym and its definition are
@@ -1487,13 +1488,13 @@
    <tt>instance</tt> declaration (Section <a
    href="decls.html#instance-decls">4.3.2</a>).</p>
   -->
-  <p>�����Υ˥�Ϸ������ͥ���β���������夵���뤿��ι�ʸ��ε����ˤ�
-   ���ʤ��������Υ˥�Ȥ�������ϴ������֤�������ǽ�Ǥ��롣</p>
+  <p>型シノニムは型シグネチャの可読性を向上させるための構文上の機構にす
+   ぎない。型シノニムとその定義は完全に置き換え可能である。</p>
 
   <p><a name="datatype-renaming"></a></p>
   <p> <a name="sect4.2.3"></a></p>
   <!--<h4>4.2.3<tt>&nbsp;&nbsp;</tt>Datatype Renamings</h4>-->
-  <h4>4.2.3<tt>&nbsp;&nbsp;</tt>�ǡ�����̾���դ��ؤ�</h4>
+  <h4>4.2.3<tt>&nbsp;&nbsp;</tt>データ型名の付け替え</h4>
 
   <p></p>
 
@@ -1524,7 +1525,7 @@
   <!--
   <p> A declaration of the form</p>
   -->
-  <p>�ʲ��η��������</p>
+  <p>以下の形式の宣言</p>
   <p> <tt>newtype</tt><i> cx </i><tt>=&gt;</tt><i> T
    u</i><sub><i>1</i></sub><i> ... u</i><sub><i>k</i></sub><i>
    </i><tt>=</tt><i> N t </i></p>
@@ -1543,19 +1544,19 @@
    be implemented without execution time overhead; <tt>newtype</tt> does
    not change the underlying representation of an object.</p>
   -->
-  <p>�ϴ�¸�η���ɽ�����뿷��������Ƴ�����롣�� <tt>(</tt><i>T
-   u</i><sub><i>1</i></sub> <i>... u</i><sub><i>k</i></sub><tt>)</tt> ��
-   �ǡ����� <i>t</i> ��̾�����դ��ؤ��롣�����Υ˥�Ȱ㤦�Τϡ����줬��
-   �η����Ϥ�Ф��Ȥ������ȤǤ��롣���ʤ�������η��ؤ��뤤�ϸ��η�����
-   ������Ū�˷��Ѵ���Ԥ�ʤ���Фʤ�ʤ�������˷����Υ˥�Ȱ�äơ�
-   <tt>newtype</tt> �ϺƵ�Ū�ʷ����������Τ˻Ȥ����Ȥ��Ǥ��롣������
-   <i>N</i> �ϼ��Τʤ��Ǥϡ������ͤ� <i>t</i> ���鷿<tt>(</tt><i>T
-   u</i><sub><i>1</i></sub><i>... u</i><sub><i>k</i></sub><tt>)</tt> ��
-   �Ѵ����롣�ѥ��������ǻȤ��� <i>N</i> �Ϥ����ͤ� <tt>(</tt><i>T
-   u</i><sub><i>1</i></sub><i> ... u</i><sub><i>k</i></sub><tt>)</tt> ��
-   �鷿 <i>t</i> �Ѵ����롣�����η��Ѵ��ϼ¹Ի��Υ����Хإåɤʤ��Ǽ�
-   �����뤳�Ȥ��Ǥ��롣<tt>newtype</tt> �ϥ��֥������Ȥ��ܼ�Ū��ɽ������
-   �����ʤ���</p>
+  <p>は既存の型を表現する新しい型を導入する。型 <tt>(</tt><i>T
+   u</i><sub><i>1</i></sub> <i>... u</i><sub><i>k</i></sub><tt>)</tt> は
+   データ型 <i>t</i> の名前を付け替える。型シノニムと違うのは、これが別
+   の型を創り出すということである。すなわち、元の型へあるいは元の型から
+   は明示的に型変換を行わなければならない。さらに型シノニムと違って、
+   <tt>newtype</tt> は再帰的な型を定義するのに使うことができる。構成子
+   <i>N</i> は式のなかでは、ある値を型 <i>t</i> から型<tt>(</tt><i>T
+   u</i><sub><i>1</i></sub><i>... u</i><sub><i>k</i></sub><tt>)</tt> へ
+   変換する。パターンの中で使われる <i>N</i> はある値を型 <tt>(</tt><i>T
+   u</i><sub><i>1</i></sub><i> ... u</i><sub><i>k</i></sub><tt>)</tt> か
+   ら型 <i>t</i> 変換する。これらの型変換は実行時のオーバヘッドなしで実
+   装することができる。<tt>newtype</tt> はオブジェクトの本質的な表現を変
+   更しない。</p>
   <!--
   <p> New instances (see Section <a
    href="decls.html#instance-decls">4.3.2</a>) can be defined for a type
@@ -1568,23 +1569,23 @@
    Unlike algebraic datatypes, the newtype constructor <i>N</i> is
    <i>unlifted</i>, so that <i>N _|_ </i>is the same as <i>_|_</i>.</p>
   -->
-  <p>���������󥹥���(<a href="decls.html#instance-decls">4.3.2</a> ��
-   �򸫤�)�� <tt>newtype</tt> �ˤ��������줿�����Ф���������뤳�Ȥ���
-   ���롣�������������Υ˥���Ф��Ƥ�����Ǥ��ʤ���<tt>newtype</tt> �ˤ�
-   ���Ϥ�Ф��줿�������Ū�ǡ������Ȥ��̤�ΤǤ��롣���Ū�ǡ�������ɽ
-   ����;ʬ�ʴ��ܻ��Ȥ���������ɽ���ؤΥ��������Ϥ�����Ψ�Ǥ��롣��
-   �ΰ㤤�ϥѥ�����ȹ���Ф���ۤ뵬§(<a
-   href="exps.html#pattern-matching">3.17</a> ��򸫤�)��ȿ�Ǥ�����Τ�
-   ���롣���Ū�ǡ������ȤϤ�������newtype ������ <i>N</i> �� <em>��ե�
-   ����ʤ�</em>�����ʤ����<i>N _|_</i> �� <i>_|_</i> �Ǥ��롣</p>
+  <p>新しいインスタンス(<a href="decls.html#instance-decls">4.3.2</a> 節
+   を見よ)は <tt>newtype</tt> により定義された型に対して定義することがで
+   きる。しかし、型シノニムに対しては定義できない。<tt>newtype</tt> によ
+   り創り出された型は代数的データ型とは別ものである。代数的データ型の表
+   現は余分な間接参照をもち、その表現へのアクセスはより非効率である。こ
+   の違いはパターン照合に対する異る規則(<a
+   href="exps.html#pattern-matching">3.17</a> 節を見よ)を反映したもので
+   ある。代数的データ型とはちがい、newtype 構成子 <i>N</i> は <em>リフト
+   されない</em>。すなわち、<i>N _|_</i> は <i>_|_</i> である。</p>
   <!--
   <p> The following examples clarify the differences between <tt>data</tt>
    (algebraic datatypes), <tt>type</tt> (type synonyms), and
    <tt>newtype</tt> (renaming types.) Given the declarations
   -->
-  <p>�ʲ�����ϡ�<tt>data</tt> (���Ū�ǡ�����)��<tt>type</tt> (�����Υ�
-   ��) ����ӡ�<tt>newtype</tt> (��̾���դ��ؤ�)�ΰ㤤�����Τˤ����Τ�
-   ���롣�ʲ��������Ϳ�����Ƥ����ΤȤ��褦��
+  <p>以下の例は、<tt>data</tt> (代数的データ型)、<tt>type</tt> (型シノニ
+   ム) および、<tt>newtype</tt> (型名の付け替え)の違いを明確にするもので
+   ある。以下の宣言が与えられているものとしよう。
    <tt><br />
    <br />
    &nbsp;&nbsp;data&nbsp;D1&nbsp;=&nbsp;D1&nbsp;Int<br />
@@ -1610,57 +1611,57 @@
    _|_</i><tt>)</tt> is equivalent to <i>_|_</i> while <tt>(</tt><i>
    </i><tt>D1</tt><i> _|_</i><tt>)</tt> is not equivalent to <i>_|_</i>.</p>
   -->
-   �� <tt>(</tt><i> </i><tt>d1</tt><i> _|_</i><tt>)</tt>��<tt>(</tt><i>
-   </i><tt>d2</tt><i> _|_</i><tt>)</tt> ����� <tt>(d2&nbsp;(D2</tt><i>
-   _|_</i><tt>)&nbsp;)</tt> �Ϥ��٤� <i>_|_</i> ��Ʊ���Ǥ��롣������
-   <tt>(</tt><i> </i><tt>n</tt><i> _|_</i><tt>)</tt>��<tt>(</tt><i>
+   式 <tt>(</tt><i> </i><tt>d1</tt><i> _|_</i><tt>)</tt>、<tt>(</tt><i>
+   </i><tt>d2</tt><i> _|_</i><tt>)</tt> および <tt>(d2&nbsp;(D2</tt><i>
+   _|_</i><tt>)&nbsp;)</tt> はすべて <i>_|_</i> と同等である。一方、
+   <tt>(</tt><i> </i><tt>n</tt><i> _|_</i><tt>)</tt>、<tt>(</tt><i>
    </i><tt>n</tt><i> </i><tt>(</tt><i> </i><tt>N&nbsp;
-   </tt><i>_|_</i><tt>)&nbsp;)</tt>��<tt>(</tt><i> </i><tt>d1</tt><i>
-   </i><tt>(</tt><i> </i> <tt>D1</tt><i> _|_</i><tt>)&nbsp;)</tt> �����
-   <tt>(</tt><i> </i><tt>s</tt><i> _|_</i><tt>)</tt> �Ϥ��٤�
-   <tt>42</tt> �Ǥ��롣�äˡ�<tt>(</tt><i> </i><tt>N</tt><i>
-   _|_</i><tt>)</tt> �� <i>_|_</i> �Ǥ�������ǡ�<tt>(</tt><i>
-   </i><tt>D1</tt><i> _|_</i><tt>)</tt> �� <i>_|_</i> ��Ʊ���ǤϤʤ���
+   </tt><i>_|_</i><tt>)&nbsp;)</tt>、<tt>(</tt><i> </i><tt>d1</tt><i>
+   </i><tt>(</tt><i> </i> <tt>D1</tt><i> _|_</i><tt>)&nbsp;)</tt> および
+   <tt>(</tt><i> </i><tt>s</tt><i> _|_</i><tt>)</tt> はすべて
+   <tt>42</tt> である。特に、<tt>(</tt><i> </i><tt>N</tt><i>
+   _|_</i><tt>)</tt> は <i>_|_</i> である一方で、<tt>(</tt><i>
+   </i><tt>D1</tt><i> _|_</i><tt>)</tt> は <i>_|_</i> と同等ではない。
    </p>
   <!--
   <p> The optional deriving part of a <tt>newtype</tt> declaration is
    treated in the same way as the deriving component of a <tt>data</tt>
    declaration; see Section <a href="decls.html#derived-decls">4.3.3</a>.</p>
   -->
-  <p><tt>newtype</tt> �����ɬ�ܤǤϤʤ�Ƴ�����ϡ�<tt>data</tt> ����ˤ�
-   ����Ƴ�й������Ǥ�Ʊ���˰�����<a
-   href="decls.html#derived-decls">4.3.3</a> ��򸫤衣</p>
+  <p><tt>newtype</tt> 宣言の必須ではない導出部は、<tt>data</tt> 宣言にお
+   ける導出構成要素と同じに扱う。<a
+   href="decls.html#derived-decls">4.3.3</a> 節を見よ。</p>
   <!--
   <p> A <tt>newtype</tt> declaration may use field-naming syntax, though of
    course there may only be one field. Thus: 
   -->
-  <p><tt>newtype</tt> ����Ǥϥե������̾�ι�ʸ��Ȥ����Ȥ��Ǥ��롣���
-  �����ե�����ɤ����Τ�ΤǤ��롣���ʤ����
+  <p><tt>newtype</tt> 宣言ではフィールド名の構文を使うことができる。もち
+  ろん一フィールドだけのものである。すなわち、
    <tt><br />
    <br />
    &nbsp;&nbsp;newtype&nbsp;Age&nbsp;=&nbsp;Age&nbsp;{&nbsp;unAge&nbsp;::&nbsp;Int&nbsp;}<br />
    <br />
    </tt>
    <!-- brings into scope both a constructor and a de-constructor: -->
-   �ϡ������Ҥ�æ�����Ҥ�ͭ���ϰϤ�
+   は、構成子と脱構成子の有効範囲に
    <tt><br />
    <br />
    &nbsp;&nbsp;Age&nbsp;&nbsp;&nbsp;::&nbsp;Int&nbsp;-&gt;&nbsp;Age<br />
    &nbsp;&nbsp;unAge&nbsp;::&nbsp;Age&nbsp;-&gt;&nbsp;Int<br />
    <br />
    </tt>
-   ��Ƴ�����롣</p>
+   を導入する。</p>
 
   <p><a name="overloading"></a></p>
   <p> <a name="sect4.3"></a></p>
   <!--<h3>4.3<tt>&nbsp;&nbsp;</tt>Type Classes and Overloading</h3>-->
-  <h3>4.3<tt>&nbsp;&nbsp;</tt>�����饹��¿�����</h3>
+  <h3>4.3<tt>&nbsp;&nbsp;</tt>型クラスと多重定義</h3>
 
   <p><a name="classes"></a></p>
   <p><a name="class-decls"></a></p>
   <p> <a name="sect4.3.1"></a></p>
   <!--<h4>4.3.1<tt>&nbsp;&nbsp;</tt>Class Declarations</h4>-->
-  <h4>4.3.1<tt>&nbsp;&nbsp;</tt>���饹���</h4>
+  <h4>4.3.1<tt>&nbsp;&nbsp;</tt>クラス宣言</h4>
   <p></p>
   <table cellspacing="0" cellspacing="0">
    <tr>
@@ -1708,8 +1709,8 @@
   <p> A <i>class declaration</i> introduces a new class and the operations
    (<i>class methods</i>) on it. A class declaration has the general form:</p>
   -->
-  <p><em>���饹���</em>�Ͽ��������饹�Ȥ��ξ�α黻(<em>���饹�᥽�å�
-  </em>)��Ƴ�����롣���饹����ϼ��Τ褦�ʰ���Ū�ʷ������ġ�</p> 
+  <p><em>クラス宣言</em>は新しいクラスとその上の演算(<em>クラスメソッド
+  </em>)を導入する。クラス宣言は次のような一般的な形式をもつ。</p> 
   <p></p>
   <table>
    <tr>
@@ -1724,21 +1725,21 @@
    below; the only type variable that may be referred to in <i>cx </i>is
    <i>u</i>.</p>
   -->
-  <p>����Ͽ��������饹̾ <i>C</i> ��Ƴ�����롣���ѿ� <i>u</i> ��ͭ����
-   �Ϥϡ����饹���ΤΥ��饹�᥽�åɤΥ����ͥ���ΤߤǤ��롣ʸ̮
-   <i>cx</i> �� <i>C</i> �Υ����ѡ����饹��ʲ��˲��⤹��褦�˻��ꤹ�롣
-   <i>cx</i> ��ǻ��ȤǤ��뷿�ѿ��� <i>u</i> �ΤߤǤ��롣</p>
+  <p>これは新しいクラス名 <i>C</i> を導入する。型変数 <i>u</i> の有効範
+   囲は、クラス本体のクラスメソッドのシグネチャのみである。文脈
+   <i>cx</i> は <i>C</i> のスーパークラスを以下に解説するように指定する。
+   <i>cx</i> 中で参照できる型変数は <i>u</i> のみである。</p>
   <!--
   <p> The superclass relation must not be cyclic; i.e. it must form a
    directed acyclic graph.</p>
   -->
-  <p>�����ѡ����饹�δ�Ϣ�Ͻ۴Ĥ��ƤϤʤ�ʤ������ʤ������۴�ͭ������
-  �դ�������ʤ���Фʤ�ʤ���</p>
+  <p>スーパークラスの関連は循環してはならない。すなわち、非循環有向グラ
+  フを形成しなければならない。</p>
   <!--
   <p> The <i>cdecls</i> part of a <tt>class</tt> declaration contains three
    kinds of declarations:</p>
   -->
-  <p><tt>class</tt> ����� <i>cdecls</i> ��ʬ�ϡ�3 ����������ޤࡣ</p>
+  <p><tt>class</tt> 宣言の <i>cdecls</i> 部分は、3 種類の宣言を含む。</p>
   <!--
   <ul>
    <li> The class declaration introduces new <i>class methods
@@ -1806,70 +1807,70 @@
   -->
   <ul>
    <li>
-    <p>���饹����Ͽ�����<em>���饹�᥽�å�</em><i>v</i><sub>i</sub> ��
-     Ƴ�����롣���饹�᥽�åɤ�ͭ���ϰϤ� <tt>class</tt> ����γ�¦�س�ĥ
-     ����롣���饹����Υ��饹�᥽�åɤ� <i>cdecls</i> ��ǡ�����Ū�˷���
-     ���ͥ���Ϳ����줿</p>
+    <p>クラス宣言は新しい<em>クラスメソッド</em><i>v</i><sub>i</sub> を
+     導入する。クラスメソッドの有効範囲は <tt>class</tt> 宣言の外側へ拡張
+     される。クラス宣言のクラスメソッドは <i>cdecls</i> 中で、明示的に型シ
+     グネチャ与えられた</p>
     <p><i>v</i><sub><i>i</i></sub><i> </i><tt>::</tt><i>
      cx</i><sub><i>i</i></sub><i> </i><tt>=&gt;</tt><i>
      t</i><sub><i>i</i></sub></p>
-    <p>�ˤ��礦���б����롣���饹�᥽�åɤ��ѿ�«������ӥե������̾��
-     �ȥåץ�٥��̾�����֤�ͭ���롣ͭ���ϰ����¾�Υȥåץ�٥��«
-     ���Ⱦ��ͤ��ƤϤʤ�ʤ������Τ��Ȥϡ����饹�᥽�åɤϥȥåץ�٥��
-     ������ե������̾�����뤤��¾�Υ��饹�᥽�åɤ�Ʊ��̾�����Ĥ���
-     ���Ǥ��ʤ��Ȥ������ȤǤ��롣</p> 
-    <p>�ȥåץ�٥�Υ��饹�᥽�å� <i>v</i><sub><i>i</i></sub> �η���</p>
+    <p>にちょうど対応する。クラスメソッドは変数束縛およびフィールド名と
+     トップレベルの名前空間を共有する。有効範囲内で他のトップレベルの束
+     縛と衝突してはならない。このことは、クラスメソッドはトップレベルの
+     定義、フィールド名、あるいは他のクラスメソッドと同じ名前をもつこと
+     ができないということである。</p> 
+    <p>トップレベルのクラスメソッド <i>v</i><sub><i>i</i></sub> の型は</p>
     <p>v<sub>i</sub> :: forall u,<u>w</u>. (C u,
      cx<sub>i</sub>)=&gt;t<sub>i</sub></p> 
-    <p>�Ǥ��롣<i>t</i><sub><i>i</i></sub> �� <i>u</i> �˸��ڤ��Ƥ��ʤ�
-     ��Фʤ�ʤ�������ϡ�<i>u</i> �ʳ��� <i>w</i> �ˤĤ��Ƹ��ڤ��Ƥ�褤��
-     ���ξ��ˤϡ�<i>v</i><sub><i>i</i></sub> �η��� <i>u</i> �����
-     <i>w</i> ��ξ���ˤ�����¿��Ū�Ǥ��롣<i>cx</i><sub><i>i</i></sub> ��
-     <u>w</u> �Τߴޤळ�Ȥ��Ǥ���<i>u</i> �ϴޤळ�Ȥ��Ǥ��ʤ������Ȥ��С� 
+    <p>である。<i>t</i><sub><i>i</i></sub> は <i>u</i> に言及していなけ
+     ればならない。これは、<i>u</i> 以外の <i>w</i> について言及してもよい。
+     この場合には、<i>v</i><sub><i>i</i></sub> の型は <i>u</i> および
+     <i>w</i> の両方において多相的である。<i>cx</i><sub><i>i</i></sub> は
+     <u>w</u> のみ含むことができ、<i>u</i> は含むことができない。たとえば、 
      <tt><br><br>
 &nbsp;&nbsp;class&nbsp;Foo&nbsp;a&nbsp;where<br>
 &nbsp;&nbsp;&nbsp;&nbsp;op&nbsp;::&nbsp;Num&nbsp;b&nbsp;=&gt;&nbsp;a&nbsp;-&gt;&nbsp;b&nbsp;-&gt;&nbsp;a<br>
      <br>
      </tt>
     </p>
-    <p>�����ǡ�<tt>op</tt> �η��� <i>forall a, b. (</i><tt>Foo</tt><i>
-     a, </i><tt>Num</tt><i> b)  =&gt;a -&gt;b -&gt;a</i> �Ǥ��롣</p></li>
+    <p>ここで、<tt>op</tt> の型は <i>forall a, b. (</i><tt>Foo</tt><i>
+     a, </i><tt>Num</tt><i> b)  =&gt;a -&gt;b -&gt;a</i> である。</p></li>
    <li>
-    <p><i>cdecls</i> �ϤɤΥ��饹�᥽�åɤˤĤ��Ƥ�<em>��������</em>��
-     �ޤळ�Ȥ��Ǥ���(����ʳ����ͤˤĤ��Ƥ��Բ�)���������ʤ��顢���饹
-     �᥽�åɤϥȥåץ�٥���ͤȤ�����������ΤǤ��뤫�顢���饹�᥽��
-     �ɤ��Ф�����������ϡ����Υ��饹����γ��Υȥåץ�٥�˽и�����
-     ���Ȥ��ǽ�Ǥ��롣</p></li>
+    <p><i>cdecls</i> はどのクラスメソッドについても<em>結合性宣言</em>を
+     含むことができる(それ以外の値については不可)。しかしながら、クラス
+     メソッドはトップレベルの値として宣言されるのであるから、クラスメソッ
+     ドに対する結合性宣言は、そのクラス宣言の外のトップレベルに出現する
+     ことも可能である。</p></li>
    <li>
-    <p>�Ǹ�ˡ�<i>cdecls</i> �Ϥɤ� <i>v</i><sub><i>i</i></sub> ���Ф���
-     ��<em>�ǥե���ȥ��饹�᥽�å�</em>��ޤळ�Ȥ��Ǥ��롣
-     <i>v</i><sub><i>i</i></sub> ���Ф���ǥե���ȥ��饹�᥽�åɤϡ���
-     ����������б�����«��������� <tt>instance</tt> ��� (<a
-     href="decls.html#instance-decls">4.3.2</a> ��򸫤�)��Ϳ�����ʤ�
-     ���˻��Ѥ���롣���դ��ͤ��뤤�ϴؿ�����ΤߤǤ���Ȥ������Ȥ��
-     ���С��ǥե���ȥ᥽�å�������̾��������Ǥ��롣���Ȥ��С�
+    <p>最後に、<i>cdecls</i> はどの <i>v</i><sub><i>i</i></sub> に対して
+     も<em>デフォルトクラスメソッド</em>を含むことができる。
+     <i>v</i><sub><i>i</i></sub> に対するデフォルトクラスメソッドは、も
+     し、それに対応する束縛が特定の <tt>instance</tt> 宣言 (<a
+     href="decls.html#instance-decls">4.3.2</a> 節を見よ)で与えられない
+     場合に使用される。左辺は値あるいは関数定義のみであるということを除
+     けば、デフォルトメソッド宣言は通常の値定義である。たとえば、
      <tt><br><br>
 &nbsp;&nbsp;class&nbsp;Foo&nbsp;a&nbsp;where<br>
 &nbsp;&nbsp;&nbsp;&nbsp;op1,&nbsp;op2&nbsp;::&nbsp;a&nbsp;-&gt;&nbsp;a<br>
 &nbsp;&nbsp;&nbsp;&nbsp;(op1,&nbsp;op2)&nbsp;=&nbsp;...<br>
      <br>
      </tt> 
-     �ϵ�����ʤ�������ϡ��ǥե��������κ��դ��ѥ����������Ǥ��롣
+     は許されない。それは、デフォルト宣言の左辺がパターンだからである。
     </p></li> 
   </ul>
   <!--
   <p>Other than these cases, no other declarations are permitted in
    <i>cdecls</i>.</p>
   -->
-  <p>�����ʳ�������ϡ�<i>cdecls</i> �Ǥϵ�����ʤ���</p>
+  <p>これら以外の宣言は、<i>cdecls</i> では許されない。</p>
   <!--
   <p> A <tt>class </tt>declaration with no <tt>where</tt> part may be
    useful for combining a collection of classes into a larger one that
    inherits all of the class methods in the original ones. For example:
   -->
-  <p><tt>where</tt> ��ʬ��⤿�ʤ� <tt>class</tt> ����ϥ��쥯����󥯥�
-   ���򸵤Υ��饹�Υ��饹�᥽�åɤ򤹤٤ƴޤव����礭�ʥ��쥯�����
-   �饹�˷�礹��Τ���Ω�ġ����Ȥ��С�
+  <p><tt>where</tt> 部分をもたない <tt>class</tt> 宣言はコレクションクラ
+   スを元のクラスのクラスメソッドをすべて含むさらに大きなコレクションク
+   ラスに結合するのに役立つ。たとえば、
    <tt><br />
    <br />
    &nbsp;&nbsp;class&nbsp;&nbsp;(Read&nbsp;a,&nbsp;Show&nbsp;a)&nbsp;=&gt;&nbsp;Textual&nbsp;a<br />
@@ -1881,16 +1882,16 @@
    subclass has no immediate class methods. The <tt>instance</tt>
    declaration must be given explicitly with no <tt>where</tt> part.</p>
   -->
-   ���Τ褦�ʾ�硢�⤷���뷿�����٤ƤΥ����ѡ����饹�Υ��󥹥��󥹤Ǥ�
-   ���硢���Ȥ������֥��饹��ľ�ܥ��饹�᥽�åɤ�⤿�ʤ��ˤ��衣��ư
-   Ū�ˤ��Υ��֥��饹�Υ��󥹥��󥹤Ǥ���Ȥ����櫓�ǤϤʤ���
-   <tt>instance</tt> ����� <tt>where</tt> ��ʬ�ʤ��ǡ�����Ū��Ϳ���ͤ�
-   �ʤ�ʤ���</p>
+   このような場合、もしある型がすべてのスーパークラスのインスタンスであ
+   る場合、たとえ、サブクラスが直接クラスメソッドをもたないにせよ。自動
+   的にそのサブクラスのインスタンスであるというわけではない。
+   <tt>instance</tt> 宣言は <tt>where</tt> 部分なしで、明示的に与えねば
+   ならない。</p>
 
   <p><a name="instance-decls"></a></p>
   <p><a name="sect4.3.2"></a></p>
   <!--<h4>4.3.2<tt>&nbsp;&nbsp;</tt>Instance Declarations</h4>-->
-  <h4>4.3.2<tt>&nbsp;&nbsp;</tt>���󥹥������</h4>
+  <h4>4.3.2<tt>&nbsp;&nbsp;</tt>インスタンス宣言</h4>
 
   <p></p>
 
@@ -1954,15 +1955,15 @@
   <!--
   <p>An <i>instance declaration</i> introduces an instance of a class. Let</p>
   -->
-  <p><em>���󥹥������</em>�ϥ��饹�Υ��󥹥��󥹤�Ƴ�����롣</p>
+  <p><em>インスタンス宣言</em>はクラスのインスタンスを導入する。</p>
   <p> <tt>class</tt><i> cx </i><tt>=&gt;</tt><i> C u </i><tt>where</tt><i>
    </i><tt>{</tt><i> cbody </i><tt>}</tt></p>
   <!--
   <p> be a <tt>class</tt> declaration. The general form of the
    corresponding instance declaration is:</p>
   -->
-  �� <tt>class</tt> ����Ȥ��褦��������б����륤�󥹥�������ΰ��̷�
-  �ϼ��Τ褦�ˤʤ롣
+  を <tt>class</tt> 宣言としよう。これに対応するインスタンス宣言の一般形
+  は次のようになる。
   <p> <tt>instance</tt><i> cx' </i><tt>=&gt;</tt><i> C (T
    u</i><sub><i>1</i></sub><i> ... u</i><sub><i>k</i></sub><i>)
    </i><tt>where</tt><i> </i><tt>{</tt><i> d </i><tt>}</tt></p>
@@ -1974,15 +1975,15 @@
    furthermore, <i>T</i> must not be a type synonym, and the
    <i>u</i><sub><i>i</i></sub> must all be distinct.</p>
   -->
-  <p>������ <i>k&gt;=0</i> ����� <i>T</i> �Ϸ����Υ˥�ǤϤʤ�������
-   ���󥹲����줿�����ҡ�<i>(T u</i><sub><i>1</i></sub><i>
-   ... u</i><sub><i>k</i></sub><i>)</i> �Ϸ������Ҥ�ñ��ʷ��ѿ�
-   <i>u</i><sub><i>1</i></sub><i>, ... u</i><sub><i>k</i></sub> ��Ŭ�Ѥ�
-   ����ΤǤ��롣�����η��ѿ����̡��Τ�ΤǤʤ���Фʤ�ʤ���</p>
+  <p>ここで <i>k&gt;=0</i> および <i>T</i> は型シノニムではない。インス
+   タンス化された構成子、<i>(T u</i><sub><i>1</i></sub><i>
+   ... u</i><sub><i>k</i></sub><i>)</i> は型構成子を単純な型変数
+   <i>u</i><sub><i>1</i></sub><i>, ... u</i><sub><i>k</i></sub> に適用し
+   たものである。これらの型変数は別々のものでなければならない。</p>
   <!--
   <p> This prohibits instance declarations such as: 
   -->
-  <p>���Τ��Ȥϰʲ��Τ褦�ʥ��󥹥��������ؤ����ΤǤ��롣</p>
+  <p>このことは以下のようなインスタンス宣言を禁じるものである。</p>
    <tt><br />
    <br />
    &nbsp;&nbsp;instance&nbsp;C&nbsp;(a,a)&nbsp;where&nbsp;...<br />
@@ -2000,13 +2001,13 @@
    though <tt>range</tt> is in scope only with the qualified name
    <tt>Ix.range</tt>.
   -->
-   ��� <i>d</i> �ϥ��饹 <i>C</i> �Υ��饹�᥽�åɤ��Ф���«���Τߤ��
-   �ळ�Ȥ��Ǥ��롣����������ˤʤ����饹�᥽�åɤ��Ф���«����Ϳ���뤳
-   �Ȥ��������ʤ���������������������Ǥ���̾���� immaterial ????? �Ǥ�
-   �롣�Ȥ��ˡ��､��̾�ξ��Ϥ����Ǥ��롣(���ε�§�ϥ������ݡ��ȥꥹ��
-   (<a href="modules.html#export">5.2</a> ��)��ν�°̾���Ф���
-   ��Τ�Ʊ���Ǥ���)���㤨�С����ξ�硢<tt>range</tt> �� �､��̾
-   <tt>Ix.range</tt> �ΤȤ��Τ�ͭ���ϰϤǤ���ˤ⤫����餺����������
+   宣言 <i>d</i> はクラス <i>C</i> のクラスメソッドに対する束縛のみを含
+   むことができる。スコープ内にないクラスメソッドに対する束縛を与えるこ
+   とは正しくない。しかし、スコープ内でその名前は immaterial ????? であ
+   る。とくに、被修飾名の場合はそうである。(この規則はエクスポートリスト
+   (<a href="modules.html#export">5.2</a> 節)内の従属名に対する
+   ものと同等である)。例えば、次の場合、<tt>range</tt> は 被修飾名
+   <tt>Ix.range</tt> のときのみ有効範囲であるにもかかわらず、正しい。
    <tt><br />
    <br />
    &nbsp;&nbsp;module&nbsp;A&nbsp;where<br />
@@ -2023,11 +2024,11 @@
    href="decls.html#class-decls">4.3.1</a>), the method declarations must
    take the form of a variable or function definition.</p>
   -->
-   ����Ϸ������ͥ��㤢�뤤�Ϸ���������ޤळ�ȤϤǤ��ʤ�������ϡ���
-   �����ͥ������������ϴ��� <tt>class</tt> �����Ϳ�����Ƥ��뤫��
-   �Ǥ��롣�ǥե���ȥ��饹�᥽�å� (<a
-   href="decls.html#class-decls">4.3.1</a> ��)�ξ���Ʊ�ͤ˥᥽�å����
-   ���ѿ��ޤ��ϴؿ�����η�����Ȥ�ʤ���Фʤ�ʤ���</p>
+   宣言は型シグネチャあるいは結合性宣言を含むことはできない。それは、型
+   シグネチャや結合性宣言は既に <tt>class</tt> 宣言で与えられているから
+   である。デフォルトクラスメソッド (<a
+   href="decls.html#class-decls">4.3.1</a> 節)の場合と同様にメソッド宣言
+   は変数または関数定義の形式をとらなければならない。</p>
   <!--
   <p> If no binding is given for some class method then the corresponding
    default class method in the <tt>class</tt> declaration is used (if
@@ -2035,19 +2036,19 @@
    instance is bound to <tt>undefined</tt> and no compile-time error
    results.</p>
   -->
-  <p>�⤷�������Ĥ��Υ��饹�᥽�åɤ��Ф���«����Ϳ�����ʤ���С�
-   <tt>class</tt> �������б�����ǥե���ȥ��饹�᥽�åɤ����Ѥ���롣
-   �⤷�����ΤȤ������Τ褦�ʥǥե���ȥ��饹�᥽�åɤ�¸�ߤ��ʤ�����
-   �Ϥ��Υ��󥹥��󥹤Τ��Υ��饹�᥽�åɤ� <tt>undefined</tt> ��«����
-   �졢����ѥ�������顼�ȤϤʤ�ʤ���</p>
+  <p>もし、いくつかのクラスメソッドに対して束縛が与えられなければ、
+   <tt>class</tt> 宣言中の対応するデフォルトクラスメソッドが使用される。
+   もし、このとき、そのようなデフォルトクラスメソッドが存在しない場合に
+   はこのインスタンスのこのクラスメソッドは <tt>undefined</tt> に束縛さ
+   れ、コンパイル時エラーとはならない。</p>
   <!--
   <p> An <tt>instance</tt> declaration that makes the type <i>T</i> to be
    an instance of class <i>C</i> is called a <i>C-T instance declaration
    </i> and is subject to these static restrictions:</p>
   -->
-  <p>�� <i>T</i> �򥯥饹 <i>C</i> �Υ��󥹥��󥹤Ȥ���
-   <tt>instance</tt> ����� <em>C-T ���󥹥������</em>�ȸƤФ졢�ʲ�
-   �����¤�����롣</p>
+  <p>型 <i>T</i> をクラス <i>C</i> のインスタンスとする
+   <tt>instance</tt> 宣言は <em>C-T インスタンス宣言</em>と呼ばれ、以下
+   の制限を受ける。</p>
   <!--
   <ul>
    <li>A type may not be declared as an instance of a particular class more
@@ -2086,37 +2087,37 @@
   -->
   <ul>
    <li><p>
-    �ҤȤĤη��Ϥ��Υץ��������Ǥ�����Υ��饹�Υ��󥹥��󥹤Ȥ��� 2
-    ��ʾ�������뤳�ȤϤǤ��ʤ���</p></li> 
+    ひとつの型はそのプログラム中では特定のクラスのインスタンスとして 2
+    回以上宣言することはできない。</p></li> 
    <li><p>
-    ���Υ��饹�ȷ��Ϥ��ʤ��������ʤ���Фʤ�ʤ������μ�ϡ�<a
-    href="decls.html#kindinference">4.6</a> ��ǲ��⤹���ο������Ѥ���
-    ���ꤹ�뤳�Ȥ��Ǥ��롣</p></li>
+    そのクラスと型はおなじ種を持たなければならない。この種は、<a
+    href="decls.html#kindinference">4.6</a> 節で解説する種の推論を用いて
+    決定することができる。</p></li>
    <li><p>
-    ���󥹥��󥹷� <i>(T u</i><sub><i>1</i></sub><i>
-    ... u</i><sub><i>k</i></sub><i>)</i> ��η��ѿ��Ϥ��Υ��󥹥��󥹤�
-    ʸ̮ <i>cx'</i> �������������ΤȤ��褦�� ���β���Τ�ȤǤϡ�����2
-    �Ĥξ���������ʤ���Фʤ�ʤ���
+    インスタンス型 <i>(T u</i><sub><i>1</i></sub><i>
+    ... u</i><sub><i>k</i></sub><i>)</i> 中の型変数はそのインスタンスの
+    文脈 <i>cx'</i> の制約を満すものとしよう。 この仮定のもとでは、次の2
+    つの条件も満されなければならない。
     <ol>
-     <li><i>C</i> �Υ����ѡ����饹��ʸ̮ <i>cx[(T u1 ... uk)/u]</i> ��ɽ
-      �����������������ʤ���Фʤ�ʤ�������������С�<i>T</i> ��
-      <i>C</i> �Υ����ѡ����饹���줾��Υ��󥹥��󥹤Ǥ��ꡢ���٤ƤΥ���
-      �ѡ����饹�Υ��󥹥��󥹤�ʸ̮�� <i>cx'</i> �ˤ��⤿�餵��ʤ���
-      �Фʤ�ʤ���</li>
-     <li>���������դ������ <i>d</i> �ˤ����륯�饹�᥽�å�������Ф���
-      �׵ᤵ��륤�󥹥��󥹷���η��ѿ��������������ʤ���Фʤ�ʤ���
+     <li><i>C</i> のスーパークラスの文脈 <i>cx[(T u1 ... uk)/u]</i> で表
+      現される制約が満されなければならない。いいかえれば、<i>T</i> は
+      <i>C</i> のスーパークラスそれぞれのインスタンスであり、すべてのスー
+      パークラスのインスタンスの文脈は <i>cx'</i> によりもたらされなけれ
+      ばならない。</li>
+     <li>正しく型付けされる <i>d</i> におけるクラスメソッド宣言に対して
+      要求されるインスタンス型中の型変数の制約も満されなければならない。
       </li>
     </ol></p>
-    <p>�º���Ū�ʾ�������С����󥹥�����������Τդ��Ĥ��������
-     ���Ǥ����Ū���󥹥��󥹤�ʸ̮ <i>cx'</i> ��������뤳�Ȥϲ�ǽ��
-     ���롣�������ʤ��顢�����Ƥ��˥��󥹥���ʸ̮��񤯤��Ȥ�ɬ�ܤ�
-     ���롣</p></li>
+    <p>実際病的な場合を除けば、インスタンス宣言から上のふたつの制約を満
+     す最も一般的インスタンスの文脈 <i>cx'</i> を推論することは可能で
+     ある。しかしながら、明示てきにインスタンス文脈を書くことは必須で
+     ある。</p></li>
   </ul>
   <!--
   <p>The following example illustrates the restrictions imposed by
    superclass instances:
   -->
-  <p>���ϥ����ѡ����饹�Υ��󥹥��󥹤ˤ�����¤����������ΤǤ��롣
+  <p>次はスーパークラスのインスタンスによる制限を説明するものである。
    <tt><br />
    <br />
    &nbsp;&nbsp;class&nbsp;Foo&nbsp;a&nbsp;=&gt;&nbsp;Bar&nbsp;a&nbsp;where&nbsp;...<br />
@@ -2134,17 +2135,17 @@
    <tt>[a]</tt> is an instance of <tt>Foo</tt> under this assumption,
    because <tt>Eq</tt> and <tt>Show</tt> are superclasses of <tt>Num</tt>.</p>
   -->
-  ������������� Haskell �Ǥ��롣<tt>Foo</tt> �� <tt>Bar</tt> �Υ����ѡ�
-   ���饹�Ǥ��뤫�顢�դ��Ĥ�Υ��󥹥�������� <tt>Num&nbsp;a</tt> ��
-   ��������Τ�Ȥǡ�<tt>[a]</tt> �� <tt>Foo</tt> �Υ��󥹥��󥹤Ǥ����
-   ��ˤΤ����������ǽ�Υ��󥹥�������Ϥޤ��ˡ�<tt>[a]</tt> �Ϥ��β�
-   ��Τ�Ȥ� <tt>Foo</tt> �Υ��󥹥��󥹤Ǥ���Ȥ������Ȥ���äƤ����
-   �Ǥ��롣����ϡ�<tt>Eq</tt> ����� <tt>Show</tt> �� <tt>Num</tt> �Υ���
-   �ѡ����饹������Ǥ��롣</p> 
+  この例は正しい Haskell である。<tt>Foo</tt> は <tt>Bar</tt> のスーパー
+   クラスであるから、ふたつめのインスタンス宣言は <tt>Num&nbsp;a</tt> と
+   いう仮定のもとで、<tt>[a]</tt> が <tt>Foo</tt> のインスタンスである場
+   合にのみ正しい。最初のインスタンス宣言はまさに、<tt>[a]</tt> はこの仮
+   定のもとで <tt>Foo</tt> のインスタンスであるということを言っているの
+   である。それは、<tt>Eq</tt> および <tt>Show</tt> は <tt>Num</tt> のスー
+   パークラスだからである。</p> 
   <!--
   <p> If the two instance declarations instead read like this:
   -->
-  <p>�⤷����ĤΥ��󥹥��󥹤�Ĥ��Τ褦��
+  <p>もし、二つのインスタンスをつぎのように
    <tt><br />
    <br />
    &nbsp;&nbsp;instance&nbsp;Num&nbsp;a&nbsp;=&gt;&nbsp;Foo&nbsp;[a]&nbsp;where&nbsp;...<br />
@@ -2159,24 +2160,24 @@
    hold, since <tt>[a]</tt> is only an instance of <tt>Foo</tt> under the
    stronger assumption <tt>Num&nbsp;a</tt>.</p>
   -->
-   ���ɤߤ�����ȥץ������������ʤ�Τˤʤ롣�դ��Ĥ�Υ��󥹥�����
-   ���� <tt>(Eq&nbsp;a,&nbsp;Show&nbsp;a)</tt> �Ȥ�������Τ�Ȥǡ�
-   <tt>[a]</tt> �� <tt>Foo</tt> �Υ��󥹥��󥹤Ǥ�����ˤΤ�����������
-   �����ʤ��顢<tt>[a]</tt> �Ϥ�궯�� <tt>Num&nbsp;a</tt> �Ȥ��������
-   ��ȤǤΤߡ�<tt>Foo</tt> �Υ��󥹥��󥹤Ǥ��뤫�餳�����󤬤��⤿���
-   ����</p>
+   と読みかえるとプログラムは不正なものになる。ふたつめのインスタンス宣
+   言は <tt>(Eq&nbsp;a,&nbsp;Show&nbsp;a)</tt> という仮定のもとで、
+   <tt>[a]</tt> が <tt>Foo</tt> のインスタンスである場合にのみ正しい。し
+   かしながら、<tt>[a]</tt> はより強い <tt>Num&nbsp;a</tt> という仮定の
+   もとでのみ、<tt>Foo</tt> のインスタンスであるからこの制約がたもたれな
+   い。</p>
   <!--
   <p> Further examples of <tt>instance</tt> declarations may be found in
    Chapter <a href="standard-prelude.html#stdprelude">8</a>.<a
    name="derived-decls"></a></p>
   -->
-  <p><tt>instance</tt> ����Τ���ʤ���ˤĤ��Ƥϡ�<a
-   href="standard-prelude.html#stdprelude">8</a> �Ϥ˸��뤳�Ȥ��Ǥ��롣
+  <p><tt>instance</tt> 宣言のさらなる例については、<a
+   href="standard-prelude.html#stdprelude">8</a> 章に見ることができる。
    </p>
 
   <p> <a name="sect4.3.3"></a></p>
   <!--<h4>4.3.3<tt>&nbsp;&nbsp;</tt>Derived Instances</h4>-->
-  <h4>4.3.3<tt>&nbsp;&nbsp;</tt>Ƴ�Х��󥹥���</h4>
+  <h4>4.3.3<tt>&nbsp;&nbsp;</tt>導出インスタンス</h4>
   <!--
   <p> As mentioned in Section <a
    href="decls.html#datatype-decls">4.2.1</a>, <tt>data</tt> and
@@ -2189,26 +2190,26 @@
    <i>T</i>, either via an explicit <tt>instance</tt> declaration or by
    including the superclass in the <tt>deriving</tt> clause.</p>
   -->
-  <p><a href="decls.html#datatype-decls">4.2.1</a> ��Ǹ��ڤ����褦�ˡ�
-   <tt>data</tt> �������� <tt>newtype</tt> ����ϡ�ɬ�ܤǤϤʤ�
-   <tt>deriving</tt> �������ġ��⤷���η������ޤޤ�Ƥ�����ˤϡ�
-   <em>Ƴ�Х��󥹥������</em>�ϼ�ưŪ�ˤ���̾���դΥ��饹�Τ��줾���
-   �ǡ��������Ф�����������롣�����Υ��󥹥��󥹤ϥ桼���Ƥ��� �Υ���
-   �����󥹤�Ʊ�����¤˻��ۤ���롣�⤷�� <i>T</i> �ˤĤ��ơ����饹
-   <i>C</i>��Ƴ�Ф����顢����Ū�� <tt>instance</tt> ������̤��Ƥ�������
-   ���ϡ�<tt>deriving</tt> ����Υ����ѡ����饹�򥤥󥯥롼�ɤ��뤳�Ȥǡ�
-   <i>C</i> �Τ��٤ƤΥ����ѡ����饹���Ф��륤�󥹥��󥹤���<i>T</i> ��
-   �Ф���¸�ߤ��ʤ���Фʤ�ʤ���</p> 
+  <p><a href="decls.html#datatype-decls">4.2.1</a> 節で言及したように、
+   <tt>data</tt> 宣言および <tt>newtype</tt> 宣言は、必須ではない
+   <tt>deriving</tt> 形式をもつ。もしこの形式が含まれている場合には、
+   <em>導出インスタンス宣言</em>は自動的にその名前付のクラスのそれぞれの
+   データ型に対して生成される。これらのインスタンスはユーザていぎ のイン
+   スタンスと同じ制限に支配される。もし型 <i>T</i> について、クラス
+   <i>C</i>を導出したら、明示的な <tt>instance</tt> 宣言を通じてか、ある
+   いは、<tt>deriving</tt> 節中のスーパークラスをインクルードすることで、
+   <i>C</i> のすべてのスーパークラスに対するインスタンスが、<i>T</i> に
+   対して存在しなければならない。</p> 
   <!--
   <p> Derived instances provide convenient commonly-used operations for
    user-defined datatypes. For example, derived instances for datatypes in
    the class <tt>Eq</tt> define the operations <tt>==</tt> and <tt>/=</tt>,
    freeing the programmer from the need to define them.</p>
   -->
-  <p>Ƴ�Х��󥹥��󥹤ϥ桼������Υǡ��������Ф��������˶��̤˻Ȥ����
-   �����󶡤����ΤǤ��롣���Ȥ��С�<tt>Eq</tt> ���饹��Υǡ���������
-   ����Ƴ�Х��󥹥��󥹤ϱ黻 <tt>==</tt> ����� <tt>/=</tt> ���������
-   �ץ�����ޤ��������������֤�ʤ���</p> 
+  <p>導出インスタンスはユーザ定義のデータ型に対して便利に共通に使える演
+   算を提供するものである。たとえば、<tt>Eq</tt> クラス中のデータ型に対
+   する導出インスタンスは演算 <tt>==</tt> および <tt>/=</tt> を定義し、
+   プログラマがそれを定義する手間を省く。</p> 
   <!--
   <p> The only classes in the Prelude for which derived instances are
    allowed are <tt>Eq</tt>, <tt>Ord</tt>, <tt>Enum</tt>, <tt>Bounded</tt>,
@@ -2219,19 +2220,19 @@
    including a specification of when such derived instances are possible.
    Classes defined by the standard libraries may also be derivable.</p>
   -->
-  <p>�ץ��塼����Υ��饹�Ǥ�����Ф���Ƴ�Х��󥹥��󥹤�������Ƥ���Τ�
-   <tt>Eq</tt>��
-   <tt>Ord</tt>��
-   <tt>Enum</tt>��
-   <tt>Bounded</tt>��
-   <tt>Show</tt>�������
-   <tt>Read</tt> �����Ǥ��롣����餹�٤Ƥϡ�
-   �� <a href="basic.html#standard-classes">5</a> ���������Ƥ��롣����
-   ��Υ��饹���줾��ˤĤ��ƤɤΤ褦��Ƴ�Х��󥹥��󥹤���������뤫��
-   �ܺ٤� <a href="derived.html#derived-appendix">10</a> �Ϥˤ��롣����
-   �Ǥϡ��ɤΤ褦�ʾ��ˤ��Τ褦��Ƴ�Х��󥹥��󥹤���ǽ���Ȥ���������
-   ��ޤޤ�Ƥ��롣ɸ��饤�֥��ˤ���������Ƥ��륯�饹��Ƴ�в�ǽ��
-   ���롣</p> 
+  <p>プレリュード中のクラスでそれに対する導出インスタンスが許されているのは
+   <tt>Eq</tt>、
+   <tt>Ord</tt>、
+   <tt>Enum</tt>、
+   <tt>Bounded</tt>、
+   <tt>Show</tt>、および
+   <tt>Read</tt> だけである。これらすべては、
+   図 <a href="basic.html#standard-classes">5</a> で定義されている。これ
+   らのクラスそれぞれについてどのように導出インスタンスが生成されるかの
+   詳細は <a href="derived.html#derived-appendix">10</a> 章にある。そこ
+   では、どのような場合にそのような導出インスタンスが可能かとういう仕様
+   も含まれている。標準ライブラリにより定義されているクラスも導出可能で
+   ある。</p> 
   <!--
   <p> A static error results if it is not possible to derive an
    <tt>instance </tt>declaration over a class named in a <tt>deriving</tt>
@@ -2239,12 +2240,12 @@
    in <tt>Enum</tt>. It is also a static error to give an explicit
    <tt>instance</tt> declaration for a class that is also derived.</p>
   -->
-  <p>�⤷��<tt>deriving</tt> ������ǡ�̾���դ��Υ��饹���
-   <tt>instance</tt> �����Ƴ�Ф��뤳�Ȥ��Ǥ��ʤ���С���Ū���顼�Ȥʤ롣
-   ���Ȥ��С����٤ƤΥǡ������� <tt>Enum</tt> �Υ��饹�᥽�åɤ򤿤�����
-   ���ݡ��ȤǤ���櫓�ǤϤʤ���Ƴ�Ф��줿���줿���饹�ˤ�����������Ū
-   �� <tt>instance</tt> �����Ϳ���褦�Ȥ���ȡ����ξ�����Ū���顼�Ȥ�
-   �롣</p>
+  <p>もし、<tt>deriving</tt> 形式中で、名前付きのクラス上の
+   <tt>instance</tt> 宣言を導出することができなければ、静的エラーとなる。
+   たとえば、すべてのデータ型が <tt>Enum</tt> のクラスメソッドをただしく
+   サポートできるわけではない。導出されたされたクラスにたいして明示的
+   に <tt>instance</tt> 宣言を与えようとすると、この場合も静的エラーとな
+   る。</p>
   <!--
   <p> If the <tt>deriving</tt> form is omitted from a <tt>data</tt> or
    <tt>newtype </tt>declaration, then <i>no</i> instance declarations are
@@ -2252,17 +2253,17 @@
    equivalent to including an empty deriving form:
    <tt>deriving&nbsp;()</tt>.</p>
   -->
-  <p><tt>deriving</tt> ������ <tt>data</tt> ����� <tt>newtype</tt> ���
-   �Ǿ�ά���줿��硢���Υǡ��������Ф��Ƥϡ������ʤ륤�󥹥��������
-   Ƴ�Ф���<em>�ʤ�</em>�����ʤ����<tt>deriving</tt> �������ά����Ȥ�
-   �����Ȥϡ�����Ƴ�з�����<tt>deriving&nbsp;()</tt> ��Ʊ���Ǥ��롣</p>
+  <p><tt>deriving</tt> 形式が <tt>data</tt> 宣言や <tt>newtype</tt> 宣言
+   で省略された場合、そのデータ型に対しては、いかなるインスタンス宣言も
+   導出され<em>ない</em>。すなわち、<tt>deriving</tt> 形式を省略するとい
+   うことは、空の導出形式、<tt>deriving&nbsp;()</tt> と同等である。</p>
 
   <p><a name="default-decls"></a></p>
   <p><a name="sect4.3.4"></a></p>
   <!--<h4>4.3.4<tt>&nbsp;&nbsp;</tt>Ambiguous Types, and Defaults for
    Overloaded Numeric Operations</h4>-->
-  <h4>4.3.4<tt>&nbsp;&nbsp;</tt>ۣ��ʷ���¿��������줿���ͱ黻�Υǥե�
-   ������</h4>
+  <h4>4.3.4<tt>&nbsp;&nbsp;</tt>曖昧な型と多重定義された数値演算のデフォ
+   ルト定義</h4>
   <p></p>
   <table cellspacing="0" cellspacing="0">
    <tr>
@@ -2281,12 +2282,12 @@
    <tt>Int</tt> and <tt>Bool</tt> are members of <tt>Read</tt> and
    <tt>Show</tt>, then the expression
   -->
-  <p>Haskell-���������¿��������տ魯�������<em>ۣ��ʷ�</em>��������ǽ
-   �������뤳�ȤǤ��롣���Ȥ��С�<a
-   href="derived.html#derived-appendix">10</a> �Ϥ��������Ƥ���ؿ�
-   <tt>read</tt> �� <tt>show</tt> �����Ѥ��ơ�<tt>Int</tt> �����
-   <tt>Bool</tt> �� <tt>Read</tt> ����� <tt>Show</tt> �Υ��С����Ȥ�
-   ����硢��
+  <p>Haskell-スタイルの多重定義に付随する問題は<em>曖昧な型</em>が出来る可能
+   性があることである。たとえば、<a
+   href="derived.html#derived-appendix">10</a> 章で定義されている関数
+   <tt>read</tt> と <tt>show</tt> を利用して、<tt>Int</tt> および
+   <tt>Bool</tt> は <tt>Read</tt> および <tt>Show</tt> のメンバーだとし
+   た場合、式
    <tt><br />
    <br />
    &nbsp;&nbsp;let&nbsp;x&nbsp;=&nbsp;read&nbsp;"..."&nbsp;in&nbsp;show&nbsp;x
@@ -2296,7 +2297,7 @@
   <!--
    is ambiguous, because the types for <tt>show</tt> and <tt>read</tt>,</p>
   -->
-   ��ۣ��Ǥ��롣<tt>show</tt> ����� <tt>read</tt> ���б����뷿</p>
+   は曖昧である。<tt>show</tt> および <tt>read</tt> に対応する型</p>
   <p></p>
   <table>
    <tr>
@@ -2315,37 +2316,37 @@
    </tt>in both cases, or <tt>Bool</tt>. Such expressions are considered
    ill-typed, a static error.</p>
   -->
-  <p>�� <tt>a</tt> �� <tt>Int</tt> �˥��󥹥��󥹲����Ƥ⡢<tt>Bool</tt>
-   �˥��󥹥��󥹲����Ƥ�������뤫��Ǥ��롣���Τ褦�ʼ������������դ�
-   ����ʤ���Τȹͤ�����Ū���顼�Ȥʤ롣</p>
+  <p>は <tt>a</tt> を <tt>Int</tt> にインスタンス化しても、<tt>Bool</tt>
+   にインスタンス化しても満されるからである。このような式は正しく型付け
+   されないものと考え、静的エラーとなる。</p>
   <!--
   <p> We say that an expression <tt>e</tt> has an <i>ambiguous type </i>if,
    in its type <i>forall </i><u>u</u><i>. cx =&gt;t</i>, there is a type
    variable <i>u</i> in <u>u</u> that occurs in <i>cx</i> but not in
    <i>t</i>. Such types are invalid.</p>
   -->
-  <p>�� <tt>e</tt> �η� <i>forall </i><u>u</u><i>. cx =&gt;t</i> �ˤ���
-   �� <i>cx</i> �ˤϤ��ꡢ<i>t</i> �ˤϤʤ��褦�� <u>u</u> �η��ѿ�
-   <i>u</i> ��¸�ߤ����硢�� <tt>e</tt> ��<em>ۣ��ʷ�</em>���ĤȤ�
-   �������Τ褦�ʷ��������Ǥ��롣</p>
+  <p>式 <tt>e</tt> の型 <i>forall </i><u>u</u><i>. cx =&gt;t</i> におい
+   て <i>cx</i> にはあり、<i>t</i> にはないような <u>u</u> の型変数
+   <i>u</i> が存在する場合、式 <tt>e</tt> は<em>曖昧な型</em>をもつとい
+   う。このような型は不正である。</p>
   <!--
   <p> For example, the earlier expression involving <tt>show</tt> and
    <tt>read</tt> has an ambiguous type since its type is <i>forall a.
    </i><tt>Show</tt><i> a, </i><tt>Read</tt><i> a =&gt;</i><tt>String</tt>.</p>
   -->
-  <p>���Ȥ��С���ˤ����� <tt>show</tt> ����� <tt>read</tt> ��ޤ༰��
-  ۣ��ʷ����ġ�����Ϥ��η�����<i>forall a.  </i><tt>Show</tt><i>  a,
-  </i><tt>Read</tt><i>  a =&gt;</i> <tt>String</tt> �Ǥ��뤫�����</p>
+  <p>たとえば、先にあげた <tt>show</tt> および <tt>read</tt> を含む式は
+  曖昧な型をもつ、それはその型が、<i>forall a.  </i><tt>Show</tt><i>  a,
+  </i><tt>Read</tt><i>  a =&gt;</i> <tt>String</tt> であるからだ。</p>
   <!--
   <p> Ambiguous types can only be circumvented by input from the user. One
    way is through the use of <i>expression type-signatures </i>as described
    in Section <a href="exps.html#expression-type-sigs">3.16</a>. For
    example, for the ambiguous expression given earlier, one could write:
   -->
-  <p>ۣ��ʷ��ϥ桼�������Ϥˤ�äƤΤ߲��򤵤�롣�ҤȤĤ���ˡ�� <a
-   href="exps.html#expression-type-sigs">3.16</a> �����������<em>���η�
-   �����ͥ���</em>��Ȥ����ȤǤ��롣���Ȥ��С����ۣ��ʷ����ļ��ϡ���
-   �Τ褦�˽񤯤��Ȥ��Ǥ��롣
+  <p>曖昧な型はユーザの入力によってのみ回避される。ひとつの方法は <a
+   href="exps.html#expression-type-sigs">3.16</a> 節で説明した<em>式の型
+   シグネチャ</em>を使うことである。たとえば、先の曖昧な型をもつ式は、次
+   のように書くことができる。
    <tt><br />
    <br />
    &nbsp;&nbsp;let&nbsp;x&nbsp;=&nbsp;read&nbsp;"..."&nbsp;in&nbsp;show&nbsp;(x::Bool)<br />
@@ -2354,7 +2355,7 @@
   <!--
    which disambiguates the type.</p>
   -->
-   ����Ƿ���ۣ��Ǥʤ��ʤ롣</p>
+   これで型が曖昧でなくなる。</p>
   <!--
   <p> Occasionally, an otherwise ambiguous expression needs to be made the
    same type as some variable, rather than being given a fixed type with an
@@ -2364,12 +2365,12 @@
    <tt>`asTypeOf`</tt> <i>y</i> has the value of <i>x</i>, but <i>x</i> and
    <i>y</i> are forced to have the same type. For example, 
   -->
-  <p>���ˤ�äƤϡ����η������ͥ���Ƿ�����ꤹ��ΤǤϤʤ������ѿ���
-   ����Ʊ�������뤿��ˤ٤Ĥΰ�̣��ۣ��ʼ���ɬ�פȤʤ롣������Ū�Τ�
-   ��ˤ���Τ����ؿ� <tt>asTypeOf</tt> (<a
-   href="standard-prelude.html#stdprelude">8</a> ��) �Ǥ��롣<i>x</i>
-   <tt>`asTypeOf`</tt> <i>y</i> ���ͤ� <i>x</i> ���ͤǤ��뤬��<i>x</i>
-   ����� <i>y</i> �϶���Ū��Ʊ�����ˤʤ롣���Ȥ��С�
+  <p>場合によっては、式の型シグネチャで型を固定するのではなく、型変数と
+   して同じ型を作るためにべつの意味で曖昧な式が必要となる。この目的のた
+   めにあるのが、関数 <tt>asTypeOf</tt> (<a
+   href="standard-prelude.html#stdprelude">8</a> 章) である。<i>x</i>
+   <tt>`asTypeOf`</tt> <i>y</i> の値は <i>x</i> の値であるが、<i>x</i>
+   および <i>y</i> は強制的に同じ型になる。たとえば、
    <tt><br />
    <br />
    &nbsp;&nbsp;approxSqrt&nbsp;x&nbsp;=&nbsp;encodeFloat&nbsp;1&nbsp;(exponent&nbsp;x&nbsp;`div`&nbsp;2)&nbsp;`asTypeOf`&nbsp;x<br />
@@ -2379,16 +2380,16 @@
    (See Section <a href="basic.html#coercion">6.4.6</a> for a
    description of <tt>encodeFloat</tt> and <tt>exponent</tt>.)</p>
   -->
-   �Ǥ���( <tt>encodeFloat</tt> ����� <tt>exponent</tt> �������ˤĤ���
-   �� <a href="basic.html#coercion">6.4.6</a> ��򸫤�)��</p>
+   である( <tt>encodeFloat</tt> および <tt>exponent</tt> の説明について
+   は <a href="basic.html#coercion">6.4.6</a> 節を見よ)。</p>
   <!--
   <p> Ambiguities in the class <tt>Num </tt>are most common, so Haskell
    provides another way to resolve them---with a <i>default
    declaration</i>:</p>
   -->
-  <p>���饹 <tt>Num</tt> �ˤ�����ۣ�����Ϥ褯���뤳�ȤǤ��롣����ǡ�
-   Haskell �ǤϤ�����褹��⤦�ҤȤĤ���ˡ���󶡤��롣<em>default ��
-   ��</em>��Ȥ���ˡ�Ǥ��롣</p>
+  <p>クラス <tt>Num</tt> における曖昧性はよくあることである。それで、
+   Haskell ではこれを解決するもうひとつの方法を提供する。<em>default 宣
+   言</em>を使う方法である。</p>
   <p> <tt>default&nbsp;(</tt><i>t</i><sub><i>1</i></sub><i>
    </i><tt>,</tt><i> ... </i><tt>,</tt><i> t</i><sub><i>n</i></sub><tt>)
    </tt></p>
@@ -2398,51 +2399,51 @@
    situations where an ambiguous type is discovered, an ambiguous type
    variable, <i>v</i>, is defaultable if:</p>
   -->
-  <p>������ <i>n&gt;=0</i> �Ǥ��ꡢ�� <i>t</i><sub><i>i</i></sub> ��
-   <tt>Num&nbsp;</tt><i>t</i><sub><i>i</i></sub> ����¸����ʤ���Фʤ�
-   �ʤ���ۣ��ʷ���ȯ�������褦�ʾ����Ǥϡ�ۣ��ʷ��ѿ� <i>v</i> ��
-   �ʲ��� 3 �Ĥ��������˥ǥե���������ǽ�Ǥ��롣</p>
+  <p>ここで <i>n&gt;=0</i> であり、各 <i>t</i><sub><i>i</i></sub> は
+   <tt>Num&nbsp;</tt><i>t</i><sub><i>i</i></sub> が保存されなければなら
+   ない。曖昧な型が発見されるような状況では、曖昧な型変数 <i>v</i> は
+   以下の 3 つを満す場合にデフォルト宣言可能である。</p>
   <ul>
    <!--
    <li><i>v</i> appears only in constraints of the form <i>C v</i>, where
     <i>C</i> is a class, and</li>
    -->
-   <li><i>v</i> �� <i>C v</i> �Ȥ�������������Τʤ��ǤΤ�ɽ���롣(������
-   <i>C</i> �ϥ��饹)</li> 
+   <li><i>v</i> が <i>C v</i> という形式の制約のなかでのみ表われる。(ここで
+   <i>C</i> はクラス)</li> 
    <!--
    <li>at least one of these classes is a numeric class, (that is,
     <tt>Num</tt> or a subclass of <tt>Num</tt>), and</li>
    -->
-   <li>���ʤ��Ȥ�ҤȤĤϿ��ͥ��饹(���ʤ����<tt>Num</tt>
-    ���뤤�� <tt>Num</tt> �Υ��֥��饹)�Ǥ��롣</li>
+   <li>少なくともひとつは数値クラス(すなわち、<tt>Num</tt>
+    あるいは <tt>Num</tt> のサブクラス)である。</li>
    <!--
    <li>all of these classes are defined in the Prelude or a standard
     library (Figures <a href="basic.html#basic-numeric-1">6.2</a>--<a
     href="basic.html#basic-numeric-2">6.3</a>, pages -- show the numeric
     classes, and Figure <a href="basic.html#standard-classes">6.1</a>, page
     , shows the classes defined in the Prelude.)</li>-->
-   <li>���Υ��饹�Τ��٤Ƥ��ץ��塼�ɤ��뤤��ɸ��饤�֥����������
-    �Ƥ��롣(�� <a href="basic.html#basic-numeric-1">6</a>--<a
-    href="basic.html#basic-numeric-2">7</a> �Ͽ��ͥ��饹�򡢿� <a
-    href="basic.html#standard-classes">5</a> �ϥץ��塼�ɤ���������
-    ���륯�饹�򼨤�)</li>
+   <li>そのクラスのすべてがプレリュードあるいは標準ライブラリで定義され
+    ている。(図 <a href="basic.html#basic-numeric-1">6</a>--<a
+    href="basic.html#basic-numeric-2">7</a> は数値クラスを、図 <a
+    href="basic.html#standard-classes">5</a> はプレリュードで定義されて
+    いるクラスを示す)</li>
   </ul>
   <!--
   <p>Each defaultable variable is replaced by the first type in the default
    list that is an instance of all the ambiguous variable's classes. It is
    a static error if no such type is found.</p>
   -->
-  <p>default �����ǽ�ʤ��줾����ѿ��ϡ����٤Ƥ�ۣ����ѿ��Υ��饹�ΰ�
-   �ĤΥ��󥹥��󥹤Ǥ���ǥե���ȥꥹ����κǽ�η����֤��������롣
-   ���Τ褦�ʷ������Ĥ���ʤ����ˤ���Ū���顼�Ȥʤ롣</p>
+  <p>default 宣言可能なそれぞれの変数は、すべての曖昧な変数のクラスの一
+   つのインスタンスであるデフォルトリスト中の最初の型で置き換えられる。
+   このような型が見つからない場合には静的エラーとなる。</p>
   <!--
   <p> Only one default declaration is permitted per module, and its effect
    is limited to that module. If no default declaration is given in a
    module then it assumed to be:
   -->
-  <p>�ҤȤĤΥ⥸�塼��Ǥϥǥե��������ϤҤȤĤ���������Ƥ��ꡢ���θ�
-   �̤Ϥ��Υ⥸�塼����˸¤��롣�⤷������⥸�塼��ǥǥե���������
-   �ʤ��Ф����ˤϰʲ������ꤵ��롣
+  <p>ひとつのモジュールではデフォルト宣言はひとつだけ許されており、その効
+   果はそのモジュール内に限られる。もし、あるモジュールでデフォルト宣言が
+   ないばあいには以下が仮定される。
    <tt><br />
    <br />
    &nbsp;&nbsp;default&nbsp;(Integer,&nbsp;Double)<br />
@@ -2452,24 +2453,24 @@
    The empty default declaration, <tt>default&nbsp;()</tt>, turns off
    all defaults in a module.</p>
   -->
-   ���Υǥե���������<tt>default&nbsp;()</tt> �Ϥ��Υ⥸�塼��Τ��٤�
-   �Υǥե���Ȥ򥪥դˤ��롣</p>
+   空のデフォルト宣言、<tt>default&nbsp;()</tt> はそのモジュールのすべて
+   のデフォルトをオフにする。</p>
 
   <p><a name="nested"></a></p>
   <p><a name="sect4.4"></a></p>
   <!--<h3>4.4<tt>&nbsp;&nbsp;</tt>Nested Declarations</h3>-->
-  <h3>4.4<tt>&nbsp;&nbsp;</tt>����Ҥˤʤä����</h3>
+  <h3>4.4<tt>&nbsp;&nbsp;</tt>入れ子になった宣言</h3>
   <!--
   <p> The following declarations may be used in any declaration list,
    including the top level of a module.</p>
   -->
-  <p>�ʲ�������ϥ⥸�塼��Υȥåץ�٥��ޤ�ɤ�����ꥹ����Ǥ����
-  �Ǥ��롣</p>
+  <p>以下の宣言はモジュールのトップレベルを含むどの宣言リスト中でも使用
+  できる。</p>
 
   <p><a name="type-signatures"></a></p>
   <p> <a name="sect4.4.1"></a></p>
   <!--<h4>4.4.1<tt>&nbsp;&nbsp;</tt>Type Signatures</h4>-->
-  <h4>4.4.1<tt>&nbsp;&nbsp;</tt>�������ͥ���</h4>
+  <h4>4.4.1<tt>&nbsp;&nbsp;</tt>型シグネチャ</h4>
   <p></p>
   <table cellspacing="0" cellspacing="0">
    <tr>
@@ -2488,8 +2489,8 @@
   <p>A type signature specifies types for variables, possibly with respect
    to a context. A type signature has the form:</p>
   -->
-  <p>�������ͥ�����ѿ��η�����ꤷ��ʸ̮��Ȥ�ʤ����Ȥ⤢�롣��������
-  ����˷����ϰʲ��ΤȤ��ꡣ</p>
+  <p>型シグネチャは変数の型を指定し、文脈をともなうこともある。型シグネ
+  チャに形式は以下のとおり。</p>
   <p> <i>v</i><sub><i>1</i></sub><i>, ..., v</i><sub><i>n</i></sub><i>
    </i><tt>::</tt><i> cx </i><tt>=&gt;</tt><i> t </i></p>
   <!--
@@ -2501,14 +2502,14 @@
    outer scope. Moreover, it is invalid to give more than one type
    signature for one variable, even if the signatures are identical.</p>
   -->
-  <p>����ϡ�<i>1</i> ���� <i>n</i> �ޤǤγ� <i>i</i> �ˤĤ���
+  <p>これは、<i>1</i> から <i>n</i> までの各 <i>i</i> について
    <i>v</i><sub><i>i</i></sub><i> </i><tt>::</tt><i> cx
-   </i><tt>=&gt;</tt><i> t</i> �Ǥ��뤳�Ȥ�ɽ��������Τ�Ʊ���Ǥ��롣��
-   <i>v</i><sub><i>i</i></sub> �Ϥ��η������ͥ��㤬�ޤޤ�Ƥ���Ʊ�����
-   �ꥹ�������«����⤿�ʤ���Фʤ�ʤ������ʤ����ͭ���ϰϳ����ѿ�«
-   �����Ф��Ʒ������ͥ����Ϳ����Τ������Ǥ��롣����ˡ���Ĥ��ѿ�����
-   ���Ƥϡ����Ȥ���Ʊ�������ͥ���Ǥ������Ȥ⡢2 �ٰʾ巿�����ͥ����Ϳ
-   ���뤳�Ȥ������Ǥ��롣</p> 
+   </i><tt>=&gt;</tt><i> t</i> であることを表明したものと同等である。各
+   <i>v</i><sub><i>i</i></sub> はその型シグネチャが含まれている同じ宣言
+   リスト中に値束縛をもたなければならない。すなわち、有効範囲外の変数束
+   縛に対して型シグネチャを与えるのは不正である。さらに、一つの変数に対
+   しては、たとえ、同じシグネチャであろうとも、2 度以上型シグネチャを与
+   えることは不正である。</p> 
   <!--
   <p> As mentioned in Section <a href="decls.html#type-syntax">4.1.2</a>,
    every type variable appearing in a signature is universally quantified
@@ -2516,10 +2517,10 @@
    to the type signature that contains it. For example, in the following
    declarations 
   -->
-  <p><a href="decls.html#type-syntax">4.1.2</a> ��Ǹ��ڤ����褦�ˡ����
-   �η������ͥ���˽и����뷿�ѿ��Ϥɤ�⤽�Υ����ͥ��������ν������
-   ����Τǡ����ѿ���ͭ���ϰϤϤ�������󤹤뷿�����ͥ�����Ǥ��롣����
-   ���С��ʲ������
+  <p><a href="decls.html#type-syntax">4.1.2</a> 節で言及したように、一つ
+   の型シグネチャに出現する型変数はどれもそのシグネチャ上で全称修飾を受
+   けるので、型変数の有効範囲はそれを制約する型シグネチャ内である。たと
+   えば、以下の宣言
    <tt><br />
    <br />
    &nbsp;&nbsp;f&nbsp;::&nbsp;a&nbsp;-&gt;&nbsp;a<br />
@@ -2534,21 +2535,21 @@
    specify a signature for a variable with a dependent type; this is
    explained in Section <a href="decls.html#monomorphism">4.5.4</a>.)</p>
   -->
-   �Ǥϡ��դ��Ĥη������ͥ���� <tt>a</tt> ���̤�ΤǤ��롣������󡢤�
-   �����������Ū���顼�Ȥʤ롣����� <tt>x</tt> �Ϸ� <i>forall
-   a. a</i> ��⤿�ʤ�����Ǥ��롣(<tt>x</tt> �η��Ϸ� <tt>f</tt> �˰�¸
-   ���Ƥ��롣��¸�����ѿ����Ф��륷���ͥ������ꤹ����ˡ�Ϥ��ޤΤȤ���
-   Haskell �ˤϤʤ������Τ��ȤˤĤ��Ƥ� <a
-   href="decls.html#monomorphism">4.5.4</a> ����������롣)</p>
+   では、ふたつの型シグネチャの <tt>a</tt> は別ものである。もちろん、こ
+   れらの宣言は静的エラーとなる。それは <tt>x</tt> は型 <i>forall
+   a. a</i> をもたないからである。(<tt>x</tt> の型は型 <tt>f</tt> に依存
+   している。依存型の変数に対するシグネチャを指定する方法はいまのところ
+   Haskell にはない。このことについては <a
+   href="decls.html#monomorphism">4.5.4</a> 節で説明する。)</p>
   <!--
   <p> If a given program includes a signature for a variable <i>f</i>, then
    each use of <i>f</i> is treated as having the declared type. It is a
    static error if the same type cannot also be inferred for the defining
    occurrence of <i>f</i>.</p>
   -->
-  <p>�⤷��Ϳ����줿�ץ�����ब�ѿ� <i>f</i> ���Ф��륷���ͥ����ޤ�
-   �ʤ顢<i>f</i> �ϻ��ѤΤ��Ӥ�������줿�����Ĥ�ΤȤ��ư����롣
-   <i>f</i> �νи����Ȥ�Ʊ�����������Ǥ��ʤ����ˤ���Ū���顼�Ȥʤ롣
+  <p>もし、与えられたプログラムが変数 <i>f</i> に対するシグネチャを含む
+   なら、<i>f</i> は使用のたびに宣言された型をもつものとして扱われる。
+   <i>f</i> の出現ごとに同じ型が推論できない場合には静的エラーとなる。
    </p>
   <!--
   <p> If a variable <i>f</i> is defined without providing a corresponding
@@ -2562,16 +2563,16 @@
    generalization, as described in Section <a
    href="decls.html#generalization">4.5.2</a>).</p>
   -->
-  <p>�⤷���ѿ� <i>f</i> ���б����뷿�����ͥ����⤿�����������Ƥ���
-   �ʤ顢<i>f</i> �Ϥ���������롼��(<a
-   href="decls.html#dependencyanalysis">4.5</a> ��򸫤�)���ǻ��Ѥ����
-   ���Ӥ�<em>��</em>�����뤤���б����ƿ������줿�����Ĥ�ΤȤ��ư����
-   �롣�������ʤ��顢���������ʤ���ǽ�Ǥ��뤿��ˤϡ�����νи������
-   <i>f</i> �Τ���������롼�פʤ��Ǥλ��Ѥ��٤Ƥ�Ʊ��ñ�귿(<a
-   href="decls.html#generalization">4.5.2</a> �����������褦�ˡ����η�
-   ������̲��ˤ�äƼ緿��������)������ͤФʤ�ʤ���</p>
+  <p>もし、変数 <i>f</i> が対応する型シグネチャをもたずに定義されている
+   なら、<i>f</i> はその宣言グループ(<a
+   href="decls.html#dependencyanalysis">4.5</a> 節を見よ)外で使用される
+   たびに<em>主</em>型あるいは対応して推論された型をもつものとして扱われ
+   る。しかしながら、型推論がなお可能であるためには、定義の出現および
+   <i>f</i> のその宣言グループないでの使用すべては同じ単相型(<a
+   href="decls.html#generalization">4.5.2</a> 節で説明するように、その型
+   から一般化によって主型が得られる)を持たねばならない。</p>
   <!--<p> For example, if we define -->
-  <p>���Ȥ��С��ʲ��Τ褦����������Ȥ��褦��
+  <p>たとえば、以下のように定義したとしよう。
    <tt><br />
    <br />
    &nbsp;&nbsp;sqr&nbsp;x&nbsp;&nbsp;=&nbsp;&nbsp;x*x<br />
@@ -2583,10 +2584,10 @@
    as <tt>sqr&nbsp;5</tt> or <tt>sqr&nbsp;0.1</tt>. It is also valid to
    declare a more specific type, such as 
   -->
-   �緿�� <tt>sqr</tt><i> :: forall a.  </i><tt>Num</tt><i>  a =&gt;a
-   -&gt;a</i>�Ǥ��ꡢ����ˤ�ꡢ<tt>sqr&nbsp;5</tt> ���뤤��
-   <tt>sqr&nbsp;0.1</tt> �Τ褦��Ŭ�Ѥ���ǽ�ˤʤ롣�ޤ������Τ褦�ˡ����
-   �ȸ��ꤵ�줿����������뤳�Ȥ�Ǥ��롣
+   主型は <tt>sqr</tt><i> :: forall a.  </i><tt>Num</tt><i>  a =&gt;a
+   -&gt;a</i>であり、これにより、<tt>sqr&nbsp;5</tt> あるいは
+   <tt>sqr&nbsp;0.1</tt> のような適用が可能になる。また、次のように、もっ
+   と限定された型を宣言することもできる。
    <tt><br />
    <br />
    &nbsp;&nbsp;sqr&nbsp;::&nbsp;Int&nbsp;-&gt;&nbsp;Int<br />
@@ -2596,8 +2597,8 @@
    but now applications such as <tt>sqr&nbsp;0.1</tt> are invalid.
    Type signatures such as
   -->
-   �����������ΤȤ��ˤ� <tt>sqr&nbsp;0.1</tt> �Τ褦��Ŭ�Ѥ������ʤ�Τ�
-   �ʤ롣�ʲ��Τ褦�ʷ������ͥ���
+   しかし、このときには <tt>sqr&nbsp;0.1</tt> のような適用は不正なものに
+   なる。以下のような型シグネチャ
    <tt><br />
    <br />
    &nbsp;&nbsp;sqr&nbsp;::&nbsp;(Num&nbsp;a,&nbsp;Num&nbsp;b)&nbsp;=&gt;&nbsp;a&nbsp;-&gt;&nbsp;b&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;invalid<br />
@@ -2608,17 +2609,17 @@
    are invalid, as they are more general than the principal type of
    <tt>sqr</tt>.</p>
   -->
-   �������Ǥ��롣����Ϥ����� <tt>sqrt</tt> �μ緿�������Ū�ʷ��Ǥ�
-   �뤫��Ǥ��롣</p>
+   は不正である。それはこれらは <tt>sqrt</tt> の主型よりも一般的な型であ
+   るからである。</p>
   <!--
   <p> Type signatures can also be used to support <i>polymorphic
    recursion</i>. The following definition is pathological, but illustrates
    how a type signature can be used to specify a type more general than the
    one that would be inferred:
   -->
-  <p>�������ͥ����<em>¿��Ƶ�</em>�򥵥ݡ��Ȥ���Τ˻Ȥ����Ȥ��Ǥ��롣
-   �ʲ��������Ū����Ǥ��뤬���������ͥ��㤬�������줿���������Ū��
-   ������ꤹ��ΤˤɤΤ褦�˻Ȥ��뤫�򼨤��Ƥ��롣
+  <p>型シグネチャは<em>多相再帰</em>をサポートするのに使うことができる。
+   以下の例は病的な例であるが、型シグネチャが推論された型よりも一般的な
+   型を指定するのにどのように使えるかを示している。
    <tt><br />
    <br />
    &nbsp;&nbsp;data&nbsp;T&nbsp;a&nbsp;&nbsp;=&nbsp;&nbsp;K&nbsp;(T&nbsp;Int)&nbsp;(T&nbsp;a)<br />
@@ -2633,16 +2634,16 @@
    <tt>T&nbsp;Int</tt>. Polymorphic recursion allows the user to supply the
    more general type signature, <tt>T&nbsp;a&nbsp;-&gt;&nbsp;a</tt>.</p>
   -->
-   �⤷�����Υ����ͥ��������Ȥ�Τ����ȡ��ǽ�κƵ��ƤӤ����ǡ�
-   <tt>f</tt> �ΰ����� <tt>T&nbsp;Int</tt> �ʤΤǡ�<tt>f</tt> �η���
-   <tt>T&nbsp;Int&nbsp;-&gt;&nbsp;Int</tt> �ȿ�������롣¿��Ƶ��ϥ桼
-   ����������Ū�ʷ������ͥ��� <tt>T&nbsp;a&nbsp;-&gt;&nbsp;a</tt> ��Ϳ
-   ���뤳�Ȥ��ǽ�ˤ��Ƥ��롣</p> 
+   もし、このシグネチャ宣言をとりのぞくと、最初の再帰呼びだしで、
+   <tt>f</tt> の引数は <tt>T&nbsp;Int</tt> なので、<tt>f</tt> の型は
+   <tt>T&nbsp;Int&nbsp;-&gt;&nbsp;Int</tt> と推論される。多相再帰はユー
+   ザがより一般的な型シグネチャ <tt>T&nbsp;a&nbsp;-&gt;&nbsp;a</tt> を与
+   えることを可能にしている。</p> 
 
   <p><a name="fixity"></a></p>
   <p> <a name="sect4.4.2"></a></p>
   <!--<h4>4.4.2<tt>&nbsp;&nbsp;</tt>Fixity Declarations</h4>-->
-  <h4>4.4.2<tt>&nbsp;&nbsp;</tt>��������</h4>
+  <h4>4.4.2<tt>&nbsp;&nbsp;</tt>結合性宣言</h4>
 
   <p></p>
 
@@ -2681,14 +2682,14 @@
    their fixity declarations can occur either in the class declaration
    itself or at top level.)</p>
   -->
-  <p>����������1�İʾ�α黻�Ҥη������«����ͥ���̤�Ϳ�����ΤǤ�
-   �롣���������Ϸ������ͥ��㤬������Ȥ����ʤ�ɤ��˸����Ƥ�褯��
-   �������ͥ����Ʊ�͡�����α黻�Ҥ���������������ΤǤ��롣�ޤ�����
-   ��ⷿ�����ͥ����Ʊ�ͤˡ����������ϡ����α黻�Ҥ������Ʊ�������
-   �롼�פΤʤ��� 1 �٤����и����뤳�Ȥ��Ǥ����ɤα黻�Ҥ��Ф��Ƥ�⡹ 1
-   �٤η���������Ϳ���뤳�Ȥ��Ǥ��롣(���饹�᥽�åɤη��������Ϥ��
-   �����㳰�ǡ�����ϥ��饹����椢�뤤�ϥȥåץ�٥�Τɤ��餫�ǽи���
-   �뤳�Ȥ��Ǥ��롣)</p>
+  <p>結合性宣言は1つ以上の演算子の結合性と束縛の優先順位を与えるものであ
+   る。結合性宣言は型シグネチャが現われるところならどこに現われてもよく、
+   型シグネチャと同様、特定の演算子の性質を宣言するものである。また、こ
+   れも型シグネチャと同様に、結合性宣言は、その演算子の宣言と同じ宣言グ
+   ループのなかで 1 度だけ出現することができ、どの演算子に対しても高々 1
+   度の結合性宣言を与えることができる。(クラスメソッドの結合性宣言はめだ
+   たぬ例外で、これはクラス宣言中あるいはトップレベルのどちらかで出現す
+   ることができる。)</p>
   <!--
   <p> There are three kinds of fixity, non-, left- and right-associativity
    (<tt>infix</tt>, <tt>infixl</tt>, and <tt>infixr</tt>, respectively),
@@ -2700,15 +2701,15 @@
    Table <a href="decls.html#prelude-fixities">4.1</a> lists the fixities
    and precedences of the operators defined in the Prelude.</p>
   -->
-  <p>������ˤϡ�̵��硢����硢�����(���줾�졢<tt>infix</tt>��
-   <tt>infixl</tt>��<tt>infixr</tt>) �� 3 ���ढ�ꡢ��٥� 0 ���� 9 �ޤ�
-   �� 10 �ʳ���ͥ����(��٥� 0 ����äȤ�夯����٥� 9 ���Ǥ⶯�����
-   �դ��򤢤�魯)�����롣�⤷��<em>����</em>����ά�����С�����ϥ��
-   �� 9 �����ꤵ��롣����������⤿�ʤ��黻�ҤϤ��٤ơ�
-   <tt>infixl&nbsp;9</tt> (����������ѤˤĤ��ƾܤ����� <a
-   href="exps.html#expressions">3</a> ��򸫤�)��ɽ <a
-   href="decls.html#prelude-fixities">4.1</a> �ϥץ��塼�ɤ��������Ƥ�
-   ��黻�Ҥη������ͥ���̤�ɽ�Ǥ��롣</p>
+  <p>結合性には、無結合、左結合、右結合(それぞれ、<tt>infix</tt>、
+   <tt>infixl</tt>、<tt>infixr</tt>) の 3 種類あり、レベル 0 から 9 まで
+   の 10 段階の優先順位(レベル 0 がもっとも弱く、レベル 9 が最も強い結び
+   付きをあらわす)がある。もし、<em>数字</em>が省略されれば、それはレベ
+   ル 9 が想定される。結合性宣言をもたない演算子はすべて、
+   <tt>infixl&nbsp;9</tt> (結合性の利用について詳しくは <a
+   href="exps.html#expressions">3</a> 節を見よ)。表 <a
+   href="decls.html#prelude-fixities">4.1</a> はプレリュードで定義されてい
+   る演算子の結合性と優先順位の表である。</p>
 
   <p></p>
 
@@ -2794,7 +2795,7 @@
 
    <div align="center">
     <!--<h3>Precedences and fixities of prelude operators</h3>-->
-    <h3>�ץ��塼�ɱ黻�Ҥ�ͥ���̤ȷ����</h3>
+    <h3>プレリュード演算子の優先順位と結合性</h3>
    </div>
    <a name="prelude-fixities"></a></div>
 
@@ -2803,9 +2804,9 @@
    variable), just like its type; fixity is not a property of that entity's
    <i>name</i>. For example: 
   -->
-  <p>�����������Υ���ƥ��ƥ�(�����Ҥ��뤤���ѿ�)��°���Ǥ��ꡢ���Ȥ�
-   �ʤ��褦�ʤ�ΤǤ��롣������ϥ���ƥ��ƥ���<em>̾��</em>��°���ǤϤ�
-   �����㤨�С�
+  <p>結合性は特定のエンティティ(構成子あるいは変数)の属性であり、型とお
+   なじようなものである。結合性はエンティティの<em>名前</em>の属性ではな
+   い。例えば、
    <tt><br />
    <br />
    &nbsp;&nbsp;module&nbsp;Bar(&nbsp;op&nbsp;)&nbsp;where<br />
@@ -2831,15 +2832,15 @@
    the nested definition of <tt>`op`</tt> with a nested fixity
    declaration.)</p>
   -->
-   �����ǡ�<tt>`Bar.op`</tt> �� <tt>infixr&nbsp;7</tt>��
-   <tt>`Foo.op`</tt> �� <tt>infix&nbsp;3</tt> �Ǥ��ꡢ<tt>f</tt> �α���
-   �� <tt>op</tt> ������Ҥˤʤä�����ϡ��ǥե���Ȥ�
-   <tt>infixl&nbsp;9</tt> �Ȥ�����������ġ�(����Ҥʤʤä�
-   <tt>`op`</tt> �����������Ҥη���������Ϳ���뤳�Ȥ�Ǥ��롣)</p>
+   ここで、<tt>`Bar.op`</tt> は <tt>infixr&nbsp;7</tt>、
+   <tt>`Foo.op`</tt> は <tt>infix&nbsp;3</tt> であり、<tt>f</tt> の右辺
+   の <tt>op</tt> の入れ子になった定義は、デフォルトの
+   <tt>infixl&nbsp;9</tt> という結合性をもつ。(入れ子ななった
+   <tt>`op`</tt> の定義に入れ子の結合性定義を与えることもできる。)</p>
 
   <p> <a name="sect4.4.3"></a></p>
   <!--<h4>4.4.3<tt>&nbsp;&nbsp;</tt>Function and Pattern Bindings</h4>-->
-  <h4>4.4.3<tt>&nbsp;&nbsp;</tt>�ؿ�«������ӥѥ�����«��</h4>
+  <h4>4.4.3<tt>&nbsp;&nbsp;</tt>関数束縛およびパターン束縛</h4>
   <p><a name="function-bindings"></a><a name="pattern-bindings"></a></p>
 
   <p></p>
@@ -2911,21 +2912,21 @@
    binding may appear at the top-level of a module or within a
    <tt>where</tt> or <tt>let</tt> construct.</p>
   -->
-  <p>���ι�ʸ�Ǥ� 2 �Ĥξ�����̤��롣���դ�
-   <i>pat</i><sup><i>0</i></sup> �Ǥ���Ȥ�<em>�ѥ�����«��</em>���и���
-   �롣����ʳ��ξ��ˤϡ�����«����<em>�ؿ�«��</em>�ȸƤ֡��ɤ����«
-   ����⥸�塼��Υȥåץ�٥뤢�뤤�� <tt>let</tt> ���뤤��
-   <tt>where</tt> ������Ǥ�����롣</p> 
+  <p>この構文では 2 つの場合を区別する。左辺が
+   <i>pat</i><sup><i>0</i></sup> であるとき<em>パターン束縛</em>が出現す
+   る。それ以外の場合には、この束縛は<em>関数束縛</em>と呼ぶ。どちらの束
+   縛もモジュールのトップレベルあるいは <tt>let</tt> あるいは
+   <tt>where</tt> 構成内であらわれる。</p> 
 
   <p> <a name="sect4.4.3.1"></a></p>
   <!--<h5>4.4.3.1<tt>&nbsp;&nbsp;</tt>Function bindings</h5>-->
-  <h5>4.4.3.1<tt>&nbsp;&nbsp;</tt>�ؿ�«��</h5>
+  <h5>4.4.3.1<tt>&nbsp;&nbsp;</tt>関数束縛</h5>
   <!--
   <p>A function binding binds a variable to a function value. The general
    form of a function binding for variable <i>x</i> is:</p>
   -->
-  <p>�ؿ�«�����ѿ���ؿ��ͤ�«�����롣�ѿ� <i>x</i> ���Ф���ؿ�«����
-  ����Ū�����ϡ�</p> 
+  <p>関数束縛は変数を関数値に束縛する。変数 <i>x</i> に対する関数束縛の
+  一般的形式は、</p> 
   <p></p>
   <table>
    <tr>
@@ -2946,8 +2947,8 @@
   <p> where each <i>p</i><sub><i>ij</i></sub> is a pattern, and where each
    <i>match</i><sub><i>i</i></sub> is of the general form:</p>
   -->
-  <p>�����ǡ��� <i>p</i><sub><i>ij</i></sub> �ϥѥ�����Ǥ��ꡢ��
-  <i>match</i><sub><i>i</i></sub> �ϰʲ��η�����</p>
+  <p>ここで、各 <i>p</i><sub><i>ij</i></sub> はパターンであり、各
+  <i>match</i><sub><i>i</i></sub> は以下の形式、</p>
   <p></p>
 
   <table>
@@ -2959,7 +2960,7 @@
   </table>
 
   <!--<p>or</p>-->
-  <p>���뤤��</p>
+  <p>あるいは</p>
   <p></p>
 
   <table>
@@ -2985,9 +2986,9 @@
    <i>m</i><sub><i>i</i></sub><i>&gt;=1</i>. The former is treated as
    shorthand for a particular case of the latter, namely:</p>
   -->
-  <p>�Ǥ��ꡢ�����ǡ�<i>n&gt;=1</i>��<i>1&lt;=i&lt;=n</i>��
-   <i>m</i><sub><i>i</i></sub><i>&gt;=1</i> �Ǥ��롣���Ԥϡ���Ԥ����̤�
-   ���ξ�ά���Ȥ��ư����롣���ʤ����</p>
+  <p>であり、ここで、<i>n&gt;=1</i>、<i>1&lt;=i&lt;=n</i>、
+   <i>m</i><sub><i>i</i></sub><i>&gt;=1</i> である。前者は、後者の特別な
+   場合の省略形として扱われる。すなわち、</p>
   <p></p>
 
   <table>
@@ -2999,24 +3000,24 @@
   </table>
 
   <p></p>
-  <p>�Ǥ��롣</p>
+  <p>である。</p>
   <!--
   <p> Note that all clauses defining a function must be contiguous, and the
    number of patterns in each clause must be the same. The set of patterns
    corresponding to each match must be <i>linear</i>---no variable is
    allowed to appear more than once in the entire set.</p>
   -->
-  <p>�ؿ���������뤹�٤Ƥ����Ϣ³���Ƥ��ʤ���Фʤ餺������Υѥ�����
-   �ο���Ʊ���Ǥʤ���Фʤ�ʤ����ƾȹ���б�����ѥ�����ν���ϡ�<em>
-   ����</em>�Ǥʤ���Фʤ�ʤ������ʤ�������ν������ΤǤɤ��ѿ��� 2 ��
-   �ʾ夢����ƤϤ����ʤ���</p> 
+  <p>関数を定義するすべての節は連続していなければならず、各節のパターン
+   の数は同じでなければならない。各照合に対応するパターンの集合は、<em>
+   線形</em>でなければならない。すなわち、その集合全体でどの変数も 2 度
+   以上あらわれてはいけない。</p> 
   <!--
   <p> Alternative syntax is provided for binding functional values to infix
    operators. For example, these three function definitions are all
    equivalent: 
   -->
-  <p>�ؿ�«���ˤϴؿ����ͤ����ֱ黻�Ҥ�«�������̤ι�ʸ���Ѱդ���Ƥ��롣
-   ���Ȥ��С��ʲ��� 2 �Ĥδؿ������Ʊ���Ǥ��롣
+  <p>関数束縛には関数の値を中置演算子に束縛する別の構文も用意されている。
+   たとえば、以下の 2 つの関数定義は同等である。
    <tt><br />
    <br />
    &nbsp;&nbsp;plus&nbsp;x&nbsp;y&nbsp;z&nbsp;=&nbsp;x+y+z<br />
@@ -3034,9 +3035,9 @@
      The general binding form for functions is semantically equivalent to
      the equation (i.e. simple pattern binding):
      -->
-     <h3>�Ѵ�:</h3>
-     �ؿ����Ф������Ū��«���η����ϥ��ޥ�ƥ������Ȥ��ƤϤ���������Ʊ
-     ���Ǥ��롣(���Ȥ��С�ñ��ʥѥ�����«��)
+     <h3>変換:</h3>
+     関数に対する一般的な束縛の形式はセマンティクスとしてはこの等式と同
+     等である。(たとえば、単純なパターン束縛)
      <p> <i>x </i><tt>=&nbsp;\</tt><i> x</i><sub><i>1</i></sub><i> ...
       x</i><sub><i>k</i></sub><i>
       </i><tt>-&gt;&nbsp;case&nbsp;(</tt><i>x</i><sub><i>1</i></sub><tt>,&nbsp;</tt><i>...</i><tt>,&nbsp;</tt><i>x</i><sub><i>k</i></sub><tt>)&nbsp;of
@@ -3059,7 +3060,7 @@
      <!--
      <p> where the <i>x</i><sub><i>i</i></sub> are new identifiers.</p>
      -->
-     <p>�����ǡ�<i>x</i><sub><i>i</i></sub> �Ͽ��������̻�</p>
+     <p>ここで、<i>x</i><sub><i>i</i></sub> は新しい識別子</p>
     </td>
    </tr>
   </table>
@@ -3067,7 +3068,7 @@
   <p><a name="patbind"></a></p>
   <p> <a name="sect4.4.3.2"></a></p>
   <!--<h5>4.4.3.2<tt>&nbsp;&nbsp;</tt>Pattern bindings</h5>-->
-  <h5>4.4.3.2<tt>&nbsp;&nbsp;</tt>�ѥ�����«��</h5>
+  <h5>4.4.3.2<tt>&nbsp;&nbsp;</tt>パターン束縛</h5>
   <!--
   <p> A pattern binding binds variables to values. A <i>simple</i> pattern
    binding has form <i>p = e</i>. The pattern <i>p</i> is matched "lazily"
@@ -3075,18 +3076,18 @@
    front of it. See the translation in Section <a
    href="exps.html#let-expressions">3.12</a>.</p>
   -->
-  <p>�ѥ�����«�����ѿ����ͤ�«�����롣<em>ñ��</em>�ѥ�����«���� <i>p
-   = e</i> �Ȥ��������Ǥ��롣�ѥ����� <i>p</i> ������ <tt>~</tt> ������
-   ��Ĥ��Ƥ��뤫�Τ褦��ȿ���Բĥѥ������Ʊ�ͤ��ٱ�ȹ礵��롣<a
-   href="exps.html#let-expressions">3.12</a> ����Ѵ��򸫤衣</p>
+  <p>パターン束縛は変数を値に束縛する。<em>単純</em>パターン束縛は <i>p
+   = e</i> という形式である。パターン <i>p</i> は前に <tt>~</tt> が暗黙
+   上ついているかのように反駁不可パターンと同様に遅延照合される。<a
+   href="exps.html#let-expressions">3.12</a> 節の変換を見よ。</p>
   <!--
   <p> The <i>general</i> form of a pattern binding is <i>p match</i>, where
    a <i>match</i> is the same structure as for function bindings above; in
    other words, a pattern binding is:</p>
   -->
-  <p>�ѥ�����«����<em>����</em>���� <i>p match</i> �Ǥ��ꡢ�����Ǥ�
-   <i>match</i> �Ͼ�δؿ�«�����Ф���Τ�Ʊ����¤�򤷤Ƥ��롣����������
-   �Хѥ�����«����</p>
+  <p>パターン束縛の<em>一般</em>形は <i>p match</i> であり、ここでは
+   <i>match</i> は上の関数束縛に対するのと同じ構造をしている。いいかえれ
+   ばパターン束縛は</p>
   <p></p>
 
   <table>
@@ -3124,9 +3125,9 @@
      The pattern binding above is semantically equivalent to this simple
      pattern binding:
      -->
-     <h3>�Ѵ�:</h3>
-     ��Υѥ�����«���ϰʲ���ñ��ѥ�����«���ȥ��ޥ�ƥ������Ȥ��Ƥ�Ʊ
-     ���Ǥ��롣
+     <h3>変換:</h3>
+     上のパターン束縛は以下の単純パターン束縛とセマンティクスとしては同
+     等である。
      <p></p>
      <table>
       <tr>
@@ -3169,15 +3170,15 @@
   <p></p>
 
   <!--<h3>A note about syntax.</h3>-->
-  <h3>��ʸ�˴ؤ���Ρ���</h3>
+  <h3>構文に関するノート</h3>
   <!--
   <p> It is usually straightforward to tell whether a binding is a pattern
    binding or a function binding, but the existence of <tt>n+k</tt>
    patterns sometimes confuses the issue. Here are four examples:
   -->
-  <p>«�����ѥ�����«���Ǥ��뤫�ؿ�«���Ǥ��뤫��ʬ����Τϴ�ñ�Ǥ���
-   ����<tt>n+k</tt> �ѥ�����¸�ߤ���Ȥ�������Ϥ�䤳�����ʤ롣4 ����
-   �򤢤����
+  <p>束縛がパターン束縛であるか関数束縛であるかを見分けるのは簡単である
+   が、<tt>n+k</tt> パターンが存在するとこの問題はややこしくなる。4 つ例
+   をあげると
    <tt><br />
    <br />
    &nbsp;&nbsp;x&nbsp;+&nbsp;1&nbsp;=&nbsp;...
@@ -3199,32 +3200,32 @@
   <!--
    The first two can be distinguished because a pattern binding has a
    <i>pat</i><sup><i>0</i></sup> on the left hand side, not a <i>pat</i>
-   ���� the former cannot be an unparenthesised <tt>n+k</tt> pattern.</p>
+   —— the former cannot be an unparenthesised <tt>n+k</tt> pattern.</p>
   -->
-   �ǽ����Ĥϡ����̤��뤳�Ȥ��Ǥ��롣�ʤ��ʤ顢�ѥ�����«���Ϻ��դˤ�
-   ���� <i>pat</i><sup><i>0</i></sup> ������������ <i>p</i> �ǤϤʤ���
-   ���Ԥϳ�̤Ǥ����ޤ�ʤ� <tt>n+k</tt> �ѥ�����ˤʤꤨ�ʤ�����Ǥ��롣
+   最初の二つは、区別することができる。なぜなら、パターン束縛は左辺にお
+   いて <i>pat</i><sup><i>0</i></sup> を持ち、これは <i>p</i> ではなく、
+   前者は括弧でかこまれない <tt>n+k</tt> パターンになりえないからである。
    </p>
 
   <p><a name="dependencyanalysis"></a></p>
   <p><a name="sect4.5"></a></p>
   <!--<h3>4.5<tt>&nbsp;&nbsp;</tt>Static Semantics of Function and Pattern
    Bindings</h3>-->
-  <h3>4.5<tt>&nbsp;&nbsp;</tt>�ؿ�«������ӥѥ�����«����
-   ��Ū���ޥ�ƥ�����</h3>
+  <h3>4.5<tt>&nbsp;&nbsp;</tt>関数束縛およびパターン束縛の
+   静的セマンティクス</h3>
   <!--
   <p> The static semantics of the function and pattern bindings of a
    <tt>let</tt> expression or <tt>where</tt> clause are discussed in this
    section.</p>
   -->
-  <p><tt>let</tt> ���뤤�� <tt>where</tt> ��δؿ�«������ӥѥ�����«��
-  ����Ū���ޥ�ƥ������ˤĤ��Ƥ�����ǵ������롣</p>
+  <p><tt>let</tt> あるいは <tt>where</tt> 節の関数束縛およびパターン束縛
+  の静的セマンティクスについてこの節で議論する。</p>
   
   <p><a name="depend-anal"></a></p>
   <p><a name="sect4.5.1"></a></p>
 
   <!--<h4>4.5.1<tt>&nbsp;&nbsp;</tt>Dependency Analysis</h4>-->
-  <h4>4.5.1<tt>&nbsp;&nbsp;</tt>��¸������</h4>
+  <h4>4.5.1<tt>&nbsp;&nbsp;</tt>依存性解析</h4>
   <!--
   <p> In general the static semantics are given by the normal
    Hindley-Milner inference rules. A <i>dependency analysis
@@ -3232,22 +3233,22 @@
    variables bound by value declarations are in the same <i>declaration
    group</i> if either</p>
   -->
-  <p>����Ū�˥��ޥ�ƥ��������̾�� Hindley-Milner ������§�ˤ�ä�Ϳ��
-   ���롣<em>��¸�������Ѵ�</em>�Ϥޤ�¿�����򶯲����뤿��˹Ԥʤ��롣
-   �ͤ�����ˤ�ä�«�������դ��Ĥ��ѿ��ϼ��Τɤ줫�ξ�硢Ʊ��<em>��
-   �����롼��</em>��°���롣</p>
+  <p>一般的にセマンティクスは通常の Hindley-Milner 推論規則によって与え
+   られる。<em>依存性解析変換</em>はまず多相性を強化するために行なわれる。
+   値の宣言によって束縛されるふたつの変数は次のどれかの場合、同じ<em>宣
+   言グループ</em>に属する。</p>
 
   <ol>
    <!--
    <li> they are bound by the same pattern binding, or</li>
    -->
-   <li>�ɤ����Ʊ���ѥ�����«���ˤ��«������롣</li>
+   <li>どちらも同じパターン束縛により束縛される。</li>
    <!--
    <li> their bindings are mutually recursive (perhaps via some other
     declarations that are also part of the group).</li>
    -->
-   <li>������«������ߺƵ�Ū (�����餯�Ϥ��Υ��롼�פΰ����Ǥ����̤���
-     �����̤���)</li>
+   <li>それらの束縛は相互再帰的 (おそらくはそのグループの一部である別の宣
+     言を通じて)</li>
   </ol>
   <!--
   <p>Application of the following rules causes each <tt>let</tt> or
@@ -3257,18 +3258,18 @@
    similar transformation is described in Peyton Jones' book [<a
    href="haskell.html#$peyton-jones:book">10</a>].)</p>
   -->
-  <p>�ʲ��ε�§��Ŭ�Ѥˤ�ꡢ�� <tt>let</tt> ���뤤�� <tt>where</tt> ��
-   ��(�⥸�塼��Υȥåץ�٥��«����������� <tt>where</tt> ���ޤ�)
-   �ϡ��ҤȤĤ�������롼�פ��ѿ��Τߤ�«������ɬ�פȤ�����¸�����Ϥ�
-   ��ª���롣(Ʊ�ͤ��Ѵ��ϡ�Payton Jones ���� [<a
-   href="haskell.html#$peyton-jones:book">9</a>] �ǲ��⤵��Ƥ��롣)</p>
+  <p>以下の規則の適用により、各 <tt>let</tt> あるいは <tt>where</tt> 構
+   成(モジュールのトップレベルの束縛を定義する <tt>where</tt> 節を含む)
+   は、ひとつの宣言グループの変数のみを束縛し、必要とされる依存性解析を
+   捕捉する。(同様の変換は、Payton Jones の本 [<a
+   href="haskell.html#$peyton-jones:book">9</a>] で解説されている。)</p>
   
   <ol>
    <!--
    <li>The order of declarations in <tt>where</tt>/<tt>let</tt> constructs
     is irrelevant.</li>
    -->
-   <li><tt>where</tt>/<tt>let</tt> �����ˤ���������ν���ϡ�̵�ط���
+   <li><tt>where</tt>/<tt>let</tt> 構成における宣言の順序は、無関係。
    </li>
    <li><tt>let&nbsp;{</tt><i>d</i><sub><i>1</i></sub><tt>;&nbsp;</tt><i>d</i><sub><i>2</i></sub><tt>}&nbsp;in&nbsp;</tt><i>e</i>
     =
@@ -3278,14 +3279,14 @@
     (when no identifier bound in <i>d</i><sub><i>2</i></sub> appears free
     in <i>d</i><sub><i>1</i></sub>)</li>
    -->
-    (<i>d</i><sub><i>2</i></sub> ���ǧ���Ҥ�
-    <i>d</i><sub><i>1</i></sub> ���̵«���ǤϤ�����ʤ����)</li>
+    (<i>d</i><sub><i>2</i></sub> 内の認識子が
+    <i>d</i><sub><i>1</i></sub> 内で無束縛ではあらわれない場合)</li>
   </ol>
 
   <p><a name="generalization"></a></p>
   <p> <a name="sect4.5.2"></a></p>
   <!--<h4>4.5.2<tt>&nbsp;&nbsp;</tt>Generalization</h4>-->
-  <h4>4.5.2<tt>&nbsp;&nbsp;</tt>���̲�</h4>
+  <h4>4.5.2<tt>&nbsp;&nbsp;</tt>一般化</h4>
   <!--
   <p> The Hindley-Milner type system assigns types to a
    <tt>let</tt>-expression in two stages. First, the right-hand side of the
@@ -3295,16 +3296,16 @@
    environment; this is called <i>generalization</i>. Finally, the body of
    the <tt>let</tt>-expression is typed.</p>
   -->
-  <p>Hindley-Milner �η������ƥ�Ϸ��� <tt>let</tt>-���ˡ��դ��Ĥ��ʳ���
-   ������Ƥ롣�褺������α��դ����ν�������Ƥ��ʤ�����Ϳ���ơ�����
-   �����롣���ˤ��η���ˤ�����뤹�٤Ƥη��ѿ��򡢤��η��Ķ����«��
-   �ѿ����б��դ����Ƥ��ʤ���С����ν������롣�����<em>���̲�
-   </em>(generalization)�Ȥ������Ǹ�ˡ�<tt>let</tt>-�������Τ��դ���
-   �롣</p>
+  <p>Hindley-Milner の型システムは型を <tt>let</tt>-式に、ふたつの段階で
+   割り当てる。先ず、宣言の右辺を、全称修飾されていない型を与えて、型付
+   けする。次にこの型内にあらわれるすべての型変数を、この型環境内の束縛
+   変数に対応付けられていなければ、全称修飾する。これを<em>一般化
+   </em>(generalization)という。最後に、<tt>let</tt>-式の本体を型付けす
+   る。</p>
   <!--
   <p> For example, consider the declaration
   -->
-  <p>���Ȥ��С��ʲ��������ͤ��衣
+  <p>たとえば、以下の宣言を考えよ。
    <tt><br />
    <br />
    &nbsp;&nbsp;f&nbsp;x&nbsp;=&nbsp;let&nbsp;g&nbsp;y&nbsp;=&nbsp;(y,y)<br />
@@ -3318,18 +3319,18 @@
    <i>forall a. a -&gt;(a,a)</i>, after which the typing of the
    "<tt>...</tt>" part can proceed.</p>
   -->
-  <tt>g</tt> ������η��� <i>a -&gt;(a,a)</i> �Ǥ��롣���̲��β����ǡ�
-   <tt>g</tt> �ˤ�¿�귿 <i>forall a.  a -&gt;(a,a)</i> ����Ϳ���졢����
-   �塢"<tt>...</tt>" ����ʬ�η��դ��������ʤ��롣</p> 
+  <tt>g</tt> の定義の型は <i>a -&gt;(a,a)</i> である。一般化の過程で、
+   <tt>g</tt> には多相型 <i>forall a.  a -&gt;(a,a)</i> が付与され、その
+   後、"<tt>...</tt>" の部分の型付けがおこなわれる。</p> 
   <!--
   <p> When typing overloaded definitions, all the overloading constraints
    from a single declaration group are collected together, to form the
    context for the type of each variable declared in the group. For
    example, in the definition:
   -->
-  <p>¿������η��դ���Ԥ��Ȥ����ҤȤĤ�������롼�פ���Τ��٤Ƥ�¿��
-   ������󤬤ҤȤĤˤޤȤ��졢���Υ��롼���������������ѿ��η���
-   �Ф���ʸ̮��������롣���Ȥ��С�
+  <p>多重定義の型付けを行うとき、ひとつの宣言グループからのすべての多重
+   定義制約がひとつにまとめられ、そのグループ内で宣言される各変数の型に
+   対する文脈を形成する。たとえば、
    <tt><br />
    <br />
    &nbsp;&nbsp;f&nbsp;x&nbsp;=&nbsp;let&nbsp;g1&nbsp;x&nbsp;y&nbsp;=&nbsp;if&nbsp;x&gt;y&nbsp;then&nbsp;show&nbsp;x&nbsp;else&nbsp;g2&nbsp;y&nbsp;x<br />
@@ -3345,16 +3346,16 @@
    <tt>show</tt>). The type variables appearing in this collection of
    constraints are called the <i>constrained type variables</i>.</p>
   -->
-  �Ȥ��������ǡ�<tt>g1</tt> ������� <tt>g2</tt> ������ϤȤ�� <i>a
-   -&gt;a -&gt;</i><tt>String</tt> �ǡ����Ѥ��줿����� <tt>Ord</tt><i>
-   a</i> (<tt>&gt;</tt> �λ��Ѥˤ��ȯ��)������� <tt>Show</tt><i> a</i>
-   (<tt>show</tt> �λ��Ѥˤ��ȯ��)�Ǥ��롣����Τ��ν��Ѥ���ˤ�����
-   �뷿�ѿ���<em>�������ѿ�</em>�Ȥ�֡�</p>
+  という定義内で、<tt>g1</tt> の定義と <tt>g2</tt> の定義はともに <i>a
+   -&gt;a -&gt;</i><tt>String</tt> で、蓄積された制約は <tt>Ord</tt><i>
+   a</i> (<tt>&gt;</tt> の使用により発生)、および <tt>Show</tt><i> a</i>
+   (<tt>show</tt> の使用により発生)である。制約のこの集積の中にあらわれ
+   る型変数は<em>被制約型変数</em>とよぶ。</p>
   <!--
   <p> The generalization step attributes to both <tt>g1</tt> and
    <tt>g2</tt> the type</p>
   -->
-  <p>���ΰ��̲��ʳ��Ǥ� <tt>g1</tt> ����� <tt>g2</tt> ��ξ���˷�</p>
+  <p>この一般化段階では <tt>g1</tt> および <tt>g2</tt> の両方に型</p>
 
   <p> <i>forall a. (</i><tt>Ord</tt><i> a, </i><tt>Show</tt><i> a) =&gt;a
    -&gt;a -&gt;</i><tt>String </tt></p>
@@ -3364,22 +3365,22 @@
    even though the occurrences of <tt>&gt;</tt> and <tt>show</tt> are in
    the definition of <tt>g1</tt>.</p>
   -->
-  <p>����Ϳ����롣<tt>g2</tt> �� <tt>&gt;</tt> ����� <tt>show</tt> ��
-   �и��� <tt>g1</tt> ��Ǥ��äƤ⡢<tt>g1</tt> ��Ʊ����ˡ��¿���������
-   �Ƥ��뤳�Ȥ����դ��衣</p>
+  <p>が付与される。<tt>g2</tt> は <tt>&gt;</tt> および <tt>show</tt> の
+   出現が <tt>g1</tt> 内であっても、<tt>g1</tt> と同じ方法で多重定義され
+   ていることに注意せよ。</p>
   <!--
   <p> If the programmer supplies explicit type signatures for more than one
    variable in a declaration group, the contexts of these signatures must
    be identical up to renaming of the type variables.</p>
   -->
-  <p>�ҤȤĤ�������롼����� 2 �İʾ���ѿ����Ф��ơ��ץ�����ޤ�����Ū
-   �˷������ͥ����Ϳ������硢�����η������ͥ����ʸ̮�Ϥ��η��ѿ���
-   ̾�����դ��ؤ���Ʊ��Ǥʤ���Фʤ�ʤ���</p>
+  <p>ひとつの宣言グループ内で 2 つ以上の変数に対して、プログラマが明示的
+   に型シグネチャを与えた場合、それらの型シグネチャの文脈はその型変数の
+   名前の付け替えと同一でなければならない。</p>
 
   <p><a name="context-reduction"></a></p>
   <p><a name="sect4.5.3"></a></p>
   <!--<h4>4.5.3<tt>&nbsp;&nbsp;</tt>Context Reduction Errors</h4>-->
-  <h4>4.5.3<tt>&nbsp;&nbsp;</tt>ʸ̮���󥨥顼</h4>
+  <h4>4.5.3<tt>&nbsp;&nbsp;</tt>文脈簡約エラー</h4>
   <!--
   <p>As mentioned in Section <a href="decls.html#type-semantics">4.1.4</a>,
    the context of a type may constrain only a type variable, or the
@@ -3388,25 +3389,25 @@
    context constraints have be reduced to this "head normal form".
    Consider, for example, the definition: 
   -->
-  <p><a href="decls.html#type-semantics">4.1.4</a> ��Ǹ��ڤ����褦�ˡ�
-   ���뷿��ʸ̮�Ϸ��ѿ����뤤��1�İʾ�η��ؤη��ѿ���Ŭ�Ѥ������󤷤ʤ���
-   ���Τ��Ȥˤ�ꡢ���̲��ˤ�ä��������줿���ϡ����٤Ƥ�ʸ̮���󤬤���
-   ��Ƭ���������פ˴��󤵤��褦�ʷ�����ɽ������ʤ���Фʤ�ʤ�������
-   ���С��Ĥ��Τ褦�������ͤ��褦��
+  <p><a href="decls.html#type-semantics">4.1.4</a> 節で言及したように、
+   ある型の文脈は型変数あるいは1つ以上の型への型変数の適用しか制約しない。
+   このことにより、一般化によって生成された型は、すべての文脈制約がその
+   「頭部正規形」に簡約されるような形式で表現されなければならない。たと
+   えば、つぎのような定義を考えよう。
    <tt><br />
    <br />
    &nbsp;&nbsp;f&nbsp;xs&nbsp;y&nbsp;&nbsp;=&nbsp;&nbsp;xs&nbsp;==&nbsp;[y]<br />
    <br />
    </tt>
    <!-- Its type is given by -->
-   ���η���
+   この型は
    <tt><br />
    <br />
    &nbsp;&nbsp;f&nbsp;::&nbsp;Eq&nbsp;a&nbsp;=&gt;&nbsp;[a]&nbsp;-&gt;&nbsp;a&nbsp;-&gt;&nbsp;Bool<br />
    <br />
    </tt>
    <!-- and not -->
-   ��Ϳ������ΤǤ��äơ�
+   で与えられるのであって、
    <tt><br />
    <br />
    &nbsp;&nbsp;f&nbsp;::&nbsp;Eq&nbsp;[a]&nbsp;=&gt;&nbsp;[a]&nbsp;-&gt;&nbsp;a&nbsp;-&gt;&nbsp;Bool<br />
@@ -3418,19 +3419,19 @@
    lists, before generalization. If no such instance is in scope, a static
    error occurs.</p>
   -->
-  <p>��Ϳ�����ΤǤϤʤ������Υꥹ�ȷ���Ʊ�������Ȥ����Ǥ����⡢
-   �ꥹ�Ⱦ�� <tt>Eq</tt> ���б����륤�󥹥���������Ѥ������̲�������
-   ��ʸ̮��ñ�㲽����롣�⤷�����Τ褦�ʥ��󥹥��󥹤�ͭ���ϰ���ˤʤ�
-   ��С���Ū���顼�Ȥʤ롣</p>
+  <p>で与えられのではない。このリスト型で同等性がとれる場合でさえも、
+   リスト上の <tt>Eq</tt> に対応するインスタンス宣言を用い、一般化する前
+   に文脈は単純化される。もし、このようなインスタンスが有効範囲内になけ
+   れば、静的エラーとなる。</p>
   <!--
   <p> Here is an example that shows the need for a constraint of the form
    <i>C (m t)</i> where m is one of the type variables being generalized;
    that is, where the class <i>C</i> applies to a type expression that is
    not a type variable or a type constructor. Consider: 
   -->
-  <p><i>C (m t)</i> �Ȥ�������������ɬ�פǤ��뤳�Ȥ򼨤��㤬���롣����
-   �� m �ϰ��̲�����뷿�ѿ��ΤҤȤĤǤ��롣���ʤ�������饹 <i>C</i> ��
-   ���ѿ����뤤�Ϸ������ҤǤϤʤ��褦�ʷ������Ф���Ŭ�Ѥ��롣
+  <p><i>C (m t)</i> という形式の制約が必要であることを示す例がある。ここ
+   で m は一般化される型変数のひとつである。すなわち、クラス <i>C</i> が
+   型変数あるいは型構成子ではないような型式に対して適用する。
    <tt><br />
    <br />
    &nbsp;&nbsp;f&nbsp;::&nbsp;(Monad&nbsp;m,&nbsp;Eq&nbsp;(m&nbsp;a))&nbsp;=&gt;&nbsp;a&nbsp;-&gt;&nbsp;m&nbsp;a&nbsp;-&gt;&nbsp;Bool<br />
@@ -3446,13 +3447,13 @@
    <tt>(Monad&nbsp;m,&nbsp;Eq&nbsp;(m&nbsp;a))&nbsp;=&gt;&nbsp;a&nbsp;-&gt;&nbsp;m&nbsp;a&nbsp;-&gt;&nbsp;Bool</tt>,
    and the context cannot be simplified further.</p>
   -->
-   ��ͤ��褦��<tt>return</tt> �η��� 
+   を考えよう。<tt>return</tt> の型は 
    <tt>Monad&nbsp;m&nbsp;=&gt;&nbsp;a&nbsp;-&gt;&nbsp;m&nbsp;a</tt>
-   �Ǥ��ꡢ<tt>(==)</tt> �η���
+   であり、<tt>(==)</tt> の型は
    <tt>Eq&nbsp;a&nbsp;=&gt;&nbsp;a&nbsp;-&gt;&nbsp;a&nbsp;-&gt;&nbsp;Bool</tt>
-   �Ǥ��롣����椨��<tt>f</tt> �η���
+   である。それゆえ、<tt>f</tt> の型は
    <tt>(Monad&nbsp;m,&nbsp;Eq&nbsp;(m&nbsp;a))&nbsp;=&gt;&nbsp;a&nbsp;-&gt;&nbsp;m&nbsp;a&nbsp;-&gt;&nbsp;Bool</tt>
-   �Ǥʤ���Фʤ餺��ʸ̮�Ϥ���ʾ���󤹤뤳�ȤϤǤ��ʤ���</p>
+   でなければならず、文脈はこれ以上簡約することはできない。</p>
   <!--
   <p> The instance declaration derived from a data type <tt>deriving</tt>
    clause (see Section <a href="decls.html#derived-decls">4.3.3</a>) must,
@@ -3460,11 +3461,11 @@
    all the constraints must be of the form <i>C a</i>, where <i>a</i> is a
    type variable. For example, in the type
   -->
-  <p>�ǡ������� <tt>deriving</tt> �� (<a
-   href="decls.html#derived-decls">4.3.3</a> ���ߤ�)���Ƴ�Ф��줿����
-   ����������ϡ��ɤΥ��󥹥��󥹤Ȥ�Ʊ���褦�ˡ�<em>ñ���</em>��ʸ̮
-   ������ͤФʤ�ʤ������ʤ�������٤Ƥ������ <i>C a</i> �Ȥ��������ǡ�
-   <i>a</i> �Ϸ��ѿ��Ǥ��롣���Ȥ��С�
+  <p>データ型の <tt>deriving</tt> 節 (<a
+   href="decls.html#derived-decls">4.3.3</a> 節をみよ)より導出されたイン
+   スタンス宣言は、どのインスタンスとも同じように、<em>単純な</em>な文脈
+   を持たねばならない。すなわち、すべての制約は <i>C a</i> という形式で、
+   <i>a</i> は型変数である。たとえば、
    <tt><br />
    <br />
    &nbsp;&nbsp;data&nbsp;Apply&nbsp;a&nbsp;b&nbsp;=&nbsp;App&nbsp;(a&nbsp;b)&nbsp;&nbsp;deriving&nbsp;Show<br />
@@ -3475,21 +3476,21 @@
    <tt>Show&nbsp;(a&nbsp;b)</tt>, which cannot be reduced and is not
    simple; thus a static error results.</p>
   -->
-  �Ȥ������ˤ����ơ�Ƴ�Ф��줿 Show �Υ��󥹥��󥹤�ʸ̮
-  <tt>Show&nbsp;(a&nbsp;b)</tt> ��������������ϴ���Ǥ��ꡢñ��ǤϤ�
-  �������ʤ������Ū���顼�Ȥʤ롣</p> 
+  という型において、導出された Show のインスタンスは文脈
+  <tt>Show&nbsp;(a&nbsp;b)</tt> を生成し、これは既約であり、単純ではな
+  い。すなわち、静的エラーとなる。</p> 
 
   <p><a name="monomorphism"></a></p>
   <p><a name="sect4.5.4"></a></p>
   <!--<h4>4.5.4<tt>&nbsp;&nbsp;</tt>Monomorphism</h4>-->
-  <h4>4.5.4<tt>&nbsp;&nbsp;</tt>ñ����</h4>
+  <h4>4.5.4<tt>&nbsp;&nbsp;</tt>単相性</h4>
   <!--
   <p>Sometimes it is not possible to generalize over all the type variables
    used in the type of the definition. For example, consider the
    declaration
   -->
-  <p>���ˤ�äƤϡ�����η��Τʤ��ǻȤ��Ƥ������Ƥη��ѿ����Ф��ư�
-   �̲�����ǽ�Ǥ���ȤϤ�����ʤ������Ȥ��С����������ͤ��褦��
+  <p>場合によっては、定義の型のなかで使われている全ての型変数に対して一
+   般化が可能であるとはかぎらない。たとえば、次の宣言を考えよう。
    <tt><br />
    <br />
    &nbsp;&nbsp;f&nbsp;x&nbsp;=&nbsp;let&nbsp;g&nbsp;y&nbsp;z&nbsp;=&nbsp;([x,y],&nbsp;z)<br />
@@ -3506,21 +3507,21 @@
    type environment. We say that the type of <tt>g</tt> is <i>monomorphic
    in the type variable a</i>.</p>
   -->
-   <tt>x</tt> �η��� <i>a</i> �Ǥ���褦�ʴĶ��Ǥϡ�<tt>g</tt> �������
-   ���� <i>a -&gt;b
-   -&gt;</i><tt>([</tt><i>a</i><tt>]</tt><i>,b</i><tt>)</tt> �Ǥ��롣��
-   �̲����ʳ��� <tt>g</tt> �ˤϷ� <i>forall b.  a -&gt;b
-   -&gt;</i><tt>([</tt><i>a</i><tt>]</tt><i>,b</i><tt>)</tt> ����Ϳ���졢
-   <i>b</i> �Τߤ����ν�����ǽ�Ǥ��롣�ʤ��ʤ顢<i>a</i> �Ϥ��η��Ķ���
-   �и����뤫��Ǥ��롣����� <tt>g</tt> �η���<em>���η��ѿ�</em>
-   <i>a</i> <em>�ˤ�����ñ��Ǥ���</em>�Ȥ�����</p>
+   <tt>x</tt> の型が <i>a</i> であるような環境では、<tt>g</tt> の定義の
+   型は <i>a -&gt;b
+   -&gt;</i><tt>([</tt><i>a</i><tt>]</tt><i>,b</i><tt>)</tt> である。一
+   般化の段階で <tt>g</tt> には型 <i>forall b.  a -&gt;b
+   -&gt;</i><tt>([</tt><i>a</i><tt>]</tt><i>,b</i><tt>)</tt> が付与され、
+   <i>b</i> のみが全称修飾可能である。なぜなら、<i>a</i> はその型環境で
+   出現するからである。これを <tt>g</tt> の型は<em>この型変数</em>
+   <i>a</i> <em>において単相である</em>という。</p>
   <!--
   <p> The effect of such monomorphism is that the first argument of all
    applications of <tt>g</tt> must be of a single type. For example, it
    would be valid for the "<tt>...</tt>" to be
   -->
-  <p>���Τ褦��ñ�����αƶ��� <tt>g</tt> �Τ��٤�Ŭ�Ѥ���������ñ���
-   ���Ǥʤ���Фʤ�ʤ��Ȥ������ȤǤ��롣���Ȥ��С����<tt>...</tt> ����ʬ��
+  <p>このような単相性の影響は <tt>g</tt> のすべて適用の第一引数が単一の
+   型でなければならないということである。たとえば、上の<tt>...</tt> の部分が
    <tt><br />
    <br />
    &nbsp;&nbsp;(g&nbsp;True,&nbsp;g&nbsp;False)<br />
@@ -3530,8 +3531,8 @@
    (which would, incidentally, force <tt>x</tt> to have type
    <tt>Bool</tt>) but invalid for it to be
   -->
-   �Ǥ���Τ���������(����϶�����<tt>x</tt> �� �� <tt>Bool</tt> �����
-   ���Ȥ��פ��롣) �����������줬��
+   であるのは正しい。(これは偶々、<tt>x</tt> が 型 <tt>Bool</tt> を持つ
+   ことを強要する。) しかし、これが、
    <tt><br />
    <br />
    &nbsp;&nbsp;(g&nbsp;True,&nbsp;g&nbsp;'c')<br />
@@ -3542,18 +3543,18 @@
    to be <i>monomorphic </i>in the type variable <i>a</i> if <i>a</i> is
    free in <i>forall </i><u>u</u><i>. cx =&gt;t</i>.</p>
   -->
-   �Ǥ��뤳�Ȥ��������ʤ������̤ˡ��� <i>forall </i><u>u</u><i>. cx
-   =&gt;t</i> �ϡ��⤷ <i>a</i> �� <i>forall </i><u>u</u><i>. cx
-   =&gt;t</i> �ˤ�����«������Ƥ��ʤ���С����ѿ� <i>a</i> �ˤ�����<em>
-   ñ��Ū</em>�Ǥ���Ȥ�����</p>
+   であることは正しくない。一般に、型 <i>forall </i><u>u</u><i>. cx
+   =&gt;t</i> は、もし <i>a</i> が <i>forall </i><u>u</u><i>. cx
+   =&gt;t</i> において束縛されていなければ、型変数 <i>a</i> において<em>
+   単相的</em>であるという。</p>
   <!--
   <p> It is worth noting that the explicit type signatures provided by
    Haskell are not powerful enough to express types that include
    monomorphic type variables. For example, we cannot write
   -->
-  <p>Haskell ������Ū�������ͥ��㤬ñ��Ū���ѿ���ޤ෿��ɽ������Τ˽�
-   ʬ�ʥѥ��⤿�ʤ��Ȥ������Ȥ����ܤ��ͤ��롣���Ȥ��С����Τ褦�˽񤯤�
-   �ȤϤǤ��ʤ���
+  <p>Haskell の明示的型シグネチャが単相的型変数を含む型を表現するのに十
+   分なパワーをもたないということは注目に値する。たとえば、次のように書くこ
+   とはできない。
    <tt><br />
    <br />
    &nbsp;&nbsp;f&nbsp;x&nbsp;=&nbsp;let&nbsp;<br />
@@ -3569,11 +3570,11 @@
    <tt>g</tt> can only be given a type signature if its first argument is
    restricted to a type not involving type variables; for example
   -->
-   �ʤ��ʤ顢����ϡ�<tt>g</tt> �� <tt>a</tt> ����� <tt>b</tt> �ˤ����ơ�
-   ¿��Ū�Ǥ���ȼ�ĥ���Ƥ��뤫��Ǥ��� (<a
-   href="decls.html#type-signatures">4.4.1</a> ��򸫤�)�����Υץ������
-   �Ǥϡ�<tt>g</tt> �ϡ��⤷�����������������ѿ���ޤޤʤ��������¤���
-   �Ƥ�����ˤΤ߷������ͥ����Ϳ���뤳�Ȥ��Ǥ��롣���Ȥ��С�
+   なぜなら、これは、<tt>g</tt> が <tt>a</tt> および <tt>b</tt> において、
+   多相的であると主張しているからである (<a
+   href="decls.html#type-signatures">4.4.1</a> 節を見よ)。このプログラム
+   では、<tt>g</tt> は、もし、その第一引数が型変数を含まない型に制限され
+   ている場合にのみ型シグネチャを与えることができる。たとえば、
    <tt><br />
    <br />
    &nbsp;&nbsp;g&nbsp;::&nbsp;Int&nbsp;-&gt;&nbsp;b&nbsp;-&gt;&nbsp;([Int],b)<br />
@@ -3583,20 +3584,20 @@
    This signature would also cause <tt>x</tt> to have type
    <tt>Int</tt>.</p>
   -->
-  �Ǥ��롣���Υ����ͥ���� <tt>x</tt> �� <tt>Int</tt> ������Ĥ��Ȥ⼨��
-   �Ƥ��롣</p>
+  である。このシグネチャは <tt>x</tt> が <tt>Int</tt> 型を持つことも示し
+   ている。</p>
 
   <p><a name="sect:monomorphism-restriction"></a></p>
   <p><a name="sect4.5.5"></a></p>
   <!--<h4>4.5.5<tt>&nbsp;&nbsp;</tt>The Monomorphism Restriction</h4>-->
-  <h4>4.5.5<tt>&nbsp;&nbsp;</tt>ñ��������</h4>
+  <h4>4.5.5<tt>&nbsp;&nbsp;</tt>単相性制限</h4>
   <!--
   <p> Haskell places certain extra restrictions on the generalization step,
    beyond the standard Hindley-Milner restriction described above, which
    further reduces polymorphism in particular cases.</p>
   -->
-  <p>Haskell �Ǥϰ��̲��˴ؤ��ơ���ǽҤ٤�ɸ��Ū Hindley-Milner ���¤�¾�ˡ�
-   ���̤ʾ��ˡ�¿�����򸺤��롢����ˤ����Ĥ������¤����롣</p>
+  <p>Haskell では一般化に関して、上で述べた標準的 Hindley-Milner 制限の他に、
+   特別な場合に、多相性を減ずる、さらにいくつかの制限がある。</p>
   <!--
   <p> The monomorphism restriction depends on the binding syntax of a
    variable. Recall that a variable is bound by either a <i>function
@@ -3605,32 +3606,32 @@
    only a single variable (Section <a
    href="decls.html#pattern-bindings">4.4.3</a>).</p>
   -->
-  <p>ñ�������¤��ѿ�«���ι�ʸ�˰�¸���롣�ѿ���<em>�ؿ�«��</em>�ˤ��
-   �Ƥ⡢<em>�ѥ�����«��</em>�ˤ�äƤ�«������뤳�ȡ��ޤ���<em>ñ��
-   </em>�ѥ�����«�� (<a href="decls.html#pattern-bindings">4.4.3</a> ��)
-   ��ñ����ѿ�����ʤ�ѥ�����Υѥ�����«���Ǥ��뤳�Ȥ�פ��������ȡ�
+  <p>単相性制限は変数束縛の構文に依存する。変数は<em>関数束縛</em>によっ
+   ても、<em>パターン束縛</em>によっても束縛されること、また、<em>単純
+   </em>パターン束縛 (<a href="decls.html#pattern-bindings">4.4.3</a> 節)
+   は単一の変数からなるパターンのパターン束縛であることを思いだすこと。
    </p>
   <!--
   <p> The following two rules define the monomorphism restriction:</p>
   -->
-  <p>�ʲ�����Ĥε�§��ñ�����¤�������Ƥ��롣</p>
+  <p>以下の二つの規則は単相制限を定義している。</p>
 
   <table border="2" cellpadding="3">
    <tr>
     <td>
      <!--<h3>The monomorphism restriction</h3>-->
-     <h3>ñ��������</h3>
+     <h3>単相性制限</h3>
      <p></p>
      <dl>
       <!--<dt> Rule 1.</dt>-->
-      <dt>��§ 1.</dt>
+      <dt>規則 1.</dt>
      </dl>
      <!--
      <p>We say that a given declaration group is <i>unrestricted</i> if and
       only if:</p>
      -->
-     <p>Ϳ����줿������롼�פ����¤�����ʤ��Ȥ����Τϰʲ��ξ��Ǥ��ꡢ���ξ�
-     ��ˤ����롣</p>
+     <p>与えられた宣言グループが制限を受けないというのは以下の場合であり、その場
+     合にかぎる。</p>
      <dl>
       <dt> (a):</dt>
      </dl>
@@ -3639,8 +3640,8 @@
       simple pattern binding (Section <a
       href="decls.html#patbind">4.4.3.2</a>), <i>and </i></p>
      -->
-     <p>���Υ��롼����Τ��٤Ƥ��ѿ����줾�줬�ؿ�«�����뤤��
-      ñ��ѥ�����«���ˤ��«������Ƥ��롣<em>���</em></p>
+     <p>そのグループ内のすべての変数それぞれが関数束縛あるいは
+      単純パターン束縛により束縛されている。<em>且つ</em></p>
      <dl>
       <dt> (b):</dt>
      </dl>
@@ -3656,22 +3657,22 @@
       that a type variable is constrained if it must belong to some type
       class; see Section <a href="decls.html#generalization">4.5.2</a>.)</p>
      -->
-     <p>���Υ��롼�����ñ��ѥ�����«���ˤ��«������Ƥ��뤹�٤Ƥ��ѿ�
-      ���줾��ˤ�����Ū�ʷ������ͥ��㤬Ϳ�����Ƥ��롣</p>
+     <p>そのグループ内の単純パターン束縛により束縛されているすべての変数
+      それぞれには明示的な型シグネチャが与えられている。</p>
 
      <p>
-      �̾��¿�����˴ؤ��� Hindley-Milner ���¤ϡ����δĶ���«�������
-      ���ʤ����ѿ��Τߤ����̲��Ǥ���Ȥ�����ΤǤ��롣����ˡ����Υ��롼
-      �פ��Ф�����̲����ʳ��Ǥ�<em>������������롼�פ��������ѿ��ϰ�
-      �̲��Ǥ��ʤ�</em> �Ȥ����Τ��ä�롣(���ѿ����������Ĥ��η����饹
-      ��°���ʤ���Фʤ�ʤ��Ȥ����Τ�������������Ȥ������Ȥΰ�̣��
-      ���뤳�Ȥ�פ��������ȡ�
+      通常の多相性に関する Hindley-Milner 制限は、その環境で束縛されて
+      いない型変数のみが一般化できるというものである。これに、そのグルー
+      プに対する一般化の段階では<em>被制限宣言グループの被制約型変数は一
+      般化できない</em> というのが加わる。(型変数が，いくつかの型クラス
+      に属さなければならないというのが、制約を受けるということの意味で
+      あることを思いだすこと。
       <a href="decls.html#generalization">4.5.2</a>
-      ��򸫤�)��</p>
+      節を見よ)。</p>
      <p></p>
      <dl>
       <!--<dt> Rule 2.</dt>-->
-      <dt> ��§ 2.</dt>
+      <dt> 規則 2.</dt>
      </dl>
      <!--
      <p>Any monomorphic type variables that remain when type inference for
@@ -3679,21 +3680,21 @@
       are resolved to particular types using the defaulting rules (Section
       <a href="decls.html#default-decls">4.3.4</a>).</p>
      -->
-     <p>����⥸�塼�����Τ��Ф��뷿��������λ���������ǡ��ޤ���ñ�귿��
-      ���Ǥ����ΤϤ��٤ơ�<em>ۣ��</em>�Ǥ���ȹͤ��������	default
-      �ε�§(<a href="decls.html#default-decls">4.3.4</a> ��)��Ȥä���
-      ��η��˲�褹�롣</p>
+     <p>あるモジュール全体に対する型推論が完了した時点で、まだ、単相型変
+      数であるものはすべて、<em>曖昧</em>であると考え、これは	default
+      の規則(<a href="decls.html#default-decls">4.3.4</a> 節)を使って特
+      定の型に解決する。</p>
     </td>
    </tr>
   </table>
   <p></p>
   <!--<h3>Motivation</h3>-->
-  <h3>ư��</h3>
+  <h3>動機</h3>
   <!--
   <p> Rule 1 is required for two reasons, both of which are fairly subtle.</p>
   -->
-  <p>��§ 1 ��ɬ�פʤΤ�2����ͳ�����äơ��ɤ����������̯�ʤ�ΤǤ�
-  �롣</p>
+  <p>規則 1 が必要なのは2つ理由があって，どちらも非常に微妙なものであ
+  る。</p>
   <ul>
    <li> 
     <!--
@@ -3702,16 +3703,16 @@
     library <tt>List</tt>) whose type is given by
     -->
     <p>
-    <em>��§ 1 ��ͽ�۳��κƷ׻����ɤ�</em>�����Ȥ��С�
-    <tt>genericLength</tt> �ϰʲ��Τ褦�ʷ����������Ƥ���
-    (<tt>List</tt> �饤�֥���)ɸ��ؿ��Ǥ��롣
+    <em>規則 1 は予想外の再計算を防ぐ</em>。たとえば、
+    <tt>genericLength</tt> は以下のような型が定義されている
+    (<tt>List</tt> ライブラリの)標準関数である。
     <tt><br />
     <br />
     &nbsp;&nbsp;genericLength&nbsp;::&nbsp;Num&nbsp;a&nbsp;=&gt;&nbsp;[b]&nbsp;-&gt;&nbsp;a<br />
     <br />
     </tt>
     <!-- Now consider the following expression: -->
-    �����ǡ����μ���ͤ��롣
+    ここで、次の式を考える。
     <tt><br />
     <br />
     &nbsp;&nbsp;let&nbsp;{&nbsp;len&nbsp;=&nbsp;genericLength&nbsp;xs&nbsp;}&nbsp;in&nbsp;(len,&nbsp;len)<br />
@@ -3723,10 +3724,10 @@
     different overloadings. If the programmer does actually wish the
     computation to be repeated, an explicit type signature may be added:
     -->
-    <tt>len</tt> �ϰ��٤����׻������٤���Τȸ����뤬����§ 1 ��
-    �ʤ���С������ 2 �ٷ׻�����롣2 �Ĥ�¿��������줾��ˤĤ��� 1
-    �٤��ĤǤ��롣�⤷���ץ�����ޤ����η׻���ȿ�������Τ�˾��ʤ顢
-    ����Ū�˷������ͥ�����ɲä���Ф褤��
+    <tt>len</tt> は一度だけ計算されるべきものと見られるが、規則 1 が
+    なければ、これは 2 度計算される。2 つの多重定義それぞれについて 1
+    度ずつである。もし、プログラマがこの計算が反復されるのを望むなら、
+    明示的に型シグネチャを追加すればよい。
     <tt><br />
     <br />
     &nbsp;&nbsp;let&nbsp;{&nbsp;len&nbsp;::&nbsp;Num&nbsp;a&nbsp;=&gt;&nbsp;a;&nbsp;len&nbsp;=&nbsp;genericLength&nbsp;xs&nbsp;}&nbsp;in&nbsp;(len,&nbsp;len)<br />
@@ -3740,8 +3741,8 @@
     declaration group 
     -->
     <p>
-    <em>��§ 1 ��ۣ��ˤʤ뤳�Ȥ��ɤ�</em>�����Ȥ��С����Τ褦��������롼
-    �פ�ͤ��褦��
+    <em>規則 1 は曖昧になることを防ぐ</em>。たとえば、次のような宣言グルー
+    プを考えよう。
     <tt><br />
     <br />
     &nbsp;&nbsp;[(n,s)]&nbsp;=&nbsp;reads&nbsp;t<br />
@@ -3751,8 +3752,8 @@
     Recall that <tt>reads</tt> is a standard function whose type is
     given by the signature
     -->
-    <tt>reads</tt> ��ɸ��ؿ��Ǥ��η��ϰʲ��Υ����ͥ���Ǥ���������
-    �����ΤǤ��뤳�Ȥ�פ��Ф����ȡ�
+    <tt>reads</tt> は標準関数でその型は以下のシグネチャであたえられて
+    いるものであることを思い出すこと。
     <tt><br />
     <br />
     &nbsp;&nbsp;reads&nbsp;::&nbsp;(Read&nbsp;a)&nbsp;=&gt;&nbsp;String&nbsp;-&gt;&nbsp;[(a,String)]<br />
@@ -3771,24 +3772,24 @@
     whether a type signature is provided. In this case, both <tt>n</tt> and
     <tt>s</tt> are monomorphic in <i>a</i>.
     -->
-    ��§ 1 ���ʤ���С�<tt>n</tt> �η��� <i>forall
-    a. </i><tt>Read</tt><i> a =&gt;a</i> �Ȥʤꡢ<tt>s</tt> �� <i>forall
-    a.</i> <tt>Read</tt><i> a</i> <i>=&gt;</i><tt>String</tt> �Ȥʤ롣��
-    �Ԥ������ʷ��Ǥ��롣�ʤ��ʤ��ܼ�Ū��ۣ��Ǥ��뤫�����
+    規則 1 がなければ、<tt>n</tt> の型は <i>forall
+    a. </i><tt>Read</tt><i> a =&gt;a</i> となり、<tt>s</tt> は <i>forall
+    a.</i> <tt>Read</tt><i> a</i> <i>=&gt;</i><tt>String</tt> となる。後
+    者は不正な型である。なぜなら本質的に曖昧であるからだ。
 
-    <tt>s</tt>����Ѥ���ˡ��ɤ��¿������ˤ��뤫����ꤹ�뤳�Ȥ�Ǥ�
-    �ʤ���С� <tt>s</tt> ���Ф��뷿�����ͥ�����ɲä��Ƥ�����褹��
-    ��Ǥ��ʤ������Τ��Ȥˤ�ꡢ<em>��ñ��</em>�ѥ�����«�������Ѥ����Ȥ�
-    (<a href="decls.html#patbind">4.4.3</a> ��)����������뷿�ϤĤͤ���
-    �����ѿ��ˤ�����ñ�������������Τ��ȤϷ������ͥ��㤬Ϳ�����Ƥ�
-    �뤫�ɤ����ˤ������ʤ������ξ�硢<tt>n</tt> ����� <tt>s</tt> ��
-    <i>a</i> �ˤ�����ñ�������ġ�
+    <tt>s</tt>を使用ために、どれを多重定義にするかを決定することもでき
+    なければ、 <tt>s</tt> に対する型シグネチャを追加してこれを解決する
+    もできない。このことにより、<em>非単純</em>パターン束縛が使用されるとき
+    (<a href="decls.html#patbind">4.4.3</a> 節)、推論される型はつねに被
+    制約型変数において単相性をもち、このことは型シグネチャが与えられてい
+    るかどうかにかかわらない。この場合、<tt>n</tt> および <tt>s</tt> は
+    <i>a</i> において単相性をもつ。
     </p>
     <!--
     <p> The same constraint applies to pattern-bound functions. For
      example, in
     -->
-    <p>Ʊ�����󤬥ѥ�����«���������ؿ��ˤ�Ŭ�Ѥ���롣���Ȥ��С�
+    <p>同じ制約がパターン束縛を受ける関数にも適用される。たとえば、
      <tt><br />
      <br />
      &nbsp;&nbsp;(f,g)&nbsp;=&nbsp;((+),(-))<br />
@@ -3798,8 +3799,8 @@
      both <tt>f</tt> and <tt>g</tt> are monomorphic regardless of any
      type signatures supplied for <tt>f</tt> or <tt>g</tt>.</p>
      -->
-     �ˤ����ơ�<tt>f</tt> ����� <tt>g</tt> �Ϥ��줾��˷������ͥ��㤬Ϳ
-     �����Ƥ��뤫�ɤ����ˤ�����餺ñ�������ġ�</p>
+     において、<tt>f</tt> および <tt>g</tt> はそれぞれに型シグネチャが与
+     えられているかどうかにかかわらず単相性をもつ。</p>
    </li>
   </ul>
   <!--
@@ -3809,12 +3810,12 @@
    of all the variables bound in a module must be determined by that module
    alone, and not by any modules that import it.
   -->
-  <p>��§ 2 ��ɬ�פ���ͳ�ϡ�<em>�������ݡ���</em>���줿«����ñ��Ū�˻�
-   �Ѥ���褦����������ˡ�������⥸�塼��γ�¦�Υ⥸�塼���Ǥη�����
-   ��¹Ԥ���ʳ��ˤʤˤ�ʤ��Ȥ������ȤǤ��롣��§ 2 �ϤҤȤĤΥ⥸�塼
-   �����«������뤹�٤Ƥ��ѿ������Τʷ��������⥸�塼��ˤ�äƤΤ߷�
-   �ꤵ��ʤ���Фʤ餺������򥤥�ݡ��Ȥ���¦�Υ⥸�塼��ǤϷ��ꤵ
-   ��ʤ��ȼ�ĥ�����ΤǤ��롣
+  <p>規則 2 が必要な理由は、<em>エクスポート</em>された束縛を単相的に使
+   用するよう強制する方法が、現モジュールの外側のモジュール上での型推論
+   を実行する以外になにもないということである。規則 2 はひとつのモジュー
+   ル内で束縛されるすべての変数の正確な型は当該モジュールによってのみ決
+   定されなければならず、これをインポートした側のモジュールでは決定さ
+   れないと主張するものである。
    <tt><br />
    <br />
    &nbsp;&nbsp;module&nbsp;M1(len1)&nbsp;where<br />
@@ -3837,31 +3838,31 @@
    the above code is actually what is wanted, a type signature on
    <tt>len1</tt> would solve the problem.)</p>
   -->
-  �⥸�塼�� <tt>M1</tt> ��η���������λ���ƤȤ���<tt>len1</tt> ��ñ��
-   �� <tt>Num&nbsp;a&nbsp;=&gt;&nbsp;a</tt> �����(��§ 1)����§ 2 �Ϥ�
-   ���Ǥ�ñ��η��ѿ� <tt>a</tt> ��ۣ��Ǥ��ꡢ����� <a
-   href="decls.html#default-decls">4.3.4</a> ��� default ��§��Ȥ�����
-   �ǲ�褵��ʤ���Фʤ�ʤ��ȼ�ĥ�����ΤǤ��롣����ˤ�ꡢ
-   <tt>len1</tt> �Ϸ� <tt>Int</tt> ���������<tt>len2</tt> �ˤ�����
-   <tt>len1</tt> �λ��ѤϷ������Ȥʤ롣(�⤷����Υ����ɤ��ºݤ�ꤿ����
-   �ȤǤ���ʤ顢<tt>len1</tt> �˷������ͥ����Ϳ���������ϲ�褹��)��</p> 
+  モジュール <tt>M1</tt> 上の型推論が完了してとき、<tt>len1</tt> は単相
+   型 <tt>Num&nbsp;a&nbsp;=&gt;&nbsp;a</tt> を持つ(規則 1)。規則 2 はこ
+   こでは単相の型変数 <tt>a</tt> は曖昧であり、これは <a
+   href="decls.html#default-decls">4.3.4</a> 節の default 規則を使うこと
+   で解決されなければならないと主張するものである。これにより、
+   <tt>len1</tt> は型 <tt>Int</tt> を獲得し、<tt>len2</tt> における
+   <tt>len1</tt> の使用は型不正となる。(もし、上のコードが実際やりたいこ
+   とであるなら、<tt>len1</tt> に型シグネチャを与えれば問題は解決する)。</p> 
   <!--
   <p> This issue does not arise for nested bindings, because their entire
    scope is visible to the compiler.</p>
   -->
-  <p>�������������Ҥˤʤä�«���Ǥϵ�����ʤ�������ѥ��餫���ͭ����
-  �����Τ������Ƥ��뤫��Ǥ��롣</p>
+  <p>この問題は入れ子になった束縛では起こらない。コンパイラからは有効範
+  囲全体が見えているからである。</p>
 
   <!--<h3>Consequences</h3>-->
-  <h3>����</h3>
+  <h3>結論</h3>
   <!--
   <p> The monomorphism rule has a number of consequences for the
    programmer. Anything defined with function syntax usually generalizes as
    a function is expected to. Thus in
   -->
-  <p>ñ�����ε�§�ϥץ�����ޤ��Ф��ƤϤ����Ĥ��η�����⤿�餹���ؿ���
-   ʸ�����������ΤϤɤ���̾�ϴؿ���Τ��ߤɤ�����̲����롣��������
-   �ơ� 
+  <p>単相性の規則はプログラマに対してはいくつかの結論をもたらす。関数構
+   文で定義されるものはどれも通常は関数をのぞみどおり一般化する。したがっ
+   て、 
    <tt><br />
    <br />
    &nbsp;&nbsp;f&nbsp;x&nbsp;y&nbsp;=&nbsp;x+y<br />
@@ -3872,9 +3873,9 @@
    <tt>Num</tt>. There is no danger of recomputation here. However, the
    same function defined with pattern syntax:
   -->
-   �ˤ����ơ��ؿ� <tt>f</tt> �ϥ��饹 <tt>Num</tt> �ˤ����뤤���ʤ�¿��
-   ����ˤ����Ƥ���Ѥ��뤳�Ȥ��Ǥ��롣�����Ǥϡ��Ʒ׻��δ����Ϥʤ�����
-   �����ʤ��顢�ѥ�����ʸ��������줿Ʊ���ؿ�
+   において、関数 <tt>f</tt> はクラス <tt>Num</tt> におけるいかなる多重
+   定義においても使用することができる。ここでは、再計算の危険はない。し
+   かしながら、パターン構文で定義された同じ関数
    <tt><br />
    <br />
    &nbsp;&nbsp;f&nbsp;=&nbsp;\x&nbsp;-&gt;&nbsp;\y&nbsp;-&gt;&nbsp;x+y<br />
@@ -3887,10 +3888,10 @@
    full overloading. The standard prelude contains many examples of
    this:
   -->
-   �ϴ�����¿������򤷤褦�Ȥ���ʤ鷿�����ͥ����ɬ�פȤ��롣¿���δ�
-   �����ؤɤξ�硢ñ��ѥ�����«����Ĥ��ä��������롣�桼��������
-   �����������ͥ������Ϳ����������¿�������ݻ����ʤ���Фʤ�ʤ���
-   ɸ��ץ��塼�ɤϤ��Τ��Ȥ����¿���ޤ�Ǥ��롣
+   は完全な多重定義をしようとするなら型シグネチャを必要とする。多くの関
+   数は殆どの場合、単純パターン束縛をつかって定義される。ユーザは注意
+   深く型シグネチャを付与し、完全な多重定義を維持しなければならない。
+   標準プレリュードはこのことの例を多く含んでいる。
    <tt><br />
    <br />
    &nbsp;&nbsp;sum&nbsp;&nbsp;::&nbsp;(Num&nbsp;a)&nbsp;=&gt;&nbsp;[a]&nbsp;-&gt;&nbsp;a<br />
@@ -3900,8 +3901,8 @@
   <!--
   <p> Rule 1 applies to both top-level and nested definitions. Consider
   -->
-  <p>��§ 1 �ϥȥåץ�٥�����������Ҥˤʤä�����Ȥ�ξ����Ŭ�Ѥ��롣
-   �ʲ��Τ褦�ʾ���ͤ��褦�� 
+  <p>規則 1 はトップレベルの定義と入れ子になった定義との両方に適用する。
+   以下のような場合を考えよう。 
    <tt><br />
    <br />
    &nbsp;&nbsp;module&nbsp;M&nbsp;where<br />
@@ -3915,23 +3916,23 @@
    <tt>a</tt> is resolved to <tt>Rational</tt> when performing type
    inference on <tt>len2</tt>.</p>
   -->
-  �����ǡ��������� <tt>len1</tt> ��ñ��η�
-   (<tt>Num&nbsp;a&nbsp;=&gt;&nbsp;a</tt>)���Ĥ��Ȥ򸫤����������η���
-   �� <tt>a</tt> �� <tt>len2</tt> ��Ǥη������򤪤��ʤä��Ȥ��ˡ�
-   <tt>Rational</tt> �Ȥ��Ʋ�褵��롣</p>
+  ここで、型推論は <tt>len1</tt> が単相の型
+   (<tt>Num&nbsp;a&nbsp;=&gt;&nbsp;a</tt>)をもつことを見いだし、この型変
+   数 <tt>a</tt> は <tt>len2</tt> 上での型推論をおこなったときに、
+   <tt>Rational</tt> として解決される。</p>
 
   <p><a name="kindinference"></a></p>
   <p> <a name="sect4.6"></a></p>
   <!-- <h3>4.6<tt>&nbsp;&nbsp;</tt>Kind Inference</h3> -->
-  <h3>4.6<tt>&nbsp;&nbsp;</tt>��ο���</h3>
+  <h3>4.6<tt>&nbsp;&nbsp;</tt>種の推論</h3>
   <!--
   <p> This section describes the rules that are used to perform <i>kind
    inference</i>, i.e. to calculate a suitable kind for each type
    constructor and class appearing in a given program.</p>
   -->
-  <p>������Ǥ�<em>��ο���</em>��¹Ԥ��뤿�ᡢ���ʤ����Ϳ����줿�ץ�
-   �������˽и����륯�饹�䷿�Τ��줾����Ф���Ŭ�ڤʼ��׻����뤿��
-   ���Ѥ����뵬§���������롣</p>
+  <p>この節では<em>種の推論</em>を実行するため、すなわち、与えられたプロ
+   グラム中に出現するクラスや型のそれぞれに対して適切な種を計算するため
+   に用いられる規則を説明する。</p>
   <!--
   <p> The first step in the kind inference process is to arrange the set of
    datatype, synonym, and class definitions into dependency groups. This
@@ -3942,12 +3943,12 @@
    <tt>D</tt>, a synonym <tt>S</tt> and a class <tt>C</tt>, all of which
    would be included in the same dependency group:
   -->
-  <p>���μ�ο��������κǽ���ʳ��ϥǡ����������Υ˥ࡢ����ӥ��饹����
-   ���ν�����¸�ط��Υ��롼�פˤʤ��ľ�����ȤǤ��롣�����ʳ��ϡ�<a
-   href="decls.html#dependencyanalysis">4.5</a> ������������ѿ����Ф���
-   ��¸�����ϤȤۤȤ��Ʊ����ˡ�ǹԤ��롣���Ȥ��С����Υץ���������
-   �Ҥϥǡ����������� <tt>D</tt>�����Υ˥� <tt>S</tt> ����ӥ��饹
-   <tt>C</tt> ��ޤߡ������Ϥ��٤�Ʊ����¸�����롼�פ˴ޤޤ�롣
+  <p>この種の推論処理の最初の段階はデータ型、シノニム、およびクラスの定
+   義の集合を依存関係のグループにならべ直すことである。この段階は、<a
+   href="decls.html#dependencyanalysis">4.5</a> 節で説明した変数に対する
+   依存性解析とほとんど同じ方法で行われる。たとえば、次のプログラムの断
+   片はデータ型構成子 <tt>D</tt>、シノニム <tt>S</tt> およびクラス
+   <tt>C</tt> を含み、これらはすべて同じ依存性グループに含まれる。
    <tt><br />
    <br />
    &nbsp;&nbsp;data&nbsp;C&nbsp;a&nbsp;=&gt;&nbsp;D&nbsp;a&nbsp;=&nbsp;Foo&nbsp;(S&nbsp;a)<br />
@@ -3966,14 +3967,14 @@
    <tt>S</tt> must have kind *-&gt;* and that every instance of class
    <tt>C</tt> must have kind *.</p>
   -->
-   ���줾��Υ��롼������ѿ��������ҡ�����ӡ����饹�μ�Ϸ�������ɸ��Ū
-   �ʥƥ��˥å�����Ӽ����¸����ñ�첽 [<a
-   href="haskell.html#$jones:cclasses">6</a>] ���Ѥ��Ʒ��ꤵ��롣���Ȥ�
-   �С��������Ǥϡ��ѥ�᡼�� <tt>a</tt> �� <tt>bar</tt> �η��δؿ���
-   �ۻ� <tt>(-&gt;)</tt> �ΰ����Ȥ��ƽи�����ˤ�äƼ�� * �Ǥʤ���Ф�
-   ��ʤ��������Ǥ���С�<tt>D</tt> �� <tt>S</tt> ��ξ���Ȥ�˼� * �Ǥ�
-   ����Фʤ餺�����饹 <tt>C</tt> �Υ��󥹥��󥹤Ϥɤ��� * �Ǥʤ����
-   �ʤ�ʤ���</p>
+   それぞれのグループ内の変数、構成子、および、クラスの種は型推論の標準的
+   なテクニックおよび種を保存する単一化 [<a
+   href="haskell.html#$jones:cclasses">6</a>] を用いて決定される。たとえ
+   ば、上の定義では、パラメータ <tt>a</tt> は <tt>bar</tt> の型の関数構
+   築子 <tt>(-&gt;)</tt> の引数として出現するによって種は * でなければな
+   らない。そうであれば、<tt>D</tt> と <tt>S</tt> は両方ともに種 * でな
+   ければならず、クラス <tt>C</tt> のインスタンスはどれも種 * でなければ
+   ならない。</p>
   <!--
   <p> It is possible that some parts of an inferred kind may not be fully
    determined by the corresponding definitions; in such cases, a default of
@@ -3981,10 +3982,10 @@
    face="symbol">k</font> for the <tt>a</tt> parameter in each of the
    following examples:
   -->
-  <p>�������줿��Τ����Ĥ�����ʬ�ϡ��б���������ˤ�äƴ����ˤϷ����
-   ���ʤ��Ȥ������Ȥ⤢�ꤦ�롣���Τ褦�ʾ��ˤϡ��ǥե���Ȥ� * ����
-   ��ΤȲ��ꤹ�롣���Ȥ��С��ʲ�����Τ��줾��� <tt>a</tt> �ѥ�᡼��
-   ���Ф���Ǥ�դμ� <font face="symbol">k</font> ���ꤹ�뤳�Ȥ��Ǥ��롣
+  <p>推論された種のいくつかの部分は、対応する定義によって完全には決定で
+   きないということもありうる。このような場合には、デフォルトで * をもつ
+   ものと仮定する。たとえば、以下の例のそれぞれの <tt>a</tt> パラメータ
+   に対して任意の種 <font face="symbol">k</font> を仮定することができる。
    <tt><br />
    <br />
    &nbsp;&nbsp;data&nbsp;App&nbsp;f&nbsp;a&nbsp;=&nbsp;A&nbsp;(f&nbsp;a)<br />
@@ -4001,14 +4002,14 @@
    these two constructors are (*-&gt;*)-&gt;*-&gt;* and *-&gt;*,
    respectively.</p>
   -->
-   ����� <tt>App</tt> ����� <tt>Tree</tt> ���Ф��Ƽ�
+   これは <tt>App</tt> および <tt>Tree</tt> に対して種
    (<font face="symbol">k</font>-&gt;*)-&gt;
-   <font face="symbol">k</font>-&gt;* ����� 
-   <font face="symbol">k</font>-&gt;* ��Ϳ�������줾���Ǥ�դμ� 
-   <font face="symbol">k</font> �����롣�ޤ��������¿��μ�������ĥ��ɬ
-   �פȤ��롣���Τ���ꡢ�ǥե���Ȥ�«�� <font face="symbol">k</font>=* ��
-   �Ȥ��ȡ���������Ĥι����Ҥ��Ф���ºݤμ�Ϥ��줾�졢
-   (*-&gt;*)-&gt;*-&gt;* �� i*-&gt;* �Ǥ��롣</p>
+   <font face="symbol">k</font>-&gt;* および 
+   <font face="symbol">k</font>-&gt;* を与え、それぞれに任意の種 
+   <font face="symbol">k</font> がある。また、これは多相の種を許す拡張を必
+   要とする。そのかわり、デフォルトの束縛 <font face="symbol">k</font>=* を
+   使うと、これらの二つの構成子に対する実際の種はそれぞれ、
+   (*-&gt;*)-&gt;*-&gt;* と i*-&gt;* である。</p>
   <!--
   <p> Defaults are applied to each dependency group without consideration
    of the ways in which particular type constructor constants or classes
@@ -4019,13 +4020,13 @@
    because the kind of <tt>[]</tt>, *-&gt;*, does not match the kind * that
    is expected for an argument of <tt>Tree</tt>:
   -->
-  <p>�ǥե���Ȥ�����η������Ҥ��뤤�ϥ��饹����ΰ�¸���롼�פ��뤤��
-   �ץ������Τ���¾����ʬ�ǤĤ����Ƥ�����ˡ�Ȥϴط��ʤ������줾���
-   ��¸���롼�פ��Ф���Ŭ�Ѥ���롣���Ȥ��С��ʲ��Τ褦����������ɲ�
-   ���Ƥ⤽�αƶ��� <tt>Tree</tt> ���Ф����ο����ˤϵڤФʤ�(���Ȥ��С�
-   ��� (*-&gt;*)-&gt;* ���ѹ�����)�����Τ���ꡢ��Ū���顼�Ȥʤ롣�ʤ�
-   �ʤ顢<tt>[]</tt> �μ� *-&gt;* �� <tt>Tree</tt> �ΰ����Ȥ��ƴ��Ԥ���
-   ��� * �ȥޥå����ʤ�����Ǥ��롣
+  <p>デフォルトは特定の型構成子あるいはクラスが後の依存グループあるいは
+   プログラムのその他の部分でつかわれている方法とは関係なく、それぞれの
+   依存グループに対して適用される。たとえば、以下のような定義を上に追加
+   してもその影響は <tt>Tree</tt> に対する種の推論には及ばない(たとえば、
+   種を (*-&gt;*)-&gt;* に変更する)。そのかわり、静的エラーとなる。なぜ
+   なら、<tt>[]</tt> の種 *-&gt;* は <tt>Tree</tt> の引数として期待され
+   る種 * とマッチしないからである。
    <tt><br />
    <br />
    &nbsp;&nbsp;type&nbsp;FunnyTree&nbsp;=&nbsp;Tree&nbsp;[]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;invalid<br />
@@ -4036,8 +4037,8 @@
    class are used consistently with the same kind whenever they are in
    scope.</p>
   -->
-  <p>���Τ��Ȥϡ��ƹ����Ҥȥ��饹��Ʊ���������פ�Ʊ������ĤȤ�������
-   �����ݤäƻ��Ѥ���Ƥ��뤳�Ȥ��ݾڤ���Τǡ����פǤ��롣</p>
+  <p>このことは、各構成子とクラスが同じスコープで同じ種をもつという整合
+   性を保って使用されていることを保証するので、重要である。</p>
 
   <hr />
 

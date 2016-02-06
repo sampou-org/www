@@ -1,6 +1,7 @@
-<html>
+<!DOCTYPE html>
+<html lang="ja">
  <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
+  <meta charset="utf-8">
   <title>The Haskell 98 Library Report: CPU Time</title>
  </head>
 
@@ -13,7 +14,7 @@
   <hr />
   <p><a name="cputime"></a><a name="sect26"></a></p>
   <!--<h2>26<tt>&nbsp;&nbsp;</tt>CPU Time</h2>-->
-  <h2>26<tt>&nbsp;&nbsp;</tt>CPU ����</h2>
+  <h2>26<tt>&nbsp;&nbsp;</tt>CPU 時刻</h2>
 
   <p>
   <table border="2" cellpadding="3">
@@ -35,10 +36,10 @@
    as an integral number of picoseconds.</p>
   -->
   <p>
-   �׻� <tt>getCPUTime</tt> �ϸ��ߤΥץ�����ब�ȤäƤ��� CPU ���֤��
-   ����ñ�̤Ǥ���路���������ؤ��������η�̤����٤�
-   <tt>cpuTimePrecision</tt> �Ǥ��������Ƥ��롣����ϡ������塢�Ǥ�û
-   ����¬��ǽ�� CPU ���ֳִ֤ǡ�����ϥԥ���ñ�̤������Ǥ��������Ƥ��롣
+   計算 <tt>getCPUTime</tt> は現在のプログラムが使っている CPU 時間をピ
+   コ秒単位であらわした数字を替えす。この結果の精度は
+   <tt>cpuTimePrecision</tt> であたえられている。これは、実装上、最も短
+   い計測可能な CPU 時間間隔で、これはピコ秒単位の整数であたえられている。
   </p>
   <hr />
   <p><i>The Haskell 98 Report</i><br />

@@ -1,6 +1,7 @@
-<html>
+<!DOCTYPE html>
+<html lang="ja">
  <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
+  <meta charset="utf-8">
   <title>The Haskell 98 Library Report: Rational Numbers</title>
  </head>
 
@@ -13,7 +14,7 @@
   <hr />
   <p><a name="sect12"></a></p>
   <!--<h2>12<tt>&nbsp;&nbsp;</tt>Rational Numbers</h2>-->
-  <h2>12<tt>&nbsp;&nbsp;</tt>ͭ����</h2>
+  <h2>12<tt>&nbsp;&nbsp;</tt>有理数</h2>
   <p>
   <table border="2" cellpadding="3">
    <tr>
@@ -57,9 +58,9 @@
    <tt>Rational</tt> is a synonym for <tt>Ratio&nbsp;Integer</tt>.</p>
   -->
   <p>
-   ���줾��� <tt>Integral</tt> �� t ���Ф��ơ���Ĥη� <tt>Ratio</tt> t
-   ��¸�ߤ��ơ����ι������Ǥϰ��Ȥ� t ���Ǥ��롣��̾ <tt>Rational</tt>
-   �� <tt>Ratio&nbsp;Integer</tt> �η���Ʊ��̾�Ǥ��롣
+   それぞれの <tt>Integral</tt> 型 t に対して、一つの型 <tt>Ratio</tt> t
+   が存在して、その構成要素は一組の t 型である。型名 <tt>Rational</tt>
+   は <tt>Ratio&nbsp;Integer</tt> の型の同義名である。
   </p>
   <!--
   <p> <tt>Ratio</tt> is an instance of classes <tt>Eq</tt>, <tt>Ord</tt>,
@@ -71,14 +72,14 @@
    integer overflow even for rational numbers of small absolute size.</p>
   -->
   <p>
-   <tt>Ratio</tt> �� <tt>Eq</tt>��<tt>Ord</tt>��<tt>Num</tt>��
-   <tt>Real</tt>��<tt>Fractional</tt>��<tt>RealFrac</tt>��<tt>Enum</tt>��
-   <tt>Read</tt> ����� <tt>Show</tt> ���饹�Υ��󥹥��󥹤Ǥ��롣
-   ���줾��ξ��ˤĤ��ơ�<tt>Ratio</tt> t ���Ф��륤�󥹥��󥹤�ñ�ˡ�
-   �б����� t ��α黻��֥�եȡפ�������Ǥ��롣�⤷��t ��ͭ�¤�
-   ���Ǥ���С���̤�����äƤ�ͽ¬�Բ�ǽ�Ǥ��롣���Ȥ��С�
-   <tt>Ratio&nbsp;Int</tt> �������ͤ�������ͭ�����ξ��ˤ�������
-   �夢�դ�򵯤���ǽ�������롣
+   <tt>Ratio</tt> は <tt>Eq</tt>、<tt>Ord</tt>、<tt>Num</tt>、
+   <tt>Real</tt>、<tt>Fractional</tt>、<tt>RealFrac</tt>、<tt>Enum</tt>、
+   <tt>Read</tt> および <tt>Show</tt> クラスのインスタンスである。
+   それぞれの場合について、<tt>Ratio</tt> t に対するインスタンスは単に、
+   対応する t 上の演算を「リフト」するだけである。もし、t が有限の
+   型であれば、結果は前もっては予測不可能である。たとえば、
+   <tt>Ratio&nbsp;Int</tt> は絶対値が小さい有理数の場合にも整数の
+   桁あふれを起す可能性がある。
   </p>
   <!--
   <p> The operator <tt>(%)</tt> forms the ratio of two integral numbers,
@@ -90,12 +91,12 @@
    <tt>12&nbsp;%&nbsp;(-8)</tt> is reduced to (-3)/2.</p>
   -->
   <p>
-   �黻�� <tt>(%)</tt> �� 2 �Ĥ����� (integral number) ������������
-   ʬ�줬�����δ���ʬ������ʬ���롣�ؿ� <tt>numerator</tt> �� 
-   <tt>denominator</tt> ��ʬ�줬�����δ���ʬ���ξ�����ι������Ǥ�
-   ���Ф���<tt>Ratio</tt> ����ݥǡ������Ǥ��롣���Ȥ��С�
-   <tt>12&nbsp;%&nbsp;8</tt> ����ʬ����� 3/2 �Ȥʤꡢ
-   <tt>12&nbsp;%&nbsp;(-8)</tt> ����ʬ����� (-3)/2 �Ȥʤ롣
+   演算子 <tt>(%)</tt> は 2 つの整数 (integral number) の比を形成し、
+   分母が正数の既約分数に約分する。関数 <tt>numerator</tt> と 
+   <tt>denominator</tt> は分母が正数の既約分数の場合の比の構成要素を
+   取り出す。<tt>Ratio</tt> は抽象データ型である。たとえば、
+   <tt>12&nbsp;%&nbsp;8</tt> は約分されて 3/2 となり、
+   <tt>12&nbsp;%&nbsp;(-8)</tt> は約分されて (-3)/2 となる。
   </p>
   <!--
   <p> The <tt>approxRational</tt> function, applied to two real fractional
@@ -109,20 +110,20 @@
    rational.</p>
   -->
   <p>
-   <tt>approxRational</tt> �ؿ���2�Ĥμ¾��� <tt>x</tt> ��
-   <tt>epsilon</tt> ��Ŭ�Ѥ���ơ������
+   <tt>approxRational</tt> 関数は2つの実小数 <tt>x</tt> と
+   <tt>epsilon</tt> に適用されて、開区間
    <i>(</i><tt>x</tt><i>-</i><tt>epsilon</tt><i>,
-   </i><tt>x</tt><i>+</i><tt>epsilon</tt><i>)</i> ��ˤ���Ǥ�ñ���
-   ͭ�������֤�������ͭ���� <i>n/d</i> �� �̤δ���ͭ���� <i>n'/d'</i>
-   ����ñ��Ǥ���ȸ�����Τϡ�<i>|n| &lt;=|n'|</i> ����
-   <i>d &lt;=d'</i> �ξ��Ǥ��롣������¿���֤�ͣ��κǤ�ñ���
-   ͭ������ޤ�Ȥ������Ȥ�������ǽ�Ǥ��뤳�Ȥ����դ��衣
+   </i><tt>x</tt><i>+</i><tt>epsilon</tt><i>)</i> 内にある最も単純な
+   有理数を返す。既約有理数 <i>n/d</i> が 別の既約有理数 <i>n'/d'</i>
+   よりも単純であると言えるのは、<i>|n| &lt;=|n'|</i> かつ
+   <i>d &lt;=d'</i> の場合である。あらゆる実数区間は唯一の最も単純な
+   有理数を含むということが証明可能であることに注意せよ。
   </p>
   <p> <a name="Ratio"></a></p>
   <p> <a name="sect12.1"></a></p>
 
   <!--<h3>12.1<tt>&nbsp;&nbsp;</tt>Library <tt>Ratio</tt></h3>-->
-  <h3>12.1<tt>&nbsp;&nbsp;</tt><tt>Ratio</tt> �饤�֥��</h3>
+  <h3>12.1<tt>&nbsp;&nbsp;</tt><tt>Ratio</tt> ライブラリ</h3>
 
   <p>
    <tt><br />

@@ -1,6 +1,7 @@
-<html>
+<!DOCTYPE html>
+<html lang="ja">
  <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
+  <meta charset="utf-8">
   <title>The Haskell 98 Library Report: Character Utilities</title>
  </head>
 
@@ -13,7 +14,7 @@
   <hr />
   <p><a name="sect19"></a></p>
   <!--<h2>19<tt>&nbsp;&nbsp;</tt>Character Utilities</h2>-->
-  <h2>19<tt>&nbsp;&nbsp;</tt>ʸ���桼�ƥ���ƥ�</h2>
+  <h2>19<tt>&nbsp;&nbsp;</tt>文字ユーティリティ</h2>
 
   <p>
   <table border="2" cellpadding="3">
@@ -58,12 +59,12 @@
    is not accessible in this library.</p>
   -->
   <p>
-   ���Υ饤�֥��� Unicode ʸ�������θ¤�줿�黻�򶡵뤷�Ƥ��롣
-   ����ʸ������κǽ�� 128 ����ȥ�� ASCII ʸ������Ȱ��פ��롣
-   ���� 128 �Υ���ȥ�� Latin-1 ʸ������ΤΤ������ʬ�Ǥ��롣
-   ���Υ⥸�塼����� Unicode ʸ������Τ����θ¤�줿��ʬ�򰷤���
-   �����ʤ������ʤ����Unicode �Υե륻�åȤ�°���Ϥ��Υ饤�֥��Ǥ�
-   �����ʤ���
+   このライブラリは Unicode 文字集合上の限られた演算を供給している。
+   この文字集合の最初の 128 エントリは ASCII 文字集合と一致する。
+   次の 128 のエントリは Latin-1 文字集合ののこりの部分である。
+   このモジュールは全 Unicode 文字集合のうちの限られた部分を扱うに
+   すぎない。すなわち、Unicode のフルセットの属性はこのライブラリでは
+   扱えない。
   </p>
   <!--
   <p> Unicode characters may be divided into five general categories:
@@ -75,35 +76,35 @@
    not used by the reader to represent numbers.</p>
   -->
   <p>
-   Unicode ʸ���ϤĤ��� 5 �ĤΤ����ޤ��ʥ��ƥ��꡼��ʬ�व��롣
-   ��ɽ��ʸ��������ե��٥åȤξ�ʸ��������ե��٥åȤΤ���ʳ���
-   ����������¾��ɽ����ǽʸ����Haskell �Υץ�����ߥ󥰤Ǥ���Ū��
-   ����ˤϡ����٤Ƥξ�ʸ���Ǥʤ�ʸ���ϡ���ʸ���Ǥ���Ȥ��ư�����
-   ( Unicode �Ǥ�3�Ĥβ�ǽ�������롣��ʸ������ʸ���������ȥ�ʸ��)
-   �����ϼ��̻Ҥ�ʸ���Ȥ��ƻ��Ѳ�ǽ�Ǥ��뤬��ASCII ʸ�������
-   �ϰϤˤϤʤ���ΤˤĤ��ƤϿ��򤢤�魯��ΤȤ��ƤϻȤ�ʤ���
+   Unicode 文字はつぎの 5 つのおおまかなカテゴリーに分類される。
+   非表示文字、アルファベットの小文字、アルファベットのそれ以外、
+   数字、その他の表示可能文字。Haskell のプログラミングでの目的の
+   ためには、すべての小文字でない文字は、大文字であるとして扱う。
+   ( Unicode では3つの可能性がある。大文字、小文字、タイトル文字)
+   数字は識別子の文字として使用可能であるが、ASCII 文字集合の
+   範囲にはないものについては数をあらわすものとしては使わない。
   </p>
   <!--
   <p> For each sort of Unicode character, here are the predicates which
    return <tt>True</tt>:</p>
   -->
   <p>
-   Unicode ʸ���γƼ���ˤĤ��ơ�<tt>True</tt> ���֤��Ҹ�򼨤��Ƥ�����
+   Unicode 文字の各種類について、<tt>True</tt> を返す述語を示しておく。
   </p>
   <div align="center">
    <table>
     <tr>
 <!--       <td> Character Type</td> -->
 <!--       <td> Predicates</td> -->
-     <td> ʸ���Υ�����</td>
-     <td> �Ҹ�</td>
+     <td> 文字のタイプ</td>
+     <td> 述語</td>
      <td></td>
      <td></td>
      <td></td>
     </tr>
     <tr>
 <!--       <td> Lower Case Alphabetic</td> -->
-     <td> ��ʸ���Υ���ե��٥å�</td>
+     <td> 小文字のアルファベット</td>
      <td> <tt>isPrint</tt></td>
      <td> <tt>isAlphaNum</tt></td>
      <td> <tt>isAlpha</tt></td>
@@ -111,7 +112,7 @@
     </tr>
     <tr>
 <!--       <td>Other Alphabetic</td> -->
-     <td> ����¾�Υ���ե��٥å�</td>
+     <td> その他のアルファベット</td>
      <td> <tt>isPrint</tt></td>
      <td> <tt>isAlphaNum</tt></td>
      <td> <tt>isAlpha</tt></td>
@@ -119,7 +120,7 @@
     </tr>
     <tr>
 <!--       <td>Digits</td> -->
-     <td> ����</td>
+     <td> 数字</td>
      <td> <tt>isPrint</tt></td>
      <td> <tt>isAlphaNum</tt></td>
      <td></td>
@@ -127,7 +128,7 @@
     </tr>
     <tr>
 <!--       <td>Other Printable</td> -->
-     <td> ����¾��ɽ����ǽʸ��</td>
+     <td> その他の表示可能文字</td>
      <td> <tt>isPrint</tt></td>
      <td></td>
      <td></td>
@@ -135,7 +136,7 @@
     </tr>
     <tr>
 <!--       <td> Non-Printing</td> -->
-     <td> ��ɽ��ʸ��</td>
+     <td> 非表示文字</td>
      <td></td>
      <td></td>
      <td></td>
@@ -154,23 +155,23 @@
    <tt>0</tt>..<tt>15</tt>, and generates lower-case hexadecimal digits.</p>
   -->
   <p>
-   <tt>isDigit</tt>��<tt>isOctDigit</tt>������� <tt>isHexDigit</tt> 
-   �ؿ��� ASCII ʸ���Τ����򤹤롣<tt>intToDigit</tt> ����� 
-   <tt>digitToInt</tt> �� 1 ʸ���ο��� <tt>Char</tt> �Ȥ�����б����� 
-   <tt>Int</tt> �֤��Ѵ��򤪤��ʤ���<tt>digitToInt</tt> �黻��
-   ���ΰ����� <tt>isHexDigit</tt> �������ʤ���м��Ԥ��롣��������
-   16 �ʿ�����ʸ������ʸ���ϤȤ��ǧ���Ǥ���(���ʤ��
+   <tt>isDigit</tt>、<tt>isOctDigit</tt>、および <tt>isHexDigit</tt> 
+   関数は ASCII 文字のみ選択する。<tt>intToDigit</tt> および 
+   <tt>digitToInt</tt> は 1 文字の数字 <tt>Char</tt> とそれに対応する 
+   <tt>Int</tt> 間の変換をおこなう。<tt>digitToInt</tt> 演算は
+   その引数が <tt>isHexDigit</tt> を満さなければ失敗する。しかし、
+   16 進数の大文字、小文字はともに認識できる(すなわち
    <tt>'0'</tt>..<tt>'9'</tt>,<tt>'a'</tt>..<tt>'f'</tt>,
-   <tt>'A'</tt>..<tt>'F'</tt> ��ǧ���Ǥ���)��<tt>intToDigit</tt> 
-   �Ϥ��ΰ����� <tt>0</tt>..<tt>15</tt> ���ϰϤˤʤ���м��Ԥ��롣
-   ����� 16 �ʿ��ξ��Ͼ�ʸ�����֤���
+   <tt>'A'</tt>..<tt>'F'</tt> が認識できる)。<tt>intToDigit</tt> 
+   はその引数が <tt>0</tt>..<tt>15</tt> の範囲になければ失敗する。
+   さらに 16 進数の場合は小文字を返す。
   </p>
   <!--
   <p> The <tt>isSpace</tt> function recognizes only white characters in the
    Latin-1 range.</p>
   -->
   <p>
-   <tt>isSpace</tt> �ؿ��� Latin-1 ���ϰϤζ���Τߤ�ǧ�����롣
+   <tt>isSpace</tt> 関数は Latin-1 の範囲の空白のみを認識する。
   </p>
   <!--
   <p> The function <tt>showLitChar</tt> converts a character to a string
@@ -187,11 +188,11 @@
    </tt></p>
   -->
   <p>
-   �ؿ� <tt>showLitChar</tt> ��ʸ���� Haskell �ǤΥץ�����ॽ������
-   ����������ʸ���ε����Ĥ��ä�ɽ����ǽʸ������Ѵ����롣�ؿ�
-   <tt>lexLitChar</tt> �Ϥ��εդǡ�����ʸ���򥨥󥳡��ɤ��Ƥ���
-   ʸ���Τʤ�Ӥ���֤���<tt>readLitChar</tt> ��Ʊ�����Ȥ򤹤뤬��
-   ����򥨥󥳡��ɤ��Ƥ���ʸ�����Ѵ����롣�㤨�С�
+   関数 <tt>showLitChar</tt> は文字を Haskell でのプログラムソースの
+   エスケープ文字の規約をつかって表示可能文字列に変換する。関数
+   <tt>lexLitChar</tt> はその逆で、その文字をエンコードしている
+   文字のならびをを返す。<tt>readLitChar</tt> は同じことをするが、
+   それをエンコードしている文字に変換する。例えば、
    <tt><br />
    <br />
    &nbsp;&nbsp;showLitChar&nbsp;'\n'&nbsp;s&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;"\\n"&nbsp;++&nbsp;s<br />
@@ -199,7 +200,7 @@
    &nbsp;&nbsp;readLitChar&nbsp;"\\nHello"&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;[('\n',&nbsp;"Hello")]<br />
    <br />
    </tt>
-   �Ǥ��롣
+   である。
   </p>
   <!--
   <p> Function <tt>toUpper</tt> converts a letter to the corresponding
@@ -209,23 +210,23 @@
    letter, leaving any other character unchanged.</p>
   -->
   <p>
-   �ؿ� <tt>toUpper</tt> �ϱѻ���ʸ�����б�������ʸ�����Ѵ����롣
-   ����ʳ���ʸ���Ϥ��ΤޤޤǤ��롣�б�������ʸ�������뤹�٤Ƥ�
-   Unicode ʸ�����Ѵ�����롣Ʊ�ͤ� <tt>toLower</tt> ���б�����
-   ��ʸ���Τ���ʸ�����Ѵ���������ʳ��򤽤Τޤޤˤ��롣
+   関数 <tt>toUpper</tt> は英字小文字を対応する大文字へ変換する。
+   それ以外の文字はそのままである。対応する大文字があるすべての
+   Unicode 文字は変換される。同様に <tt>toLower</tt> は対応する
+   小文字のある文字を変換し、それ以外をそのままにする。
   </p>
   <!--
   <p> The <tt>ord</tt> and <tt>chr</tt> functions are <tt>fromEnum</tt> and
    <tt>toEnum </tt>restricted to the type <tt>Char</tt>.<a name="Char"></a></p>
   -->
   <p>
-   <tt>ord</tt> �ؿ������ <tt>chr</tt> �ؿ��� <tt>fromEnum</tt>
-   ����� <tt>toEnum</tt> �� <tt>Char</tt> �����ǤǤ��롣
+   <tt>ord</tt> 関数および <tt>chr</tt> 関数は <tt>fromEnum</tt>
+   および <tt>toEnum</tt> の <tt>Char</tt> 限定版である。
   </p>
 
   <p> <a name="sect19.1"></a></p>
   <!--<h3>19.1<tt>&nbsp;&nbsp;</tt>Library <tt>Char</tt></h3>-->
-  <h3>19.1<tt>&nbsp;&nbsp;</tt><tt>Char</tt> �饤�֥��</h3>
+  <h3>19.1<tt>&nbsp;&nbsp;</tt><tt>Char</tt> ライブラリ</h3>
 
   <p><tt><br />
    module&nbsp;Char&nbsp;(&nbsp;<br />

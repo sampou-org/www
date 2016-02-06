@@ -1,6 +1,7 @@
-<html>
+<!DOCTYPE html>
+<html lang="ja">
  <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
+  <meta charset="utf-8">
   <title>The Haskell 98 Library Report: Dates and Times</title>
  </head>
 
@@ -13,7 +14,7 @@
   <hr />
   <p><a name="time"></a><a name="sect24"></a></p>
   <!--<h2>24<tt>&nbsp;&nbsp;</tt>Dates and Times</h2>-->
-  <h2>24<tt>&nbsp;&nbsp;</tt>���դȻ���</h2>
+  <h2>24<tt>&nbsp;&nbsp;</tt>日付と時刻</h2>
   <p>
   <table border="2" cellpadding="3">
    <tr>
@@ -94,8 +95,8 @@
    Coordinated Universal Time (UTC).</p>
   -->
   <p>
-   <tt>Time</tt> �饤�֥��ϥ����ॾ��������ޤ������Ф���ɸ��Ū��
-   ǽ���󶡤��롣���Υ饤�֥��� UTC �ΰ����ˤ������Ƥ� RFC 1129 �˽����� 
+   <tt>Time</tt> ライブラリはタイムゾーン情報を含む時刻に対する標準的機
+   能を提供する。このライブラリは UTC の扱いにたいしては RFC 1129 に従う。 
   </p>
   <!--
   <p> <tt>ClockTime</tt> is an abstract type, used for the system's
@@ -106,12 +107,12 @@
    following ranges.</p>
   -->
   <p>
-   <tt>ClockTime</tt> ����ݷ��ǡ������ƥ����������å��Τ�����Ѱդ����
-   ���롣�����ľ����Ӥ��뤳�Ȥ��Ǥ����ޤ���I/O �䤽�Τۤ������ӤΤ���
-   �˥����������� <tt>CalendarTime</tt> ���Ѵ����뤳�Ȥ��Ǥ��롣
-   <tt>CalendarTime</tt> �ϥ桼�����ɤߤȤ뤳�Ȥ��Ǥ����ޤ�������Ū��
-   <tt>ClockTime</tt> ����ɽ���Ȥ��Ƽ�갷����ǽ�ʤ�ΤǤ��롣���줾���
-   ���ͥե�����ɤ��ϰϤϰʲ��ΤȤ���Ǥ��롣
+   <tt>ClockTime</tt> は抽象型で、システム内部クロックのために用意されて
+   いる。時刻は直接比較することができ、また、I/O やそのほかの用途のため
+   にカレンダー時刻 <tt>CalendarTime</tt> に変換することができる。
+   <tt>CalendarTime</tt> はユーザが読みとることができ、また、内部的な
+   <tt>ClockTime</tt> 型の表現として取り扱い可能なものである。それぞれの
+   数値フィールドの範囲は以下のとおりである。
   </p>
   <p>
   <table border="2" cellpadding="3">
@@ -133,7 +134,7 @@
        <td>-maxInt...</td>
        <td>maxInt</td>
        <!--<td>Pre-Gregorian dates are inaccurate</td>-->
-       <td>���쥴�ꥦ������������դˤĤ��Ƥ������ΤǤ���</td>
+       <td>グレゴリウス暦以前の日付については不正確である</td>
       </tr>
       <tr>
        <td></td>
@@ -163,7 +164,7 @@
        <td>0...</td>
        <td>61</td>
        <!--<td>Allows for two Leap Seconds</td>-->
-       <td>2���ä���ǽ</td>
+       <td>2閏秒が可能</td>
       </tr>
       <tr>
        <td></td>
@@ -179,7 +180,7 @@
        <td>0...</td>
        <td>365</td>
        <!--<td>364 in non-Leap years</td>-->
-       <td>ʿǯ��364�ޤ�</td>
+       <td>平年は364まで</td>
       </tr>
       <tr>
        <td></td>
@@ -188,7 +189,7 @@
        <td>-89999...</td>
        <td>89999</td>
        <!--<td>Variation from UTC in seconds</td>-->
-       <td>UTC ��������Ѱ�</td>
+       <td>UTC からの秒変位</td>
       </tr>
      </table>
     </td>
@@ -202,10 +203,10 @@
    records the difference between two clock times in a user-readable way.</p>
   -->
   <p>
-   <i>ctTZName</i> �ե�����ɤϥ����ॾ�����̾���Ǥ��롣<i>ctIsDST</i>
-   �ե�����ɤϥ��ޡ������बͭ���Ǥ���� <tt>True</tt> �Ǥ��ꡢ����ʤ�
-   ��С�<tt>False</tt> �Ǥ��롣<tt>TimeDiff</tt> ���� 2 �Ĥΰۤ�����
-   ����桼�����ɤ������Ǥ�������ǵ�Ͽ�����ΤǤ��롣
+   <i>ctTZName</i> フィールドはタイムゾーンの名前である。<i>ctIsDST</i>
+   フィールドはサマータイムが有効であれば <tt>True</tt> であり、さもなけ
+   れば、<tt>False</tt> である。<tt>TimeDiff</tt> 型は 2 つの異る時刻の
+   差をユーザが読んで理解できる形式で記録するものである。
   </p>
   <!--
   <p> Function <tt>getClockTime</tt> returns the current time in its
@@ -217,12 +218,12 @@
    <i>t2</i> as a <tt>TimeDiff</tt>.</p>
   -->
   <p>
-   �ؿ� <tt>getClockTime</tt> �ϸ��ߤλ��������ɽ�����֤����� 
-   <tt>addToClockTime</tt> <i>d</i> <i>t</i> �ϻ��� <i>d</i> �Ȼ��� 
-   <i>t</i> ��û�������������Ȥ��롣���� <i>d</i> �����ξ��⤢��С�
-   ��ξ��⤢�롣�� <tt>diffClockTimes</tt> <i>t1</i> <i>t2</i> �����
-   �λ��� <i>t1</i> �� <i>t2</i> �Ȥκ����֤�������� <tt>TimeDiff</tt>
-   ��Ʊ�ͤǤ��롣
+   関数 <tt>getClockTime</tt> は現在の時刻を内部表現で返す。式 
+   <tt>addToClockTime</tt> <i>d</i> <i>t</i> は時間 <i>d</i> と時刻 
+   <i>t</i> を加算し新しい時刻とする。時間 <i>d</i> は正の場合もあれば、
+   負の場合もある。式 <tt>diffClockTimes</tt> <i>t1</i> <i>t2</i> は二つ
+   の時刻 <i>t1</i> と <i>t2</i> との差を返す。これは <tt>TimeDiff</tt>
+   と同様である。
   </p>
   <!--
   <p> Function <tt>toCalendarTime</tt> <i>t</i> converts <i>t</i> to a
@@ -231,10 +232,10 @@
    local environment, <tt>toCalendarTime</tt> is in the <tt>IO</tt> monad.</p>
   -->
   <p>
-   �ؿ� <tt>toCalendarTime</tt> <i>t</i> �� <i>t</i> ���ϻ��֤��Ѵ�����
-   �����ॾ����ȥ��ޡ�������ˤ�ä��Ѵ��������֤��ѹ����롣����ϥ���
-   ����ʴĶ��˰�¸����Τ� <tt>toCalendarTime</tt> �� <tt>IO</tt> ���
-   �ɤ���ˤ��롣
+   関数 <tt>toCalendarTime</tt> <i>t</i> は <i>t</i> を現地時間に変換し、
+   タイムゾーンとサマータイムによって変換した時間を変更する。これはロー
+   カルな環境に依存するので <tt>toCalendarTime</tt> は <tt>IO</tt> モナ
+   ドの中にある。
   </p>
   <!--
   <p> Function <tt>toUTCTime</tt> <i>t</i> converts <i>t</i> into a
@@ -244,24 +245,24 @@
    <i>ctYDay</i>, <i>ctTZName</i>, and <i>ctIsDST</i> fields.</p>
   -->
   <p>
-   �ؿ� <tt>toUTCTime</tt> <i>t</i> �� <i>t</i> ��ɸ��� UTC ������
-   <tt>CalendarTime</tt> ���Ѵ����롣<tt>toClockTime</tt> <i>l</i> ��
-   <i>l</i> ���б����� <tt>ClockTime</tt> ���Ѵ�����<i>ctWDay</i>��
-   <i>ctYDay</i>��<i>ctTZName</i> ����� <i>ctIsDST</i> �ե�����ɤ�����
-   ��̵�뤹�롣
+   関数 <tt>toUTCTime</tt> <i>t</i> は <i>t</i> を標準の UTC 形式の
+   <tt>CalendarTime</tt> に変換する。<tt>toClockTime</tt> <i>l</i> は
+   <i>l</i> を対応する <tt>ClockTime</tt> へ変換し、<i>ctWDay</i>、
+   <i>ctYDay</i>、<i>ctTZName</i> および <i>ctIsDST</i> フィールドの内容
+   を無視する。
   </p>
   <!--
   <p> Function <tt>calendarTimeToString</tt> formats calendar times using
    local conventions and a formatting string.</p>
   -->
   <p>
-   �ؿ� <tt>calendarTimeToString</tt> �ϥ������륳��٥󥷥��ˤ�륫��
-   ������������������ʸ�����ե����ޥåȤ��롣
+   関数 <tt>calendarTimeToString</tt> はローカルコンベンションによるカレ
+   ンダータイムを整形し文字列をフォーマットする。
   </p>
 
   <p> <a name="sect24.1"></a></p>
   <!--<h3>24.1<tt>&nbsp;&nbsp;</tt>Library <tt>Time</tt></h3>-->
-  <h3>24.1<tt>&nbsp;&nbsp;</tt><tt>Time</tt> �饤�֥��</h3>
+  <h3>24.1<tt>&nbsp;&nbsp;</tt><tt>Time</tt> ライブラリ</h3>
 
   <p><tt><br />
    module&nbsp;Time&nbsp;(<br />

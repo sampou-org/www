@@ -1,6 +1,7 @@
-<html>
+<!DOCTYPE html>
+<html lang="ja">
  <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
+  <meta charset="utf-8">
   <title>The Haskell 98 Report: Compiler Pragmas</title>
  </head>
  <body bgcolor="#ffffff">
@@ -12,7 +13,7 @@
   <hr />
   <p><a name="pragmas"></a><a name="sect11"></a></p>
   <!--<h2>11<tt>&nbsp;&nbsp;</tt>Compiler Pragmas</h2>-->
-  <h2>11<tt>&nbsp;&nbsp;</tt>�ץ饰��</h2>
+  <h2>11<tt>&nbsp;&nbsp;</tt>プラグマ</h2>
   <!--
   <p> Some compiler implementations support compiler <i>pragmas</i>, which
    are used to give additional instructions or hints to the compiler, but
@@ -24,18 +25,18 @@
    is <tt>{-#</tt> <tt>#-}</tt>.</p>
   -->
   <p>
-   <em>�ץ饰��</em>�򥵥ݡ��Ȥ�������ѥ��餬�����Ĥ����롣�ץ饰�ޤ�
-   �ղ�Ū�����ҥ�Ȥ򥳥�ѥ����Ϳ���뤿��˻��Ѥ���롣��������
-   ����� Haskell ���줽�Τ�Τ���������ʬ�ǤϤʤ����ץ������ΰ�̣��
-   �Ѥ����ΤǤϤʤ���������ǤϤ��δ�¸�λ��Ȥߤ����󤹤롣������
-   �����ʤ�ץ饰�ޤ��θ����ɬ�פϤʤ����������������Ϥ�����������
-   �褦�ˤʤäƤ��ʤ��Τʤ顢�ץ饰�ޤ�̵�뤷�ʤ���Фʤ�ʤ���
-   ����Ȥ��Ƥϥץ饰�ޤϥ����Ȥȴ��蘆��롣���������Ϥ๽ʸ��
-   <tt>{-#</tt> <tt>#-}</tt> �Ǥ���Ȥ����㳰�Ǥ��롣
+   <em>プラグマ</em>をサポートしたコンパイラがいくつかある。プラグマは
+   付加的指令やヒントをコンパイラに与えるために使用される。しかし、
+   これは Haskell 言語そのものの正式な部分ではなく、プログラムの意味を
+   変えるものではない。この節ではこの既存の仕組みを要約する。実装は
+   いかなるプラグマも考慮する必要はない。しかし、実装はこれを処理する
+   ようになっていないのなら、プラグマを無視しなければならない。
+   字句としてはプラグマはコメントと看倣される。ただし、囲む構文が
+   <tt>{-#</tt> <tt>#-}</tt> であるときは例外である。
   </p>
   <p> <a name="sect11.1"></a></p>
   <!--<h3>11.1<tt>&nbsp;&nbsp;</tt>Inlining</h3>-->
-  <h3>11.1<tt>&nbsp;&nbsp;</tt>����饤��Ÿ��</h3>
+  <h3>11.1<tt>&nbsp;&nbsp;</tt>インライン展開</h3>
   <p>
   <table cellspacing="0" cellspacing="0">
    <tr>
@@ -57,15 +58,15 @@
    <tt>NOINLINE</tt> pragma.</p>
   -->
   <p>
-   <tt>INLINE</tt> �ץ饰�ޤϻ��ꤷ���ѿ��򤽤�餬�Ȥ��Ƥ������
-   ����饤��Ÿ������褦�ˡ�����ѥ���˻ؼ����롣����ѥ���Ϥ��Ф���
-   ��ưŪ��ñ��ʼ��򥤥�饤��Ÿ�����롣����� <tt>NOINLINE</tt>
-   �ץ饰�ޤ��������뤳�Ȥ��Ǥ��롣
+   <tt>INLINE</tt> プラグマは指定した変数をそれらが使われている場所で
+   インライン展開するように、コンパイラに指示する。コンパイラはしばしば
+   自動的に単純な式をインライン展開する。これは <tt>NOINLINE</tt>
+   プラグマで抑制することができる。
   </p>
 
   <p> <a name="sect11.2"></a></p>
   <!--<h3>11.2<tt>&nbsp;&nbsp;</tt>Specialization</h3>-->
-  <h3>11.2<tt>&nbsp;&nbsp;</tt>�ò�</h3>
+  <h3>11.2<tt>&nbsp;&nbsp;</tt>特化</h3>
   <p>
   <table cellspacing="0" cellspacing="0">
    <tr>
@@ -98,8 +99,8 @@
    overloaded numeric operations.</p>
   -->
   <p>
-   �ò���¿��������줿�ؿ��Υǥ����ѥå��ˤ������Ψ����򤹤뤿���
-   ���Ѥ���롣���Ȥ��С�
+   特化は多重定義された関数のディスパッチにある非効率を回避するために
+   使用される。たとえば、
    <tt><br />
    <br />
    factorial&nbsp;::&nbsp;Num&nbsp;a&nbsp;=&gt;&nbsp;a&nbsp;-&gt;&nbsp;a<br />
@@ -109,9 +110,9 @@
    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;factorial&nbsp;::&nbsp;Integer&nbsp;-&gt;&nbsp;Integer&nbsp;#-}<br />
    <br />
    </tt>
-   �ˤ����ơ��ѥ�᡼���� <tt>Int</tt> �ޤ��� <tt>Interger</tt> �Ǥ��뤳
-   �Ȥ򥳥�ѥ��餬���ФǤ��� <tt>factorial</tt> �θƽФ���¿���������
-   �����ͱ黻��ޤޤʤ���<tt>factorial</tt> ���ò��С������Ǥ��롣
+   において、パラメータが <tt>Int</tt> または <tt>Interger</tt> であるこ
+   とをコンパイラが検出できる <tt>factorial</tt> の呼出しは多重定義され
+   た数値演算を含まない、<tt>factorial</tt> の特化バージョンである。
   </p>
   <hr />
   <p><i>The Haskell 98 Report</i><br />

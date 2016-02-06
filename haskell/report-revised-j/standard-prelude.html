@@ -1,7 +1,7 @@
-
-<html>
+<!DOCTYPE html>
+<html lang="ja">
  <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
+  <meta charset="utf-8">
   <title>The Haskell 98 Report: Standard Prelude</title>
  </head>
 
@@ -16,7 +16,7 @@
 
   <p><a name="stdprelude"></a><a name="sect8"></a></p>
   <!--<h2>8<tt>&nbsp;&nbsp;</tt>Standard Prelude</h2>-->
-  <h2>8<tt>&nbsp;&nbsp;</tt>ɸ��ץ��塼��</h2>
+  <h2>8<tt>&nbsp;&nbsp;</tt>標準プレリュード</h2>
   <!--
   <p> In this chapter the entire Haskell Prelude is given. It constitutes a
    <i>specification</i> for the Prelude. Many of the definitions are
@@ -24,10 +24,10 @@
    required that the specification be implemented as shown here.</p>
   -->
   <p>
-   ���ξϤǤ� Haskell �ץ��塼�����Τ򼨤�������ϥץ��塼�ɤ�<em>��
-   ��</em>���������ΤǤ��롣������������ϸ�Ψ�������ΤǤ��뤳�Ȥ�
-   �ݤ˽񤫤�Ƥ��ꡢ�����˼����줿�褦�˻��ͤ���������뤳�Ȥ��׵ᤷ��
-   ����櫓�ǤϤʤ���
+   この章では Haskell プレリュード全体を示す。これはプレリュードの<em>仕
+   様</em>を構成するものである。おおくの定義は効率よりも明確であることを
+   旨に書かれており、ここに示されたように仕様が実装されることを要求して
+   いるわけではない。
   </p>
   <!--
   <p> The default method definitions, given with <tt>class</tt>
@@ -40,13 +40,13 @@
    <tt>Int</tt> values).</p>
   -->
   <p>
-   <tt>class</tt> �����Ϳ����줿�ǥե���ȥ᥽�åɤ�����ϡ��ǥե����
-   �᥽�å�<em>�Τ�</em>�λ��ͤ������Ƥ���ˤ����ʤ������٤ƤΥ��󥹥�
-   �󥹤Υ᥽�åɤΰ�̣�λ��ͤ������Ƥ���櫓�ǤϤʤ��������򤢤���
-   �ʤ�С����饹 <tt>Enum</tt> �� <tt>enumFrom</tt> ���Ф���ǥե����
-   �᥽�åɤϡ�<tt>Int</tt> ���ϰϤ�Ķ����褦�ʷ��ˤĤ��Ƥ�������ư�
-   �ʤ�(�ʤ��ʤ� <tt>fromEnum</tt> �Ϥ��Τ褦�ʷ��Τ��٤Ƥ��ͤ��̡���
-   <tt>Int</tt> ���ͤ˼������뤳�ȤϤǤ��ʤ�����Ǥ���)��
+   <tt>class</tt> 宣言で与えられたデフォルトメソッドの定義は、デフォルト
+   メソッド<em>のみ</em>の仕様を構成しているにすぎない。すべてのインスタ
+   ンスのメソッドの意味の仕様を構成しているわけではない。一つ例をあげる
+   ならば、クラス <tt>Enum</tt> の <tt>enumFrom</tt> に対するデフォルト
+   メソッドは、<tt>Int</tt> の範囲を超えるような型については正しく動作し
+   ない(なぜなら <tt>fromEnum</tt> はそのような型のすべての値を別々の
+   <tt>Int</tt> の値に写像することはできないからである)。
   </p>
   <!--
   <p> The Prelude shown here is organized into a root module,
@@ -58,13 +58,13 @@
    significant.</p>
   -->
   <p>
-   �����˼����줿�ץ��塼�ɤϤҤȤĤΥ롼�ȥ⥸�塼�� <tt>Prelude</tt>
-   �� 3�ĤΥ��֥⥸�塼�� <tt>PreludeList</tt>��<tt>PreludeText</tt> ��
-   ��� <tt>PreludeIO</tt> ���ȿ�����Ƥ��롣���ι�¤��ñ�������Τ����
-   ��ΤǤ��롣�����ϥץ��塼�ɤ��Ф��뤳���ȿ�������Ѥ��뤳�Ȥ��׵�
-   ����Ƥ���櫓�Ǥ⡢����3�ĤΥ⥸�塼�뤬�̡��˥���ݡ��ȤǤ��뤳�Ȥ�
-   �׵ᤵ��Ƥ���櫓�Ǥ�ʤ���<tt>Prelude</tt> �⥸�塼��Υ������ݡ���
-   �Τߤ����פʤΤǤ��롣
+   ここに示されたプレリュードはひとつのルートモジュール <tt>Prelude</tt>
+   と 3つのサブモジュール <tt>PreludeList</tt>、<tt>PreludeText</tt> お
+   よび <tt>PreludeIO</tt> で組織されている。この構造は単に説明のための
+   ものである。実装はプレリュードに対するこの組織化を使用することを要求
+   されているわけでも、この3つのモジュールが別々にインポートできることを
+   要求されているわけでもない。<tt>Prelude</tt> モジュールのエクスポート
+   のみが重要なのである。
   </p>
   <!--
   <p> Some of these modules import Library modules, such as <tt>Char</tt>,
@@ -74,12 +74,12 @@
    free to import more, or less, of the Library modules, as it pleases.</p>
   -->
   <p>
-   �����Υ⥸�塼��Τ����Ĥ��ϡ�<tt>Char</tt>��<tt>Monad</tt>��
-   <tt>IO</tt> ����� <tt>Numeric</tt> �ʤɤΥ饤�֥��⥸�塼��򥤥�
-   �ݡ��Ȥ��롣�����Υ⥸�塼��ˤĤ��Ƥ� ��II���ǡ������˲��⤵��Ƥ�
-   �롣�����Υ���ݡ��ȤϤ������ <tt>Prelude</tt> �λ��ͤΰ����ǤϤ�
-   �������ʤ������������ä�¿���Υ饤�֥��⥸�塼��򥤥�ݡ��Ȥ���
-   ���Ȥ⡢��������ݡ��Ȥ��뤳�Ȥ⼫ͳ�Ǥ��롣
+   これらのモジュールのいくつかは、<tt>Char</tt>、<tt>Monad</tt>、
+   <tt>IO</tt> および <tt>Numeric</tt> などのライブラリモジュールをイン
+   ポートする。これらのモジュールについては 第II部で、完全に解説されてい
+   る。これらのインポートはもちろん <tt>Prelude</tt> の仕様の一部ではな
+   い。すなわち、実装がもっと多くのライブラリモジュールをインポートする
+   ことも、少くインポートすることも自由である。
   </p>
   <!--
   <p> Primitives that are not definable in Haskell , indicated by names
@@ -90,11 +90,11 @@
    left out for the sake of brevity.</p>
   -->
   <p>
-   Haskell ������Ǥ��ʤ��ץ�ߥƥ��֤� ��<tt>prim</tt>�פǤϤ��ޤ�̾��
-   �ˤ�äƼ����졢<tt>PreludeBuiltin</tt> �Τʤ��ǥ����ƥ�˰�¸������
-   ˡ���������Ƥ��ꡢ�����Ǥϼ����ʤ����ץ�ߥƥ��֤򥯥饹�᥽�åɤ�
-   ñ�˷�ӤĤ��륤�󥹥�������Ͼ�ά���롣����ʵ�ǽ�Τ������ʥ���
-   �����󥹤Τ����Ĥ��ˤĤ��Ƥϡ��ʷ餵�򤿤�Ĥ���ˤϤ����Ƥ��롣
+   Haskell で定義できないプリミティブは 「<tt>prim</tt>」ではじまる名前
+   によって示され、<tt>PreludeBuiltin</tt> のなかでシステムに依存した方
+   法で定義されており、ここでは示さない。プリミティブをクラスメソッドに
+   単に結びつけるインスタンス宣言は省略する。明白な機能のより饒舌なイン
+   スタンスのいくつかについては、簡潔さをたもつためにはずしてある。
   </p>
   <!--
   <p> Declarations for special types such as <tt>Integer</tt>, or
@@ -104,10 +104,10 @@
    definition cannot be given in Haskell.</p>
   -->
   <p>
-   <tt>Integer</tt>�����뤤�� <tt>()</tt> �Τ褦�����̤ʷ����Ф��������
-   �Դ������뤤�Ϲ�ʸŪ�ˤ������Ǥ��뤫�⤷��̤����������Τ���˥ץ��塼
-   �ɤ˴ޤ�Ƥ��롣��ά���� "<tt>...</tt>" ��¿���ξ�硢�Ĥ�������ʬ
-   �� Haskell �Ǥ�Ϳ�����ʤ��Ȥ����ǻ��Ѥ��Ƥ��롣
+   <tt>Integer</tt>、あるいは <tt>()</tt> のような特別な型に対する宣言は
+   不完全あるいは構文的には不正であるかもしれぬが、完全性のためにプレリュー
+   ドに含めている。省略記号 "<tt>...</tt>" は多くの場合、残りの定義部分
+   が Haskell では与えられないところで使用している。
   </p>
   <!--
   <p> To reduce the occurrence of unexpected ambiguity errors, and to
@@ -120,14 +120,14 @@
    for example <tt>genericLength</tt>.</p>
   -->
   <p>
-   ͽ������ۣ�������顼�νи��򸺤餹����ȸ�Ψ��������뤿��ˡ��ꥹ��
-   ��Τ褯�Ȥ��ؿ��Τ����Ĥ��ϡ����������Τ�����ͷ� 
-   <tt>Integral&nbsp;a</tt> ���뤤�� <tt>Num&nbsp;a</tt> �����ˡ�
-   <tt>Int</tt> ��Ȥ������������ؿ��� <tt>take</tt>��<tt>drop</tt>��
-   <tt>!!</tt>��<tt>length</tt>��<tt>splitAt</tt> ����� 
-   <tt>replicate</tt> �Ǥ��롣�����δؿ��Τ��������Τ���С�������
-   <tt>List</tt> �饤�֥���Ϳ�����Ƥ��ꡢ"<tt>generic</tt>" �Ȥ���
-   ��Ƭ�����Ĥ��Ƥ��롣���Ȥ��С�<tt>genericLength</tt> �Ǥ��롣
+   予期せぬ曖昧性エラーの出現を減らすためと効率を改善するために、リスト
+   上のよく使う関数のいくつかは、より一般性のある数値型 
+   <tt>Integral&nbsp;a</tt> あるいは <tt>Num&nbsp;a</tt> の代りに、
+   <tt>Int</tt> を使う。こうした関数は <tt>take</tt>、<tt>drop</tt>、
+   <tt>!!</tt>、<tt>length</tt>、<tt>splitAt</tt> および 
+   <tt>replicate</tt> である。これらの関数のより一般性のあるバージョンは
+   <tt>List</tt> ライブラリで与えられており、"<tt>generic</tt>" という
+   接頭辞がついている。たとえば、<tt>genericLength</tt> である。
   </p>
 
   <p> <tt><br />
@@ -833,7 +833,7 @@
   <p> <a name="sect8.1"></a></p>
 
   <!--<h3>8.1<tt>&nbsp;&nbsp;</tt>Prelude <tt>PreludeList</tt></h3>-->
-  <h3>8.1<tt>&nbsp;&nbsp;</tt>�ץ��塼�� <tt>PreludeList</tt></h3>
+  <h3>8.1<tt>&nbsp;&nbsp;</tt>プレリュード <tt>PreludeList</tt></h3>
 
   <p><tt><br />
    --&nbsp;Standard&nbsp;list&nbsp;functions<br />
@@ -1191,7 +1191,7 @@
    <a name="preludetext"></a> </tt><a name="sect8.2"></a></p>
 
   <!--<h3>8.2<tt>&nbsp;&nbsp;</tt>Prelude <tt>PreludeText</tt></h3>-->
-  <h3>8.2<tt>&nbsp;&nbsp;</tt>�ץ��塼�� <tt>PreludeText</tt></h3>
+  <h3>8.2<tt>&nbsp;&nbsp;</tt>プレリュード <tt>PreludeText</tt></h3>
 
   <p><tt><br />
    module&nbsp;PreludeText&nbsp;(<br />
@@ -1436,7 +1436,7 @@
   <p> <a name="sect8.3"></a></p>
 
   <!--<h3>8.3<tt>&nbsp;&nbsp;</tt>Prelude <tt>PreludeIO</tt></h3>-->
-  <h3>8.3<tt>&nbsp;&nbsp;</tt>�ץ��塼�� <tt>PreludeIO</tt></h3>
+  <h3>8.3<tt>&nbsp;&nbsp;</tt>プレリュード <tt>PreludeIO</tt></h3>
 
   <p><tt><br />
    module&nbsp;PreludeIO&nbsp;(<br />

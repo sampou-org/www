@@ -1,6 +1,7 @@
-<html>
+<!DOCTYPE html>
+<html lang="ja">
  <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
+  <meta charset="utf-8">
   <title>The Haskell 98 Library Report: Monad Utilities</title>
  </head>
 
@@ -13,7 +14,7 @@
   <hr />
   <p><a name="Monad"></a><a name="sect20"></a></p>
   <!--<h2>20<tt>&nbsp;&nbsp;</tt>Monad Utilities</h2>-->
-  <h2>20<tt>&nbsp;&nbsp;</tt>¥â¥Ê¥É¥æ¡¼¥Æ¥£¥ê¥Æ¥£</h2>
+  <h2>20<tt>&nbsp;&nbsp;</tt>ãƒ¢ãƒŠãƒ‰ãƒ¦ãƒ¼ãƒ†ã‚£ãƒªãƒ†ã‚£</h2>
   <p>
   <table border="2" cellpadding="3">
    <tr>
@@ -70,18 +71,18 @@
    provides some useful operations on monads.</p>
   -->
   <p>
-   <tt>Monad</tt> ¥é¥¤¥Ö¥é¥ê¤Ï <tt>MonadPlus</tt> ¥¯¥é¥¹¤òÄêµÁ¤·¡¢
-   ¥â¥Ê¥É¾å¤Î¤¤¤¯¤Ä¤«¤ÎÍ­ÍÑ¤Ê±é»»¤òÄêµÁ¤·¤Æ¤¤¤ë¡£
+   <tt>Monad</tt> ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã¯ <tt>MonadPlus</tt> ã‚¯ãƒ©ã‚¹ã‚’å®šç¾©ã—ã€
+   ãƒ¢ãƒŠãƒ‰ä¸Šã®ã„ãã¤ã‹ã®æœ‰ç”¨ãªæ¼”ç®—ã‚’å®šç¾©ã—ã¦ã„ã‚‹ã€‚
   </p>
 
   <p> <a name="sect20.1"></a></p>
   <!--<h3>20.1<tt>&nbsp;&nbsp;</tt>Naming conventions</h3>-->
-  <h3>20.1<tt>&nbsp;&nbsp;</tt>Ì¿Ì¾¾å¤Î´·½¬</h3>
+  <h3>20.1<tt>&nbsp;&nbsp;</tt>å‘½åä¸Šã®æ…£ç¿’</h3>
   <!--
   <p> The functions in this library use the following naming conventions:</p>
   -->
   <p>
-   ¤³¤Î¥é¥¤¥Ö¥é¥êÆâ¤Î´Ø¿ô¤ÎÌ¾Á°¤Ï°Ê²¼¤Î´·½¬¤Ë½¾¤¦¡£
+   ã“ã®ãƒ©ã‚¤ãƒ–ãƒ©ãƒªå†…ã®é–¢æ•°ã®åå‰ã¯ä»¥ä¸‹ã®æ…£ç¿’ã«å¾“ã†ã€‚
   </p>
   <!--
   <ul>
@@ -120,9 +121,9 @@
    <ul>
     <li>
      <p>
-      ÀÜÈø¼­ "<tt>M</tt>" ¤Ï¾ï¤Ë¤½¤Î´Ø¿ô¤¬ Kleisli ¥«¥Æ¥´¥ê¡¼¤Î´Ø¿ô¤Ç¤¢¤ë
-      ¤³¤È¤ò¼¨¤·¤Æ¤¤¤ë¡£<tt>m</tt> ¤¬´Ø¿ô¤Î·ë²Ì¤ËÉÕÍ¿¤µ¤ì¤ë(modulo currying)¡¥
-      ¤³¤ì¤ÏÂ¾¤Ç¤Ï¸½¤ì¤Ê¤¤¡£Îã¤È¤·¤Æ¤Ï¡¢
+      æ¥å°¾è¾ "<tt>M</tt>" ã¯å¸¸ã«ãã®é–¢æ•°ãŒ Kleisli ã‚«ãƒ†ã‚´ãƒªãƒ¼ã®é–¢æ•°ã§ã‚ã‚‹
+      ã“ã¨ã‚’ç¤ºã—ã¦ã„ã‚‹ã€‚<tt>m</tt> ãŒé–¢æ•°ã®çµæœã«ä»˜ä¸ã•ã‚Œã‚‹(modulo currying)ï¼
+      ã“ã‚Œã¯ä»–ã§ã¯ç¾ã‚Œãªã„ã€‚ä¾‹ã¨ã—ã¦ã¯ã€
       <tt><br />
       <br />
       &nbsp;&nbsp;filter&nbsp;&nbsp;::&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(a&nbsp;-&gt;&nbsp;&nbsp;&nbsp;Bool)&nbsp;-&gt;&nbsp;[a]&nbsp;-&gt;&nbsp;&nbsp;&nbsp;[a]<br />
@@ -132,8 +133,8 @@
      </p>
     </li>
     <li>
-     <p>ÀÜÈø¼­ "<tt>_</tt>" ¤Ï·ë²Ì¤Î·¿¤ò <tt>(m&nbsp;a)</tt> ¤«¤é
-      <tt>(m&nbsp;())</tt> ¤ØÊÑ¹¹¤¹¤ë¡¥¤¿¤È¤¨¤Ğ(<tt>Prelude</tt>¤Ç¤Ï):
+     <p>æ¥å°¾è¾ "<tt>_</tt>" ã¯çµæœã®å‹ã‚’ <tt>(m&nbsp;a)</tt> ã‹ã‚‰
+      <tt>(m&nbsp;())</tt> ã¸å¤‰æ›´ã™ã‚‹ï¼ãŸã¨ãˆã°(<tt>Prelude</tt>ã§ã¯):
       <tt><br />
       <br />
       sequence&nbsp;&nbsp;::&nbsp;Monad&nbsp;m&nbsp;=&gt;&nbsp;[m&nbsp;a]&nbsp;-&gt;&nbsp;m&nbsp;[a]&nbsp;<br />
@@ -144,8 +145,8 @@
     </li>
     <li>
      <p>
-      ÀÜÆ¬¼­ "<tt>m</tt>" ¤Ï´ûÂ¸¤Î´Ø¿ô¤ò¥â¥Ê¥É·Á¼°¤Ë°ìÈÌ²½¤¹¤ë¤â¤Î¤Ç¤¢¤ë¡£
-      ¤¿¤È¤¨¤Ğ¡¢(<tt>Prelude</tt>¤Ç¤Ï)¡¤
+      æ¥é ­è¾ "<tt>m</tt>" ã¯æ—¢å­˜ã®é–¢æ•°ã‚’ãƒ¢ãƒŠãƒ‰å½¢å¼ã«ä¸€èˆ¬åŒ–ã™ã‚‹ã‚‚ã®ã§ã‚ã‚‹ã€‚
+      ãŸã¨ãˆã°ã€(<tt>Prelude</tt>ã§ã¯)ï¼Œ
       <tt><br />
       <br />
       &nbsp;&nbsp;sum&nbsp;&nbsp;::&nbsp;Num&nbsp;a&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt;&nbsp;[a]&nbsp;&nbsp;&nbsp;-&gt;&nbsp;a<br />
@@ -158,7 +159,7 @@
   </p>
   <p> <a name="sect20.2"></a></p>
   <!--<h3>20.2<tt>&nbsp;&nbsp;</tt>Class <tt>MonadPlus</tt></h3>-->
-  <h3>20.2<tt>&nbsp;&nbsp;</tt><tt>MonadPlus</tt> ¥¯¥é¥¹</h3>
+  <h3>20.2<tt>&nbsp;&nbsp;</tt><tt>MonadPlus</tt> ã‚¯ãƒ©ã‚¹</h3>
   <!--
   <p> The <tt>MonadPlus</tt> class is defined as follows: <tt><br />
    <br />
@@ -170,7 +171,7 @@
    and plus of the monad.</p>
   -->
   <p>
-   <tt>MonadPlus</tt> ¥¯¥é¥¹¤Ï°Ê²¼¤Î¤è¤¦¤ËÄêµÁ¤µ¤ì¤Æ¤¤¤ë¡£
+   <tt>MonadPlus</tt> ã‚¯ãƒ©ã‚¹ã¯ä»¥ä¸‹ã®ã‚ˆã†ã«å®šç¾©ã•ã‚Œã¦ã„ã‚‹ã€‚
    <tt><br />
    <br />
    class&nbsp;&nbsp;Monad&nbsp;m&nbsp;=&gt;&nbsp;MonadPlus&nbsp;m&nbsp;&nbsp;where<br />
@@ -178,8 +179,8 @@
    &nbsp;&nbsp;&nbsp;&nbsp;mplus&nbsp;&nbsp;::&nbsp;m&nbsp;a&nbsp;-&gt;&nbsp;m&nbsp;a&nbsp;-&gt;&nbsp;m&nbsp;a<br />
    <br />
    </tt>
-   ¥¯¥é¥¹¥á¥½¥Ã¥É <tt>mzero</tt> ¤ª¤è¤Ó <tt>mplus</tt> ¤Ï¥â¥Ê¥É¤Ë¤ª¤±¤ë¥¼¥í
-   ¤ª¤è¤Ó²ÃË¡¤Ç¤¢¤ë¡£
+   ã‚¯ãƒ©ã‚¹ãƒ¡ã‚½ãƒƒãƒ‰ <tt>mzero</tt> ãŠã‚ˆã³ <tt>mplus</tt> ã¯ãƒ¢ãƒŠãƒ‰ã«ãŠã‘ã‚‹ã‚¼ãƒ­
+   ãŠã‚ˆã³åŠ æ³•ã§ã‚ã‚‹ã€‚
   </p>
   <!--
   <p> Lists and the <tt>Maybe</tt> type are instances of
@@ -197,8 +198,8 @@
    </tt></p>
   -->
   <p>
-   ¥ê¥¹¥È·¿¤ª¤è¤Ó <tt>Maybe</tt> ·¿¤Ï <tt>MonadPlus</tt> 
-   ¤Î¥¤¥ó¥¹¥¿¥ó¥¹¤Ç¤¢¤ë¡£¤¹¤Ê¤ï¤Á¡¢
+   ãƒªã‚¹ãƒˆå‹ãŠã‚ˆã³ <tt>Maybe</tt> å‹ã¯ <tt>MonadPlus</tt> 
+   ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã§ã‚ã‚‹ã€‚ã™ãªã‚ã¡ã€
    <tt><br />
    <br />
    instance&nbsp;&nbsp;MonadPlus&nbsp;Maybe&nbsp;&nbsp;where<br />
@@ -215,16 +216,16 @@
 
   <p> <a name="sect20.3"></a></p>
   <!--<h3>20.3<tt>&nbsp;&nbsp;</tt>Functions</h3>-->
-  <h3>20.3<tt>&nbsp;&nbsp;</tt>´Ø¿ô·²</h3>
+  <h3>20.3<tt>&nbsp;&nbsp;</tt>é–¢æ•°ç¾¤</h3>
   <!--
   <p> The <tt>join</tt> function is the conventional monad join operator.
    It is used to remove one level of monadic structure, projecting its
    bound argument into the outer level.</p>
   -->
   <p>
-   <tt>join</tt> ´Ø¿ô¤ÏµìÍè¤Î¥â¥Ê¥É¤Î join ±é»»»Ò¤Ç¤¢¤ë¡£¤³¤Î±é»»»Ò¤Ï
-   ¥â¥Ê¥É¹½Â¤¤Î°ì¤Ä¤Î¥ì¥Ù¥ë¤ò½üµî¤·¡¢¤½¤ÎÂ«Çû°ú¿ô¤ò³°Â¦¤Î¥ì¥Ù¥ë¤Ë
-   Åê¼Í¤¹¤ë¤â¤Î¤Ç¤¢¤ë¡£
+   <tt>join</tt> é–¢æ•°ã¯æ—§æ¥ã®ãƒ¢ãƒŠãƒ‰ã® join æ¼”ç®—å­ã§ã‚ã‚‹ã€‚ã“ã®æ¼”ç®—å­ã¯
+   ãƒ¢ãƒŠãƒ‰æ§‹é€ ã®ä¸€ã¤ã®ãƒ¬ãƒ™ãƒ«ã‚’é™¤å»ã—ã€ãã®æŸç¸›å¼•æ•°ã‚’å¤–å´ã®ãƒ¬ãƒ™ãƒ«ã«
+   æŠ•å°„ã™ã‚‹ã‚‚ã®ã§ã‚ã‚‹ã€‚
   </p>
   <!--
   <p> The <tt>mapAndUnzipM</tt> function maps its first argument over a
@@ -232,9 +233,9 @@
    used with complicated data structures or a state-transforming monad.</p>
   -->
   <p>
-   <tt>mapAndUnzipM</tt> ´Ø¿ô¤ÏÂè°ì°ú¿ô¤ò¥ê¥¹¥È¾å¤Ç¥Ş¥Ã¥×¤·¤Æ¥ê¥¹¥È¤Î
-   ÁÈ¤òÊÖ¤¹¡£¤³¤Î´Ø¿ô¤Ï¼ç¤Ë¡¢Ê£»¨¤Ê¥Ç¡¼¥¿¹½Â¤¤¢¤ë¤¤¤Ï¾õÂÖÊÑ´¹¥â¥Ê¥É¤È
-   ¤È¤â¤Ë»ÈÍÑ¤µ¤ì¤ë¡£
+   <tt>mapAndUnzipM</tt> é–¢æ•°ã¯ç¬¬ä¸€å¼•æ•°ã‚’ãƒªã‚¹ãƒˆä¸Šã§ãƒãƒƒãƒ—ã—ã¦ãƒªã‚¹ãƒˆã®
+   çµ„ã‚’è¿”ã™ã€‚ã“ã®é–¢æ•°ã¯ä¸»ã«ã€è¤‡é›‘ãªãƒ‡ãƒ¼ã‚¿æ§‹é€ ã‚ã‚‹ã„ã¯çŠ¶æ…‹å¤‰æ›ãƒ¢ãƒŠãƒ‰ã¨
+   ã¨ã‚‚ã«ä½¿ç”¨ã•ã‚Œã‚‹ã€‚
   </p>
   <!--
   <p> The <tt>zipWithM</tt> function generalises <tt>zipWith</tt> to
@@ -266,9 +267,9 @@
    reversed.</p>
   -->
   <p>
-   <tt>zipWithM</tt> ´Ø¿ô¤Ï <tt>zipWith</tt> ¤òÇ¤°Õ¤Î¥â¥Ê¥É¤Ø°ìÈÌ²½¤·¤¿
-   ¤â¤Î¤Ç¤¢¤ë¡£Îã¤¨¤Ğ¡¢°Ê²¼¤Î´Ø¿ô¤Ï¥Õ¥¡¥¤¥ë¤òÉ½¼¨¤·¡¢¤½¤Î¹Ô¤ÎÀèÆ¬¤Ë
-   ¹ÔÈÖ¹æ¤òÉÕ¤±¤ë¤â¤Î¤Ç¤¢¤ë¡£
+   <tt>zipWithM</tt> é–¢æ•°ã¯ <tt>zipWith</tt> ã‚’ä»»æ„ã®ãƒ¢ãƒŠãƒ‰ã¸ä¸€èˆ¬åŒ–ã—ãŸ
+   ã‚‚ã®ã§ã‚ã‚‹ã€‚ä¾‹ãˆã°ã€ä»¥ä¸‹ã®é–¢æ•°ã¯ãƒ•ã‚¡ã‚¤ãƒ«ã‚’è¡¨ç¤ºã—ã€ãã®è¡Œã®å…ˆé ­ã«
+   è¡Œç•ªå·ã‚’ä»˜ã‘ã‚‹ã‚‚ã®ã§ã‚ã‚‹ã€‚
    <tt><br />
    <br />
    listFile&nbsp;::&nbsp;String&nbsp;-&gt;&nbsp;IO&nbsp;()<br />
@@ -279,11 +280,11 @@
    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(lines&nbsp;cts)<br />
    <br />
    </tt>
-   <tt>foldM</tt> ´Ø¿ô¤Ï <tt>foldl</tt> ¤Î¥¢¥Ê¥í¥¸¡¼¤Ç¤¢¤ë¡£·ë²Ì¤¬
-   ¥â¥Ê¥É¤ËÊñ¤Ş¤ì¤Æ¤¤¤ë¤³¤È¤Ï½ü¤¤¤Æ¡£<tt>foldM</tt> ¤Ï¥ê¥¹¥È°ú¿ô¤Î
-   º¸¤«¤é±¦¤ØºîÍÑ¤·¤Æ¤¤¤¯¤³¤È¤ËÃí°Õ¤¹¤ë¤³¤È¡£¤³¤Î¤³¤È¤Ï¡¢
-   <tt>(&gt;&gt;)</tt> ¤ª¤è¤Ó "¾ö¤ß¹ş¤ß´Ø¿ô"¤¬²Ä´¹¤Ç¤Ï¤Ê¤¤¤È¤³¤í¤ÇÌäÂê¤È
-   ¤Ê¤ê¤¦¤ë¡£
+   <tt>foldM</tt> é–¢æ•°ã¯ <tt>foldl</tt> ã®ã‚¢ãƒŠãƒ­ã‚¸ãƒ¼ã§ã‚ã‚‹ã€‚çµæœãŒ
+   ãƒ¢ãƒŠãƒ‰ã«åŒ…ã¾ã‚Œã¦ã„ã‚‹ã“ã¨ã¯é™¤ã„ã¦ã€‚<tt>foldM</tt> ã¯ãƒªã‚¹ãƒˆå¼•æ•°ã®
+   å·¦ã‹ã‚‰å³ã¸ä½œç”¨ã—ã¦ã„ãã“ã¨ã«æ³¨æ„ã™ã‚‹ã“ã¨ã€‚ã“ã®ã“ã¨ã¯ã€
+   <tt>(&gt;&gt;)</tt> ãŠã‚ˆã³ "ç•³ã¿è¾¼ã¿é–¢æ•°"ãŒå¯æ›ã§ã¯ãªã„ã¨ã“ã‚ã§å•é¡Œã¨
+   ãªã‚Šã†ã‚‹ã€‚
    <tt><br />
    <br />
    &nbsp;&nbsp;&nbsp;&nbsp;foldM&nbsp;f&nbsp;a1&nbsp;[x1,&nbsp;x2,&nbsp;...,&nbsp;xm&nbsp;]<br />
@@ -295,8 +296,8 @@
    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f&nbsp;am&nbsp;xm<br />
    <br />
    </tt>
-   ¤â¤·¡¢±¦¤«¤éº¸¤ØÉ¾²Á¤¹¤ëÉ¬Í×¤¬¤¢¤ë¤Ê¤é¡¢ÆşÎÏ¤Î¥ê¥¹¥È¤òµÕ½ç¤Ë
-   ¤·¤Ê¤±¤ì¤Ğ¤Ê¤é¤Ê¤¤¡£
+   ã‚‚ã—ã€å³ã‹ã‚‰å·¦ã¸è©•ä¾¡ã™ã‚‹å¿…è¦ãŒã‚ã‚‹ãªã‚‰ã€å…¥åŠ›ã®ãƒªã‚¹ãƒˆã‚’é€†é †ã«
+   ã—ãªã‘ã‚Œã°ãªã‚‰ãªã„ã€‚
   </p>
   <!--
   <p> The <tt>when</tt> and <tt>unless</tt> functions provide conditional
@@ -308,15 +309,15 @@
    <tt>debug</tt> is <tt>True</tt>, and otherwise do nothing.</p>
   -->
   <p>
-   <tt>when</tt> ¤ª¤è¤Ó <tt>unless</tt> ´Ø¿ô¤Ï¥â¥Ê¥É¼°¤Î¾ò·ï¼Â¹Ô¤ò
-   ¤ª¤³¤Ê¤¦¡£¤¿¤È¤¨¤Ğ¡¢
+   <tt>when</tt> ãŠã‚ˆã³ <tt>unless</tt> é–¢æ•°ã¯ãƒ¢ãƒŠãƒ‰å¼ã®æ¡ä»¶å®Ÿè¡Œã‚’
+   ãŠã“ãªã†ã€‚ãŸã¨ãˆã°ã€
    <tt><br />
    <br />
    when&nbsp;debug&nbsp;(putStr&nbsp;"Debugging\n")<br />
    <br />
    </tt>
-   ¤Ï¡¢¤â¤·¥Ö¡¼¥ëÃÍ <tt>debug</tt> ¤¬ <tt>True</tt> ¤Ê¤é¡¢Ê¸»úÎó 
-   <tt>"Debugging\n"</tt> ¤ò½ĞÎÏ¤·¡¢¤½¤¦¤Ç¤Ê¤±¤ì¤Ğ¡¢¤Ê¤Ë¤â¤·¤Ê¤¤¡£
+   ã¯ã€ã‚‚ã—ãƒ–ãƒ¼ãƒ«å€¤ <tt>debug</tt> ãŒ <tt>True</tt> ãªã‚‰ã€æ–‡å­—åˆ— 
+   <tt>"Debugging\n"</tt> ã‚’å‡ºåŠ›ã—ã€ãã†ã§ãªã‘ã‚Œã°ã€ãªã«ã‚‚ã—ãªã„ã€‚
   </p>
   <!--
   <p> The monadic lifting operators promote a function to a monad. The
@@ -328,8 +329,8 @@
    </tt></p>
   -->
   <p>
-   ¥â¥Ê¥É»ı¤Á¾å¤²±é»»¤Ï´Ø¿ô¤ò¥â¥Ê¥É¤Ø¥×¥í¥â¡¼¥È¤¹¤ë¡£´Ø¿ô°ú¿ô¤Ïº¸¤«¤é
-   ±¦¤ØÁöºº¤µ¤ì¤ë¡£¤¿¤È¤¨¤Ğ¡¢
+   ãƒ¢ãƒŠãƒ‰æŒã¡ä¸Šã’æ¼”ç®—ã¯é–¢æ•°ã‚’ãƒ¢ãƒŠãƒ‰ã¸ãƒ—ãƒ­ãƒ¢ãƒ¼ãƒˆã™ã‚‹ã€‚é–¢æ•°å¼•æ•°ã¯å·¦ã‹ã‚‰
+   å³ã¸èµ°æŸ»ã•ã‚Œã‚‹ã€‚ãŸã¨ãˆã°ã€
    <tt><br />
    <br />
    liftM2&nbsp;(+)&nbsp;[0,1]&nbsp;[0,2]&nbsp;=&nbsp;[0,2,1,3]<br />
@@ -350,25 +351,25 @@
    </tt></p>
   -->
   <p>
-   Â¿¤¯¤Î¾õ¶·¤Ç¡¢<tt>liftM</tt> ±é»»¤Ï ´Ø¿ôÅ¬ÍÑ¤ò¥×¥í¥â¡¼¥È¤¹¤ë <tt>ap</tt> 
-   ¤ò»È¤¦¤³¤È¤ÇÃÖ¤­´¹¤¨²ÄÇ½¤Ç¤¢¤ë¡£
+   å¤šãã®çŠ¶æ³ã§ã€<tt>liftM</tt> æ¼”ç®—ã¯ é–¢æ•°é©ç”¨ã‚’ãƒ—ãƒ­ãƒ¢ãƒ¼ãƒˆã™ã‚‹ <tt>ap</tt> 
+   ã‚’ä½¿ã†ã“ã¨ã§ç½®ãæ›ãˆå¯èƒ½ã§ã‚ã‚‹ã€‚
    <tt><br />
    <br />
    return&nbsp;f&nbsp;`ap`&nbsp;x1&nbsp;`ap`&nbsp;...&nbsp;`ap`&nbsp;xn<br />
    <br />
    </tt>
-   ¤Ï¡¢
+   ã¯ã€
    <tt><br />
    <br />
    liftMn&nbsp;f&nbsp;x1&nbsp;x2&nbsp;...&nbsp;xn<br />
    <br />
    </tt>
-   ¤ÈÆ±Åù¤Ç¤¢¤ë¡£
+   ã¨åŒç­‰ã§ã‚ã‚‹ã€‚
   </p>
    
   <a name="sect20.4"></a>
   <!--<h3>20.4<tt>&nbsp;&nbsp;</tt>Library <tt>Monad</tt></h3>-->
-  <h3>20.4<tt>&nbsp;&nbsp;</tt><tt>Monad</tt> ¥é¥¤¥Ö¥é¥ê</h3>
+  <h3>20.4<tt>&nbsp;&nbsp;</tt><tt>Monad</tt> ãƒ©ã‚¤ãƒ–ãƒ©ãƒª</h3>
 
   <p><tt><br />
    module&nbsp;Monad&nbsp;(<br />

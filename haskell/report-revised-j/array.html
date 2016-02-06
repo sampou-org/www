@@ -1,6 +1,7 @@
-<html>
+<!DOCTYPE html>
+<html lang="ja">
  <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
+  <meta charset="utf-8">
   <title>The Haskell 98 Library Report: Arrays</title>
  </head>
 
@@ -13,7 +14,7 @@
   <hr />
   <p><a name="arrays"></a><a name="sect16"></a></p>
   <!--<h2>16<tt>&nbsp;&nbsp;</tt>Arrays</h2>-->
-  <h2>16<tt>&nbsp;&nbsp;</tt>����</h2>
+  <h2>16<tt>&nbsp;&nbsp;</tt>配列</h2>
   <p>
   <table border="2" cellpadding="3">
    <tr>
@@ -64,12 +65,12 @@
    implementation, arrays are treated as data, not as general functions.</p>
   -->
   <p>
-   Haskell �ˤϥ���ǥå�����ǽ��<em>����</em>������äƤ��ꡢ�����
-   ������Ϣ³������ʬ�����Ʊ���Ǥ��ΰ���Ĵؿ��Ȥߤʤ����Ȥ��Ǥ��롣
-   ���Τ褦�����¤Τ���ؿ��ϸ�Ψ�ɤ��������뤳�Ȥ���ǽ�Ǥ��롣
-   �äˡ��ץ�����ޤϤ��ι������ǤؤΥ�����������ʬ��®�����Ȥ�
-   ���Ԥ��뤳�Ȥ��Ǥ��롣���Τ褦�ʼ����β�ǽ����Τ��ʤ�Τˤ��뤿��ˡ�
-   ����ϰ��̤δؿ��Ȥ��ƤǤϤʤ��ǡ����Ȥ��ƤȤꤢ�Ĥ�����
+   Haskell にはインデックス可能な<em>配列</em>が備わっており、これは
+   整数の連続した部分集合と同型での領域をもつ関数とみなすことができる。
+   このような制限のある関数は効率良く実装することが可能である。
+   特に、プログラマはその構成要素へのアクセスが十分に速いことを
+   期待することができる。このような実装の可能性を確かなものにするために、
+   配列は一般の関数としてではなくデータとしてとりあつかう。
   </p>
   <!--
   <p> Since most array functions involve the class <tt>Ix</tt>, this module
@@ -77,14 +78,14 @@
    <tt>Array</tt> and <tt>Ix</tt>.</p>
   -->
   <p>
-   �ۤȤ�ɤ�����ؿ��ϥ��饹 <tt>Ix</tt> ��ޤ�Τǡ�����
-   <tt>Ix</tt> �⥸�塼��� <tt>Array</tt> ���饨�����ݡ��Ȥ���Ƥ��ơ�
-   <tt>Array</tt> �� <tt>Ix</tt> ��ξ���򥤥�ݡ��Ȥ���ɬ�פϤʤ���
+   ほとんどの配列関数はクラス <tt>Ix</tt> を含むので、この
+   <tt>Ix</tt> モジュールは <tt>Array</tt> からエクスポートされていて、
+   <tt>Array</tt> と <tt>Ix</tt> の両方をインポートする必要はない。
   </p>
 
   <p> <a name="sect16.1"></a></p>
   <!--<h3>16.1<tt>&nbsp;&nbsp;</tt>Array Construction</h3>-->
-  <h3>16.1<tt>&nbsp;&nbsp;</tt>����ι���</h3>
+  <h3>16.1<tt>&nbsp;&nbsp;</tt>配列の構築</h3>
   <!--
   <p>If <tt>a</tt> is an index type and <tt>b</tt> is any type, the type of
    arrays with indices in <tt>a</tt> and elements in <tt>b</tt> is written
@@ -97,15 +98,15 @@
    <tt>((1,1),(10,10))</tt>.</p>
   -->
   <p>
-   �⤷��<tt>a</tt> �����륤��ǥå������Ǥ��� <tt>b</tt> ��Ǥ�դη���
-   ����Ȥ���ȡ�<tt>a</tt> �Υ���ǥå�������������Ǥ� <tt>b</tt>
-   �Ǥ�������η��� <tt>Array&nbsp;a&nbsp;b</tt> �Ƚ񤯡�����ϴؿ�
-   <tt>array</tt> �ˤ�äƤĤ���������Ȥ���ǽ�Ǥ��롣<tt>array</tt>
-   ����������<em>����</em>���ФǤ��롣���줾�줬���������
-   ����ǥå����η��ˤʤäƤ��롣�����ζ����Ϥ��ν�Ǥ�������Τʤ���
-   �Ǿ��Υ���ǥå����Ⱥ���Υ���ǥå����Ǥ��롣�㤨�С�1 ����Ϥ��ޤ�
-   Ĺ�� 10 �Υ٥��ȥ�ϡ��������� <tt>(1,10)</tt> ����ġ��ޤ���1 ����
-   �Ϥ��ޤ� 10 �� 10 �ι���ζ������Ф� <tt>((1,1),(10,10))</tt> �Ǥ��롣
+   もし、<tt>a</tt> があるインデックス型でかつ <tt>b</tt> が任意の型で
+   あるとすると、<tt>a</tt> のインデックスを持ち、要素が <tt>b</tt>
+   である配列の型は <tt>Array&nbsp;a&nbsp;b</tt> と書く。配列は関数
+   <tt>array</tt> によってつくりだすことが可能である。<tt>array</tt>
+   の第一引数は<em>境界</em>の対である。それぞれがその配列の
+   インデックスの型になっている。これらの境界はこの順でその配列のなかの
+   最小のインデックスと最大のインデックスである。例えば、1 からはじまる
+   長さ 10 のベクトルは、境界の対 <tt>(1,10)</tt> を持つ。また、1 から
+   はじまる 10 × 10 の行列の境界の対は <tt>((1,1),(10,10))</tt> である。
   </p>
   <!--
   <p> The second argument of <tt>array</tt> is a list of <i>associations
@@ -128,27 +129,27 @@
    the <tt>array</tt> constructor.</p>
   -->
   <p>
-   <tt>array</tt> ����������� (����ǥå���, ��) �η���<em>Ϣ��</em>
-   �ꥹ�ȤǤ��롣ŵ��Ū�ˤϡ����Υꥹ�Ȥ�����ɽ����ɽ�����롣Ϣ����
-   <tt>(i,&nbsp;x)</tt> ������Υ���ǥå��� <tt>i</tt> �ˤ������ͤ� 
-   <tt>x</tt> �Ǥ���Ȥ�������ˤʤäƤ��롣�⤷���ꥹ�ȤΤʤ���
-   ����ǥå����˶�������Ϥ���Ƥ����Τ�����С����������̤���
-   (���ʤ�� _|_ )�Ȥʤ롣�⤷���ꥹ�ȤΤʤ���Ϣ���Ф�Ʊ������ǥå�����
-   ���Ĥʤ顢���Υ���ǥå����ˤ������ͤ�̤���(���ʤ����_|_ )�Ȥʤ롣
-   ����ǥå����Ϥ����Υ��顼������å����ʤ���Фʤ�ʤ��Τǡ�
-   <tt>array</tt> �϶����а�����Ϣ�ۥꥹ�ȤΥ���ǥå����˴ؤ���
-   ���ʤǤ��롣���������ͤ˴ؤ��Ƥ������ʤǤ��롣�������äơ�
-   ���Τ褦�ʺƵ��ϲ�ǽ�Ǥ��롣
+   <tt>array</tt> の第二引数は (インデックス, 値) の形の<em>連想</em>
+   リストである。典型的には、このリストは内包表記で表現する。連想対
+   <tt>(i,&nbsp;x)</tt> は配列のインデックス <tt>i</tt> における値が 
+   <tt>x</tt> であるという定義になっている。もし、リストのなかの
+   インデックスに境界からはずれているものがあれば、この配列は未定義
+   (すなわち _|_ )となる。もし、リストのなかの連想対が同じインデックスを
+   持つなら、そのインデックスにおける値は未定義(すなわち、_|_ )となる。
+   インデックスはこれらのエラーをチェックしなければならないので、
+   <tt>array</tt> は境界対引数と連想リストのインデックスに関して
+   正格である。しかし、値に関しては非正格である。したがって、
+   次のような再帰は可能である。
    <tt><br />
    <br />
    a&nbsp;=&nbsp;array&nbsp;(1,100)&nbsp;((1,1)&nbsp;:&nbsp;[(i,&nbsp;i&nbsp;*&nbsp;a!(i-1))&nbsp;|&nbsp;i&nbsp;&lt;-&nbsp;[2..100]])<br />
    <br />
    </tt>
-   ��������ζ�����Τ��٤ƤΥ���ǥå�����Ϣ�ۥꥹ�ȤΤʤ��˽и�����
-   ɬ�פϤʤ�����������Ϣ�ۥꥹ�Ȥˤ�����ʤ�����ǥå������б�����
-   �ͤ�̤���(���ʤ����_|_)�Ȥʤ롣
-   �� <a href="array.html#array-examples">16.1</a> �� <tt>array</tt>
-   �����Ҥ���Ѥ��������Ĥ�����򼨤��Ƥ롣
+   その配列の境界内のすべてのインデックスが連想リストのなかに出現する
+   必要はない。しかし、連想リストにあらわれないインデックスに対応する
+   値は未定義(すなわち、_|_)となる。
+   図 <a href="array.html#array-examples">16.1</a> は <tt>array</tt>
+   構成子を使用したいくつかの例を示してる。
   </p>
   <p>
   <table border="2" cellpadding="3">
@@ -178,7 +179,7 @@
      </table>
      <div align="center">
       <!--<h3>Array examples</h3>-->
-      <h3>�������</h3>
+      <h3>配列の例</h3>
      </div>
      <a name="array-examples"></a></td>
    </tr>
@@ -194,13 +195,13 @@
    function <tt>listArray</tt>.</p>
   -->
   <p>
-   <tt>(!)</tt> �黻�Ҥ������ź���ΤȤ��������Ƥ�ɽ�魯��
-   <tt>bounds</tt> �ؿ��ϡ��ҤȤĤ������Ŭ�Ѥ���ȡ����ζ����Ф��֤���
-   �ؿ� <tt>indices</tt>��<tt>elems</tt> ����� <tt>assocs</tt> ��
-   �ҤȤĤ������Ŭ�Ѥ����ȡ����줾�졢����ǥå��������ǡ����뤤��
-   ����ǥå���������Ϣ���ФΥ���ǥå�����ˤʤ�٤��ꥹ�Ȥ��֤���
-   ����ϴؿ� <tt>listArray</tt> ��Ȥäƶ����Фȥ���ǥå������
-   �ʤ�٤��ͤΥꥹ�Ȥ��鹽�ۤ��뤳�Ȥ�Ǥ��롣
+   <tt>(!)</tt> 演算子は配列の添字のところの内容を表わす。
+   <tt>bounds</tt> 関数は、ひとつの配列に適用すると、その境界対を返す。
+   関数 <tt>indices</tt>、<tt>elems</tt> および <tt>assocs</tt> は
+   ひとつの配列に適用されると、それぞれ、インデックス、要素、あるいは
+   インデックスと要素連想対のインデックス順にならべたリストを返す。
+   配列は関数 <tt>listArray</tt> を使って境界対とインデックス順に
+   ならべた値のリストから構築することもできる。
   </p>
   <!--
   <p> If, in any dimension, the lower bound is greater than the upper
@@ -209,15 +210,15 @@
    bounds with which the array was constructed.</p>
   -->
   <p>
-   �⤷���������峦�����礭���褦�ʼ������ҤȤĤǤ⤢��С���������
-   ���Ȥ������������Ǥ��롣��������ؤΥ���ǥå�����륢�������ϡ���
-   �����󶭳����顼�ˤʤ롣<tt>bounds</tt> �Ϥ��ξ��Ǥ����󤬹��ۤ�
-   �줿�Ȥ��ζ����ФȤʤ롣
+   もし、下界が上界よりも大きいような次元がひとつでもあれば、その配列
+   自身は正当だが空である。空の配列へのインデックスよるアクセスは、常
+   に配列境界エラーになる。<tt>bounds</tt> はその場合でも配列が構築さ
+   れたときの境界対となる。
   </p>
 
   <p> <a name="sect16.1.1"></a></p>
   <!--<h4>16.1.1<tt>&nbsp;&nbsp;</tt>Accumulated Arrays</h4>-->
-  <h4>16.1.1<tt>&nbsp;&nbsp;</tt>��������</h4>
+  <h4>16.1.1<tt>&nbsp;&nbsp;</tt>蓄積配列</h4>
   <!--
   <p> Another array creation function, <tt>accumArray</tt>, relaxes the
    restriction that a given index may appear at most once in the
@@ -239,28 +240,28 @@
    be recursive.<a name="array-update"></a></p>
   -->
   <p>
-   �⤦��Ĥ���������ؿ��� <tt>accumArray</tt> �Ǥ��롣���δؿ���
-   Ϳ����줿����ǥå�����Ϣ�ۥꥹ����ˤ��äƤ��Ĥ����Ȥ������¤�
-   ���¤���<em>���Ѵؿ�</em>��Ȥä�Ʊ������ǥå�������Ϣ�������
-   �ͤ����Ѥ��롣<tt>accumArray</tt> �������������Ѵؿ��ǡ����������
-   ����ͤǤ��롣�Τ������Ĥΰ����� <tt>array</tt> �ؿ��ξ���Ʊ�ͤ�
-   �����Ф�Ϣ�ۥꥹ�ȤǤ��롣���Ȥ��С������Ĥ��Υ���ǥå��������ͤ�
-   �ꥹ�Ȥ򤢤�����ȡ�<tt>hist</tt> �ϻ��ꤵ�줿�ϰ���ˤ���
-   �ƥ���ǥå����νи����Υҥ��ȥ������������롣
+   もう一つの配列作成関数は <tt>accumArray</tt> である。この関数は
+   与えられたインデックスが連想リスト中にあっても一つだけという制限を
+   緩和し、<em>蓄積関数</em>を使って同じインデックスをもつ連想対中の
+   値を蓄積する。<tt>accumArray</tt> の第一引数は蓄積関数で、第二引数は
+   初期値である。のこりの二つの引数は <tt>array</tt> 関数の場合と同様に
+   境界対と連想リストである。たとえば、いくつかのインデックス型の値の
+   リストをあたえると、<tt>hist</tt> は指定された範囲内にある
+   各インデックスの出現数のヒストグラムを生成する。
    <tt><br />
    <br />
    hist&nbsp;::&nbsp;(Ix&nbsp;a,&nbsp;Num&nbsp;b)&nbsp;=&gt;&nbsp;(a,a)&nbsp;-&gt;&nbsp;[a]&nbsp;-&gt;&nbsp;Array&nbsp;a&nbsp;b<br />
    hist&nbsp;bnds&nbsp;is&nbsp;=&nbsp;accumArray&nbsp;(+)&nbsp;0&nbsp;bnds&nbsp;[(i,&nbsp;1)&nbsp;|&nbsp;i&lt;-is,&nbsp;inRange&nbsp;bnds&nbsp;i]<br />
    <br />
    </tt>
-   �⤷���Ѵؿ������ʤǤ����硢<tt>accumArray</tt> ��Ϣ�ۥꥹ�����
-   ����ǥå������Ф��Ƥ����ǤϤʤ��ͤ��Ф��Ƥ����ʤˤʤ롣�������äơ�
-   ���̤�����ȤϤ����äơ���������ϰ��̤ˤϺƵ��ˤ��ƤϤʤ�ʤ���
+   もし蓄積関数が正格である場合、<tt>accumArray</tt> は連想リスト中の
+   インデックスに対してだけではなく値に対しても正格になる。したがって、
+   一般の配列とはちがって、蓄積配列は一般には再帰にしてはならない。
   </p>
 
   <p> <a name="sect16.2"></a></p>
   <!--<h3>16.2<tt>&nbsp;&nbsp;</tt>Incremental Array Updates</h3>-->
-  <h3>16.2<tt>&nbsp;&nbsp;</tt>��������ʹ���</h3>
+  <h3>16.2<tt>&nbsp;&nbsp;</tt>配列の漸進更新</h3>
   <!--
   <p> The operator <tt>(//)</tt> takes an array and a list of pairs and
    returns an array identical to the left argument except that it has been
@@ -272,14 +273,14 @@
    the same matrix, except with the diagonal zeroed.</p>
   -->
   <p>
-   �黻�� <tt>(//)</tt> �������ҤȤĤ��ФΥꥹ�ȤȤ�Ȥꡢ��¦��
-   Ϣ�ۥꥹ�Ȥˤ�äƹ������줿��ʬ�ʳ��Ϻ�¦�������Ʊ��������֤���
-   ( <tt>array</tt> �ؿ��ΤȤ���Ʊ�͡�Ϣ�ۥꥹ����Υ���ǥå�����
-   ������������Ǥ��������뤿��ˤϡ�ͣ��Ǥʤ���Фʤ�ʤ���)
-   ���Ȥ��С��⤷ <tt>m</tt> ������ǥå����� 1 ����Ϥޤ� 
-   <tt>n</tt> �� <tt>n</tt> �ι���Ǥ���Ȥ���ȡ�
+   演算子 <tt>(//)</tt> は配列をひとつと対のリストとをとり、右側の
+   連想リストによって更新された部分以外は左側の配列と同じ配列を返す。
+   ( <tt>array</tt> 関数のときと同様、連想リスト中のインデックスは
+   更新される要素が定義されるためには、唯一でなければならない。)
+   たとえば、もし <tt>m</tt> がインデックスが 1 から始まる 
+   <tt>n</tt> × <tt>n</tt> の行列であるとすると、
    <tt>m//[((i,i),&nbsp;0)&nbsp;|&nbsp;i&nbsp;&lt;-&nbsp;[1..n]]</tt>
-   ���г����Ǥ� 0 �Ǥ���Ȥ����ʳ��ϸ��ι����Ʊ����ΤǤ��롣
+   は対角要素が 0 であるという以外は元の行列と同じものである。
   </p>
   <!--
   <p> <tt>accum</tt> <i>f</i> takes an array and an association list and
@@ -291,10 +292,10 @@
    </tt></p>
   -->
   <p>
-   <tt>accum</tt> <I>f</I> �ϰ�Ĥ�����Ȱ�Ĥ�Ϣ�ۥꥹ�Ȥ�Ȥꡢ
-   �ꥹ�Ȥ�����Ф����Ѵؿ� <tt>f</tt> ���Ѥ�����������Ѥ��롣
-   �������äơ�<tt>accumArray</tt> �� <tt>accum</tt> ��Ȥä�
-   �ʲ��Τ褦��������뤳�Ȥ��Ǥ��롣
+   <tt>accum</tt> <I>f</I> は一つの配列と一つの連想リストをとり、
+   リストからの対を蓄積関数 <tt>f</tt> を用いて配列に蓄積する。
+   したがって、<tt>accumArray</tt> は <tt>accum</tt> を使って
+   以下のように定義することができる。
    <tt><br />
    <br />
    accumArray&nbsp;f&nbsp;z&nbsp;b&nbsp;=&nbsp;accum&nbsp;f&nbsp;(array&nbsp;b&nbsp;[(i,&nbsp;z)&nbsp;|&nbsp;i&nbsp;&lt;-&nbsp;range&nbsp;b])<br />
@@ -303,7 +304,7 @@
  
   <p> <a name="sect16.3"></a></p>
   <!--<h3>16.3<tt>&nbsp;&nbsp;</tt>Derived Arrays</h3>-->
-  <h3>16.3<tt>&nbsp;&nbsp;</tt>Ƴ������</h3>
+  <h3>16.3<tt>&nbsp;&nbsp;</tt>導出配列</h3>
   <!--
   <p> The two functions <tt>fmap</tt> and <tt>ixmap </tt>derive new arrays
    from existing ones; they may be thought of as providing function
@@ -314,12 +315,12 @@
    shows some examples.</p>
   -->
   <p>
-   ��Ĥδؿ� <tt>fmap</tt> �� <tt>ixmap</tt> �ϴ�¸�����󤫤鿷����
-   �����Ƴ�Ф��롣�����δؿ��ϸ���������¢���Ƥ�������ˤĤ��ơ�
-   ���줾�챦�δؿ��Ⱥ��δؿ����������ؿ��ȹͤ����롣 
-   <tt>fmap</tt> �ؿ�����������Ǥ��ͤ��Ѵ�����<tt>ixmap</tt> ��
-   ����Υ���ǥå������Ѵ����ǽ�ˤ��롣��
-   <a href="array.html#derived-array-examples">16.2</a> �ˤ�����򼨤���
+   二つの関数 <tt>fmap</tt> と <tt>ixmap</tt> は既存の配列から新しい
+   配列を導出する。これらの関数は元の配列が内蔵している写像について、
+   それぞれ右の関数と左の関数を合成する関数と考えられる。 
+   <tt>fmap</tt> 関数は配列の要素の値を変換し、<tt>ixmap</tt> は
+   配列のインデックスの変換を可能にする。図
+   <a href="array.html#derived-array-examples">16.2</a> にその例を示す。
   </p>
   <p>
   <table border="2" cellpadding="3">
@@ -350,7 +351,7 @@
      </table>
      <div align="center">
       <!--<h3>Derived array examples</h3>-->
-      <h3>Ƴ���������</h3>
+      <h3>導出配列の例</h3>
      </div>
      <a name="derived-array-examples"></a></td>
    </tr>
@@ -360,7 +361,7 @@
   <p><a name="Libarray"></a></p>
   <p> <a name="sect16.4"></a></p>
   <!--<h3>16.4<tt>&nbsp;&nbsp;</tt>Library <tt>Array</tt></h3>-->
-  <h3>16.4<tt>&nbsp;&nbsp;</tt><tt>Array</tt> �饤�֥��</h3>
+  <h3>16.4<tt>&nbsp;&nbsp;</tt><tt>Array</tt> ライブラリ</h3>
 
   <p><tt><br />
    module&nbsp;&nbsp;Array&nbsp;(&nbsp;<br />

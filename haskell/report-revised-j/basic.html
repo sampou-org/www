@@ -1,8 +1,8 @@
-
-<html>
+<!DOCTYPE html>
+<html lang="ja">
  <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
-  <title>The Haskell 98 Report: ������ߤη��ȥ��饹</title>
+  <meta charset="utf-8">
+  <title>The Haskell 98 Report: 定義ずみの型とクラス</title>
  </head>
 
  <body bgcolor="#ffffff">
@@ -18,7 +18,7 @@
   <p><a name="sect6"></a></p>
 
   <!--<h2>6<tt>&nbsp;&nbsp;</tt>Predefined Types and Classes</h2>-->
-  <h2>6<tt>&nbsp;&nbsp;</tt>������ߤη��ȥ��饹</h2>
+  <h2>6<tt>&nbsp;&nbsp;</tt>定義ずみの型とクラス</h2>
   <!--
   <p>The Haskell Prelude contains predefined classes, types, and functions
    that are implicitly imported into every Haskell program. In this
@@ -30,20 +30,20 @@
    II.</p>
   -->
   <p>
-   Haskell �Υץ��塼�ɤϡ����ۤΤ����ˤ��٤Ƥ� Haskell �Υץ�������
-   ����ݡ��Ȥ����������ߤΥ��饹��������Ӵؿ���ޤ�Ǥ��롣�������
-   �ϡ��ץ��塼����˸����Ф��뤳�Τ褦�ʷ�����ӥ��饹�ˤĤ��Ʋ��⤹
-   �롣�ۤȤ�ɤδؿ��Ϥ����ǤϾܤ�������Ϥ��ʤ���
-   <a href="standard-prelude.html#stdprelude">8</a> �Ϥ�Ϳ�����Ƥ�
-   ������򤫤��Ѱդ�����Ǥ��뤫��Ǥ��롣���Τۤ�������ʣ�ǿ������
-   ͭ�����Τ褦��������ߤη��� Part II ���������Ƥ��롣
+   Haskell のプレリュードは、暗黙のうちにすべての Haskell のプログラムに
+   インポートされる定義ずみのクラス、型および関数を含んでいる。この節で
+   は、プレリュード中に見い出せるこのような型およびクラスについて解説す
+   る。ほとんどの関数はここでは詳しく解説はしない。
+   <a href="standard-prelude.html#stdprelude">8</a> 章に与えられてい
+   る定義をから用意に理解できるからである。そのほか、配列、複素数および
+   有理数のような定義ずみの型は Part II で定義されている。
   </p>
 
   <p><a name="basic-types"></a></p>
   <p> <a name="sect6.1"></a></p>
 
   <!--<h3>6.1<tt>&nbsp;&nbsp;</tt>Standard Haskell Types</h3>-->
-  <h3>6.1<tt>&nbsp;&nbsp;</tt>Haskell ��ɸ�෿</h3>
+  <h3>6.1<tt>&nbsp;&nbsp;</tt>Haskell の標準型</h3>
   <!--
   <p>These types are defined by the Haskell Prelude. Numeric types are
    described in Section <a href="basic.html#numbers">6.4</a>. When
@@ -52,18 +52,18 @@
    faithfully convey the meaning of the underlying type.</p>
   -->
   <p>
-   �����η��� Haskell �ץ��塼�ɤˤ�ä��������Ƥ��롣���ͷ��ˤĤ�
-   �Ƥ� <a href="basic.html#numbers">6.4</a> ��ǲ��⤹�롣ɬ�פʤ餽��
-   ���� Haskell �Ǥ������Ϳ���Ƥ��롣
-   �����Ĥ�������Ϲ�ʸŪ�ˤ��������ʤ��������η����ܼ�Ū�ʰ�̣�����¤�
-   ����路�Ƥ��롣
+   これらの型は Haskell プレリュードによって定義されている。数値型につい
+   ては <a href="basic.html#numbers">6.4</a> 節で解説する。必要ならその
+   型の Haskell での定義を与えている。
+   いくつかの定義は構文的には正しくないが、その型の本質的な意味は誠実に
+   あらわしている。
   </p>
 
   <p><a name="booleans"></a></p>
   <p> <a name="sect6.1.1"></a></p>
 
   <!--<h4>6.1.1<tt>&nbsp;&nbsp;</tt>Booleans</h4>-->
-  <h4>6.1.1<tt>&nbsp;&nbsp;</tt>������</h4>
+  <h4>6.1.1<tt>&nbsp;&nbsp;</tt>真理値</h4>
 
   <p><tt>
    data&nbsp;&nbsp;Bool&nbsp;&nbsp;=&nbsp;&nbsp;False&nbsp;|&nbsp;True&nbsp;deriving&nbsp;<br />
@@ -76,10 +76,10 @@
    <tt>not</tt>. The name <tt>otherwise</tt> is defined as <tt>True</tt> to
    make guarded expressions more readable.</p>
   -->
-  �����ͷ� <tt>Bool</tt> ����󷿤ΤҤȤĤǤ��롣����Ū�ʿ����ʹؿ��ϡ�
-  <tt>&amp;&amp;</tt> (and)��<tt>||</tt> (or)������� <tt>not</tt>
-  �Ǥ��롣̾�� <tt>otherwise</tt> �ϥ����ɼ����ɤߤ䤹�������Τ�
-  <tt>True</tt> ���������Ƥ��롣</p>
+  真理値型 <tt>Bool</tt> は列挙型のひとつである。基本的な真理値関数は、
+  <tt>&amp;&amp;</tt> (and)、<tt>||</tt> (or)、および <tt>not</tt>
+  である。名前 <tt>otherwise</tt> はガード式を読みやすくするもので
+  <tt>True</tt> と定義されている。</p>
 
   <p> <a name="prelude-bool"></a></p>
   <p> <a name="characters"></a></p>
@@ -87,7 +87,7 @@
   <p> <a name="sect6.1.2"></a></p>
 
   <!--<h4>6.1.2<tt>&nbsp;&nbsp;</tt>Characters and Strings</h4>-->
-  <h4>6.1.2<tt>&nbsp;&nbsp;</tt>ʸ����ʸ����</h4>
+  <h4>6.1.2<tt>&nbsp;&nbsp;</tt>文字と文字列</h4>
   <!--
   <p> The character type <tt>Char </tt>is an enumeration whose values
    represent Unicode characters [<a href="haskell.html#$unicode">11</a>].
@@ -100,15 +100,15 @@
    <tt>Enum</tt>, map characters to and from the <tt>Int</tt> type.</p>
   -->
   <p>
-   ʸ���� <tt>Char</tt> ����󷿤ΤҤȤĤǡ�Unicode ʸ��
-   [<a href="haskell.html#$unicode">11</a>] ��ɽ����ʸ�����Ф�����繽ʸ
-   �� <a href="lexemes.html#lexemes-char">2.6</a> ����������Ƥ��ꡢʸ
-   ����ƥ��ϥǡ����� <tt>Char</tt> ��̵���������ҤǤ��롣��
-   <tt>Char</tt> �ϥ��饹 <tt>Read</tt>��<tt>Show</tt>��<tt>Eq</tt>��
-   <tt>Ord</tt>��<tt>Enum</tt> ����� <tt>Bounded</tt> �Υ��󥹥��󥹤�
-   ���롣ͭ����󷿤ξ��ɸ��ؿ� <tt>toEum</tt> �����
-   <tt>fromEnum</tt> ��ʸ���� <tt>Int</tt> �����餢�뤤�� <tt>Int</tt>
-   ���ؤμ����Ǥ��롣
+   文字型 <tt>Char</tt> は列挙型のひとつで、Unicode 文字
+   [<a href="haskell.html#$unicode">11</a>] を表す。文字に対する字句構文
+   は <a href="lexemes.html#lexemes-char">2.6</a> 節で定義されており、文
+   字リテラルはデータ型 <tt>Char</tt> の無引数構成子である。型
+   <tt>Char</tt> はクラス <tt>Read</tt>、<tt>Show</tt>、<tt>Eq</tt>、
+   <tt>Ord</tt>、<tt>Enum</tt> および <tt>Bounded</tt> のインスタンスで
+   ある。有界列挙型の上の標準関数 <tt>toEum</tt> および
+   <tt>fromEnum</tt> は文字の <tt>Int</tt> 型からあるいは <tt>Int</tt>
+   型への写像である。
   </p>
   <!--
   <p> Note that ASCII control characters each have several representations
@@ -119,16 +119,16 @@
    <tt>\CR</tt>, <tt>\t</tt> and <tt>\HT</tt>, <tt>\v</tt> and
    <tt>\VT</tt>, and <tt>\n</tt> and <tt>\LF</tt>.</p>
   -->
-  <p> ASCII ������ʸ���Ϥ��줾��ʸ����ƥ��Ȥ��Ƥ����Ĥ���ɽ������Ĥ�
-   �Ȥ����դ��衣���ͥ��������ס�ASCII �ˡ���˥å����������פ����
-   <tt>\^</tt><i>X</i> ��ˡ�����롣����ˡ����Τ褦��ɽ����Ʊ���Τ�Τ�
-   ���롣<tt>\a</tt> �� <tt>\BEL</tt>��<tt>\b</tt> �� <tt>\BS</tt>��
-   <tt>\f</tt> �� <tt>\FF</tt>��<tt>\r</tt> �� <tt>\CR</tt>��<tt>\t</tt>
-   �� <tt>\HT</tt>��<tt>\v</tt> �� <tt>\VT</tt> ������ <tt>\n</tt> ��
-   <tt>\LF</tt>��</p>
+  <p> ASCII の制御文字はそれぞれ文字リテラルとしていくつかの表現を持つこ
+   とに注意せよ。数値エスケープ、ASCII ニーモニックエスケープおよび
+   <tt>\^</tt><i>X</i> 記法がある。さらに、次のような表現も同等のもので
+   ある。<tt>\a</tt> と <tt>\BEL</tt>、<tt>\b</tt> と <tt>\BS</tt>、
+   <tt>\f</tt> と <tt>\FF</tt>、<tt>\r</tt> と <tt>\CR</tt>、<tt>\t</tt>
+   と <tt>\HT</tt>、<tt>\v</tt> と <tt>\VT</tt> そして <tt>\n</tt> と
+   <tt>\LF</tt>。</p>
 
   <!-- <p> A <i>string</i> is a list of characters: -->
-  <p><i>ʸ����</i> ��ʸ���Υꥹ�ȤǤ��롣
+  <p><i>文字列</i> は文字のリストである。
    <tt><br />
    <br />
    type&nbsp;&nbsp;String&nbsp;&nbsp;=&nbsp;&nbsp;[Char]<br />
@@ -141,17 +141,17 @@
 
   <p> <tt>[&nbsp;'A','&nbsp;','s','t','r',&nbsp;'i','n','g'] </tt></p>
   -->
-  <p>ʸ����� <a href="lexemes.html#lexemes-char">2.6</a> ��ǲ��⤵���
-   ������繽ʸ���Ѥ��ƾ�ά���ˤ��뤳�Ȥ��Ǥ��롣���Ȥ��С� "A string"
-   ��</p>
+  <p>文字列は <a href="lexemes.html#lexemes-char">2.6</a> 節で解説されて
+   いる字句構文を用いて省略形にすることができる。たとえば、 "A string"
+   は</p>
   <p><tt>['A','&nbsp;','s','t','r','i','n','g']</tt></p>
-  <p>�ξ�ά���Ǥ��롣</p>
+  <p>の省略形である。</p>
 
   <p> <a name="basic-lists"></a></p>
   <p> <a name="sect6.1.3"></a></p>
 
   <!--<h4>6.1.3<tt>&nbsp;&nbsp;</tt>Lists</h4>-->
-  <h4>6.1.3<tt>&nbsp;&nbsp;</tt>�ꥹ��</h4>
+  <h4>6.1.3<tt>&nbsp;&nbsp;</tt>リスト</h4>
 
   <p><tt>
    data&nbsp;&nbsp;[a]&nbsp;&nbsp;=&nbsp;&nbsp;[]&nbsp;|&nbsp;a&nbsp;:&nbsp;[a]&nbsp;&nbsp;deriving&nbsp;(Eq,&nbsp;Ord)<br />
@@ -172,24 +172,24 @@
    <tt>Ord</tt>, <tt>Monad</tt>, <tt>Functor</tt>, and
    <tt>MonadPlus</tt>.
   -->
-   �ꥹ�Ȥϡ���Ĥι����Ҥ������Ū�ǡ������Ǥ��뤬��<a
-   href="exps.html#lists">3.7</a> ��ǽҤ٤��褦�����̤ʹ�ʸ���ġ��ǽ�
-   �ι����Ҥ϶��ꥹ�Ȥǡ�`<tt>[]</tt>' (�֥˥��)�Ƚ񤯡�����ܤι�����
-   �ϡ�`<tt>:</tt>' (�֥��󥹡�)�Ƚ񤯡��⥸�塼�� <tt>PreludeList</tt>
-   (<a href="standard-prelude.html#preludelist">8.1</a> ��򸫤�) ��¿��
-   ��ɸ��ꥹ�ȴؿ���������Ƥ��롣���󡢥ꥹ�Ȥ�����ɽ���� 2 �Ĥ����̤�
-   �ꥹ�Ȥ��Ф��������ʹ�ʸ�ˤĤ��Ƥϡ�<a
-   href="exps.html#arithmetic-sequences">3.10</a> �ᤪ��� <a
-   href="exps.html#list-comprehensions">3.11</a> ��ˤ��줾����⤷�Ƥ�
-   �롣�ꥹ�Ȥ� <tt>Read</tt>��<tt>Show</tt>��<tt>Eq</tt>��<tt>Ord</tt>��
-   <tt>Monad</tt>��<tt>Functor</tt> ����� <tt>MonadPlus</tt> ���饹�Υ�
-   �󥹥��󥹤Ǥ��롣</p>
+   リストは、二つの構成子をもつ代数的データ型であるが、<a
+   href="exps.html#lists">3.7</a> 節で述べたように特別な構文をもつ。最初
+   の構成子は空リストで、`<tt>[]</tt>' (「ニル」)と書く。二つ目の構成子
+   は、`<tt>:</tt>' (「コンス」)と書く。モジュール <tt>PreludeList</tt>
+   (<a href="standard-prelude.html#preludelist">8.1</a> 節を見よ) は多く
+   の標準リスト関数を定義している。数列、リストの内包表記の 2 つの特別な
+   リストに対する便利な構文については、<a
+   href="exps.html#arithmetic-sequences">3.10</a> 節および <a
+   href="exps.html#list-comprehensions">3.11</a> 節にそれぞれ解説してあ
+   る。リストは <tt>Read</tt>、<tt>Show</tt>、<tt>Eq</tt>、<tt>Ord</tt>、
+   <tt>Monad</tt>、<tt>Functor</tt> および <tt>MonadPlus</tt> クラスのイ
+   ンスタンスである。</p>
 
   <p> <a name="basic-tuples"></a></p>
   <p> <a name="sect6.1.4"></a></p>
 
   <!--<h4>6.1.4<tt>&nbsp;&nbsp;</tt>Tuples</h4>-->
-  <h4>6.1.4<tt>&nbsp;&nbsp;</tt>���ץ�</h4>
+  <h4>6.1.4<tt>&nbsp;&nbsp;</tt>タプル</h4>
   <!--
   <p> Tuples are algebraic datatypes with special syntax, as defined in
    Section <a href="exps.html#tuples">3.8</a>. Each tuple type has a single
@@ -198,12 +198,12 @@
    that all their component types are).</p>
   -->
   <p>
-   ���ץ�����̤ʹ�ʸ�������Ū�ǡ������Ǥ��ꡢ����� <a
-   href="exps.html#tuples">3.8</a> ��ǲ��⤷�Ƥ��롣���줾��Υ��ץ뷿
-   ��ñ��ι����Ҥ��ġ����٤ƤΥ��ץ�� <tt>Eq</tt>��<tt>Ord</tt>��
-   <tt>Bounded</tt>��<tt>Read</tt> ����� <tt>Show</tt> �Υ��󥹥��󥹤�
-   ����(������󡢤��٤Ƥι������Ǥ������Υ��󥹥��󥹤Ǥ��뤳�Ȥ����
-   �Ǥ���)��
+   タプルは特別な構文をもつ代数的データ型であり、これは <a
+   href="exps.html#tuples">3.8</a> 節で解説してある。それぞれのタプル型
+   は単一の構成子をもつ。すべてのタプルは <tt>Eq</tt>、<tt>Ord</tt>、
+   <tt>Bounded</tt>、<tt>Read</tt> および <tt>Show</tt> のインスタンスで
+   ある(もちろん、すべての構成要素がそれらのインスタンスであることが条件
+   である)。
   </p>
   <!--
   <p> There is no upper bound on the size of a tuple, but some Haskell
@@ -215,13 +215,13 @@
    <tt>zip</tt> for tuples up to a size of 7.</p>
   -->
   <p>
-   ���ץ�Υ������ˤϾ�¤Ϥʤ����������ʤ��顢�����Ĥ��� Haskell �μ���
-   �Ǥϥ��ץ�Υ����������¤��ߤ����礭�����ץ�Υ��󥹥��󥹤����¤���
-   ���Ȥ⤢�롣�����������٤Ƥ� Haskell �μ����� 15 �ޤǤΥ��ץ륵������
-   ���ݡ��Ȥ��ʤ���Фʤ�ʤ��������ơ������� <tt>Eq</tt>��
-   <tt>Ord</tt>��<tt>Bounded</tt>��<tt>Read</tt> ����� <tt>Show</tt> ��
-   ���󥹥��󥹤Ǥʤ���Фʤ�ʤ����ץ��塼�ɤȥ饤�֥��Ǥϥ�������
-   7 �ޤǤΥ��ץ���Ф��� zip �ʤɤΥ��ץ�ؿ���������Ƥ��롣
+   タプルのサイズには上限はない。しかしながら、いくつかの Haskell の実装
+   ではタプルのサイズに制限を設け、大きいタプルのインスタンスを制限する
+   こともある。しかし、すべての Haskell の実装は 15 までのタプルサイズを
+   サポートしなければならない。そして、それらは <tt>Eq</tt>、
+   <tt>Ord</tt>、<tt>Bounded</tt>、<tt>Read</tt> および <tt>Show</tt> の
+   インスタンスでなければならない。プレリュードとライブラリではサイズが
+   7 までのタプルに対して zip などのタプル関数を定義している。
   </p>
   <!--
   <p> The constructor for a tuple is written by omitting the expressions
@@ -231,10 +231,10 @@
    <tt>(,,)&nbsp;Int&nbsp;Bool&nbsp;Int</tt> denote the same type.</p>
   -->
   <p>
-   ���륿�ץ���б����빽���Ҥϥ���ޤ�Ϥ༰���ά���ƽ񤯡��������äơ�
-   <tt>(x,y)</tt> �� <tt>(,) x y</tt> ��Ʊ���ͤ��������롣Ʊ�����Ȥ�����
-   �ץ�η������Ҥˤ⤤����Τǡ�<tt>(Int,Bool,Int)</tt> �� <tt>(,,) Int
-   Bool Int</tt> ��Ʊ�����򤢤�路�Ƥ��롣
+   あるタプルに対応する構成子はコンマを囲む式を省略して書く。したがって、
+   <tt>(x,y)</tt> と <tt>(,) x y</tt> は同じ値を生成する。同じことが、タ
+   プルの型構成子にもいえるので、<tt>(Int,Bool,Int)</tt> と <tt>(,,) Int
+   Bool Int</tt> は同じ型をあらわしている。
   </p>
   <!--
   <p> The following functions are defined for pairs (2-tuples):
@@ -242,16 +242,16 @@
    Similar functions are not predefined for larger tuples.</p>
   -->
   <p>
-   �ʲ��δؿ���<tt>fst</tt>��<tt>snd</tt>��<tt>curry</tt> �����
-   <tt>uncurry</tt> ����(2 ���ץ�)�ˤĤ��Ƥδؿ��Ȥ����������롣�����
-   �礭�ʥ��ץ�ˤĤ��Ƥ�Ʊ�ͤδؿ�������ѤǤϤʤ���
+   以下の関数、<tt>fst</tt>、<tt>snd</tt>、<tt>curry</tt> および
+   <tt>uncurry</tt> は対(2 タプル)についての関数として定義される。さらに
+   大きなタプルについては同様の関数は定義済ではない。
   </p>
 
   <p><a name="basic-trivial"></a></p>
   <p> <a name="sect6.1.5"></a></p>
 
   <!--<h4>6.1.5<tt>&nbsp;&nbsp;</tt>The Unit Datatype</h4>-->
-  <h4>6.1.5<tt>&nbsp;&nbsp;</tt>��˥åȥǡ�����</h4>
+  <h4>6.1.5<tt>&nbsp;&nbsp;</tt>ユニットデータ型</h4>
   <!--
   <p><tt>
    data&nbsp;&nbsp;()&nbsp;=&nbsp;()&nbsp;deriving&nbsp;(Eq,&nbsp;Ord,&nbsp;Bounded,&nbsp;Enum,&nbsp;Read,&nbsp;Show)<br />
@@ -264,15 +264,15 @@
    data&nbsp;&nbsp;()&nbsp;=&nbsp;()&nbsp;deriving&nbsp;(Eq,&nbsp;Ord,&nbsp;Bounded,&nbsp;Enum,&nbsp;Read,&nbsp;Show)<br />
    <br />
    </tt>
-   ��˥åȥǡ����� <tt>()</tt> ����-<i>_|_</i> �����ǡ����ʤ����̵����
-   ������ <tt>()</tt> ���Ĥ�����ġ� 
-   <a href="exps.html#unit-expression">3.9</a> ��⤢�碌�Ƹ��衣
+   ユニットデータ型 <tt>()</tt> は非-<i>_|_</i> の要素、すなわち、無引数
+   構成子 <tt>()</tt> を一つだけもつ。 
+   <a href="exps.html#unit-expression">3.9</a> 節もあわせて見よ。
   </p>
 
   <p> <a name="sect6.1.6"></a></p>
 
   <!--<h4>6.1.6<tt>&nbsp;&nbsp;</tt>Function Types</h4>-->
-  <h4>6.1.6<tt>&nbsp;&nbsp;</tt>�ؿ��η�</h4>
+  <h4>6.1.6<tt>&nbsp;&nbsp;</tt>関数の型</h4>
   <!--
   <p>Functions are an abstract type: no constructors directly create
    functional values. The following simple functions are found in the
@@ -280,14 +280,14 @@
    <tt>($)</tt>, and <tt>until</tt>.</p>
   -->
   <p>
-   �ؿ�����ݷ��ΤҤȤĤǡ��ؿ����ͤ�ľ���������빽���ҤϤʤ����ʲ���ñ
-   ��ʴؿ���<tt>id</tt>��<tt>const</tt>��<tt>(.)</tt>��<tt>flip</tt>��
-   <tt>($)</tt> ����� <tt>until</tt> �ϥץ��塼����ˤ����ΤǤ��롣
+   関数は抽象型のひとつで、関数の値を直接生成する構成子はない。以下の単
+   純な関数、<tt>id</tt>、<tt>const</tt>、<tt>(.)</tt>、<tt>flip</tt>、
+   <tt>($)</tt> および <tt>until</tt> はプレリュード内にあるものである。
   </p>
 
   <p> <a name="sect6.1.7"></a></p>
   <!--<h4>6.1.7<tt>&nbsp;&nbsp;</tt>The IO and IOError Types</h4>-->
-  <h4>6.1.7<tt>&nbsp;&nbsp;</tt>IO ������� IOError ��</h4>
+  <h4>6.1.7<tt>&nbsp;&nbsp;</tt>IO 型および IOError 型</h4>
   <!--
   <p>The <tt>IO</tt> type serves as a tag for operations (actions) that
    interact with the outside world. The <tt>IO</tt> type is abstract: no
@@ -296,11 +296,11 @@
    href="io-13.html#io">7</a> describes I/O operations.</p>
   -->
   <p>
-   <tt>IO</tt> ���ϳ����ȤΥ��󥿥饯��������(���������)���Ф��륿��
-   �Ȥ���Ư����<tt>IO</tt> ������ݷ��Ǥ��ꡢ�����Ҥϥ桼������ϸ�����
-   ����<tt>IO</tt> �� <tt>Monad</tt> ����� <tt>Functor</tt> ���饹�Υ�
-   �󥹥��󥹤Ǥ��롣<a href="io-13.html#io">7</a> �Ϥ� I/O ���ˤĤ���
-   ���⤹�롣
+   <tt>IO</tt> 型は外界とのインタラクション操作(アクション)に対するタグ
+   として働く。<tt>IO</tt> 型は抽象型であり、構成子はユーザからは見えな
+   い。<tt>IO</tt> は <tt>Monad</tt> および <tt>Functor</tt> クラスのイ
+   ンスタンスである。<a href="io-13.html#io">7</a> 章で I/O 操作について
+   解説する。
   </p>
   <!--
   <p> <tt>IOError</tt> is an abstract type representing errors raised by
@@ -312,17 +312,17 @@
    many more.</p>
   -->
   <p>
-   <tt>IOError</tt> �� I/O ���ˤ�ä�ȯ�����ƥ��顼��ɽ��������ݷ��ǡ�
-   <tt>Show</tt> ����� <tt>Eq</tt> �Υ��󥹥��󥹤Ǥ��롣���η����ͤϼ
-   �� I/O �ؿ��ˤ�깽������롣���Υ�ݡ��ȤǤϤ���ʾ�Ϥդ�ʤ����ץ�
-   ��塼�ɤϡ������Ĥ��� I/O �ؿ�
-   (<a href="standard-prelude.html#preludeio">8.3</a> ����������Ƥ���)
-   �����ꡢPart II �ˤϤ����¿���� I/O �ؿ������롣
+   <tt>IOError</tt> は I/O 操作によって発生してエラーを表現する抽象型で、
+   <tt>Show</tt> および <tt>Eq</tt> のインスタンスである。この型の値は種々
+   の I/O 関数により構成される。このレポートではこれ以上はふれない。プレ
+   リュードは、いくつかの I/O 関数
+   (<a href="standard-prelude.html#preludeio">8.3</a> 節で定義されている)
+   があり、Part II にはさらに多くの I/O 関数がある。
   </p>
 
   <p> <a name="sect6.1.8"></a></p>
   <!--<h4>6.1.8<tt>&nbsp;&nbsp;</tt>Other Types</h4>-->
-  <h4>6.1.8<tt>&nbsp;&nbsp;</tt>����¾�η�</h4>
+  <h4>6.1.8<tt>&nbsp;&nbsp;</tt>その他の型</h4>
   <!--
   <p><tt>
    data&nbsp;&nbsp;Maybe&nbsp;a&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;Nothing&nbsp;|&nbsp;Just&nbsp;a&nbsp;&nbsp;deriving&nbsp;(Eq,&nbsp;Ord,&nbsp;Read,&nbsp;Show)<br />
@@ -342,16 +342,16 @@
    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Eq,&nbsp;Ord,&nbsp;Bounded,&nbsp;Enum,&nbsp;Read,&nbsp;Show)<br />
    <br />
    </tt>
-   <tt>Maybe</tt> ���� <tt>Functor</tt>��<tt>Monad</tt> �����
-   <tt>MonadPlus</tt> �Υ��󥹥��󥹤Ǥ��롣<tt>Ordering</tt> ����
-   <tt>Ord</tt> ���饹�� <tt>compare</tt> �ǻȤ��롣�ؿ� <tt>maybe</tt>
-   ����� <tt>either</tt> �ϥץ��塼�ɤˤ��롣</p>
+   <tt>Maybe</tt> 型は <tt>Functor</tt>、<tt>Monad</tt> および
+   <tt>MonadPlus</tt> のインスタンスである。<tt>Ordering</tt> 型は
+   <tt>Ord</tt> クラスの <tt>compare</tt> で使われる。関数 <tt>maybe</tt>
+   および <tt>either</tt> はプレリュードにある。</p>
 
   <p><a name="strict-eval"></a></p>
   <p> <a name="sect6.2"></a></p>
 
   <!--<h3>6.2<tt>&nbsp;&nbsp;</tt>Strict Evaluation</h3>-->
-  <h3>6.2<tt>&nbsp;&nbsp;</tt>����ɾ��</h3>
+  <h3>6.2<tt>&nbsp;&nbsp;</tt>正格評価</h3>
   <!--
   <p>Function application in Haskell is non-strict; that is, a function
    argument is evaluated only when required. Sometimes it is desirable to
@@ -363,15 +363,15 @@
    </tt>The function <tt>seq</tt> is defined by the equations:</p>
   -->
   <p>
-   Haskell �ˤ�����ؿ�Ŭ�Ѥ������ʤǤ��롣���ʤ�����ؿ�������ɬ�פʤ�
-   ���ˤΤ�ɾ������롣�Ȥ��ˤ��ͤ�ɾ���� <tt>seq</tt> �ؿ����Ѥ��ƶ���
-   ��������礬���롣
+   Haskell における関数適用は非正格である。すなわち、関数引数は必要なと
+   きにのみ評価される。ときには値の評価を <tt>seq</tt> 関数を用いて強制
+   したい場合がある。
    <tt><br />
    <br />
    &nbsp;&nbsp;seq&nbsp;::&nbsp;a&nbsp;-&gt;&nbsp;b&nbsp;-&gt;&nbsp;b<br />
    <br />
    </tt>
-   �ؿ� <tt>seq</tt> �ϰʲ����������������롣
+   関数 <tt>seq</tt> は以下の等式で定義される。
   </p>
   <p>
   <table>
@@ -395,14 +395,14 @@
    weakens Haskell's parametricity properties.</p>
   -->
   <p>
-   <tt>seq</tt> ���̾��ɬ�פ��ٱ�ɾ������򤷤ƥѥե����ޥ󥹤���夵
-   �������Ƴ�����롣���ʥǡ�����
-   (<a href="decls.html#strictness-flags">4.2.1</a> ��򸫤�)�� <tt>$!</tt>
-   �Ȥ����黻�Ҥ�Ĥ��ä��������롣�������ʤ��顢����Ͻ���ʰ�̣���
-   �����⤿�餹������ϡ����Ƥη��˻��Ѳ�ǽ�Ǥ��뤫�������̤Ȥ��ơ�_
-   |_ �� \x ->  _|_ ��Ʊ���ǤϤʤ��ʤ롣seq �Ϥ������̤��뤿����Ѥ���
-   ��뤫��Ǥ��롣Ʊ�ͤ���ͳ�ǡ�seq ��¸�ߤϡ�Haskell ��
-   �ѥ��ȥꥷ�ƥ�����롣
+   <tt>seq</tt> は通常、不必要な遅延評価を回避してパフォーマンスを向上さ
+   せために導入する。正格データ型
+   (<a href="decls.html#strictness-flags">4.2.1</a> 節を見よ)は <tt>$!</tt>
+   という演算子をつかって定義される。しかしながら、これは重大な意味上の
+   帰結をもたらす。それは、全ての型に使用可能であるからだ。結果として、_
+   |_ は \x ->  _|_ と同じではなくなる。seq はこれを区別するために用いら
+   れるからである。同様の理由で、seq の存在は、Haskell の
+   パラメトリシティを弱める。
   </p>
   <!--
   <p> The operator <tt>$!</tt> is strict (call-by-value) application, and
@@ -427,8 +427,8 @@
    <tt>zipWith&nbsp;($)&nbsp;fs&nbsp;xs</tt>.</p>
   -->
   <p>
-   �黻�� <tt>$!</tt> ������(call-by-value)Ŭ�ѤǤ��ꡢ<tt>seq</tt> ����
-   �����������롣�ץ��塼�ɤǤ��ٱ�Ŭ�Ѥ� <tt>$</tt> ��������Ƥ��롣
+   演算子 <tt>$!</tt> は正格(call-by-value)適用であり、<tt>seq</tt> を用
+   いて定義される。プレリュードでは遅延適用の <tt>$</tt> も定義している。
    <tt><br />
    <br />
    &nbsp;&nbsp;infixr&nbsp;0&nbsp;$,&nbsp;$!<br />
@@ -437,30 +437,30 @@
    &nbsp;&nbsp;f&nbsp;$!&nbsp;x&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;x&nbsp;`seq`&nbsp;f&nbsp;x<br />
    <br />
    </tt>
-   �ٱ�Ŭ�ѱ黻�� <tt>$</tt> �Ͼ�Ĺ�˸����뤫�⤷��ʤ�������ϡ��̾��
-   Ŭ�� <tt>(f x)</tt> �� <tt>(f $ x)</tt> ��Ʊ����̣������Ǥ��롣����
-   ���ʤ��顢<tt>$</tt> �ϱ���������㤤ͥ���̤��ĤΤǡ����ˤ�ä�
-   �ϳ�̤��ά���뤳�Ȥ��Ǥ��롣���Ȥ��С�
+   遅延適用演算子 <tt>$</tt> は冗長に見えるかもしれない。それは、通常の
+   適用 <tt>(f x)</tt> は <tt>(f $ x)</tt> と同じ意味だからである。しか
+   しながら、<tt>$</tt> は右結合性と低い優先順位をもつので、場合によって
+   は括弧を省略することができる。たとえば、
    <tt><br />
    <br />
    &nbsp;&nbsp;f&nbsp;$&nbsp;g&nbsp;$&nbsp;h&nbsp;x&nbsp;&nbsp;=&nbsp;&nbsp;f&nbsp;(g&nbsp;(h&nbsp;x))<br />
    <br />
    </tt>
-   ����� <tt>map ($ 0) xs</tt> ���뤤�� <tt>zipWith ($) fs xs</tt> �ʤ�
-   �Τ褦�ʹⳬ�ؿ���Ȥ����̤Ǥ�ͭ�ѤǤ��롣
+   これは <tt>map ($ 0) xs</tt> あるいは <tt>zipWith ($) fs xs</tt> など
+   のような高階関数を使う場面でも有用である。
   </p>
 
   <p> <a name="sect6.3"></a></p>
   <!--<h3>6.3<tt>&nbsp;&nbsp;</tt>Standard Haskell Classes</h3>-->
-  <h3>6.3<tt>&nbsp;&nbsp;</tt>Haskell ��ɸ�९�饹</h3>
+  <h3>6.3<tt>&nbsp;&nbsp;</tt>Haskell の標準クラス</h3>
   <!--
   <p>Figure <a href="basic.html#standard-classes">6.1</a> shows the
    hierarchy of Haskell classes defined in the Prelude and the Prelude
    types that are instances of these classes.</p>
   -->
   <p>
-   �� <a href="basic.html#standard-classes">6.1</a> �ϥץ��塼�ɤ����
-   ����Ƥ��� Haskell �Υ��饹�Ȥ��η��Υ��󥹥��󥹤γ��ؤ򼨤��Ƥ��롣
+   図 <a href="basic.html#standard-classes">6.1</a> はプレリュードで定義
+   されている Haskell のクラスとその型のインスタンスの階層を示している。
   </p>
   <table border="2" cellpadding="3">
    <tr>
@@ -487,19 +487,19 @@
    given to fully specify an instance.</p>
   -->
   <p>
-   �ǥե���ȤΥ��饹�᥽�å����
-   (<a href="decls.html#classes">4.3</a> ��)��ɸ��Υ��饹�Τʤ���¿����
-   �᥽�åɤ��Ф����󶡤���Ƥ��롣
-   <a href="standard-prelude.html#stdprelude">8</a> �ϤΤ��줾��������
-   �դ��Ƥ��륳���Ȥϥǥե��������Τ�ΤȤȤ�ˤ��٤ƤΥ��饹�᥽��
-   ���Ф���������󶡤���᥽�å�����κǾ��¤ν���Ǥ��뤳�Ȥ򼨤��Ƥ�
-   �롣�⤷�����Τ褦�ʥ����Ȥ��ʤ����ˤϡ����󥹥��󥹤����˻���
-   ���뤿��ˡ����ƤΥ��饹�᥽�åɤ�Ϳ�����Ƥ��ʤ���Фʤ�ʤ���
+   デフォルトのクラスメソッド宣言
+   (<a href="decls.html#classes">4.3</a> 節)は標準のクラスのなかの多くの
+   メソッドに対して提供されている。
+   <a href="standard-prelude.html#stdprelude">8</a> 章のそれぞれの宣言に
+   付いているコメントはデフォルト宣言のものとともにすべてのクラスメソッ
+   ド対する定義を提供するメソッド定義の最小限の集合であることを示してい
+   る。もし、このようなコメントがない場合には、インスタンスを完全に指定
+   するために、全てのクラスメソッドが与えられていなければならない。
   </p>
 
   <p> <a name="sect6.3.1"></a></p>
   <!--<h4>6.3.1<tt>&nbsp;&nbsp;</tt>The Eq Class</h4>-->
-  <h4>6.3.1<tt>&nbsp;&nbsp;</tt>Eq ���饹</h4>
+  <h4>6.3.1<tt>&nbsp;&nbsp;</tt>Eq クラス</h4>
   <!--
   <p><tt>
    &nbsp;&nbsp;class&nbsp;&nbsp;Eq&nbsp;a&nbsp;&nbsp;where<br />
@@ -523,11 +523,11 @@
    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;==&nbsp;y&nbsp;&nbsp;=&nbsp;not&nbsp;(x&nbsp;/=&nbsp;y)<br />
    <br />
    </tt>
-   Eq ���饹�������� (<tt>==</tt>) ����� �������� (<tt>/=</tt>) �᥽��
-   �ɤ��󶡤��롣���٤Ƥδ��ܥǡ������ϴؿ��η������ <tt>IO</tt> �����
-   ���������Υ��饹�Υ��󥹥��󥹤Ǥ��롣<tt>Eq</tt> �Υ��󥹥��󥹤Ϥ�
-   �ι������Ǥ� <tt>Eq</tt> �Υ��󥹥��󥹤Ǥ�����Τ��٤ƥ桼������ǡ�
-   �������Ф���Ƴ�Ф��뤳�Ȥ��Ǥ��롣
+   Eq クラスは等価性 (<tt>==</tt>) および 非等価性 (<tt>/=</tt>) メソッ
+   ドを提供する。すべての基本データ型は関数の型および <tt>IO</tt> 型をの
+   ぞき、このクラスのインスタンスである。<tt>Eq</tt> のインスタンスはそ
+   の構成要素も <tt>Eq</tt> のインスタンスである場合のすべてユーザ定義デー
+   タ型に対して導出することができる。
   </p>
   <!--
   <p> This declaration gives default method declarations for both
@@ -538,18 +538,18 @@
    are defined, neither default method is used.</p>
   -->
   <p>
-   ��������� <tt>/=</tt> �� <tt>==</tt> ��ξ�����Ф���
-   �ǥե���ȤΥ᥽�åɤ�Ϳ���Ƥ��ꡢ���줾�줬�⤦������Ȥä����
-   ����Ƥ��롣<tt>Eq</tt> �Υ��󥹥�������ǡ�<tt>==</tt> ��
-   <tt>/=</tt> ��Ȥ��������ʤ��ȡ�ξ�����롼�פ��Ƥ��ޤ�������������
-   �������С��⤦�����ϡ��ǥե���ȥ᥽�åɤΤʤ��ǡ����������Ϳ����
-   ����Ĥ����ޤ����⤷ξ���������Ϳ������С��ǥե���ȤΥ᥽�åɤ�
-   �ɤ����Ȥ��ޤ���
+   この宣言は <tt>/=</tt> と <tt>==</tt> の両方に対して
+   デフォルトのメソッドを与えており、それぞれがもう一方を使って定義
+   されている。<tt>Eq</tt> のインスタンス宣言で、<tt>==</tt> も
+   <tt>/=</tt> もともに定義しないと、両方がループしてしまう。一方だけ、
+   定義すれば、もう一方は、デフォルトメソッドのなかで、いま定義を与えた
+   方をつかいます。もし両方の定義が与えられれば、デフォルトのメソッドは
+   どちらも使われません。
   </p>
 
   <p> <a name="sect6.3.2"></a></p>
   <!--<h4>6.3.2<tt>&nbsp;&nbsp;</tt>The Ord Class</h4>-->
-  <h4>6.3.2<tt>&nbsp;&nbsp;</tt>Ord ���饹</h4>
+  <h4>6.3.2<tt>&nbsp;&nbsp;</tt>Ord クラス</h4>
   <!--
   <p><tt><br />
    <br />
@@ -604,14 +604,14 @@
    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;otherwise&nbsp;=&nbsp;&nbsp;y<br />
    <br />
    </tt>
-   <tt>Ord</tt> ���饹��������ǡ��������Ф����Ѥ����롣�ؿ���
-   <tt>IO</tt> ����� <tt>IOError</tt> ��Τ������٤Ƥδ��ܥǡ�������
-   ���Υ��饹�Υ��󥹥��󥹤Ǥ��롣<tt>Ord</tt> �Υ��󥹥��󥹤Ϥ���
-   �������Ǥ� <tt>Ord</tt> �Υ��󥹥��󥹤Ǥ��뤹�٤ƤΥ桼�������
-   �ǡ��������Ф���Ƴ�ФǤ��롣�ǡ��������Ǥι����Ҥ�����礬Ƴ�Ф���
-   �� <tt>Ord</tt> ���󥹥��󥹤ν������롣<tt>Ordering</tt>
-   �ǡ������Ϥդ��ĤΥ��֥������Ȥ����Τʽ���դ�����ꤹ��ñ�����Ӥ�
-   ��ǽ�ˤ��롣
+   <tt>Ord</tt> クラスは全順序データ型に対して用いられる。関数、
+   <tt>IO</tt> および <tt>IOError</tt> をのぞくすべての基本データ型は
+   このクラスのインスタンスである。<tt>Ord</tt> のインスタンスはその
+   構成要素も <tt>Ord</tt> のインスタンスであるすべてのユーザ定義の
+   データ型に対して導出できる。データ宣言中での構成子の宣言順が導出され
+   た <tt>Ord</tt> インスタンスの順序を決める。<tt>Ordering</tt>
+   データ型はふたつのオブジェクトの正確な順序付けを決定する単一の比較を
+   可能にする。
   </p>
   <!--
   <p> The default declarations allow a user to create an <tt>Ord</tt>
@@ -619,14 +619,14 @@
    type-specific <tt>==</tt> and <tt>&lt;=</tt> functions.</p>
   -->
   <p>
-   �ǥե��������ˤ�ꡢ�桼������<tt>Ord</tt> ���󥹥��󥹤���ˤ�
-   ���η����Ѥ� <tt>compare</tt> �ؿ���������뤫�����뤤�� <tt>==</tt>
-   ����� <tt>&lt;=</tt> �ؿ���������뤫�ɤ��餫�Ǥ褤��
+   デフォルト宣言により、ユーザが、<tt>Ord</tt> インスタンスを作るには
+   その型専用の <tt>compare</tt> 関数を定義するか、あるいは <tt>==</tt>
+   および <tt>&lt;=</tt> 関数を定義するかどちらかでよい。
   </p>
 
   <p> <a name="sect6.3.3"></a></p>
   <!--<h4>6.3.3<tt>&nbsp;&nbsp;</tt>The Read and Show Classes</h4>-->
-  <h4>6.3.3<tt>&nbsp;&nbsp;</tt>Read ����� Show ���饹</h4>
+  <h4>6.3.3<tt>&nbsp;&nbsp;</tt>Read および Show クラス</h4>
   <!--
   <p><tt>
    type&nbsp;&nbsp;ReadS&nbsp;a&nbsp;=&nbsp;String&nbsp;-&gt;&nbsp;[(a,String)]<br />
@@ -672,11 +672,11 @@
    &nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;...&nbsp;default&nbsp;decl&nbsp;for&nbsp;showList&nbsp;given&nbsp;in&nbsp;Prelude<br />
    <br />
    </tt>
-   <tt>Read</tt> ����� <tt>Show</tt> ���饹��ʸ����Ȥδ֤��ͤ��Ѵ�����
-   ������Ѥ��롣<tt>showsPrec</tt> ����� readsPrec �ؤ� <tt>Int</tt>
-   �����ϡ���̤ˤ���륳��ƥ�����
-   (<a href="derived.html#derived-text">10.4</a> ��򸫤�)�Ǥ�
-   ���α黻�Ҥ�ͥ���̤Ǥ��롣
+   <tt>Read</tt> および <tt>Show</tt> クラスは文字列との間で値を変換する
+   ために用いる。<tt>showsPrec</tt> および readsPrec への <tt>Int</tt>
+   引数は、括弧にいれるコンテキスト
+   (<a href="derived.html#derived-text">10.4</a> 節を見よ)での
+   この演算子の優先順位である。
   </p>
   <!--
   <p> <tt>showsPrec</tt> and <tt>showList</tt> return a
@@ -690,13 +690,13 @@
    be shown in double quotes, rather than between square brackets.</p>
   -->
   <p>
-   <tt>showsPrec</tt> ����� <tt>showList</tt> �� String����String�ؤδ�
-   �����֤�������ϡ��ؿ��������Ѥ���������֤�Ϣ����ǽ�ˤ����ΤǤ�
-   �롣�ü첽���줿���֤ΤҤȤ� <tt>show</tt> ���Ѱդ���Ƥ��ꡢ�����ͥ
-   ����ʸ̮�ϥ������Ѥ��Ƥ��ꡢ�̾�� <tt>String</tt> ���֤���
-   showList �᥽�åɤϥץ�����ޤ��ͤΥꥹ�Ȥ�ɽ��������ˡ���ü첽�Ǥ���
-   �褦���Ѱդ���Ƥ��롣����ϡ��ä� Char �����Ф���ͭ�Ѥǡ� String ��
-   ���ͤ�ѳ�̤ǤϤʤ���Ű�����ǰϤä�ɽ�����롣
+   <tt>showsPrec</tt> および <tt>showList</tt> は StringからStringへの関
+   数を返す。これは、関数合成を用いて定数時間の連結を可能にするものであ
+   る。特殊化された形態のひとつ <tt>show</tt> が用意されており、これは優
+   先順位文脈はゼロを用いており、通常の <tt>String</tt> を返す。
+   showList メソッドはプログラマが値のリストを表示する方法を特殊化できる
+   ように用意されている。これは、特に Char 型に対して有用で、 String 型
+   の値を角括弧ではなく二重引用符で囲って表示する。
   </p>
   <!--
   <p> Derived instances of <tt>Read</tt> and <tt>Show</tt> replicate the
@@ -706,10 +706,10 @@
   </p>
   -->
   <p>
-   Ƴ�Ф��줿 Read ����� Show �Υ��󥹥��󥹤Ϲ����Ҥ�������줿�Ȥ���
-   ��������򷫤��֤������ֹ����Ҥ���ӥե������̾�ϡ����Ϥ���ӽ��Ϥ�
-   �ݤ��Ѥ����롣showPrec ���������줿ʸ������̾ readsPrec ���ɤ�
-   ����ǽ�ȤʤäƤ��롣
+   導出された Read および Show のインスタンスは構成子が宣言されたときの
+   スタイルを繰り返す。中置構成子およびフィールド名は、入力および出力の
+   際に用いられる。showPrec で生成された文字列は通常、 readsPrec で読み
+   取り可能となっている。
   </p>
   <!--
   <p> All <tt>Prelude</tt> types, except function types and <tt>IO</tt>
@@ -720,10 +720,10 @@
   <p>
   -->
   <p>
-   �ؿ������ IO �η���Τ�����Prelude �η��Ϥ��٤� Show ����� Read ��
-   ���󥹥��󥹤Ǥ��롣(�⤷���Τ���С��ץ�����ޤϥ��󥹥����������
-   �դ��뤳�Ȥǡ��ؿ���IO �η�����ΤΤʤ� Show �Υ��󥹥��󥹤Ȥ��뤳��
-   ���Ǥ��롣)
+   関数および IO の型をのぞき、Prelude の型はすべて Show および Read の
+   インスタンスである。(もし、のぞめば、プログラマはインスタンス宣言を用
+   意することで、関数やIO の型を実体のない Show のインスタンスとすること
+   ができる。)
   </p>
   <!--
   <p> For convenience, the Prelude provides the following auxiliary
@@ -747,7 +747,7 @@
    completely consumed by the input process.</p>
   -->
   <p>
-   ���ؤΤ���ˡ��ץ��塼�ɤǤϰʲ�������ؿ����Ѱդ���Ƥ��롣
+   利便のために、プレリュードでは以下の補助関数が用意されている。
    <tt><br />
    <br />
    reads&nbsp;&nbsp;&nbsp;::&nbsp;(Read&nbsp;a)&nbsp;=&gt;&nbsp;ReadS&nbsp;a<br />
@@ -762,9 +762,9 @@
    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[]&nbsp;&nbsp;-&gt;&nbsp;error&nbsp;"PreludeText.read:&nbsp;no&nbsp;parse"<br />
    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_&nbsp;&nbsp;&nbsp;-&gt;&nbsp;error&nbsp;"PreludeText.read:&nbsp;ambiguous&nbsp;parse"<br />
    <br /></tt>
-   <tt>shows</tt> ����� <tt>reads</tt> �ϥǥե���Ȥ�ͥ���� 0
-   ���Ѥ��롣<tt>read</tt> �ؿ���ʸ���󤫤����Ϥ��ɤߡ����Ͻ����Ǥ����
-   �����˾��񤷤ʤ���Фʤ�ʤ���</p>
+   <tt>shows</tt> および <tt>reads</tt> はデフォルトの優先順位 0
+   を用いる。<tt>read</tt> 関数は文字列から入力を読み、入力処理でこれを
+   完全に消費しなければならない。</p>
   <!--
   <p> The function <tt>lex&nbsp;::&nbsp;ReadS&nbsp;String</tt>, used by
    <tt>read</tt>, is also part of the Prelude. It reads a single lexeme
@@ -776,20 +776,20 @@
    input string, <tt>lex</tt> fails (i.e. returns <tt>[]</tt>).</p>
   -->
   <p>
-   �ؿ� <tt>lex&nbsp;::&nbsp;ReadS&nbsp;String</tt> �� <tt>read</tt> ��
-   �Ȥ���������ϥץ��塼�ɤΰ����Ǥ��롣����ϡ��ҤȤĤλ�������Ϥ�
-   ���ɤߡ��ǽ�ˤĤŤ������Τơ����λ����������ʸ�������֤�������
-   ʸ���󤬶��򤷤��ޤ�Ǥ��ʤ���С�<tt>lex</tt> ��ñ��ζ�ʸ�����ޤ�
-   ����������֤���(�������äơ�<tt>lex&nbsp;""</tt> =
-   <tt>[("","")]</tt> �Ǥ��롣) ����ʸ����κǽ����ʬ�����������礬�ʤ�
-   �Ȥ��ˤϡ�<tt>lex</tt> �ϼ��Ԥ��ޤ�(���ʤ����<tt>[]</tt>���֤��ޤ�)��
+   関数 <tt>lex&nbsp;::&nbsp;ReadS&nbsp;String</tt> は <tt>read</tt> が
+   使うが、これはプレリュードの一部である。これは、ひとつの字句を入力か
+   ら読み、最初につづく空白を捨て、その字句を構成する文字群を返す。入力
+   文字列が空白しか含んでいなければ、<tt>lex</tt> は単一の空文字列を含む
+   成功字句を返す。(したがって、<tt>lex&nbsp;""</tt> =
+   <tt>[("","")]</tt> である。) 入力文字列の最初の部分に正しい字句がない
+   ときには、<tt>lex</tt> は失敗します(すなわち、<tt>[]</tt>を返します)。
   </p>
 
   <p><a name="enum-class"></a></p>
   <p> <a name="sect6.3.4"></a></p>
 
   <!--<h4>6.3.4<tt>&nbsp;&nbsp;</tt>The Enum Class</h4>-->
-  <h4>6.3.4<tt>&nbsp;&nbsp;</tt>Enum ���饹</h4>
+  <h4>6.3.4<tt>&nbsp;&nbsp;</tt>Enum クラス</h4>
   <!--
   <p><tt>
    class&nbsp;&nbsp;Enum&nbsp;a&nbsp;&nbsp;where<br />
@@ -825,30 +825,30 @@
    &nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;Default&nbsp;declarations&nbsp;given&nbsp;in&nbsp;Prelude<br />
    <br />
    </tt>
-   <tt>Enum</tt> ���饹�ϰ���ˤʤ�٤�줿���ξ�α黻��������롣�ؿ�
-   <tt>succ</tt> ����� <tt>pred</tt> �Ϥ��줾�줢���ͤμ����ͤ��������
-   �ͤ��֤���<tt>toEnum</tt> ����� <tt>fromEnum</tt> �ؿ���
-   <tt>Enum</tt> �� <tt>Int</tt> �δ֤��ͤ�������롣
-   <tt>enumFrom</tt> �ʤɤΥ᥽�åɤϿ��� 
-   (<a href="exps.html#arithmetic-sequences">3.10</a> ��)���Ѵ��򤹤��
-   �����Ѥ����롣</p> 
+   <tt>Enum</tt> クラスは一列にならべられた型の上の演算を定義する。関数
+   <tt>succ</tt> および <tt>pred</tt> はそれぞれある値の次の値および前の
+   値を返す。<tt>toEnum</tt> および <tt>fromEnum</tt> 関数は
+   <tt>Enum</tt> と <tt>Int</tt> の間で値を写像する。
+   <tt>enumFrom</tt> などのメソッドは数列 
+   (<a href="exps.html#arithmetic-sequences">3.10</a> 節)の変換をすると
+   きに用いられる。</p> 
   <!--
   <p> Instances of <tt>Enum</tt> may be derived for any enumeration type
    (types whose constructors have no fields); see Chapter <a
    href="derived.html#derived-appendix">10</a>.</p>
   -->
   <p>
-   <tt>Enum</tt> �Υ��󥹥��󥹤�Ǥ�դ����(���ۻҤ��ե�����ɤ������
-   ����)���Ф���Ƴ�в�ǽ�Ǥ��롣����ˤĤ��Ƥ�
-   <a href="derived.html#derived-appendix">10</a> �Ϥ򸫤衣
+   <tt>Enum</tt> のインスタンスは任意の列挙型(構築子がフィールドを持たな
+   い型)に対して導出可能である。これについては
+   <a href="derived.html#derived-appendix">10</a> 章を見よ。
   </p>
   <!--
   <p> For any type that is an instance of class <tt>Bounded</tt> as well as
    <tt>Enum</tt>, the following should hold:</p>
   -->
   <p>
-   <tt>Enum</tt> ��Ʊ�ͤˡ������� <tt>Bounded</tt> ���饹��
-   ���󥹥��󥹤η��ϡ��ʲ����������ġ�
+   <tt>Enum</tt> と同様に、あらゆる <tt>Bounded</tt> クラスの
+   インスタンスの型は、以下の性質をもつ。
   </p>
   <!--
   <p>
@@ -879,13 +879,13 @@
   -->
   <p>
   <ul>
-   <li><p><tt>succ&nbsp;maxBound</tt> ����� <tt>pred&nbsp;minBound</tt> ��
-	�����ƤӽФ��ϼ¹Ի����顼�Ȥʤ�</p></li>
-   <li><p><tt>fromEnum</tt> ����� <tt>toEnum</tt> �Ϸ�̤η���ɽ���Ǥ�
-	�ʤ��ͤǤ���м¹Ի����顼�Ȥʤ롣���Ȥ��С�
-	<tt>toEnum&nbsp;7&nbsp;::&nbsp;Bool</tt> �ϥ��顼�Ȥʤ롣</p></li>
-   <li><p><tt>enumFrom</tt> ����� <tt>enumFromThen</tt> �ϰ��ۤ�
-	��������������٤��Ǥ��롣���ʤ����
+   <li><p><tt>succ&nbsp;maxBound</tt> および <tt>pred&nbsp;minBound</tt> と
+	いう呼び出しは実行時エラーとなる</p></li>
+   <li><p><tt>fromEnum</tt> および <tt>toEnum</tt> は結果の型で表現でき
+	ない値であれば実行時エラーとなる。たとえば、
+	<tt>toEnum&nbsp;7&nbsp;::&nbsp;Bool</tt> はエラーとなる。</p></li>
+   <li><p><tt>enumFrom</tt> および <tt>enumFromThen</tt> は暗黙の
+	境界で定義されるべきである。すなわち、
 <tt><br />
     <br />
     &nbsp;&nbsp;enumFrom&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;=&nbsp;enumFromTo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;maxBound<br />
@@ -920,23 +920,23 @@
     <tt>Double</tt>. The semantics of these instances is given next.</li>
   </ul>
   -->
-  <p> �ʲ��� <tt>Prelude</tt> �η��� <tt>Enum</tt> �Υ��󥹥��󥹤Ǥ��롣
+  <p> 以下の <tt>Prelude</tt> の型は <tt>Enum</tt> のインスタンスである。
    <ul>
-    <li><p>��󷿡�<tt>()</tt>��<tt>Bool</tt>��<tt>Ordering</tt>��
-	 �����Υ��󥹥��󥹤Υ��ޥ�ƥ�������
-	 <a href="derived.html#derived-appendix">10</a> �Ϥ�Ϳ�����Ƥ�
-	 �롣���Ȥ��С�<tt>[LT..]</tt> �� [LT,EQ,GT] �Ȥ����ꥹ�ȤǤ��롣
+    <li><p>列挙型：<tt>()</tt>、<tt>Bool</tt>、<tt>Ordering</tt>。
+	 これらのインスタンスのセマンティクスは
+	 <a href="derived.html#derived-appendix">10</a> 章で与えられてい
+	 る。たとえば、<tt>[LT..]</tt> は [LT,EQ,GT] というリストである。
 	 </p></li>
-    <li><p><tt>Char</tt>�����󥹥��󥹤� 
-	 <a href="standard-prelude.html#stdprelude">8</a> �ϤǤ��������
-	 �Ƥ��ꡢ����� <tt>Char</tt> �� <tt>Int</tt> �֤��Ѵ��򤪤��ʤ�
-	 �ץ�ߥƥ��ִؿ��ˤ�ȤŤƤ��롣���Ȥ��С�
-	 <tt>enumFromTo&nbsp;'a'&nbsp;'z'</tt> �Ͼ�ʸ���αѻ��򥢥�ե�
-	 �٥åȽ�ˤʤ�٤ƥꥹ�ȤǤ��롣
+    <li><p><tt>Char</tt>：インスタンスは 
+	 <a href="standard-prelude.html#stdprelude">8</a> 章であたえられ
+	 ており、これは <tt>Char</tt> と <tt>Int</tt> 間の変換をおこなう
+	 プリミティブ関数にもとづている。たとえば、
+	 <tt>enumFromTo&nbsp;'a'&nbsp;'z'</tt> は小文字の英字をアルファ
+	 ベット順にならべてリストである。
 	 </p></li>
-    <li><p>���ͷ���<tt>Int</tt>��<tt>Integer</tt>��<tt>Float</tt>��
-	 <tt>Double</tt>�������Υ��󥹥��󥹤Υ��ޥ�ƥ������ϼ���Ϳ��
-	 �롣</p></li>
+    <li><p>数値型：<tt>Int</tt>、<tt>Integer</tt>、<tt>Float</tt>、
+	 <tt>Double</tt>。これらのインスタンスのセマンティクスは次に与え
+	 る。</p></li>
    </ul>
   </p>
   <!--
@@ -948,19 +948,19 @@
    to a value that is too large to fit in an <tt>Int</tt>.</p>
   -->
   <p>
-   4 �Ĥο��ͷ��Τ��٤ƤˤĤ��ơ�<tt>succ</tt> �� 1 ��ä���
-   <tt>pred</tt> �� 1 ��������Ѵ� <tt>fromEnum</tt> �� <tt>toEnum</tt>
-   �ϡ����η��� <tt>Int</tt> �Ȥδ֤��Ѵ��Ǥ��롣<tt>Float</tt> �����
-   <tt>Double</tt> �ξ��ϡ��������ʹߤο����ϼ����롣
-   <tt>fromEnum</tt> �� <tt>Int</tt> ���ϰϤ�Ķ����褦���ͤ�Ŭ�Ѥ��줿
-   �����֤��ͤϼ�����¸�Ǥ��롣
+   4 つの数値型のすべてについて、<tt>succ</tt> は 1 を加え、
+   <tt>pred</tt> は 1 を引く。変換 <tt>fromEnum</tt> と <tt>toEnum</tt>
+   は、その型と <tt>Int</tt> との間の変換である。<tt>Float</tt> および
+   <tt>Double</tt> の場合は、小数点以降の数字は失われる。
+   <tt>fromEnum</tt> が <tt>Int</tt> の範囲を超えるような値に適用された
+   場合の返り値は実装依存である。
   </p>
   <!--
   <p> For the types <tt>Int</tt> and <tt>Integer</tt>, the enumeration
    functions have the following meaning:</p>
   -->
-  <p><tt>Int</tt> ����� <tt>Integer</tt> ���Ф��Ƥ����ؿ��ϰʲ��Τ褦
-   �ʰ�̣�ˤʤ롣</p>
+  <p><tt>Int</tt> および <tt>Integer</tt> に対しては列挙関数は以下のよう
+   な意味になる。</p>
   <!--
   <ul>
    <li>The sequence <tt>enumFrom</tt><i> e</i><sub><i>1</i></sub> is the
@@ -1002,33 +1002,33 @@
   -->
   <p>
    <ul>
-    <li><p><tt>enumFrom</tt> �ο���ϡ�
-         <tt>[</tt><i>e</i><sub><i>1</i></sub><tt>,</tt><i>e</i><sub><i>1</i></sub><i>+1</i><tt>,</tt><i>e</i><sub><i>1</i></sub><i>+2</i><tt>,</tt><i>...</i><tt>]</tt> �Ȥ����ꥹ�ȤǤ��롣</p></li>
-    <li><p><tt>enumFromThen</tt> �ο���ϡ�
+    <li><p><tt>enumFrom</tt> の数列は、
+         <tt>[</tt><i>e</i><sub><i>1</i></sub><tt>,</tt><i>e</i><sub><i>1</i></sub><i>+1</i><tt>,</tt><i>e</i><sub><i>1</i></sub><i>+2</i><tt>,</tt><i>...</i><tt>]</tt> というリストである。</p></li>
+    <li><p><tt>enumFromThen</tt> の数列は、
          <tt>[</tt><i>e</i><sub><i>1</i></sub><tt>,</tt><i>e</i><sub><i>1</i></sub><i>+i</i><tt>,</tt><i>e</i><sub><i>1</i></sub><i>+2i</i><tt>,</tt><i>...</i><tt>]</tt> 
-	 �Ȥ����ꥹ�Ȥǡ���ʬ <i>i</i> ��
-	 <i>e</i><sub><i>2</i></sub><i>-e</i><sub><i>1</i></sub> �Ǥ��롣
-	 ��ʬ�ϥ����⤷������Ǥ⤫�ޤ�ʤ�����ʬ�������ʤ顢���٤Ƥ���
-	 �Ǥ�Ʊ���ꥹ�Ȥˤʤ롣
+	 というリストで、増分 <i>i</i> は
+	 <i>e</i><sub><i>2</i></sub><i>-e</i><sub><i>1</i></sub> である。
+	 増分はゼロもしくは負でもかまわない。増分がゼロなら、すべての要
+	 素が同じリストになる。
          </p></li>
     <li><p><tt>enumFromTo</tt><i> e</i><sub><i>1</i></sub>
-	 <i>e</i><sub><i>3</i></sub> �ο����
+	 <i>e</i><sub><i>3</i></sub> の数列は
          <tt>[</tt><i>e</i><sub><i>1</i></sub><tt>,</tt><i>e</i><sub><i>1</i></sub><i>+1</i><tt>,</tt><i>e</i><sub><i>1</i></sub><i>+2</i><tt>,</tt><i>...e</i><sub><i>3</i></sub><tt>]</tt>
-	 �Ȥ�������ˤʤ롣<i>e</i><sub><i>1</i></sub>
-         <i> &gt; e</i><sub><i>3</i></sub> �ξ��ˤϥꥹ�Ȥ϶��Ǥ��롣
+	 という数列になる。<i>e</i><sub><i>1</i></sub>
+         <i> &gt; e</i><sub><i>3</i></sub> の場合にはリストは空である。
          </p></li>
     <li><p><tt>enumFromThenTo</tt><i> e</i><sub><i>1</i></sub>
-	 <i>e</i><sub><i>2</i></sub><i> e</i><sub><i>3</i></sub> �ο����
+	 <i>e</i><sub><i>2</i></sub><i> e</i><sub><i>3</i></sub> の数列は
 	 <tt>[</tt><i>e</i><sub><i>1</i></sub><tt>,</tt><i>e</i><sub><i>1</i></sub><i>+i</i><tt>,</tt><i>e</i><sub><i>1</i></sub><i>+2i</i><tt>,</tt><i>...e</i><sub><i>3</i></sub><tt>]</tt>
-	 �Ȥ����ꥹ�Ȥˤʤ롣��ʬ <i>i</i> ��
-	 <i>e</i><sub><i>2</i></sub><i>-e</i><sub><i>1</i></sub> �Ǥ��롣
-	 ��ʬ���������⤷�������ξ�硢�ꥹ�Ȥϼ������Ǥ���
-	 <i>e</i><sub><i>3</i></sub> ��Ķ����Ȥ����Ȥ����ǽ�λ���롣
-	 <i>e</i><sub><i>1</i></sub><i> &gt; e</i><sub><i>3</i></sub> ��
-	 ����С��ꥹ�Ȥ϶��Ǥ��롣��ʬ����ξ��ˤϡ�
-	 �ꥹ�Ȥϼ������Ǥ���<i>e</i><sub><i>3</i></sub> ��꾮�����ʤ�
-	 �Ȥ����Ȥ����ǽ�λ���롣<i>e1 &lt; e</i><sub><i>3</i></sub> ��
-	 ���ˤϡ��ꥹ�Ȥ϶��Ǥ��롣
+	 というリストになる。増分 <i>i</i> は
+	 <i>e</i><sub><i>2</i></sub><i>-e</i><sub><i>1</i></sub> である。
+	 増分が、ゼロもしくは正の場合、リストは次の要素が、
+	 <i>e</i><sub><i>3</i></sub> を超えるというところで終了する。
+	 <i>e</i><sub><i>1</i></sub><i> &gt; e</i><sub><i>3</i></sub> で
+	 あれば、リストは空である。増分が負の場合には、
+	 リストは次の要素が、<i>e</i><sub><i>3</i></sub> より小さくなる
+	 というところで終了する。<i>e1 &lt; e</i><sub><i>3</i></sub> の
+	 場合には、リストは空である。
 	 </p></li>
    </ul>
   </p>
@@ -1041,23 +1041,23 @@
    negative <i>i</i>.</p>
   -->
   <p>
-   <tt>Float</tt> ����� <tt>Double</tt> �˴ؤ��ơ�<tt>enumFrom</tt> ²
-   �Υ��ޥ�ƥ������ϡ���� <tt>Int</tt> ���Ф���롼���Ϳ�����Ƥ�
-   �롣���������㤤�ϡ��ꥹ�Ȥ���λ����Τϡ���ʬ <i>i</i> �����ΤȤ��ˤϡ�
-   �������Ǥ� <i>e</i><sub><i>3</i></sub><i>+i/2</i> ��Ķ�����Ȥ��Ǥ��ꡢ
-   ��� <i>i</i> �ΤȤ��ˤ� <i>e</i><sub><i>3</i></sub><i>+i/2</i> ���
-   �������ʤä��Ȥ��Ǥ��롣
+   <tt>Float</tt> および <tt>Double</tt> に関して、<tt>enumFrom</tt> 族
+   のセマンティクスは、上の <tt>Int</tt> に対するルールで与えられてい
+   る。ただし、違いは、リストが終了するのは、増分 <i>i</i> が正のときには、
+   その要素が <i>e</i><sub><i>3</i></sub><i>+i/2</i> を超えたときであり、
+   負の <i>i</i> のときには <i>e</i><sub><i>3</i></sub><i>+i/2</i> より
+   小さくなったときである。
   </p>
   <!--
   <p> For all four of these Prelude numeric types, all of the
    <tt>enumFrom</tt> family of functions are strict in all their arguments.</p>
   -->
-  <p>������ Prelude �ο��ͷ��� 4 �ĤϤɤ����Ф��Ƥ⡢
-   <tt>enumFrom</tt> ²�δؿ����������ɤΰ����ˤĤ��Ƥ����ʤǤ��롣</p>
+  <p>これらの Prelude の数値型の 4 つはどれもに対しても、
+   <tt>enumFrom</tt> 族の関数は全部、どの引数についても正格である。</p>
 
   <p> <a name="sect6.3.5"></a></p>
   <!--<h4>6.3.5<tt>&nbsp;&nbsp;</tt>The Functor Class</h4>-->
-  <h4>6.3.5<tt>&nbsp;&nbsp;</tt>Functor ���饹</h4>
+  <h4>6.3.5<tt>&nbsp;&nbsp;</tt>Functor クラス</h4>
   <!--
   <p><tt>
    class&nbsp;&nbsp;Functor&nbsp;f&nbsp;&nbsp;where<br />
@@ -1070,12 +1070,12 @@
    class&nbsp;&nbsp;Functor&nbsp;f&nbsp;&nbsp;where<br />
    &nbsp;&nbsp;&nbsp;&nbsp;fmap&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;(a&nbsp;-&gt;&nbsp;b)&nbsp;-&gt;&nbsp;f&nbsp;a&nbsp;-&gt;&nbsp;f&nbsp;b<br />
    <br />
-   </tt><tt>Functor</tt> ���饹�ϼ�����ǽ�ʷ��˴ؤ����Ѥ��롣
-   �ꥹ�ȡ�<tt>IO</tt> ����� <tt>Maybe</tt> �Ϥ��Υ��饹�Ǥ��롣</p>
+   </tt><tt>Functor</tt> クラスは写像可能な型に関して用いる。
+   リスト、<tt>IO</tt> および <tt>Maybe</tt> はこのクラスである。</p>
   <!--
   <p> Instances of <tt>Functor</tt> should satisfy the following laws:</p>
   -->
-  <p><tt>Functor</tt> �Υ��󥹥��󥹤ϰʲ��ε���������٤��Ǥ��롣</p>
+  <p><tt>Functor</tt> のインスタンスは以下の規約を満すべきである。</p>
   
   <p>
   <table>
@@ -1096,13 +1096,13 @@
   <p> All instances of <tt>Functor</tt> defined in the Prelude satisfy
    these laws.</p>
   -->
-  <p>�ץ��塼�ɤ��������Ƥ��뷿�Ϥ��٤Ƥ����ε����������</p>  
+  <p>プレリュードで定義されている型はすべてこれらの規約を満す。</p>  
 
   <p><a name="monad-class"></a></p>
   <p> <a name="sect6.3.6"></a></p>
 
   <!--<h4>6.3.6<tt>&nbsp;&nbsp;</tt>The Monad Class</h4>-->
-  <h4>6.3.6<tt>&nbsp;&nbsp;</tt>Monad ���饹</h4>
+  <h4>6.3.6<tt>&nbsp;&nbsp;</tt>Monad クラス</h4>
   <!--
   <p><tt>
    class&nbsp;&nbsp;Monad&nbsp;m&nbsp;&nbsp;where<br />
@@ -1129,8 +1129,8 @@
    &nbsp;&nbsp;&nbsp;&nbsp;fail&nbsp;s&nbsp;&nbsp;=&nbsp;error&nbsp;s<br />
    <br />
    </tt>
-   Monad ���饹��<em>��ʥ�</em>��δ��ܱ黻��������롣
-   ��ʥɤ˴ؤ���ܺ٤� <a href="io-13.html#io">7</a> �Ϥ򸫤衣</p>
+   Monad クラスは<em>モナド</em>上の基本演算を定義する。
+   モナドに関する詳細は <a href="io-13.html#io">7</a> 章を見よ。</p>
   <!--
   <p> "<tt>do</tt>" expressions provide a convenient syntax for writing
    monadic expressions (see Section <a
@@ -1138,9 +1138,9 @@
    invoked on pattern-match failure in a <tt>do </tt>expression.</p>
   -->
   <p>
-   ��do�׼��ϥ�ʥɤμ���񤯺ݤ������ʹ�ʸ���󶡤���(
-   <a href="exps.html#do-expressions">3.14</a> ���ߤ�)��<tt>fail</tt>
-   �᥽�åɤ� <tt>do</tt> ����ǤΥѥ�����ȹ缺�Ԥˤ�äƤҤ���������롣
+   「do」式はモナドの式を書く際の便利な構文を提供する(
+   <a href="exps.html#do-expressions">3.14</a> 節をみよ)。<tt>fail</tt>
+   メソッドは <tt>do</tt> 式中でのパターン照合失敗によってひき起こされる。
   </p>
   <!--
   <p> In the Prelude, lists, <tt>Maybe</tt>, and <tt>IO</tt> are all
@@ -1150,19 +1150,19 @@
    <a href="io-13.html#io-exceptions">7.3</a>).</p>
   -->
   <p>
-   �ץ��塼����Ǥϡ��ꥹ�ȡ�<tt>Maybe</tt> ����� <tt>IO</tt> �Ϥ���
-   �� <tt>Monad</tt> �Υ��󥹥��󥹤Ǥ��롣�ꥹ�Ȥ��б�����
-   <tt>fail</tt> �᥽�åɤ϶��ꥹ�Ȥ��֤���<tt>Maybe</tt> ���б�����
-   <tt>fail</tt> �᥽�åɤ� <tt>Nothing</tt> ���֤����������ʤ��顢
-   <tt>IO</tt> ���б����� <tt>fail</tt> �᥽�åɤ� IO ��ʥɤΤʤ��ǡ�
-   �㳰��Ҥ�������(
-   <a href="io-13.html#io-exceptions">7.3</a> ���ߤ�)��
+   プレリュード中では、リスト、<tt>Maybe</tt> および <tt>IO</tt> はすべ
+   て <tt>Monad</tt> のインスタンスである。リストに対応する
+   <tt>fail</tt> メソッドは空リストを返し、<tt>Maybe</tt> に対応する
+   <tt>fail</tt> メソッドは <tt>Nothing</tt> を返す。しかしながら、
+   <tt>IO</tt> に対応する <tt>fail</tt> メソッドは IO モナドのなかで、
+   例外をひきおこす(
+   <a href="io-13.html#io-exceptions">7.3</a> 節をみよ)。
   </p>
 
   <!--
   <p> Instances of <tt>Monad</tt> should satisfy the following laws:</p>
   -->
-  <p><tt>Monad</tt> �Υ��󥹥��󥹤ϰʲ��ε���������٤��Ǥ��롣</p>
+  <p><tt>Monad</tt> のインスタンスは以下の規約を満すべきである。</p>
 
   <p>
   <table>
@@ -1187,8 +1187,8 @@
   <p> Instances of both <tt>Monad</tt> and <tt>Functor</tt> should
    additionally satisfy the law:</p>
   -->
-  <p><tt>Monad</tt> �� <tt>Functor</tt> �Υ��󥹥��󥹤Ϥ���˰ʲ���
-   ����������٤��Ǥ��롣</p>
+  <p><tt>Monad</tt> と <tt>Functor</tt> のインスタンスはさらに以下の
+   規約を満すべきである。</p>
   <p>
   <table>
    <tr>
@@ -1202,8 +1202,8 @@
   <p> All instances of <tt>Monad</tt> defined in the Prelude satisfy these
    laws.</p>
   -->
-  <p>�ץ��塼������������Ƥ��뤹�٤Ƥ� <tt>Monad</tt> ��
-   ���󥹥��󥹤Ϥ����ε���������Ƥ��롣
+  <p>プレリュード中で定義されているすべての <tt>Monad</tt> の
+   インスタンスはこれらの規約を満している。
   </p>
   <!--
   <p> The Prelude provides the following auxiliary functions: <tt><br />
@@ -1216,7 +1216,7 @@
    <br />
    </tt></p>
   -->
-  <p>�ץ��塼�ɤǤϰʲ�������ؿ����Ѱդ���Ƥ��롣
+  <p>プレリュードでは以下の補助関数が用意されている。
    <tt><br />
    <br />
    sequence&nbsp;&nbsp;::&nbsp;Monad&nbsp;m&nbsp;=&gt;&nbsp;[m&nbsp;a]&nbsp;-&gt;&nbsp;m&nbsp;[a]&nbsp;<br />
@@ -1230,7 +1230,7 @@
 
   <p> <a name="sect6.3.7"></a></p>
   <!--<h4>6.3.7<tt>&nbsp;&nbsp;</tt>The Bounded Class</h4>-->
-  <h4>6.3.7<tt>&nbsp;&nbsp;</tt>Bounded ���饹</h4>
+  <h4>6.3.7<tt>&nbsp;&nbsp;</tt>Bounded クラス</h4>
 
   <p><tt>
    class&nbsp;&nbsp;Bounded&nbsp;a&nbsp;&nbsp;where<br />
@@ -1249,23 +1249,23 @@
    in <tt>Bounded</tt></p>
   -->
   <p>
-   <tt>Bounded</tt> ���饹�Ϸ��ξ�¤���Ӳ��¤�̾�����դ���Τ��Ѥ��롣
-   <tt>Ord</tt> �� <tt>Bounded</tt> ���饹�Υ����ѡ����饹�ǤϤʤ���
-   ������ǤϤʤ����ǤǤ��¤���Ӳ��¤��Ĥ��Ȥ��Ǥ��뤫��Ǥ��롣
-   �� <tt>Int</tt>��<tt>Char</tt>��<tt>Bool</tt>��<tt>()</tt>��
-   <tt>Ordering</tt> ����Ӥ��٤ƤΥ��ץ�� <tt>Bounded</tt> ��
-   ���󥹥��󥹤Ǥ��롣<tt>Bounded</tt> ���饹��Ǥ�դ���󷿤��Ф���
-   Ƴ�Ф��뤳�Ȥ���ǽ�Ǥ��롣<tt>minBound</tt> �� <tt>data</tt> �����
-   ������ǽ�ι��ۻҤǤ��ꡢmaxBound �ϺǸ�ι��ۻҤǤ��롣
-   <tt>Bounded</tt> �Ϲ������Ǥ� <tt>Bounded</tt> �Ǥ���褦��
-   ñ�칽�ۻҷ��ˤĤ��Ƥ�Ƴ�в�ǽ�Ǥ��롣
+   <tt>Bounded</tt> クラスは型の上限および下限に名前を付けるのに用いる。
+   <tt>Ord</tt> は <tt>Bounded</tt> クラスのスーパークラスではない。
+   全順序ではない型ででも上限および下限をもつことができるからである。
+   型 <tt>Int</tt>、<tt>Char</tt>、<tt>Bool</tt>、<tt>()</tt>、
+   <tt>Ordering</tt> およびすべてのタプルは <tt>Bounded</tt> の
+   インスタンスである。<tt>Bounded</tt> クラスは任意の列挙型に対して
+   導出することが可能である。<tt>minBound</tt> は <tt>data</tt> 宣言に
+   おける最初の構築子であり、maxBound は最後の構築子である。
+   <tt>Bounded</tt> は構成要素が <tt>Bounded</tt> であるような
+   単一構築子型についても導出可能である。
   </p>
 
   <p><a name="numbers"></a></p>
   <p> <a name="sect6.4"></a></p>
 
   <!--<h3>6.4<tt>&nbsp;&nbsp;</tt>Numbers</h3>-->
-  <h3>6.4<tt>&nbsp;&nbsp;</tt>����</h3>
+  <h3>6.4<tt>&nbsp;&nbsp;</tt>数値</h3>
   <!--
   <p> Haskell provides several kinds of numbers; the numeric types and the
    operations upon them have been heavily influenced by Common Lisp and
@@ -1282,18 +1282,18 @@
    complex.</p>
   -->
   <p>
-   Haskell �ǤϤ����Ĥ��μ���ο��ͤ��Ѱդ���Ƥ��롣���ͷ��Ϥ����
-   ���ξ�α黻�ϡ�Common Lisp ����� Scheme �αƶ��򶯤������Ƥ��롣
-   ���ʹؿ���̾������ӱ黻�Ҥ��̾�� 
-   <a href="basic.html#standard-classes">6.1</a> �Ǽ����줿�ط���ޤ�
-   �����Ĥ��η����饹���Ѥ���¿���������롣���ͷ��� <tt>Num</tt>
-   ���饹�� <tt>Eq</tt> ���饹�Υ��֥��饹�Ǥ��롣���٤Ƥο��ͤ�Ʊ������
-   ��Ӥ���ǽ������Ǥ��롣���֥��饹�� <tt>Real</tt> �� <tt>Ord</tt>
-   ���饹�Ǥ⤢�롣ʣ�ǿ�(<tt>Complex</tt> �饤�֥����������Ƥ���)
-   �ʳ��Τ��٤Ƥο��ͤˤϤ⤦�ҤȤĤ���ӱ黻����ǽ������Ǥ��롣
-   <tt>Integral</tt> ���饹��ͭ���ϰϤ����̵���ϰϤ�������ξ����ޤࡣ
-   �ޤ���<tt>Fraction</tt> ���饹�Ϥ��٤Ƥ�����������ޤࡣ
-   <tt>Floating</tt> ���饹�ϼ¿������ʣ�ǿ���ξ���Τ��٤Ƥ���ư������ޤࡣ
+   Haskell ではいくつかの種類の数値が用意されている。数値型はおよび
+   その上の演算は、Common Lisp および Scheme の影響を強く受けている。
+   数値関数の名前および演算子は通常、図 
+   <a href="basic.html#standard-classes">6.1</a> で示された関係を含む
+   いくつかの型クラスを用いて多重定義される。数値型の <tt>Num</tt>
+   クラスは <tt>Eq</tt> クラスのサブクラスである。すべての数値は同値性の
+   比較が可能だからである。サブクラスの <tt>Real</tt> は <tt>Ord</tt>
+   クラスでもある。複素数(<tt>Complex</tt> ライブラリで定義されている)
+   以外のすべての数値にはもうひとつの比較演算が可能だからである。
+   <tt>Integral</tt> クラスは有限範囲および無限範囲の整数の両方を含む。
+   また、<tt>Fraction</tt> クラスはすべての非整数型を含む。
+   <tt>Floating</tt> クラスは実数および複素数の両方のすべての浮動小数を含む。
   </p>
   <!--
   <p> The Prelude defines only the most basic numeric types: fixed sized
@@ -1305,13 +1305,13 @@
    defined in the <tt>Ratio </tt>library.</p>
   -->
   <p>
-   �ץ��塼�ɤ����˴���Ū�ʿ��ͷ��Τߤ�������Ƥ��ꡢ������Ĺ����
-   (<tt>Int</tt>)��Ǥ����Ĺ����(<tt>Integer</tt>)��ñ������ư����
-   (<tt>Float</tt>)���������������ư����(<tt>Double</tt>)��
-   ������Ƥ��롣���Τۤ��Ρ�ͭ������ʣ�ǿ��Τ褦�ʿ��ͷ��ˤĤ��Ƥ�
-   �饤�֥���������Ƥ��롣�Ȥ��ˡ�<tt>Rational</tt> ���� <tt>
-   Ratio</tt> �饤�֥����������Ƥ���褦�ˡ��դ��Ĥ�
-   <tt>Integer</tt> ���ͤ���Ǥ��롣
+   プレリュードは非常に基本的な数値型のみを定義しており、固定倍長整数
+   (<tt>Int</tt>)、任意倍長整数(<tt>Integer</tt>)、単精度浮動小数
+   (<tt>Float</tt>)、および倍精度浮動小数(<tt>Double</tt>)を
+   定義している。そのほかの、有理数や複素数のような数値型については
+   ライブラリで定義している。とくに、<tt>Rational</tt> 型は <tt>
+   Ratio</tt> ライブラリで定義されているように、ふたつの
+   <tt>Integer</tt> の値の比である。
   </p>
   <!--
   <p> The default floating point operations defined by the Haskell Prelude
@@ -1322,11 +1322,11 @@
    for in Prelude class <tt>RealFloat</tt>.</p>
   -->
   <p>
-   Haskell �Υץ��塼�ɤˤ�ä��������Ƥ���ǥե���Ȥ�
-   ��ư�����黻�ϸ��Ԥθ������¸����(LIA)ɸ��ˤϽ�򤷤Ƥ��ʤ���
-   ������ɸ�������ʣ���ʿ��͹�¤���׵ᤷ������椨��
-   �饤�֥��ؤޤ蘆�줿�ΤǤ��롣���٤ƤǤϤʤ��������Ĥ���
-   IEEE ɸ����ư������¦�̤� <tt>RealFloat</tt> ���饹�ǹ�θ����Ƥ��롣
+   Haskell のプレリュードによって定義されているデフォルトの
+   浮動小数演算は現行の言語非依存算術(LIA)標準には準拠していない。
+   これらの標準は大変複雑な数値構造を要求し、それゆえ、
+   ライブラリへまわされたのである。すべてではなく、いくつかの
+   IEEE 標準浮動小数の側面は <tt>RealFloat</tt> クラスで考慮されている。
   </p>
   <!--
   <p> The standard numeric types are listed in Table <a
@@ -1345,18 +1345,18 @@
    value such as infinity, indefinite, etc.</p>
   -->
   <p>
-   ɸ����ͷ��ϡ�ɽ <a href="basic.html#standard-numeric-types">6.1</a>
-   �˥ꥹ�ȥ��åפ���Ƥ��롣ͭ����Ĺ���� <tt>Int</tt> �Ͼ����Ȥ⡢
+   標準数値型は、表 <a href="basic.html#standard-numeric-types">6.1</a>
+   にリストアップされている。有限倍長整数 <tt>Int</tt> は少くとも、
    <i>[ - 2</i><sup><i>29</i></sup><i>, 2</i><sup><i>29</i></sup><i> - 1]</i>
-   ���ϰϤ򥫥С����롣<tt>Int</tt> �� <tt>Bounded</tt> ���饹��
-   ���󥹥��󥹤ʤΤǡ�<tt>maxBound</tt> ����� <tt>minBound</tt> ��
-   ������������� <tt>Int</tt> ���ϰϤ���ꤹ�뤿����Ѥ��뤳�Ȥ��Ǥ��롣
-   <tt>Float</tt> �ϼ�����������롣���η��Ͼ����Ȥ� IEEE ñ���ٷ���
-   ���٤��ϰϤˤҤȤ����ʤ���Фʤ�ʤ���Ʊ�ͤ� <tt>Double</tt> �� 
-   IEEE �����٤򥫥С����ʤ���Фʤ�ʤ����������ٿ��ͷ��ˤ�����
-   �㳰���(�����Хե������뤤�ϥ�������ե����ʤ�)�η�̤ˤĤ��Ƥ�
-   ̤����Ǥ��롣�����ϡ����顼(���ޥ�ƥ������Ȥ��Ƥ� _|_)���ݤ᤿�͡�
-   ���뤤�ϡ�̵�¡�̤��������Τۤ����ͤ�����Ǥ��롣
+   の範囲をカバーする。<tt>Int</tt> は <tt>Bounded</tt> クラスの
+   インスタンスなので、<tt>maxBound</tt> および <tt>minBound</tt> を
+   実装が定義する <tt>Int</tt> の範囲を決定するために用いることができる。
+   <tt>Float</tt> は実装が定義する。この型は少くとも IEEE 単精度型の
+   精度と範囲にひとしくなければならない。同様に <tt>Double</tt> は 
+   IEEE 倍精度をカバーしなければならない。固定精度数値型における
+   例外条件(オーバフローあるいはアンダーフローなど)の結果については
+   未定義である。実装は、エラー(セマンティクスとしては _|_)、丸めた値、
+   あるいは、無限、未定義、そのほかの値を選択できる。
   </p>
   <p>
   <div align="center">
@@ -1408,7 +1408,7 @@
    </div>
    <div align="center">
     <!--<h3>Standard Numeric Types</h3>-->
-    <h3>ɸ����ͷ�</h3>
+    <h3>標準数値型</h3>
    </div>
   </div>
   </p>
@@ -1421,11 +1421,11 @@
    and built-in types that are instances of the numeric classes.</p>
   -->
   <p>
-   �ץ��塼�ɤ��������Ƥ���ɸ����ͥ��饹����Ӥ��Τۤ��ο��ʹؿ���
-   �� <a href="basic.html#basic-numeric-1">6.2</a> -- 
-   <a href="basic.html#basic-numeric-2">6.3</a>�Ǽ�����
-   �� <a href="basic.html#standard-classes">6.1</a> �ϥ��饹�ΰ�¸�ط�
-   ����Ӥ����Υ��饹�Υ��󥹥��󥹤Ǥ����Ȥ߹��߷��򼨤���
+   プレリュードで定義されている標準数値クラスおよびそのほかの数値関数は
+   図 <a href="basic.html#basic-numeric-1">6.2</a> -- 
+   <a href="basic.html#basic-numeric-2">6.3</a>で示す。
+   図 <a href="basic.html#standard-classes">6.1</a> はクラスの依存関係
+   およびそれらのクラスのインスタンスである組み込み型を示す。
   </p>
   <p>
   <table border="2" cellpadding="3">
@@ -1471,7 +1471,7 @@
      </div>
      <div align="center">
       <!--<h3>Standard Numeric Classes and Related Operations, Part 1</h3>-->
-      <h3>ɸ����ͥ��饹�ȴ�Ϣ����黻�� Part 1</h3>
+      <h3>標準数値クラスと関連する演算子 Part 1</h3>
      </div>
      <a name="basic-numeric-1"></a></td>
    </tr>
@@ -1518,7 +1518,7 @@
      </div>
      <div align="center">
       <!--<h3>Standard Numeric Classes and Related Operations, Part 2</h3>-->
-      <h3>ɸ����ͥ��饹�ȴ�Ϣ����黻�� Part 2</h3>
+      <h3>標準数値クラスと関連する演算子 Part 2</h3>
      </div>
      <a name="basic-numeric-2"></a></td>
    </tr>
@@ -1529,7 +1529,7 @@
   <p> <a name="sect6.4.1"></a></p>
 
   <!--<h4>6.4.1<tt>&nbsp;&nbsp;</tt>Numeric Literals</h4>-->
-  <h4>6.4.1<tt>&nbsp;&nbsp;</tt>���ͥ�ƥ��</h4>
+  <h4>6.4.1<tt>&nbsp;&nbsp;</tt>数値リテラル</h4>
   <!--
   <p> The syntax of numeric literals is given in Section <a
    href="lexemes.html#lexemes-numeric">2.5</a>. An integer literal
@@ -1552,31 +1552,31 @@
   </p>
   -->
   <p>
-   ���ͥ�ƥ��ι�ʸ�� <a href="lexemes.html#lexemes-numeric">2.5</a>
-   ���Ϳ�����Ƥ��롣������ƥ��� <tt>fromInteger</tt> �ؿ��� 
-   <tt>Integer</tt> �����б������ͤؤ�Ŭ�Ѥ�ɽ��������ΤǤ��롣
-   Ʊ�ͤˡ���ư������ƥ��ϡ�<tt>fromRational</tt> �� 
-   <tt>Rational</tt> (���ʤ����<tt>Ratio&nbsp;Integer</tt>)�����ͤ�
-   Ŭ�Ѥ򤢤�魯���ʲ��η��դ���������줿��ΤȤ���ȡ�
+   数値リテラルの構文は <a href="lexemes.html#lexemes-numeric">2.5</a>
+   節で与えられている。整数リテラルは <tt>fromInteger</tt> 関数の 
+   <tt>Integer</tt> 型の対応する値への適用を表現したものである。
+   同様に、浮動小数リテラルは、<tt>fromRational</tt> の 
+   <tt>Rational</tt> (すなわち、<tt>Ratio&nbsp;Integer</tt>)型の値へ
+   適用をあらわす。以下の型付があたえられたものとすると、
    <tt><br />
    <br />
    fromInteger&nbsp;&nbsp;::&nbsp;(Num&nbsp;a)&nbsp;=&gt;&nbsp;Integer&nbsp;-&gt;&nbsp;a<br />
    fromRational&nbsp;::&nbsp;(Fractional&nbsp;a)&nbsp;=&gt;&nbsp;Rational&nbsp;-&gt;&nbsp;a<br />
    <br />
    </tt>
-   �����������ư�����Υ�ƥ��Ϥ��줾�졢
-   <tt>(Num&nbsp;a)&nbsp;=&gt;&nbsp;a</tt> �����
-   <tt>(Fractional&nbsp;a)&nbsp;=&gt;&nbsp;a</tt> �Ȥ������ˤʤ롣
-   ���ͥ�ƥ��Ϥ��Τ褦�ʴ���Ū����ˡ��Ǥ�դ��б�������ͷ����ͤ�
-   ��ᤵ���褦���������Ƥ��롣¿�������ۣ�����ε����ˤĤ��Ƥ�
-   <a href="decls.html#default-decls">4.3.4</a> ��򸫤衣
+   整数および浮動小数のリテラルはそれぞれ、
+   <tt>(Num&nbsp;a)&nbsp;=&gt;&nbsp;a</tt> および
+   <tt>(Fractional&nbsp;a)&nbsp;=&gt;&nbsp;a</tt> という型になる。
+   数値リテラルはこのような間接的な方法で任意の対応する数値型の値に
+   解釈されるように定義されている。多重定義の曖昧性の議論については
+   <a href="decls.html#default-decls">4.3.4</a> 節を見よ。
   </p>
   <p> <a name="arithmetic-operators"></a></p>
   <p> <a name="sect6.4.2"></a></p>
   <!--
   <h4>6.4.2<tt>&nbsp;&nbsp;</tt>Arithmetic and Number-Theoretic Operations</h4>
   -->
-  <h4>6.4.2<tt>&nbsp;&nbsp;</tt>����Ū�黻�Ҥȿ���Ū�黻��</h4>
+  <h4>6.4.2<tt>&nbsp;&nbsp;</tt>算術的演算子と数論的演算子</h4>
   <!--
   <p> The infix class methods <tt>(+)</tt>, <tt>(*)</tt>, <tt>(-)</tt>, and
    the unary function <tt>negate</tt> (which can also be written as a
@@ -1588,14 +1588,14 @@
    methods satisfy these laws if <tt>y</tt> is non-zero:</p>
   -->
   <p>
-   ���֥��饹�᥽�å� <tt>(+)</tt>��<tt>(*)</tt>��<tt>(-)</tt> �����
-   ñ��ؿ� <tt>nagate</tt> (����ϡ����֤Υޥ��ʥ����Ȥ��ƽ񤯤���
-   ��Ǥ��� <a href="exps.html#operators">3.4</a> ��򸫤�)�Ϥ��٤Ƥο�
-   �ͤ�Ŭ�Ѥ��뤳�Ȥ��Ǥ��롣���饹�᥽�å� <tt>quot</tt>��<tt>rem</tt>��
-   <tt>div</tt> ����� <tt>mod</tt> �������ˤ���Ŭ�Ѥ��ʤ���������
-   ���饹�᥽�å� <tt>(/)</tt> ��ʬ���ˤ���Ŭ�Ѥ��ʤ���<tt>quot</tt>��
-   <tt>rem</tt>��<tt>div</tt> ����� <tt>mod</tt> �Ȥ������饹�᥽�å�
-   �� <tt>y</tt> ���󥼥��ξ��ˤϡ��ʲ��ε����������
+   中置クラスメソッド <tt>(+)</tt>、<tt>(*)</tt>、<tt>(-)</tt> および
+   単項関数 <tt>nagate</tt> (これは、前置のマイナス符号として書くこと
+   もできる <a href="exps.html#operators">3.4</a> 節を見よ)はすべての数
+   値に適用することができる。クラスメソッド <tt>quot</tt>、<tt>rem</tt>、
+   <tt>div</tt> および <tt>mod</tt> は整数にしか適用しない。一方、
+   クラスメソッド <tt>(/)</tt> は分数にしか適用しない。<tt>quot</tt>、
+   <tt>rem</tt>、<tt>div</tt> および <tt>mod</tt> というクラスメソッド
+   は <tt>y</tt> が非ゼロの場合には、以下の規約を満す。
   </p>
   <p>
   <table>
@@ -1636,42 +1636,42 @@
   </p>
   -->
   <p>
-   <tt>`quot`</tt> �ϥ����˸��äƴݤ�������������Ǥ��ꡢ
-   <tt>`div`</tt> �����̵����˸��äƤޤ����롣���饹�᥽�å� 
-   <tt>quotRem</tt> ��������Ƚ���������Ȥ��ƤȤꡢ(��,;��)���Ȥ��֤���
-   <tt>divMod</tt> ��Ʊ�ͤ�
+   <tt>`quot`</tt> はゼロに向って丸められる整数除算であり、
+   <tt>`div`</tt> は負の無限大に向ってまるめられる。クラスメソッド 
+   <tt>quotRem</tt> は被除数と除数を引数としてとり、(商,余り)の組を返す。
+   <tt>divMod</tt> は同様に
    <tt><br />
    <br />
    quotRem&nbsp;x&nbsp;y&nbsp;&nbsp;=&nbsp;&nbsp;(x&nbsp;</tt>`<tt>quot</tt>`<tt>&nbsp;y,&nbsp;x&nbsp;</tt>`<tt>rem</tt>`<tt>&nbsp;y)<br />
    divMod&nbsp;&nbsp;x&nbsp;y&nbsp;&nbsp;=&nbsp;&nbsp;(x&nbsp;</tt>`<tt>div</tt>`<tt>&nbsp;y,&nbsp;x&nbsp;</tt>`<tt>mod</tt>`<tt>&nbsp;y)<br />
    <br />
    </tt>
-   ���������Ƥ��롣������Ǥϡ������������Ƚ��Ҹ��Ȥ����Ȥ��Ǥ��롣
+   と定義されている。整数上では、偶数、奇数の判定述語を使うことができる。
    <tt><br />
    <br />
    even&nbsp;x&nbsp;=&nbsp;&nbsp;x&nbsp;</tt>`<tt>rem</tt>`<tt>&nbsp;2&nbsp;==&nbsp;0<br />
    odd&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;not&nbsp;.&nbsp;even<br />
    <br />
    </tt>
-   ������������ӺǾ����ܿ��ؿ������롣<tt>gcd</tt> <i>x</i> <i>y</i>
-   �� <i>x</i> ����� <i>y</i> ��ξ������ڤ����������Ǥ��롣���Ȥ��С�
-   <tt>gcd&nbsp;(-3)&nbsp;6</tt> = <tt>3</tt>��
-   <tt>gcd&nbsp;(-3)&nbsp;(-6)</tt> = <tt>3</tt>��
-   <tt>gcd&nbsp;0&nbsp;4</tt> = <tt>4</tt> �Ǥ��롣
-   <tt>gcd&nbsp;0&nbsp;0</tt> �ϼ¹Ի����顼��Ҥ���������
+   最大公約数および最小公倍数関数がある。<tt>gcd</tt> <i>x</i> <i>y</i>
+   は <i>x</i> および <i>y</i> の両方を割切る最大の整数である。たとえば、
+   <tt>gcd&nbsp;(-3)&nbsp;6</tt> = <tt>3</tt>、
+   <tt>gcd&nbsp;(-3)&nbsp;(-6)</tt> = <tt>3</tt>、
+   <tt>gcd&nbsp;0&nbsp;4</tt> = <tt>4</tt> である。
+   <tt>gcd&nbsp;0&nbsp;0</tt> は実行時エラーをひきおこす。
   </p>
   <!--
   <p> <tt>lcm</tt> <i>x</i> <i>y</i> is the smallest positive integer that
    both <i>x</i> and <i>y</i> divide.</p>
   -->
   <p>
-   <tt>lcm</tt> <i>x</i> <i>y</i> �� <i>x</i> ����� <i>y</i> ��
-   ξ���ǳ��ڤ뤳�ȤΤǤ���Ǿ������������Ǥ��롣
+   <tt>lcm</tt> <i>x</i> <i>y</i> は <i>x</i> および <i>y</i> の
+   両方で割切ることのできる最小の正の整数である。
   </p>
 
   <p> <a name="sect6.4.3"></a></p>
   <!--<h4>6.4.3<tt>&nbsp;&nbsp;</tt>Exponentiation and Logarithms</h4>-->
-  <h4>6.4.3<tt>&nbsp;&nbsp;</tt>�ؿ����п�</h4>
+  <h4>6.4.3<tt>&nbsp;&nbsp;</tt>指数と対数</h4>
   <!--
   <p> The one-argument exponential function <tt>exp</tt> and the logarithm
    function <tt>log</tt> act on floating-point numbers and use base
@@ -1686,20 +1686,20 @@
   </p>
   -->
   <p>
-   ������λؿ��ؿ� <tt>exp</tt> ������п��ؿ� <tt>log</tt> ����ư����
-   ��ǤĤ���줽����� <i>e</i> �Ǥ��롣<tt>logBase</tt> <i>a</i>
-   <i>x</i> �� <i>x</i> ���� <i>a</i> �ˤ���п����֤���<tt>sqrt</tt> ��
-   ��ư����������ʿ�������֤���2 �����λؿ��ؿ��� 3�Ĥ��ꡢ<tt>(^)</tt>
-   �Ϥ��٤Ƥο��ͤ������沾�Ǥ��ꡢ<tt>(^^)</tt> ��ʬ���������衢����
-   �ơ�<tt>(**)</tt> �Ϥդ��Ĥ���ư����������Ȥ��롣<i>x</i><tt>^0</tt>
-   ���뤤�� <i>x</i><tt>^^0</tt> ���ͤ�Ǥ��(0��ޤ�)�� <i>x</i> ���Ф���
-   <tt>1</tt> �Ǥ��롣<tt>0**</tt><i>y</i> ��̤����Ǥ��롣
+   一引数の指数関数 <tt>exp</tt> および対数関数 <tt>log</tt> は浮動小数
+   上でつかわれその底は <i>e</i> である。<tt>logBase</tt> <i>a</i>
+   <i>x</i> は <i>x</i> の底 <i>a</i> による対数を返す。<tt>sqrt</tt> は
+   浮動小数の正の平方根を返す。2 引数の指数関数は 3つあり、<tt>(^)</tt>
+   はすべての数値の非負の羃乗であり、<tt>(^^)</tt> は分数の整数乗、そし
+   て、<tt>(**)</tt> はふたつの浮動小数を引数とする。<i>x</i><tt>^0</tt>
+   あるいは <i>x</i><tt>^^0</tt> の値は任意(0を含む)の <i>x</i> に対して
+   <tt>1</tt> である。<tt>0**</tt><i>y</i> は未定義である。
   </p>
 
   <p> <a name="magnitude-sign"></a></p>
   <p> <a name="sect6.4.4"></a></p>
   <!--<h4>6.4.4<tt>&nbsp;&nbsp;</tt>Magnitude and Sign</h4>-->
-  <h4>6.4.4<tt>&nbsp;&nbsp;</tt>�����ͤ����</h4>
+  <h4>6.4.4<tt>&nbsp;&nbsp;</tt>絶対値と符号</h4>
   <!--
   <p> A number has a <i>magnitude </i>and a <i>sign</i>. The functions
    <tt>abs</tt> and <tt>signum</tt> apply to any number and satisfy the
@@ -1719,8 +1719,8 @@
    </tt></p>
   -->
   <p>
-   ���ͤˤ�<em>������</em>�����<em>���</em>�����롣�ؿ� <tt>abs</tt>
-   ����� <tt>signum</tt> ��Ǥ�դο��ͤ�Ŭ�ѤǤ����ʲ��ε����������
+   数値には<em>絶対値</em>および<em>符号</em>がある。関数 <tt>abs</tt>
+   および <tt>signum</tt> は任意の数値に適用でき、以下の規約を満す。
    <tt><br />
    <br />
    abs&nbsp;x&nbsp;*&nbsp;signum&nbsp;x&nbsp;==&nbsp;x<br />
@@ -1739,7 +1739,7 @@
 
   <p> <a name="sect6.4.5"></a></p>
   <!--<h4>6.4.5<tt>&nbsp;&nbsp;</tt>Trigonometric Functions</h4>-->
-  <h4>6.4.5<tt>&nbsp;&nbsp;</tt>���Ѵؿ�</h4>
+  <h4>6.4.5<tt>&nbsp;&nbsp;</tt>三角関数</h4>
   <!--
   <p> Class <tt>Floating</tt> provides the circular and hyperbolic sine,
    cosine, and tangent functions and their inverses. Default
@@ -1748,10 +1748,10 @@
    to provide more accurate implementations.</p>
   -->
   <p>
-   <tt>Floating</tt> ���饹�ˤϱߤ�����ж�����������;�������ܴؿ��Ȥ�
-   �εմؿ����Ѱդ���Ƥ��롣<tt>tan</tt>��<tt>tanh</tt>��
-   <tt>logBase</tt>��<tt>**</tt> ����� <tt>sqrt</tt> �Υǥե���Ȥμ���
-   ���Ѱդ���Ƥ��뤬�������ԤϤ�������٤Τ褤������ͳ���Ѱդ��Ƥ褤��
+   <tt>Floating</tt> クラスには円および双曲線の正弦、余弦、正接関数とそ
+   の逆関数が用意されている。<tt>tan</tt>、<tt>tanh</tt>、
+   <tt>logBase</tt>、<tt>**</tt> および <tt>sqrt</tt> のデフォルトの実装
+   が用意されているが、実装者はさらに精度のよい実装を自由に用意してよい。
   </p>
   <!--
   <p> Class <tt>RealFloat</tt> provides a version of arctangent taking two
@@ -1767,16 +1767,16 @@
    implementation.</p>
   -->
   <p>
-   <tt>RealFloat</tt> ���饹�ǤϤդ��Ĥ���ư����������Ȥ�����ܴؿ�����
-   �դ���Ƥ��롣����ư���� <i>x</i> ����� <i>y</i> ���Ф��ơ�
-   <tt>atan2</tt> <i>y</i> <i>x</i> �ϸ��������� <i>(x,y)</i> �ظ����٥�
-   �ȥ��(x ���������������)���٤�׻����롣<tt>atan2</tt> <i>y</i>
-   <i>x</i> �� <tt>[-pi,&nbsp;pi]</tt> ���ϰϤ��ͤ��֤�������ϡ������
-   �������򥵥ݡ��Ȥ����Ȥ��� Common Lisp �Υ��ޥ�ƥ�������Ƨ���������
-   �Ǥ��롣 <i>y</i> �� <tt>RealFloat</tt> �η��Ǥ���� <tt>atan2</tt>
-   y<i></i> <tt>1</tt> �� <tt>atan</tt> <i>y</i> ��Ʊ���ͤ��֤��ʤ�Ф�
-   ��ʤ���<tt>atan2</tt> �Υǥե���Ȥ�������Ѱդ���Ƥ��뤬�������Ԥ�
-   ������٤ι⤤�������Ѱդ��뤳�Ȥ��Ǥ��롣
+   <tt>RealFloat</tt> クラスではふたつの浮動小数引数をとる逆正接関数が用
+   意されている。実浮動小数 <i>x</i> および <i>y</i> に対して、
+   <tt>atan2</tt> <i>y</i> <i>x</i> は原点から点 <i>(x,y)</i> へ向うベク
+   トルの(x 軸の正方向からの)角度を計算する。<tt>atan2</tt> <i>y</i>
+   <i>x</i> は <tt>[-pi,&nbsp;pi]</tt> の範囲の値を返す。これは、符号付
+   きゼロをサポートしたときに Common Lisp のセマンティクスを踏襲したもの
+   である。 <i>y</i> が <tt>RealFloat</tt> の型であれば <tt>atan2</tt>
+   y<i></i> <tt>1</tt> は <tt>atan</tt> <i>y</i> と同じ値を返さなればな
+   らない。<tt>atan2</tt> のデフォルトの定義が用意されているが、実装者は
+   より精度の高い実装を用意することができる。
   </p>
   <!--
   <p> The precise definition of the above functions is as in Common Lisp,
@@ -1786,17 +1786,17 @@
   </p>
   -->
   <p>
-   ��δؿ��Τ�����Τ�����ϡ�Common Lisp �Τ�Τ�Ʊ���ǡ�����Ϲ��ˡ�
-   Penfield �� APL �ץ��ݡ����� 
-   [<a href="haskell.html#$penfield:complex-apl">9</a>] �˸����롣�޴���
-   ��Ϣ³�����������ε����ˤĤ��ƤϤ����λ���ʸ���򸫤衣
+   上の関数のより正確な定義は、Common Lisp のものと同等で、それは更に、
+   Penfield の APL プロポーザル 
+   [<a href="haskell.html#$penfield:complex-apl">9</a>] に見られる。枝刈、
+   不連続性、実装、の議論についてはこれらの参考文献を見よ。
   </p>
   
   <p> <a name="coercion"></a></p>
   <p> <a name="sect6.4.6"></a></p>
 
   <!--<h4>6.4.6<tt>&nbsp;&nbsp;</tt>Coercions and Component Extraction</h4>-->
-  <h4>6.4.6<tt>&nbsp;&nbsp;</tt>���Ѵ�����ӹ������Ǥμ��Ф�</h4>
+  <h4>6.4.6<tt>&nbsp;&nbsp;</tt>型変換および構成要素の取り出し</h4>
   <!--
   <p> The <tt>ceiling</tt>, <tt>floor</tt>, <tt>truncate</tt>, and
    <tt>round </tt>functions each take a real fractional argument and return
@@ -1808,14 +1808,14 @@
    even integer if <i>x</i> is equidistant between two integers.</p>
   -->
   <p>
-   <tt>ceiling</tt>��<tt>floor</tt>��<tt>truncate</tt> �����
-   <tt>round</tt> �ؿ��Ϥ��줾�졢����(fractional)������Ȥ��������֤���
-   <tt>ceiling</tt> <i>x</i> �� <i>x</i> �򲼲��ʤ��Ǿ����������֤���
-   <tt>floor</tt> <i>x</i> �� <i>x</i> �����ʤ�������������֤���
-   <tt>truncate</tt> <i>x</i> �� <i>x</i> �� <tt>0</tt> �δ֤� <i>x</i>
-   ��ޤߤ���˺Ǥ�ᤤ�����Ȥʤꡢ<tt>round</tt> <i>x</i> ��  �ˤ�ä�
-   ��ᤤ�������֤����⤷ <i>x</i> ���դ��Ĥ�������������Υ�ˤ�����ϡ�
-   �����������֤���
+   <tt>ceiling</tt>、<tt>floor</tt>、<tt>truncate</tt> および
+   <tt>round</tt> 関数はそれぞれ、小数(fractional)引数をとり整数を返す。
+   <tt>ceiling</tt> <i>x</i> は <i>x</i> を下回らない最小の整数を返し、
+   <tt>floor</tt> <i>x</i> は <i>x</i> を上回らない最大の整数を返し、
+   <tt>truncate</tt> <i>x</i> は <i>x</i> と <tt>0</tt> の間で <i>x</i>
+   を含みそれに最も近い整数となり、<tt>round</tt> <i>x</i> は  にもっと
+   も近い整数を返す。もし <i>x</i> がふたつの整数から等距離にある場合は、
+   偶数の方を返す。
   </p>
   <!--
   <p> The function <tt>properFraction</tt> takes a real fractional number
@@ -1827,12 +1827,12 @@
    defined in terms of <tt>properFraction</tt>.</p>
   -->
   <p>
-   �ؿ� <tt>properFraction</tt> �ϼ�ʬ�� <i>x</i> ��Ȥꡢ<i>x = n+f</i>
-   �Ǥ��ꡢ<i>n</i> �� <i>x</i> ��Ʊ����������<i>f</i> �� <i>x</i> ��
-   Ʊ������Ʊ�����Τ������ͤ� 1 ��꾮�����ͤǤ���褦�ʡ���
-   <i>(n,f)</i> ���֤���<tt>ceiling</tt>��<tt>floor</tt>��
-   <tt>truncate</tt> ����� <tt>round</tt> �ؿ���
-   <tt>properFraction</tt> ��Ĥ��ä�������뤳�Ȥ��Ǥ��롣
+   関数 <tt>properFraction</tt> は実分数 <i>x</i> をとり、<i>x = n+f</i>
+   であり、<i>n</i> は <i>x</i> と同符号の整数、<i>f</i> は <i>x</i> と
+   同じ型、同じ符号ので絶対値が 1 より小さい値であるような、対
+   <i>(n,f)</i> を返す。<tt>ceiling</tt>、<tt>floor</tt>、
+   <tt>truncate</tt> および <tt>round</tt> 関数は
+   <tt>properFraction</tt> をつかって定義することができる。
   </p>
   <!--
   <p> Two functions convert numbers to type <tt>Rational</tt>:
@@ -1846,15 +1846,15 @@
    rational; in particular, note that 0/1 is the simplest rational of all.</p>
   -->
   <p>
-   ���ͤ� <tt>Rational</tt> ���Ѵ�����ؿ���2�Ĥ��롣
-   <tt>toRational</tt> �ϼ°��������٤��ݤä�Ʊ�ͤ�ͭ�������֤���
-   <tt>approxRational</tt> ����Ĥμ�ʬ�� <i>x</i> ����� <font
-   face="symbol">e</font> ������Ȥ���<i>x</i> ʬ�� <font
-   face="symbol">e</font> �δ����ͭ�������֤��������ǡ�����ʬ�� p/q ��
-   |p| &lt;=|p<sup>'</sup>| ���� q &lt;=q<sup>'</sup> �Ǥ���褦��¾��
-   p<sup>'</sup> / q<sup>'</sup> ����ñ���ʬ���Ǥ��롣�ɤΤ褦�ʼ¿�
-   �ζ�֤˺Ǥ�ñ���ͭ������ͣ���¸�ߤ��롣�����ǡ� 0/1 �Ϥ��٤Ƥ�ͭ��
-   ���Τʤ��ǺǤ�ñ��ʤ�ΤǤ��뤳�Ȥ����դ��衣
+   数値を型 <tt>Rational</tt> へ変換する関数が2つある。
+   <tt>toRational</tt> は実引数の精度を保った同値の有理数を返す。
+   <tt>approxRational</tt> は二つの実分数 <i>x</i> および <font
+   face="symbol">e</font> を引数とし、<i>x</i> 分の <font
+   face="symbol">e</font> の既約の有理数を返す。ここで、既約分数 p/q は
+   |p| &lt;=|p<sup>'</sup>| かつ q &lt;=q<sup>'</sup> であるような他の
+   p<sup>'</sup> / q<sup>'</sup> よりも単純な分数である。どのような実数
+   の区間に最も単純な有理数が唯一つ存在する。ここで、 0/1 はすべての有理
+   数のなかで最も単純なものであることに注意せよ。
   </p>
   <!--
   <p> The class methods of class <tt>RealFloat</tt> allow efficient,
@@ -1882,25 +1882,25 @@
    floating-point number by an integer power of the radix.</p>
   -->
   <p>
-   <tt>RealFloat</tt> ���饹�Υ��饹�᥽�åɤ���ư���������ؤθ�Ψ�Τ褤
-   �ޥ������¸�Υ�����������ǽ�ˤʤ롣�ؿ� <tt>floatRadix</tt>��
-   <tt>floatDigits</tt> ����� <tt>floatRange</tt> ����ư�������Υѥ�᡼
-   ����Ϳ�����ΤǤ��롣���줾��ϡ�����ɽ���δ����������Τ��δ����
-   �η���������Ʋ��ꤷ�Ƥ���ؿ����ϰϤǤ��롣����ư����������Ŭ�Ѥ���
-   ���ؿ� <tt>decodeFloat</tt> �� <tt>Integer</tt> �Ȥ���ɽ�����줿����
-   �ȳ����Υ�������ؿ�(<tt>Int</tt>)���֤����⤷��<tt>decodeFloat&nbsp;x</tt>
-   �� <tt>(</tt><i>m</i><tt>,</tt><i>n</i><tt>)</tt> �Ȥʤ�Τ�
-   �顢 <tt>x</tt> �� <i>mb</i><sup>n</sup> ���ͤ��������������ǡ�<i>b</i>
-   ����ư����������Ǥ��롣<i>m</i> ����� <i>n</i> �ϤȤ�˥����Ǥ��뤫��
-   �ޤ��ϡ�<i>d</i> �� <tt>floatDigits&nbsp;x</tt> ���ͤȤ����Ȥ�
-   <i>b</i><sup><i>d-1</i></sup><i>&lt;=m&lt;b</i><sup><i>d</i></sup> ��
-   ���뤫�Τɤ��餫�Ǥ��롣<tt>encodeFloat</tt> �Ϥ����Ѵ��εդ򤪤��ʤ���
-   <tt>significand</tt> ����� <tt>exponent</tt> ��2�Ĥ�
-   <tt>decodeFloat</tt> ��Ʊ��������󶡤��롣��������
-   <tt>significand&nbsp;x</tt> �� <tt>Integer</tt> �ǤϤʤ� <tt>x</tt>
-   ��Ʊ�������ͤȤʤꡢ��� <i>(-1,1)</i> �˥��������Ѵ�����롣
-   <tt>exponent&nbsp;0</tt> �ϥ����Ǥ��롣<tt>scaleFloat</tt> ����ư����
-   �����ȴ��������沤�褺�롣
+   <tt>RealFloat</tt> クラスのクラスメソッドで浮動小数点数への効率のよい
+   マシン非依存のアクセスが可能になる。関数 <tt>floatRadix</tt>、
+   <tt>floatDigits</tt> および <tt>floatRange</tt> は浮動小数型のパラメー
+   タを与えるものである。それぞれは、内部表現の基数、仮数中のこの基数で
+   の桁数、そして仮定している指数の範囲である。実浮動小数点数に適用され
+   た関数 <tt>decodeFloat</tt> は <tt>Integer</tt> として表現された仮数
+   と概算のスケール指数(<tt>Int</tt>)を返す。もし、<tt>decodeFloat&nbsp;x</tt>
+   が <tt>(</tt><i>m</i><tt>,</tt><i>n</i><tt>)</tt> となるのな
+   ら、 <tt>x</tt> は <i>mb</i><sup>n</sup> の値に等しい。ここで、<i>b</i>
+   は浮動小数点基数である。<i>m</i> および <i>n</i> はともにゼロであるか、
+   または、<i>d</i> が <tt>floatDigits&nbsp;x</tt> の値としたとき
+   <i>b</i><sup><i>d-1</i></sup><i>&lt;=m&lt;b</i><sup><i>d</i></sup> で
+   あるかのどちらかである。<tt>encodeFloat</tt> はこの変換の逆をおこなう。
+   <tt>significand</tt> および <tt>exponent</tt> は2つで
+   <tt>decodeFloat</tt> と同じ情報を提供する。しかし、
+   <tt>significand&nbsp;x</tt> は <tt>Integer</tt> ではなく <tt>x</tt>
+   と同じ型の値となり、区間 <i>(-1,1)</i> にスケール変換される。
+   <tt>exponent&nbsp;0</tt> はゼロである。<tt>scaleFloat</tt> は浮動小数
+   点数と基数の整数羃を乗ずる。
   </p>
   <!--
   <p> The functions <tt>isNaN</tt>, <tt>isInfinite</tt>,
@@ -1909,10 +1909,10 @@
    floating point numbers, these may all return false.</p>
   -->
   <p>
-   �ؿ� <tt>isNaN</tt>��<tt>isInfinite</tt>��<tt>isDenormalized</tt>��
-   <tt>isNegativeZero</tt> ����� <tt>isIEEE</tt> �Ϥ��٤� IEEE ɸ�����
-   ����ɽ�����줿���ͤ򥵥ݡ��Ȥ��롣��-IEEE ��ư���������ˤĤ��ƤϤ���
-   ��Ϥ��٤ơ������֤���
+   関数 <tt>isNaN</tt>、<tt>isInfinite</tt>、<tt>isDenormalized</tt>、
+   <tt>isNegativeZero</tt> および <tt>isIEEE</tt> はすべて IEEE 標準を用
+   いて表現された数値をサポートする。非-IEEE 浮動小数点数についてはこれ
+   らはすべて、偽を返す。
   </p>
   <!--
   <p> Also available are the following coercion functions: <tt><br />
@@ -1923,7 +1923,7 @@
   </p>
   -->
   <p>
-   �ޤ����η��Ѵ��ؿ������Ѳ�ǽ�Ǥ��롣 
+   また次の型変換関数も利用可能である。 
    <tt><br />
    <br />
    fromIntegral&nbsp;::&nbsp;(Integral&nbsp;a,&nbsp;Num&nbsp;b)&nbsp;&nbsp;&nbsp;&nbsp;=&gt;&nbsp;a&nbsp;-&gt;&nbsp;b<br />

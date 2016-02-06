@@ -1,7 +1,7 @@
-
-<html>
+<!DOCTYPE html>
+<html lang="ja">
  <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
+  <meta charset="utf-8">
   <title>The Haskell 98 Report: Basic Input/Output</title>
  </head>
 
@@ -18,7 +18,7 @@
   <p> <a name="sect7"></a></p>
 
   <!--<h2>7<tt>&nbsp;&nbsp;</tt>Basic Input/Output</h2>-->
-  <h2>7<tt>&nbsp;&nbsp;</tt>���� I/O</h2>
+  <h2>7<tt>&nbsp;&nbsp;</tt>基本 I/O</h2>
   <!--
   <p> The I/O system in Haskell is purely functional, yet has all of the
    expressive power found in conventional programming languages. To achieve
@@ -26,10 +26,10 @@
    purely functional context.</p>
   -->
   <p>
-   Haskell �� I/O �����ƥ�Ͻ��˴ؿ�Ū�Ǥ��롣����Ǥ�ʤ�������Υץ�
-   ����ߥ󥰸��줬���ɽ���ϤΤ��٤Ƥ���äƤ��롣�����¸����뤿���
-   Haskell ��<em>��ʥ�</em>���Ѥ��� I/O ������ʴؿ�Ūʸ̮�Τʤ�
-   �����礷�Ƥ��롣
+   Haskell の I/O システムは純粋に関数的である。それでもなお、従来のプロ
+   グラミング言語がもつ表現力のすべてを持っている。これを実現するために
+   Haskell は<em>モナド</em>を用いて I/O 操作を純粋な関数的文脈のなか
+   に統合している。
   </p>
   <!--
   <p> The I/O monad used by Haskell mediates between the <i>values</i>
@@ -44,14 +44,14 @@
    preserve this order.</p>
   -->
   <p>
-   Haskell ���Ѥ��� I/O ��ʥɤϡ��ؿ�������Ǥϼ�����<em>��</em>�ȡ�I/O
-   ����Ӱ���Ū�ˤ�̿�᷿�ץ�����ߥ󥰤���ħ�դ���<em>ư��</em>�Ȥδ֤�
-   �Ȥ��ġ�Haskell �Ǥμ���ɾ����ϥǡ����ΰ�¸���ˤΤ����������롣
-   �����ǤϤ��ν�������򤹤�ΤϤ��ʤ꼫ͳ�Ǥ��롣�������ʤ��顢ư�� --
-   �ä� I/O -- �ϥץ������μ¹Ԥ��̣�Τ����Τˤ��뤿��ˡ���������
-   �����줿��꤫���ǽ���դ����ʤ���Фʤ�ʤ���Haskell �� I/O ��ʥ�
-   �ϥ桼����ư��ΰ���ˤʤ���Ϣ�ʤ����ꤹ����ˡ���Ѱդ��Ƥ��롣��
-   ���Ϥ��ν������¸���ʤ���Фʤ�ʤ���
+   Haskell が用いる I/O モナドは、関数型言語では自然な<em>値</em>と、I/O
+   および一般的には命令型プログラミングを特徴付ける<em>動作</em>との間を
+   とりもつ。Haskell での式の評価順はデータの依存性にのみ制約を受ける。
+   実装ではこの順序を選択するのはかなり自由である。しかしながら、動作 --
+   特に I/O -- はプログラムの実行を意味のあるものにするために、妥当に定
+   義されたやりかたで順序付けられなければならない。Haskell の I/O モナド
+   はユーザに動作の一列にならんだ連なりを指定する方法を用意している。実
+   装はこの順序を保存しなければならない。
   </p>
   <!--
   <p> The term <i>monad</i> comes from a branch of mathematics known as
@@ -66,21 +66,21 @@
    imperative languages.</p>
   -->
   <p>
-   <em>��ʥ�</em>�Ȥ����Ѹ��<em>����</em>�Ȥ����Τ�����ؤΰ�ʬ�
-   ��Τ�ΤǤ��롣�������ʤ��顢Haskell �ץ�����ޤλ������餤���С���
-   �ʥɤϤҤȤĤ���ݥǡ������ȹͤ���Τ��٥��ȤǤ��롣I/O ��ʥɤξ��
-   �ˤϡ��������Ū�ͤϾ�ǤΤ٤�<em>ư��</em>�Ǥ��롣�����Ĥ��α黻�ϡ�
-   �ץ�ߥƥ��֤�ư��Ǥ��ꡢ����� I/O �����б����Ƥ��롣���̤ʱ黻
-   (Monad �Υ᥽�åɡ�<a href="basic.html#monad-class">6.3.6</a> ����
-   ��)����ư������ˤĤʤ��롣�����̿�᷿����ΰ������� (���ߥ���
-   ��ʤ�)���б����Ƥ��롣
+   <em>モナド</em>という術語は<em>圏論</em>として知られる数学の一分野か
+   らのものである。しかしながら、Haskell プログラマの視点からいえば、モ
+   ナドはひとつの抽象データ型と考えるのがベストである。I/O モナドの場合
+   には、その抽象的値は上でのべた<em>動作</em>である。いくつかの演算は、
+   プリミティブな動作であり、従来の I/O 操作と対応している。特別な演算
+   (Monad のメソッド、<a href="basic.html#monad-class">6.3.6</a> 節をみ
+   よ)が、動作を一列につなげる。これは命令型言語の一列化操作子 (セミコロ
+   ンなど)に対応している。
   </p>
 
   <p> <a name="standard-io-functions"></a></p>
   <p> <a name="sect7.1"></a></p>
 
   <!--<h3>7.1<tt>&nbsp;&nbsp;</tt>Standard I/O Functions</h3>
-  <h3>7.1<tt>&nbsp;&nbsp;</tt>ɸ�� I/O �ؿ�</h3>
+  <h3>7.1<tt>&nbsp;&nbsp;</tt>標準 I/O 関数</h3>
   <!--
   <p>Although Haskell provides fairly sophisticated I/O facilities, as
    defined in the <tt>IO</tt> library, it is possible to write many Haskell
@@ -88,10 +88,10 @@
    Prelude, and which are described in this section.</p>
   -->
   <p>
-   Haskell �Ǥϡ�<tt>IO</tt> �饤�֥����������Ƥ���褦�ˡ�������
-   �����줿 I/O ���֤��Ѱդ���Ƥ��뤬���������� Haskell �ץ������ϥ�
-   ���塼�ɤ��������ݡ��Ȥ��뤤���Ĥ���ñ��ʴؿ��������ƽ񤯤��Ȥ�
-   �Ǥ��롣�����ˤĤ��ƤϤ�����ǲ��⤹�롣
+   Haskell では、<tt>IO</tt> ライブラリに定義されているように、非常に洗
+   練された I/O 装置が用意されているが、おおくの Haskell プログラムはプ
+   レリュードがエクスポートするいくつかの単純な関数をもちいて書くことが
+   できる。これらについてはこの節で解説する。
   </p>
   <!--
   <p> All I/O functions defined here are character oriented. The treatment
@@ -101,22 +101,22 @@
    I/O.</p>
   -->
   <p>
-   �������������Ƥ��뤹�٤Ƥ� I/O �ؿ���ʸ���ظ��Ǥ��롣����ʸ���ϥ���
-   �ƥ�ˤ�ä��Ѳ����롣���Ȥ��С����Ϥ���Ĥ�ʸ�����꥿����ȥ饤��ե���
-   �ɤϰ�Ĥβ���ʸ���Ȥ����ɤޤ�뤳�Ȥ⤢�롣�����δؿ��ϥХ��ʥ�
-   I/O �˲���Ū�˻��Ѥ��뤳�ȤϤǤ��ʤ���
+   ここで定義されているすべての I/O 関数は文字指向である。改行文字はシス
+   テムによって変化する。たとえば、入力の二つの文字、リターンとラインフィー
+   ドは一つの改行文字として読まれることもある。これらの関数はバイナリ
+   I/O に可搬的に使用することはできない。
   </p>
   <!--
   <p> In the following, recall that <tt>String</tt> is a synonym for
    <tt>[Char]</tt> (Section <a href="basic.html#characters">6.1.2</a>).</p>
   -->
   <p>
-   �ʲ�����Τʤ��ǡ�<tt>String</tt> �� <tt>[Char]</tt> �η������ꥢ���Ǥ�
-   �뤳�Ȥ�פ��Ф�����(<a href="basic.html#characters">6.1.2</a> ��)��
+   以下の例のなかで、<tt>String</tt> は <tt>[Char]</tt> の型エイリアスであ
+   ることを思い出すこと(<a href="basic.html#characters">6.1.2</a> 節)。
   </p>
 
   <!--<h3>Output Functions</h3>-->
-  <h3>���ϴؿ�</h3>
+  <h3>出力関数</h3>
   <!--
   <p>These functions write to the standard output device (this is normally
    the user's terminal). <tt><br />
@@ -132,7 +132,7 @@
    strings for output using the <tt>show</tt> operation and adds a newline.</p>
   -->
   <p>
-   �����δؿ���ɸ����ϥǥХ���(�̾�ϥ桼����ü��)�˽񤭽Ф���
+   これらの関数は標準出力デバイス(通常はユーザの端末)に書き出す。
    <tt><br />
    <br />
    &nbsp;&nbsp;putChar&nbsp;&nbsp;::&nbsp;Char&nbsp;-&gt;&nbsp;IO&nbsp;()<br />
@@ -141,10 +141,10 @@
    &nbsp;&nbsp;print&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;Show&nbsp;a&nbsp;=&gt;&nbsp;a&nbsp;-&gt;&nbsp;IO&nbsp;()<br />
    <br />
    </tt>
-   <tt>print</tt> �ؿ���Ǥ�դΰ�����ǽ�����ͤ�ɸ����ϥǥХ����˽��Ϥ��롣
-   ������ǽ���ϤȤ� <tt>Show</tt> ���饹�Υ��󥹥��󥹤η��Τ��ȤǤ��롣
-   <tt>print</tt> �� <tt>show</tt> �黻��Ȥä��ͤ��Ѵ��������Ԥ򤯤廊
-   ��ʸ����ˤ��롣  
+   <tt>print</tt> 関数は任意の印字可能型の値を標準出力デバイスに出力する。
+   印字可能型はとは <tt>Show</tt> クラスのインスタンスの型のことである。
+   <tt>print</tt> は <tt>show</tt> 演算を使って値を変換し、改行をくわえ
+   て文字列にする。  
   </p>
   <!--
   <p> For example, a program to print the first 20 integers and their
@@ -155,8 +155,8 @@
    </tt></p>
   -->
   <p>
-   ���Ȥ��С��ǽ��20�Ĥ������򤪤�Ӥ���2����������ץ������ϰʲ���
-   �褦�˽񤯤��Ȥ��Ǥ��롣
+   たとえば、最初の20個の整数をおよびその2乗を印字するプログラムは以下の
+   ように書くことができる。
    <tt><br />
    <br />
    main&nbsp;=&nbsp;print&nbsp;([(n,&nbsp;2^n)&nbsp;|&nbsp;n&nbsp;&lt;-&nbsp;[0..19]])<br />
@@ -165,7 +165,7 @@
   </p>
 
   <!--<h3>Input Functions</h3>-->
-  <h3>���ϴؿ�</h3>
+  <h3>入力関数</h3>
   <!--
   <p>These functions read input from the standard input device (normally
    the user's terminal). <tt><br />
@@ -185,7 +185,7 @@
    <tt>IO</tt> library.</p>
   -->
   <p>
-   �����δؿ���ɸ������(�̾�桼��ü��)�������Ϥ��ɤࡣ 
+   これらの関数は標準入力(通常、ユーザ端末)から入力を読む。 
    <tt><br />
    <br />
    &nbsp;&nbsp;getChar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;IO&nbsp;Char<br />
@@ -196,11 +196,11 @@
    &nbsp;&nbsp;readLn&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;Read&nbsp;a&nbsp;=&gt;&nbsp;IO&nbsp;a<br />
    <br />
    </tt>
-   <tt>getChar</tt> ����� <tt>getLine</tt> ��ξ���� EOF ���㳰
-   (<a href="io-13.html#io-exceptions">7.3</a> ��)��ȯ�����롣�����㳰��
-   Ʊ�ꤹ��Ҹ� <tt>isEOFError</tt> �� <tt>IO</tt> �饤�֥����������
-   �Ƥ��롣<tt>getLine</tt> �黻�� <tt>hGetLine</tt> ��Ʊ���������㳰��
-   ȯ�������롣����� <tt>IO</tt> �饤�֥����������Ƥ��롣
+   <tt>getChar</tt> および <tt>getLine</tt> の両方は EOF で例外
+   (<a href="io-13.html#io-exceptions">7.3</a> 節)を発生する。この例外を
+   同定する述語 <tt>isEOFError</tt> は <tt>IO</tt> ライブラリで定義され
+   ている。<tt>getLine</tt> 演算は <tt>hGetLine</tt> と同じ状況で例外を
+   発生させる。これも <tt>IO</tt> ライブラリで定義されている。
   </p>
   <!--
   <p> The <tt>getContents</tt> operation returns all user input as a single
@@ -211,11 +211,11 @@
    standard output device.</p>
   -->
   <p>
-   <tt>getContents</tt> �黻�Ϥ��٤ƤΥ桼�����Ϥ�ҤȤĤ�ʸ����Ȥ�����
-   ��������ʸ�����ɬ�פˤʤä��Ȥ����ٱ䤷���ɤޤ�롣<tt>interact</tt>
-   �ؿ��� <tt>String-&gt;String</tt> ���δؿ�������Ȥ��ƤȤ롣ɸ������
-   ������������Τ����δؿ����Ϥ��졢��̤�ʸ�����ɸ����ϥǥХ����˽�
-   �Ϥ��롣
+   <tt>getContents</tt> 演算はすべてのユーザ入力をひとつの文字列として返
+   す。この文字列は必要になったときに遅延して読まれる。<tt>interact</tt>
+   関数は <tt>String-&gt;String</tt> 型の関数を引数としてとる。標準入力
+   からの入力全体がこの関数に渡され、結果の文字列を標準出力デバイスに出
+   力する。
   </p>
   <!--
   <p> Typically, the <tt>read</tt> operation from class <tt>Read</tt> is
@@ -225,11 +225,11 @@
    combines <tt>getLine</tt> and <tt>readIO</tt>.</p>
   -->
   <p>
-   ŵ��Ū�ˤϡ�<tt>Read</tt> ���饹 �� <tt>read</tt> �黻��ʸ���󤫤���
-   ���Ѵ�����Τ��Ѥ��롣<tt>readIO</tt> �ؿ��ϡ��ץ���������ߤ�����
-   ���ˡ�I/O ��ʥɤ˥ѡ������ԤΥ����ʥ�򤢤��뤳�Ȥ������
-   <tt>read</tt> ��������Ƥ��롣<tt>readLn</tt> �ؿ��� <tt>getLine</tt>
-   �� <tt>readIO</tt> �Ȥ��ȹ礻�롣
+   典型的には、<tt>Read</tt> クラス の <tt>read</tt> 演算を文字列から値
+   に変換するのに用いる。<tt>readIO</tt> 関数は、プログラムを停止させる
+   代りに、I/O モナドにパーズ失敗のシグナルをあげることを除けば
+   <tt>read</tt> と類似している。<tt>readLn</tt> 関数は <tt>getLine</tt>
+   と <tt>readIO</tt> とを組合せる。
   </p>
   <!--
   <p> The following program simply removes all non-ASCII characters from
@@ -241,8 +241,8 @@
    </tt></p>
   -->
   <p>
-   �ʲ��Υץ�������ñ���ɸ�����Ϥ��餹�٤Ƥ���ASCIIʸ�������������
-   �̤�ɸ����Ϥ˥��������롣(isAscii �ؿ��ϥ饤�֥����������Ƥ��롣)
+   以下のプログラムは単純に標準入力からすべての非ASCII文字を取り除き、結
+   果を標準出力にエコーする。(isAscii 関数はライブラリで定義されている。)
    <tt><br />
    <br />
    main&nbsp;=&nbsp;interact&nbsp;(filter&nbsp;isAscii)<br />
@@ -251,16 +251,16 @@
   </p>
 
   <!--<h3>Files</h3>-->
-  <h3>�ե�����</h3>
+  <h3>ファイル</h3>
   <!--
   <p>These functions operate on files of characters. Files are named by
    strings using some implementation-specific method to resolve strings as
    file names.</p>
   -->
   <p>
-   �����δؿ��ϥ���饯���ե���������롣�ե�����Ϥʤ�餫��ʸ��
-   ���ե�����̾�Ȥ��Ʋ�褹������������ˡ��ʸ����ˤ�ä�̾�����Ĥ�
-   ���Ƥ��롣
+   これらの関数はキャラクタファイルを操作する。ファイルはなんらかの文字
+   列をファイル名として解決する実装指定の方法で文字列によって名前がつけ
+   られている。
   </p>
   <!--
   <p> The <tt>writeFile</tt> and <tt>appendFile</tt> functions write or
@@ -285,10 +285,10 @@
    </tt></p>
   -->
   <p>
-   <tt>writeFile</tt> ����� <tt>appendFile</tt> �ؿ������������ʸ����
-   ���������Υե�����˽񤯡����뤤�ϡ��ɲä��롣<tt>readFile</tt>
-   �ؿ��ϥե�������ɤߤ��Υե���������Ƥ�ʸ����Ȥ����֤������Υե���
-   ����ٱ䤵�졢ɬ�פ˱����� <tt>getContents</tt> ���ɤޤ�롣
+   <tt>writeFile</tt> および <tt>appendFile</tt> 関数は第二引数の文字列
+   を、第一引数のファイルに書く、あるいは、追加する。<tt>readFile</tt>
+   関数はファイルを読みそのファイルの内容を文字列として返す。このファイ
+   ルは遅延され、必要に応じて <tt>getContents</tt> で読まれる。
    <tt><br />
    <br />
    &nbsp;&nbsp;type&nbsp;FilePath&nbsp;=&nbsp;&nbsp;String<br />
@@ -298,10 +298,10 @@
    &nbsp;&nbsp;readFile&nbsp;&nbsp;&nbsp;::&nbsp;FilePath&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;IO&nbsp;String<br />
    <br />
    </tt>
-   <tt>writeFile</tt> ����� <tt>appendFile</tt> �ϥ�ƥ��ʸ�����ե�
-   ����˽񤭹��ळ�Ȥ����դ��衣������ǽ�����ͤ�񤯤���ˤ�
-   <tt>print</tt> ��Ʊ�ͤˡ��ޤ����ͤ�ʸ������Ѵ�����Τ� <tt>show</tt>
-   �ؿ����Ѥ��롣 
+   <tt>writeFile</tt> および <tt>appendFile</tt> はリテラル文字列をファ
+   イルに書き込むことに注意せよ。印字可能型の値を書くためには
+   <tt>print</tt> と同様に、まず、値を文字列へ変換するのに <tt>show</tt>
+   関数を用いる。 
    <tt><br />
    <br />
    main&nbsp;=&nbsp;appendFile&nbsp;"squares"&nbsp;(show&nbsp;[(x,x*x)&nbsp;|&nbsp;x&nbsp;&lt;-&nbsp;[0,0.1..2]])<br />
@@ -311,7 +311,7 @@
 
   <p> <a name="sect7.2"></a></p>
   <!--<h3>7.2<tt>&nbsp;&nbsp;</tt>Sequencing I/O Operations</h3>-->
-  <h3>7.2<tt>&nbsp;&nbsp;</tt>I/O ����ľ��</h3>
+  <h3>7.2<tt>&nbsp;&nbsp;</tt>I/O 操作の直列化</h3>
   <!--
   <p>The type constructor <tt>IO</tt> is an instance of the <tt>Monad</tt>
    class. The two monadic binding functions, methods in the <tt>Monad</tt>
@@ -336,19 +336,19 @@
    before the program completes.</p>
   -->
   <p>
-   �������� <tt>IO</tt> �� <tt>Monad</tt> ���饹�Υ��󥹥��󥹤Ǥ��롣��
-   �ʥɤΤդ��ĤΥХ���ǥ��󥰴ؿ������ʤ�� Monad ���饹�Υ᥽�åɤ�
-   I/O ���Τʤ�Ӥ��������Τ��Ѥ��롣<tt>&gt;&gt;</tt> �ؿ��Ϻǽ��
-   ���η�̤˶�̣���ʤ��Ȥ����Ȥ����ǡ����Ȥ��С����η�̤�
-   <tt>()</tt> �Ǥ���褦�ʾ����Ѥ����롣<tt>&gt;&gt;=</tt> �黻�Ϻ�
-   ������η�̤򼡤����ذ����Ȥ����Ϥ���
+   型構成子 <tt>IO</tt> は <tt>Monad</tt> クラスのインスタンスである。モ
+   ナドのふたつのバインディング関数、すなわち Monad クラスのメソッドは
+   I/O 操作のならびを合成するのに用いる。<tt>&gt;&gt;</tt> 関数は最初の
+   操作の結果に興味がないというところで、たとえば、その結果が
+   <tt>()</tt> であるような場合に用いられる。<tt>&gt;&gt;=</tt> 演算は最
+   初の操作の結果を次の操作へ引数として渡す。
    <tt><br />
    <br />
    &nbsp;&nbsp;(&gt;&gt;=)&nbsp;::&nbsp;IO&nbsp;a&nbsp;-&gt;&nbsp;(a&nbsp;-&gt;&nbsp;IO&nbsp;b)&nbsp;-&gt;&nbsp;IO&nbsp;b&nbsp;<br />
    &nbsp;&nbsp;(&gt;&gt;)&nbsp;&nbsp;::&nbsp;IO&nbsp;a&nbsp;-&gt;&nbsp;IO&nbsp;b&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;IO&nbsp;b<br />
    <br />
    </tt>
-   ���Ȥ��С�
+   たとえば、
    <tt><br />
    <br />
    main&nbsp;=&nbsp;readFile&nbsp;"input-file"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&gt;&gt;=&nbsp;\&nbsp;s&nbsp;-&gt;<br />
@@ -356,10 +356,10 @@
    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;putStr&nbsp;"Filtering&nbsp;successful\n"<br />
    <br />
    </tt>
-   �ϡ������ <tt>interact</tt> ���Ѥ�����ˤˤƤ��뤬�������
-   <tt>"input-file"</tt> ��������Ϥ�Ȥꡢ���ν��Ϥ�
-   <tt>"output-file"</tt> �˽񤭤�������å������ϥץ�����ब��λ������
-   ��ɸ����Ϥ˰�������롣
+   は、先の例 <tt>interact</tt> を用いた例ににているが、これは
+   <tt>"input-file"</tt> からの入力をとり、その出力を
+   <tt>"output-file"</tt> に書きだす。メッセージはプログラムが終了する前
+   に標準出力に印字される。
   </p>
   <!--
   <p> The <tt>do</tt> notation allows programming in a more imperative
@@ -378,8 +378,8 @@
    </tt></p>
   -->
   <p>
-   <tt>do</tt> ��ˡ�Ϥ��̿�᷿�ˤ�������ʸ�ǥץ�����ह�뤳�Ȥ��ǽ��
-   ���롣������ꤤ���֤�ͥ���ʥС������ϰʲ��Τ褦�ˤʤ롣
+   <tt>do</tt> 記法はより命令型にちかい構文でプログラムすることを可能に
+   する。先の例よりいくぶん優雅なバージョンは以下のようになる。
    <tt><br />
    <br />
    main&nbsp;=&nbsp;do<br />
@@ -406,23 +406,23 @@
    <br /></p>
   -->
   <p>
-   <tt>return</tt> �ؿ��� I/O ���η�̤��������Τ��Ѥ����롣���Ȥ�
-   �С�<tt>getLine</tt> �� <tt>return</tt> ���Ѥ��Ʒ�̤��������
-   <tt>getChar</tt> ��Ȥä��������롣
+   <tt>return</tt> 関数は I/O 操作の結果を定義するのに用いられる。たとえ
+   ば、<tt>getLine</tt> は <tt>return</tt> を用いて結果を定義して
+   <tt>getChar</tt> を使って定義される。
   </p>
 
   <p> <a name="io-exceptions"></a></tt></p>
   <p> <a name="sect7.3"></a></p>
 
   <!--<h3>7.3<tt>&nbsp;&nbsp;</tt>Exception Handling in the I/O Monad</h3>-->
-  <h3>7.3<tt>&nbsp;&nbsp;</tt>I/O ��ʥɤ��㳰����</h3>
+  <h3>7.3<tt>&nbsp;&nbsp;</tt>I/O モナドの例外処理</h3>
   <!--
   <p> The I/O monad includes a simple exception handling system. Any I/O
    operation may raise an exception instead of returning a result.</p>
   -->
   <p>
-   I/O ��ʥɤ�ñ����㳰�����������äƤ��롣���٤Ƥ� I/O ���Ϸ�̤�
-   �֤������㳰��ȯ�����뤳�Ȥ����롣
+   I/O モナドは単純な例外処理機構をもっている。すべての I/O 操作は結果を
+   返さず、例外を発生することがある。
   </p>
   <!--
   <p> Exceptions in the I/O monad are represented by values of type
@@ -456,12 +456,12 @@
    <tt>IO</tt> library.</p>
   -->
   <p>
-   I/O ��ʥɤ��㳰�ϡ��� <tt>IOError</tt> �����ͤȤ���ɽ������롣����
-   ����ݷ��ǡ����ι����Ҥϥ桼������ϱ��ä���Ƥ��롣<tt>IO</tt> �饤
-   �֥��� <tt>IOError</tt> ���ͤ��������ꡢ���ڤ����ꤹ��ؿ������
-   ���Ƥ��롣<tt>IOError</tt> ���ͤ���������ͣ��Υץ��塼�ɴؿ���
-   <tt>userError</tt> �Ǥ��롣�桼�����顼���ͤϤ��Υ��顼����������ʸ��
-   ���ޤࡣ
+   I/O モナドの例外は、型 <tt>IOError</tt> 型の値として表現される。これ
+   は抽象型で、その構成子はユーザからは隠蔽されている。<tt>IO</tt> ライ
+   ブラリは <tt>IOError</tt> の値を構成したり、検証したりする関数を定義
+   している。<tt>IOError</tt> の値を生成する唯一のプレリュード関数は
+   <tt>userError</tt> である。ユーザエラーの値はそのエラーを説明する文字
+   列を含む。
    <tt><br />
    <br />
    &nbsp;&nbsp;userError&nbsp;::&nbsp;String&nbsp;-&gt;&nbsp;IOError<br />
@@ -473,20 +473,20 @@
    &nbsp;&nbsp;catch&nbsp;&nbsp;&nbsp;::&nbsp;IO&nbsp;a&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;(IOError&nbsp;-&gt;&nbsp;IO&nbsp;a)&nbsp;-&gt;&nbsp;IO&nbsp;a&nbsp;<br />
    <br />
    </tt>
-   <tt>ioError</tt> �ؿ����㳰��ȯ�����롣<tt>catch</tt> �ؿ��ϡ������
-   ����ݸ�줿ư�����ȯ������Ǥ�դ��㳰������Ȥ�ϥ�ɥ���Ω���롣
-   �㳰�� <tt>catch</tt> �ˤ���Ω���줿��äȤ�ᤤ�ϥ�ɥ�ˤ�ä���
-   ª����롣�����Υϥ�ɥ�����򤹤뤳�ȤϤʤ������٤Ƥ��㳰����ª��
-   ��롣�㳰�����Ťϡ��ϥ�ɥ����Ǥ�դ�˾�ޤ��㳰���ȯ�����뤳�Ȥ���
-   ��Ū���Ѱդ���ʤ�Фʤ�ʤ������Ȥ��С�
+   <tt>ioError</tt> 関数は例外を発生する。<tt>catch</tt> 関数は、それに
+   より保護された動作内で発生した任意の例外を受けとるハンドラを確立する。
+   例外は <tt>catch</tt> により確立されたもっとも近いハンドラによって捕
+   捉される。これらのハンドラは選択することはなく、すべての例外が捕捉さ
+   れる。例外の伝播は、ハンドラ内で任意の望まぬ例外を再発生することで明
+   示的に用意されなればならない。たとえば、
    <tt><br />
    <br />
    f&nbsp;=&nbsp;catch&nbsp;g&nbsp;(\e&nbsp;-&gt;&nbsp;if&nbsp;IO.isEOFError&nbsp;e&nbsp;then&nbsp;return&nbsp;[]&nbsp;else&nbsp;ioError&nbsp;e)<br />
    <br />
    </tt>
-   �ˤ����ƴؿ� <tt>f</tt> �ϡ�<tt>g</tt> ��� EOF �㳰�������ä��Ȥ���
-   <tt>[]</tt> ���֤��������Ǥʤ���С��㳰�ϼ��γ�¦�Υϥ�ɥ�����Ť�
-   �롣<tt>isEOFError</tt> �ؿ��� <tt>IO</tt> �饤�֥��ΰ����Ǥ��롣
+   において関数 <tt>f</tt> は、<tt>g</tt> 内で EOF 例外がおこったとき、
+   <tt>[]</tt> を返す。そうでなければ、例外は次の外側のハンドラへ伝播す
+   る。<tt>isEOFError</tt> 関数は <tt>IO</tt> ライブラリの一部である。
   </p>
   <!--
   <p> When an exception propagates outside the main program, the Haskell
@@ -494,8 +494,8 @@
    program.</p>
   -->
   <p>
-   �㳰���ᥤ��ץ������γ�¦�����Ť����Ȥ���Haskell �����ƥ�Ϥ����
-   �б����� <tt>IOError</tt> ���ͤ�����������Υץ�������̤��롣
+   例外がメインプログラムの外側に伝播したとき、Haskell システムはそれに
+   対応した <tt>IOError</tt> の値を印字し、そのプログラムをぬける。
   </p>
   <!--
   <p> The <tt>fail</tt> method of the <tt>IO</tt> instance of the
@@ -513,9 +513,9 @@
   -->
 
   <p>
-   <tt>Monad</tt> ���饹(<a href="basic.html#monad-class">6.3.6</a>
-   ��)�� <tt>IO</tt> ���󥹥��󥹤� <tt>fail</tt> �᥽�åɤ�
-   <tt>userError</tt> ��Ҥ����������ʤ��
+   <tt>Monad</tt> クラス(<a href="basic.html#monad-class">6.3.6</a>
+   節)の <tt>IO</tt> インスタンスの <tt>fail</tt> メソッドは
+   <tt>userError</tt> をひき起す。すなわち
    <tt><br />
    <br />
    &nbsp;&nbsp;instance&nbsp;Monad&nbsp;IO&nbsp;where&nbsp;<br />
@@ -524,8 +524,8 @@
    &nbsp;&nbsp;&nbsp;&nbsp;fail&nbsp;s&nbsp;=&nbsp;ioError&nbsp;(userError&nbsp;s)<br />
    <br />
    </tt>
-   �ץ��塼����� I/O �ؿ��ˤ�äƼ椭�������줿�㳰��
-   <a href="io.html#IO">21</a> �Ϥ��������Ƥ��롣
+   プレリュード中の I/O 関数によって惹き起こされた例外は
+   <a href="io.html#IO">21</a> 章で定義されている。
   </p>
 
   <hr />

@@ -1,9 +1,9 @@
-
-<html>
+<!DOCTYPE html>
+<html lang="ja">
  <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
+  <meta charset="utf-8">
   <!--<title>The Haskell 98 Report: Introduction</title>-->
-  <title>Haskell 98 ��ݡ���: ����ȥ����������</title>
+  <title>Haskell 98 レポート: イントロダクション</title>
  </head>
 
  <body bgcolor="#ffffff">
@@ -16,7 +16,7 @@
 
   <p><a name="introduction"></a><a name="sect1"></a></p>
   <!--<h2>1<tt>&nbsp;&nbsp;</tt>Introduction</h2>-->
-  <h2>1<tt>&nbsp;&nbsp;</tt>����ȥ����������</h2>
+  <h2>1<tt>&nbsp;&nbsp;</tt>イントロダクション</h2>
 
   <!--
   <p> Haskell is a general purpose, purely functional programming language
@@ -29,14 +29,14 @@
    culmination and solidification of many years of research on non-strict
    functional languages.</p>
   -->
-  <p>Haskell �����Ѥν��ؿ����ץ�����ߥ󥰸���ǡ��ץ�����ߥ󥰸���
-   �߷פ�ʬ��ǤκǶ�γ׿���¿������������Ƥ��롣Haskell ���󶡤���
-   �Τϡ��ⳬ�ؿ��������ʤΰ�̣������Ū¿�귿�դ������Ѽ���������Ū�ǡ�
-   �������ѥ�����ȹ硢�ꥹ�Ȥ�����ɽ�����⥸�塼�륷���ƥࡢ��ʥ� I/O
-   �����ƥ�Ǥ��롣�ޤ�������˼��Τ褦��˭���ʥץ�ߥƥ��֥ǡ���������
-   �դ���Ƥ��롣�ꥹ�ȡ�����Ǥ����Ĺ������������Ĺ��������ư����������
-   Haskell ���ٱ�ɾ�����ؿ�������˴ؤ���Ĺǯ�θ����Ž̤�����ΤǤ��ꡢ
-   �ޤ�������ĺ���ˤ��Ĥ�ΤǤ��롣 
+  <p>Haskell は汎用の純粋関数型プログラミング言語で、プログラミング言語
+   設計の分野での最近の革新の多くが取入れられている。Haskell が提供する
+   のは、高階関数、非正格の意味論、静的多相型付け、利用者定義の代数的デー
+   タ型、パターン照合、リストの内包表記、モジュールシステム、モナド I/O
+   システムである。また、さらに次のような豊かなプリミティブデータ型が用
+   意されている。リスト、配列、任意倍長整数、固定倍長整数、浮動小数点数。
+   Haskell は遅延評価型関数型言語に関する長年の研究を凝縮したものであり、
+   また、その頂点にたつものである。 
   </p>
   <!--
   <p> This report defines the syntax for Haskell programs and an informal
@@ -47,24 +47,24 @@
    for undefined programs (i.e. programs that formally evaluate to _|_).<a
    name="programs"></a></p>
   -->
-  <p>���Υ�ݡ��Ȥ� Haskell �ǽ񤫤줿�ץ������ι�ʸ�Ȥ��Υץ�������
-   ��̣���Ф��������Ū��ݰ�̣������������ΤǤ��롣Haskell �Υץ���
-   ��ब�ɤΤ褦�˽������졢��ᤵ�졢����ѥ��뤵��뤫�ʤɤȤ��ä���
-   ʬ�˰�¸�������������ˤϿ���ʤ��������ǤϤȤꤢ���ʤ�����ˤϥץ�
-   ����ߥ󥰴Ķ���������̤���(���ʤ��������Ū�ˤ� _|_ ��ɾ�������)��
-   �������˴ؤ��륨�顼��å�������ޤޤ�롣
+  <p>このレポートは Haskell で書かれたプログラムの構文とそのプログラムの
+   意味に対する非形式的抽象意味論を定義するものである。Haskell のプログ
+   ラムがどのように処理され、解釈され、コンパイルされるかなどといった部
+   分に依存する実装の問題には触れない。ここではとりあげない問題にはプロ
+   グラミング環境の性質や未定義(すなわち、形式的には _|_ と評価される)プ
+   ログラムに関するエラーメッセージも含まれる。
   </p>
 
   <p><a name="sect1.1"></a></p>
   <!--<h3>1.1<tt>&nbsp;&nbsp;</tt>Program Structure</h3>-->
-  <h3>1.1<tt>&nbsp;&nbsp;</tt>�ץ������ι�¤</h3>
+  <h3>1.1<tt>&nbsp;&nbsp;</tt>プログラムの構造</h3>
   <!--
   <p> In this section, we describe the abstract syntactic and semantic
    structure of Haskell , as well as how it relates to the organization of
    the rest of the report.</p>
   -->
-  <p>������Ǥϡ�Haskell ����ݹ�ʸ��¤����ݰ�̣����¤�ˤĤ����������롣
-   �ޤ����Υ�ݡ��Ȥ�¾����ʬ����Ω�ƤȤδط��ˤĤ��Ƥ��������롣</p>
+  <p>この節では、Haskell の抽象構文構造と抽象意味論構造について説明する。
+   またこのレポートの他の部分の組立てとの関係についても説明する。</p>
   <ol>
    <!--
    <li>At the topmost level a Haskell program is a set of <i>modules</i>,
@@ -74,11 +74,11 @@
     <p></p>
    </li>
    -->
-   <li>�ǥȥåץ�٥�Ǥ� Haskell �ץ������Ȥ�<em>�⥸�塼��</em>�ν�
-    �ޤ�Ǥ��롣�⥸�塼��ˤĤ��Ƥ�
-    <a href="modules.html#modules">5</a>�Ϥ��������Ƥ��롣�⥸�塼���̾
-    �����֤�������絬�ϥץ������ˤ����륽�եȥ������κ����Ѥμ��ʤ���
-    �����Ƥ��롣
+   <li>最トップレベルでは Haskell プログラムとは<em>モジュール</em>の集
+    まりである。モジュールについては
+    <a href="modules.html#modules">5</a>章で説明している。モジュールは名
+    前空間の制御と大規模プログラムにおけるソフトウェアの再利用の手段を提
+    供している。
     <p></p>
    </li> 
    <!--
@@ -90,10 +90,10 @@
     <p></p>
    </li>
    -->
-   <li>�⥸�塼��Υȥåץ�٥�ϡ�<em>���</em>�ν��ޤ�Ǥ��롣����ˤ�
-    �����Ĥ��μ��ब���뤬�����Τ��٤ƤˤĤ���
-    <a href="decls.html#declarations">4</a> �Ϥ��������Ƥ��롣������̾�
-    ���͡��ǡ������������饹�����������ʤɤ�������롣
+   <li>モジュールのトップレベルは、<em>宣言</em>の集まりである。宣言には
+    いくつかの種類があるが、そのすべてについて
+    <a href="decls.html#declarations">4</a> 章で説明している。宣言は通常
+    の値、データ型、型クラス、結合性情報などを定義する。
     <p></p>
    </li>
    <!--
@@ -104,11 +104,11 @@
     <p></p>
    </li>
    -->
-   <li>���β��Υ�٥��<em>��</em>�Ǥ��롣����ˤĤ��Ƥ� 
-    <a href="exps.html#expressions">3</a> �Ϥˤ��������Ƥ��롣���ϤҤȤ�
-     ��<em>��</em>��ɽ�������ΤǤ��ꡢ<em>��Ū�ʷ�</em>����ġ�����
-     Haskell �ǤΥץ�����ߥ󥰤��濴�Ǥ��ꡢ�־����� Haskell �ץ������
-     ���Τ�ΡפǤ��롣
+   <li>その下のレベルは<em>式</em>である。これについては 
+    <a href="exps.html#expressions">3</a> 章にて説明している。式はひとつ
+     の<em>値</em>を表示するものであり、<em>静的な型</em>を持つ。式は
+     Haskell でのプログラミングの中心であり、「小さい Haskell プログラム
+     そのもの」である。
      <p></p>
    </li>
    <!--
@@ -119,17 +119,17 @@
     <p></p>
    </li>
    -->
-   <li>�ǲ��̥�٥�ˤ���Τ� Haskell ��<em>���繽¤</em>�Ǥ��롣�����
-    �Ĥ��Ƥ� <a href="lexemes.html#lexical-structure">2</a> �Ϥˤ������
-    �Ƥ��롣���繽¤�ϥƥ����ȥե�������� Haskell �ץ������ζ���Ū��
-    ɽ����ª�����ΤǤ��롣
+   <li>最下位レベルにあるのは Haskell の<em>字句構造</em>である。これに
+    ついては <a href="lexemes.html#lexical-structure">2</a> 章にて定義し
+    ている。字句構造はテキストファイル中の Haskell プログラムの具体的な
+    表現を捉えるものである。
    </li>
   </ol>
   <!--
   <p>This report proceeds bottom-up with respect to Haskell 's syntactic
    structure.</p>
   -->
-  <p>���Υ�ݡ��Ȥ� Haskell �ι�ʸ��¤��ܥȥॢ�åפ�������ʤ�롣</p>
+  <p>このレポートは Haskell の構文構造をボトムアップに説明を進める。</p>
   <!--
   <p> The chapters not mentioned above are Chapter <a
    href="basic.html#basic-types-and-classes">6</a>, which describes the
@@ -140,14 +140,14 @@
    literate programming, the specification of derived instances, and
    pragmas supported by most Haskell compilers.</p>
   -->
-  <p>��Ǥϸ��ڤ��ʤ��ä�����
-   <a href="basic.html#basic-types-and-classes">6</a> �ϤǤ� Haskell ��
-   ɸ����Ȥ߹��ޤ�Ƥ��뷿�ȷ����饹�ˤĤ��ơ�
-   <a href="io-13.html#io">7</a> �ϤǤ� Haskell �� I/O (���ʤ����
-   Haskell �Υץ������ϤɤΤ褦�ˤ��Ƴ����������̿����뤫)�ˤĤ��Ƶ���
-   ���롣�ޤ��������Ĥ��ξϤǤϡ��ץ��塼�ɡ���ݹ�ʸ��ʸ��Ū�ץ�����
-   �ߥ󥰡�Ƴ�Х��󥹥��󥹤λ��͡��ؤ�ɤ� Haskell ����ѥ���ǥ��ݡ���
-   ����Ƥ���ץ饰�ޤˤĤ����������롣
+  <p>上では言及しなかったが、
+   <a href="basic.html#basic-types-and-classes">6</a> 章では Haskell に
+   標準で組み込まれている型と型クラスについて、
+   <a href="io-13.html#io">7</a> 章では Haskell の I/O (すなわち、
+   Haskell のプログラムはどのようにして外の世界と通信するか)について議論
+   する。また、いくつかの章では、プレリュード、具象構文、文芸的プログラ
+   ミング、導出インスタンスの仕様、殆んどの Haskell コンパイラでサポート
+   されているプラグマについて説明する。
   </p>
   <!--
   <p> Examples of Haskell program fragments in running text are given in
@@ -165,24 +165,24 @@
    such as <i>e</i> for expressions, <i>d</i> for declarations, <i>t</i>
    for types, etc.<a name="intro-kernel"></a></p>
   -->
-  <p>���Υƥ����ȤǤ� Haskell �Υץ����������Ҥϡ������ץ饤���ե����
-   �Ǽ�����<tt><br />
+  <p>このテキストでは Haskell のプログラムの断片は、タイプライタフォント
+   で示す。<tt><br />
    <br />
    &nbsp;let&nbsp;x&nbsp;=&nbsp;1<br />
    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;z&nbsp;=&nbsp;x+y<br />
    &nbsp;in&nbsp;&nbsp;z+1<br />
    <br />
-   </tt>Haskell �Υ����ɤ�Ǥ�դ���ʬ��ɽ������ץ���������ҤΡַ�פ�
+   </tt>Haskell のコードの任意の部分を表現するプログラム断片の「穴」は
    <tt>if</tt><i>  e</i><sub><i>1</i></sub><i> </i><tt>then</tt>
    <i>  e</i><sub><i>2</i></sub><i> </i><tt>else</tt>
-   <i>  e</i><sub><i>3</i></sub> �Τ褦�˥�����å��ǽ񤯡�
-   ����Ū�ˤϡ�������å���̾���ϥˡ���˥å��ˤʤäƤ��ơ�<i>e</i> �ϼ�
-   ��<i>d</i> �������<i>t</i> �Ϸ���ɽ�魯��
+   <i>  e</i><sub><i>3</i></sub> のようにイタリックで書く。
+   一般的には、イタリックの名前はニーモニックになっていて、<i>e</i> は式
+   を、<i>d</i> は宣言を、<i>t</i> は型を表わす。
   </p>
 
   <p><a name="sect1.2"></a></p>
   <!--<h3>1.2<tt>&nbsp;&nbsp;</tt>The Haskell Kernel</h3>-->
-  <h3>1.2<tt>&nbsp;&nbsp;</tt>Haskell �Υ����ͥ�</h3>
+  <h3>1.2<tt>&nbsp;&nbsp;</tt>Haskell のカーネル</h3>
   <!--
   <p> Haskell has adopted many of the convenient syntactic structures that
    have become popular in functional programming. In this Report, the
@@ -191,11 +191,11 @@
    is a program written in a small subset of Haskell that we call the
    Haskell <i>kernel</i>.</p>
   -->
-  <p>Haskell �ϴؿ��ץ�����ߥ󥰤������ǿ͵��ˤʤä�¿���������ʹ�ʸ��
-   ¤����Ѥ��������Υ�ݡ��ȤǤϡ��������ä����ṽʸ�ΰ�̣����ñ���
-  �������Ѵ����뤳�Ȥ�Ϳ���롣�⤷���������Ѵ����ɤξ��ˤ⡢����­��
-  ��Ŭ�Ѥ����С���̤� Haskell ��<em>�����ͥ�</em>�ȸƤ� Haskell �ξ�
-  �������֥��åȤǽ񤫤줿�ץ������ˤʤ롣</p> 
+  <p>Haskell は関数プログラミングの世界で人気になった多くの便利な構文構
+   造を採用した。このレポートでは、そういった糖衣構文の意味をより単純な
+  構成に変換することで与える。もし、これらの変換がどの場合にも、過不足な
+  く適用されれば、結果は Haskell の<em>カーネル</em>と呼ぶ Haskell の小
+  さいサブセットで書かれたプログラムになる。</p> 
   <!--
   <p> Although the kernel is not formally specified, it is essentially a
    slightly sugared variant of the lambda calculus with a straightforward
@@ -204,14 +204,14 @@
    facilitates reasoning about Haskell programs and provides useful
    guidelines for implementors of the language.<a name="errors"></a></p>
   -->
-  <p>���Υ����ͥ�Ϸ���Ū�˻��Ͳ�����ƤϤ��ʤ������ܼ�Ū�ˤϡ�ľ��Ū��
-   ɽ��Ū��̣�����ĥ����׻��˾������ṽʸ��Ĥ����廊����ΤǤ��롣
-   ���줾��ι�ʸ��¤�Υ����ͥ�ؤ��Ѵ��ϡ����ι�ʸ��Ƴ����������Ϳ���롣
+  <p>このカーネルは形式的に仕様化されてはいないが、本質的には、直接的な
+   表示的意味論をもつラムダ計算に少し糖衣構文をつけくわえたものである。
+   それぞれの構文構造のカーネルへの変換は、その構文を導入した時に与える。
    </p>
 
   <p><a name="sect1.3"></a></p>
   <!--<h3>1.3<tt>&nbsp;&nbsp;</tt>Values and Types</h3>-->
-  <h3>1.3<tt>&nbsp;&nbsp;</tt>�ͤȷ�</h3>
+  <h3>1.3<tt>&nbsp;&nbsp;</tt>値と型</h3>
   <!--
   <p> An expression evaluates to a <i>value</i> and has a static
    <i>type</i>. Values and types are not mixed in Haskell . However, the
@@ -220,12 +220,12 @@
    type structure) but also <i>ad hoc</i> polymorphism, or
    <i>overloading</i> (using <i>type classes</i>).</p>
   -->
-  <p>��Ĥμ���ɾ�������Ȱ�Ĥ�<em>��</em>�Ȥʤꡢ��Ĥμ��ϰ�Ĥ���Ū
-   ��<em>��</em>����ġ�Haskell �Ǥ��ͤȷ����ޤ������ˤʤ뤳�ȤϤʤ�����
-   �����ʤ��顢�������ƥ�ǤϤ����Ĥ�μ�������Ѽ�����Υǡ����������
-   �Ƥ��롣�ޤ���(����Ū�� Hindley-Milner �η���¤����Ѥ���)�ѥ�᡼��
-   ¿�����Ф���ǤϤʤ���<em>���ɥۥå�</em>¿�������뤤��(�����饹���
-   �Ѥ���)<em>¿�����</em>�������Ƥ��롣</p>
+  <p>一つの式は評価されると一つの<em>値</em>となり、一つの式は一つの静的
+   な<em>型</em>を持つ。Haskell では値と型がまぜこぜになることはない。し
+   かしながら、型システムではいくつもの種類の利用者定義のデータ型を許し
+   ている。また、(伝統的な Hindley-Milner の型構造を使用した)パラメータ
+   多相性ばかりではなく、<em>アドホック</em>多相性あるいは(型クラスを使
+   用した)<em>多重定義</em>も許されている。</p>
   <!--
   <p> Errors in Haskell are semantically equivalent to _|_. Technically,
    they are not distinguishable from nontermination, so the language
@@ -234,15 +234,15 @@
    errors. See Section <a href="exps.html#basic-errors">3.1</a>.
   </p>
   -->
-  <p>Haskell �ˤ����륨�顼�ϰ�̣��Ū�ˤ� _|_ ��Ʊ���Ǥ��롣����Ū�ˤϥ�
-   �顼������ߤȶ��̤��Ĥ��ʤ��Τǡ�Haskell �Ǥϥ��顼���Ф��뤤�ϥ��顼
-   ȯ������ư��ˤĤ��Ƥε����ϸ���ˤϴޤޤʤ���������󡢼����Ǥϥ��顼
-   �˴ؤ���ͭ�Ѥʾ�����󶡤��褦�Ȥ��뤳�Ȥˤʤ�����</p>
+  <p>Haskell におけるエラーは意味論的には _|_ と同等である。技術的にはエ
+   ラーは非停止と区別がつかないので、Haskell ではエラー検出あるいはエラー
+   発生時の動作についての機構は言語には含まない。もちろん、実装ではエラー
+   に関して有用な情報を提供しようとすることになろう。</p>
 
   <p><a name="namespaces"></a></p>
   <p><a name="sect1.4"></a></p>
   <!--<h3>1.4<tt>&nbsp;&nbsp;</tt>Namespaces</h3>-->
-  <h3>1.4<tt>&nbsp;&nbsp;</tt>̾������</h3>
+  <h3>1.4<tt>&nbsp;&nbsp;</tt>名前空間</h3>
   <!--
   <p> There are six kinds of names in Haskell : those for <i>variables</i>
    and <i>constructors</i> denote values; those for <i>type variables</i>,
@@ -250,10 +250,10 @@
    related to the type system; and <i>module names</i> refer to modules.
    There are two constraints on naming:</p>
   -->
-  <p>Haskell �ˤ� 6 �����̾�������롣<em>�ѿ�̾</em>��<em>������̾</em>
-   ���ͤ�ɽ����<em>���ѿ�̾</em>��<em>��������̾</em>��<em>�����饹̾</em>
-   �Ϸ������ƥ�˴ؤ����Τؤλ��ȤǤ��ꡢ<em>�⥸�塼��̾</em>�ϥ⥸�塼
-   ��ؤλ��ȤǤ��롣̾����Ĥ���ˤ����äƤϡ��ʲ��Τ褦�����󤬤��롣
+  <p>Haskell には 6 種類の名前がある。<em>変数名</em>、<em>構成子名</em>
+   は値を表し、<em>型変数名</em>、<em>型構成子名</em>、<em>型クラス名</em>
+   は型システムに関わる実体への参照であり、<em>モジュール名</em>はモジュー
+   ルへの参照である。名前をつけるにあたっては、以下のような制約がある。
   </p>
   <ol>
    <!--
@@ -261,22 +261,22 @@
     with lowercase letters or underscore; the other four kinds of names are
     identifiers beginning with uppercase letters.</li>
    -->
-   <li>�ѿ�̾�ȷ��ѿ�̾�Ͼ�ʸ�����뤤�ϥ�������������ǤϤ��ޤ뼱�̻ҤǤ�
-    �롣����ʳ��� 4 �����̾������ʸ���ǤϤ��ޤ뼱�̻ҤǤ��롣</li>
+   <li>変数名と型変数名は小文字あるいはアンダースコアではじまる識別子であ
+    る。それ以外の 4 種類の名前は大文字ではじまる識別子である。</li>
    <!--
    <li>An identifier must not be used as the name of a type constructor and
     a class in the same scope.</li>
    -->
-   <li>�ҤȤĤμ��̻Ҥ�Ʊ��ͭ���ϰϤǤϷ�������̾����ӥ��饹̾�Ȥ��ƻ���
-    ���ƤϤʤ�ʤ���</li> 
+   <li>ひとつの識別子は同じ有効範囲では型構成子名およびクラス名として使用
+    してはならない。</li> 
   </ol>
   <!--
   <p>These are the only constraints; for example, <tt>Int</tt> may
    simultaneously be the name of a module, class, and constructor within a
    single scope.</p>
   -->
-  <p>���� 2 �Ĥ���������Ǥ��롣���Ȥ��С�<tt>Int</tt> �ϰ�Ĥ�ͭ���ϰ�
-   �Τʤ���Ʊ���˥⥸�塼��̾�����饹̾��������̾�ˤʤ뤳�Ȥ��Ǥ��롣
+  <p>この 2 つだけが制約である。たとえば、<tt>Int</tt> は一つの有効範囲
+   のなかで同時にモジュール名、クラス名、構成子名になることができる。
   </p> 
 
   <hr />

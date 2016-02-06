@@ -1,6 +1,7 @@
-<html>
+<!DOCTYPE html>
+<html lang="ja">
  <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
+  <meta charset="utf-8">
   <title>The Haskell 98 Library Report: System functions</title>
  </head>
  <body bgcolor="#ffffff">
@@ -12,7 +13,7 @@
   <hr />
   <p> <a name="sect23"></a></p>
   <!--<h2>23<tt>&nbsp;&nbsp;</tt>System Functions</h2>-->
-  <h2>23<tt>&nbsp;&nbsp;</tt>�����ƥ�ؿ�</h2>
+  <h2>23<tt>&nbsp;&nbsp;</tt>システム関数</h2>
   <p>
   <table border="2" cellpadding="3">
    <tr>
@@ -43,8 +44,8 @@
    operating system.</p>
   -->
   <p>
-   ���Υ饤�֥��ϥץ������ȥ��ڥ졼�ƥ��󥰥����ƥ�Υ��󥿥饯����
-   ��򵭽Ҥ����ΤǤ��롣 
+   このライブラリはプログラムとオペレーティングシステムのインタラクショ
+   ンを記述するものである。 
   </p>
   <!--
   <p> Any <tt>System</tt> operation could raise an
@@ -54,11 +55,11 @@
    support an operation it must raise an <tt>isIllegalOperation</tt>.</p>
   -->
   <p>
-   ���٤Ƥ� <tt>System</tt> ���� <a href="io.html#IOError">21.1</a> ��
-   �ǽҤ٤��褦�� <tt>isIllegalOperationError</tt> ��ȯ�������롣�����
-   ���Τ��٤Ƥε�����륨�顼�ϰʲ��˵��Ҥ��롣���������򥵥ݡ��Ȥ���
-   �����ˤϡ�<tt>isIllegalOperationError</tt> ��ȯ�������ʤ���Фʤ��
-   �����Ȥ��ä����դ��뤳�ȡ� 
+   すべての <tt>System</tt> 操作は <a href="io.html#IOError">21.1</a> 節
+   で述べたように <tt>isIllegalOperationError</tt> を発生しうる。それ以
+   外のすべての許されるエラーは以下に記述する。実装が操作をサポートしな
+   い場合には、<tt>isIllegalOperationError</tt> を発生させなければならな
+   いことに特に注意すること。 
   </p>
   <!--
   <p> The <tt>ExitCode</tt> type defines the exit codes that a program can
@@ -69,12 +70,12 @@
    (for instance, 0 on a POSIX-compliant system).</p>
   -->
   <p>
-   <tt>ExitCode</tt> ���ϥץ�����ब�֤����ȤΤǤ���æ�Х����ɤ������
-   �롣<tt>ExitSuccess</tt> ������΢�˽�λ�������Ȥ򼨤���
-   <tt>ExitFailure </tt><i>code</i> �ϥץ�����ब�� <i>code</i> �ȤȤ�
-   �˼��Ԥ������Ȥ򼨤���<i>code</i> �����Τʲ��ϥ��ڥ졼�ƥ��󥰥���
-   �ƥ��¸�Ǥ��롣�ä� <i>code</i> ���ͤΤ����Ĥ��϶ؤ����Ƥ��롣(��
-   �Ȥ��С� 0 �� POSIX ���Υ����ƥ�Ǥ϶ؤ����Ƥ��롣)
+   <tt>ExitCode</tt> 型はプログラムが返すことのできる脱出コードを定義す
+   る。<tt>ExitSuccess</tt> は成功裏に終了したことを示す。
+   <tt>ExitFailure </tt><i>code</i> はプログラムが値 <i>code</i> ととも
+   に失敗したことを示す。<i>code</i> の正確な解釈はオペレーティングシス
+   テム依存である。特に <i>code</i> の値のいくつかは禁じられている。(た
+   とえば、 0 は POSIX 準拠のシステムでは禁じられている。)
   </p>
   <!--
   <p> Computation <tt>getArgs</tt> returns a list of the program's command
@@ -87,13 +88,13 @@
    operating system processes the command <i>cmd</i>.</p>
   -->
   <p>
-   <tt>getArgs</tt> �׻��ϥץ������Υ��ޥ�ɥ饤������Υꥹ��(�ץ���
-   ���̾�ϴޤޤʤ�)���֤���<tt>getProgName</tt> �׻��ϵ�ư���줿�ץ���
-   ����̾�����֤���<tt>getEnv</tt> <i>var</i> �ϴĶ��ѿ� <i>var</i> ��
-   �ͤ��֤����⤷���ѿ� <i>var</i> ���������Ƥ��ʤ���С�
-   <tt>isDoesNotExistError</tt> �㳰��ȯ�����롣<tt>system</tt>
-   <i>cmd</i> �׻��ϥ��ڥ졼�ƥ��󥰥����ƥ�Υץ�������<i>cmd</i> ���
-   �Ԥ����Ȥ��ν�λ�����ɤ��֤���
+   <tt>getArgs</tt> 計算はプログラムのコマンドライン引数のリスト(プログ
+   ラム名は含まない)を返す。<tt>getProgName</tt> 計算は起動されたプログ
+   ラムの名前を返す。<tt>getEnv</tt> <i>var</i> は環境変数 <i>var</i> の
+   値を返す。もし、変数 <i>var</i> が定義されていなければ、
+   <tt>isDoesNotExistError</tt> 例外を発生する。<tt>system</tt>
+   <i>cmd</i> 計算はオペレーティングシステムのプロセスが<i>cmd</i> を実
+   行したときの終了コードを返す。
   </p>
   <!--
   <p> Computation <tt>exitWith</tt> <i>code</i> terminates the program,
@@ -110,17 +111,17 @@
    by <tt>catch</tt>.</p>
   -->
   <p>
-   <tt>exitWith</tt> <i>code</i> �ϥץ�������λ���Ƥ��Υץ�������
-   �ƤӽФ����� <i>code</i> ���֤����ץ�������λ���������褺�����ץ�
-   ���뤤�ϥ��ߥ����������֤Υϥ�ɥ�򥯥��������롣�ƤӽФ�¦�Ϲ�����
-   �褦�˥꥿���󥳡��ɤ��᤹�뤳�Ȥ���ǽ�Ǥ��뤬���ץ��������̾��
-   ��λ�������ˤ�<tt>ExitSuccess</tt> ���֤��ʤ��ƤϤʤ�ʤ����ޤ���
-   <tt>ExitFailure&nbsp;</tt><i>n</i> �ϥץ�����ब�����Բ�ǽ������˽�
-   ���路�����Ȥ��̣���ʤ���Фʤ�ʤ���<tt>exitFailure</tt> ���ͤ�
-   <tt>exitWith&nbsp;(ExitFailure&nbsp;</tt><i>exitfail</i><tt>)</tt> ��
-   �ͤ���������<i>exitfail</i> �ϼ�����¸�Ǥ��롣<tt>exitWith</tt> ��
-   I/O ��ʥ���Υ��顼�ϥ�ɥ�󥰤�Х��ѥ�����<tt>catch</tt> �ˤ����
-   ª���Բ�ǽ�Ǥ��롣
+   <tt>exitWith</tt> <i>code</i> はプログラムを終了してそのプログラムの
+   呼び出し元に <i>code</i> を返す。プログラムを終了する前に先ずオープン
+   あるいはセミクローズ状態のハンドルをクローズする。呼び出し側は好きな
+   ようにリターンコードを解釈することが可能であるが、プログラムは通常に
+   完了した場合には<tt>ExitSuccess</tt> を返さなくてはならない。また、
+   <tt>ExitFailure&nbsp;</tt><i>n</i> はプログラムが修復不可能な問題に出
+   くわしたことを意味しなければならない。<tt>exitFailure</tt> の値は
+   <tt>exitWith&nbsp;(ExitFailure&nbsp;</tt><i>exitfail</i><tt>)</tt> の
+   値に等しく、<i>exitfail</i> は実装依存である。<tt>exitWith</tt> は
+   I/O モナド中のエラーハンドリングをバイパスし、<tt>catch</tt> による捕
+   捉は不可能である。
   </p>
   <!--
   <p> If a program terminates as a result of calling <tt>error</tt> or
@@ -134,11 +135,11 @@
   </p>
   -->
   <p>
-   �ץ�����ब <tt>error</tt> ��Ƥ����̤��뤤���ͤ� <i>_|_</i> �ˤʤ�
-   �ƥץ�����ब��λ�������ˤ� <tt>exitFailure</tt> �׻���Ʊ���ΰ���
-   �Ȥʤ롣�����ǤϤʤ���硢�ץ������ <i>p</i> ������Ū��
-   <tt>exitWith</tt> ��Ƥ֤��Ȥʤ���λ������硢���ΰ����ϰʲ��η׻���
-   Ʊ���Ǥ��롣
+   プログラムが <tt>error</tt> を呼んだ結果あるいは値が <i>_|_</i> になっ
+   てプログラムが終了した場合には <tt>exitFailure</tt> 計算と同等の扱い
+   となる。そうではない場合、プログラム <i>p</i> が明示的に
+   <tt>exitWith</tt> を呼ぶことなく終了した場合、その扱いは以下の計算と
+   同じである。
    <tt><br />
    (</tt><i>p</i><tt>&nbsp;&gt;&gt;&nbsp;exitWith&nbsp;ExitSuccess)&nbsp;`catch`&nbsp;\&nbsp;_&nbsp;-&gt;&nbsp;exitFailure
    <br />

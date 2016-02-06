@@ -1,6 +1,7 @@
-<html>
+<!DOCTYPE html>
+<html lang="ja">
  <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
+  <meta charset="utf-8">
   <title>The Haskell 98 Library Report: Numerics</title>
  </head>
 
@@ -14,7 +15,7 @@
 
   <p><a name="lib-numeric"></a><a name="sect14"></a></p>
   <!--<h2>14<tt>&nbsp;&nbsp;</tt>Numeric</h2>-->
-  <h2>14<tt>&nbsp;&nbsp;</tt>����</h2>
+  <h2>14<tt>&nbsp;&nbsp;</tt>数値</h2>
   <p>
   <table border="2" cellpadding="3">
    <tr>
@@ -61,8 +62,8 @@
    used in the standard Prelude.</p>
   -->
   <p>
-   ���Υ饤�֥��ˤϳƼ�δؿ����ޤޤ줤�롣����¿����
-   ɸ��ץ��塼�ɤǻ��Ѥ���Ƥ��롣
+   このライブラリには各種の関数が含まれいる。その多くが
+   標準プレリュードで使用されている。
   </p>
   <!--
   <p> In what follows, recall the following type definitions from the
@@ -74,8 +75,8 @@
    </tt></p>
   -->
   <p>
-   ���Τ��ȤǤϡ�<tt>Prelude</tt> ���������Ƥ���ʲ��η������פ��Ф�
-   ���ȡ�
+   このあとでは、<tt>Prelude</tt> で定義されている以下の型定義を思い出す
+   こと。
    <tt><br />
    &nbsp;<br />
    &nbsp;&nbsp;type&nbsp;ShowS&nbsp;=&nbsp;String&nbsp;-&gt;&nbsp;String<br />
@@ -86,7 +87,7 @@
 
   <p> <a name="sect14.1"></a></p>
   <!--<h3>14.1<tt>&nbsp;&nbsp;</tt>Showing functions</h3>-->
-  <h3>14.1<tt>&nbsp;&nbsp;</tt>ɽ���ؿ�</h3>
+  <h3>14.1<tt>&nbsp;&nbsp;</tt>表示関数</h3>
   <!--
   <p>
   <ul>
@@ -158,59 +159,59 @@
      <p>
       <tt>showSigned&nbsp;::&nbsp;(Real&nbsp;a)&nbsp;=&gt;&nbsp;(a&nbsp;-&gt;&nbsp;ShowS)&nbsp;-&gt;&nbsp;Int&nbsp;-&gt;&nbsp;a&nbsp;-&gt;&nbsp;ShowS</tt>
       <br />
-      �ϡ���β�ǽ���Τ��뷿 <tt>a</tt> �� <tt>Real</tt> �ͤ�ʸ�����
-      �Ѵ����롣<i>(</i><tt>showSigned</tt><i> show prec val)</i> �θƤ�
-      �Ф��ˤ����ơ�<i>val</i> ��ɽ��������ͤǤ��ꡢ<i>prec</i> �Ϥ���
-      ��Ϥ�ʸ̮��ͥ���٤ǡ�<i>show</i> ����椬�դ��ʤ��ͤ�ɽ���Ǥ���
-      �ؿ��Ǥ��롣
+      は、負の可能性のある型 <tt>a</tt> の <tt>Real</tt> 値を文字列に
+      変換する。<i>(</i><tt>showSigned</tt><i> show prec val)</i> の呼び
+      出しにおいて、<i>val</i> は表示される値であり、<i>prec</i> はそれ
+      を囲む文脈の優先度で、<i>show</i> は符号が付かない値を表示できる
+      関数である。
      </p>
     </li>
     <li>
      <p>
       <tt>showIntAtBase&nbsp;::&nbsp;Integral&nbsp;a&nbsp;=&gt;&nbsp;a&nbsp;-&gt;&nbsp;(Int&nbsp;-&gt;&nbsp;Char)&nbsp;-&gt;&nbsp;a&nbsp;-&gt;&nbsp;ShowS</tt>
       <br />
-      ��<em>�����</em> <tt>Integral</tt> ���饹�ο��ͤ���1�����ǻ��ꤵ
-      �줿�����ɽ�����롥��2������ɽ�����뤿���ʸ������ꤹ�롥
+      は<em>非負の</em> <tt>Integral</tt> クラスの数値を第1引数で指定さ
+      れた基数で表示する．第2引数で表示するための文字を指定する．
     </p>
    </li>
    <li><tt>showInt,&nbsp;showOct,&nbsp;showHex&nbsp;::&nbsp;Integral&nbsp;a&nbsp;=&gt;&nbsp;a&nbsp;-&gt;&nbsp;ShowS</tt>
     <br />
-      �ϡ�<em>�����</em> <tt>Integral</tt> ���饹�ο��ͤ򤽤줾�졢10 �ʡ�
-      8 �ʡ�16 �ʤ�ɽ�����롣</p>
+      は、<em>非負の</em> <tt>Integral</tt> クラスの数値をそれぞれ、10 進、
+      8 進、16 進で表示する。</p>
     </li>
     <li>
      <p>
       <tt>showFFloat,&nbsp;showEFloat,&nbsp;showGFloat</tt> <br />
       <tt>&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;(RealFloat&nbsp;a)&nbsp;=&gt;&nbsp;Maybe&nbsp;Int&nbsp;-&gt;&nbsp;a&nbsp;-&gt;&nbsp;ShowS</tt>
       <br />
-      ������ 3 �Ĥδؿ��Ϥ��٤ơ������ <tt>RealFloat</tt> ���饹��
-      �ͤ�ɽ�����롣</p>
+      これらの 3 つの関数はすべて、符号付 <tt>RealFloat</tt> クラスの
+      値を表示する。</p>
      <p>
       <ul>
-       <li><tt>showFFloat</tt> ��ɸ��ξ���ɽ��(���Ȥ��С�
-        <tt>245000</tt>, <tt>0.0015</tt>) �˻��Ѥ��롣</li>
-       <li><tt>showEFloat</tt> �ϲʳ�ɽ��(�ؿ�ɽ��) (���Ȥ��С�
-        <tt>2.45e2</tt>, <tt>1.5e-3</tt>) �˻��Ѥ��롣</li>
-       <li><tt>showGFloat</tt> �ϡ������ͤ� <tt>0.1</tt> ��
-        <tt>9,999,999</tt> �δ֤ˤ�����ˤ�ɸ��ξ���ɽ����
-        ����ʳ��ξ��ˤϲʳ�ɽ���˻��Ѥ��롣</li>
+       <li><tt>showFFloat</tt> は標準の小数表記(たとえば、
+        <tt>245000</tt>, <tt>0.0015</tt>) に使用する。</li>
+       <li><tt>showEFloat</tt> は科学表記(指数表記) (たとえば、
+        <tt>2.45e2</tt>, <tt>1.5e-3</tt>) に使用する。</li>
+       <li><tt>showGFloat</tt> は、絶対値が <tt>0.1</tt> と
+        <tt>9,999,999</tt> の間にある場合には標準の小数表記、
+        それ以外の場合には科学表記に使用する。</li>
       </ul>
      </p>
      <p>
-      <i>(</i><tt>showEFloat</tt><i> digs val)</i> �θƤӽФ��ˤ����ơ�
-      <i>digs</i> �� <tt>Nothing</tt> �ʤ顢�����ͤϴݤ�ʤ���ɽ�����졢
-      <i>digs</i> �� <tt>Just</tt> <i>d</i> �ʤ�С��������ʲ���
-      ¿���Ƥ� <i>d</i> ���ɽ������롣<i>digs</i> ������¾�� 2 �Ĥ�
-      �ؿ��ǤǤ�Ʊ�ͤ�Ŭ�Ѥ���롣
+      <i>(</i><tt>showEFloat</tt><i> digs val)</i> の呼び出しにおいて、
+      <i>digs</i> が <tt>Nothing</tt> なら、その値は丸めなしで表示され、
+      <i>digs</i> が <tt>Just</tt> <i>d</i> ならば、小数点以下は
+      多くても <i>d</i> 桁で表示される。<i>digs</i> 引数は他の 2 つの
+      関数ででも同様に適用される。
      </p>
     </li>
     <li>
      <p>
       <tt>floatToDigits&nbsp;&nbsp;::&nbsp;(RealFloat&nbsp;a)&nbsp;=&gt;&nbsp;Integer&nbsp;-&gt;&nbsp;a&nbsp;-&gt;&nbsp;([Int],&nbsp;Int)</tt>
       <br />
-      �ϴ�����ͤȤ򡢳Ʒ�Υꥹ�ȤȻؿ���ɽ�����롣<tt>floatToDigits</tt>
+      は基数と値とを、各桁のリストと指数で表現する。<tt>floatToDigits</tt>
       b r = <tt>([</tt>d_1, d_2, ... d_n<tt>],&nbsp;</tt>e<tt>) </tt> 
-      �ʤ�С��ʲ����������ݻ�����롣
+      ならば、以下の性質が維持される。
      </p>
      <p>
       <ul>
@@ -228,7 +229,7 @@
   </p>
   <p> <a name="sect14.2"></a></p>
   <!--<h3>14.2<tt>&nbsp;&nbsp;</tt>Reading functions</h3>-->
-  <h3>14.2<tt>&nbsp;&nbsp;</tt>�ɤ߹��ߴؿ�</h3>
+  <h3>14.2<tt>&nbsp;&nbsp;</tt>読み込み関数</h3>
   <!--
   <p>
   <ul>
@@ -275,41 +276,41 @@
     <p>
      <tt>readSigned&nbsp;::&nbsp;(Real&nbsp;a)&nbsp;=&gt;&nbsp;ReadS&nbsp;a&nbsp;-&gt;&nbsp;ReadS&nbsp;a</tt>
      <br />
-     �ϡ������դ��ʤ����Ѥ��ɤ߹��ߴؿ���Ϳ������ȡ�
-     <em>����դ�</em>�� <tt>Real</tt> ���饹���ͤ��ɤ߹��ࡣ
+     は、符号の付かない値用の読み込み関数を与えられると、
+     <em>符号付き</em>の <tt>Real</tt> クラスの値を読み込む。
     </p>
    </li>
    <li>
     <p>
      <tt>readInt&nbsp;::&nbsp;(Integral&nbsp;a)&nbsp;=&gt;&nbsp;a&nbsp;-&gt;&nbsp;(Char-&gt;Bool)&nbsp;-&gt;&nbsp;(Char-&gt;Int)&nbsp;-&gt;&nbsp;ReadS&nbsp;a</tt>
      <br />
-     �ϡ�<em>�����դ��ʤ�</em> <tt>Integral</tt> ���饹���ͤ�Ǥ�դ�
-     ������ɤ߹��ࡣ<i>(</i><tt>readInt</tt><i> base isdig d2i)</i> ��
-     �ƤӽФ��ˤ����ơ�<i>base</i> �ϴ���Ǥ��ꡢ<i>isdig</i> �Ϥ���
-     ����Ȥ��������ʿ����Ǥ��뤫�ɤ�����Ƚ�ꤹ��Ҹ�Ǥ��롣�ޤ���
-     <i>d2i</i> �������ʿ����� <tt>Int</tt> ���Ѵ����롣
+     は、<em>符号の付かない</em> <tt>Integral</tt> クラスの値を任意の
+     基数で読み込む。<i>(</i><tt>readInt</tt><i> base isdig d2i)</i> の
+     呼び出しにおいて、<i>base</i> は基数であり、<i>isdig</i> はその
+     基数として正当な数字であるかどうかを判定する述語である。また、
+     <i>d2i</i> は正当な数字を <tt>Int</tt> へ変換する。
     </p>
    </li>
    <li>
     <p>
      <tt>readFloat&nbsp;::&nbsp;(RealFrac&nbsp;a)&nbsp;=&gt;&nbsp;ReadS&nbsp;a</tt>
      <br />
-     �ϡ��ʳص�ˡ��ɽ�����줿<em>�����դ��ʤ�</em> <tt>RealFrac</tt> 
-     ���饹���ͤ��ɤ߹��ࡣ
+     は、科学記法で表現された<em>符号の付かない</em> <tt>RealFrac</tt> 
+     クラスの値を読み込む。
     </p>
    </li>
    <li>
     <p>
      <tt>readDec,&nbsp;readOct,&nbsp;readHex&nbsp;::&nbsp;(Integral&nbsp;a)&nbsp;=&gt;&nbsp;ReadS&nbsp;a</tt>
      <br />
-     �ϡ����줾�졢10 �ʡ�8 �ʡ�16 �ʵ�ˡ�������դ��ʤ����ͤ��ɤ߹��ࡣ
-     16 �ʤξ��ˤϡ���ʸ������ʸ���Τɤ���Ǥ�褤��
+     は、それぞれ、10 進、8 進、16 進記法の符号の付かない数値を読み込む。
+     16 進の場合には、大文字、小文字のどちらでもよい。
     </p>
    </li>
    <li>
     <p>
      <tt>lexDigits&nbsp;::&nbsp;ReadS&nbsp;String</tt><br />
-     �� 10 �ʿ��ζ��ǤϤʤ�ʸ������ɤ߹��ࡣ
+     は 10 進数の空ではない文字列を読み込む。
     </p>
    </li>
   </ul>
@@ -320,14 +321,14 @@
    naming is a historical accident.)</p>
   -->
   <p>
-   (���ա�<tt>readInt</tt> �� <tt>showIntAtBase</tt> �ȡ����Сפ�ʤ���
-   <tt>readDec</tt> �� <tt>showInt</tt> �ȡ����Сפ�ʤ���̾�����������
-   ���Ū��ͳ�ˤ�롣)
+   (注意：<tt>readInt</tt> は <tt>showIntAtBase</tt> と「双対」をなし、
+   <tt>readDec</tt> は <tt>showInt</tt> と「双対」をなす。名前の不整合は
+   歴史的理由による。)
   </p>
 
   <p> <a name="sect14.3"></a></p>
   <!--<h3>14.3<tt>&nbsp;&nbsp;</tt>Miscellaneous</h3>-->
-  <h3>14.3<tt>&nbsp;&nbsp;</tt>����¾</h3>
+  <h3>14.3<tt>&nbsp;&nbsp;</tt>その他</h3>
   <!--
   <p>
   <ul>
@@ -341,15 +342,15 @@
   <ul>
    <li>
     <tt>fromRat&nbsp;::&nbsp;(RealFloat&nbsp;a)&nbsp;=&gt;&nbsp;Rational&nbsp;-&gt;&nbsp;a</tt><br />
-    �ϡ�<tt>Rational</tt> ���饹���ͤ�Ǥ�դ� <tt>RealFlat</tt> ��
-    ���饹���ͤ��Ѵ����롣
+    は、<tt>Rational</tt> クラスの値を、任意の <tt>RealFlat</tt> の
+    クラスの値に変換する。
    </li>
   </ul>
   </p>
 
   <p> <a name="sect14.4"></a></p>
   <!--<h3>14.4<tt>&nbsp;&nbsp;</tt>Library <tt>Numeric</tt></h3>-->
-  <h3>14.4<tt>&nbsp;&nbsp;</tt><tt>Numeric</tt> �饤�֥��</h3>
+  <h3>14.4<tt>&nbsp;&nbsp;</tt><tt>Numeric</tt> ライブラリ</h3>
 
   <p><tt><br />
    module&nbsp;Numeric(fromRat,<br />

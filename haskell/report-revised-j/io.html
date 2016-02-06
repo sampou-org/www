@@ -1,6 +1,7 @@
-<html>
+<!DOCTYPE html>
+<html lang="ja">
  <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
+  <meta charset="utf-8">
   <title>The Haskell 98 Library Report: Input/Output</title>
  </head>
  <body bgcolor="#ffffff">
@@ -12,7 +13,7 @@
   <hr />
   <p><a name="IO"></a><a name="sect21"></a></p>
   <!--<h2>21<tt>&nbsp;&nbsp;</tt>Input/Output</h2>-->
-  <h2>21<tt>&nbsp;&nbsp;</tt>������</h2>
+  <h2>21<tt>&nbsp;&nbsp;</tt>入出力</h2>
 
   <p>
   <table border="2" cellpadding="3">
@@ -135,27 +136,27 @@
    file systems are contained in the <tt>Directory</tt> library.</p>
   -->
   <p>
-   Haskell �ˤ������Ѥ������ʥ� I/O �����ƥ�ˤĤ��Ƥϡ�Haskell
-   �����ݡ��Ȥǵ��Ҥ���Ƥ��롣<tt>print</tt> �Τ褦�˰��̤ˤ褯
-   �Ȥ��Ƥ��� I/O �ؿ���ɸ�� Prelude �ΰ����ˤʤäƤ��ꡢ����Ū��
-   ����ݡ��Ȥ���ɬ�פϤʤ������Υ饤�֥��Ϥ����٤� I/O ��
-   �ޤ�Ǥ��롣�ե����륷���ƥ��δ�Ϣ���Τ����Ĥ���
-   <tt>Directory</tt> �饤�֥��˴ޤޤ�Ƥ��롣
+   Haskell において用いられるモナド I/O システムについては、Haskell
+   言語レポートで記述されている。<tt>print</tt> のように一般によく
+   使われている I/O 関数は標準 Prelude の一部になっており、明示的に
+   インポートする必要はない。このライブラリはより高度な I/O を
+   含んでいる。ファイルシステム上の関連操作のいくつかは
+   <tt>Directory</tt> ライブラリに含まれている。
   </p>
 
   <p><a name="IOError"></a></p>
   <p> <a name="sect21.1"></a></p>
   <!--<h3>21.1<tt>&nbsp;&nbsp;</tt>I/O Errors</h3>-->
-  <h3>21.1<tt>&nbsp;&nbsp;</tt>I/O ���顼</h3>
+  <h3>21.1<tt>&nbsp;&nbsp;</tt>I/O エラー</h3>
   <!--
   <p>Errors of type <tt>IOError</tt> are used by the I/O monad. This is an
    abstract type; the library provides functions to interrogate and
    construct values in <tt>IOError</tt>:</p>
   -->
   <p>
-   �� <tt>IOError</tt> �Υ��顼�� I/O ��ʥɤǻȤ��롣
-   �������ݷ��Ǥ��롣���Υ饤�֥��Ǥ� <tt>IOError</tt> �Τʤ����ͤ�
-   õ�ä��ꡢ���Τʤ����ͤ��ۤ����ꤹ�뤿��δؿ������뤵��Ƥ��롣
+   型 <tt>IOError</tt> のエラーは I/O モナドで使われる。
+   これは抽象型である。このライブラリでは <tt>IOError</tt> のなかの値を
+   探ったり、そのなかに値を構築したりするための関数が供給されている。
   </p>
   <!--
   <ul>
@@ -181,24 +182,24 @@
   -->
   <p>
    <ul>
-     <li><tt>isAlreadyExistsError</tt> -- �����ΰ�Ĥ����Ǥ�¸�ߤ��Ƥ����Τǡ�
-     ���������Ԥ�����</li>
-    <li><tt>isDoesNotExistError</tt> -- �����ΰ�Ĥ�¸�ߤ��Ƥ��ʤ��ä��Τǡ�
-     ���������Ԥ�����</li>
-    <li><tt>isAlreadyInUseError</tt> -- �����ΤҤȤĤ����٤����Ȥ���꥽��
-     ���Ǥ��ġ����Ǥ˻Ȥ��Ƥ����Τǡ������Ԥ�����(���Ȥ��С�Ʊ���ե�
-     �����񤭤��ߤΤ����2�٥����ץ󤷤褦�Ȥ���Ȥ��Υ��顼�ˤʤ롣)
+     <li><tt>isAlreadyExistsError</tt> -- 引数の一つがすでに存在していたので、
+     この操作が失敗した。</li>
+    <li><tt>isDoesNotExistError</tt> -- 引数の一つが存在していなかったので、
+     この操作が失敗した。</li>
+    <li><tt>isAlreadyInUseError</tt> -- 引数のひとつが一度だけ使えるリソー
+     スでかつ、すでに使われていたので、操作が失敗した。(たとえば、同じファ
+     イルを書きこみのために2度オープンしようとするとこのエラーになる。)
      </li>
-    <li><tt>isFullError</tt> -- �ǥХ��������դǤ��ä��Τǡ������Ԥ�����
+    <li><tt>isFullError</tt> -- デバイスが満杯であったので、操作が失敗した。
      </li>
-    <li><tt>isEOFError</tt> -- �ե�����κǸ����ã���Ƥ����Τǡ�������
-     ������</li>
-    <li><tt>isIllegalOperation</tt> -- ���������Բ�ǽ��
-    <li><tt>isPermissionError</tt> -- ���ѼԤ���������¹Ԥ��뤿��Υ���
-     �졼�ƥ��󥰥����ƥ��θ��¤���äƤ��ʤ��Τǡ������Ԥ�����
+    <li><tt>isEOFError</tt> -- ファイルの最後に到達していたので、操作が失敗
+     した。</li>
+    <li><tt>isIllegalOperation</tt> -- この操作は不可能。
+    <li><tt>isPermissionError</tt> -- 利用者がこの操作を実行するためのオペ
+     レーティングシステム上の権限を持っていないので、操作が失敗した。
      </li>
-    <li><tt>isUserError</tt> -- <tt>fail</tt> ����Ѥ����ץ�����ޤ������
-     �����顼�����ä���</li>
+    <li><tt>isUserError</tt> -- <tt>fail</tt> を使用したプログラマが定義し
+     たエラーが起った。</li>
    </ul>
   </p>
   <!--
@@ -207,9 +208,9 @@
    </tt>otherwise.</p>
   -->
   <p>
-   �����δؿ��Ϥɤ�� <tt>Bool</tt> �ͤ��֤������ΰ������б�����
-   ���顼�Ǥ��ä����ˤ� <tt>True</tt> �򡢤���ʤ���С�
-   <tt>False</tt> ���֤���
+   これらの関数はどれも <tt>Bool</tt> 値を返す。その引数が対応する
+   エラーであった場合には <tt>True</tt> を、さもなければ、
+   <tt>False</tt> を返す。
   </p>
   <!--
   <p> Any computation which returns an <tt>IO</tt> result may fail with
@@ -220,11 +221,11 @@
    <tt>isIllegalOperation</tt>.</p>
   -->
   <p>
-   <tt>IO</tt> ���η�̤��֤��׻��Ϥɤ�� <tt>isIllegalOperationError</tt> 
-   �Ǽ��Ԥ����ǽ�������롣�����ˤ�äư����������줦�륨�顼��
-   �б��������θ�˥ꥹ�ȥ��åפ��Ƥ��롣���ˤ�äƤϡ�������
-   �ɤΥ��顼�����ä�����Ƚ�̤Ǥ��ʤ����Ȥ⤢�롣���ξ��ˤ� 
-   <tt>isIllegalOperationError</tt> �Τ�Τ��֤��ʤ���Фʤ�ʤ���
+   <tt>IO</tt> 型の結果を返す計算はどれも <tt>isIllegalOperationError</tt> 
+   で失敗する可能性がある。実装によって引き起こされうるエラーは
+   対応する操作の後にリストアップしてある。場合によっては、実装が
+   どのエラーが起ったかを判別できないこともある。その場合には 
+   <tt>isIllegalOperationError</tt> のものを返さなければならない。
   </p>
   <!--
   <p> Three additional functions are provided to obtain information about
@@ -239,24 +240,24 @@
    string is implementation-dependent.</p>
   -->
   <p>
-   ����ˡ����顼�ͤ˴ؤ����������뤿��δؿ���3���Ѱդ���Ƥ��롣
-   <tt>ioeGetHandle</tt> �ϥ��顼�ͤ��ϥ�ɥ� <I>hdl</I> ��
-   ���Ȥ��Ƥ���С�<tt>Just</tt> <I>hdl</I> ���֤�������ʤ���С�
-   <tt>Nothing</tt> ���֤���<tt>ioeGetFileName</tt> �ϥ��顼�ͤ�
-   �ե����� <i>name</i> �򻲾Ȥ��Ƥ���С�<tt>Just</tt> <I>name</I>
-   ���֤�������ʤ���С�<tt>Nothing</tt> ���֤���
-   <tt>ioeGetErrorString</tt> ��ʸ������֤���(<tt>fail</tt> ���Ѥ���
-   �����������줿)���Ѽ�����Υ��顼�ˤĤ��Ƥϡ�
-   <tt>ioeGetErrorString</tt> �ˤ�ä��֤����ʸ���󤬡�<tt>fail</tt> 
-   ���Ϥ��줿�����Ǥ��롣����¾�Υ��顼�ˤĤ��Ƥ�ʸ����ϼ�����¸�Ǥ��롣
+   さらに、エラー値に関する情報を得るための関数が3つ用意されている。
+   <tt>ioeGetHandle</tt> はエラー値がハンドル <I>hdl</I> を
+   参照していれば、<tt>Just</tt> <I>hdl</I> を返し、さもなければ、
+   <tt>Nothing</tt> を返す。<tt>ioeGetFileName</tt> はエラー値が
+   ファイル <i>name</i> を参照していれば、<tt>Just</tt> <I>name</I>
+   を返し、さもなければ、<tt>Nothing</tt> を返す。
+   <tt>ioeGetErrorString</tt> は文字列を返す。(<tt>fail</tt> を用いて
+   引き起こされた)利用者定義のエラーについては、
+   <tt>ioeGetErrorString</tt> によって返される文字列が、<tt>fail</tt> 
+   に渡された引数である。その他のエラーについての文字列は実装依存である。
   </p>
   <!--
   <p> The <tt>try</tt> function returns an error in a computation
    explicitly using the <tt>Either</tt> type.</p>
   -->
   <p>
-   <tt>try</tt> �ؿ��Ϸ׻��Τʤ�������Ū�� <tt>Either</tt> ����Ȥäơ�
-   ���顼���֤���
+   <tt>try</tt> 関数は計算のなかで明示的に <tt>Either</tt> 型を使って、
+   エラーを返す。
   </p>
   <!--
   <p> The <tt>bracket</tt> function captures a common allocate, compute,
@@ -265,14 +266,14 @@
    try-catch-finally in Java.</p>
   -->
   <p>
-   <tt>bracket</tt> �ؿ��ϡ��׻�����Υ��顼�ξ��Ǥ⡢���������
-   ɬ�פˤʤ�褦�ʡ��褯���������ݡ��׻�������������귿���
-   ��ª���롣����� Java �� try-catch-finally �ε�����������Ƥ��롣
+   <tt>bracket</tt> 関数は、計算途中のエラーの場合でも、メモリ解放が
+   必要になるような、よくあるメモリ確保、計算、メモリ解放の定型句を
+   捕捉する。これは Java の try-catch-finally の機構に類似している。
   </p>
 
   <p> <a name="sect21.2"></a></p>
   <!--<h3>21.2<tt>&nbsp;&nbsp;</tt>Files and Handles</h3>-->
-  <h3>21.2<tt>&nbsp;&nbsp;</tt>�ե�����ȥϥ�ɥ�</h3>
+  <h3>21.2<tt>&nbsp;&nbsp;</tt>ファイルとハンドル</h3>
   <!--
   <p>Haskell interfaces to the external world through an abstract <i>file
    system</i>. This file system is a collection of named <i>file system
@@ -285,18 +286,18 @@
    files</i> are persistent, ordered files, and normally reside on disk.</p>
   -->
   <p>
-   Haskell �γ����ȤΥ��󥿥ե����������Ū��<em>�ե����륷���ƥ�</em>
-   �Ǥ��롣�����Ǥ����ե����륷���ƥ�Ȥ�̾�����դ���
-   <em>�ե����륷���ƥ४�֥�������</em>�ν���Ǥ��ꡢ�����ϡ�
-   <em>�ǥ��쥯�ȥ�</em>�ˤޤȤ�����ΤǤ���
-   (<tt>Directory</tt> �򸫤�)�������ˤ�äƤϥǥ��쥯�ȥ꼫�Ȥ�
-   �ե����륷���ƥ४�֥������ȤǤ��ꡢ�ޤ����̤Υǥ��쥯�ȥ��
-   ����ȥ�Ǥ�����⤢�롣ñ�㲽���뤿��ˡ����٤ƤΥǥ��쥯�ȥ�Ǥ�
-   �ʤ��ե����륷���ƥ४�֥������Ȥ�<em>�ե�����</em>�Ƥ֤��Ȥˤ��褦��
-   �ºݤˤ��̿�����ͥ�Ǥ��ä��ꡢ���ڥ졼�ƥ��󥰥����ƥ��Ǥ�
-   �̤Τ�ΤȤ���ǧ������뤳�ȤϤ��뤱��ɤ⡣<em>ʪ���ե�����</em>
-   �ϱ�³Ū�ǡ�����դ���줿�ե�����Τ��Ȥǡ����̤ˤϥǥ��������
-   �֤���Ƥ��롣
+   Haskell の外界とのインタフェースは抽象的な<em>ファイルシステム</em>
+   である。ここでいうファイルシステムとは名前の付いた
+   <em>ファイルシステムオブジェクト</em>の集りであり、それらは、
+   <em>ディレクトリ</em>にまとめられるものである
+   (<tt>Directory</tt> を見よ)。実装によってはディレクトリ自身が
+   ファイルシステムオブジェクトであり、また、別のディレクトリの
+   エントリである場合もある。単純化するために、すべてのディレクトリでは
+   ないファイルシステムオブジェクトを<em>ファイル</em>呼ぶことにしよう。
+   実際には通信チャネルであったり、オペレーティングシステム上では
+   別のものとして認識されることはあるけれども。<em>物理ファイル</em>
+   は永続的で、順序付けられたファイルのことで、一般にはディスク上に
+   置かれている。
   </p>
   <!--
   <p> File and directory names are values of type <tt>String</tt>, whose
@@ -305,10 +306,10 @@
    that file.</p>
   -->
   <p>
-   �ե�����ȥǥ��쥯�ȥ��̾���� <tt>String</tt> �����ͤǤ��롣
-   �������Τʰ�̣�ϥ��ڥ졼�ƥ��󥰥����ƥ�˰�¸���롣�ե������
-   �����ץ󤹤뤳�Ȥ���ǽ�ǡ����η�̤ϥϥ�ɥ�Ǥ��ꡢ
-   �����Ȥäƥե���������Ƥ����뤳�Ȥ��Ǥ��롣
+   ファイルとディレクトリの名前は <tt>String</tt> 型の値である。
+   その正確な意味はオペレーティングシステムに依存する。ファイルは
+   オープンすることが可能で、その結果はハンドルであり、
+   これを使ってファイルの内容を操作することができる。
   </p>
   <p><a name="Handles"></a></p>
   <!--
@@ -319,12 +320,12 @@
    following properties:</p>
   -->
   <p>
-   Haskell �Ǥϥե����뤫���ʸ�����ɤ߽Ф����ե�����ؤ�
-   ʸ���ν񤭹������������Ƥ��ꡢ����� <tt>Handle</tt> �����ͤ�
-   ����蘆��롣���η��Τ��줾����ͤ�<em>�ϥ�ɥ�</em>��
-   ���ʤ�� Haskell �μ¹Ի������ƥब�ե����륷���ƥ४�֥������Ȥ�
-   �����Ϥ�<em>����</em>���뤿��˻Ȥ���ΤǤ��롣�ϥ�ɥ�Ͼ��ʤ��Ȥ�
-   �ʲ����������ġ�
+   Haskell ではファイルからの文字の読み出し、ファイルへの
+   文字の書き込み操作が定義されており、これは <tt>Handle</tt> 型の値で
+   あらわされる。この型のそれぞれの値は<em>ハンドル</em>、
+   すなわち Haskell の実行時システムがファイルシステムオブジェクトの
+   入出力を<em>管理</em>するために使うものである。ハンドルは少なくとも
+   以下の特性をもつ。
   </p>
   <!--
   <p>
@@ -340,11 +341,11 @@
   -->
   <p>
    <ul>
-    <li>���Ϥ��뤤�Ͻ��Ϥ��뤤�Ϥ���ξ�����������</li>
-    <li>�����ץ󤢤뤤�ϥ����������뤤��Ⱦ���������ξ��֤Ǥ��ꡢ</li>
-    <li>��������ǽ��</li>
-    <li>�Ԥ��뤤�ϥ֥��å�ñ�̤ǡ��Хåե�����ԲĤ��뤤�ϲ�ǽ��</li>
-    <li>�Хåե�(Ĺ���������ξ��⤢��)����</li>
+    <li>入力あるいは出力あるいはその両方を管理し、</li>
+    <li>オープンあるいはクローズあるいは半クローズの状態であり、</li>
+    <li>シーク可能で</li>
+    <li>行あるいはブロック単位で、バッファリング不可あるいは可能で</li>
+    <li>バッファ(長さがゼロの場合もある)をもつ</li>
    </ul>
   </p>
   <!--
@@ -362,25 +363,25 @@
    compare the internal state of different handles for equality.</p>
   -->
   <p>
-   �ۤȤ�ɤξ��ϥ�ɥ�ϼ������������ɤ��ǵ����뤫�򼨤�
-   ���ߤ������ϰ��֤Ȥ�����Τ��ġ��ϥ�ɥ�Ϥ⤷���Ϥ��������뤤��
-   �����Ϥ�ξ��������Ǥ���ΤǤ����<em>�ɤ߹��߲�ǽ</em>�Ǥ��롣
-   Ʊ�ͤˡ��⤷���Ϥ������뤤�������Ϥ�ξ���������Ǥ���ΤǤ����
-   <em>�񤭤��߲�ǽ</em>�Ǥ��롣�ϥ�ɥ�Ϻǽ�˥��������Ȥ��줿�Ȥ���
-   �����ץ󤵤�Ƥ��롣��ö�������������Ȥ���ܹԡ����ϡ����ϤȤ��
-   �Ȥ��ʤ��ʤ롣����ϡ��ϥ�ɥ�ؤΥ�ե���󥹤����Ȥ��ĤäƤ��Ƥ⡢
-   �����Ϥ��Υ��ȡ��쥸������ѤǤ��ʤ��Ȥ������ȤǤ��롣
-   �ϥ�ɥ�� <tt>Show</tt> ����� <tt>Eq</tt> ���饹�Ǥ��롣
-   �ϥ�ɥ�ɽ���Τ����ʸ����ϥ����ƥ��¸�Ǥ��롣����ʸ����ˤ�
-   �ǥХå��Ѥ˥ϥ�ɥ���̤���Τ˽�ʬ�ʾ����ޤ�Ǥ��롣
-   �ϥ�ɥ�ϡ�<tt>==</tt> �˴ؤ��ơ���ʬ���ȤǤȤΤ���������
-   Ʊ�����˴ؤ��ơ��̤Υϥ�ɥ���������֤���Ӥ���褦�ʤ��ȤϤʤ���
+   ほとんどの場合ハンドルは次の入出力操作がどこで起こるかを示す
+   現在の入出力位置というものをもつ。ハンドルはもし入力だけ、あるいは
+   入出力の両方を管理できるのであれば<em>読み込み可能</em>である。
+   同様に、もし出力だけあるいは入出力の両方が管理できるのであれば
+   <em>書きこみ可能</em>である。ハンドルは最初にアロケートされたときに
+   オープンされている。一旦クローズされるとそれ移行、入力、出力ともに
+   使えなくなる。これは、ハンドルへのリファレンスがたとえ残っていても、
+   実装はそのストーレジを再利用できないということである。
+   ハンドルは <tt>Show</tt> および <tt>Eq</tt> クラスである。
+   ハンドル表示のための文字列はシステム依存である。その文字列には
+   デバッグ用にハンドルを識別するのに十分な情報を含んでいる。
+   ハンドルは、<tt>==</tt> に関して、自分自身でとのみ等しい。
+   同値性に関して、別のハンドルと内部状態を比較するようなことはない。
   </p>
 
   <p><a name="StandardHandles"></a></p>
   <p> <a name="sect21.2.1"></a></p>
   <!--<h4>21.2.1<tt>&nbsp;&nbsp;</tt>Standard Handles</h4>-->
-  <h4>21.2.1<tt>&nbsp;&nbsp;</tt>ɸ��ϥ�ɥ�</h4>
+  <h4>21.2.1<tt>&nbsp;&nbsp;</tt>標準ハンドル</h4>
   <!--
   <p> Three handles are allocated during program initialisation. The first
    two (<tt>stdin</tt> and <tt>stdout</tt>) manage input or output from the
@@ -389,17 +390,17 @@
    These handles are initially open.</p>
   -->
   <p>
-   3 �ĤΥϥ�ɥ뤬�ץ������ν������˥��������Ȥ���롣�ǽ�����
-   (<tt>stdin</tt> �� <tt>stdout</tt>)�Ϥ��줾�� Haskell �Υץ������
-   �Ǥ�ɸ�����ϥ���ͥ��ɸ����ϥ���ͥ����������ΤǤ��롣
-   3 �Ĥ�Τ��(<tt>stderr</tt>)��ɸ�२�顼����ͥ����������ΤǤ��롣
-   ���� 3 �ĤΥϥ�ɥ�Ϻǽ餫�饪���ץ󤵤�Ƥ��롣
+   3 つのハンドルがプログラムの初期化中にアロケートされる。最初の二つ
+   (<tt>stdin</tt> と <tt>stdout</tt>)はそれぞれ Haskell のプログラム
+   での標準入力チャネルと標準出力チャネルを管理するものである。
+   3 つめのもの(<tt>stderr</tt>)は標準エラーチャネルを管理するものである。
+   この 3 つのハンドルは最初からオープンされている。
   </p>
 
   <a name="SemiClosed"></a>
   <p> <a name="sect21.2.2"></a></p>
   <!--<h4>21.2.2<tt>&nbsp;&nbsp;</tt>Semi-Closed Handles</h4>-->
-  <h4>21.2.2<tt>&nbsp;&nbsp;</tt>�ϥ�ɥ�Υ��ߥ�������</h4>
+  <h4>21.2.2<tt>&nbsp;&nbsp;</tt>ハンドルのセミクローズ</h4>
   <!--
   <p> The operation <tt>hGetContents</tt><i> hdl</i> (Section <a
    href="io.html#hGetContents">21.9.4</a>) puts a handle <i>hdl</i> into an
@@ -409,12 +410,12 @@
    <i>hdl</i>.</p>
   -->
   <p>
-   ��� <tt>hGetContents</tt><i> hdl</i> 
-   (<a href="io.html#hGetContents">21.9.4</a> ��)�ϥϥ�ɥ� <i>hdl</i>
-   ����־���<em>���ߥ�������</em>���֤ˤ��롣���ξ��֤Ǥϡ�<i>hdl</i> 
-   �ϼ¼�Ū�ˤϥ����������֤Ǥ��뤬��<tt>hdl</tt> ����ɬ�פ˱�����
-   �ɤ߹��ߤ򤪤��ʤ���<tt>hGetContents</tt> <i>hdl</i> �ˤ�ä�
-   �֤�������̤ʥꥹ�Ȥ��ɤ߹������Τ����Ѥ���롣
+   操作 <tt>hGetContents</tt><i> hdl</i> 
+   (<a href="io.html#hGetContents">21.9.4</a> 節)はハンドル <i>hdl</i>
+   を中間状態<em>セミクローズ</em>状態にする。この状態では、<i>hdl</i> 
+   は実質的にはクローズ状態であるが、<tt>hdl</tt> から必要に応じて
+   読み込みをおこない、<tt>hGetContents</tt> <i>hdl</i> によって
+   返される特別なリストに読み込んだものが蓄積される。
   </p>
   <!--
   <p> Any operation that fails because a handle is closed, also fails if a
@@ -422,10 +423,10 @@
    semi-closed handle becomes closed:</p>
   -->
   <p>
-   ���٤Ƥ����ϥϥ�ɥ뤬������������Ƥ���ȼ��Ԥ��롣Ʊ�ͤ�
-   �ϥ�ɥ뤬���ߥ�����������Ƥ��Ƥ⼺�Ԥ��롣ͣ����㳰�ϡ�
-   <tt>hClose</tt> �Ǥ��롣���ߥ����������줿�ϥ�ɥ�ϰʲ��ξ���
-   ������������롣
+   すべての操作はハンドルがクローズされていると失敗する。同様に
+   ハンドルがセミクローズされていても失敗する。唯一の例外は、
+   <tt>hClose</tt> である。セミクローズされたハンドルは以下の場合に
+   クローズされる。
   </p>
   <!--
   <ul>
@@ -436,9 +437,9 @@
   -->
   <p>
    <ul>
-    <li>���Υϥ�ɥ�� <tt>hClose</tt> ��Ŭ�Ѥ��줿���<li>
-    <li>���Υϥ�ɥ뤫��Υǡ������ɤ߹������ I/O ���顼�����������</li>
-    <li>�ϥ�ɥ뤫�������Ƥ��ɤ߹��ޤ줿����</li>
+    <li>そのハンドルに <tt>hClose</tt> が適用された場合<li>
+    <li>そのハンドルからのデータを読み込み中に I/O エラーが起きた場合</li>
+    <li>ハンドルから全内容が読み込まれたあと</li>
    </ul>
   </p>
   <!--
@@ -449,23 +450,23 @@
   -->
   <p>
   <p>
-   ���ߥ����������֤Υϥ�ɥ뤬��ö������������Ƥ��ޤ��ȡ��б�����
-   �ꥹ�Ȥ����Ƥϸ��ꤵ��롣���κǽ�Ū�ʥꥹ�Ȥ����Ƥ���ʬŪ�˵���
-   ����Ƥ���ˤ����ʤ��������Ȥ⡢�ϥ�ɥ뤬������������������ä�
-   ɾ�����줿���ȥ꡼��Υǡ�����ޤळ�Ȥˤʤ롣
+   セミクローズ状態のハンドルが一旦クローズされてしまうと、対応する
+   リストの内容は固定される。この最終的なリストの内容は部分的に規定
+   されているにすぎない。少くとも、ハンドルがクローズされるに先だって
+   評価されたストリームのデータを含むことになる。
   </p>
   <!--
   <p> Any I/O errors encountered while a handle is semi-closed are simply
    discarded. </p>
   -->
   <p>
-   �ϥ�ɥ뤬���ߥ����������֤ˤ�����˵����������� I/O ���顼
-   ��ñ����Ѵ�����롣
+   ハンドルがセミクローズ状態にある場合に起きたあらゆる I/O エラー
+   は単純に廃棄される。
   </p>
    
   <p><a name="sect21.2.3"></a></p>
   <!--<h4>21.2.3<tt>&nbsp;&nbsp;</tt>File locking</h4>-->
-  <h4>21.2.3<tt>&nbsp;&nbsp;</tt>�ե�����Υ��å�</h4>
+  <h4>21.2.3<tt>&nbsp;&nbsp;</tt>ファイルのロック</h4>
   <!--
   <p> Implementations should enforce as far as possible, at least locally
    to the Haskell process, multiple-reader single-writer locking on files.
@@ -480,16 +481,16 @@
    example.</p>
   -->
   <p>
-   �����ǤϤǤ����뤫���ꡢHaskell �Υץ�������Ǥϡ��ե�������Ф��Ƥ�
-   �ɤ߹���¿�š��񤭤��ߤ� 1 �Ĥ����Ȥ������å�������¸����ʤ����
-   �ʤ�ʤ����������äơ�<em>Ʊ���ե�������Ф������ϴ����Ѥ�ʣ����
-   �ϥ�ɥ뤬¸�ߤ����ǽ�������ꡢ���ϴ����Ѥˤϰ�ĤΥե�����ˤ�
-   ��ĤΥϥ�ɥ뤷��¸�ߤ��ʤ�</em>���⤷�������Ѥ˥ϥ�ɥ뤬�����ץ�
-   ���줿���֤��뤤�ϥ��ߥ��������ξ��֤Ǥ�����ˤϡ����Υե������
-   �Ф��Ƥϥϥ�ɥ�򥢥������Ȥ��뤳�Ȥ����ϤǤ��뤬��
-   ���Υϥ�ɥ�ǽ��Ϥ�������뤳�ȤϤǤ��ʤ�����ĤΥե����뤬Ʊ����
-   ���뤫�ɤ����ϼ�����¸�Ǥ��뤬�����Ȥ��С��դĤ���Ʊ�����Хѥ�̾��
-   �������͡��व��Ƥ��ʤ���С�Ʊ���Ǥ���٤��Ǥ��롣
+   実装ではできうるかぎり、Haskell のプロセス内では、ファイルに対しては
+   読み込み多重、書きこみは 1 つだけというロック機構を実現しなければ
+   ならない。したがって、<em>同じファイルに対して入力管理用に複数の
+   ハンドルが存在する可能性があり、出力管理用には一つのファイルには
+   一つのハンドルしか存在しない</em>。もし、出力用にハンドルがオープン
+   された状態あるいはセミクローズの状態である場合には、そのファイルに
+   対してはハンドルをアロケートすることだけはできるが、
+   そのハンドルで出力を管理することはできない。二つのファイルが同じで
+   あるかどうかは実装依存であるが、たとえば、ふつう、同じ絶対パス名を
+   もち、リネームされていなければ、同じであるべきである。
   </p>
   <!--
   <p> <i>Warning</i>: the <tt>readFile</tt> operation (Section <a
@@ -501,24 +502,24 @@
    <tt>isAlreadyInUseError</tt>.</p>
   -->
   <p>
-   <em>�ٹ�</em> <tt>readFile</tt> ���
-   (<a href="io-13.html#standard-io-functions">7.1</a> ��)�ϡ�
-   �����ե�����Τ��٤ƤΥ���ƥ�Ĥ����񤵤�Ƥ��ޤ�ʤ�������
-   ���ߥ����������줿�ϥ�ɥ���ݻ����롣���η�̤Ȥ��ơ����
-   <tt>readFile</tt> �ǥ����ץ󤵤줿�ե������(���Ȥ��С�
-   <tt>writeFile</tt> ��Ȥä�)�񤭹��⤦�Ȥ�����̾
-   <tt>isAlreadyInUseError</tt> �ȤʤäƼ��Ԥ��뤳�Ȥˤʤ������
+   <em>警告：</em> <tt>readFile</tt> 操作
+   (<a href="io-13.html#standard-io-functions">7.1</a> 節)は、
+   当該ファイルのすべてのコンテンツが消費されてしまわないうちは
+   セミクローズされたハンドルを保持する。その結果として、先に
+   <tt>readFile</tt> でオープンされたファイルに(たとえば、
+   <tt>writeFile</tt> を使って)書き込もうとすると通常、
+   <tt>isAlreadyInUseError</tt> となって失敗することになるだろ。
   </p>
 
   <p><a name="OpeningClosing"></a></p>
   <p> <a name="sect21.3"></a></p>
   <!--<h3>21.3<tt>&nbsp;&nbsp;</tt>Opening and Closing Files</h3>-->
-  <h3>21.3<tt>&nbsp;&nbsp;</tt>�ե�����Υ����ץ�ȥ�������</h3>
+  <h3>21.3<tt>&nbsp;&nbsp;</tt>ファイルのオープンとクローズ</h3>
   <p><a name="Opening"></a></p>
   <p> <a name="sect21.3.1"></a></p>
 
   <!--<h4>21.3.1<tt>&nbsp;&nbsp;</tt>Opening Files</h4>-->
-  <h4>21.3.1<tt>&nbsp;&nbsp;</tt>�ե�����Υ����ץ�</h4>
+  <h4>21.3.1<tt>&nbsp;&nbsp;</tt>ファイルのオープン</h4>
   <!--
   <p> Computation <tt>openFile</tt> <i>file</i> <i>mode</i> allocates and
    returns a new, open handle to manage the file <i>file</i>. It manages
@@ -527,12 +528,12 @@
    mode is <tt>ReadWriteMode</tt>.</p>
   -->
   <p>
-   �׻� <tt>openFile</tt> <I>file</I> <I>mode</I> �ϥե����� <i>file</i>
-   ��������뤿��ο����������ץ󤵤줿�ϥ�ɥ�򥢥������Ȥ�������֤���
-   ���Υϥ�ɥ�� <i>mode</i> �� <tt>ReadMode</tt> �Ǥ���������ѤǤ��ꡢ
-   <i>mode</i> �� <tt>WriteMode</tt> ���뤤�� <tt>AppendMode</tt> 
-   �Ǥ���н����ѤǤ��ꡢ<i>mode</i> �� <tt>ReadWriteMode</tt> �ʤ��
-   ������ξ�ѤǤ��롣
+   計算 <tt>openFile</tt> <I>file</I> <I>mode</I> はファイル <i>file</i>
+   を管理するための新しいオープンされたハンドルをアロケートしそれを返す。
+   このハンドルは <i>mode</i> が <tt>ReadMode</tt> であれば入力用であり、
+   <i>mode</i> が <tt>WriteMode</tt> あるいは <tt>AppendMode</tt> 
+   であれば出力用であり、<i>mode</i> が <tt>ReadWriteMode</tt> ならば
+   入出力両用である。
   </p>
   <!--
   <p> If the file does not exist and it is opened for output, it should be
@@ -547,25 +548,25 @@
    implementation-dependent.</p>
   -->
   <p>
-   �⤷���ե����뤬¸�ߤ����������Ѥ˥����ץ󤵤��п��˥ե����뤬
-   ��������롣�⤷��<i>mode</i> �� <tt>WriteMode</tt> �ǥե����뤬
-   ���Ǥ�¸�ߤ��Ƥ���С����Υե������Ĺ�������˴ݤ���롣
-   ���ڥ졼�ƥ��󥰥����ƥ�ˤ�äƤ϶��Υե������õ���Τ�
-   ����Τǡ��ե����뤬 <i>mode</i> <tt>WriteMode</tt> �� 
-   <tt>openFile</tt> ���줿��˽񤭤��ߤ��������ʤ��ä���硢
-   ���Υե����뤬���Ѥ�餺¸�ߤ��Ƥ��뤳�Ȥ��ݾڤ���ʤ���
-   �ե����뤬�⤷��<tt>AppendMode</tt> �ǥ����ץ󤵤줿���ˤ�
-   �ϥ�ɥ�ΰ��֤ϥե�����κǸ�ˤ��ꡢ����ʳ��ξ�����Ƭ
-   (���ξ��ˤ�����Ū�� I/O ���֤� 0 )�ˤ��롣����ΥХåե��⡼�ɤ�
-   ������¸�Ǥ��롣
+   もし、ファイルが存在せず、出力用にオープンされれば新にファイルが
+   作成される。もし、<i>mode</i> が <tt>WriteMode</tt> でファイルが
+   すでに存在していれば、そのファイルは長さゼロに丸められる。
+   オペレーティングシステムによっては空のファイルを消去するものも
+   あるので、ファイルが <i>mode</i> <tt>WriteMode</tt> で 
+   <tt>openFile</tt> された後に書きこみが成功しなかった場合、
+   そのファイルが相変わらず存在していることは保証されない。
+   ファイルがもし、<tt>AppendMode</tt> でオープンされた場合には
+   ハンドルの位置はファイルの最後にあり、それ以外の場合は先頭
+   (この場合には内部的な I/O 位置が 0 )にある。初期のバッファモードは
+   実装依存である。
   </p>
   <!--
   <p> If <tt>openFile</tt> fails on a file opened for output, the file may
    still have been created if it did not already exist.</p>
   -->
   <p>
-   �⤷��<tt>openFile</tt> �����ϥե�����Υ����ץ�˼��Ԥ������Ǥ⡢
-   ���Υե����뤬¸�ߤ��ʤ���С������˺�������롣
+   もし、<tt>openFile</tt> が出力ファイルのオープンに失敗した場合でも、
+   そのファイルが存在しなければ、新たに作成される。
   </p>
   <!--
   <p> <i>Error reporting</i>: the <tt>openFile</tt> computation may fail
@@ -575,18 +576,18 @@
    the file.</p>
   -->
   <p>
-   <em>���顼���</em><tt>openFile</tt> �η׻��Ϥ⤷�ե����뤬
-   ���˥����ץ󤵤�Ƥ��ƺƥ����ץ�Ǥ��ʤ���С�
-   <tt>isAlreadyInUseError</tt> �ȤʤäƼ��Ԥ����ե����뤬¸�ߤ��ʤ����
-   <tt>isDoesNotExistError</tt>���ե�����򥪡��ץ󤹤븢�¤�
-   �桼�����⤿�ʤ���С�<tt>isPermissionError</tt>�Ȥʤ롣
+   <em>エラー報告：</em><tt>openFile</tt> の計算はもしファイルが
+   既にオープンされていて再オープンできなければ、
+   <tt>isAlreadyInUseError</tt> となって失敗し、ファイルが存在しなければ
+   <tt>isDoesNotExistError</tt>、ファイルをオープンする権限を
+   ユーザがもたなければ、<tt>isPermissionError</tt>となる。
   </p>
 
   <p><a name="Closing"></a></p>
   <p> <a name="sect21.3.2"></a></p>
 
   <!--<h4>21.3.2<tt>&nbsp;&nbsp;</tt>Closing Files</h4>-->
-  <h4>21.3.2<tt>&nbsp;&nbsp;</tt>�ե�����Υ�������</h4>
+  <h4>21.3.2<tt>&nbsp;&nbsp;</tt>ファイルのクローズ</h4>
 
   <!--
   <p> Computation <tt>hClose</tt> <i>hdl</i> makes handle <i>hdl</i>
@@ -599,37 +600,37 @@
    successfully closed.</p>
   -->
   <p>
-   <tt>hClose</tt> <i>hdl</i> �Ȥ����׻��ϥϥ�ɥ� <i>hdl</i> ��
-   �����������롣���η׻�����λ�������ˡ��⤷��<i>hdl</i> ���񤭤���
-   ��ǽ�Ǥ���С����ΥХåե��� <tt>hFlush</tt> ��Ȥ��Τ�Ʊ�ͤ�
-   �ե�å��夵��롣<tt>hClose</tt> �򤹤Ǥ˥����������줿�ϥ�ɥ��
-   �¹Ԥ��Ƥ⡢���⤪���餺�����顼�ˤ�ʤ�ʤ��������������줿
-   �ϥ�ɥ�ؤΤ���ʳ������ϼ��Ԥ��롣�⤷��<tt>hClose</tt>����
-   �ʤ�餫����ͳ�Ǽ��Ԥ����顢����ʾ��(<tt>hClose</tt>�ʳ���)
-   ���ڥ졼������ <i>hdl</i> �������������������줿����Ʊ�ͤ�
-   ���Ԥ��롣
+   <tt>hClose</tt> <i>hdl</i> という計算はハンドル <i>hdl</i> を
+   クローズする。この計算が終了する前に、もし、<i>hdl</i> が書きこみ
+   可能であれば、そのバッファは <tt>hFlush</tt> を使うのと同様に
+   フラッシュされる。<tt>hClose</tt> をすでにクローズされたハンドルに
+   実行しても、何もおこらず、エラーにもならない。クローズされた
+   ハンドルへのそれ以外の操作は失敗する。もし、<tt>hClose</tt>が、
+   なんらかの理由で失敗したら、それ以上の(<tt>hClose</tt>以外の)
+   オペレーションは <i>hdl</i> が正しくクローズされた場合と同様に
+   失敗する。
   </p>
 
   <p><a name="FileSize"></a></p>
   <p> <a name="sect21.4"></a></p>
   <!--<h3>21.4<tt>&nbsp;&nbsp;</tt>Determining the Size of a File</h3>-->
-  <h3>21.4<tt>&nbsp;&nbsp;</tt>�ե����륵�����η���</h3>
+  <h3>21.4<tt>&nbsp;&nbsp;</tt>ファイルサイズの決定</h3>
   <!--
   <p> For a handle <i>hdl</i> which is attached to a physical file,
    <tt>hFileSize </tt><i>hdl</i> returns the size of that file in 8-bit
    bytes (<i>&gt;=</i> 0).</p>
   -->
   <p>
-   ʪ��Ū�ʥե�����˷���դ���줿�ϥ�ɥ� <i>hdl</i> ���Ф��ơ�
-   <tt>hFileSize</tt> <i>hdl</i> �ϥե�������礭���� 8-bit �Х��Ȥ��֤�
-   (<i>&gt;=</i> 0)��
+   物理的なファイルに結び付けられたハンドル <i>hdl</i> に対して、
+   <tt>hFileSize</tt> <i>hdl</i> はファイルの大きさを 8-bit バイトで返す
+   (<i>&gt;=</i> 0)。
   </p>
  
   <p><a name="EOF"></a></p>
   <p> <a name="sect21.5"></a></p>
 
   <!--<h3>21.5<tt>&nbsp;&nbsp;</tt>Detecting the End of Input</h3>-->
-  <h3>21.5<tt>&nbsp;&nbsp;</tt>���Ͻ�ü�θ���</h3>
+  <h3>21.5<tt>&nbsp;&nbsp;</tt>入力終端の検出</h3>
   <!--
   <p> For a readable handle <i>hdl</i>, computation <tt>hIsEOF</tt>
    <i>hdl</i> returns <tt>True </tt>if no further input can be taken from
@@ -639,19 +640,19 @@
    except that it works only on <tt>stdin</tt>.</p>
   -->
   <p>
-   �ɤ߽Ф���ǽ�ʥϥ�ɥ� <i>hdl</i> ���Ф����׻� <tt>hIsEOF</tt>
-   <i>hdl</i> �ϡ�<i>hdl</i> ���餳��ʾ����Ϥ���Ф��ʤ����ˤ�
-   <tt>True</tt> ���֤������Τ��Ȥϡ�ʪ��Ū�ʥե�����˷���դ���줿
-   �ϥ�ɥ�ˤĤ��Ƹ����С����ߤ������ϰ��֤����Υե������Ĺ����������
-   �Ȥ������ȤǤ��롣�⤷����ü�Ǥʤ���С�<tt>False</tt> ���֤롣
-   �׻� <tt>isEOF</tt> �� <tt>stdin</tt> ��ǤΤ�ư���Ȥ������Ȥ�
-   �����С�Ʊ��η׻��Ǥ��롣
+   読み出し可能なハンドル <i>hdl</i> に対し、計算 <tt>hIsEOF</tt>
+   <i>hdl</i> は、<i>hdl</i> からこれ以上入力を取り出せない場合には
+   <tt>True</tt> を返す。このことは、物理的なファイルに結び付けられた
+   ハンドルについて言えば、現在の入出力位置がそのファイルの長さに等しい
+   ということである。もし、終端でなければ、<tt>False</tt> が返る。
+   計算 <tt>isEOF</tt> は <tt>stdin</tt> 上でのみ動作するということを
+   除けば、同一の計算である。
   </p>
 
   <p><a name="Buffering"></a></p>
   <p> <a name="sect21.6"></a></p>
   <!--<h3>21.6<tt>&nbsp;&nbsp;</tt>Buffering Operations</h3>-->
-  <h3>21.6<tt>&nbsp;&nbsp;</tt>�Хåե�������</h3>
+  <h3>21.6<tt>&nbsp;&nbsp;</tt>バッファリング操作</h3>
   <!--
   <p> Three kinds of buffering are supported: line-buffering,
    block-buffering or no-buffering. These modes have the following effects.
@@ -659,11 +660,11 @@
    buffer according to the buffer mode:</p>
   -->
   <p>
-   3 ����ΥХåե���󥰤����ݡ��Ȥ���Ƥ��롣�ԥХåե���󥰡�
-   �֥��å��Хåե���󥰡��Хåե���󥰤ʤ����Ǥ��롣�����Υ⡼�ɤ�
-   �ʲ��θ��̤����롣���Ϥ˴ؤ��Ƥϡ����ܤ������Хåե����餽��
-   �Хåե��⡼�ɤ˱����ƽ񤭽Ф���뤫�����뤤��<em>�ե�å��夵���
-   </em>��
+   3 種類のバッファリングがサポートされている。行バッファリング、
+   ブロックバッファリング、バッファリングなし、である。これらのモードは
+   以下の効果がある。出力に関しては、項目は内部バッファからその
+   バッファモードに応じて書き出されるか、あるいは<em>フラッシュされる
+   </em>。
   </p>
   <!--
   <ul>
@@ -681,15 +682,15 @@
   <p>
    <ul>
     <li>
-     <b>�ԥХåե���󥰡�</b>���Τ��Ȥ������뤿�Ӥ˥Хåե����Τ�
-     �ե�å��夵��롣���Ԥ����Ϥ��줿���Хåե��������С��ե���������
-     <tt>hFlush</tt>��ȯ�Ԥ��줿���ϥ�ɥ뤬�����������줿��</li>
+     <b>行バッファリング：</b>次のことが起こるたびにバッファ全体が
+     フラッシュされる。改行が出力された。バッファがオーバーフローした。
+     <tt>hFlush</tt>が発行された。ハンドルがクローズされた。</li>
     <li>
-     <b>�֥��å��Хåե���󥰡�</b>���Τ��Ȥ������뤿�Ӥ˥Хåե����Τ�
-     �񤭽Ф���롣�Хåե��������С��ե���������<tt>hFlush</tt> ��
-     ȯ�Ԥ��줿���ϥ�ɥ뤬�����������줿��</li>
-    <li><b>�Хåե���󥰤ʤ���</b>���Ϥ�ľ���˽񤭽Ф��졢
-     �Хåե��˳�Ǽ����뤳�ȤϤʤ���</li>
+     <b>ブロックバッファリング：</b>次のことが起こるたびにバッファ全体が
+     書き出される。バッファがオーバーフローした。<tt>hFlush</tt> が
+     発行された。ハンドルがクローズされた。</li>
+    <li><b>バッファリングなし：</b>出力は直ちに書き出され、
+     バッファに格納されることはない。</li>
    </ul>
   </p>
   <!--
@@ -698,17 +699,17 @@
    it has been written out.</p>
   -->
   <p>
-   �����Ͼ�Ǥε���������ˤ˥Хåե���ե�å��夷�Ƥ�褤����������
-   ��ε���ʲ������٤ˤ��ƤϤʤ�ʤ����Хåե��Ͻ񤭽Ф����Ѥ�Ȥ�����
-   ���ˤ���롣
+   実装は上での規定よりも頻繁にバッファをフラッシュしてもよい。しかし、
+   上の規定以下の頻度にしてはならない。バッファは書き出しが済むとすぐに
+   空にされる。
   </p>
   <!--
   <p> Similarly, input occurs according to the buffer mode for handle
    <i>hdl</i>.</p>
   -->
   <p>
-   Ʊ�ͤˤ��ơ����ϤϤ��Υϥ�ɥ� <i>hdl</i> �ΥХåե��⡼�ɤ�
-   �������äƵ����롣
+   同様にして、入力はそのハンドル <i>hdl</i> のバッファモードに
+   したがって起こる。
   </p>
   <!--
   <ul>
@@ -728,18 +729,18 @@
   -->
   <p>
    <ul>
-    <li><b>�ԥХåե���󥰡�</b><i>hdl</i> ���б�����Хåե���
-     ���Ǥʤ���硢���ι��ܤ��Хåե������ɤ߹��ޤ�롣���Ǥ��ä���硢
-     ����ʸ�������뤫���Хåե����ե�ˤʤ�ޤǡ��Хåե����ɤ߹��ޤ�롣
-     ����ʸ����ͭ���ˤʤ뤫���Хåե����ե�ˤʤ�ޤǤϡ�����ʸ����
-     ͭ���ˤʤ�ʤ���</li>
-    <li><b>�֥��å��Хåե���󥰡�</b><i>hdl</i> ���б�����Хåե���
-     ���ˤʤä��Ȥ����Ĥ��Υ֥��å����Хåե����ɤ߹��ޤ�롣</li>
-    <li><b>�Хåե���󥰤ʤ���</b>�������Ϥ��ɤ߹��ޤ��֤���롣
-     <tt>hLookAhead</tt> ���</li>
-     (<a href="io.html#hLookAhead">21.9.3</a>��) �Ϥ��Ȥ��Хåե����
-     �ʤ��⡼�ɤΥϥ�ɥ�Ǥ��äƤ��ʸ��ʬ�ΥХåե���ɬ�פǤ��뤳�Ȥ�
-     �����Ƥ��롣
+    <li><b>行バッファリング：</b><i>hdl</i> に対応するバッファが
+     空でない場合、次の項目がバッファから読み込まれる。空であった場合、
+     改行文字がくるか、バッファがフルになるまで、バッファに読み込まれる。
+     改行文字が有効になるか、バッファがフルになるまでは、入力文字は
+     有効にならない。</li>
+    <li><b>ブロックバッファリング：</b><i>hdl</i> に対応するバッファが
+     空になったとき、つぎのブロックがバッファに読み込まれる。</li>
+    <li><b>バッファリングなし：</b>次の入力が読み込まれ返される。
+     <tt>hLookAhead</tt> 操作</li>
+     (<a href="io.html#hLookAhead">21.9.3</a>節) はたとえバッファリング
+     なしモードのハンドルであっても一文字分のバッファが必要であることを
+     示している。
    </ul>
   </p>
   <!--
@@ -747,16 +748,16 @@
    block-buffered and terminals will normally be line-buffered.</p>
   -->
   <p>
-   ��¿���μ����Ǥϡ�ʪ��Ū�ʥե�����ϤդĤ��֥��å��Хåե����
-   �⡼�ɤ����������ߥʥ�ϹԥХåե���󥰥⡼�ɤ����롣
+   大多数の実装では、物理的なファイルはふつうブロックバッファリング
+   モードで操作し、ターミナルは行バッファリングモードで操作する。
   </p>
   <!--
   <p> Computation <tt>hSetBuffering</tt> <i>hdl</i> <i>mode</i> sets the
    mode of buffering for handle <i>hdl</i> on subsequent reads and writes.</p>
   -->
   <p>
-   �׻� <tt>hSetBuffering</tt> <i>hdl</i> <i>mode</i> �ϥϥ�ɥ� <i>hdl</i>
-   �Τ��θ���ɤ߽񤭤ΥХåե���󥰥⡼�ɤ����ꤹ�롣
+   計算 <tt>hSetBuffering</tt> <i>hdl</i> <i>mode</i> はハンドル <i>hdl</i>
+   のその後の読み書きのバッファリングモードを設定する。
   </p>
   <!--
   <ul>
@@ -774,14 +775,14 @@
   -->
   <p>
    <ul>
-    <li>�⤷��<i>mode</i> �� <tt>LineBuffering</tt> �Ǥ����硢
-    ��ǽ�Ǥʤ�ԥХåե���󥰤�ͭ���ˤʤ롣</li>
-    <li>�⤷��<i>mode</i> �� <tt>BlockBuffering</tt> <i>size</i>
-    �Ǥ����硢��ǽ�ʤ�֥��å��Хåե���󥰤�ͭ���ˤʤ롣
-    �Хåե��Υ������ϡ�<i>size</i> �� <tt>Just&nbsp;</tt> <i>n</i>
-    �Ǥ����硢 <i>n</i> ñ�̤Ǥ��ꡢ����ʤ���С�������¸�Ǥ��롣</li>
-    <li>�⤷��<i>mode</i> �� <tt>NoBuffering</tt> �Ǥ����硢��ǽ�ʤ�С�
-     �Хåե���󥰤�̵���ˤʤ롣</li>
+    <li>もし、<i>mode</i> が <tt>LineBuffering</tt> である場合、
+    可能でなら行バッファリングが有効になる。</li>
+    <li>もし、<i>mode</i> が <tt>BlockBuffering</tt> <i>size</i>
+    である場合、可能ならブロックバッファリングが有効になる。
+    バッファのサイズは、<i>size</i> が <tt>Just&nbsp;</tt> <i>n</i>
+    である場合、 <i>n</i> 単位であり、さもなければ、実装依存である。</li>
+    <li>もし、<i>mode</i> が <tt>NoBuffering</tt> である場合、可能ならば、
+     バッファリングは無効になる。</li>
    </ul>
   </p>
   <!--
@@ -789,8 +790,8 @@
    <tt>LineBuffering</tt> to <tt>NoBuffering</tt>, then</p>
   -->
   <p>
-   �⤷���Хåե��⡼�ɤ� <tt>BlockBuffering</tt> �ޤ��ϡ�
-   <tt>LineBuffering</tt> ���� <tt>NoBuffering</tt> ���ѹ����줿��硢
+   もし、バッファモードが <tt>BlockBuffering</tt> または、
+   <tt>LineBuffering</tt> から <tt>NoBuffering</tt> へ変更された場合、
   </p>
   <!--
   <ul>
@@ -802,9 +803,9 @@
   -->
   <p>
    <ul>
-    <li><i>hdl</i> ���񤭤��߲�ǽ�Ǥ���С�<tt>hFlush</tt> ����Ѥ���
-     �Τ�Ʊ�ͤ˥Хåե��ϥե�å��夵��롣</li>
-    <li><i>hdl</i> ���񤭤����ԲĤǤ���С��Хåե������Ƥ��˴�����롣</li>
+    <li><i>hdl</i> が書きこみ可能であれば、<tt>hFlush</tt> を使用する
+     のと同様にバッファはフラッシュされる。</li>
+    <li><i>hdl</i> が書きこみ不可であれば、バッファの内容は破棄される。</li>
    </ul>
   </p>
   <!--  
@@ -814,18 +815,18 @@
    buffering mode to be changed.</p>
   -->
   <p>
-   <em>���顼���</em>�⤷���ϥ�ɥ뤬���Ǥ��ɤ߹��ߡ����뤤��
-   �񤭽Ф��Ѥ˻��Ѥ���Ƥ��ơ����ġ��Хåե���󥰥⡼�ɤ��ѹ���
-   �����ʤ��褦�˼�������Ƥ�����ˤϡ�<tt>hSetBuffering</tt> �׻��� 
-   <tt>isPermissionError</tt> �Ȥʤ꼺�Ԥ��롣
+   <em>エラー報告：</em>もし、ハンドルがすでに読み込み、あるいは
+   書き出し用に使用されていて、かつ、バッファリングモードの変更を
+   許さないように実装されている場合には、<tt>hSetBuffering</tt> 計算は 
+   <tt>isPermissionError</tt> となり失敗する。
   </p>
   <!--
   <p> Computation <tt>hGetBuffering</tt> <i>hdl</i> returns the current
    buffering mode for <i>hdl</i>.</p>
   -->
   <p>
-   �׻� <tt>hGetBuffering</tt> <i>hdl</i> �� <i>hdl</i> �θ��ߤ�
-   �Хåե���󥰥⡼�ɤ��֤���
+   計算 <tt>hGetBuffering</tt> <i>hdl</i> は <i>hdl</i> の現在の
+   バッファリングモードを返す。
   </p>
   <!--
   <p> The default buffering mode when a handle is opened is
@@ -833,23 +834,23 @@
    is attached to that handle.</p>
   -->
   <p>
-   �ϥ�ɥ뤬�����ץ󤵤줿�Ȥ��Υǥե���ȤΥХåե���󥰥⡼�ɤ�
-   ������¸�Ǥ��ꡢ�ϥ�ɥ뤬������Ƥ�줿�ե����륷���ƥ४�֥�������
-   �˰�¸���롣
+   ハンドルがオープンされたときのデフォルトのバッファリングモードは
+   実装依存であり、ハンドルが割り当てられたファイルシステムオブジェクト
+   に依存する。
   </p>
 
   <p><a name="Flushing"></a></p>
   <p> <a name="sect21.6.1"></a></p>
   <!--<h4>21.6.1<tt>&nbsp;&nbsp;</tt>Flushing Buffers</h4>-->
-  <h4>21.6.1<tt>&nbsp;&nbsp;</tt>�Хåե��Υե�å���</h4>
+  <h4>21.6.1<tt>&nbsp;&nbsp;</tt>バッファのフラッシュ</h4>
   <!--
   <p> Computation <tt>hFlush</tt> <i>hdl</i> causes any items buffered for
    output in handle <i>hdl</i> to be sent immediately to the operating
    system.</p>
   -->
   <p>
-   �׻� <tt>hFlush</tt> <i>hdl</i> �ϥϥ�ɥ� <i>hdl</i> ��
-   ���ϥХåե������Ƥ����Ƥ�ľ���˥��ڥ졼�ƥ��󥰥����ƥ�����ꤳ�ࡣ
+   計算 <tt>hFlush</tt> <i>hdl</i> はハンドル <i>hdl</i> の
+   出力バッファの全ての内容を直ちにオペレーティングシステムへ送りこむ。
   </p>
   <!--
   <p> <i>Error reporting</i>: the <tt>hFlush</tt> computation may fail
@@ -859,20 +860,20 @@
    retained under these circumstances.</p>
   -->
   <p>
-   <em>���顼���</em>�⤷���ǥХ������ե�Ǥ���� <tt>hFlush</tt> 
-   �׻��� <tt>isFullError</tt> �Ȥʤꡢ�����ƥ�꥽���������¤�
-   Ķ�������� <tt>isPermissionError</tt> �ȤʤäƼ��Ԥ��롣
-   �Хåե����ʸ�����˴�����뤫�����Τޤޤξ��֤ˤʤ뤫�ϵ��ꤵ��Ƥ��ʤ���
+   <em>エラー報告：</em>もし、デバイスがフルであれば <tt>hFlush</tt> 
+   計算は <tt>isFullError</tt> となり、システムリソースの制限を
+   超えた場合は <tt>isPermissionError</tt> となって失敗する。
+   バッファ内の文字が破棄されるか、そのままの状態になるかは規定されていない。
   </p>
 
   <p><a name="Seeking"></a></p>
   <p> <a name="sect21.7"></a></p>
   <!--<h3>21.7<tt>&nbsp;&nbsp;</tt>Repositioning Handles</h3>-->
-  <h3>21.7<tt>&nbsp;&nbsp;</tt>�ϥ�ɥ�κ�����</h3>
+  <h3>21.7<tt>&nbsp;&nbsp;</tt>ハンドルの再配置</h3>
 
   <p> <a name="sect21.7.1"></a></p>
   <!--<h4>21.7.1<tt>&nbsp;&nbsp;</tt>Revisiting an I/O Position</h4>-->
-  <h4>21.7.1<tt>&nbsp;&nbsp;</tt>I/O ���֤κ�ˬ</h4>
+  <h4>21.7.1<tt>&nbsp;&nbsp;</tt>I/O 位置の再訪</h4>
   <!--
   <p> Computation <tt>hGetPosn</tt> <i>hdl</i> returns the current I/O
    position of <i>hdl</i> as a value of the abstract type
@@ -882,11 +883,11 @@
    <tt>hGetPosn</tt>.</p>
   -->
   <p>
-   �׻� <tt>hGetPosn</tt> <i>hdl</i> �� <i>hdl</i> �θ��ߤ� I/O ���֤�
-   ��ݥǡ����� <tt>HandlePosn</tt> ���ͤȤ����֤����⤷��
-   <tt>hGetPosn</tt> <i>h</i> �θƤӽФ������� <i>p</i> ���֤����顢
-   �׻�<tt>hSetPosn</tt> <i>p</i> �� <i>h</i> �ΰ��֤�
-   <tt>hGetPosn</tt> ���ƤӽФ��줿���ΰ��֤����ꤹ�롣
+   計算 <tt>hGetPosn</tt> <i>hdl</i> は <i>hdl</i> の現在の I/O 位置を
+   抽象データ型 <tt>HandlePosn</tt> の値として返す。もし、
+   <tt>hGetPosn</tt> <i>h</i> の呼び出しが位置 <i>p</i> を返したら、
+   計算<tt>hSetPosn</tt> <i>p</i> は <i>h</i> の位置を
+   <tt>hGetPosn</tt> が呼び出された時の位置に設定する。
   </p>  
   <!--
   <p> <i>Error reporting</i>: the <tt>hSetPosn</tt> computation may fail
@@ -894,22 +895,22 @@
    exceeded.</p>
   -->
   <p>
-   <em>���顼���</em>�⤷�������ƥ�꥽���������¤�Ķ�����顢�׻� 
-   <tt>hSetPosn</tt> �� <tt>isPermissionError</tt> �Ȥʤ꼺�Ԥ��롣
+   <em>エラー報告：</em>もし、システムリソースの制限を超えたら、計算 
+   <tt>hSetPosn</tt> は <tt>isPermissionError</tt> となり失敗する。
   </p>
 
   <p> <a name="sect21.7.2"></a></p>
   <!--<h4>21.7.2<tt>&nbsp;&nbsp;</tt>Seeking to a new Position</h4>-->
-  <h4>21.7.2<tt>&nbsp;&nbsp;</tt>���������֤ؤΥ�����</h4>
+  <h4>21.7.2<tt>&nbsp;&nbsp;</tt>新しい位置へのシーク</h4>
   <!--
   <p> Computation <tt>hSeek</tt> <i>hdl</i> <i>mode</i> <i>i</i> sets the
    position of handle <i>hdl</i> depending on <i>mode</i>. If <i>mode</i>
    is:</p>
   -->
   <p>
-   �׻� <tt>hSeek</tt> <i>hdl</i> <i>mode</i> <i>i</i> �ϥϥ�ɥ� 
-   <i>hdl</i> �ΰ��֤� <i>mode</i> �ˤ������ä����ꤹ�롣
-   �⤷ <i>mode</i> ��
+   計算 <tt>hSeek</tt> <i>hdl</i> <i>mode</i> <i>i</i> はハンドル 
+   <i>hdl</i> の位置を <i>mode</i> にしたがって設定する。
+   もし <i>mode</i> が
   </p>
   <!--
   <ul>
@@ -925,19 +926,19 @@
   -->
   <p>
    <ul>
-    <li><tt>AbsoluteSeek</tt> : �ʤ�С�<i>hdl</i> �ΰ��֤� <i>i</i> ������
-     ����롣</li>
-    <li><tt>RelativeSeek</tt> : �ʤ�С�<i>hdl</i> �ΰ��֤ϸ��ߤΰ��֤���
-        ���ե��å� <i>i</i> �ΰ��֤����ꤵ��롣</li>
-    <li><tt>SeekFromEnd</tt> : �ʤ�С�<i>hdl</i> �ΰ��֤ϥե�����ν�ü����
-	���ե��å� <i>i</i> �ΰ��֤����ꤵ��롣</li>
+    <li><tt>AbsoluteSeek</tt> : ならば、<i>hdl</i> の位置は <i>i</i> に設定
+     される。</li>
+    <li><tt>RelativeSeek</tt> : ならば、<i>hdl</i> の位置は現在の位置から
+        オフセット <i>i</i> の位置に設定される。</li>
+    <li><tt>SeekFromEnd</tt> : ならば、<i>hdl</i> の位置はファイルの終端から
+	オフセット <i>i</i> の位置に設定される。</li>
    </ul>
   </p>
   <!--
   <p>The offset is given in terms of 8-bit bytes.</p>
   -->
   <p>
-   ���ե��åȤ� 8-bit �Х��Ȥ�Ϳ�����롣
+   オフセットは 8-bit バイトで与えられる。
   </p>
   <!--
   <p> If <i>hdl</i> is block- or line-buffered, then seeking to a position
@@ -951,16 +952,16 @@
    physical file, an I/O position beyond the current end-of-file.</p>
   -->
   <p>
-   �⤷��<i>hdl</i> ���֥��å��Хåե���󥰥⡼�ɤ��뤤�ϥ饤��
-   �Хåե���󥰥⡼�ɤʤ顢���ߤΥХåե���ˤʤ����֤ؤΥ�������
-   �Ԥ��ȡ��ޤ������ϥХåե���ˤ���ǡ����򤹤٤ƥǥХ�����
-   �񤭽Ф������Τ��ȡ����ϥХåե����˴����롣�����Υϥ�ɥ��
-   �������Բ�ǽ�ʾ�礬����( <tt>hIsSeekable</tt>�ι�򸫤�)���ޤ��ϡ�
-   ��ǽ�ʰ��֤ɤ����Τߤ򥵥ݡ��Ȥ�����(���Ȥ��С��ơ��פκǸ��
-   �Τ߰��֤ɤ�򤹤뤳�Ȥ���ǽ�Ǥ���Ȥ�����Ƭ�ΰ��֤��뤤�ϸ���
-   ���֤���Υ��ե��åȤǤΤ߰��֤ɤ꤬�Ǥ���Ȥ�������)�⤢�롣
-   ���I/O���֤����ꤹ��Τ��Բ�ǽ�Ǥ��롣�ޤ���ʪ��Ū�ʥե������
-   �Ф��Ƹ��ߤν�ü��Ķ������֤ɤ���Բ�ǽ�Ǥ��롣
+   もし、<i>hdl</i> がブロックバッファリングモードあるいはライン
+   バッファリングモードなら、現在のバッファ内にない位置へのシークを
+   行うと、まず、出力バッファ内にあるデータをすべてデバイスに
+   書き出し、そのあと、入力バッファを破棄する。一部のハンドルは
+   シーク不可能な場合がある( <tt>hIsSeekable</tt>の項を見よ)。または、
+   可能な位置どり操作のみをサポートする場合(たとえば、テープの最後に
+   のみ位置どりをすることが可能であるとか、先頭の位置あるいは現在
+   位置からのオフセットでのみ位置どりができるということ)もある。
+   負のI/O位置を設定するのは不可能である。また、物理的なファイルに
+   対して現在の終端を超える位置どりも不可能である。
   </p>
   <!--
   <p> <i>Error reporting</i>: the <tt>hSeek</tt> computation may fail with:
@@ -968,15 +969,15 @@
    exceeded.</p>
   -->
   <p>
-   <em>���顼���</em> <tt>hSeek</tt> �׻��ϥ����ƥ�λ񸻸³���
-   Ķ����� <tt>isPerissionError</tt> �Ǽ��Ԥ��롣
+   <em>エラー報告：</em> <tt>hSeek</tt> 計算はシステムの資源限界を
+   超えると <tt>isPerissionError</tt> で失敗する。
   </p>
 
   <p><a name="Query"></a></p>
   <p> <a name="sect21.8"></a></p>
 
   <!--  <h3>21.8<tt>&nbsp;&nbsp;</tt>Handle Properties</h3>-->
-  <h3>21.8<tt>&nbsp;&nbsp;</tt>�ϥ�ɥ������</h3>
+  <h3>21.8<tt>&nbsp;&nbsp;</tt>ハンドルの性質</h3>
   <!--
   <p> The functions <tt>hIsOpen</tt>, <tt>hIsClosed</tt>,
    <tt>hIsReadable</tt>, <tt>hIsWritable</tt> and <tt>hIsSeekable
@@ -985,20 +986,20 @@
    <tt>False</tt> otherwise.</p>
   -->
   <p>
-   �ؿ�
-   <tt>hIsOpen</tt>�� 
-   <tt>hIsClosed</tt>��
-   <tt>hIsReadable</tt>��
-   <tt>hIsWritable</tt> �����
+   関数
+   <tt>hIsOpen</tt>、 
+   <tt>hIsClosed</tt>、
+   <tt>hIsReadable</tt>、
+   <tt>hIsWritable</tt> および
    <tt>hIsSeekable</tt>
-   �ϥϥ�ɥ�������˴ؤ��������֤��������δؿ��ϥϥ�ɥ뤬��
-   ������������Ĥʤ� <tt>True</tt> ���֤��������Ǥʤ���С�
-   <tt>False</tt> ���֤���
+   はハンドルの性質に関する情報を返す。これらの関数はハンドルが、
+   指定の性質をもつなら <tt>True</tt> を返し、そうでなければ、
+   <tt>False</tt> を返す。
   </p>
 
   <p> <a name="sect21.9"></a></p>
   <!--<h3>21.9<tt>&nbsp;&nbsp;</tt>Text Input and Output</h3>-->
-  <h3>21.9<tt>&nbsp;&nbsp;</tt>�ƥ�����������</h3>
+  <h3>21.9<tt>&nbsp;&nbsp;</tt>テキスト入出力</h3>
   <!--
   <p> Here we define a standard set of input operations for reading
    characters and strings from text files, using handles. Many of these
@@ -1007,16 +1008,16 @@
    explicitly specified by the I/O operation.</p>
   -->
   <p>
-   �����ǡ��ƥ����ȥե����뤫��ϥ�ɥ���Ѥ���ʸ�����뤤��ʸ�����
-   �ɤ߽Ф������ɸ�����������������롣�����δؿ���¿����
-   �ץ��塼�ɤˤ���ؿ��ΰ��̲�������ΤǤ��롣�ץ��塼�ɤ�I/O�ؿ���
-   �ۤȤ�ɤ���<tt>stdin</tt> ����� <tt>stdout</tt> ��Ȥ���ΤǤ��뤬��
-   �����Ǥϡ��ϥ�ɥ뤬����Ū��I/O���ˤ�äƻ��ꤵ��Ƥ��롣
+   ここで、テキストファイルからハンドルを用いて文字あるいは文字列を
+   読み出すための標準の入力操作群を定義する。これらの関数の多くは
+   プレリュードにある関数の一般化したものである。プレリュードのI/O関数は
+   ほとんどが、<tt>stdin</tt> および <tt>stdout</tt> を使うものであるが、
+   ここでは、ハンドルが明示的にI/O操作によって指定されている。
   </p>
   <p><a name="hReady"></a></p>
   <p> <a name="sect21.9.1"></a></p>
   <!--<h4>21.9.1<tt>&nbsp;&nbsp;</tt>Checking for Input</h4>-->
-  <h4>21.9.1<tt>&nbsp;&nbsp;</tt>���ϤΤ���Υ����å�</h4>
+  <h4>21.9.1<tt>&nbsp;&nbsp;</tt>入力のためのチェック</h4>
   <p><a name="hWaitForInput"></a></p>
   <!--
   <p> Computation <tt>hWaitForInput</tt> <i>hdl</i> <i>t</i> waits until
@@ -1025,18 +1026,18 @@
    is available within <i>t</i> milliseconds.</p>
   -->
   <p>
-   <tt>hWaitForInput</tt> <i>hdl</i> <i>t</i> �η׻��ϥϥ�ɥ� <i>hdl</i> 
-   ������Ϥ����Ѳ�ǽ�ˤʤ�Τ��Ԥ���碌�롣���δؿ��ϥϥ�ɥ� <i>hdl</i> 
-   ������Ϥ����Ѳ�ǽ�ˤʤꤷ���� <tt>True</tt> ���֤����⤷ <i>t</i> �ߥ�
-   �ð�������Ϥ����Ѳ�ǽ�ˤʤ�ʤ���С�<tt>False</tt> ���֤���
+   <tt>hWaitForInput</tt> <i>hdl</i> <i>t</i> の計算はハンドル <i>hdl</i> 
+   上で入力が利用可能になるのを待ち合わせる。この関数はハンドル <i>hdl</i> 
+   上で入力が利用可能になりしだい <tt>True</tt> を返す。もし <i>t</i> ミリ
+   秒以内に入力が利用可能にならなければ、<tt>False</tt> を返す。
   </p>
   <!--
   <p> Computation <tt>hReady</tt> <i>hdl</i> indicates whether at least one
    item is available for input from handle <i>hdl</i>.</p>
   -->
   <p>
-   <tt>hReady</tt> <i>hdl</i> �η׻��Ϥ��ʤ��Ȥ� 1 �Ĥι��ܤ��ϥ�ɥ� 
-   <i>hdl</i> �����Ѳ�ǽ�ˤʤäƤ��뤫�ɤ�����ɽ�����롣
+   <tt>hReady</tt> <i>hdl</i> の計算はすなくとも 1 つの項目がハンドル 
+   <i>hdl</i> で利用可能になっているかどうかを表示する。
   </p>
   <!--
   <p> <i>Error reporting</i>: the <tt>hWaitForInput</tt> and
@@ -1044,20 +1045,20 @@
    file has been reached.</p>
   -->
   <p>
-   <em>���顼���</em> <tt>hWaitForInput</tt>��<tt>hReady</tt> �η׻��ϡ�
-   �ե�����ν�ü����ã���Ƥ���� <tt>isEOFError</tt> �Ǽ��Ԥ��롣
+   <em>エラー報告：</em> <tt>hWaitForInput</tt>、<tt>hReady</tt> の計算は、
+   ファイルの終端に到達していると <tt>isEOFError</tt> で失敗する。
   </p>
 
   <p> <a name="sect21.9.2"></a></p>
   <!--<h4>21.9.2<tt>&nbsp;&nbsp;</tt>Reading Input</h4>-->
-  <h4>21.9.2<tt>&nbsp;&nbsp;</tt>���Ϥ��ɤ߹���</h4>
+  <h4>21.9.2<tt>&nbsp;&nbsp;</tt>入力の読み込み</h4>
   <!--
   <p> Computation <tt>hGetChar</tt> <i>hdl</i> reads a character from the
    file or channel managed by <i>hdl</i>.</p>
   -->
   <p>
-   <tt>hGetChar</tt> <i>hdl</i> �׻��� <i>hdl</i> �ˤ���������Ƥ���
-   �ե����뤢�뤤�ϥ���ͥ뤫���ʸ���ɤ߽Ф���
+   <tt>hGetChar</tt> <i>hdl</i> 計算は <i>hdl</i> により管理されている
+   ファイルあるいはチャネルから一文字読み出す。
   </p>
   <!--
   <p> Computation <tt>hGetLine</tt> <i>hdl</i> reads a line from the file
@@ -1065,9 +1066,9 @@
    shorthand for <tt>hGetLine&nbsp;stdin</tt>.</p>
   -->
   <p>
-   <tt>hGetLine</tt> <i>hdl</i> �׻��� <i>hdl</i> �ˤ���������Ƥ���
-   �ե����뤢�뤤�ϥ���ͥ뤫�����ɤ߽Ф����ץ��塼����� 
-   <tt>getLine</tt> �� <tt>hGetLine&nbsp;stdin</tt> �Ȥξ�ά���Ǥ��롣
+   <tt>hGetLine</tt> <i>hdl</i> 計算は <i>hdl</i> により管理されている
+   ファイルあるいはチャネルから一行読み出す。プレリュード中の 
+   <tt>getLine</tt> は <tt>hGetLine&nbsp;stdin</tt> との省略形である。
   </p>
   <!--
   <p> <i>Error reporting</i>: the <tt>hGetChar</tt> computation fails with
@@ -1079,81 +1080,81 @@
    (partial) line is returned.</p>
   -->
   <p>
-   <em>���顼���</em> <tt>hGetContents</tt> �׻��ϡ��ե�����ν�ü��
-   ��ã���Ƥ���С�<tt>isEOFError</tt> �Ǽ��Ԥ��롣<tt>hGetLine</tt>
-   �׻��ϡ��Ԥκǽ��ʸ�����ɤ���Ȥ��ˡ��ե����뽪ü�˽в񤨤С�
-   <tt>isEOFError</tt> �Ǽ��Ԥ��롣<tt>hGetLine</tt> ������ʳ���
-   ���ǥե����뽪ü�˽в񤨤С������Ԥν�ü�Ȥ��ư���������
-   (��ʬ)�Ԥ��֤���
+   <em>エラー報告：</em> <tt>hGetContents</tt> 計算は、ファイルの終端に
+   到達していれば、<tt>isEOFError</tt> で失敗する。<tt>hGetLine</tt>
+   計算は、行の最初の文字を読んだときに、ファイル終端に出会えば、
+   <tt>isEOFError</tt> で失敗する。<tt>hGetLine</tt> がそれ以外の
+   場所でファイル終端に出会えば、それを行の終端として扱い、その
+   (部分)行を返す。
   </p>
   <p><a name="hLookAhead"></a></p>
   <p> <a name="sect21.9.3"></a></p>
 
   <!--<h4>21.9.3<tt>&nbsp;&nbsp;</tt>Reading Ahead</h4>-->
-  <h4>21.9.3<tt>&nbsp;&nbsp;</tt>���ɤ�</h4>
+  <h4>21.9.3<tt>&nbsp;&nbsp;</tt>先読み</h4>
   <!--
   <p> Computation <tt>hLookAhead</tt> <i>hdl</i> returns the next character
    from handle <i>hdl</i> without removing it from the input buffer,
    blocking until a character is available.</p>
   -->
   <p>
-   <tt>hLookAhead</tt> <i>hdl</i> �η׻��ϥϥ�ɥ� <i>hdl</i> ����
-   ���ΰ�ʸ�����ɤ߽Ф�������������ϥХåե�����������ʤ����ޤ���
-   ��ʸ�����Ѳ�ǽ�ˤʤ�ޤǡ��֥��å����롣
+   <tt>hLookAhead</tt> <i>hdl</i> の計算はハンドル <i>hdl</i> から
+   次の一文字を読み出すが、それを入力バッファから取り除かない。また、
+   一文字利用可能になるまで、ブロックする。
   </p>
   <!--
   <p> <i>Error reporting</i>: the <tt>hLookAhead</tt> computation may fail
    with: <tt>isEOFError</tt> if the end of file has been reached.</p>
   -->
   <p>
-   <em>���顼���</em>
-   <tt>hLookahead</tt> �׻��ϡ��ե�����ν�ü����ã���Ƥ����
-   <tt>isEOFError</tt> �Ǽ��Ԥ��롣
+   <em>エラー報告：</em>
+   <tt>hLookahead</tt> 計算は、ファイルの終端に到達していると
+   <tt>isEOFError</tt> で失敗する。
   </p>
 
   <p><a name="hGetContents"></a></p>
   <p> <a name="sect21.9.4"></a></p>
   <!--<h4>21.9.4<tt>&nbsp;&nbsp;</tt>Reading The Entire Input</h4>-->
-  <h4>21.9.4<tt>&nbsp;&nbsp;</tt>�������Τ��ɤ߹���</h4>
+  <h4>21.9.4<tt>&nbsp;&nbsp;</tt>入力全体の読み込み</h4>
   <!--
   <p> Computation <tt>hGetContents</tt> <i>hdl</i> returns the list of
    characters corresponding to the unread portion of the channel or file
    managed by <i>hdl</i>, which is made semi-closed.</p>
   -->
   <p>
-   <tt>hGetContents</tt> <i>hdl</i> �׻��� <i>hdl</i> �ˤ��
-   ��������Ƥ���ե����뤢�뤤�ϥ���ͥ��̤����ʬ�ˤ���ʸ����
-   �ꥹ�Ȥ��֤����ϥ�ɥ�򥻥ߥ����������롣
+   <tt>hGetContents</tt> <i>hdl</i> 計算は <i>hdl</i> により
+   管理されているファイルあるいはチャネルの未読部分にある文字の
+   リストを返し、ハンドルをセミクローズする。
   </p>
   <!--
   <p> <i>Error reporting</i>: the <tt>hGetContents</tt> computation may
    fail with: <tt>isEOFError</tt> if the end of file has been reached.</p>
   -->
   <p>
-   <em>���顼���</em>
-   <tt>hGetContents</tt> �׻��ϡ��ե�����ν�ü����ã���Ƥ���С�
-   <tt>isEOFError</tt> �Ǽ��Ԥ��롣
+   <em>エラー報告：</em>
+   <tt>hGetContents</tt> 計算は、ファイルの終端に到達していれば、
+   <tt>isEOFError</tt> で失敗する。
   </p>
   <p> <a name="sect21.9.5"></a></p>
   <!--<h4>21.9.5<tt>&nbsp;&nbsp;</tt>Text Output</h4>-->
-  <h4>21.9.5<tt>&nbsp;&nbsp;</tt>�ƥ����Ƚ���</h4>
+  <h4>21.9.5<tt>&nbsp;&nbsp;</tt>テキスト出力</h4>
   <!--
   <p> Computation <tt>hPutChar</tt> <i>hdl</i> <i>c</i> writes the
    character <i>c</i> to the file or channel managed by <i>hdl</i>.
    Characters may be buffered if buffering is enabled for <i>hdl</i>.</p>
   -->
   <p>
-   <tt>hPutChar</tt> <i>hdl</i> <i>c</i> �׻���ʸ�� <i>c</i> �� <i>hdl</i> 
-   �Ǵ�������Ƥ���ե����뤢�뤤�ϥ���ͥ�˽񤭹��ࡣ<i>hdl</i> ���Ф���
-   �Хåե���󥰤���ǽ�ˤʤäƤ���С�ʸ���ϥХåե����ߤ����롣
+   <tt>hPutChar</tt> <i>hdl</i> <i>c</i> 計算は文字 <i>c</i> を <i>hdl</i> 
+   で管理されているファイルあるいはチャネルに書き込む。<i>hdl</i> に対して
+   バッファリングが可能になっていれば、文字はバッファに蓄えられる。
   </p>
   <!--
   <p> Computation <tt>hPutStr</tt> <i>hdl</i> <i>s</i> writes the string
    <i>s</i> to the file or channel managed by <i>hdl</i>.</p>
   --> 
   <p>
-   <tt>hPutStr</tt> <i>hdl</i> <i>s</i> �׻���ʸ���� <i>s</i> �� 
-   <i>hdl</i> �Ǵ�������Ƥ���ե����뤢�뤤�ϥ���ͥ�˽񤭹��ࡣ
+   <tt>hPutStr</tt> <i>hdl</i> <i>s</i> 計算は文字列 <i>s</i> を 
+   <i>hdl</i> で管理されているファイルあるいはチャネルに書き込む。
   </p>
   <!--
   <p> Computation <tt>hPrint</tt> <i>hdl</i> <i>t</i> writes the string
@@ -1161,9 +1162,9 @@
    file or channel managed by <i>hdl</i> and appends a newline.</p>
   -->
   <p>
-   <tt>hPrint</tt> <i>hdl</i> <i>t</i> �׻��� <tt>shows</tt> �ؿ���
-   ���������� <i>t</i> ��ɽ������ʸ�����<i>hdl</i> 
-   �Ǵ�������Ƥ���ե����뤢�뤤�ϥ���ͥ�˽񤭹��ߡ����Ԥ��ɲä��롣
+   <tt>hPrint</tt> <i>hdl</i> <i>t</i> 計算は <tt>shows</tt> 関数で
+   あたえられる <i>t</i> を表現する文字列を<i>hdl</i> 
+   で管理されているファイルあるいはチャネルに書き込み、改行を追加する。
   </p>
   <!--
   <p> <i>Error reporting</i>: the <tt>hPutChar</tt>, <tt>hPutStr</tt> and
@@ -1173,26 +1174,26 @@
    exceeded.</p>
   -->
   <p>
-   <em>���顼���</em>
-   <tt>hPutChar</tt>��<tt>hPutStr</tt> ����� <tt>hPrint</tt> ��
-   �׻��ϥǥХ������ե�Ǥ���� <tt>isFull</tt>-<tt>Error</tt> �Ǽ��Ԥ���
-   �̤Υ����ƥ�񸻤����¤�Ķ����� <tt>isPermissionError</tt> �Ǽ��Ԥ��롣
+   <em>エラー報告：</em>
+   <tt>hPutChar</tt>、<tt>hPutStr</tt> および <tt>hPrint</tt> の
+   計算はデバイスがフルであれば <tt>isFull</tt>-<tt>Error</tt> で失敗し、
+   別のシステム資源の制限を超えると <tt>isPermissionError</tt> で失敗する。
   </p>
 
   <p> <a name="sect21.10"></a></p>
   <!--<h3>21.10<tt>&nbsp;&nbsp;</tt>Examples</h3>-->
-  <h3>21.10<tt>&nbsp;&nbsp;</tt>��</h3>
+  <h3>21.10<tt>&nbsp;&nbsp;</tt>例</h3>
   <!--
   <p> Here are some simple examples to illustrate Haskell I/O.</p>
   -->
-  <p>Haskell �������Ϥ��������뤿��ˤ����Ĥ���򤢤��褦��</p>
+  <p>Haskell の入出力を説明するためにいくつか例をあげよう。</p>
 
   <p> <a name="sect21.10.1"></a></p>
-  <h4>21.10.1<tt>&nbsp;&nbsp;</tt>��Ĥο�����</h4>
+  <h4>21.10.1<tt>&nbsp;&nbsp;</tt>二つの数の和</h4>
   <!--
   <p> This program reads and sums two <tt>Integer</tt>s.
   -->
-  <p> ���Υץ��������ɤ߹������Ĥ� <tt>Integer</tt>���¤�׻�����
+  <p> このプログラムは読み込んだ二つの <tt>Integer</tt>の和を計算する
    <tt><br />
    <br />
    import&nbsp;IO<br />
@@ -1213,7 +1214,7 @@
   
   <p> <a name="sect21.10.2"></a></p>
   <!--<h4>21.10.2<tt>&nbsp;&nbsp;</tt>Copying Files</h4>-->
-  <h4>21.10.2<tt>&nbsp;&nbsp;</tt>�ե�����Υ��ԡ�</h4>
+  <h4>21.10.2<tt>&nbsp;&nbsp;</tt>ファイルのコピー</h4>
   <!--
   <p> A simple program to create a copy of a file, with all lower-case
    characters translated to upper-case. This program will not allow a file
@@ -1221,10 +1222,10 @@
    exactly two arguments must be supplied to the program. 
   -->
   <p>
-   �ե������ʣ������ñ��ʥץ������ǡ����٤Ƥξ�ʸ������ʸ����
-   �Ѵ�����롣���Υץ������ϼ�ʬ���ȤؤΥ��ԡ��ϵ����ʤ���
-   ���ΥС������Ǥ�ʸ����٥�������Ϥ�Ȥ���ɬ�����ץ������ؤ�
-   ���������Ϳ���ʤ���Фʤ�ʤ����Ȥ����դ��衣
+   ファイルの複製を作る単純なプログラムで、すべての小文字は大文字に
+   変換される。このプログラムは自分自身へのコピーは許さない。
+   このバージョンでは文字レベルの入出力を使う。必ず、プログラムへは
+   引数を二つ与えなければならないことに注意せよ。
    <tt><br />
    <br />
    import&nbsp;IO<br />
@@ -1251,7 +1252,7 @@
   <!--
   <p> An equivalent but much shorter version, using string I/O is:
   -->
-  <p> ʸ����������Ϥ��Ѥ���Ʊ���Τ��ä�û���С������ϰʲ��ΤȤ��ꡣ
+  <p> 文字列の入出力を用いた同等のずっと短いバージョンは以下のとおり。
    <tt><br />
    <br />
    import&nbsp;System<br />
@@ -1266,7 +1267,7 @@
 
   <p> <a name="sect21.11"></a></p>
   <!--<h3>21.11<tt>&nbsp;&nbsp;</tt>Library <tt>IO</tt></h3>-->
-  <h3>21.11<tt>&nbsp;&nbsp;</tt><tt>IO</tt> �饤�֥��</h3>
+  <h3>21.11<tt>&nbsp;&nbsp;</tt><tt>IO</tt> ライブラリ</h3>
   <p>
    <tt>module&nbsp;IO&nbsp;{-&nbsp;export&nbsp;list&nbsp;omitted&nbsp;-}&nbsp;where<br />
    <br />

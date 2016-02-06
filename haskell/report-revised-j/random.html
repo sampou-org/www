@@ -1,6 +1,7 @@
-<html>
+<!DOCTYPE html>
+<html lang="ja">
  <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
+  <meta charset="utf-8">
   <title>The Haskell 98 Library Report: Random Numbers</title>
  </head>
 
@@ -13,7 +14,7 @@
   <hr />
   <p><a name="random numbers"></a><a name="sect27"></a></p>
   <!--<h2>27<tt>&nbsp;&nbsp;</tt>Random Numbers</h2>-->
-  <h2>27<tt>&nbsp;&nbsp;</tt>���</h2>
+  <h2>27<tt>&nbsp;&nbsp;</tt>乱数</h2>
 
   <p>
   <table border="2" cellpadding="3">
@@ -85,13 +86,13 @@
    source.</p>
   -->
   <p>
-   <tt>Random</tt> �饤�֥��ϵ�����������򰷤������Υ饤�֥��ϤǤϡ�
-   �����֤�Ʊ����̤��������ˤʤäƤ��롣����ϻ���ν�����������
-   ��Ȥ���ư��Ȥ˰㤦��̤��ۤ����Ȥ��ˤϥ����ƥ������������Ȥ�
-   �����������饷���ɤ�Ϳ����Ф褤��
+   <tt>Random</tt> ライブラリは擬似乱数生成を扱う。このライブラリはでは、
+   繰り返し同じ結果を得られるよになっている。これは指定の初期乱数生成器
+   を使う。動作ごとに違う結果がほしいときにはシステム初期化生成器を使う
+   か、外部からシードを与えればよい。
   </p>
   <!--<p> The library is split into two layers:</p>-->
-  <p>���Υ饤�֥���2�ؤ�ʬ��Ƥ��롣</p>
+  <p>このライブラリは2層に分れている。</p>
   <!--
   <ul>
    <li>A core <i>random number generator</i> provides a supply of bits. The
@@ -109,20 +110,20 @@
   <p>
   <ul>
    <li>
-    <p>�ˤȤʤ�<em>���������</em>�ϥӥå���򶡵뤹�롣<tt>RandomGen</tt> 
-    ���饹�Ϥ������������ؤζ��̥��󥿡��ե������򶡵뤹�롣</p></li>
+    <p>核となる<em>乱数生成器</em>はビット列を供給する。<tt>RandomGen</tt> 
+    クラスはこの類の生成器への共通インターフェイスを供給する。</p></li>
    <li>
-    <p><tt>Random</tt> ���饹����������狼������η����ͤ���Ф����ʤ�
-     �󶡤��롣���Ȥ��С�<tt>Rondom</tt> �� <tt>Fload</tt> ���󥹥���
-     �� <tt>Float</tt> �����ͤȤʤ뤳�Ȥ��Ǥ��롣</p></li>
+    <p><tt>Random</tt> クラスは乱数生成器から特定の型の値を取り出す手段を
+     提供する。たとえば、<tt>Rondom</tt> の <tt>Fload</tt> インスタンス
+     は <tt>Float</tt> 型の値となることができる。</p></li>
   </ul>
   </p>
 
   <p> <a name="sect27.1"></a></p>
   <!--<h3>27.1<tt>&nbsp;&nbsp;</tt>The <tt>RandomGen</tt> class, and the
    <tt>StdGen</tt> generator</h3>-->
-  <h3>27.1<tt>&nbsp;&nbsp;</tt><tt>RandomGen</tt> ���饹��
-   <tt>StdGen</tt> ������</h3>
+  <h3>27.1<tt>&nbsp;&nbsp;</tt><tt>RandomGen</tt> クラスと
+   <tt>StdGen</tt> 生成器</h3>
   <!--
   <p> The class <tt>RandomGen</tt> provides a common interface to random
    number generators. <tt><br />
@@ -138,7 +139,7 @@
    </tt></p>
   -->
   <p>
-   <tt>RandomGen</tt> ���饹�����������ؤζ��̥��󥿥ե������򶡵뤹�롣
+   <tt>RandomGen</tt> クラスは乱数生成器への共通インタフェースを供給する。
    <tt><br />
    <br />
    &nbsp;&nbsp;class&nbsp;RandomGen&nbsp;g&nbsp;where<br />
@@ -189,35 +190,35 @@
   <p>
    <ul>
     <li>
-     <p><tt>genRange</tt> �黻����������֤��ͤ��ϰϤˤʤ롣</p>
+     <p><tt>genRange</tt> 演算は生成器の返す値の範囲になる。</p>
      <p>
       <ul>
-       <li>�⤷��(a,b) = <tt>genRange</tt> g �ʤ�� a &lt; b </li>
+       <li>もし、(a,b) = <tt>genRange</tt> g ならば a &lt; b </li>
        <li><tt>genRange</tt> _|_ /= _|_.</li>
       </ul>
      </p>
-     <p>�Ǥʤ���Фʤ�ʤ���</p>
+     <p>でなければならない。</p>
      <p>
-      ��Ĥ�ξ��� <tt>getRange</tt> ������������å��Ǥ���������椨
-      ���줬�֤��ͤϡ�<tt>RandomGen</tt> �Υ��󥹥��󥹤ˤ�äƤΤ�
-      ���ꤵ�줦��Ȥ������Ȥ�μ¤ˤ��뤿��Τ�ΤǤ��롣
-      Ʊ�ͤ�<tt>genRange</tt> ����٤����ɤ����������ϰϤ���ꤹ��褦
-      �ʼ������ǽ�ˤ��롣���ΤȤ������Ȥ��� <tt>next</tt> ���֤���
-      �����郎 <tt>next</tt> ���Ϥ��줿������Ȱ㤦�ϰϤ��Ĥ��⤷��
-      �ʤ��Ȥ������ۤϤʤ���
+      二つめの条件は <tt>getRange</tt> が引数をチェックできず、それゆえ
+      それが返す値は、<tt>RandomGen</tt> のインスタンスによってのみ
+      決定されうるということを確実にするためのものである。
+      同様に<tt>genRange</tt> を一度だけ読んで生成器の範囲を確定するよう
+      な実装も可能にする。このとき、たとえば <tt>next</tt> が返した
+      生成器が <tt>next</tt> に渡された生成器と違う範囲をもつかもしれ
+      ないという心配はない。
      </p> 
     </li>
     <li>
      <p>
-      <tt>next</tt> ���� <tt>genRange</tt>���֤����ϰ�(ξü��ޤ�)�ǰ�
-      �ͤ�ʬ�ۤ���<tt>Int</tt> �ȿ�������������֤���</p></li>
+      <tt>next</tt> 操作は <tt>genRange</tt>が返した範囲(両端を含む)で一
+      様に分布する<tt>Int</tt> と新しい生成器を返す。</p></li>
     <li>
      <p>
-      <tt>split</tt> ���Ǥ� 2 �Ĥ��̤��������������뤳�Ȥ��Ǥ��롣
-      ����ϴؿ��ץ������Ǥ�����ͭ�ѤǤ���(���Ȥ��С�����������Ƶ�
-      Ū�ƤӽФ����Ϥ��褦�ʾ��Ǥ���)���������ʤ��顢<tt>split</tt> ��
-      ����Ū�˥��Х��Ȥʼ����ˤĤ��Ƥ��ؤɤʤˤ�ʤ���Ƥ��ʤ���(ʸ��
-      [1,4]���桹���Τꤨ����Ǥ���)<p></p></li> 
+      <tt>split</tt> 操作では 2 つの別の乱数生成器を得ることができる。
+      これは関数プログラムでは大変有用である(たとえば、乱数生成器を再帰
+      的呼び出しへ渡すような場合である)。しかしながら、<tt>split</tt> の
+      統計的にロバストな実装については殆どなにもなされていない。(文献
+      [1,4]が我々が知りえた例である)<p></p></li> 
    </ul>
   </p>
   <!--
@@ -236,8 +237,8 @@
    <tt>genRange</tt> of at least 30 bits.</p>
   -->
   <p>
-   <tt>Random</tt> �饤�֥��ϡ�<tt>RandomGen</tt> ���饹�Υ��󥹥��󥹡�
-   ��ݥǡ��������� <tt>StdGen</tt> ���󶡤��롣
+   <tt>Random</tt> ライブラリは、<tt>RandomGen</tt> クラスのインスタンス、
+   抽象データタイプ <tt>StdGen</tt> を提供する。
    <tt><br />
    <br />
    &nbsp;&nbsp;data&nbsp;StdGen&nbsp;=&nbsp;... --&nbsp;Abstract<br />
@@ -249,8 +250,8 @@
    &nbsp;&nbsp;mkStdGen&nbsp;::&nbsp;Int&nbsp;-&gt;&nbsp;StdGen<br />
    <br />
    </tt>
-   <tt>RandomGen</tt> ���饹�Υ��󥹥��� <tt>StdGen</tt> �Ͼ��ʤ��Ȥ�
-   30�ӥåȤ� <tt>genRange</tt>
+   <tt>RandomGen</tt> クラスのインスタンス <tt>StdGen</tt> は少なくとも
+   30ビットの <tt>genRange</tt>
   </p>
   <!--
   <p> The result of repeatedly using <tt>next</tt> should be at least as
@@ -261,11 +262,11 @@
    just given.</p>
   -->
   <p>
-   <tt>next</tt> �򷫤��֤����Ѥ�����̤Ͼ��ʤ��Ȥ⡢[2,3] ��
-   "Minimal Standard Random Number Generator" �ˤ�������Ū�������ͭ����
-   ���ʤ���Фʤ�ʤ���<tt>split</tt> �μ����ˤĤ��ƾܺ٤��Τ�ʤ�����
-   ����٤����Ȥϡ�<tt>split</tt> �� (a) Ʊ��ǤϤʤ� (b) �嵭�ΰ�
-   ̣����Ω�˥��Х��Ȥ���������Ϥ���褦�ˤ��뤳�ȤǤ��롣
+   <tt>next</tt> を繰り返し使用した結果は少なくとも、[2,3] の
+   "Minimal Standard Random Number Generator" にある統計的頑健性を有して
+   いなければならない。<tt>split</tt> の実装について詳細に知らない場合に
+   するべきことは、<tt>split</tt> が (a) 同一ではない (b) 上記の意
+   味で独立にロバストな生成器を届けるようにすることである。
   </p>
   <!--
   <p> The <tt>Show</tt>/<tt>Read</tt> instances of <tt>StdGen</tt> provide
@@ -273,9 +274,9 @@
    required that <tt>read&nbsp;(show&nbsp;g)&nbsp;==&nbsp;g</tt>.</p>
   -->
   <p>
-   <tt>StdGen</tt>�� <tt>Show</tt>/<tt>Read</tt> ���󥹥��󥹤ˤ�����
-   ������ξ��֤��ݻ�������ˡ���󶡤���Ƥ��롣
-   <tt>read&nbsp;(show&nbsp;g)&nbsp;==&nbsp;g</tt> �Ǥʤ���Фʤ�ʤ���
+   <tt>StdGen</tt>の <tt>Show</tt>/<tt>Read</tt> インスタンスにより乱数
+   生成器の状態を保持する方法が提供されている。
+   <tt>read&nbsp;(show&nbsp;g)&nbsp;==&nbsp;g</tt> でなければならない。
   </p>
   <!--
   <p> In addition, <tt>read</tt> may be used to map an arbitrary string
@@ -293,14 +294,14 @@
   </p>
   -->
   <p>
-   ����� <tt>read</tt> ��Ǥ�դ�ʸ����(<tt>show</tt> �ˤ���������줿��
-   �ΤǤ���ɬ�פϤʤ�)�� <tt>StdGen</tt> �����ͤؼ�������Τ˻Ȥ��롣��
-   ��Ū�� <tt>StdGen</tt> �� <tt>Read</tt> ���󥹥��󥹤ϰʲ����������
-   �ġ�
+   さらに <tt>read</tt> は任意の文字列(<tt>show</tt> により生成されたも
+   のである必要はない)を <tt>StdGen</tt> 型の値へ写像するのに使える。一
+   般的に <tt>StdGen</tt> の <tt>Read</tt> インスタンスは以下の性質をも
+   つ。
   <ul>
-   <li>�����ʤ�ʸ������Ф��Ƥ��������뤳�Ȥ��ݾڤ���</li>
-   <li>ʸ�����ͭ����ʬ�Τߤ�Ȥ����Ȥ��ݾڤ���</li>
-   <li>������ʸ���󤬰ۤ�з�̤�㤦�褦�˸�����</li>
+   <li>いかなる文字列に対しても成功することを保証する</li>
+   <li>文字列の有限部分のみを使うことを保証する</li>
+   <li>引数も文字列が異れば結果も違うように見える</li>
   </ul>
   </p>
   <!--
@@ -310,17 +311,17 @@
    distinct generators.</p>
   -->
   <p>
-   �ؿ� <tt>mkStdGen</tt> �ϡ�<tt>Int</tt> ����������ؤμ����ˤ�ꡢ��
-   ���������Ĥ���⤦�ҤȤĤ���ˡ���󶡤��Ƥ��롣�����Ǥ⡢�ѿ����ۤ�
-   �аۤä������郎�Ĥ�����褦�˸����롣 
+   関数 <tt>mkStdGen</tt> は、<tt>Int</tt> から生成器への写像により、初
+   期生成器をつくるもうひとつの方法を提供している。ここでも、変数が異れ
+   ば異った生成器がつくられるように見える。 
   </p>
   <!--
   <p> Programmers may, of course, supply their own instances of
    <tt>RandomGen</tt>.</p>
   -->
   <p>
-   ������󡢥ץ�����ޤ��ȼ��� <tt>RandomGen</tt> �Υ��󥹥��󥹤���
-   ���뤳�Ȥ��Ǥ��롣 
+   もちろん、プログラマは独自の <tt>RandomGen</tt> のインスタンスを提供
+   することができる。 
   </p>
   <!--
   <p> <i>Implementation warning.</i> A superficially attractive
@@ -343,7 +344,7 @@
    Implementations of the above form do not meet the specification.</p>
   -->
   <p>
-   <em>������ηٹ�</em>���츫̥��Ū�� <tt>split</tt> �μ����ϡ�
+   <em>実装上の警告</em>。一見魅力的な <tt>split</tt> の実装は、
    <tt><br />
    <br />
    &nbsp;&nbsp;instance&nbsp;RandomGen&nbsp;MyGen&nbsp;where<br />
@@ -351,23 +352,23 @@
    &nbsp;&nbsp;&nbsp;&nbsp;split&nbsp;g&nbsp;=&nbsp;(g,&nbsp;variantOf&nbsp;g)<br />
    <br />
    </tt>
-   �Ǥ��롣�����Ǥϡ�<tt>split</tt> �� <tt></tt> ���Ȥ��֤���������
-   ������� <tt>g</tt> ����Ƴ�Ф��롣��������������Ĥϳ�������Ω����
-   �������ȹͤ����롣
+   である。ここでは、<tt>split</tt> は <tt></tt> 自身を返し、新たな
+   生成器を <tt>g</tt> から導出する。しかし、この二つは外見上独立した
+   生成器をと考えられる。
    <tt><br />
    <br />
    &nbsp;&nbsp;g1&nbsp;=&nbsp;snd&nbsp;(split&nbsp;g)<br />
    &nbsp;&nbsp;g2&nbsp;=&nbsp;snd&nbsp;(split&nbsp;(fst&nbsp;(split&nbsp;g)))<br />
    <br />
    </tt>
-   �⤷��split ��������Ω�����������(����ɤ���)��ʬ����ȡ�<tt>g1</tt>
-   �� <tt>g2</tt> ����Ω�Ǥʤ���Фʤ�ʤ������������ºݤˤϤ��Τդ��Ĥ�
-   <tt>variantOf g</tt> �����������嵭�Τ褦�ʼ����ϻ��ͤˤϹ��ʤ���
+   もし、split が真に独立した生成器を(指定どおり)配分すると、<tt>g1</tt>
+   と <tt>g2</tt> は独立でなければならない。しかし、実際にはこのふたつは
+   <tt>variantOf g</tt> に等しい。上記のような実装は仕様には合わない。
   </p>
 
   <p> <a name="sect27.2"></a></p>
   <!--<h3>27.2<tt>&nbsp;&nbsp;</tt>The <tt>Random</tt> class</h3>-->
-  <h3>27.2<tt>&nbsp;&nbsp;</tt><tt>Random</tt> ���饹</h3>
+  <h3>27.2<tt>&nbsp;&nbsp;</tt><tt>Random</tt> クラス</h3>
   <!--
   <p> With a source of random number supply in hand, the <tt>Random</tt>
    class allows the programmer to extract random values of a variety of
@@ -403,8 +404,8 @@
    </tt></p>
   -->
   <p>
-   ���������󶡤��륽����������Τǡ��ץ�����ޤϿ����ʷ���������ͤ�
-   <tt>Random</tt> ���饹����Ȥ�������Ȥ��Ǥ��롣
+   手で乱数を提供するソースがあるので、プログラマは色々な型の乱数の値を
+   <tt>Random</tt> クラスからとりだすことができる。
    <tt><br />
    <br />
    class&nbsp;Random&nbsp;a&nbsp;where<br />
@@ -478,39 +479,39 @@
    <ul>
     <li>
      <p>
-      <tt>randomR</tt> ���ϰ� <i>(lo,hi)</i> ����������� <i>g</i> ���
-      �ꡢ�Ķ�� <i>[lo,hi]</i> �Ǥΰ���ʬ������ͤȼ��ο���������Ȥ���
-      ����<i>lo&gt;hi</i> �Ǥ��ä����ʤˤ������뤫�ϵ��ꤷ�ʤ���Ϣ³��
-      ���Ф��Ƥ� <i>lo</i> ����� <i>hi</i> ����������뤳�Ȥ��׵ᤵ���
-      ���ʤ���������ϼ����ȶ�֤˰�¸���뤳�Ȥ�ǧ����Ƥ��롣
+      <tt>randomR</tt> は範囲 <i>(lo,hi)</i> と乱数生成器 <i>g</i> をと
+      り、閉区間 <i>[lo,hi]</i> での一様分布乱数値と次の新な生成器とを返
+      す。<i>lo&gt;hi</i> であった場合なにがおこるかは規定しない。連続型
+      に対しては <i>lo</i> および <i>hi</i> が生成されることを要求されは
+      しないが、これは実装と区間に依存することが認められている。
      </p>
     </li>
     <li>
      <p>
-      <tt>random</tt> �ο��񤤤��ϰϤ�Ȥ�ʤ����Ȥ�Τ�����
-      <tt>randomR</tt> ��Ʊ���Ǥ��롣
+      <tt>random</tt> の振舞いは範囲をとらないことをのぞけば
+      <tt>randomR</tt> と同じである。
      <ul>
-      <li>(<tt>Char</tt> �Τ褦�� <tt>Bounded</tt> ���饹�Υ��󥹥���
-	  �Ǥ���褦��)�¤�줿�ϰϤ��ķ��ˤ������Ƥϡ��ϰϤ��̾�����
-	  ���ˤʤ롣 </li>
-      <li>���������Ф��Ƥϡ��ϰϤ��̾Ⱦ�Ķ�� <i>[0,1)</i> �Ǥ��롣
+      <li>(<tt>Char</tt> のような <tt>Bounded</tt> クラスのインスタンス
+	  であるような)限られた範囲をもつ型にたいしては、範囲は通常整数
+	  型になる。 </li>
+      <li>小数型に対しては、範囲は通常、半閉区間 <i>[0,1)</i> である。
 	  </li>
-      <li><tt>Integer</tt> ���Ф��Ƥ��ϰϤ�Ǥ�դ� <tt>Int</tt> ���ϰϤ�
-	  �ʤ�</li>
+      <li><tt>Integer</tt> に対しては範囲は任意の <tt>Int</tt> の範囲と
+	  なる</li>
      </ul>
      </p>
     </li>
     <li>
      <p>
-      ʣ�����Ǥ� <tt>randomRs</tt> ����� <tt>randoms</tt> �������̵��
-      �ꥹ�Ȥ�����������������������֤��ʤ���
+      複数形版の <tt>randomRs</tt> および <tt>randoms</tt> は乱数の無限
+      リストを生成し、新しい生成器は返さない。
      </p>
     </li>
     <li>
      <p>
-      <tt>IO</tt> �Ǥ� <tt>randomRIO</tt> ����� <tt>randomIO</tt> �ϥ�����
-     �Х�����������Ȥ���(<a href="random.html#global-rng">27.3</a>
-     �򸫤衣)
+      <tt>IO</tt> 版の <tt>randomRIO</tt> および <tt>randomIO</tt> はグロー
+     バル乱数生成器を使う。(<a href="random.html#global-rng">27.3</a>
+     を見よ。)
      </p>
     </li>
    </ul>
@@ -520,7 +521,7 @@
   <p> <a name="sect27.3"></a></p>
 
   <!--<h3>27.3<tt>&nbsp;&nbsp;</tt>The global random number generator</h3>-->
-  <h3>27.3<tt>&nbsp;&nbsp;</tt>�������Х����������</h3>
+  <h3>27.3<tt>&nbsp;&nbsp;</tt>グローバル乱数生成器</h3>
   <!--
   <p> There is a single, implicit, global random number generator of type
    <tt>StdGen</tt>, held in some global variable maintained by the
@@ -539,11 +540,11 @@
    </tt></p>
   -->
   <p>
-   <tt>StdGen</tt> ���ΰ��ۤΥ������Х����������Ȥ�����Τ���Ĥ�������
-   �ơ�<tt>IO</tt> ��ʥɤˤ�갿���Υ������Х��ѿ����ݻ�����Ƥ��롣
-   ����ϥ����ƥ��¸�Τʤ�餫����ˡ�ˤ���������դ��뤤�� Linux ����
-   �ͥ�����������ˤ�ꡢ��ưŪ�˽��������롣������Ūư���Τ����
-   ��<tt>setStdGen</tt> ����Ѥ��뤳�ȡ� 
+   <tt>StdGen</tt> 型の暗黙のグローバル乱数生成器というものが一つだけあっ
+   て、<tt>IO</tt> モナドにより或る種のグローバル変数に保持されている。
+   これはシステム依存のなんらかの方法により時刻と日付あるいは Linux カー
+   ネルの乱数生成器により、自動的に初期化される。決定論的動作をのぞむな
+   ら<tt>setStdGen</tt> を使用すること。 
    <tt><br />
    <br />
    &nbsp;&nbsp;setStdGen&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;StdGen&nbsp;-&gt;&nbsp;IO&nbsp;()
@@ -583,22 +584,22 @@
    <ul>
     <li>
      <p>
-      <tt>getStdGen</tt> ����� <tt>setStdGen</tt> �Ϥ��줾�쥰�����Х���
-      ��������Τ���������ꤹ�롣
+      <tt>getStdGen</tt> および <tt>setStdGen</tt> はそれぞれグローバル乱
+      数生成器のを取得／設定する。
      </p>
     </li>
     <li>
      <p>
-      <tt>newStdGen</tt> �� <tt>split</tt> �򸽺ߤΥ������Х�����������
-      Ŭ�Ѥ��ơ����η�̤ΰ�ĤǤ���򹹿������⤦��Ĥ��֤���
+      <tt>newStdGen</tt> は <tt>split</tt> を現在のグローバル乱数生成器に
+      適用して、その結果の一つでそれを更新し、もう一つを返す。
      </p>
     </li>
     <li>
      <p>
-      <tt>getStdRandom</tt> �϶��뤵�줿�ؿ���Ȥ����ߤΥ������Х������
-      ���狼���ͤ������������������򶡵뤷���ؿ����֤����������������
-      �������롣���Ȥ��С�<tt>rollDice</tt> �� 1 ���� 6 �ޤǤ������ȯ��
-      ���롣
+      <tt>getStdRandom</tt> は供給された関数を使い現在のグローバル乱数生
+      成器から値を取得し、この生成器を供給した関数が返した新しい生成器で
+      更新する。たとえば、<tt>rollDice</tt> は 1 から 6 までの乱数を発生
+      する。
       <tt><br />
       <br />
     &nbsp;&nbsp;rollDice&nbsp;::&nbsp;IO&nbsp;Int<br />
@@ -611,7 +612,7 @@
   </p>
 
   <!--<h3>References</h3>-->
-  <h3>����ʸ��</h3>
+  <h3>参考文献</h3>
 
   <dl>
    <dt> [1]</dt>

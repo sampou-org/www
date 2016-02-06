@@ -1,6 +1,7 @@
-<html>
+<!DOCTYPE html>
+<html lang="ja">
  <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
+  <meta charset="utf-8">
   <title>The Haskell 98 Library Report: List Utilities</title>
  </head>
 
@@ -13,7 +14,7 @@
   <hr />
   <p><a name="sect17"></a></p>
   <!--<h2>17<tt>&nbsp;&nbsp;</tt>List Utilities</h2>-->
-  <h2>17<tt>&nbsp;&nbsp;</tt>¥ê¥¹¥È¥æ¡¼¥Æ¥£¥ê¥Æ¥£</h2>
+  <h2>17<tt>&nbsp;&nbsp;</tt>ãƒªã‚¹ãƒˆãƒ¦ãƒ¼ãƒ†ã‚£ãƒªãƒ†ã‚£</h2>
   <p>
   <table border="2" cellpadding="3">
    <tr>
@@ -127,12 +128,12 @@
   </p>
   <!--<p>This library defines some lesser-used operations over lists.</p>-->
   <p>
-   ¤³¤Î¥é¥¤¥Ö¥é¥ê¤Ï¥ê¥¹¥È¾å¤Î¤¢¤Ş¤ê»ÈÍÑÉÑÅÙ¤Î¹â¤¯¤Ê¤¤±é»»¤òÄêµÁ¤·¤Æ¤¤¤ë¡£
+   ã“ã®ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã¯ãƒªã‚¹ãƒˆä¸Šã®ã‚ã¾ã‚Šä½¿ç”¨é »åº¦ã®é«˜ããªã„æ¼”ç®—ã‚’å®šç¾©ã—ã¦ã„ã‚‹ã€‚
   </p>
 
   <p> <a name="sect17.1"></a></p>
   <!--<h3>17.1<tt>&nbsp;&nbsp;</tt>Indexing lists</h3>-->
-  <h3>17.1<tt>&nbsp;&nbsp;</tt>¥ê¥¹¥È¤Î¥¤¥ó¥Ç¥Ã¥¯¥¹ÉÕ¤±</h3>
+  <h3>17.1<tt>&nbsp;&nbsp;</tt>ãƒªã‚¹ãƒˆã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ä»˜ã‘</h3>
   
 <!--    <p> -->
 <!--    <ul> -->
@@ -159,32 +160,32 @@
    <ul>
     <li>
      <p>
-      <tt>elemIndex&nbsp;val&nbsp;list</tt> ¤Ï¡¢¤â¤·¤¢¤ì¤Ğ¡¢
-      <tt>list</tt> Ãæ¤ÇºÇ½é¤Ë¤¢¤é¤ï¤ì¤¿ <tt>val</tt> ¤Î¥¤¥ó¥Ç¥Ã¥¯¥¹¤ò
-      <tt>Just&nbsp;index</tt> ¤È¤·¤ÆÊÖ¤¹¡£
-      <tt>not&nbsp;(val&nbsp;`elem`&nbsp;list)</tt> ¤Ç¤¢¤ì¤Ğ¡¢
-      <tt>Nothing</tt> ¤òÊÖ¤¹¡£
+      <tt>elemIndex&nbsp;val&nbsp;list</tt> ã¯ã€ã‚‚ã—ã‚ã‚Œã°ã€
+      <tt>list</tt> ä¸­ã§æœ€åˆã«ã‚ã‚‰ã‚ã‚ŒãŸ <tt>val</tt> ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’
+      <tt>Just&nbsp;index</tt> ã¨ã—ã¦è¿”ã™ã€‚
+      <tt>not&nbsp;(val&nbsp;`elem`&nbsp;list)</tt> ã§ã‚ã‚Œã°ã€
+      <tt>Nothing</tt> ã‚’è¿”ã™ã€‚
      </p>
     </li>
     <li>
      <p>
-      <tt>elemIndices&nbsp;val&nbsp;list</tt> ¤Ï
-      <tt>list</tt> Ãæ¤Ë¤¢¤é¤ï¤ì¤ë <tt>val</tt> ¤Î½Ğ¸½¤ËÂĞ±ş¤¹¤ë
-      ¥¤¥ó¥Ç¥Ã¥¯¥¹¤ò¤½¤Î½ç¤Ë¤Ê¤é¤Ù¤¿¥ê¥¹¥È¤òÊÖ¤¹¡£
+      <tt>elemIndices&nbsp;val&nbsp;list</tt> ã¯
+      <tt>list</tt> ä¸­ã«ã‚ã‚‰ã‚ã‚Œã‚‹ <tt>val</tt> ã®å‡ºç¾ã«å¯¾å¿œã™ã‚‹
+      ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’ãã®é †ã«ãªã‚‰ã¹ãŸãƒªã‚¹ãƒˆã‚’è¿”ã™ã€‚
      </p>
     </li>
     <li>
-     <tt>find</tt> ¤Ï½Ò¸ì¤òËş¤¹ºÇ½é¤ÎÍ×ÁÇ¤òÊÖ¤¹¡£¤â¤·¡¢¸«¤Ä¤«¤é¤Ê¤¤¾ì¹ç
-     ¤Ë¤Ï <tt>Nothing</tt> ¤òÊÖ¤¹¡£<tt>findIndex</tt> ¤ÏÂĞ±ş
-     ¤¹¤ë¥¤¥ó¥Ç¥Ã¥¯¥¹¤òÊÖ¤¹¡£<tt>findIndices</tt> ¤Ï¤½¤Î¤è¤¦¤Ê¤¹¤Ù¤Æ¤Î
-     ¥¤¥ó¥Ç¥Ã¥¯¥¹¤Î¥ê¥¹¥È¤òÊÖ¤¹¡£
+     <tt>find</tt> ã¯è¿°èªã‚’æº€ã™æœ€åˆã®è¦ç´ ã‚’è¿”ã™ã€‚ã‚‚ã—ã€è¦‹ã¤ã‹ã‚‰ãªã„å ´åˆ
+     ã«ã¯ <tt>Nothing</tt> ã‚’è¿”ã™ã€‚<tt>findIndex</tt> ã¯å¯¾å¿œ
+     ã™ã‚‹ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’è¿”ã™ã€‚<tt>findIndices</tt> ã¯ãã®ã‚ˆã†ãªã™ã¹ã¦ã®
+     ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã®ãƒªã‚¹ãƒˆã‚’è¿”ã™ã€‚
     </li>
    </ul>
   </p>
 
   <p> <a name="sect17.2"></a></p>
 <!--    <h3>17.2<tt>&nbsp;&nbsp;</tt>"Set" operations</h3> -->
-  <h3>17.2<tt>&nbsp;&nbsp;</tt>¡Ö½¸¹ç¡×±é»»</h3>
+  <h3>17.2<tt>&nbsp;&nbsp;</tt>ã€Œé›†åˆã€æ¼”ç®—</h3>
 
 <!--    <p> There are a number of "set" operations defined over the <tt>List</tt> -->
 <!--     type. <tt>nub</tt> (meaning "essence") removes duplicates elements from -->
@@ -194,11 +195,11 @@
 <!--     their first argument contains no duplicates.</p> -->
 
   <p>
-   <tt>List</tt> ·¿¾å¤Î¡Ö½¸¹ç¡×±é»»¤¬¤¤¤¯¤Ä¤âÄêµÁ¤µ¤ì¤Æ¤¤¤Ş¤¹¡£
-   <tt>nub</tt> (¡Ö¥¨¥Ã¥»¥ó¥¹¡×¤Î°Õ)¤Ï¥ê¥¹¥È¤«¤é½ÅÊ£¤¹¤ëÍ×ÁÇ¤ò¼è¤ê½ü¤¯¡£
-   <tt>delete</tt>¡¢<tt>(&#92;&#92;)</tt>¡¢<tt>union</tt> ¤ª¤è¤Ó
-   <tt>intersect</tt> ¤ÏÂè°ì°ú¿ô¤È¤·¤Æ½ÅÊ£¤Î¤Ê¤¤¥ê¥¹¥È¤¬Í¿¤¨¤é¤ì¤¿¤é¡¢
-   ½ÅÊ£Í×ÁÇ¤ò¤â¤¿¤Ê¤¤¤È¤¤¤¦ÉÔÊÑÉ½ÌÀ¤òÊİ»ı¤¹¤ë¡£
+   <tt>List</tt> å‹ä¸Šã®ã€Œé›†åˆã€æ¼”ç®—ãŒã„ãã¤ã‚‚å®šç¾©ã•ã‚Œã¦ã„ã¾ã™ã€‚
+   <tt>nub</tt> (ã€Œã‚¨ãƒƒã‚»ãƒ³ã‚¹ã€ã®æ„)ã¯ãƒªã‚¹ãƒˆã‹ã‚‰é‡è¤‡ã™ã‚‹è¦ç´ ã‚’å–ã‚Šé™¤ãã€‚
+   <tt>delete</tt>ã€<tt>(&#92;&#92;)</tt>ã€<tt>union</tt> ãŠã‚ˆã³
+   <tt>intersect</tt> ã¯ç¬¬ä¸€å¼•æ•°ã¨ã—ã¦é‡è¤‡ã®ãªã„ãƒªã‚¹ãƒˆãŒä¸ãˆã‚‰ã‚ŒãŸã‚‰ã€
+   é‡è¤‡è¦ç´ ã‚’ã‚‚ãŸãªã„ã¨ã„ã†ä¸å¤‰è¡¨æ˜ã‚’ä¿æŒã™ã‚‹ã€‚
   </p>
 <!--
     <ul>
@@ -244,7 +245,7 @@
    <ul>
     <li>
      <p>
-      <tt>nub</tt> ¤Ï¥ê¥¹¥È¤Î¤«¤éÍ×ÁÇ¤Î½ÅÊ£¤ò¤È¤ê¤Î¤¾¤¯¡£¤¿¤È¤¨¤Ğ¡¢
+      <tt>nub</tt> ã¯ãƒªã‚¹ãƒˆã®ã‹ã‚‰è¦ç´ ã®é‡è¤‡ã‚’ã¨ã‚Šã®ããã€‚ãŸã¨ãˆã°ã€
       <tt><br /> 
       <br /> 
       &nbsp;&nbsp;nub&nbsp;[1,3,1,4,3,3]&nbsp;=&nbsp;[1,3,4]<br /> 
@@ -254,8 +255,8 @@
     </li>
     <li>
      <p>
-      <tt>delete&nbsp;x</tt> ¤Ï¤½¤Î¥ê¥¹¥È°ú¿ô¤«¤éºÇ½é¤Ë½Ğ¸½¤·¤¿ 
-      <tt>x</tt> ¤ò¼è¤ê½ü¤¯¡£¤¿¤È¤¨¤Ğ¡¢
+      <tt>delete&nbsp;x</tt> ã¯ãã®ãƒªã‚¹ãƒˆå¼•æ•°ã‹ã‚‰æœ€åˆã«å‡ºç¾ã—ãŸ 
+      <tt>x</tt> ã‚’å–ã‚Šé™¤ãã€‚ãŸã¨ãˆã°ã€
       <tt><br /> 
       <br /> 
       &nbsp;&nbsp;delete&nbsp;'a'&nbsp;"banana"&nbsp;==&nbsp;"bnana"<br /> 
@@ -265,29 +266,29 @@
     </li>
     <li>
      <p>
-      <tt>(\\)</tt> ¤Ï¥ê¥¹¥È¤Îº¹(·ë¹çÀ­¤Ï¤Ê¤¤)¤Ç¤¢¤ë¡£
-     <tt>xs&nbsp;\\&nbsp;ys</tt> ¤Î·ë²Ì¤Ï¡¢<tt>xs</tt> ¤Î¤Ê¤«¤«¤é 
-     <tt>ys</tt> ¤Î³ÆÍ×ÁÇ¤ÎºÇ½é¤Ë½Ğ¸½¤·¤¿¤â¤Î¤ò¼è¤ê½ü¤¤¤¿»Ä¤ê¤Ç¤¢¤ë¡£¤·
-     ¤¿¤¬¤Ã¤Æ¡¢
-     <tt>(xs&nbsp;++&nbsp;ys)&nbsp;\\&nbsp;xs&nbsp;==&nbsp;ys</tt> ¤Ç¤¢¤ë¡£
+      <tt>(\\)</tt> ã¯ãƒªã‚¹ãƒˆã®å·®(çµåˆæ€§ã¯ãªã„)ã§ã‚ã‚‹ã€‚
+     <tt>xs&nbsp;\\&nbsp;ys</tt> ã®çµæœã¯ã€<tt>xs</tt> ã®ãªã‹ã‹ã‚‰ 
+     <tt>ys</tt> ã®å„è¦ç´ ã®æœ€åˆã«å‡ºç¾ã—ãŸã‚‚ã®ã‚’å–ã‚Šé™¤ã„ãŸæ®‹ã‚Šã§ã‚ã‚‹ã€‚ã—
+     ãŸãŒã£ã¦ã€
+     <tt>(xs&nbsp;++&nbsp;ys)&nbsp;\\&nbsp;xs&nbsp;==&nbsp;ys</tt> ã§ã‚ã‚‹ã€‚
      </p>
     </li>
     <li>
      <p>
-      <tt>union</tt> ¤Ï¥ê¥¹¥È¤ÎÏÂ¤Ç¤¢¤ë¡£¤¹¤Ê¤ï¤Á¡¢
+      <tt>union</tt> ã¯ãƒªã‚¹ãƒˆã®å’Œã§ã‚ã‚‹ã€‚ã™ãªã‚ã¡ã€
       <tt><br /><br />
       &nbsp;&nbsp;"dog"&nbsp;`union`&nbsp;"cow"&nbsp;==&nbsp;"dogcw"
       <br /><br /></tt>
-      ¤Ç¤¢¤ë¡£
+      ã§ã‚ã‚‹ã€‚
      </p>
     </li>
     <li>
      <p>
-      <tt>intersect</tt> ¤Ï¥ê¥¹¥È¤Î¶¦ÄÌÉôÊ¬¤Ç¤¢¤ë¡£¤¹¤Ê¤ï¤Á¡¢
+      <tt>intersect</tt> ã¯ãƒªã‚¹ãƒˆã®å…±é€šéƒ¨åˆ†ã§ã‚ã‚‹ã€‚ã™ãªã‚ã¡ã€
       <tt><br /><br />
       &nbsp;&nbsp;[1,2,3,4]&nbsp;`intersect`&nbsp;[2,4,6,8]&nbsp;==&nbsp;[2,4]
       <br /><br /></tt>
-      ¤Ç¤¢¤ë¡£
+      ã§ã‚ã‚‹ã€‚
      </p>
     </li>
    </ul>   
@@ -295,7 +296,7 @@
 
   <p> <a name="sect17.3"></a></p>
 <!--    <h3>17.3<tt>&nbsp;&nbsp;</tt>List transformations</h3> -->
-  <h3>17.3<tt>&nbsp;&nbsp;</tt>¥ê¥¹¥È¤ÎÊÑ´¹</h3>
+  <h3>17.3<tt>&nbsp;&nbsp;</tt>ãƒªã‚¹ãƒˆã®å¤‰æ›</h3>
   <!--
   <ul>
    <li> <tt>intersperse&nbsp;sep</tt> inserts <tt>sep</tt> between the
@@ -378,61 +379,61 @@
    <ul>
     <li>
      <p>
-      <tt>intersperse&nbsp;sep</tt> ¤Ï¤½¤Î¥ê¥¹¥È°ú¿ô¤ÎÍ×ÁÇ¤Î´Ö¤Ë 
-      <tt>seq</tt> ¤òÁŞÆş¤·¤¿¤â¤Î¤Ç¤¢¤ë¡£¤¹¤Ê¤ï¤Á¡¢
+      <tt>intersperse&nbsp;sep</tt> ã¯ãã®ãƒªã‚¹ãƒˆå¼•æ•°ã®è¦ç´ ã®é–“ã« 
+      <tt>seq</tt> ã‚’æŒ¿å…¥ã—ãŸã‚‚ã®ã§ã‚ã‚‹ã€‚ã™ãªã‚ã¡ã€
       <tt><br /><br />
       &nbsp;&nbsp;intersperse&nbsp;','&nbsp;"abcde"&nbsp;==&nbsp;"a,b,c,d,e"
       <br /><br /></tt>
-      ¤Ç¤¢¤ë¡£
+      ã§ã‚ã‚‹ã€‚
      </p>
     </li>
     <li>
      <p>
-      <tt>transpose</tt> ¤Ï¤½¤Î°ú¿ô¤Î¹Ô¤ÈÎó¤òÆş¤ìÂØ¤¨¤ë¡£¤¹¤Ê¤ï¤Á¡¢
+      <tt>transpose</tt> ã¯ãã®å¼•æ•°ã®è¡Œã¨åˆ—ã‚’å…¥ã‚Œæ›¿ãˆã‚‹ã€‚ã™ãªã‚ã¡ã€
       <tt><br /><br />
       &nbsp;&nbsp;transpose&nbsp;[[1,2,3],[4,5,6]]&nbsp;==&nbsp;[[1,4],[2,5],[3,6]]
       <br /><br /></tt>
-     ¤Ç¤¢¤ë¡£
+     ã§ã‚ã‚‹ã€‚
      </p>
     </li>
     <li>
      <p>
-      <tt>partition</tt> ¤Ï°ì¤Ä¤Î½Ò¸ì¤È°ì¤Ä¤Î¥ê¥¹¥È¤ò¤È¤ê¡¢¥ê¥¹¥È¤ÎÂĞ¤ò
-      ÊÖ¤¹¡£¤½¤ì¤¾¤ì¤Î·ë²Ì¤Î¥ê¥¹¥È¤Î°ìÊı¤Ï°ú¿ô¥ê¥¹¥ÈÍ×ÁÇ¤Î¤¦¤Á½Ò¸ì¤ò
-      Ëş¤¹Í×ÁÇ¤ò¤â¤Ä¤â¤Î¡¢°ìÊı¤ÏËş¤µ¤Ê¤¤¤â¤Î¤Ç¤¢¤ë¡£¤¹¤Ê¤ï¤Á¡¢
+      <tt>partition</tt> ã¯ä¸€ã¤ã®è¿°èªã¨ä¸€ã¤ã®ãƒªã‚¹ãƒˆã‚’ã¨ã‚Šã€ãƒªã‚¹ãƒˆã®å¯¾ã‚’
+      è¿”ã™ã€‚ãã‚Œãã‚Œã®çµæœã®ãƒªã‚¹ãƒˆã®ä¸€æ–¹ã¯å¼•æ•°ãƒªã‚¹ãƒˆè¦ç´ ã®ã†ã¡è¿°èªã‚’
+      æº€ã™è¦ç´ ã‚’ã‚‚ã¤ã‚‚ã®ã€ä¸€æ–¹ã¯æº€ã•ãªã„ã‚‚ã®ã§ã‚ã‚‹ã€‚ã™ãªã‚ã¡ã€
       <tt><br /><br />
       &nbsp;&nbsp;partition&nbsp;p&nbsp;xs&nbsp;==&nbsp;(filter&nbsp;p&nbsp;xs,&nbsp;filter&nbsp;(not&nbsp;.&nbsp;p)&nbsp;xs)
       <br /><br /></tt>
-      ¤Ç¤¢¤ë¡£
+      ã§ã‚ã‚‹ã€‚
      </p>
     </li>
     <li>
      <p>
-      <tt>sort</tt>/<tt>sortBy</tt> ¤Ï°ÂÄê¤·¤¿À°Îó¥¢¥ë¥´¥ê¥º¥à¤Î
-      ¼ÂÁõ¤Ç¤¢¤ë¡£<tt>insertBy</tt> ´Ø¿ô¤Ï¥ê¥¹¥È¤Ø»ØÄê¤·¤¿½ç½ø´Ø·¸¤Ë
-      ¤·¤¿¤¬¤Ã¤Æ¥ª¥Ö¥¸¥§¥¯¥È¤òÁŞÆş¤¹¤ë¡£
+      <tt>sort</tt>/<tt>sortBy</tt> ã¯å®‰å®šã—ãŸæ•´åˆ—ã‚¢ãƒ«ã‚´ãƒªã‚ºãƒ ã®
+      å®Ÿè£…ã§ã‚ã‚‹ã€‚<tt>insertBy</tt> é–¢æ•°ã¯ãƒªã‚¹ãƒˆã¸æŒ‡å®šã—ãŸé †åºé–¢ä¿‚ã«
+      ã—ãŸãŒã£ã¦ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æŒ¿å…¥ã™ã‚‹ã€‚
      </p>
     </li>
     <li>
      <p>
-      <tt>insert</tt> ¤Ï¿·¤·¤¤Í×ÁÇ¤ò½ç½ø¥ê¥¹¥È(¾º½ç¤Ë¤Ê¤é¤ó¤Ç¤¤¤ë¤â¤Î)
-      ¤ËÁŞÆş¤¹¤ë¡£
+      <tt>insert</tt> ã¯æ–°ã—ã„è¦ç´ ã‚’é †åºãƒªã‚¹ãƒˆ(æ˜‡é †ã«ãªã‚‰ã‚“ã§ã„ã‚‹ã‚‚ã®)
+      ã«æŒ¿å…¥ã™ã‚‹ã€‚
      </p>
     </li>
     <li>
      <p>
-      <tt>group</tt> ¤Ï¤½¤Î°ú¿ô¤Ç¤¢¤ë¥ê¥¹¥È¤òÅù¤·¤¤ÎÙÀÜÍ×ÁÇ¤Î¥ê¥¹¥È¤Î
-      ¥ê¥¹¥È¤ËÊ¬²ò¤¹¤ë¡£¤¿¤È¤¨¤Ğ¡¢
+      <tt>group</tt> ã¯ãã®å¼•æ•°ã§ã‚ã‚‹ãƒªã‚¹ãƒˆã‚’ç­‰ã—ã„éš£æ¥è¦ç´ ã®ãƒªã‚¹ãƒˆã®
+      ãƒªã‚¹ãƒˆã«åˆ†è§£ã™ã‚‹ã€‚ãŸã¨ãˆã°ã€
       <tt><br /><br />
       &nbsp;&nbsp;group&nbsp;"Mississippi"&nbsp;==&nbsp;["M","i","ss","i","ss","i","pp","i"]
       <br /><br /></tt>
-      ¤Ç¤¢¤ë¡£
+      ã§ã‚ã‚‹ã€‚
      </p>
     </li>
     <li>
      <p>
-      <tt>inits</tt> ¤Ï°ú¿ô¤Î¥ê¥¹¥È¤ÎÀèÆ¬ÉôÊ¬Îó¤ÎÃ»¤¤¤Û¤¦¤«¤é½ç¤Ë
-      ¤Ê¤é¤Ù¤¿¥ê¥¹¥È¤òÊÖ¤¹¡£
+      <tt>inits</tt> ã¯å¼•æ•°ã®ãƒªã‚¹ãƒˆã®å…ˆé ­éƒ¨åˆ†åˆ—ã®çŸ­ã„ã»ã†ã‹ã‚‰é †ã«
+      ãªã‚‰ã¹ãŸãƒªã‚¹ãƒˆã‚’è¿”ã™ã€‚
       <tt><br /><br />
       &nbsp;&nbsp;inits&nbsp;"abc"&nbsp;==&nbsp;["","a","ab","abc"]
       </tt>
@@ -440,8 +441,8 @@
     </li>
     <li>
      <p>
-      <tt>tails</tt> ¤Ï°ú¿ô¤Î¥ê¥¹¥È¤ÎËöÈøÉôÊ¬Îó¤òÄ¹¤¤¤Û¤¦¤«¤é½ç¤Ë
-      ¤Ê¤é¤Ù¤¿¥ê¥¹¥È¤òÊÖ¤¹¡£
+      <tt>tails</tt> ã¯å¼•æ•°ã®ãƒªã‚¹ãƒˆã®æœ«å°¾éƒ¨åˆ†åˆ—ã‚’é•·ã„ã»ã†ã‹ã‚‰é †ã«
+      ãªã‚‰ã¹ãŸãƒªã‚¹ãƒˆã‚’è¿”ã™ã€‚
       <tt><br /><br />
       &nbsp;&nbsp;tails&nbsp;"abc"&nbsp;==&nbsp;["abc",&nbsp;"bc",&nbsp;"c",""]
       </tt>
@@ -449,14 +450,14 @@
     </li>
     <li>
      <p>
-      <tt>mapAccumL&nbsp;f&nbsp;s&nbsp;l</tt> ¤Ï <tt>f</tt> ¤òÃßÀÑ¡Ö¾õÂÖ¡×
-     ¥Ñ¥é¥á¡¼¥¿ <tt>s</tt> ¤È <tt>l</tt> ¤Î³ÆÍ×ÁÇ¤Ë½ç¤ËÅ¬ÍÑ¤¹¤ë¡£
+      <tt>mapAccumL&nbsp;f&nbsp;s&nbsp;l</tt> ã¯ <tt>f</tt> ã‚’è“„ç©ã€ŒçŠ¶æ…‹ã€
+     ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ <tt>s</tt> ã¨ <tt>l</tt> ã®å„è¦ç´ ã«é †ã«é©ç”¨ã™ã‚‹ã€‚
      </p>
     </li>
     <li>
      <p>
-      <tt>mapAccumR</tt> ¤Ï¥ê¥¹¥È¤òº¸¤«¤é±¦¤Ø¤Ç¤Ï¤Ê¤¯¡¢±¦¤«¤éº¸¤ØÃ©¤ë
-      ¤È¤¤¤¦ÅÀ¤ò¤Î¤¾¤±¤Ğ   <tt>mapAccumL</tt> ¤ÈÆ±¤¸¤Ç¤¢¤ë¡£
+      <tt>mapAccumR</tt> ã¯ãƒªã‚¹ãƒˆã‚’å·¦ã‹ã‚‰å³ã¸ã§ã¯ãªãã€å³ã‹ã‚‰å·¦ã¸è¾¿ã‚‹
+      ã¨ã„ã†ç‚¹ã‚’ã®ãã‘ã°   <tt>mapAccumL</tt> ã¨åŒã˜ã§ã‚ã‚‹ã€‚
      </p>
     </li>
    </ul>
@@ -484,22 +485,22 @@
    </tt></p>
   -->
   <p>
-   <tt>unfoldr</tt> ´Ø¿ô¤Ï <tt>foldr</tt> ¤È¡ÖÁĞÂĞ¡×¤Ê´Ø¿ô¤Ç¤¢¤ë¡£
-   <tt>foldr</tt> ¤Ï¥ê¥¹¥È¤ò¾ö¤ß¹ş¤ó¤Ç°ì¤Ä¤ÎÍ×ÌóÃÍ¤Ë¤¹¤ë¤¬¡¢
-   <tt>unfoldr</tt> ¤Ï¼ïÃÍ¤«¤é¥ê¥¹¥È¤ò¹½ÃÛ¤¹¤ë¡£¤¿¤È¤¨¤Ğ¡¢
+   <tt>unfoldr</tt> é–¢æ•°ã¯ <tt>foldr</tt> ã¨ã€ŒåŒå¯¾ã€ãªé–¢æ•°ã§ã‚ã‚‹ã€‚
+   <tt>foldr</tt> ã¯ãƒªã‚¹ãƒˆã‚’ç•³ã¿è¾¼ã‚“ã§ä¸€ã¤ã®è¦ç´„å€¤ã«ã™ã‚‹ãŒã€
+   <tt>unfoldr</tt> ã¯ç¨®å€¤ã‹ã‚‰ãƒªã‚¹ãƒˆã‚’æ§‹ç¯‰ã™ã‚‹ã€‚ãŸã¨ãˆã°ã€
    <tt><br />
    <br />
    &nbsp;&nbsp;iterate&nbsp;f&nbsp;==&nbsp;unfoldr&nbsp;(\x&nbsp;-&gt;&nbsp;Just&nbsp;(x,&nbsp;f&nbsp;x))<br />
    <br />
    </tt>
-   °Ê²¼¤Î¾ò·ï¤¬À®¤êÎ©¤Ä¾ì¹ç
+   ä»¥ä¸‹ã®æ¡ä»¶ãŒæˆã‚Šç«‹ã¤å ´åˆ
    <tt><br />
    <br />
    &nbsp;&nbsp;f'&nbsp;(f&nbsp;x&nbsp;y)&nbsp;=&nbsp;Just&nbsp;(x,y)<br />
    &nbsp;&nbsp;f'&nbsp;z&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;Nothing<br />
    <br />
    </tt>
-   <tt>unfoldr</tt> ¤Ï <tt>foldr</tt> ±é»»¤ò¤È¤ê¤±¤¹¤³¤È¤¬²ÄÇ½¤Ç¤¢¤ë¡£
+   <tt>unfoldr</tt> ã¯ <tt>foldr</tt> æ¼”ç®—ã‚’ã¨ã‚Šã‘ã™ã“ã¨ãŒå¯èƒ½ã§ã‚ã‚‹ã€‚
    <tt><br />
    <br />
    &nbsp;&nbsp;unfoldr&nbsp;f'&nbsp;(foldr&nbsp;f&nbsp;z&nbsp;xs)&nbsp;==&nbsp;xs<br />
@@ -509,19 +510,19 @@
  
  <p> <a name="sect17.5"></a></p>
   <!--<h3>17.5<tt>&nbsp;&nbsp;</tt>Predicates</h3>-->
-  <h3>17.5<tt>&nbsp;&nbsp;</tt>½Ò¸ì</h3>
+  <h3>17.5<tt>&nbsp;&nbsp;</tt>è¿°èª</h3>
   <!--
   <p> <tt>isPrefixOf</tt> and <tt>isSuffixOf</tt> check whether the first
    argument is a prefix (resp. suffix) of the second argument.</p>
   -->
   <p>
-   <tt>isPrefixOf</tt> ¤È <tt>isSuffixOf</tt> ¤ÏÂè°ì°ú¿ô¤¬ÂèÆó°ú¿ô¤Î
-   ¤½¤ì¤¾¤ìÀÜÆ¬¼­¡¢ÀÜÈø¼­¤Ë¤Ê¤Ã¤Æ¤¤¤ë¤«¤É¤¦¤«¤òÈ½Äê¤¹¤ë¡£
+   <tt>isPrefixOf</tt> ã¨ <tt>isSuffixOf</tt> ã¯ç¬¬ä¸€å¼•æ•°ãŒç¬¬äºŒå¼•æ•°ã®
+   ãã‚Œãã‚Œæ¥é ­è¾ã€æ¥å°¾è¾ã«ãªã£ã¦ã„ã‚‹ã‹ã©ã†ã‹ã‚’åˆ¤å®šã™ã‚‹ã€‚
   </p>
 
   <p> <a name="sect17.6"></a></p>
   <!--<h3>17.6<tt>&nbsp;&nbsp;</tt>The "<tt>By</tt>" operations</h3>-->
-  <h3>17.6<tt>&nbsp;&nbsp;</tt>"<tt>By</tt>" ±é»»</h3>
+  <h3>17.6<tt>&nbsp;&nbsp;</tt>"<tt>By</tt>" æ¼”ç®—</h3>
   <!--
   <p> By convention, overloaded functions have a non-overloaded counterpart
    whose name is suffixed with "<tt>By</tt>". For example, the function
@@ -545,9 +546,9 @@
    predicate, the predicate is assumed to define a total ordering.</p>
   -->
   <p>
-   ´·Îã¤Ç¤¤¤¦¤È¡¢Â¿½ÅÄêµÁ´Ø¿ô¤Ë¤Ï¡¢"<tt>By</tt>" ÀÜÈø¼­¤Î¤Ä¤¤¤¿¡¢
-   ÈóÂ¿½ÅÄêµÁ´Ø¿ôÈÇ¤¬¤¢¤ë¡£Îã¤¨¤Ğ¡¢´Ø¿ô <tt>nub</tt> ¤Ï°Ê²¼¤Î¤è¤¦¤Ë
-   ÄêµÁ¤µ¤ì¤Æ¤¤¤ë¡£
+   æ…£ä¾‹ã§ã„ã†ã¨ã€å¤šé‡å®šç¾©é–¢æ•°ã«ã¯ã€"<tt>By</tt>" æ¥å°¾è¾ã®ã¤ã„ãŸã€
+   éå¤šé‡å®šç¾©é–¢æ•°ç‰ˆãŒã‚ã‚‹ã€‚ä¾‹ãˆã°ã€é–¢æ•° <tt>nub</tt> ã¯ä»¥ä¸‹ã®ã‚ˆã†ã«
+   å®šç¾©ã•ã‚Œã¦ã„ã‚‹ã€‚
    <tt><br />
    <br />
    &nbsp;&nbsp;nub&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;(Eq&nbsp;a)&nbsp;=&gt;&nbsp;[a]&nbsp;-&gt;&nbsp;[a]<br />
@@ -555,8 +556,8 @@
    &nbsp;&nbsp;nub&nbsp;(x:xs)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;x&nbsp;:&nbsp;nub&nbsp;(filter&nbsp;(\y&nbsp;-&gt;&nbsp;not&nbsp;(x&nbsp;==&nbsp;y))&nbsp;xs)<br />
    <br />
    </tt>
-   ¤·¤«¤·¡¢Æ±ÅùÀ­¥á¥½¥Ã¥É¤Ï¤¹¤Ù¤Æ¤Î¾õ¶·¤ÇÅ¬ÀÚ¤Ç¤¢¤ë¤È¤Ï¸Â¤é¤Ê¤¤¡£
-   ¼¡¤Î´Ø¿ô
+   ã—ã‹ã—ã€åŒç­‰æ€§ãƒ¡ã‚½ãƒƒãƒ‰ã¯ã™ã¹ã¦ã®çŠ¶æ³ã§é©åˆ‡ã§ã‚ã‚‹ã¨ã¯é™ã‚‰ãªã„ã€‚
+   æ¬¡ã®é–¢æ•°
    <tt><br />
    <br />
    &nbsp;&nbsp;nubBy&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;(a&nbsp;-&gt;&nbsp;a&nbsp;-&gt;&nbsp;Bool)&nbsp;-&gt;&nbsp;[a]&nbsp;-&gt;&nbsp;[a]<br />
@@ -564,11 +565,11 @@
    &nbsp;&nbsp;nubBy&nbsp;eq&nbsp;(x:xs)&nbsp;&nbsp;=&nbsp;&nbsp;x&nbsp;:&nbsp;nubBy&nbsp;eq&nbsp;(filter&nbsp;(\y&nbsp;-&gt;&nbsp;not&nbsp;(eq&nbsp;x&nbsp;y))&nbsp;xs)<br />
    <br />
    </tt>
-   ¤Ç¤Ï¥×¥í¥°¥é¥Ş¤¬Æ±ÅùÀ­¥Æ¥¹¥È¤òÆÈ¼«¤ËÍ¿¤¨¤ë¤³¤È¤¬¤Ç¤­¤ë¡£
-   "<tt>By</tt>" ´Ø¿ô¤¬¡¢<tt>Eq</tt> Ê¸Ì®¤òÆó¹à½Ò¸ì¤ÇÃÖ¤­´¹¤¨¤¿¾ì¹ç¡¢
-   ¤³¤Î½Ò¸ì¤ÏÆ±ÅùÀ­¤òÄêµÁ¤¹¤ë¤â¤Î¤È²¾Äê¤µ¤ì¤ë¡£"<tt>By</tt>" ´Ø¿ô¤¬
-   <tt>Ord</tt> Ê¸Ì®¤òÆó¹à½Ò¸ì¤ÇÃÖ¤­´¹¤¨¤¿¾ì¹ç¡¢¤³¤Î½Ò¸ì¤ÏÁ´½ç½ø¤ò
-   ÄêµÁ¤·¤Æ¤¤¤ë¤â¤Î¤È¸«¤Ê¤¹¡£
+   ã§ã¯ãƒ—ãƒ­ã‚°ãƒ©ãƒãŒåŒç­‰æ€§ãƒ†ã‚¹ãƒˆã‚’ç‹¬è‡ªã«ä¸ãˆã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚
+   "<tt>By</tt>" é–¢æ•°ãŒã€<tt>Eq</tt> æ–‡è„ˆã‚’äºŒé …è¿°èªã§ç½®ãæ›ãˆãŸå ´åˆã€
+   ã“ã®è¿°èªã¯åŒç­‰æ€§ã‚’å®šç¾©ã™ã‚‹ã‚‚ã®ã¨ä»®å®šã•ã‚Œã‚‹ã€‚"<tt>By</tt>" é–¢æ•°ãŒ
+   <tt>Ord</tt> æ–‡è„ˆã‚’äºŒé …è¿°èªã§ç½®ãæ›ãˆãŸå ´åˆã€ã“ã®è¿°èªã¯å…¨é †åºã‚’
+   å®šç¾©ã—ã¦ã„ã‚‹ã‚‚ã®ã¨è¦‹ãªã™ã€‚
   </p>
   <!--
   <p> The "<tt>By</tt>" variants are as follows: <tt>nubBy</tt>,
@@ -578,11 +579,11 @@
    <tt>minimumBy</tt>.</p>
   -->
   <p>
-   "<tt>By</tt>" ¤ÎÊÑ·Á¤Ï°Ê²¼¤Î¤è¤¦¤Ê¤â¤Î¤¬¤¢¤ë¡£
-   <tt>nubBy</tt>¡¢<tt>deleteBy</tt>¡¢<tt>deleteFirstBy</tt>
-   (<tt>\\</tt> ¤Î <tt>By</tt> ¥Ğ¡¼¥¸¥ç¥ó)¡¢<tt>unionBy</tt>¡¢
-   <tt>intersectBy</tt>¡¢<tt>groupBy</tt>¡¢<tt>sortBy</tt>¡¢
-   <tt>insertBy</tt>¡¢<tt>maximumBy</tt>¡¢<tt>minimumBy</tt>¡£
+   "<tt>By</tt>" ã®å¤‰å½¢ã¯ä»¥ä¸‹ã®ã‚ˆã†ãªã‚‚ã®ãŒã‚ã‚‹ã€‚
+   <tt>nubBy</tt>ã€<tt>deleteBy</tt>ã€<tt>deleteFirstBy</tt>
+   (<tt>\\</tt> ã® <tt>By</tt> ãƒãƒ¼ã‚¸ãƒ§ãƒ³)ã€<tt>unionBy</tt>ã€
+   <tt>intersectBy</tt>ã€<tt>groupBy</tt>ã€<tt>sortBy</tt>ã€
+   <tt>insertBy</tt>ã€<tt>maximumBy</tt>ã€<tt>minimumBy</tt>ã€‚
   </p>
   <!--
   <p> The library does not provide <tt>elemBy</tt>, because
@@ -593,17 +594,17 @@
    "<tt>By</tt>" variants.</p>
   -->
   <p>
-   ¤³¤Î¥é¥¤¥Ö¥é¥ê¤Ë¤Ï <tt>elemBy</tt> ¤Ï¤Ê¤¤¡£¤½¤ì¤Ï¡¢
-   <tt>any&nbsp;(eq&nbsp;x)</tt> ¤¬ <tt>elemBy&nbsp;eq&nbsp;x</tt> 
-   ¤¹¤ë¤À¤í¤¦»Å»ö¤ÈÆ±¤¸¤³¤È¤ò¤¹¤ë¤«¤é¤Ç¤¢¤ë¡£¼ê¤Î¹ş¤ó¤ÀÂ¿½ÅÄêµÁ´Ø¿ô 
+   ã“ã®ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã«ã¯ <tt>elemBy</tt> ã¯ãªã„ã€‚ãã‚Œã¯ã€
+   <tt>any&nbsp;(eq&nbsp;x)</tt> ãŒ <tt>elemBy&nbsp;eq&nbsp;x</tt> 
+   ã™ã‚‹ã ã‚ã†ä»•äº‹ã¨åŒã˜ã“ã¨ã‚’ã™ã‚‹ã‹ã‚‰ã§ã‚ã‚‹ã€‚æ‰‹ã®è¾¼ã‚“ã å¤šé‡å®šç¾©é–¢æ•° 
    (<tt>elemIndex</tt>, <tt>elemIndices</tt>, <tt>isPrefixOf</tt>,
-   <tt>isSuffixOf</tt>) ¤Ï "<tt>By</tt>" ¤ÎÊÑ·Á¤È¤¹¤ë¤Û¤É¤Ë¤Ï
-   ½ÅÍ×¤Ç¤Ê¤¤¤È¹Í¤¨¤é¤ì¤¿¡£
+   <tt>isSuffixOf</tt>) ã¯ "<tt>By</tt>" ã®å¤‰å½¢ã¨ã™ã‚‹ã»ã©ã«ã¯
+   é‡è¦ã§ãªã„ã¨è€ƒãˆã‚‰ã‚ŒãŸã€‚
   </p>
 
   <p> <a name="sect17.7"></a></p>
   <!--<h3>17.7<tt>&nbsp;&nbsp;</tt>The "<tt>generic</tt>" operations</h3>-->
-  <h3>17.7<tt>&nbsp;&nbsp;</tt>"<tt>generic</tt>" ±é»»</h3>
+  <h3>17.7<tt>&nbsp;&nbsp;</tt>"<tt>generic</tt>" æ¼”ç®—</h3>
   <!--
   <p> The prefix "<tt>generic</tt>" indicates an overloaded function that
    is a generalised version of a <tt>Prelude</tt> function. For example,
@@ -614,13 +615,13 @@
    is a generalised version of <tt>length</tt>.</p>
   -->
   <p>
-   ÀÜÆ¬¼­ "<tt>generic</tt>" ¤Ï <tt>Prelude</tt> ¤Î´Ø¿ô¤ÎÂ¿½ÅÄêµÁ¤µ¤ì¤¿
-   Áí¾ÎÈÇ¤Ç¤¢¤ë¤³¤È¤ò¼¨¤·¤Æ¤¤¤ë¡£¤¿¤È¤¨¤Ğ¡¢
+   æ¥é ­è¾ "<tt>generic</tt>" ã¯ <tt>Prelude</tt> ã®é–¢æ•°ã®å¤šé‡å®šç¾©ã•ã‚ŒãŸ
+   ç·ç§°ç‰ˆã§ã‚ã‚‹ã“ã¨ã‚’ç¤ºã—ã¦ã„ã‚‹ã€‚ãŸã¨ãˆã°ã€
    <tt><br />
    <br />
    &nbsp;&nbsp;genericLength&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;Integral&nbsp;a&nbsp;=&gt;&nbsp;[b]&nbsp;-&gt;&nbsp;a<br />
    <br /></tt>
-   ¤Ï <tt>length</tt> ¤ÎÁí¾ÎÈÇ¤Ç¤¢¤ë¡£
+   ã¯ <tt>length</tt> ã®ç·ç§°ç‰ˆã§ã‚ã‚‹ã€‚
   </p>
   <!--
   <p> The "<tt>generic</tt>" operations are as follows:
@@ -629,15 +630,15 @@
    <tt>!!</tt>), <tt>genericReplicate</tt>.</p>
   -->
   <p>
-   "<tt>generic</tt>" ±é»»¤Ë¤Ï°Ê²¼¤Î¤è¤¦¤Ê¤â¤Î¤¬¤¢¤ë¡£
-   <tt>genericLength</tt>¡¢<tt>genericTake</tt>¡¢<tt>genericDrop</tt>¡¢
-   <tt>genericSplitAt</tt>¡¢<tt>genericIndex</tt> (<tt>!!</tt> ¤ÎÁí¾ÎÈÇ)¡¢
+   "<tt>generic</tt>" æ¼”ç®—ã«ã¯ä»¥ä¸‹ã®ã‚ˆã†ãªã‚‚ã®ãŒã‚ã‚‹ã€‚
+   <tt>genericLength</tt>ã€<tt>genericTake</tt>ã€<tt>genericDrop</tt>ã€
+   <tt>genericSplitAt</tt>ã€<tt>genericIndex</tt> (<tt>!!</tt> ã®ç·ç§°ç‰ˆ)ã€
    <tt>genericReplicate</tt>
   </p>
 
   <p> <a name="sect17.8"></a></p>
   <!--<h3>17.8<tt>&nbsp;&nbsp;</tt>Further "<tt>zip</tt>" operations</h3>-->
-  <h3>17.8<tt>&nbsp;&nbsp;</tt>ÄÉ²Ã¤Î "<tt>zip</tt>" ±é»»</h3>
+  <h3>17.8<tt>&nbsp;&nbsp;</tt>è¿½åŠ ã® "<tt>zip</tt>" æ¼”ç®—</h3>
   <!--
   <p> The Prelude provides <tt>zip</tt>, <tt>zip3</tt>, <tt>unzip</tt>,
    <tt>unzip3</tt>, <tt>zipWith</tt>, and <tt>zipWith3</tt>. The List
@@ -645,16 +646,16 @@
    arguments.</p>
   -->
   <p>
-   ¥×¥ì¥ê¥å¡¼¥É¤Ç¤Ï¡¢<tt>zip</tt>¡¢<tt>zip3</tt>¡¢<tt>unzip</tt>¡¢
-   <tt>unzip3</tt>¡¢<tt>zipWith</tt>¡¢<tt>zipWith3</tt> ¤¬ÍÑ°Õ¤µ¤ì¤Æ¤¤¤ë¡£
-   ¤³¤Î¥ê¥¹¥È¥é¥¤¥Ö¥é¥ê¤Ç¤ÏÆ±ÍÍ¤Î 3 ¼ï¤Î±é»»¤¬ 4¡¢5¡¢6¡¢7 ¤Î°ú¿ô¤ËÂĞ¤·¤Æ
-   ÍÑ°Õ¤µ¤ì¤Æ¤¤¤ë¡£
+   ãƒ—ãƒ¬ãƒªãƒ¥ãƒ¼ãƒ‰ã§ã¯ã€<tt>zip</tt>ã€<tt>zip3</tt>ã€<tt>unzip</tt>ã€
+   <tt>unzip3</tt>ã€<tt>zipWith</tt>ã€<tt>zipWith3</tt> ãŒç”¨æ„ã•ã‚Œã¦ã„ã‚‹ã€‚
+   ã“ã®ãƒªã‚¹ãƒˆãƒ©ã‚¤ãƒ–ãƒ©ãƒªã§ã¯åŒæ§˜ã® 3 ç¨®ã®æ¼”ç®—ãŒ 4ã€5ã€6ã€7 ã®å¼•æ•°ã«å¯¾ã—ã¦
+   ç”¨æ„ã•ã‚Œã¦ã„ã‚‹ã€‚
   </p>
 
   <a name="List"></a>
   <p> <a name="sect17.9"></a></p>
 
-  <h3>17.9<tt>&nbsp;&nbsp;</tt><tt>List</tt> ¥é¥¤¥Ö¥é¥ê</h3>
+  <h3>17.9<tt>&nbsp;&nbsp;</tt><tt>List</tt> ãƒ©ã‚¤ãƒ–ãƒ©ãƒª</h3>
 
   <p><tt><br />
    module&nbsp;List&nbsp;(&nbsp;<br />

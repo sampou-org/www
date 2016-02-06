@@ -1,6 +1,7 @@
-<html>
+<!DOCTYPE html>
+<html lang="ja">
  <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
+  <meta charset="utf-8">
   <title>The Haskell 98 Report: Derived Instances</title>
  </head>
 
@@ -15,7 +16,7 @@
   <p><a name="sect10"></a></p>
 
   <!--<h2>10<tt>&nbsp;&nbsp;</tt>Specification of Derived Instances</h2>-->
-  <h2>10<tt>&nbsp;&nbsp;</tt>Ƴ�Х��󥹥��󥹤��ò�</h2>
+  <h2>10<tt>&nbsp;&nbsp;</tt>導出インスタンスの特化</h2>
   <!--
   <p> A <i>derived instance</i> is an instance declaration that is
    generated automatically in conjunction with a <tt>data</tt> or
@@ -26,17 +27,17 @@
    chapter, we describe the derivation of classes defined by the Prelude.</p>
   -->
   <p>
-   <em>Ƴ�Х��󥹥���</em> �� <tt>data</tt> ���뤤�� <tt>newtype</tt>
-   ������տ路�ơ���ưŪ���������줿���󥹥�������Ǥ��롣Ƴ�Х���
-   ������������Τϡ��б����뷿�������깽ʸŪ��Ƴ�Ф���롣Ƴ�Х���
-   �����󥹤ϥ���ѥ��餬�ΤäƤ��륯�饹�˴ؤ��ƤΤ߲�ǽ�Ǥ��롣�����
-   �Υ��饹�ϥץ��塼�ɤ����ɸ��饤�֥����������Ƥ����ΤǤ��롣
-   ���ξϤǤϡ��ץ��塼�ɤˤ�ä��������Ƥ��륯�饹��Ƴ�ФˤĤ��Ʋ�
-   �⤹�롣
+   <em>導出インスタンス</em> は <tt>data</tt> あるいは <tt>newtype</tt>
+   宣言に付随して、自動的に生成されたインスタンス宣言である。導出インス
+   タンス宣言の本体は、対応する型の定義より構文的に導出される。導出イン
+   スタンスはコンパイラが知っているクラスに関してのみ可能である。これら
+   のクラスはプレリュードおよび標準ライブラリで定義されているものである。
+   この章では、プレリュードによって定義されているクラスの導出について解
+   説する。
   </p>
   <!--<p> If <i>T</i> is an algebraic datatype declared by:</p>-->
   <p>
-   �⤷ <i>T</i> �����Τ褦��������줿���Ū�ǡ������Ǥ���ʤ�
+   もし <i>T</i> が次のように定義された代数的データ型であるなら
   </p>
   <p>
   <table>
@@ -66,9 +67,9 @@
    <i>C</i> if these conditions hold:</p>
   -->
   <p>
-   (������ <i>m&gt;=0</i> ����ӳ�̤� <i>m=1</i> �ξ���ά�����)��
-   Ƴ�Х��󥹥�������ϡ����饹 <i>C</i> �ˤĤ��ơ��ʲ��ξ�郎
-   �ʤꤿ�ƤС���ǽ�Ȥʤ롣
+   (ここで <i>m&gt;=0</i> および括弧は <i>m=1</i> の場合省略される)、
+   導出インスタンス宣言は、クラス <i>C</i> について、以下の条件が
+   なりたてば、可能となる。
   </p>
   <p>
   <ol>
@@ -80,9 +81,9 @@
    -->
    <li>
     <p>
-    <i>C</i> �� <tt>Eq</tt>��<tt>Ord</tt>��<tt>Enum</tt>��
-    <tt>Bounded</tt>��<tt>Show</tt> ���뤤�� <tt>Read</tt> �Τ�����
-    �ɤ줫��
+    <i>C</i> が <tt>Eq</tt>、<tt>Ord</tt>、<tt>Enum</tt>、
+    <tt>Bounded</tt>、<tt>Show</tt> あるいは <tt>Read</tt> のうちの
+    どれか。
     </p>
    </li>
    <!--
@@ -94,9 +95,9 @@
    -->
    <li>
     <p>
-    <i>cx' =&gt;C t</i><sub><i>ij</i></sub> ���������Ǥη�
-    <i>t</i><sub><i>ij</i></sub> �Τ��줾��ˤĤ�����¸����Ƥ���褦��
-    ʸ̮ <i>cx'</i> �����롣
+    <i>cx' =&gt;C t</i><sub><i>ij</i></sub> が構成要素の型
+    <i>t</i><sub><i>ij</i></sub> のそれぞれについて保存されているような
+    文脈 <i>cx'</i> がある。
     </p>
    </li>
    <!--
@@ -108,9 +109,9 @@
    -->
    <li>
     <p>
-    <i>C</i> �� <tt>Bounded</tt> �Ǥ����硣���ΤȤ������η������
-    (���٤Ƥι����Ҥ�̵����)�Ǥ��뤫���ޤ��Ϲ����Ҥ���Ĥ����ʤ�����
-    �ɤ��餫�Ǥʤ���Фʤ�ʤ���
+    <i>C</i> が <tt>Bounded</tt> である場合。このとき、この型は列挙型
+    (すべての構成子が無引数)であるか、または構成子が一つしかないかの
+    どちらかでなければならない。
     </p>
    </li>
    <!--
@@ -120,8 +121,8 @@
    -->
    <li>
     <p>
-    <i>C</i> �� <tt>Enum</tt> �Ǥ����硣���ΤȤ������η������
-    �Ǥʤ���Фʤ�ʤ���
+    <i>C</i> が <tt>Enum</tt> である場合。このとき、この型は列挙型
+    でなければならない。
     </p>
    </li>
    <!--
@@ -131,9 +132,9 @@
    -->
    <li>
     <p>
-    <i>T u</i><sub><i>1</i></sub><i> ... u</i><sub><i>k</i></sub>��
-    <i>C</i> �Υ��󥹥��󥹤Ȥ����ץ����������̤θĽ������Ū��
-    ���󥹥�����������äƤϤʤ�ʤ���
+    <i>T u</i><sub><i>1</i></sub><i> ... u</i><sub><i>k</i></sub>を
+    <i>C</i> のインスタンスとしたプログラム内の別の個所で明示的な
+    インスタンス宣言があってはならない。
     </p>
    </li>
   </ol>
@@ -143,8 +144,8 @@
    is treated as a <tt>data</tt> declaration with a single constructor.</p>
   -->
   <p>
-   Ƴ�Х��󥹥��󥹤Ȥ�����Ū�Τ���ˡ�<tt>newtype</tt> �����
-   ñ�칽���Ҥ� <tt>data</tt> ����Ȥ��ư����롣
+   導出インスタンスという目的のために、<tt>newtype</tt> 宣言は
+   単一構成子の <tt>data</tt> 宣言として扱われる。
   </p>
   <!--
   <p> If the <tt>deriving</tt> form is present, an instance declaration is
@@ -156,19 +157,19 @@
    form <tt>deriving&nbsp;()</tt> may be used.</p>
   -->
   <p>
-   �⤷��<tt>deriving</tt> ����������С����󥹥�������ϼ�ưŪ��
-   �� <i>C</i><sub><i>i</i></sub> ���
+   もし、<tt>deriving</tt> 形式があれば、インスタンス宣言は自動的に
+   各 <i>C</i><sub><i>i</i></sub> 上で
    <i>T u</i><sub><i>1</i></sub><i> ... u</i><sub><i>k</i></sub>
-   ���Ф�����������롣�⤷��<i>C</i><sub><i>i</i></sub> �Τɤ줫��
-   �Ф��ơ�Ƴ�Х��󥹥���������Բ�ǽ�Ǥ���С���Ū���顼�Ȥʤ롣
-   �⤷��Ƴ�Х��󥹥��󥹤�ɬ�פȤ���Ƥ��ʤ��Τʤ顢
-   <tt>deriving</tt> �����Ͼ�ά����뤫�����뤤�ϡ�
-   <tt>deriving&nbsp;()</tt> ��Ȥ����Ȥ��Ǥ��롣
+   に対して生成される。もし、<i>C</i><sub><i>i</i></sub> のどれかに
+   対して、導出インスタンス宣言が不可能であれば、静的エラーとなる。
+   もし、導出インスタンスが必要とされていないのなら、
+   <tt>deriving</tt> 形式は省略するるか、あるいは、
+   <tt>deriving&nbsp;()</tt> を使うことができる。
   </p>
   <!--
   <p> Each derived instance declaration will have the form:</p>
   -->
-  <p>��Ƴ�Х��󥹥�������ϼ��η�����Ȥ롣</p>
+  <p>各導出インスタンス宣言は次の形式をとる。</p>
   <p>
    <tt>instance&nbsp;(</tt><i>cx</i><tt>,&nbsp;</tt><i>cx'</i><tt>)&nbsp;=&gt;</tt><i>
    C</i><sub><i>i</i></sub><i> (T u</i><sub><i>1</i></sub><i> ...
@@ -180,8 +181,8 @@
    (as will be described in the remainder of this section).</p>
   -->
   <p>
-   �����ǡ�<i>d</i> �� <i>C</i><sub><i>i</i></sub> ����� <i>T</i>
-   �Υǡ���������˰�¸����(���Ȥ���ǲ��⤹��褦��)��ưŪ��Ƴ�Ф���롣
+   ここで、<i>d</i> は <i>C</i><sub><i>i</i></sub> および <i>T</i>
+   のデータ型宣言に依存して(あとの節で解説するように)自動的に導出される。
   </p>
   <!--
   <p> The context <i>cx'</i> is the smallest context satisfying point (2)
@@ -189,9 +190,9 @@
    perform a fixpoint calculation to compute it.</p>
   -->
   <p>
-   ʸ̮ <i>cx'</i> �Ͼ嵭(2)�������Ǿ�ʸ̮�Ǥ��롣��ߺƵ�Ū�ʥǡ�������
-   �Ĥ��Ƥϥ���ѥ���Ϥ������뤿��ˤ�������ư���׻���ɬ�פȤʤ�
-   �Ǥ�������
+   文脈 <i>cx'</i> は上記(2)を満す最小文脈である。相互再帰的なデータ型に
+   ついてはコンパイラはこれを求めるためにある種の不動点計算が必要となる
+   であろう。
   </p>
   <!--
   <p> The remaining details of the derived instances for each of the
@@ -200,16 +201,16 @@
    <tt>Prelude</tt>.</p>
   -->
   <p>
-   Ƴ�в�ǽ�ʳƥץ��塼�ɤΥ��饹���Ф���Ƴ�Х��󥹥��󥹤ΤΤ���ξ�
-   �٤ˤĤ��ƤϤ�����Ϳ���롣�������Ѵ��ǻȤ��Ƥ��뼫ͳ�ѿ��ȹ�����
-   �ϤĤͤ� <tt>Prelude</tt> ��������줿����ƥ��ƥ��򻲾Ȥ��Ƥ��롣
+   導出可能な各プレリュードのクラスに対する導出インスタンスののこりの詳
+   細についてはここで与える。これらの変換で使われている自由変数と構成子
+   はつねに <tt>Prelude</tt> で定義されたエンティティを参照している。
   </p>
 
   <p> <a name="sect10.1"></a></p>
   <!--<h3>10.1<tt>&nbsp;&nbsp;</tt>Derived instances of <tt>Eq</tt> and
    <tt>Ord</tt></h3>-->
-  <h3>10.1<tt>&nbsp;&nbsp;</tt><tt>Eq</tt> ����� <tt>Ord</tt>
-   ��Ƴ�Х��󥹥���</h3>
+  <h3>10.1<tt>&nbsp;&nbsp;</tt><tt>Eq</tt> および <tt>Ord</tt>
+   の導出インスタンス</h3>
   <!--
   <p>The class methods automatically introduced by derived instances of
    <tt>Eq</tt> and <tt>Ord</tt> are <tt>(==)</tt>, <tt>(/=)</tt>,
@@ -222,14 +223,14 @@
    <tt>(True&nbsp;&gt;&nbsp;False)&nbsp;==&nbsp;True</tt>.</p>
   -->
   <p>
-   <tt>Eq</tt> ����� <tt>Ord</tt> ��Ƴ�Х��󥹥��󥹤ˤ�äƼ�ưŪ��Ƴ
-   ������륯�饹�᥽�åɤ� <tt>(==)</tt>��<tt>(/=)</tt>��
-   <tt>compare</tt>��<tt>(&lt;)</tt>��<tt>(&lt;=)</tt>��<tt>(&gt;)</tt>��
-   <tt>(&gt;=)</tt>��<tt>max</tt> ����� <tt>min</tt> �Ǥ��롣��� 7 ��
-   �α黻�ҤϤ��ΰ�����Ϳ����줿�����ҽ���λ�������Ӥ��뤿������
-   ����Ƥ��롣�ǡ���������������ˤǤƤ��빽���Ҥ����ȤˤǤƤ��빽��
-   �Ҥ��⾮�����ȴ��蘆��롣���Ȥ��С�<tt>Bool</tt> ���Ǥ� 
-   <tt>(True&nbsp;&gt;&nbsp;False)&nbsp;==&nbsp;True</tt> �Ǥ��롣
+   <tt>Eq</tt> および <tt>Ord</tt> の導出インスタンスによって自動的に導
+   入されるクラスメソッドは <tt>(==)</tt>、<tt>(/=)</tt>、
+   <tt>compare</tt>、<tt>(&lt;)</tt>、<tt>(&lt;=)</tt>、<tt>(&gt;)</tt>、
+   <tt>(&gt;=)</tt>、<tt>max</tt> および <tt>min</tt> である。後の 7 つ
+   の演算子はその引数を与えられた構成子集合の字句順に比較するために定義
+   されている。データ型宣言の中で先にでてくる構成子があとにでてくる構築
+   子よりも小さいと看倣される。たとえば、<tt>Bool</tt> 型では 
+   <tt>(True&nbsp;&gt;&nbsp;False)&nbsp;==&nbsp;True</tt> である。
   </p>
   <!--
   <p> Derived comparisons always traverse constructors from left to right.
@@ -244,31 +245,31 @@
    <tt>False</tt> is the first constructor of the <tt>Bool</tt> type.</p>
   -->
   <p>
-   Ƴ�Ф��줿��ӤϾ�˹����Ҥ򺸤��鱦�إȥ�С������롣�ʲ���
-   �����������������Ƥ��롣
+   導出された比較は常に構成子を左から右へトラバースする。以下は
+   この性質を説明している。
    <tt><br />
    <br />
    &nbsp;&nbsp;(1,undefined)&nbsp;==&nbsp;(2,undefined)&nbsp;</tt><i>=&gt;</i><tt>&nbsp;&nbsp;&nbsp;&nbsp;False<br />
    &nbsp;&nbsp;(undefined,1)&nbsp;==&nbsp;(undefined,2)&nbsp;</tt><i>=&gt;</i><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><i>_|_</i><tt><br />
    <br />
    </tt>
-   <tt>Eq</tt> ����� <tt>Ord</tt> ���饹��Ƴ�Ф��줿�黻�Ϥ��٤���Ĥ�
-   �������Ф������ʤǤ��롣���Ȥ��С�
-   <tt>False&nbsp;&lt;&nbsp;</tt><i>_|_</i> �� <i>_|_</i> �Ǥ��롣
-   ����ϡ�<tt>False</tt> �� <tt>Bool</tt> ���κǽ�ι����ҤǤ���ˤ�
-   ������餺�������Ǥ��롣
+   <tt>Eq</tt> および <tt>Ord</tt> クラスの導出された演算はすべて二つの
+   引数に対して正格である。たとえば、
+   <tt>False&nbsp;&lt;&nbsp;</tt><i>_|_</i> は <i>_|_</i> である。
+   これは、<tt>False</tt> が <tt>Bool</tt> 型の最初の構成子であるにも
+   かかわらず、そうである。
   </p>
 
   <p> <a name="sect10.2"></a></p>
   <!--<h3>10.2<tt>&nbsp;&nbsp;</tt>Derived instances of <tt>Enum</tt></h3>-->
-  <h3>10.2<tt>&nbsp;&nbsp;</tt><tt>Enum</tt> ��Ƴ�Х��󥹥���</h3>
+  <h3>10.2<tt>&nbsp;&nbsp;</tt><tt>Enum</tt> の導出インスタンス</h3>
   <!--
   <p>Derived instance declarations for the class <tt>Enum</tt> are only
    possible for enumerations (data types with only nullary constructors).</p>
   -->
   <p>
-   <tt>Enum</tt> ���饹���Ф���Ƴ�Х��󥹥�����������(�ǡ�������
-   ̵���������ҤΤߤ�ޤ෿)�ˤΤ߲�ǽ�Ǥ��롣
+   <tt>Enum</tt> クラスに対する導出インスタンス宣言は列挙型(データ型が
+   無引数構成子のみを含む型)にのみ可能である。
   </p>
   <!--
   <p> The nullary constructors are assumed to be numbered left-to-right
@@ -278,10 +279,10 @@
    the maximum element, or <tt>pred</tt> to the minimum element.</p>
   -->
   <p>
-   ̵���������ҤϺ����鱦�� 0 ���� n-1 �ο����������Ƥ����ΤȲ��ꤹ
-   �롣<tt>succ</tt> ����� <tt>pred</tt> �黻�ҤϤ������ֿ޼��Τ�Ȥǡ�
-   ���줾�졢�����͡������ͤ�Ϳ���롣��������Ǥؤ� <tt>succ</tt> ��Ŭ��
-   ���뤤�ϺǾ������Ǥؤ� <tt>pred</tt> ��Ŭ�Ѥϥ��顼�Ǥ��롣
+   無引数構成子は左から右へ 0 から n-1 の数字が振られているものと仮定す
+   る。<tt>succ</tt> および <tt>pred</tt> 演算子はこの付番図式のもとで、
+   それぞれ、次の値、前の値を与える。最大の要素への <tt>succ</tt> の適用
+   あるいは最小の要素への <tt>pred</tt> の適用はエラーである。
   </p>
   <!--
   <p> The <tt>toEnum</tt> and <tt>fromEnum</tt> operators map enumerated
@@ -290,9 +291,9 @@
    the constructors.</p>
   -->
   <p>
-   <tt>toEnum</tt> ����� <tt>fromEnum</tt> �黻�Ҥ���󤵤줿�ͤ�
-   <tt>Int</tt> �֤μ����Ǥ��롣<tt>toEnum</tt> �� <tt>Int</tt> ��
-   �����������ҤΥ���ǥå����ΰ�ĤǤʤ���С��¹Ի����顼�򵯤���
+   <tt>toEnum</tt> および <tt>fromEnum</tt> 演算子は列挙された値と
+   <tt>Int</tt> 間の写像である。<tt>toEnum</tt> は <tt>Int</tt> の
+   引数が構成子のインデックスの一つでなければ、実行時エラーを起す。
   </p>
   <!--
   <p> The definitions of the remaining methods are <tt><br />
@@ -319,7 +320,7 @@
    </tt></p>
   -->
   <p>
-   �Τ���Υ᥽�åɤ�����ϡ�
+   のこりのメソッドの定義は、
    <tt><br />
    <br />
    &nbsp;&nbsp;enumFrom&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;enumFromTo&nbsp;x&nbsp;lastCon<br />
@@ -331,15 +332,15 @@
    &nbsp;&nbsp;enumFromThenTo&nbsp;x&nbsp;y&nbsp;z&nbsp;=&nbsp;map&nbsp;toEnum&nbsp;[fromEnum&nbsp;x,&nbsp;fromEnum&nbsp;y&nbsp;..&nbsp;fromEnum&nbsp;z]<br />
    <br />
    </tt>
-   �Ǥ��롣�����ǡ�<tt>firstCon</tt> �� <tt>lastCon</tt> �Ϥ��줾�졢
-   <tt>data</tt> �����ˤ�����줿�����Ҥκǽ�Τ�ΤȺǸ�Τ�ΤǤ��롣
-   �㤨�м��Τ褦�ʥǡ�������ͤ����
+   である。ここで、<tt>firstCon</tt> と <tt>lastCon</tt> はそれぞれ、
+   <tt>data</tt> 宣言中にあげられた構成子の最初のものと最後のものである。
+   例えば次のようなデータ型を考えると
    <tt><br />
    <br />
    &nbsp;&nbsp;data&nbsp;&nbsp;Color&nbsp;=&nbsp;Red&nbsp;|&nbsp;Orange&nbsp;|&nbsp;Yellow&nbsp;|&nbsp;Green&nbsp;&nbsp;deriving&nbsp;(Enum)<br />
    <br />
    </tt>
-   ����ʤդ��ˤʤ롣
+   こんなふうになる。
    <tt><br />
    <br />
    &nbsp;&nbsp;[Orange&nbsp;..]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;==&nbsp;&nbsp;[Orange,&nbsp;Yellow,&nbsp;Green]<br />
@@ -350,7 +351,7 @@
 
   <p> <a name="sect10.3"></a></p>
   <!--<h3>10.3<tt>&nbsp;&nbsp;</tt>Derived instances of <tt>Bounded</tt></h3>-->
-  <h3>10.3<tt>&nbsp;&nbsp;</tt><tt>Bounded</tt> ��Ƴ�Х��󥹥���</h3>
+  <h3>10.3<tt>&nbsp;&nbsp;</tt><tt>Bounded</tt> の導出インスタンス</h3>
   <!--
   <p>The <tt>Bounded</tt> class introduces the class methods
    <tt>minBound</tt> and <tt>maxBound</tt>, which define the minimal and
@@ -372,17 +373,17 @@
   </p>
   -->
   <p>
-   <tt>Bounded</tt> ���饹�ϡ����η��κǾ����Ǥ���Ӻ������Ǥ�������� 
-   <tt>minBound</tt> ����� <tt>maxBound</tt> �Ȥ������饹�᥽�åɤ�
-   Ƴ�����롣���ˤĤ��Ƥϡ�<tt>data</tt> �����˥ꥹ�ȥ��åפ��줿
-   �ǽ餪��ӺǸ�ι����Ҥ��������Ȥʤ롣ñ�칽���Ҥη��ˤĤ��Ƥϡ�
-   ���ι����Ҥ��������Ǥζ����Ȥ���Ŭ�Ѥ���롣���Ȥ��С����Υǡ�����
+   <tt>Bounded</tt> クラスは、この型の最小要素および最大要素を定義する 
+   <tt>minBound</tt> および <tt>maxBound</tt> というクラスメソッドを
+   導入する。列挙については、<tt>data</tt> 宣言中にリストアップされた
+   最初および最後の構成子が、境界となる。単一構成子の型については、
+   その構成子が構成要素の境界として適用される。たとえば、次のデータ型
    <tt><br />
    <br />
    &nbsp;&nbsp;data&nbsp;&nbsp;Pair&nbsp;a&nbsp;b&nbsp;=&nbsp;Pair&nbsp;a&nbsp;b&nbsp;deriving&nbsp;Bounded<br />
    <br />
    </tt>
-   �ϡ��ʲ��Τ褦�� <tt>Bounded</tt> �Υ��󥹥��󥹤��������롣
+   は、以下のような <tt>Bounded</tt> のインスタンスを生成する。
    <tt><br />
    <br />
    &nbsp;&nbsp;instance&nbsp;(Bounded&nbsp;a,Bounded&nbsp;b)&nbsp;=&gt;&nbsp;Bounded&nbsp;(Pair&nbsp;a&nbsp;b)&nbsp;where<br />
@@ -395,8 +396,8 @@
   <p> <a name="sect10.4"></a></p>
   <!--<h3>10.4<tt>&nbsp;&nbsp;</tt>Derived instances of <tt>Read</tt> and
    <tt>Show</tt></h3>-->
-  <h3>10.4<tt>&nbsp;&nbsp;</tt><tt>Read</tt> �����
-   <tt>Show</tt> ��Ƴ�Х��󥹥���</h3>
+  <h3>10.4<tt>&nbsp;&nbsp;</tt><tt>Read</tt> および
+   <tt>Show</tt> の導出インスタンス</h3>
   <!--
   <p>The class methods automatically introduced by derived instances of
    <tt>Read</tt> and <tt>Show</tt> are <tt>showsPrec</tt>,
@@ -404,10 +405,10 @@
    used to coerce values into strings and parse strings into values.</p>
   -->
   <p>
-   <tt>Read</tt> ����� <tt>Show</tt> ��Ƴ�Х��󥹥��󥹤ˤ�äƼ�ưŪ��
-   Ƴ������륯�饹�᥽�åɤ� <tt>showsPrec</tt>��<tt>readsPrec</tt>��
-   <tt>showList</tt> ����� <tt>readList</tt> �Ǥ��롣�����ϡ�
-   �ͤ���ʸ������Ѵ��ȡ��ѡ���ʸ���󤫤��ͤؤ��Ѵ��Τ�����Ѥ����롣
+   <tt>Read</tt> および <tt>Show</tt> の導出インスタンスによって自動的に
+   導入されるクラスメソッドは <tt>showsPrec</tt>、<tt>readsPrec</tt>、
+   <tt>showList</tt> および <tt>readList</tt> である。これらは、
+   値から文字列へ変換と、パーズ文字列から値への変換のために用いられる。
   </p>
   <!--
   <p> The function <tt>showsPrec&nbsp;d&nbsp;x&nbsp;r</tt> accepts a
@@ -417,10 +418,10 @@
    satisfies the law:</p>
   -->
   <p>
-   �ؿ� <tt>showsPrec&nbsp;d&nbsp;x&nbsp;r</tt> ��ͥ���٥� <tt>d</tt> 
-   (<tt>0</tt> ���� <tt>11</tt> �ο�)���� <tt>x</tt> �����ʸ����
-   <tt>r</tt> ��������졢<tt>r</tt> ��Ϣ�ܤ��줿 <tt>x</tt> ��ɽ�����֤���
-   <tt>showsPrec</tt> �ʲ��ε���򸫤�����
+   関数 <tt>showsPrec&nbsp;d&nbsp;x&nbsp;r</tt> は優先レベル <tt>d</tt> 
+   (<tt>0</tt> から <tt>11</tt> の数)、値 <tt>x</tt> および文字列
+   <tt>r</tt> を受けいれ、<tt>r</tt> に連接された <tt>x</tt> の表現を返す。
+   <tt>showsPrec</tt> 以下の規約を見たす。
   </p>
   <p>
    <tt>showsPrec&nbsp;d&nbsp;x&nbsp;r&nbsp;++&nbsp;s&nbsp;&nbsp;==&nbsp;&nbsp;showsPrec&nbsp;d&nbsp;x&nbsp;(r&nbsp;++&nbsp;s)
@@ -436,13 +437,13 @@
    rather than time quadratic in the size of the tree.</p>
   -->
   <p>
-   <tt>x</tt> �Υȥåץ�٥빽�۱黻�Ҥ�ͥ���̤� <tt>d</tt> ����
-   ��������硢ɽ���ϳ�̤ǰϤޤ�롣�������äơ��⤷��<tt>d</tt> ��
-   <tt>0</tt>�ʤ��̤ϳ�̤ˤ�����줳�ȤϤʤ���<tt>d</tt> �� 
-   <tt>11</tt> �ǥ��ȥߥå��ʼ�(�ؿ�Ŭ�Ѥ�ͥ���٤� 10 �Ǥ��뤳�Ȥ�
-   �פ���������)�Ǥʤ���С���˳�̤ˤ������롣�ɲäΥѥ�᡼��
-   <tt>r</tt> �ϡ��⤷�ĥ꡼�Τ褦�ʹ�¤���������ڤΥ�����������
-   �������ǤϤʤ������Υ������ǥץ��Ȥ�����ˤ��Բķ�Ǥ��롣
+   <tt>x</tt> のトップレベル構築演算子の優先順位が <tt>d</tt> よりも
+   小さい場合、表現は括弧で囲まれる。したがって、もし、<tt>d</tt> が
+   <tt>0</tt>なら結果は括弧にくくられことはなく、<tt>d</tt> が 
+   <tt>11</tt> でアトミックな式(関数適用の優先度は 10 であることを
+   思いだすこと)でなければ、常に括弧にくくられる。追加のパラメータ
+   <tt>r</tt> は、もしツリーのような構造が、その木のサイズの二乗の
+   オーダではなく線形のオーダでプリントする場合には不可欠である。
   </p>
   <!--
   <p> The function <tt>readsPrec&nbsp;d&nbsp;s</tt> accepts a precedence
@@ -454,23 +455,23 @@
    precedence of the operator is greater than or equal to <tt>d</tt>.</p>
   -->
   <p>
-   �ؿ� <tt>readsPrec&nbsp;d&nbsp;s</tt> ��ͥ���٥� <tt>d</tt>
-   (<tt>0</tt> ���� <tt>10</tt> ����) �����ʸ���� <tt>s</tt> ��������졢
-   ����ʸ�������Ƭ����ѡ������ơ���(�ѡ������줿�ͤȻĤ��ʸ����)��
-   �ꥹ�Ȥ��֤����⤷�����������ѡ������ʤ�С����Υꥹ�Ȥ��֤�����̤�
-   �ʤ����ֱ黻��Ŭ�Ѥ�ѡ�������ȡ����α黻�Ҥ�ͥ���٤� <tt>d</tt>
-   ����礭�������������ˤ����ä��������롣
+   関数 <tt>readsPrec&nbsp;d&nbsp;s</tt> は優先レベル <tt>d</tt>
+   (<tt>0</tt> から <tt>10</tt> の値) および文字列 <tt>s</tt> を受けいれ、
+   その文字列を先頭からパーズして、対(パーズされた値と残りの文字列)の
+   リストを返す。もし、成功したパーズがなれば、空のリストを返す。括弧の
+   ない中置演算子適用をパーズすると、その演算子の優先度が <tt>d</tt>
+   より大きいか等しい場合にかぎって成功する。
   </p>
   <!--<p> It should be the case that</p>-->
-  <p>���ξ��ʲ��Τ褦�ˤʤäƤ���Ϥ��Ǥ��롣</p>
+  <p>この場合以下のようになっているはずである。</p>
   <!--
   <div align="center"><tt>(x,"")</tt> is an element of
    <tt>(readsPrec&nbsp;d&nbsp;(showsPrec&nbsp;d&nbsp;x&nbsp;"")) </tt></div>
   -->
   <p>
-  <div align="center"><tt>(x,"")</tt> ��
+  <div align="center"><tt>(x,"")</tt> は
    <tt>(readsPrec&nbsp;d&nbsp;(showsPrec&nbsp;d&nbsp;x&nbsp;""))</tt>
-   �����ǤǤ��롣</div>
+   の要素である。</div>
   </p>
   <!--
   <p>That is, <tt>readsPrec</tt> should be able to parse the string
@@ -478,9 +479,9 @@
    <tt>showsPrec</tt> started with.</p>
   -->
   <p>
-   ���ʤ����<tt>readsPrec</tt> �� <tt>showsPrec</tt> �ˤ�ä��������줿
-   ʸ�����ѡ����Ǥ��ʤ���Фʤ�ʤ����ޤ���<tt>showsPrec</tt> ��Ϳ����
-   �ǽ���ͤ������Ǥ��ʤ���Фʤ�ʤ���
+   すなわち、<tt>readsPrec</tt> は <tt>showsPrec</tt> によって生成された
+   文字列をパーズできなければならない。また、<tt>showsPrec</tt> へ与えた
+   最初の値を生成できなければならない。
   </p>
   <!--
   <p> <tt>showList</tt> and <tt>readList</tt> allow lists of objects to be
@@ -488,9 +489,9 @@
    for strings (lists of <tt>Char</tt>).</p>
   -->
   <p>
-   <tt>showList</tt> ����� <tt>readList</tt> �ϥ��֥������ȤΥꥹ�Ȥ���
-   ɸ���ɽ��ˡ��ɽ�����뤳�Ȥ��ǽ�ˤ��롣������ä�ʸ����
-   (<tt>Char</tt> �Υꥹ��)�ξ���ͭ�ѤǤ��롣
+   <tt>showList</tt> および <tt>readList</tt> はオブジェクトのリストを非
+   標準の表記法で表現することを可能にする。これは特に文字列
+   (<tt>Char</tt> のリスト)の場合に有用である。
   </p>
   <!--
   <p> <tt>readsPrec</tt> will parse any valid representation of the
@@ -500,11 +501,11 @@
    href="standard-prelude.html#stdprelude">8</a> for full details.</p>
   -->
   <p>
-   <tt>readsPrec</tt> ��ʸ���󤫤�ɸ��η���������ɽ����ѡ������롣
-   ����ϡ��������ǰϤޤ줿ʸ����Τ߼�������롣����¾�Υꥹ�ȤˤĤ���
-   �ϡ��ͳѳ�̷��� <tt>[</tt>...<tt>]</tt> �Τ߼����Ĥ��롣������
-   �ܺ٤ˤĤ��Ƥ� <a href="standard-prelude.html#stdprelude">8</a> �Ϥ�
-   ���ȤΤ��ȡ�
+   <tt>readsPrec</tt> は文字列から標準の型の正しい表現をパーズする。
+   これは、引用部で囲まれた文字列のみ受理される。その他のリストについて
+   は、四角括弧形式 <tt>[</tt>...<tt>]</tt> のみ受けつける。完全な
+   詳細については <a href="standard-prelude.html#stdprelude">8</a> 章を
+   参照のこと。
   </p>
   <!--
   <p> The result of <tt>show</tt> is a syntactically correct Haskell
@@ -519,24 +520,24 @@
    not be true for user-defined instances.)</p>
   -->
   <p>
-   <tt>show</tt> �η�̤ϡ���ʸŪ�Ȥ������������ǡ����η���������줿��
-   ������ͭ������������ˤ�ä�Ϳ����줿����Τߤ�ޤࡣ�ޤ���
-   �ǡ������Τʤ���������줿������̾����̡�����Ӷ���Τߤ�ޤࡣ
-   ��٥��չ����ҥե�����ɤ��Ѥ���줿���ˤϡ��֥졼���������
-   �ե������̾���������뵭����Ѥ����롣��̤�ɬ�פȤ����Ľ��
-   �Τ��ɲä��졢<em>�������̵�뤹��</em>�����Ԥ��ɲä���뤳�ȤϤʤ���
-   <tt>show</tt> �η�̤ϡ����٤Ƥι������Ǥ��ɤ߹��߲�ǽ�Ǥ���С�
-   <tt>read</tt> ���ɤ߹��ߤ���ǽ�Ǥ��롣(���Τ��Ȥϡ��ץ��塼�ɤ�
-   �������Ƥ��뤹�٤ƤΥ��󥹥��󥹤ˤĤ��ƿ��Ǥ��뤬���桼�������
-   ���󥹥��󥹤ˤĤ��Ƥϡ����ǤϤʤ����Ȥ⤢�ꤦ�롣)
+   <tt>show</tt> の結果は、構文的として正しい式で、その型が宣言されたと
+   ころで有効な配置宣言によって与えられた定数のみを含む。また、
+   データ型のなかで定義された構成子名、括弧、および空白のみを含む。
+   ラベル付構成子フィールドが用いられた場合には、ブレース、コンマ
+   フィールド名、イコール記号も用いられる。括弧は必要とされる個所に
+   のみ追加され、<em>結合性は無視する</em>。改行が追加されることはない。
+   <tt>show</tt> の結果は、すべての構成要素が読み込み可能であれば、
+   <tt>read</tt> で読み込みが可能である。(このことは、プレリュードで
+   定義されているすべてのインスタンスについて真であるが、ユーザ定義の
+   インスタンスについては、真ではないこともありうる。)
   </p>
   <!--
   <p> Derived instances of <tt>Read</tt> make the following assumptions,
    which derived instances of <tt>Show</tt> obey:</p>
   -->
   <p>
-   <tt>Read</tt> ��Ƴ�Х��󥹥��󥹤ϰʲ��β���򤷡�<tt>Show</tt> ��
-   Ƴ�Х��󥹥��󥹤�����˽�����
+   <tt>Read</tt> の導出インスタンスは以下の仮定をし、<tt>Show</tt> の
+   導出インスタンスがこれに従う。
   </p>
   <!--
   <ul>
@@ -582,43 +583,43 @@
    <ul>
     <li>
      <p>
-      �����Ҥ����ֱ黻�ҤȤ����������Ƥ���С�Ƴ�Ф��줿 <tt>Read</tt> 
-      �Υ��󥹥��󥹤ϡ����ι����Ҥ�(����Ŭ�ѤǤϤʤ�)����Ŭ�ѤȤ��ƤΤ�
-      �ѡ�������롣
+      構成子が中置演算子として定義されていれば、導出された <tt>Read</tt> 
+      のインスタンスは、その構成子の(前置適用ではなく)中置適用としてのみ
+      パーズされる。
      </p>
     </li>
     <li>
      <p>
-      ��������Ѥ��Ƥ��̤νи��򸺤�ʤ�����ͥ���٤�Ȥ��ȸ��뤳�Ȥ�
-      ���롣���Ȥ��С�
+      結合性を用いても括弧の出現を減らないが、優先度を使うと減ることも
+      ある。たとえば、
       <tt><br />
       <br />
     &nbsp;&nbsp;infixr&nbsp;4&nbsp;:$<br />
     &nbsp;&nbsp;data&nbsp;T&nbsp;=&nbsp;Int&nbsp;:$&nbsp;T&nbsp;&nbsp;|&nbsp;&nbsp;NT<br />
       <br />
       </tt>
-      ���Ȥ���ȡ�
+      だとすると、
       <ul>
-       <li><tt>show&nbsp;(1&nbsp;:$&nbsp;2&nbsp;:$&nbsp;NT)</tt> ��
-        ʸ���� <tt>"1&nbsp;:$&nbsp;(2&nbsp;:$&nbsp;NT)"</tt> �Ȥʤ롣</li>
-       <li><tt>read&nbsp;"1&nbsp;:$&nbsp;(2&nbsp;:$&nbsp;NT)"</tt> ��
-        �������������Τޤޤη�̤ˤʤ롣</li>
-       <li><tt>read&nbsp;"1&nbsp;:$&nbsp;2&nbsp;:$&nbsp;NT"</tt> ��
-        ���Ԥ��롣</li>
+       <li><tt>show&nbsp;(1&nbsp;:$&nbsp;2&nbsp;:$&nbsp;NT)</tt> は
+        文字列 <tt>"1&nbsp;:$&nbsp;(2&nbsp;:$&nbsp;NT)"</tt> となる。</li>
+       <li><tt>read&nbsp;"1&nbsp;:$&nbsp;(2&nbsp;:$&nbsp;NT)"</tt> は
+        は成功し、そのままの結果になる。</li>
+       <li><tt>read&nbsp;"1&nbsp;:$&nbsp;2&nbsp;:$&nbsp;NT"</tt> は
+        失敗する。</li>
       </ul>
      </p>
     </li>
     <li>
      <p>
-      �����Ҥ��쥳���ɹ�ʸ��Ĥ��ä��������Ƥ����硢Ƴ�Ф��줿��
-      <tt>Read</tt> �ϥ쥳���ɹ�ʸ�η����Τߥѡ������롣����ˡ�
-      �ե�����ɤϸ��������Ʊ�����֤Ǥ��������ʤ���Фʤ�ʤ���
+      構成子がレコード構文をつかって定義されている場合、導出された、
+      <tt>Read</tt> はレコード構文の形式のみパーズする。さらに、
+      フィールドは元の宣言と同じ順番であたえられなければならない。
      </p>
     </li>
     <li>
      <p>
-      <tt>Read</tt> ��Ƴ�Х��󥹥��󥹤�Ǥ�դ� Haskell ��������
-      ����ʸ����Υȡ�����δ֤��֤����Ȥ�������ɲäγ�̤������롣
+      <tt>Read</tt> の導出インスタンスは任意の Haskell の白空白を
+      入力文字列のトークンの間に置くことを許す。追加の括弧も許される。
      </p>
     </li>
    </ul>
@@ -628,8 +629,8 @@
    unsuitable for some uses. Some problems include:</p>
   -->
   <p>
-   Ƴ�Ф��줿 <tt>Read</tt> ����� <tt>Show</tt> ���󥹥��󥹤�
-   �����Ĥ��ξ��ˤ�Ŭ�ڤǤϤʤ����Ȥ����롣����ϡ�
+   導出された <tt>Read</tt> および <tt>Show</tt> インスタンスは
+   いくつかの場合には適切ではないことがある。問題は、
   </p>
   <!--
   <ul>
@@ -649,27 +650,27 @@
   <p>
   <ul>
    <li>
-    �۴Ĺ�¤�ϰ����Ǥ��ʤ����ޤ������Υ��󥹥��󥹤ˤ�ä�
-    �ɤळ�Ȥ��Ǥ��ʤ���<
+    循環構造は印字できない。またこれらのインスタンスによって
+    読むことができない。<
    /li>
    <li>
-    �������褦�Ȥ����Τ϶�ͭ���줿���̹�¤�򼺤������ʤ����
-    ���륪�֥������Ȥΰ���ɽ����ɬ�פ�Ϥ뤫��Ķ�����礭���ʤ뤳�Ȥ����롣
+    印字しようとするものは共有された下位構造を失う。すなわち、
+    あるオブジェクトの印字表現は必要をはるかに超えて大きくなることがある。
    </li>
    <li>
-    �꡼�������Ȥ��ѡ����ƥ��˥å����������Ψ�ʤ�Τǡ�
-    �礭�ʹ�¤���ɤ�Τ������٤��ʤ��ǽ�������롣
+    リーダーが使うパーズテクニックは非常に非効率なもので、
+    大きな構造を読むのは非常に遅くなる可能性がある。
    </li>
    <li>
-    �ץ��塼�ɤ�������줿���ΰ�����桼�������椹�뤳�ȤϤǤ��ʤ���
-    ���Ȥ��С���ư���������Υե����ޥåȤ��ѹ�������ˡ�Ϥʤ���
+    プレリュードで定義された型の印字をユーザが制御することはできない。
+    たとえば、浮動小数点数のフォーマットを変更する方法はない。
    </li>
   </ul>
   </p>
 
   <p><a name="sect10.5"></a></p>
   <!--<h3>10.5<tt>&nbsp;&nbsp;</tt>An Example</h3>-->
-  <h3>10.5<tt>&nbsp;&nbsp;</tt>��</h3>
+  <h3>10.5<tt>&nbsp;&nbsp;</tt>例</h3>
   <!--
   <p> As a complete example, consider a tree datatype:<tt><br />
    <br />
@@ -688,23 +689,23 @@
    <a href="basic.html#standard-classes">6.1</a> (page ).</p>
   -->
   <p>
-   ��������Ȥ����ڤΥǡ�����¤��ͤ��衣
+   完全な例として木のデータ構造を考えよ。
    <tt><br />
    <br />
    &nbsp;&nbsp;data&nbsp;Tree&nbsp;a&nbsp;=&nbsp;Leaf&nbsp;a&nbsp;|&nbsp;Tree&nbsp;a&nbsp;:^:&nbsp;Tree&nbsp;a<br />
    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;deriving&nbsp;(Eq,&nbsp;Ord,&nbsp;Read,&nbsp;Show)<br />
    <br />
    </tt>
-   <tt>Bounded</tt> ����� <tt>Enum</tt> ���Ф��뼫ư�Υ��󥹥���
-   �����Ƴ�Ф��Բ�ǽ�Ǥ��롣����� <tt>Tree</tt> ����󷿤Ǥ�ʤ����
-   ñ�칽���ҤΥǡ������Ǥ�ʤ�����Ǥ��롣<tt>Tree</tt> ���Ф��봰����
-   ���󥹥�������Ͽ� <a href="derived.html#tree-inst">10.1</a> �Ǥ��롣
-   �ǥե���ȤΥ��饹�᥽�å��������ۤΤ����˻ȤäƤ��뤳�Ȥ����դ��衣
-   ���Ȥ��С�<tt>&lt;=</tt> �Τߤ� <tt>Ord</tt> ���Ф����������Ƥ��ꡢ
-   ����¾�Υ��饹�᥽�å�(<tt>&lt;</tt>��<tt>&gt;</tt>��<tt>&gt;=</tt>��
-   <tt>max</tt> ����� <tt>min</tt>) ��
-   �� <a href="basic.html#standard-classes">6.1</a> �˼��������饹
-   ������Ϳ����줿�ǥե���Ȥˤ�ä��������Ƥ��롣
+   <tt>Bounded</tt> および <tt>Enum</tt> に対する自動のインスタンス
+   宣言の導出は不可能である。それは <tt>Tree</tt> は列挙型でもなければ
+   単一構成子のデータ型でもないからである。<tt>Tree</tt> に対する完全な
+   インスタンス宣言は図 <a href="derived.html#tree-inst">10.1</a> である。
+   デフォルトのクラスメソッド定義を暗黙のうちに使っていることに注意せよ。
+   たとえば、<tt>&lt;=</tt> のみが <tt>Ord</tt> に対して定義されており、
+   その他のクラスメソッド(<tt>&lt;</tt>、<tt>&gt;</tt>、<tt>&gt;=</tt>、
+   <tt>max</tt> および <tt>min</tt>) は
+   図 <a href="basic.html#standard-classes">6.1</a> に示したクラス
+   宣言中で与えられたデフォルトによって定義されている。
   </p>
   <p>
   <table border="2" cellpadding="3">
@@ -768,7 +769,7 @@
 
      <div align="center">
       <!--<h3>Example of Derived Instances</h3>-->
-      <h3>Ƴ�Х��󥹥��󥹤���</h3>
+      <h3>導出インスタンスの例</h3>
      </div>
      <a name="tree-inst"></a></td>
    </tr>
