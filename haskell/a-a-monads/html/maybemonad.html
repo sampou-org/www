@@ -1,9 +1,9 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
+<!DOCTYPE html>
+<html lang="ja">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=EUC-JP">
+<meta charset="utf-8">
 <!--<title lang="en">The Maybe monad</title>-->
-<title lang="en">Maybe ��ʥ�</title>
+<title lang="en">Maybe モナド</title>
 </head>
 <body>
 <!--
@@ -21,16 +21,16 @@
 <table lang="ja" width="100%">
  <tr>
   <td align="left" width="33%">Prev:
-   <a href="identitymonad.html">������ʥ�</a></td>
+   <a href="identitymonad.html">恒等モナド</a></td>
   <td align="center" width="33%">TOC:
-   <a href="index.html">�ܼ�</a></td>
+   <a href="index.html">目次</a></td>
   <td align="right" width="33%">Next:
-   <a href="errormonad.html">Error ��ʥ�</a></td>
+   <a href="errormonad.html">Error モナド</a></td>
  </tr>
 </table>
 
 <!--<h1 lang="en">The Maybe monad</h1>-->
-<h1 lang="ja">Maybe ��ʥ�</h1>
+<h1 lang="ja">Maybe モナド</h1>
 <!--
 <ul lang="en">
   <li><a href="#overview">Overview</a></li>
@@ -40,17 +40,17 @@
 </ul>
 -->
 <ul lang="ja">
-  <li><a href="#overview">����</a></li>
-  <li><a href="#motivation">ư��</a></li>
-  <li><a href="#definition">���</a></li>
-  <li><a href="#example">��</a></li>
+  <li><a href="#overview">概観</a></li>
+  <li><a href="#motivation">動機</a></li>
+  <li><a href="#definition">定義</a></li>
+  <li><a href="#example">例</a></li>
 </ul>
 
 <hr align="center" size="1" width="80%">
 
 <a name="overview">
 <!--<h2 lang="en">Overview</h2>-->
-<h2 lang="ja">����</h2></a>
+<h2 lang="ja">概観</h2></a>
 <!--
 <table lang="en" width="100%" cellpadding="3">
  <tr>
@@ -85,38 +85,38 @@
 -->
 <table lang="ja" width="100%" cellpadding="3">
  <tr>
-  <th align="left">�׻��Υ�����:</th>
-  <td><code>Nothing</code> ���֤���ǽ���Τ���׻�</td>
+  <th align="left">計算のタイプ:</th>
+  <td><code>Nothing</code> を返す可能性のある計算</td>
  </tr>
   <tr>
-   <th align="left">«����ά:</th>
-   <td><code>Nothing</code> �ͤ�«�����줿�ؿ���Х��ѥ���������ʳ�����
-    ��«�����줿�ؿ��ؤ����ϤȤ��ƻȤ���
+   <th align="left">束縛戦略:</th>
+   <td><code>Nothing</code> 値は束縛された関数をバイパスし、それ以外の値
+    は束縛された関数への入力として使われる
    </td>
   </tr>
   <tr>
-   <th align="left">���Ѿ���:</th>
-   <td><code>Nothing</code> ���֤����⤷��ʤ��ؿ��Τʤ�Ӥ���׻���
-    ���ۤ��롣ʣ���ʥǡ����١����ؤ��䤤��碌�����뤤�ϼ���θ����ʤɤ�
-    �褤��Ǥ���
+   <th align="left">利用場面:</th>
+   <td><code>Nothing</code> を返すかもしれない関数のならびから計算を
+    構築する。複雑なデータベースへの問い合わせ、あるいは辞書の検索などが
+    よい例です。
    </td>
   </tr>
  <tr>
-  <th align="left">�����ȥץ饹:</th>
-  <td><code>Nothing</code> ���������ץ饹�黻�ҤϺǽ��
-   ��-<code>Nothing</code> �ͤ��֤�����ξ�������Ϥ� <code>Nothing</code>
-   �Ǥ��ä����ˤϡ�<code>Nothing</code> ���֤���
+  <th align="left">ゼロとプラス:</th>
+  <td><code>Nothing</code> がゼロ。プラス演算子は最初の
+   非-<code>Nothing</code> 値を返すか、両方の入力が <code>Nothing</code>
+   であった場合には、<code>Nothing</code> を返す。
   </td>
  </tr>
  <tr>
-  <th align="left">������:</th>
+  <th align="left">型の例:</th>
   <td><a href="http://www.haskell.org/onlinelibrary/maybe.html">Maybe a</a></td>
  </tr>
 </table>
 
 <a name="motivation">
 <!--<h2 lang="en">Motivation</h2>-->
-<h2>ư��</h2>
+<h2>動機</h2>
 </a>
 <!--
 <p lang="en">
@@ -128,11 +128,11 @@ steps may fail to return a value.
 </p>
 -->
 <p lang="ja">
-Maybe ��ʥɤϷ׻���Ϣ�������������ά�����񤷤Ƥ��롣���줾��η׻���
-����ޤǤΤɤΥ��ƥåפ���ϤȤ��� <code>Nothing</code> �Ȥʤ�С�
-�Ǹ�� <code>Nothing<code> ���֤����⤷��ʤ�������Ϸ׻������ߤ���
-��¸���륹�ƥåפ��¤Ӥ�ȼ������������ͤ��֤��Τ��Ԥ��뤫�⤷��ʤ�
-���ƥåפ��ޤޤ�Ƥ��������ˤ����ޤ���
+Maybe モナドは計算の連鎖を合成する戦略を内包している。それぞれの計算が
+それまでのどのステップも出力として <code>Nothing</code> となれば、
+最後に <code>Nothing<code> を返すかもしれない。これは計算が、互いに
+依存するステップの並びを伴い、その中に値を返すのを失敗するかもしれない
+ステップが含まれている場合に役にたちます。
 </p>
 <!--
 <p lang="en">
@@ -151,7 +151,7 @@ improve the code.
 -->
 <p lang="ja">
 <img src="info.png" align="left"></img>
-�⤷�ʲ��Τ褦�ʥ����ɤ�񤤤����Ȥ�����ʤ�:<br clear="all">
+もし以下のようなコードを書いたことがあるなら:<br clear="all">
 <pre>
 case ... of
   Nothing -> Nothing
@@ -159,13 +159,13 @@ case ... of
                Nothing -> Nothing
                Just y  -> ...
 </pre>
-<code>Maybe</code> �Υ�ʥɤȤ��Ƥ�������Ĥ��äƥ����ɤ���ɤ��뤳�Ȥ�
-�ͤ���٤��Ǥ��礦��
+<code>Maybe</code> のモナドとしての性質をつかってコードを改良することを
+考えるべきでしょう。
 </p>
 
 <a name="definition">
 <!--<h2 lang="en">Definition</h2>-->
-<h2 lang="ja">���</h2>
+<h2 lang="ja">定義</h2>
 </a>
 
 <table lang="en" bgcolor="#bbaa55" width="100%"><tr><td><pre>
@@ -185,7 +185,7 @@ instance MonadPlus Maybe where
 
 <a name="example">
 <!--<h2>Example</h2>-->
-<h2>��</h2>
+<h2>例</h2>
 </a>
 <!--
 <p lang="en">
@@ -198,12 +198,12 @@ preferences based on either a full name or a nickname.
 </p>
 -->
 <p lang="ja">
-�褯�Ȥ�����ϼ���θ����Ǥ����ե�͡���� Email ���ɥ쥹��
-�������뼭�񤬤��ꡢ�⤦�ҤȤĥ˥å��͡���� Email ���ɥ쥹��
-�������뼭�񤬤��ꡢ����ˤߤäĤ�Ȥ��� Email ���ɥ쥹�򹥤ߤ�
-email �η����˼������뼭�񤬤���Ȥ��ޤ��礦���ե�͡��ढ�뤤��
-�˥å��͡���Τɤ��餫���˸Ŀͤι��ߤ� Email �η����򸫤��Ф�
-�ؿ���Ĥ��뤳�Ȥ��Ǥ��ޤ���
+よく使われる例は辞書の検索です。フルネームを Email アドレスに
+写像する辞書があり、もうひとつニックネームを Email アドレスに
+写像する辞書があり、さらにみっつめとして Email アドレスを好みの
+email の形式に写像する辞書があるとしましょう。フルネームあるいは
+ニックネームのどちらかを基に個人の好みの Email の形式を見い出す
+関数をつくることができます。
 </p>
 
 <table bgcolor="#bbaa55" width="100%">
@@ -213,7 +213,7 @@ email �η����˼������뼭�񤬤���Ȥ��ޤ��礦���ե�͡��ढ�뤤��
  href="../examples/example11.hs">example11.hs</a></th>-->
 <th lang="ja" align="left">
 <a href="../examples/example11.hs">example11.hs</a>
-�ǻȤ��륳����</th>
+で使えるコード</th>
 </tr>
 <tr><td><pre>
 data MailPref = HTML | Plain
@@ -245,11 +245,11 @@ getMailPrefs sys name =
 <table lang="ja" width="100%">
  <tr>
   <td align="left" width="33%">Prev:
-   <a href="identitymonad.html">������ʥ�</a></td>
+   <a href="identitymonad.html">恒等モナド</a></td>
   <td align="center" width="33%">TOC:
-   <a href="index.html">�ܼ�</a></td>
+   <a href="index.html">目次</a></td>
   <td align="right" width="33%">Next:
-   <a href="errormonad.html">Error ��ʥ�</a></td>
+   <a href="errormonad.html">Error モナド</a></td>
  </tr>
 </table>
 

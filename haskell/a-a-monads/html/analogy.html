@@ -1,9 +1,9 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
+<!DOCTYPE html>
+<html lang="ja">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=EUC-JP">
+<meta charset="utf-8">
 <!--<title lang="en">A physical analogy for monads</title>-->
-<title lang="ja">��ʥɤ�ʪ��Ū�ʥ��ʥ�����</title>
+<title lang="ja">モナドの物理的なアナロジー</title>
 </head>
 <body>
 <!--
@@ -21,16 +21,16 @@
 <table lang="ja" width="100%">
  <tr>
   <td align="left" width="33%">Prev:
-   <a href="beyond.html">����ʤ�õ��</a></td>
+   <a href="beyond.html">さらなる探究</a></td>
   <td align="center" width="33%">TOC:
-   <a href="index.html">�ܼ�</a></td>
+   <a href="index.html">目次</a></td>
   <td align="right" width="33%">Next:
-   <a href="examples.html">��Ͽ II - Haskell �Υ�������</a></td>
+   <a href="examples.html">付録 II - Haskell のコード例</a></td>
  </tr>
 </table>
 
 <!--<h1 lang="en">A physical analogy for monads</h1>-->
-<h1 lang="ja">��ʥɤ�ʪ��Ū�ʥ��ʥ�����</h1>
+<h1 lang="ja">モナドの物理的なアナロジー</h1>
 <!--
 <p lang="en">
 Because monads are such abstract entities, it is sometimes useful to
@@ -41,10 +41,10 @@ the abstract world of computational monads.
 </p>
 -->
 <p lang="ja">
-��ʥɤ��������Ū�ʥ���ƥ��ƥ��ʤΤǡ��Ȥ��ˤϡ���ʥɤ��Τ��
-�ˤĤ���ľ�ܹͤ����ꡢ��ʥɤΥ��ʥ������Ȥ��Ƥζ���Ū�ʥ����ƥ��
-�ͤ���Τ�ͭ�ѤǤ���������ˡ�Ǥϡ�ʪ��Ū��ľ�Ѥȷи������Ѥ��ơ�
-�׻���ʥɤ����Ū������ƹͤ��뤿���ƶ���������ޤ���
+モナドは非常に抽象的なエンティティなので、ときには、モナドそのもの
+について直接考えるより、モナドのアナロジーとしての具体的なシステムを
+考えるのが有用です。この方法では、物理的な直観と経験を利用して、
+計算モナドの抽象的世界を再考するための洞察を得られます。
 </p>
 <!--
 <p lang="en">
@@ -55,10 +55,10 @@ could be helpful to gain the initial understanding of how a monad works.
 </p>
 -->
 <p lang="ja">
-������Ÿ�������ü��ʪ��Ū�ʥ��ʥ������ϵ��������줿�Ȥ�Ω�ƥ饤��Ǥ���
-����ϡ���ʥɤ˴����˹��פ����ΤǤϤ���ޤ���&mdash; ��˥�ʥ�
-�׻��ιⳬ��������̤δ��Ĥ��Ǥϡ�&mdash; ������������ʳ��Ǥϡ���ʥɤ�
-�ɤΤ褦�˵�ǽ���뤫�����򤹤�ˤϽ�ʬ��Ω���ޤ���
+ここで展開する特殊な物理的なアナロジーは機械化された組み立てラインです。
+これは、モナドに完璧に合致するものではありません。&mdash; 殊にモナド
+計算の高階性ある局面の幾つかでは。&mdash; しかし、初期段階では、モナドが
+どのように機能するかを理解するには十分役立ちます。
 </p>
 <!--
 <p lang="en">
@@ -70,12 +70,12 @@ belt carries the final product to the end of the assembly line to be output.
 </p>
 -->
 <p lang="ja">
-Haskell �Υץ�������٥�ȥ���٥�ȹͤ��뤳�Ȥ���Ϥ�ޤ��礦��
-���Ϥϥ���٥��ü�˺ܤ���졢��Ϣ�Υ�����ꥢ�ؤȱ��Ф�ޤ���
-�ƥ�����ꥢ�ˤ����ơ��٥�ȥ���٥���ʪ�ʤˤʤ�餫����
-�ä���졢�����Ƥ��η�̤Ϥޤ��٥�ȥ���٥�ǡ����Υ�����ꥢ��
-���Ф�ޤ����ǽ�Ū�ˤϥ٥�ȥ���٥�Ϻǽ��ʤ��Ȥ�Ω�ƥ饤���ü�ޤ�
-�Ϥ��Ӥ������Ϥ��ޤ���
+Haskell のプログラムをベルトコンベヤと考えることから始めましょう。
+入力はコンベヤの端に載せられ、一連のワークエリアへと運ばれます。
+各ワークエリアにおいて、ベルトコンベヤ上の物品になんらかの操作が
+加えられ、そしてその結果はまたベルトコンベヤで、次のワークエリアに
+運ばれます。最終的にはベルトコンベヤは最終品を組み立てラインの端まで
+はこびこれを出力します。
 </p>
 <!--
 <p lang="en">
@@ -85,9 +85,9 @@ to create the overall product.
 </p>
 -->
 <p lang="ja">
-�����Ȥ�Ω�ƥ饤���ǥ�Ǥϡ���ʥɤ�ʪ��Ū�ʥ�ǥ�ϡ��Ȥ�Ω�ƥ饤��
-��ǡ�Ϣ³����������ꥢ�������줾��ε�ǽ��������ơ��������Τ�
-�Ĥ�������Τ����椹�뵡�������ƥ�Ȥ������Ȥˤʤ�ޤ���
+この組み立てラインモデルでは、モナドの物理的なモデルは、組み立てライン
+上で、連続したワークエリアが、それぞれの機能を合成して、製品全体を
+つくりだすのを制御する機械システムということになります。
 </p>
 <!--
 <p lang="en">
@@ -103,14 +103,14 @@ Our monad consists of three parts:
 </ol>
 -->
 <p lang="ja">
-��ʥɤϰʲ���3�Ĥ���ʬ����ʤꤿ���ޤ���
+モナドは以下の3つの部分からなりたちます。
 </p>
 <ol lang="ja">
- <li>�٥�ȥ���٥�ȤȤ�˰�ư�����꤫�������ʤ�ܤ���ȥ졼
- <li>�ȥ졼��Ǥ�դΥ��֥������Ȥ�ܤ��������(loader)�ޥ���
- <li>�оݤκܤä��ȥ졼��ҤȤĤȤꡢ���������֥������Ȥκܤä��������ȥ졼��
-     ������(combiner)�ޥ��󡣤����ι����ޥ���ϡ��ºݤ˿�����
-     ���֥������Ȥ�����������(worker)�ޥ���˼���դ����Ƥ��ޤ���
+ <li>ベルトコンベヤとともに移動する作りかけの製品を載せるトレー
+ <li>トレーに任意のオブジェクトを載せるローダ(loader)マシン
+ <li>対象の載ったトレーをひとつとり、新しいオブジェクトの載った新しいトレーを
+     作る合成(combiner)マシン。これらの合成マシンは、実際に新しい
+     オブジェクトを生成するワーカ(worker)マシンに取り付けられています。
 </ol>
 <!--
 <p lang="en">We use the monad by setting up our assembly line as a loader machine which
@@ -121,11 +121,11 @@ worker machine, as shown in Figure A-1.
 </p>
 -->
 <p lang="ja">
-�Ȥ�Ω�ƥ饤��򡢺ǽ�˺�����ȥ졼�������������ޥ���Ȥ���
-���åȥ��åפ��ƥ�ʥɤ�Ȥ��ޤ��������ơ��٥�ȥ���٥�ϡ������Υȥ졼
-��ƥ�����ꥢ�ؤȱ��Ӥޤ��������ǡ������ޥ���ϥȥ졼����夲������
-���Ƥˤ�ȤŤ��ƥ���ޥ�������뤫�ɤ�������ꤷ�ޤ�������򼨤��Ƥ���
-�ΤϿ� A-1 �Ǥ���
+組み立てラインを、最初に材料をトレーに入れるローダマシンとして
+セットアップしてモナドを使います。そして、ベルトコンベヤは、それらのトレー
+を各ワークエリアへと運びます。ここで、合成マシンはトレーを取り上げ、その
+内容にもとづいてワーカマシンに送るかどうかを決定します。これを示している
+のは図 A-1 です。
 </p>
 
 <!--
@@ -143,7 +143,7 @@ Figure A-1.  An assembly line using a monad architecture.
 <img src="figureA-1.png" width="478" height="200" border="0" hspace="0" vspace="0">
 </td></tr>
 <tr bgcolor="#cc9999"><td>
-�� A-1 ��ʥɥ������ƥ������Ȥä��Ȥ�Ω�ƥ饤��
+図 A-1 モナドアーキテクチャを使った組み立てライン
 </td></tr>
 </table>
 <!--
@@ -158,13 +158,13 @@ different combiners to alter the way the final product is produced.
 </p>
 -->
 <p lang="ja">
-��ʥɤ��Ȥ�Ω�ƥ饤��˴ؤ������դ��٤������ϡ�����ޥ���ν���
-���������Ż��򡢥���ޥ���Ǽºݤ˹Ԥ���Ż�����ʬΥ���Ƥ���Ȥ���
-���ȤǤ���������ʬΥ���Ƥ��ޤ��С���Ω�����ѹ����뤳�Ȥ��Ǥ��ޤ���
-����椨��Ʊ�������ޥ����ҤȤĤ��Ȥ�Ω�ƥ饤������Ե����餻�뤳�Ȥ�
-Ȥ��Ĥ��餻�뤳�Ȥ�Ǥ��ޤ��� Ʊ�ͤˡ�����ޥ���ˤĤ��Ƥ⡢���ʤ�
-��Τǡ������ޥ�����괹���ơ����������ǽ����ʤ��ѹ����뤳�Ȥ�
-�Ǥ��ޤ���
+モナドの組み立てラインに関して注意すべき要点は、ワーカマシンの出力
+を合成する仕事を、ワーカマシンで実際に行われる仕事から分離しているという
+ことです。それらを分離してしまえば、独立して変更することができます。
+それゆえ、同じ合成マシンをひとつの組み立てラインで飛行機を作らせることも
+箸をつくらせることもできます。 同様に、ワーカマシンについても、おなじ
+もので、合成マシンを取り換えて、生産される最終製品を変更することが
+できます。
 </p>
 <!--
 <p lang="en">
@@ -181,15 +181,15 @@ Haskell as:
 </p>
 -->
 <p lang="ja">
-Ȥ�����Ȥ�Ω�ƥ饤�����򸫤ơ����줬ʪ��Ū�ʥ��ʥ������ǤϤɤΤ褦��
-ư���Ƥ���Τ��������ɤΤ褦�ˡ�Haskell �Υ����ɤ�ɽ�����뤫��
-���ޤ��礦��
-3 �ĤΥ���ޥ�����뤳�Ȥˤʤ�ޤ����ǽ�Τ�Τϡ��ں�ξ��Ҥ����Ϥ�
-���ƤȤꡢ���ϤΥȥ졼�ˤϡ������ޤ���Ȥ�η��򤷤���ΤΥڥ����ܤ�ޤ���
-2 �Ĥ�Υ���ϡ����Τ����ޤ���Ȥ�η��򤷤���ΤΥڥ����ꡢ���ϥȥ졼
-�ˤϳ꤫�ʤˤʤꡢ�ᤫ��ơ��쥹�ȥ���̾�����������줿Ȥ�������ܤ�ޤ���
-�����ܤΥ�����ᤫ�줿Ȥ������Ȥꡢ���ϥȥ졼�ˤϡ������Ѥߤλ��
-�������줿Ȥ�������ܤ�ޤ��������Haskell �ǽ񤯤ȼ��Τ褦�ˤʤ�ޤ���
+箸を作る組み立てラインの例を見て、それが物理的なアナロジーではどのように
+動いているのか、それをどのように、Haskell のコードで表現するかを
+見ましょう。
+3 つのワーカマシンを作ることになります。最初のものは、木材の小片を入力と
+してとり、出力のトレーには、おおまかに箸の形をしたもののペアが載ります。
+2 つめのワーカは、そのおおまかに箸の形をしたもののペアを取り、出力トレー
+には滑かなになり、磨かれて、レストランの名前が印刷された箸が一膳載ります。
+三番目のワーカは磨かれた箸を一膳とり、出力トレーには、印刷済みの紙で
+包装された箸が一膳載ります。これを、Haskell で書くと次のようになります。
 </p>
 <!--
 <table lang="en" bgcolor="#bbaa55" width="100%"><tr><td><pre>
@@ -214,22 +214,22 @@ wrapChopsticks c = ...
 </pre></td></tr></table>
 -->
 <table lang="ja" bgcolor="#bbaa55" width="100%"><tr><td><pre>
--- ����������ܤΥ�����
+-- 処理する基本のタイプ
 type Wood = ...
 type Chopsticks = ...
 data Wrapper x = Wrapper x
 
--- ��: Tray ���ϡ�Tray ��ʥɤ��餭�Ƥ��ޤ���
+-- 註: Tray 型は、Tray モナドからきています。
 
--- ����ؿ� 1: Ȥ�γ�������
+-- ワーカ関数 1: 箸の概形を作る
 makeChopsticks :: Wood -> Tray Chopsticks
 makeChopsticks w = ...
 
--- ����ؿ� 2: Ȥ���᤯
+-- ワーカ関数 2: 箸を磨く
 polishChopsticks :: Chopsticks -> Tray Chopsticks
 polishChopsticks c = ...
 
--- ����ؿ� 3: Ȥ����������
+-- ワーカ関数 3: 箸を包装する
 wrapChopsticks :: Chopsticks -> Tray Wrapper Chopsticks
 wrapChopsticks c = ...
 </pre></td></tr></table>
@@ -246,14 +246,14 @@ In Haskell, we would define the <code>Tray</code> monad as:
 </p>
 -->
 <p lamg="ja">
-�����Υ���ޥ���Ȥ����Τ�ɬ�פʵ�ǽ�򤹤٤ƻ��äƤ��뤳�Ȥ�
-���餫�Ǥ���ȴ���Ƥ���Τ� Tray ��ʥ����Τ�������ȥ졼����������
-�����ޥ���λ��ͤǤ����ȥ졼�϶��äݤǤ��뤫���⤷���ϡ���Ĥ���ʪ��
-�ܤäƤ��뤫�Τɤ��餫�Ǥʤ���Фʤ�ޤ��󡣥������ޥ���ϡ�ñ��ˡ�
-�ҤȤĤ���ʪ��Ȥꡢ�����٥�ȥ���٥�˺ܤ�������Ǥ��������ޥ����
-���ϥȥ졼��ҤȤĤ��ĤȤꡢ���Ǥʤ��ȥ졼�����Ƥ���°�Υ���ޥ���
-�ե����ɤ��뤢�������ˤʤä��ȥ졼��������äƤ����ޤ���Haskell �Ǥ�
-<code>Tray</code> ��ʥɤ򼡤Τ褦��������ޤ���
+これらのワーカマシンが箸を作るのに必要な機能をすべて持っていることは
+明らかです。抜けているのは Tray モナド全体を構成するトレー、ローダ、
+合成マシンの仕様です。トレーは空っぽであるか、もしくは、一つの品物が
+載っているかのどちらかでなければなりません。ローダマシンは、単純に、
+ひとつの品物をとり、それをベルトコンベヤに載せるだけです。合成マシンは
+入力トレーをひとつずつとり、空でないトレーの内容を付属のワーカマシン
+フィードするあいだ空になったトレーを先へ送っておきます。Haskell では
+<code>Tray</code> モナドを次のように定義します。
 </p>
 <!--
 <table lang="en" bgcolor="#bbaa55" width="100%"><tr><td><pre>
@@ -269,10 +269,10 @@ instance Monad Tray where
 </pre></td></tr></table>
 -->
 <table lang="ja" bgcolor="#bbaa55" width="100%"><tr><td><pre>
--- �ȥ졼�϶����⤷������ʪ����Ĥ����ܤäƤ��ʤ���Фʤ�ʤ�
+-- トレーは空かもしくは品物が一つだけ載っていなければならない
 data Tray x = Empty | Contains x
 
--- Tray �ϥ�ʥ�
+-- Tray はモナド
 instance Monad Tray where
     Empty        >>= _      = Empty
     (Contains x) >>= worker = worker x
@@ -288,8 +288,8 @@ You may recognize the <code>Tray</code> monad as a disguised version of the
 -->
 <p lang="ja">
 <img src="info.png" align="left"></img>
-<code>Tray</code> ��ʥɤ� Haskell 98 ��ɸ��饤�֥���
-<code>Maybe</code> ��ʥɤ�����������Τ��Ȥ������Ȥ�ʬ��Ǥ��礦��
+<code>Tray</code> モナドが Haskell 98 の標準ライブラリの
+<code>Maybe</code> モナドの変装したものだということは分るでしょう。
 <br clear="all"></p>
 <!--
 <p lang="en">
@@ -299,8 +299,8 @@ line, as shown in Figure A-2.
 </p>
 -->
 <p lang="ja">
-�Τ���ϡ��������ޥ���ȹ����ޥ����Ȥäơ�����ޥ���������¤١�
-�������Ȥ�Ω�ƥ饤���������Ǥ�������Ͽ� A-2 �Ǥ���
+のこるは、ローダマシンと合成マシンを使って、ワーカマシンを一列に並べ、
+完全な組み立てラインを作るだけです。それは図 A-2 です。
 </p>
 <!--
 <table lang="en" width="478" border="1">
@@ -317,7 +317,7 @@ Figure A-2.  A complete assembly line for making chopsticks using a monadic appr
 <img src="figureA-2.png" width="478" height="200" border="0" hspace="0" vspace="0">
 </td></tr>
 <tr bgcolor="#cc9999"><td>
-�� A-2 ������������ʥɥ��ץ�������Ȥä�Ȥ���뤿����Ȥ�Ω�ƥ饤��
+図 A-2 完成した、モナドアプローチを使って箸を作るための組み立てライン
 </td></tr>
 </table>
 <!--
@@ -326,7 +326,7 @@ In Haskell, the sequencing can be done using the standard monadic functions:
 </p>
 -->
 <p lang="ja">
-Haskell �Ǥ�ľ�󲽤�ɸ��Υ�ʥɴؿ��ǹԤ����Ȥ��Ǥ��ޤ���
+Haskell では直列化は標準のモナド関数で行うことができます。
 </p>
 <table bgcolor="#bbaa55" width="100%"><tr><td><pre>
 assemblyLine :: Wood -> Tray Wrapped Chopsticks
@@ -338,7 +338,7 @@ or using the built in Haskell "do" notation for monads:
 </p>
 -->
 <p lang="ja">
-���뤤�ϡ�Haskell �ȹ��ߤΥ�ʥɤ� do ��ˡ��Ȥäưʲ��Τ褦�˹Ԥ��ޤ���
+あるいは、Haskell 組込みのモナドの do 記法を使って以下のように行えます。
 </p>
 <table bgcolor="#bbaa55" width="100%"><tr><td><pre>
 assemblyLine :: Wood -> Tray Wrapped Chopsticks
@@ -356,12 +356,12 @@ if we wanted to change the manufacturing process.
 </p>
 -->
 <p lang="ja">
-�����ޤǤǡ���ʥɤ��Ȥ�Ω�ƥ饤����ۤ���ե졼�����Τ褦�ʤ�Τ�
-�Ȥ������Ȥ�Ƚ�ä��Ȼפ��ޤ��������������Υ桼�ƥ���ƥ��ˤĤ��Ƥ�
-����äȵ���Τޤ��褦�ʴ����������ΤǤϤʤ����Ȼפ��ޤ���
-�ʤ����Ȥ�Ω�ƥ饤����ʥɤΥ��ץ������ǹ��ۤ��褦�Ȥ���Τ���
-���򤹤뤿��ˤϡ��⤷������Υץ��������ѹ��������Ȼפä��Ȥ�������
-�����뤫�򡢤褯�ͤ��ƤߤƤ���������
+ここまでで、モナドが組み立てラインを構築するフレームワークのようなものだ
+ということが判ったと思います。しかし、そのユーティリティについては
+ちょっと気をのまれるような感じがしたのではないかと思います。
+なぜ、組み立てラインをモナドのアプローチで構築しようとするのかを
+理解するためには、もし、工場のプロセスを変更したいと思ったとき、何が
+おこるかを、よく考えてみてください。
 </p>
 <!--
 <p lang="en">
@@ -376,15 +376,15 @@ failed, but all you have to go on is an empty tray.
 </p>
 -->
 <p lang="ja">
-���ơ�����ޥ���Τɤ줫����꤯��ǽ���ʤ��Ȥ���<code>fail</code>
-�롼�����Ĥ��äơ����Υȥ졼���뤳�Ȥˤ��ޤ��礦��
-<code>fail</code> �롼����ϼ��Ԥ��������������ҤȤĤȤ�ޤ���
-��������<code>Tray</code> ���Ϥ��줪��̵�뤷��ñ�˶��Υȥ졼����ޤ���
-���ζ��Υȥ졼���Ȥ�Ω�ƥ饤����ޤǿʤ�Ǥ����ޤ��������ơ�
-�����ޥ���Ϥ����Ĥ�Υ���ޥ��󤬥Х��ѥ�����褦�ˤ��ޤ���
-�Ǹ�Ϥ��ζ��Υȥ졼���Ȥ�Ω�ƥ饤��κǸ����ã���������ǡ��ʼ�����
-���󥸥˥��Τ�Ȥ˱��Ф�뤳�Ȥˤʤ�ޤ����ɤΥޥ�����Ĵ�ʤΤ���
-õ���ΤϤ��Υ��󥸥˥��λŻ��Ǥ���������������Τ϶��Υȥ졼�Ǥ���
+さて、ワーカマシンのどれかが上手く機能しないとき、<code>fail</code>
+ルーチンをつかって、空のトレーを作ることにしましょう。
+<code>fail</code> ルーチンは失敗を説明する引数をひとつとります。
+しかし、<code>Tray</code> 型はこれおを無視し、単に空のトレーを作ります。
+この空のトレーは組み立てライン先まで進んでいきます。そして、
+合成マシンはこれを残りのワーカマシンがバイパスするようにします。
+最後はこの空のトレーは組み立てラインの最後に到達し、そこで、品質管理
+エンジニアのもとに運ばれることになります。どのマシンが不調なのかを
+探すのはそのエンジニアの仕事です。しかし、あるのは空のトレーです。
 </p>
 <!--
 <p lang="en">
@@ -396,10 +396,10 @@ line without changing your worker machines.
 </p>
 -->
 <p lang="ja">
-<code>Tray</code> ��ʥɤκ��� <code>fail</code> �롼����̵�뤷�Ƥ���
-���ԥ�å��������꤯�Ȥ���С����λŻ������äȤ��䤹���ʤ�Ȥ�������
-���狼��ޤ���͡��Ȥ�Ω�ƥ饤��ϥ�ʥɤΥ��ץ��������ȿ������Ƥ���Τ�
-����ޥ�����ѹ����뤳�Ȥʤ������ε�ǽ���ɲä���Τϴ�ñ�Ǥ���
+<code>Tray</code> モナドの今の <code>fail</code> ルーチンが無視している
+失敗メッセージを上手く使えれば、この仕事がずっとやりやすくなるということ
+がわかりますよね。組み立てラインはモナドのアプローチで組織化してあるので
+ワーカマシンを変更することなく、この機能を追加するのは簡単です。
 </p>
 <!--
 <p lang="en">
@@ -409,9 +409,9 @@ describing the exact reason there is no item in the tray.
 </p>
 -->
 <p lang="ja">
-�����ѹ���Ԥ��ˤϡ�ñ�ˤϡ����ˤϤʤ�ʤ����������ȥ졼�Υ����פ�
-���Ф��������Ǥ�����ˡ���ʪ���ܤäƤ��뤫����ʪ���ܤäƤ��ʤ�
-�����Ȥ�����ͳ�Υ�ݡ��Ȥ����뤫�Τɤ��餫�ˤ��ޤ���
+この変更を行うには、単には、空にはならない、新しいトレーのタイプを
+作ればいいだけです。常に、品物が載っているか、品物が載っていない
+ちゃんとした理由のレポートがあるかのどちらかにします。
 </p>
 <!--
 <table lang="en" bgcolor="#bbaa55" width="100%"><tr><td><pre>
@@ -427,10 +427,10 @@ instance Monad Tray2 where
 </pre></td></tr></table>
 -->
 <table lang="ja" bgcolor="#bbaa55" width="100%"><tr><td><pre>
--- Tray2 �ϰ�Ĥ���ʪ�������Ԥ����Ȥ��Υ�ݡ��ȤΤɤ��餫��ܤ��ޤ�
+-- Tray2 は一つの品物か、失敗したときのレポートのどちらかを載せます
 data Tray2 x = Contains x | Failed String
 
--- Tray2 �ϥ�ʥ�
+-- Tray2 はモナド
 instance Monad Tray2 where
     (Failed reason) >>= _      = Failed reason
     (Contains x)    >>= worker = worker x
@@ -447,8 +447,8 @@ libraries.<br clear="all">
 -->
 <p lang="ja">
 <img src="info.png" align="left"></img>
-<code>Tray2</code> ��ʥɤ� Haskell 98 ��ɸ��饤�֥���
-<code>Error</code> ��ʥɤ�����������Τ��Ȥ������Ȥ�ʬ��Ǥ��礦��
+<code>Tray2</code> モナドが Haskell 98 の標準ライブラリの
+<code>Error</code> モナドの変装したものだということは分るでしょう。
 <br clear="all">
 </p>
 <!--
@@ -460,10 +460,10 @@ report detailing the exact cause of the failure!
 </p>
 -->
 <p lang="ja">
-�Ȥ�Ω��<code>Tray</code> ��ʥɤ� <code>Tray2</code> ��ʥɤ��֤�������
-�������Ȥ�Ω�ƥ饤�󤢤äȤ����ޤ˥��åץ��졼�ɤǤ��ޤ������٤ϡ�
-�Զ�礬������С��ʼ��������󥸥˥��ΤȤ����˱��Ф���褿�ȥ졼�ˤ�
-�Զ��ȯ���θ����ˤĤ��Ƥξܺ٤ʥ�ݡ��Ȥ��ܤäƤ��ޤ���
+組み立て<code>Tray</code> モナドを <code>Tray2</code> モナドに置き換える
+だけで組み立てラインあっというまにアップグレードできます。今度は、
+不具合が起きれば、品質管理エンジニアのところに運ばれて来たトレーには
+不具合発生の原因についての詳細なレポートが載っています。
 </p>
 
 <hr align="center" size="1" width="80%">
@@ -483,11 +483,11 @@ report detailing the exact cause of the failure!
 <table lang="ja" width="100%">
  <tr>
   <td align="left" width="33%">Prev:
-   <a href="beyond.html">����ʤ�õ��</a></td>
+   <a href="beyond.html">さらなる探究</a></td>
   <td align="center" width="33%">TOC:
-   <a href="index.html">�ܼ�</a></td>
+   <a href="index.html">目次</a></td>
   <td align="right" width="33%">Next:
-   <a href="examples.html">��Ͽ II - Haskell �Υ�������</a></td>
+   <a href="examples.html">付録 II - Haskell のコード例</a></td>
  </tr>
 </table>
 </body>

@@ -1,7 +1,7 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
+<!DOCTYPE html>
+<html lang="ja">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=EUC-JP">
+<meta charset="utf-8">
 <title>Introduction</title>
 </head>
 <body>
@@ -20,10 +20,10 @@
 <table width="100%">
  <tr>
   <td align="left" width="33%">Prev:
-   <a href="index.html">�ܼ�</a></td>
+   <a href="index.html">目次</a></td>
   <td align="center" width="33%">TOC:
-    <a href="index.html">�ܼ�</a></td>
-  <td align="right" width="33%">Next: <a href="meet.html">��ʥɤ˿����</a></td>
+    <a href="index.html">目次</a></td>
+  <td align="right" width="33%">Next: <a href="meet.html">モナドに触れる</a></td>
  </tr>
 </table>
 </p>
@@ -37,10 +37,10 @@
 </p>
 -->
 <p lang="ja">
-<h1>����ȥ����������</h1>
+<h1>イントロダクション</h1>
 <ul>
-<li><a href="#what">��ʥɤȤϲ���</a></li>
-<li><a href="#why">�ʤ���ʥɤ����򤷤褦�Ȥ���Τ�</a></li>
+<li><a href="#what">モナドとは何か</a></li>
+<li><a href="#why">なぜモナドを理解しようとするのか</a></li>
 </ul>
 </p>
 
@@ -48,7 +48,7 @@
 <!--
 <a name="what"><h2>What is a monad?</h2></a>
 -->
-<a name="what"><h2>��ʥɤȤϲ���</h2></a>
+<a name="what"><h2>モナドとは何か</h2></a>
 <!--
 <p lang="en">
 A monad is a way to structure computations in terms of values and sequences
@@ -60,12 +60,12 @@ having to code the combination manually each time it is required.
 </p>
 -->
 <p lang="ja">
-��ʥɤ��ͤ���Ӥ����ͤ�Ȥ��׻����¤ӤȤ����������餤���С��׻���¤��
-������ˡ�Ǥ�����ʥɤ�Ȥ��ȡ��ץ�����ޤϤҤȤʤ�ӤΥ֥��å���ȤäƷ�
-�����ۤ��뤳�Ȥ��Ǥ��ޤ������Υ֥��å��Ϥ��켫�ȷ׻����¤ӤǤ�����ʥ�
-�ϤɤΤ褦�˹������줿�׻����������׻���������뤫����ꤷ�ޤ�������ˤ�
-�ꡢ�׵᤬���뤿�Ӥ��Ȥ߹�碌���ǥ����ǥ��󥰤��ʤ���Фʤ�ʤ��ץ���
-��ޤ�������Ƥ���ޤ���
+モナドは値およびその値を使う計算の並びという観点からいえば、計算を構造化
+する方法です。モナドを使うと、プログラマはひとならびのブロックを使って計
+算を構築することができます。このブロックはそれ自身計算の並びです。モナド
+はどのように合成された計算が新しい計算を形成するかを決定します。これによ
+り、要求があるたびに組み合わせを手でコーディングしなければならないプログ
+ラマを解放してくれます。
 </p>
 <!--
 <p lang="en">
@@ -87,21 +87,21 @@ computations succeed.
 </p>
 -->
 <p lang="ja">
-<em>��ʥɤ򡢷׻���������ơ����ʣ���ʷ׻��ˤ�����ά�ȹͤ����
-�����Ǥ��礦��</em>���Ȥ��С�Haskell �� <code>Maybe</code> ���ˤĤ��Ƥ�
-�褯������Ǥ���Ȼפ��ޤ�����
+<em>モナドを、計算を合成して、より複雑な計算にする戦略と考えると
+いいでしょう。</em>たとえば、Haskell の <code>Maybe</code> 型については
+よく馴染んでいると思いますが、
 <pre>
 data Maybe a = Nothing | Just a
 </pre>
-����Ϸ�̤��֤������ʤ����⤷��ʤ��׻��η���ɽ�����Ƥ��ޤ���
-<code>Maybe</code> �������������Τϡ�<code>Maybe</code> �����ͤ��֤���
-���ι����˴ؤ�����ά�Ǥ����������줿�׻������ҤȤĤη׻� <code>B</code> 
-�ǹ������졢���η׻����̤η׻� <code>A</code> �η�̤˰�¸���Ƥ����硢
-�������줿�׻��ϡ�<code>A</code> �ޤ��� <code>B</code> ��
-<code>Nothing</code> �ˤʤ��ɬ�� <code>Nothing</code> �ˤʤ�ʤ��ƤϤ�
-��ޤ��󡣤ޤ����������줿�׻���ξ���η׻�������������ˤ�
-<code>A</code> �η�̤� <code>B</code> �η�̤�Ŭ�Ѥ�����Τˤʤ�ʤ���
-�Ϥʤ�ʤ���
+これは結果を返しそこなうかもしれない計算の型を表現しています。
+<code>Maybe</code> 型が示唆するものは、<code>Maybe</code> 型の値を返す計
+算の合成に関する戦略です。合成された計算が、ひとつの計算 <code>B</code> 
+で構成され、この計算が別の計算 <code>A</code> の結果に依存している場合、
+合成された計算は、<code>A</code> または <code>B</code> が
+<code>Nothing</code> になれば必ず <code>Nothing</code> にならなくてはな
+りません。また、合成された計算は両方の計算が成功する場合には
+<code>A</code> の結果に <code>B</code> の結果を適用したものにならなくて
+はならない。
 </p>
 <!--
 <p lang="en">
@@ -114,17 +114,17 @@ These monads are each described in <a href="introII.html">Part II</a>.
 </p>
 -->
 <p lang="ja">
-�����Ϥ�¹Ԥ����׻������֤���ķ׻���ʣ���η�̤��֤��׻��ʤɤ��ۤ���
-������̤Υ�ʥɤ�¸�ߤ��ޤ����׻������������ά���������󤢤�褦�ˡ���
-�������ʥ����פΥ�ʥɤ��������󤢤�ޤ��������̤����Ω�Ĥ�Τ�
+入出力を実行した計算、状態を持つ計算、複数の結果を返す計算などを構築する
+ための別のモナドが存在します。計算を合成する戦略がたくさんあるように、い
+ろいろなタイプのモナドがたくさんありますが、特別に役に立つものや
 <a href="http://www.haskell.org/onlinelibrary/">Haskell 98 libraries</a>
-�ΰ����Ȥ����­�붦�̤Υ�ʥɤȤ����Τ������Ĥ�����ޤ��������Υ�ʥ�
-��<a href="introII.html">�� II ��</a>�ǲ��⤷�ޤ���
+の一部とするに足る共通のモナドというのがいくつかあります。これらのモナド
+は<a href="introII.html">第 II 部</a>で解説します。
 </p>
 <!--
 <a name="why"><h2>Why should I make the effort to understand monads?</h2></a>
 -->
-<a name="why"><h2>�ʤ���ʥɤ����򤷤褦�Ȥ���Τ�</h2></a>
+<a name="why"><h2>なぜモナドを理解しようとするのか</h2></a>
 <!--
 <p lang="en">
 The sheer number of different <a href="http://haskell.cs.yale.edu/bookshelf/#monads">
@@ -136,13 +136,13 @@ of exactly what a monad is and what it is good for.
 </p>
 -->
 <p lang="ja">
-���󥿡��ͥåȾ�ˤϤ����Ĥ�Τ��줾���̤�
+インターネット上にはいくつものそれぞれ別の
 <a href="http://haskell.cs.yale.edu/bookshelf/#monads">
-��ʥɥ��塼�ȥꥢ��</a>��¸�ߤ��ޤ��������Τ��Ȥϥ�ʥɤγ�ǰ�����򤹤�
-���Ȥ�¿���οͤˤȤä��񤷤����Ȥ򼨤��Ƥ��ޤ�������ϡ���ʥɤ����Ū����
-�ˤ���ΤǤ��ꡢ����餬�����Ĥ��ΰۤ����¤Τʤ����Ѥ�����Ȥ�������
-�ˤ���ΤǤ������Τ��Ȥ�����ʥɤȤϲ�����������Ω�ĤΤ������Ū������
-���Ȥ��𤵤��Ƥ���ΤǤ���
+モナドチュートリアル</a>が存在しますが、このことはモナドの概念を理解する
+ことが多くの人にとって難しいことを示しています。これは、モナドの抽象的性質
+によるものであり、それらがいくつかの異る制限のなかで用いられるという事実
+によるものです。このことが、モナドとは何か、何に役立つのかを具体的に描く
+ことを混乱させているのです。
 </p>
 <!--
 <p lang="en">
@@ -152,9 +152,9 @@ the I/O monad will improve your code and extend your capabilities.
 </p>
 -->
 <p lang="ja">
-Haskell �Ǥϥ�ʥɤ������ϥ����ƥ���濴Ū������򤷤Ƥ��ޤ���Haskell ��
-�����Ϥ�Ԥ��Τ˥�ʥɤ����򤹤뤳�Ȥ�ɬ�ܤǤϤ���ޤ��󤬡������ϥ�ʥ�
-�����򤷤Ƥ��뤳�Ȥϥ����ɤ�ǽ�Ϥθ����⤿�餹���ȤǤ��礦��
+Haskell ではモナドは入出力システムで中心的な役割りをしています。Haskell で
+入出力を行うのにモナドを理解することは必須ではありませんが、入出力モナド
+を理解していることはコードと能力の向上をもたらすことでしょう。
 </p>
 <!--
 <p lang="en">
@@ -182,24 +182,24 @@ of specific monads.
 </p>
 -->
 <p lang="ja">
-�ץ�����ޤˤȤäƥ�ʥɤϴؿ��ץ������ι�¤����ͭ�Ѥʥġ���Ǥ���
-��ʥɤˤϡ�������ä�ͭ�Ѥʤ�ΤȤ��Ƥ��� 3 �Ĥ�����������ޤ���
+プログラマにとってモナドは関数プログラムの構造化に有用なツールです。
+モナドには、それを特に有用なものとしている 3 つの性質があります。
 <ol>
- <li>�⥸����ƥ� - ���ñ��ʷ׻�����׻���������뤳�Ȥ��Ǥ����ºݤ�
-      �¹Ԥ����׻��ȹ�����ά����Υ�����Ȥ��Ǥ��ޤ���
+ <li>モジュラリティ - より単純な計算から計算を合成することができ、実際に
+      実行される計算と合成戦略を切離すことができます。
       </li>
- <li>������ - �ؿ��ץ��������ʥɤʤ��ǽ񤤤�Ʊ���Υץ���������
-      �Ϥ뤫�˽���ʤ�ΤȤ��뤳�Ȥ��Ǥ��ޤ�������ϥ�ʥɤ����׻���ά��
-      �ץ���������ΤˤФ黵�����Ȥ򤻤��ˡ���ս�˰��Ф�����Ǥ��롣
+ <li>柔軟性 - 関数プログラムをモナドなしで書いた同等のプログラムよりも
+      はるかに柔軟なものとすることができます。これはモナドが、計算戦略を
+      プログラム全体にばら撒くことをせずに、一箇所に引出すからである。
       </li>
- <li>ʬΥ�� - �ؿ��ץ����������Τ��������ʬΥ�����ޤޤǡ�̿�᥹������
-      �η׻���¤����������Τ����ѤǤ��ޤ�������ϡ�Haskell �Τ褦�ʽ��
-      �ʴؿ�������������ϤΤ褦��(����Ʃ�������˲�����褦��)�����Ѥ���
-      �߹�碌��Τ���Ω���ޤ���
+ <li>分離性 - 関数プログラムの本体から安全に分離したままで、命令スタイル
+      の計算構造を生成するのに利用できます。これは、Haskell のような純粋
+      な関数型言語と入出力のような(参照透明性を破壊するような)副作用と組
+      み合わせるのに役立ちます。
       </li>
 </ol>
-��������ħ�Τ��줾��ϡ����Τ��ȤΥ��塼�ȥꥢ�������Υ�ʥɤ�ʸ̮��
-�Ƹ�Ƥ���ޤ���
+これらの特徴のそれぞれは、このあとのチュートリアルで特定のモナドの文脈で
+再検討します。
 </p>
 
 <hr align="center" size="1" width="80%">
@@ -217,9 +217,9 @@ of specific monads.
 <p lang="ja">
 <table width="100%">
 <tr>
- <td align="left" width="33%">Prev: <a href="index.html">�ܼ�</a></td>
- <td align="center" width="33%">TOC: <a href="index.html">�ܼ�</a></td>
- <td align="right" width="33%">Next: <a href="meet.html">��ʥɤ˿����</a></td>
+ <td align="left" width="33%">Prev: <a href="index.html">目次</a></td>
+ <td align="center" width="33%">TOC: <a href="index.html">目次</a></td>
+ <td align="right" width="33%">Next: <a href="meet.html">モナドに触れる</a></td>
 </tr>
 </table>
 </p>

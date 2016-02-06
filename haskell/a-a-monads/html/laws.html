@@ -1,7 +1,7 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
+<!DOCTYPE html>
+<html lang="ja">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=EUC-JP">
+<meta charset="utf-8">
 <title>The monad laws</title>
 </head>
 <body>
@@ -26,20 +26,20 @@
 <table width="100%">
  <tr>
   <td align="left" width="33%">
-   Prev: <a href="class.html">���饹�ǻȤ�</a>
+   Prev: <a href="class.html">クラスで使う</a>
   </td>
   <td align="center" width="33%">
-   TOC: <a href="index.html">�ܼ�</a>
+   TOC: <a href="index.html">目次</a>
   </td>
   <td align="right" width="33%">
-   Next: <a href="exercises.html">��������</a>
+   Next: <a href="exercises.html">練習問題</a>
   </td>
  </tr>
 </table>	
 </p>
 
 <!--<h1 lang="en">The monad laws</h1>-->
-<h1 lange="ja">��ʥ�§</h1>
+<h1 lange="ja">モナド則</h1>
 <!--
 <p lang="en">
 <ul>
@@ -53,11 +53,11 @@
 -->
 <p lang="ja">
 <ul>
- <li><a href="#laws">���Ĥδ���§</a></li>
- <li><a href="#fail">�ּ��ԡפ��դ�����</a></li>
- <li><a href="#nowayout">�и��Ϥʤ�</a></li>
- <li><a href="#zero">Zero �� Plus</a></li>
- <li><a href="#summary">����</a></li>
+ <li><a href="#laws">三つの基本則</a></li>
+ <li><a href="#fail">「失敗」は付けたし</a></li>
+ <li><a href="#nowayout">出口はない</a></li>
+ <li><a href="#zero">Zero と Plus</a></li>
+ <li><a href="#summary">要約</a></li>
 </ul>
 </p>
 
@@ -78,20 +78,20 @@ Haskell class to support these extended monads.
 </p>
 -->
 <p lang="ja">
-���Υ��塼�ȥꥢ��ǤϤ��ޤޤǡ�����Ū�ʵ������򤱤Ƥ��ޤ�������������
-��ʥɤˤĤ��ƹͤ���٤�����Ū��������2��3����ޤ�����ʥɱ黻�ϡ�
-�֥�ʥɸ����פȤ����Τ��Ƥ��롢�����Ĥ���ˡ§���˽���ʤ����
-�ʤ�ޤ��󡣤�����ˡ§�� Haskell �Υ���ѥ��餬���������ΤǤ�
-����ޤ��󡣤������äơ����٤Ƥ� <code>Monad</code> �Υ��󥹥��󥹤�
-���������Τ���������ˡ§�˽������Ȥ��ݾڤ���Τϥץ�����޼��ȤǤ���
-Haskell �� <code>Monad</code> ���饹�ϡ��ޤ����Ƥ��ޤ��󤬡��Ǿ��¤����
-�ʾ�ˤ����Ĥ��δؿ���ޤ�Ǥ��ޤ�����ɡ�¿���Υ�ʥɤ�ɸ��Υ�ʥ�§
-�ʳ��ε�§�ˤ⽾�äƤ��ޤ���Haskell �Υ��饹�ˤϤ���������ĥ���줿��ʥ�
-�򥵥ݡ��Ȥ��뤿��Τ�Τ�����ޤ���
+このチュートリアルではいままで、技術的な議論を避けてきました。しかし、
+モナドについて考えるべき技術的な要点が2、3あります。モナド演算は、
+「モナド公理」として知られている、いくつかの法則群に従わなければ
+なりません。これらの法則は Haskell のコンパイラが強制するものでは
+ありません。したがって、すべての <code>Monad</code> のインスタンスと
+宣言したものが、これらの法則に従うことを保証するのはプログラマ自身です。
+Haskell の <code>Monad</code> クラスは、まだ見ていませんが、最小限の定義
+以上にいくつかの関数を含んでいます。結局、多くのモナドは標準のモナド則
+以外の規則にも従っています。Haskell のクラスにはこうした拡張されたモナド
+をサポートするためのものがあります。
 </p>
 
 <a name="laws"><!--<h2 lang="en">The three fundamental laws</h2>-->
-<h2 lang="ja">���Ĥδ���§</h2></a>
+<h2 lang="ja">三つの基本則</h2></a>
 
 <!--
 <p lang="en">
@@ -110,13 +110,13 @@ must work together according to three laws:
 </p>
 -->
 <p lang="ja">
-��ʥɤγ�ǰ�Ϸ����Ȥ�Ф����ؤ�ʬ����褿��ΤǤ�����ʥɤ�
-�Ĥ��ä��ꡢ�Ĥ��ä��ꤹ��Τˡ��������Τ�ɬ�פϤ���ޤ��󤬡�����Ū��
-�����ˤϤ������Ф��꽾��ɬ�פ�����ޤ�����ʥɤ��뤿��ˤϡ�Haskell ��
-<code>Monad</code> ���饹�Υ��󥹥��󥹤Ǥ���Ȥ������Ȥ�������
-�������ͥ����Ĥ��ä�������������ǤϽ�ʬ�ǤϤ���ޤ�����������ʥɤ�
-���뤿��ˤ� <code>return</code> ����� <code>>>=</code> �ؿ����Ȥ��
-�ʲ���3�Ĥ�ˡ§��ߤ����ʤ���Фʤ�ޤ���
+モナドの概念は圏論とよばれる数学の分野から来たものです。モナドを
+つくったり、つかったりするのに、圏論を知る必要はありませんが、数学的な
+形式にはすこしばかり従う必要があります。モナドを作るためには、Haskell の
+<code>Monad</code> クラスのインスタンスであるということを正しく
+型シグネチャをつかって宣言しただけでは十分ではありません。正しいモナドで
+あるためには <code>return</code> および <code>>>=</code> 関数がともに
+以下の3つの法則をみたさなければなりません。
 <ol>
  <li><code>(return x) >>= f == f x</code></li>
  <li><code>m >>= return == m</code></li>
@@ -133,12 +133,12 @@ that the semantics of the do-notation using the monad will be consistent.
 </p>
 -->
 <p lang="ja">
-�ǽ�ε�§�� <code>return</code> �� <code>>>=</code> �˴ؤ��ƺ�ñ�̸���
-�ʤäƤ��뤳�Ȥ��������Ƥ��ޤ��������ܤε�§�� <code>return</code> ��
-<code>>>=</code> �˴ؤ��Ʊ�ñ�̸��ˤʤäƤ��뤳�Ȥ��������Ƥ��ޤ���
-�����ơ������ܤε�§�� <code>>>=</code> �˴ؤ�����η��ˡ§�Ǥ���
-�����ܤε�§�˽����С���ʥɤ�Ĥ��ä� do ��ˡ�Υ��ޥ�ƥ������ϰ������
-����ޤ���
+最初の規則は <code>return</code> が <code>>>=</code> に関して左単位元に
+なっていることを要請しています。二番目の規則は <code>return</code> が
+<code>>>=</code> に関して右単位元になっていることを要請しています。
+そして、三番目の規則は <code>>>=</code> に関する一種の結合法則です。
+三番目の規則に従えば、モナドをつかった do 記法のセマンティクスは一貫性を
+もちます。
 </p>
 <!--
 <p lang="en">
@@ -150,16 +150,16 @@ satisfies the monad laws.
 </p>
 -->
 <p lang="ja">
-����3�ĤΥ�ʥ�§�������꥿���󤪤�ӥХ���ɱ黻�Ҥ��ķ����ۻҤ�
-���٤ƥ�ʥɤǤ���Haskell �ˤ����Ƥϡ������ε�§�� <code>Monad</code>
-���饹�Τ��٤ƤΥ��󥹥��󥹤��ݻ�����Ƥ��뤫�ɤ����򡢥���ѥ��餬
-�����å����뤳�ȤϤ���ޤ��󡣥ץ�����ޤ��Ĥ��ä� <code>Monad</code> ��
-���󥹥��󥹤��ɤ���ʥ�§�������褦�ˤ���Τϡ��ץ�����޼��Ȥ�
-�Ż��Ǥ���
+この3つのモナド則を満すリターンおよびバインド演算子をもつ型構築子は
+すべてモナドです。Haskell においては、これらの規則が <code>Monad</code>
+クラスのすべてのインスタンスで保持されているかどうかを、コンパイラが
+チェックすることはありません。プログラマがつくった <code>Monad</code> の
+インスタンスがどれもモナド則を満すようにするのは、プログラマ自身の
+仕事です。
 </p>
 
 <a name="fail"><!--<h2>Failure IS an option</h2>-->
-<h2>�ּ��ԡפ��դ�����</h2></a>
+<h2>「失敗」は付けたし</h2></a>
 <!--
 <p lang="en">
 The definition of the <code>Monad</code> class given
@@ -170,10 +170,10 @@ actually includes two additional functions: <code>fail</code> and
 </p>
 -->
 <p lang="ja">
-<a href="class.html#monad">����</a> �� <code>Monad</code> ���饹�������
-�Ǿ��¤�����򤷤ᤷ����Τˤ����ޤ��󡣼ºݤ� <code>Monad</code> 
-���饹������ˤϤ����2�Ĥδؿ���<code>fail</code> �� <code>>></code> ��
-����ޤ���
+<a href="class.html#monad">前述</a> の <code>Monad</code> クラスの定義は
+最小限の定義をしめしたものにすぎません。実際の <code>Monad</code> 
+クラスの定義にはさらに2つの関数、<code>fail</code> と <code>>></code> が
+あります。
 </p>
 <!--
 <p lang="en">
@@ -194,7 +194,7 @@ in the <code>Maybe</code> monad.
 </p>
 -->
 <p lang="ja">
-<code>fail</code> �ؿ��Υǥե���ȼ����ϡ�
+<code>fail</code> 関数のデフォルト実装は、
 </p>
 <p lang="ja">
 <table bgcolor="#bbaa55" width="100%"><tr><td><pre>
@@ -202,13 +202,13 @@ fail s = error s
 </pre></td></tr></table>  
 </p>
 <p lang="ja">
-�Ǥ���
+です。
 </p>
 <p lang="ja">
-���Ԥ��Ф����̤ο��񤤤��󶡤������櫓�ǤϤʤ��Τʤ顢��ʬ�Υ�ʥ��Ѥ�
-����������ѹ�����ɬ�פϤ���ޤ��󡣤��뤤�ϡ����Ԥ�ʬ�Υ�ʥɤ�
-�׻���ά���ȹ���ɬ�פϤʤ��ΤǤ������Ȥ��С�<code>Maybe</code> 
-��ʥɤǤ� <code>fail</code> �ϰʲ��Τ褦���������Ƥ��ޤ���
+失敗に対して別の振舞いを提供したいわけではないのなら、自分のモナド用に
+この定義を変更する必要はありません。あるいは、失敗を自分のモナドの
+計算戦略に組込む必要はないのです。たとえば、<code>Maybe</code> 
+モナドでは <code>fail</code> は以下のように定義されています。
 </p>
 <p lang="ja">
 <table bgcolor="#bbaa55" width="100%"><tr><td><pre>
@@ -216,9 +216,9 @@ fail _ = Nothing
 </pre></td></tr></table>  
 </p>
 <p lang="ja">
-��������� <code>fail</code> �ϡ�<code>Maybe</code> ��ʥ�����̤�
-�ؿ���«�����줿�Ȥ��ˡ���̣�Τ��� <code>Maybe</code> ��ʥɤ�
-���󥹥��󥹤��֤��褦�ˤʤ�ޤ���
+こうすると <code>fail</code> は、<code>Maybe</code> モナド中で別の
+関数で束縛されたときに、意味のある <code>Maybe</code> モナドの
+インスタンスを返すようになります。
 </p>
 <!--
 <p lang="en">
@@ -238,24 +238,24 @@ but <code>fn 1</code> and <code>fn 2</code> both have the value <code>Nothing</c
 </p>
 -->
 <p lang="ja">
-<code>fail</code> �ؿ��ϡ���ʥɤο���Ū����ˤ����Ƥ���������Ƥ���
-��ʬ�ǤϤ���ޤ��󡣤�������ɸ��� <code>Monad</code> ���饹�������
-�ޤޤ�Ƥ���Τϡ�Haskell �� do ��ˡ�Ǥ����꤬���뤫��Ǥ���
-<code>fail</code> �ؿ��ϡ�do �֥��å���ǥѥ�����ޥå��˼��Ԥ����Ȥ���
-ɬ���ƤФ�ޤ���
+<code>fail</code> 関数は、モナドの数学的定義においても要請されている
+部分ではありません。しかし、標準の <code>Monad</code> クラスの定義に
+含まれているのは、Haskell の do 記法での役割りがあるからです。
+<code>fail</code> 関数は、do ブロック中でパターンマッチに失敗したときに
+必ず呼ばれます。
 </p>
 <p lang="ja">
 <table bgcolor="#bbaa55" width="100%"><tr><td><pre>
 fn :: Int -> Maybe [Int]
 fn idx = do let l = [Just [1,2,3], Nothing, Just [], Just [7..20]]
-            (x:xs) <- l!!idx   -- �ѥ�����ޥå��˼��Ԥ���� "fail" ��Ƥ�
+            (x:xs) <- l!!idx   -- パターンマッチに失敗すると "fail" を呼ぶ
             return xs
 </pre></td></tr></table>  
 </p>
 <p lang="ja">
-����椨����Υ����ɤǤϡ�<code>fn 0</code> ���� <code>Just [2,3]</code>
-�����ޤ�����<code>fn 1</code> ����� <code>fn 2</code> ��ξ����
-<code>Nothing</code> ���ͤ����ޤ���
+それゆえ、上のコードでは、<code>fn 0</code> は値 <code>Just [2,3]</code>
+をもちますが、<code>fn 1</code> および <code>fn 2</code> の両方は
+<code>Nothing</code> の値をもちます。
 </p>
 <!--
 <p lang="en">
@@ -269,9 +269,9 @@ m >> k = m >>= (\_ -> k)
 </p>
 -->
 <p lang="ja">
-<code>>></code> �ؿ��ϥ�ʥɷ׻��ϥХ���ɤ��뤱��ɡ��ʤ�Ӥ���ǡ�
-���η׻�������ͤ�ɬ�פȤ��ʤ����������ʱ黻�ҤǤ������δؿ���
-<code>>>=</code> ��Ȥä��������Ƥ��ޤ���
+<code>>></code> 関数はモナド計算はバインドするけれど、ならびの中で、
+前の計算からの値を必要としない場合に便利な演算子です。この関数は
+<code>>>=</code> を使って定義されています。
 </p>
 <p lang="ja">
 <table bgcolor="#bbaa55" width="100%"><tr><td><pre>
@@ -282,7 +282,7 @@ m >> k = m >>= (\_ -> k)
 
 <a name="nowayout">
 <!--<h2 lang="en">No way out</h2>-->
-<h2 lang="ja">�и��Ϥʤ�</h2>
+<h2 lang="ja">出口はない</h2>
 </a>
 <!--
 <p lang="en">
@@ -296,12 +296,12 @@ function.
 </p>
 -->
 <p lang="ja">
-�⤦�����Ť��Ǥ�����ɸ��� <code>Monad</code> ���饹�Ǥ�
-��ʥɤ����ͤ�������ʤ��������Ƥ��ޤ��󡣤���Ϸ褷�ơ�
-���ΤǤϤ���ޤ�������Υ�ʥɤκ�Ԥ����Υ�ʥɤ��Ф��ơ�
-�ͤ�������ʤ�˸�����ΤϤ���ޤ��󡣤��Ȥ��С�<code>Maybe</code>
-��ʥɤ��顢<code>Just x</code>��Υѥ�����ޥå��󥰡����뤤��
-<code>fromJust</code> �ؿ����Ѥ��ơ��ͤ���Ф����Ȥ��Ǥ��ޤ���
+もうお気づきですか。標準の <code>Monad</code> クラスでは
+モナドから値を得る手段は定義されていません。これは決して、
+事故ではありません。特定のモナドの作者がそのモナドに対して、
+値を得る手段を妨げるものはありません。たとえば、<code>Maybe</code>
+モナドから、<code>Just x</code>上のパターンマッチング、あるいは
+<code>fromJust</code> 関数を用いて、値を取り出すことができます。
 </p>
 <!--
 <p lang="en">
@@ -315,12 +315,12 @@ allow values back out of the monad.
 </p>
 -->
 <p lang="ja">
-Haskell �� <code>Monad</code> ���饹�Ǥϡ����Τ褦�ʴؿ����׵ᤷ�ʤ�
-���Ȥǡ�<dfn>������</dfn>��ʥɤ��������ǽ�ˤ��Ƥ��ޤ�����������ʥ�
-���ͤ�<code>return</code> �ؿ�(���ˤ�äƤ� <code>fail</code>
-�ؿ�)���̤��ơ���ʥɤ�����뤳�Ȥ���ǽ�ǡ���ʥ���η׻��ϡ�
-�Х���ɴؿ� <code>>>=</code> ����� <code>>></code> ���Ѥ��Ƽ¹Ԥ���
-���Ȥ��Ǥ��ޤ�������������ʥɤ����ͤ�դˤȤ�Ф����ȤϤǤ��ޤ���
+Haskell の <code>Monad</code> クラスでは、このような関数を要求しない
+ことで、<dfn>一方向</dfn>モナドの生成を可能にしています。一方向モナド
+は値を、<code>return</code> 関数(場合によっては <code>fail</code>
+関数)を通じて、モナドに入れることが可能で、モナド中の計算は、
+バインド関数 <code>>>=</code> および <code>>></code> を用いて実行する
+ことができます。しかし、モナドから値を逆にとり出すことはできません。
 </p>
 <!--
 <p lang="en">
@@ -336,16 +336,16 @@ use these monads internally but return non-monadic values.
 </p>
 -->
 <p lang="ja">
-<code>IO</code> ��ʥɤ� Haskell �ˤ�����褯�Τ�줿��������ʥɤ�
-��Ǥ���<code>IO</code> ��ʥɤ���æ�Ф��뤳�ȤϤǤ��ޤ��󤫤顢
-<code>IO</code> ��ʥ���Ƿ׻���Ԥ��ˤ⤫����餺����̤��ͤȤ���
-�����ۻ� <code>IO</code> ��ޤޤʤ��褦�ʴؿ��������񤯤��Ȥ��Բ�ǽ�Ǥ���
-�ɤ�������̣���Ȥ����ȡ������ۻ� <code>IO</code> ��ޤޤʤ��褦�ʷ�̤�
-�֤�<em>������</em>�ؿ��� <code>IO</code> ��ʥɤ�Ȥ�ʤ����Ȥ�
-�ݾڤ���Ƥ���Ȥ������ȤǤ�������ʳ��Ρ�<code>List</code> ��
-<code>Maybe</code> �Ǥϥ�ʥɤ����ͤ���Ф����Ȥ���ǽ�Ǥ����������äơ�
-������ʥɤ�����Ū���Ѥ��Ƥ⡢��ʥɰʳ����ͤ��֤��ؿ���񤯤��Ȥ�
-�Ǥ��ޤ���
+<code>IO</code> モナドは Haskell におけるよく知られた一方向モナドの
+例です。<code>IO</code> モナドから脱出することはできませんから、
+<code>IO</code> モナド中で計算を行うにもかかわらず、結果の値として
+型構築子 <code>IO</code> を含まないような関数の定義を書くことは不可能です。
+どういう意味かというと、型構築子 <code>IO</code> を含まないような結果を
+返す<em>あらゆる</em>関数は <code>IO</code> モナドを使わないことが
+保証されているということです。これ以外の、<code>List</code> や
+<code>Maybe</code> ではモナドから値を取り出すことが可能です。したがって、
+これらモナドを内部的に用いても、モナド以外の値を返す関数を書くことが
+できます。
 </p>
 
 <!--
@@ -357,9 +357,9 @@ portions of the program.</em>
 </p>
 -->
 <p lang="ja">
-<em>��������ʥɤ�����������ǽ�ϡ��ץ������Υ�ʥɤǤϤʤ���ʬ�δؿ���
-���������˲����뤳�Ȥʤ������Υ�ʥɱ黻����������Ѥ򥵥ݡ��Ȥ��뤳�Ȥ�
-�Ǥ���Ȥ�����ΤǤ���</em>
+<em>一方向モナドの素晴しい機能は、プログラムのモナドではない部分の関数型
+の性質を破壊することなく、そのモナド演算子中で副作用をサポートすることが
+できるというものです。</em>
 </p>
 <!--
 <p lang="en">
@@ -385,22 +385,22 @@ functions cannot escape from it.
 </p>
 -->
 <p lang="ja">
-�桼�����Ϥ����ʸ���ɤ�Ȥ���ñ��������ͤ��Ƥߤޤ��礦��
-ñ�˴ؿ� <code>readChar :: Char</code> �Ȥ���Ȥ��Ф褤�Ȥ���
-�櫓�ˤϤ����ޤ��󡣥桼�������Ϥ˰�¸���ơ��ƤФ�뤿�Ӥ��̤�ʸ����
-�֤�ɬ�פ����뤫��Ǥ������٤Ƥδؿ���Ʊ�������ǸƤФ���ɬ��Ʊ���ͤ�
-�֤��Ȥ����Τ� Haskell �����ʴؿ�������Ǥ��뤿����ܼ�Ū�������Ǥ���
-��������<code>IO</code> ��ʥ���ǡ�I/O�ؿ�
-<code>getChar :: IO Char</code> ��Ȥ����Ȥˤ�
-<em>�������ꤢ��ޤ���</em>����������ʥ���ΰ�ĤΥ���������Ǥ���
-�Ȥ��ʤ�����Ǥ��������Ȥ��ɤΤ褦�ʴؿ��Υ����ͥ��㡼����⡢
-�����ۻ� <code>IO</code> ��������ˡ�Ϥ���ޤ��󡣤Ĥޤꡢ
-�����ۻ� <code>IO</code> ��I/O��Ԥ����٤Ƥδؿ����̤������
-�����Ȥ���Ư���ޤ�������ˡ����Τ褦�ʴؿ��� <code>IO</code> ��ʥ�
-��Ǥ������Ѥ��뤳�ȤϤǤ��ޤ��󡣤���椨����������ʥɤϽ���
-�ؿ�������Υ롼�����¤Ǥ���׻��ΰ�����Ū�˳�Υ���ƺ���������
-���Ǥ��ޤ����ؿ����η׻��򤳤��ΰ�˰ܤ����Ȥ��Ǥ��ޤ�����������
-�����Ѥ��󻲾�Ʃ���ؿ����򤱤뤳�Ȥ��Ǥ��ޤ���
+ユーザ入力から一文字読むという単純な問題を考えてみましょう。
+単に関数 <code>readChar :: Char</code> とかを使えばよいという
+わけにはいきません。ユーザの入力に依存して、呼ばれるたびに別の文字を
+返す必要があるからです。すべての関数は同じ引数で呼ばれれば必ず同じ値を
+返すというのは Haskell が純粋な関数型言語であるための本質的な性質です。
+しかし、<code>IO</code> モナド中で、I/O関数
+<code>getChar :: IO Char</code> を使うことには
+<em>全く問題ありません</em>。一方向モナド内の一つのシーケンス中でしか
+使われないからです。これを使うどのような関数のシグネチャーからも、
+型構築子 <code>IO</code> を除去する方法はありません。つまり、
+型構築子 <code>IO</code> はI/Oを行うすべての関数を識別する一種の
+タグとして働きます。さらに、このような関数は <code>IO</code> モナド
+中でしか利用することはできません。それゆえ、一方向モナドは純粋な
+関数型言語のルールを緩和できる計算領域を効果的に隔離して作りだすこと
+ができます。関数型の計算をこの領域に移すことができますが、危険な
+副作用や非参照透明関数は避けることができます。
 </p>
 <!--
 <p lang="en">
@@ -411,13 +411,13 @@ provide the answer.
 </p>
 -->
 <p lang="ja">
-��ʥɤ��������ݤΤ⤦�ҤȤĤΤ褯�Ȥ���ѥ�����ϡ���ʥɤ�
-�ͤ�ؿ���ɽ�����뤳�ȤǤ����������Ƥ����ơ���ʥɷ׻����ͤ�ɬ�פ�
-�ʤä��Ȥ��ˡ���̤Υ�ʥɤ�����餻��(run)�ס��������󶡤��ޤ���
+モナドを定義する際のもうひとつのよく使われるパターンは、モナドの
+値を関数で表現することです。そうしておいて、モナド計算の値が必要に
+なったときに、結果のモナドを「走らせて(run)」、答えを提供します。
 </p>
 
 <a name="zero"><!--<h2 lang="en">Zero and Plus</h2>-->
-<h2 lang="ja">Zero �� Plus</h2></a>
+<h2 lang="ja">Zero と Plus</h2></a>
 <!--
 <p lang="en">
 Beyond the three monad laws stated above, some monads obey additional laws.
@@ -432,9 +432,9 @@ The monads have a special value <code>mzero</code> and an operator
 </p>
 -->
 <p lang="ja">
-��Ҥ�3�ĤΥ�ʥ�§�ʳ��ˡ������Ĥ��Υ�ʥɤ������ղ�Ū�ʵ�§������ޤ���
-���Τ褦�ʥ�ʥɤˤϡ��ʲ���4�Ĥε�§�˽��������̤��� <code>mzero</code>
-���̤ʱ黻 <code>mplus</code> ���Ĥ�Τ�����ޤ���
+上述の3つのモナド則以外に、いくつかのモナドが従う付加的な規則があります。
+このようなモナドには、以下の4つの規則に従う、特別な値 <code>mzero</code>
+特別な演算 <code>mplus</code> をもつものがあります。
 <ol>
 <li><code>mzero >>= f == mzero</code></li>
 <li><code>m >>= (\x -> mzero) == mzero</code></li>
@@ -450,9 +450,9 @@ and <code>>>=</code> with &times; in ordinary arithmetic.
 </p>
 -->
 <p lang="ja">
-<code>mzero</code> �� 0 �ˡ�<code>mplus</code> �� + �ˡ������ơ�
-<code>>>=</code> �� &times; �Ȥ������ѱ黻�ˤ��줾���б�������С�
-<code>mzero</code> ����� <code>mplus</code> ��ˡ§��Ф���Τϴ�ñ�Ǥ���
+<code>mzero</code> を 0 に、<code>mplus</code> を + に、そして、
+<code>>>=</code> を &times; という算術演算にそれぞれ対応させれば、
+<code>mzero</code> および <code>mplus</code> の法則を覚えるのは簡単です。
 </p>
 <!--
 <p lang="en">
@@ -466,8 +466,8 @@ class (Monad m) => MonadPlus m where
 </pre></td></tr></table>  
 -->
 <p lang="ja">
-�����ȥץ饹���ĥ�ʥɤ� Haskell �Ǥ� <code>MonadPlus</code> ���饹��
-���󥹥��󥹤Ȥ�������Ǥ��ޤ���
+ゼロとプラスをもつモナドは Haskell では <code>MonadPlus</code> クラスの
+インスタンスとして宣言できます。
 </p>
 <table bgcolor="#bbaa55" width="100%"><tr><td><pre>
 class (Monad m) => MonadPlus m where
@@ -492,9 +492,9 @@ also <code>Nothing</code>.
 </p>
 -->
 <p lang="ja">
-��Ȥ��� <code>Maybe</code> ��ʥɤ�⤦�������ȤäƤߤޤ��礦��
-<code>Maybe</code> ��ʥɤ� <code>MonadPlus</code> �Υ��󥹥��󥹤�
-���뤳�Ȥ�ʬ��ޤ���
+例として <code>Maybe</code> モナドをもうすこし使ってみましょう。
+<code>Maybe</code> モナドが <code>MonadPlus</code> のインスタンスで
+あることが分ります。
 </p>
 <table bgcolor="#bbaa55" width="100%"><tr><td><pre>
 instance MonadPlus Maybe where
@@ -503,10 +503,10 @@ instance MonadPlus Maybe where
     x `mplus` _       = x
 </pre></td></tr></table>
 <p>
-����ϡ�<code>Nothing</code> �򥼥��ͤȤ���ǧ�������դ��Ĥ�
-<code>Maybe</code> �ͤβ�ˡ�Ϻǽ�� <code>Nothing</code> �ǤϤʤ�
-�ͤǤ���Ȥ������ȤǤ���ξ�����ͤ� <code>Nothing</code> �ʤ顢
-<code>mplus</code> �η�̤��ͤ� <code>Nothing</code> �Ǥ���
+これは、<code>Nothing</code> をゼロ値として認識し、ふたつの
+<code>Maybe</code> 値の加法は最初の <code>Nothing</code> ではない
+値であるということです。両方の値が <code>Nothing</code> なら、
+<code>mplus</code> の結果の値も <code>Nothing</code> です。
 </p>
 <!--
 <p lang="en">
@@ -515,8 +515,8 @@ empty list and <code>mplus</code> is the <code>++</code> operator.
 </p>
 -->
 <p lang="ja">
-�ꥹ�ȥ�ʥɤˤ⥼���ȥץ饹������ޤ���<code>mzero</code> ��
-���ꥹ�Ȥǡ�<code>mplus</code> �� <code>++</code> �黻�ҤǤ���
+リストモナドにもゼロとプラスがあります。<code>mzero</code> は
+空リストで、<code>mplus</code> は <code>++</code> 演算子です。
 </p>
 <!--
 <p lang="en">
@@ -532,18 +532,18 @@ other, depending on the exact definition of <code>mplus</code> in the
 </p>
 -->
 <p lang="ja">
-<code>mplus</code> �黻�Ҥ��̡��η׻���������ƤҤȤĤΥ�ʥɷ׻��ˤ���
-�Τ˻Ȥ��ޤ����ӥ����������Ǥ� <code>Maybe</code> ��
-<code>mplus</code> ��Ĥ��äơ�
+<code>mplus</code> 演算子は別々の計算を合成してひとつのモナド計算にする
+のに使われます。羊クローンの例では <code>Maybe</code> の
+<code>mplus</code> をつかって、
 <code>parent&nbsp;s&nbsp;=&nbsp;(mother&nbsp;s)&nbsp;`mplus`&nbsp;(father&nbsp;s)</code>
-�Ȥ����ؿ�������Ǥ��ޤ������δؿ��ϡ��⤷�Ƥ�¸�ߤ���Ф��οƤ��֤���
-�ɤ���οƤ⤤�ʤ���� <code>Nothing</code> ���֤��ޤ���ξ�Ƥ��������
-�Ϥ��δؿ��ϡ�<code>Maybe</code> ��ʥ���� <code>mplus</code> �������
-��äơ��ɤ��餫�οƤ��֤��ޤ���
+という関数を定義できます。この関数は、もし親が存在すればその親を返し、
+どちらの親もいなければ <code>Nothing</code> を返します。両親がいる場合に
+はこの関数は、<code>Maybe</code> モナド中の <code>mplus</code> の定義に
+よって、どちらかの親を返します。
 </p>
 
 <a name="summary"><!--<h2 lang="en">Summary</h2>-->
-<h2 lang="ja">����</h2></a>
+<h2 lang="ja">要約</h2></a>
 <!--
 <p lang="en">
 Instances of the <code>Monad</code> class should conform to the 
@@ -557,12 +557,12 @@ using do-notation.
 </p>
 -->
 <p lang="ja">
-<code>Monad</code> ���饹�Υ��󥹥��󥹤ϡ���⡢��ʥ�§��
-�����ʤ���Фʤ�ޤ��󡣥�ʥ�§�ϥ�ʥɤ����Ū�����򵭽Ҥ����ΤǤ���
-���Τ褦�ʵ�§�ˤ�3�Ĥ��äơ�<code>return</code> �ؿ��ϡ���ñ�̸��Ǥ���
-���ı�ñ�̸��Ǥ��ꡢ«�����ڥ졼���Ϸ�������Ĥȼ�ĥ���Ƥ��ޤ���
-������ˡ§�������ּ��ԡפϡ�������ư��� do ��ˡ��Ȥä����˿����
-����ˤʤ�褦�ʥ�ʥɤη�̤Ȥʤ�ޤ���
+<code>Monad</code> クラスのインスタンスは、所謂、モナド則を
+満さなければなりません。モナド則はモナドの代数的性質を記述するものです。
+このような規則には3つあって、<code>return</code> 関数は、左単位元であり
+かつ右単位元であり、束縛オペレータは結合性をもつと主張しています。
+これらの法則を満す「失敗」は、正しく動作せず do 記法を使った場合に深刻な
+問題になるようなモナドの結果となります。
 </p>
 <!--
 <p lang="en">
@@ -575,12 +575,12 @@ in Haskell's do-notation.
 </p>
 -->
 <p lang="ja">
-<code>return</code> ����� <code>>>=</code> �ؿ��˲ä��ơ�
-<code>Monad</code> ���饹�ˤϤ⤦�ҤȤĤδؿ���<code>fail</code> ��
-�������Ƥ��롣<code>fail</code> �ؿ��ϡ���ʥɤˤ����ޤ�뵻��Ū
-����������櫓�ǤϤ���ޤ��󤬡�¿���ξ�硢�ºݤ������Ǥ���Τȡ�
-Haskell �� do ��ˡ���Ѥ�����Τǡ�<code>Monad</code> ���饹�ˤ�
-�ޤޤ�Ƥ��ޤ���
+<code>return</code> および <code>>>=</code> 関数に加えて、
+<code>Monad</code> クラスにはもうひとつの関数、<code>fail</code> が
+定義されている。<code>fail</code> 関数は、モナドにそれを含める技術的
+要請があるわけではありませんが、多くの場合、実際に便利であるのと、
+Haskell の do 記法で用いられるので、<code>Monad</code> クラスには
+含まれています。
 </p>
 <!--
 <p lang="en">
@@ -592,11 +592,11 @@ for such monads which define the <code>mzero</code> value and the
 </p>
 -->
 <p lang="ja">
-��ʥɤˤ�3�Ĥδ���§�ʳ��ε�§�ˤ⽾����Τ�����ޤ������Τ褦��
-��ʥɤΥ��饹�ǽ��פʤ�Τ˥������Ǥε�ˡ�Ȳ�ˡ�黻�Ҥ��Ĥ�Τ�
-����ޤ���Haskell �Ǥϡ�<code>MonadPlus</code> ���饹�������Τ褦��
-<code>mzero</code> �ͤ� <code>mplus</code> �黻�Ҥ��ĥ�ʥɤȤ���
-�󶡤���Ƥ��ޤ���
+モナドには3つの基本則以外の規則にも従うものがあります。そのような
+モナドのクラスで重要なものにゼロ要素の記法と加法演算子をもつものが
+あります。Haskell では、<code>MonadPlus</code> クラスが、このような
+<code>mzero</code> 値と <code>mplus</code> 演算子をもつモナドとして
+提供されています。
 </p>
 
 <hr align="center" size="1" width="80%">
@@ -622,13 +622,13 @@ for such monads which define the <code>mzero</code> value and the
 <table width="100%">
  <tr>
   <td align="left" width="33%">
-   Prev: <a href="class.html">���饹�ǻȤ�</a>
+   Prev: <a href="class.html">クラスで使う</a>
   </td>
   <td align="center" width="33%">
-   TOC: <a href="index.html">�ܼ�</a>
+   TOC: <a href="index.html">目次</a>
   </td>
   <td align="right" width="33%">
-   Next: <a href="exercises.html">��������</a>
+   Next: <a href="exercises.html">練習問題</a>
   </td>
  </tr>
 </table>	

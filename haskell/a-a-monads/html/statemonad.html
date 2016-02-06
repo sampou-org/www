@@ -1,7 +1,7 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
+<!DOCTYPE html>
+<html lang="ja">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=EUC-JP">
+<meta charset="utf-8">
 <!--<title lang="en">The State monad</title>-->
 <title lang="ja">The State monad</title>
 </head>
@@ -21,16 +21,16 @@
 <table lang="ja" width="100%">
  <tr>
   <td align="left" width="33%">Prev:
-   <a href="iomonad.html">IO ��ʥ�</a></td>
+   <a href="iomonad.html">IO モナド</a></td>
   <td align="center" width="33%">TOC:
-   <a href="index.html">�ܼ�</a></td>
+   <a href="index.html">目次</a></td>
   <td align="right" width="33%">Next:
-   <a href="readermonad.html">Reader ��ʥ�</a></td>
+   <a href="readermonad.html">Reader モナド</a></td>
  </tr>
 </table>	
 
 <!--<h1 lang="en">The State monad</h1>-->
-<h1 lang="ja">State ��ʥ�</h1>
+<h1 lang="ja">State モナド</h1>
 
 <!--
 <ul lang="en">
@@ -41,17 +41,17 @@
 </ul>
 -->
 <ul lang="ja">
-  <li><a href="#overview">����</a></li>
-  <li><a href="#motivation">ư��</a></li>
-  <li><a href="#definition">���</a></li>
-  <li><a href="#example">��</a></li>
+  <li><a href="#overview">概観</a></li>
+  <li><a href="#motivation">動機</a></li>
+  <li><a href="#definition">定義</a></li>
+  <li><a href="#example">例</a></li>
 </ul>
 
 <hr align="center" size="1" width="80%">
 
 <a name="overview">
 <!--<h2 lang="en">Overview</h2>-->
-<h2 lang="ja">����</h2></a>
+<h2 lang="ja">概観</h2></a>
 <!--
 <table lang="en" width="100%" cellpadding="3">
   <tr>
@@ -83,34 +83,34 @@
 -->
 <table lang="ja" width="100%" cellpadding="3">
   <tr>
-    <th align="left">�׻��Υ�����:</th>
-    <td>���֤��ݻ�����׻�</td>
+    <th align="left">計算のタイプ:</th>
+    <td>状態を保持する計算</td>
   </tr>
   <tr>
-    <th align="left">«������ά:</th>
-    <td>«���Ͼ��֥ѥ�᡼����«�����줿�ؿ����̤��ư��ܤ˷Ҥ�����Ʊ���
-     �����ͤ�2�ٻȤ��뤳�ȤΤʤ��褦�ˤ��뤳�Ȥǡ����ξ�Ǥι�����
-     �ԤäƤ���褦�˸����ޤ���
+    <th align="left">束縛の戦略:</th>
+    <td>束縛は状態パラメータを束縛された関数を通じて一本に繋いぎ、同一の
+     状態値が2度使われることのないようにすることで、その場での更新を
+     行っているように見えます。
     </td>
   </tr>
   <tr>
-    <th align="left">���Ѿ���:</th>
-    <td>���֤�ͭ����ɬ�פΤ����Ϣ������׻����ۤ���
+    <th align="left">利用場面:</th>
+    <td>状態を共有する必要のある一連の操作から計算を構築する
     </td>
   </tr>
   <tr>
-    <th align="left">��������ӥץ饹:</th>
-    <td>�ʤ�</td>
+    <th align="left">ゼロおよびプラス:</th>
+    <td>なし</td>
   </tr>
   <tr>
-    <th align="left">������:</th>
+    <th align="left">型の例:</th>
     <td><a href="http://www.haskell.org/ghc/docs/latest/html/base/Control.Monad.State.html">State st a</a></td>
   </tr>
 </table>
 
 <a name="motivation">
 <!--<h2 lang="en">Motivation</h2>-->
-<h2 lang="ja">ư��</h2>
+<h2 lang="ja">動機</h2>
 </a>
 <!--
 <p lang="en">
@@ -121,10 +121,10 @@ sequence of functions:
 </p>
 -->
 <p lang="ja">
-���ʴؿ�������Ǥ��ͤ򤽤ξ�ǹ������뤳�ȤϤǤ��ޤ��󡣤��줬
-����Ʃ�������˲����뤫��Ǥ������Τ褦�ʾ��֤���(stateful)�׻�
-�򥷥ߥ�졼�Ȥ���Τˤ褯�Ȥ����ǥ�����ϡ���Ϣ�δؿ����̤��ơ�
-���֥ѥ�᡼����ְ��ܤ˷Ҥ��פ��ȤǤ���
+純粋な関数型言語では値をその場で更新することはできません。それが
+参照透明性を破壊するからです。このような状態をもつ(stateful)計算
+をシミュレートするのによく使うイディオムは、一連の関数を通して、
+状態パラメータを「一本に繋ぐ」ことです。
 </p>
 
 <table bgcolor="#bbaa55" width="100%"><tr><td><pre>
@@ -146,15 +146,15 @@ write, easier to read and easier to modify.
 </p>
 -->
 <p lang="ja">
-���Υ��ץ������Ͼ�꤯�����ޤ��������Τ褦�ʥ����ɤ��𻨤ǡ�
-�ݼ餷�ˤ������ְ㤤�β����ˤʤ�ޤ���State ��ʥɤϾ��֥ѥ�᡼����
-���ܤ˷Ҥ���ʬ��«��������¦�˱�����Ʊ���ˡ������ɤ�񤭤䤹����
-�ɤߤ䤹�����ѹ����䤹����Τˤ��ޤ���
+このアプローチは上手くいきますが、このようなコードは乱雑で、
+保守しにくく、間違いの温床になります。State モナドは状態パラメータを
+一本に繋ぐ部分を束縛操作の内側に隠すと同時に、コードを書きやすく、
+読みやすく、変更しやすいものにします。
 </p>
 
 <a name="definition">
 <!--<h2 lang="en">Definition</h2>-->
-<h2 lang="ja">���</h2>
+<h2 lang="ja">定義</h2>
 </a>
 <!--
 <p lang="en">The definition shown here uses multi-parameter type classes
@@ -163,9 +163,9 @@ to fully understand these details to make use of the State monad.
 </p>
 -->
 <p lang="ja">
-�����Ǽ���������Ǥ� Haskell 98 ��ɸ��ˤϤʤ���ʣ���ѥ�᡼�������饹��
-��� funDeps ���Ȥ��Ƥ��ޤ������� State ��ʥɤ����Ѥ���Τˡ������
-�ܺ٤��������򤹤�ɬ�פϤ���ޤ���
+ここで示した定義では Haskell 98 の標準にはない、複数パラメータ型クラスお
+よび funDeps が使われています。この State モナドを利用するのに、これの
+詳細を完全に理解する必要はありません。
 </p>
 
 <table bgcolor="#bbaa55" width="100%"><tr><td><pre>
@@ -186,10 +186,10 @@ of type <code>s</code>.
 </p>
 -->
 <p lang="ja">
-State ��ʥ�����ͤϡ��������ͤ��顢(value,newState) �Υڥ��ؤ�
-���ܴؿ��Ȥ���ɽ������ޤ����ޤ���������������ϼ��Τ褦�ʹ�����
-�ʤäƤ��ޤ������ʤ����<code>State s a</code> �ϡ��� <code>s</code>
-�ξ��֤��ġ�State ��ʥ���Ƿ� <code>a</code> �Ȥʤ��ͤη��Ǥ���
+State モナド内の値は、ある初期値から、(value,newState) のペアへの
+遷移関数として表現されます。また新しい型の定義は次のような構成に
+なっています。すなわち、<code>State s a</code> は、型 <code>s</code>
+の状態をもつ、State モナド内で型 <code>a</code> となる値の型です。
 </p>
 <!--
 <p lang="en">
@@ -202,10 +202,10 @@ value and new state from its left-hand argument.
 </p>
 -->
 <p lang="ja">
-�����ۻ� <code>State s</code> �� <code>Monad</code> ���饹�Υ��󥹥���
-�Ǥ���<code>return</code> �ؿ���ñ��˾������ܴؿ����������ޤ���
-���δؿ����ͤ򥻥åȤ��ޤ��������֤��ѹ����ޤ���«���黻�Ҥϡ�
-��¦�ΰ�����¦�˰��������褿�ͤȿ��������֤�Ŭ�Ѥ��ޤ���
+型構築子 <code>State s</code> は <code>Monad</code> クラスのインスタンス
+です。<code>return</code> 関数は単純に状態遷移関数を生成します。
+この関数は値をセットしますが、状態は変更しません。束縛演算子は、
+右側の引数を左側に引数から来た値と新しい状態に適用します。
 </p>
  
 <table bgcolor="#bbaa55" width="100%"><tr><td><pre>
@@ -227,11 +227,11 @@ sets the state of the monad and does not yield a value.
 </p>
 -->
 <p lang="ja">
-<code>MonadState</code> ���饹��ɸ����󶡤���Ƥ��ޤ����������ؤ�
-ñ��� State ��ʥɤؤΥ��󥿥ե��������󶡤��ޤ���<code>get</code>
-�ؿ��Ϥ���򤽤��ͤȤ���ʣ�̤��뤳�ȤǾ��֤���Ф��ؿ��Ǥ���
-<code>put</code> �ؿ��ϥ�ʥɤξ��֤򥻥åȤ�������ǡ��ͤ���ʤ�
-�ؿ��Ǥ���
+<code>MonadState</code> クラスは標準で提供されていますが、たいへん
+単純な State モナドへのインタフェースを提供します。<code>get</code>
+関数はそれをその値として複写することで状態を取り出す関数です。
+<code>put</code> 関数はモナドの状態をセットするだけで、値を作らない
+関数です。
 </p>
 <!--
 <p lang="en">
@@ -244,24 +244,24 @@ documentation</a> for the State monad library.
 </p>
 -->
 <p lang="ja">
-�ۤ��ˤ⡢<code>get</code> ����� </code>put</code> ��Ȥä�ʣ���ʷ׻���
-�¹Ԥ���ؿ���¿���󶡤���Ƥ��ޤ����Ǥ������ʤ�ΤΤҤȤĤˡ�
-���֤δؿ�����Ф� <code>gets</code> �Ȥ����ؿ�������ޤ������Τۤ���
-State ��ʥɥ饤�֥���<a href="http://www.haskell.org/ghc/docs/latest/html/base/Control.Monad.State.html">
-������</a>�ˤ���ޤ���
+ほかにも、<code>get</code> および </code>put</code> を使って複雑な計算を
+実行する関数が多数提供されています。最も便利なもののひとつに、
+状態の関数を取り出す <code>gets</code> という関数があります。そのほかは
+State モナドライブラリの<a href="http://www.haskell.org/ghc/docs/latest/html/base/Control.Monad.State.html">
+説明書</a>にあります。
 </p>
 
 <a name="example">
 <!--<h2 lang="en">Example</h2>-->
-<h2 lang="ja">��</h2>
+<h2 lang="ja">例</h2>
 </a>
 <!--
 <p lang="en">A simple application of the State monad is to thread the random generator state
 through multiple calls to the generation function.
 </p>
 -->
-<p lang="ja">State ��ʥɤ�ñ��ʥ��ץꥱ�������ϡ�����������
-���֤�������ؤ�ʣ���θƤӽФ����̤��ư��ܤ˷Ҥ����ȤǤ���
+<p lang="ja">State モナドの単純なアプリケーションは、乱数生成器の
+状態を生成器への複数の呼び出しを通じて一本に繋ぐことです。
 </p>
 <!--
 <table lang="en" bgcolor="#bbaa55" width="100%">
@@ -303,14 +303,14 @@ makeRandomValueST = runState (do n <- getOne (1,100)
 <table lang="ja" bgcolor="#bbaa55" width="100%">
  <tr bgcolor="#aabb55">
   <th align="left"><a href="../examples/example15.hs">example15.hs</a>
-   �ǻȤ��륳����
+   で使えるコード
   </th>
  </tr>
  <tr><td><pre>
 data MyType = MT Int Bool Char Int deriving Show
 
-{- State��ʥɤ�Ȥ��ȡ�������֤���Ʊ�������ȯ����ξ��֤�
-   ��������ؿ���������뤳�Ȥ��Ǥ��ޤ���
+{- Stateモナドを使うと、乱数を返し、同時に乱数発生器の状態を
+   更新する関数を定義することができます。
 -}
 getAny :: (Random a) => State StdGen a
 getAny = do g      <- get
@@ -318,16 +318,16 @@ getAny = do g      <- get
             put g'
             return x
 
--- getAny ��Ʊ���Ǥ�������������֤�������ϰϤ����¤��ޤ�
+-- getAny と同じですが、こちらは返る乱数の範囲を制限します
 getOne :: (Random a) => (a,a) -> State StdGen a
 getOne bounds = do g      <- get
                    (x,g') <- return $ randomR bounds g
                    put g'
                    return x
 
-{- StdGen ����֤Ȥ��� State ��ʥɤ�Ȥ��ȡ������ɤ��̤��ơ�
-   ���ȯ����ξ��֤���ܤ˷Ҥ��Τ��Ǥ����ʤ����Ȥʤ����𻨤�
-   ʣ�緿���ۤǤ��ޤ�
+{- StdGen を状態として State モナドを使うと、コードを通じて、
+   乱数発生器の状態を一本に繋ぐのを手でおこなうことなく、乱雑な
+   複合型を構築できます
 -}   
 makeRandomValueST :: StdGen -> (MyType, StdGen)
 makeRandomValueST = runState (do n <- getOne (1,100)
@@ -354,11 +354,11 @@ makeRandomValueST = runState (do n <- getOne (1,100)
 <table lang="ja" width="100%">
  <tr>
   <td align="left" width="33%">Prev:
-   <a href="iomonad.html">IO ��ʥ�</a></td>
+   <a href="iomonad.html">IO モナド</a></td>
   <td align="center" width="33%">TOC:
-   <a href="index.html">�ܼ�</a></td>
+   <a href="index.html">目次</a></td>
   <td align="right" width="33%">Next:
-   <a href="readermonad.html">Reader ��ʥ�</a></td>
+   <a href="readermonad.html">Reader モナド</a></td>
  </tr>
 </table>	
 

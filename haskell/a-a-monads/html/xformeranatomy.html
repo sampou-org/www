@@ -1,9 +1,9 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
+<!DOCTYPE html>
+<html lang="ja">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=EUC-JP">
+<meta charset="utf-8">
 <!--<title lang="en">Anatomy of a monad transformer</title>-->
-<title lang="ja">��ʥ��Ѵ��Ҥβ�˶</title>
+<title lang="ja">モナド変換子の解剖</title>
 </head>
 <body>
 <!--
@@ -21,16 +21,16 @@
 <table lang="ja" width="100%">
  <tr>
   <td align="left" width="33%">Prev:
-   <a href="standardxformers.html">ɸ���ʥɤ��Ѵ��ҥС������</a></td>
+   <a href="standardxformers.html">標準モナドの変換子バージョン</a></td>
   <td align="center" width="33%">TOC:
-   <a href="index.html">�ܼ�</a></td>
+   <a href="index.html">目次</a></td>
   <td align="right" width="33%">Next:
-   <a href="xformerexamples.html">����˥�ʥ��Ѵ��Ҥ���</a></td>
+   <a href="xformerexamples.html">さらにモナド変換子の例</a></td>
  </tr>
 </table>	
 
 <!--<h1 lang="en">Anatomy of a monad transformer</h1>-->
-<h1 lang="ja">��ʥ��Ѵ��Ҥβ�˶</h1>
+<h1 lang="ja">モナド変換子の解剖</h1>
 <!--
 <ul lang="en">
   <li><a href="#monad">Combined monad definition</a></li>
@@ -39,9 +39,9 @@
 </ul>
 -->
 <ul lang="ja">
- <li><a href="#monad">��ʥ�����ι���</a></li>
- <li><a href="#lift">��������ؿ����������</a></li>
- <li><a href="#functor">�ե��󥯥�</a></li>
+ <li><a href="#monad">モナド定義の合成</a></li>
+ <li><a href="#lift">もちあげ関数を定義する</a></li>
+ <li><a href="#functor">ファンクタ</a></li>
 </ul>
 
 <hr align="center" size="1" width="80%">
@@ -56,16 +56,16 @@ before continuing.
 </p>
 -->
 <p lang="ja">
-������Ǥϡ�ɸ��饤�֥��Τ�궽̣���� <code>StateT</code> �μ�����
-�Ĥ��ƾܤ������Ƥ����ޤ��礦�������Ѵ��Ҥ򸦵椷�ʤ��顢��ʬ�Υ����ɤ�
-��ʥ��Ѵ��Ҥ�Ȥ��ݤ˸ƤӤ������롢�Ѵ��Ҥε����ˤĤ��Ƥ�ƶ�����ۤ���
-�����ޤ�����˿ʤ����ˡ�<a href="statemonad.html">State ��ʥ�</a> ����
-���������Ƥ����Ȥ褤�Ǥ��礦��
+この節では、標準ライブラリのより興味深い <code>StateT</code> の実装に
+ついて詳しく見ていきましょう。この変換子を研究しながら、自分のコードで
+モナド変換子を使う際に呼びおこせる、変換子の機構についての洞察を構築して
+いきます。先に進む前に、<a href="statemonad.html">State モナド</a> の節
+を復習しておくとよいでしょう。
 </p>
 
 <a name="monad">
 <!--<h2 lang="en">Combined monad definition</h2>-->
-<h2 lang="ja">��ʥ�����ι���</h2>
+<h2 lang="ja">モナド定義の合成</h2>
 </a>
 <!--
 <p lang="en">
@@ -83,17 +83,17 @@ Furthermore, if <code>m</code> is an instance of <code>MonadPlus</code>,
 </p>
 -->
 <p lang="ja">
-ñ�ʤ� State ��ʥɤϼ��Τ褦������ǹ��ۤ���Ƥ��ޤ�����
+単なる State モナドは次のような定義で構築されていました。
 <pre>newtype State s a = State { runState :: (s -> (a,s)) }</pre>
-StateT �Ѵ��Ҥϰʲ��Τ褦���������ޤ���
+StateT 変換子は以下のように定義されます。
 <pre>newtype StateT s m a = StateT { runStateT :: (s -> m (a,s)) }</pre>
-<code>State&nbsp;s</code> �� <code>Monad</code> ���饹�Υ��󥹥���
-�Ǥ��ꡢƱ���ˡ�<code>MonadState&nbsp;s</code> ���饹�Υ��󥹥��󥹤Ǥ���
-����椨��<code>StateT&nbsp;s&nbsp;m</code> �� <code>Monad</code> ��
-<code>MonadState&nbsp;s</code> �Υ��饹�ΰ���Ǥʤ���Фʤ�ޤ���
-����ˡ�<code>m</code> �� <code>MonadPlus</code> �Υ��󥹥��󥹤ʤ顢
-<code>StateT&nbsp;s&nbsp;m</code> �� <code>MonadPlus</code> �ΰ��
-�Ǥʤ���Фʤ�ޤ���
+<code>State&nbsp;s</code> は <code>Monad</code> クラスのインスタンス
+であり、同時に、<code>MonadState&nbsp;s</code> クラスのインスタンスです。
+それゆえ、<code>StateT&nbsp;s&nbsp;m</code> も <code>Monad</code> と
+<code>MonadState&nbsp;s</code> のクラスの一員でなければなりません。
+さらに、<code>m</code> が <code>MonadPlus</code> のインスタンスなら、
+<code>StateT&nbsp;s&nbsp;m</code> も <code>MonadPlus</code> の一員
+でなければなりません。
 </p>
 <!--
 <p lang="en">
@@ -102,8 +102,8 @@ instance:
 </p>
 -->
 <p lang="ja">
-<code>StateT&nbsp;s&nbsp;m</code> ��<code>Monad</code> �Υ��󥹥���
-�Ȥ�����������
+<code>StateT&nbsp;s&nbsp;m</code> を<code>Monad</code> のインスタンス
+として定義すると
 </p>
 <!--
 <table lang="en" bgcolor="#bbaa55" width="100%">
@@ -123,9 +123,9 @@ newtype StateT s m a = StateT { runStateT :: (s -> m (a,s)) }
 
 instance (Monad m) => Monad (StateT s m) where
     return a          = StateT $ \s -> return (a,s)
-    (StateT x) >>= f  = StateT $ \s -> do (v,s')      <- x s          -- �������ͤȾ��֤�����
-                                          (StateT x') <- return $ f v -- «�����줿�ؿ���Ŭ�Ѥ��ƿ������Ѵ� fn ������
-                                          x' s'                       -- ���ξ����Ѵ� fn �򿷤������֤�Ŭ�Ѥ���
+    (StateT x) >>= f  = StateT $ \s -> do (v,s')      <- x s          -- 新しい値と状態を得る
+                                          (StateT x') <- return $ f v -- 束縛された関数を適用して新しい変換 fn を得る
+                                          x' s'                       -- その状態変換 fn を新しい状態に適用する
 </pre></td></tr></table>
 <!--
 <p lang="en">
@@ -137,11 +137,11 @@ to perform a computation in the inner monad.
 </p>
 -->
 <p lang="ja">
-�����
+これを、
 <a href="statemonad.html#definition"><code>State&nbsp;s</code></a>
-���������Ӥ��ޤ��礦�������� <code>return</code> ������ϡ�
-������ʥɤ� <code>return</code> �ؿ���ȤäƤ��ꡢ«���黻�Ҥ�
-do �֥��å���Ȥäơ�������ʥɤη׻���¹Ԥ��Ƥ��ޤ���
+の定義と比較しましょう。ここの <code>return</code> の定義は、
+内部モナドの <code>return</code> 関数を使っており、束縛演算子は
+do ブロックを使って、内部モナドの計算を実行しています。
 </p>
 
 <!--
@@ -153,10 +153,10 @@ we will have to give definitions for <code>get</code> and
 </p>
 -->
 <p lang="ja">
-<code>StateT</code> ��Ȥ����٤Ƥι�����ʥɤ�
-<code>MonadState</code> ���饹�Υ��󥹥��󥹤ʤ�褦����������Τǡ�
-<code>get</code> ����� <code>put</code> �������Ϳ���ʤ���Фʤ�ʤ�
-�Ǥ��礦��
+<code>StateT</code> を使うすべての合成モナドが
+<code>MonadState</code> クラスのインスタンスなるよう宣言したいので、
+<code>get</code> および <code>put</code> の定義を与えなければならない
+でしょう。
 </p>
 <table bgcolor="#bbaa55" width="100%">
 <tr><td><pre>
@@ -172,9 +172,9 @@ with an instance of <code>MonadPlus</code> to be instances of
 </p>
 -->
 <p lang="ja">
-�ǽ�Ū�ˤϡ�<code>MonadPlus</code> �Υ��󥹥��󥹤� <code>StateT</code>
-��Ȥ�������ʥɤ���<code>MonadPlus</code> �Υ��󥹥��󥹤Ǥ����
-����������櫓�Ǥ���
+最終的には、<code>MonadPlus</code> のインスタンスと <code>StateT</code>
+を使う合成モナドが、<code>MonadPlus</code> のインスタンスであると
+宣言したいわけです。
 </p>
 
 <table bgcolor="#bbaa55" width="100%">
@@ -186,7 +186,7 @@ instance (MonadPlus m) => MonadPlus (StateT s m) where
 
 <a name="lift">
 <!--<h2 lang="en">Defining the lifting function</h2>-->
-<h2 lang="ja">��������ؿ����������</h2>
+<h2 lang="ja">もちあげ関数を定義する</h2>
 </a>
 
 <!--
@@ -197,10 +197,10 @@ monad classes is to make <code>StateT s</code> an instance of the
 </p>
 -->
 <p lang="ja">
-��ʥ��Ѵ��Ҥ�����Haskell�Υ�ʥɥ��饹�����礹��ǽ��ʳ���
-<code>lift</code> �ؿ����Ѱդ��뤳�Ȥ�
-<code>StateT s</code> �� <code>MonadTrans</code> ���饹�Υ��󥹥��󥹤�
-���뤳�ȤǤ���
+モナド変換子を完全にHaskellのモナドクラスに統合する最終段階は
+<code>lift</code> 関数を用意することで
+<code>StateT s</code> を <code>MonadTrans</code> クラスのインスタンスと
+することです。
 </p>
 
 <table bgcolor="#bbaa55" width="100%">
@@ -225,23 +225,23 @@ semantics for the <code>lift</code> function.
 </p>
 -->
 <p lang="ja">
-<code>lift</code> �ؿ��� <code>StateT</code> �Ȥ���
-������ʥɤη׻������Ͼ��֤ȷ�̤��񤹤�ؿ����Ѵ�����褦��
-�����Ѵ��δؿ����������ޤ������η�̡��ꥹ��(���ʤ����List ��ʥ�
-�η׻�)���֤��ؿ��� <code>StateT&nbsp;s&nbsp;[]</code> �ؤ��������
-���Ȥˤʤ�ޤ��������ǡ�����ϡ�
-<code>StateT&nbsp;(s&nbsp;->&nbsp;[(a,s)])</code> ���֤��ؿ���
-�ʤ�ޤ������ʤ�������������줿�׻��ϡ����Ͼ��֤��顢
-<em>¿�Ť�</em> (value,state) ���Ȥ��������ޤ���
-���θ��̤ϡ�StateT �η׻����fork�פ������������줿�ؿ����֤��ꥹ�Ȥ�
-�ͤ��Ȥˡ��׻����̤λޤ��������ޤ����������<code>StateT</code> 
-���̤Υ�ʥɤ�Ŭ�Ѥ���� <code>lift</code> �ؿ����б������̤�
-���ޥ�ƥ������������ޤ���
+<code>lift</code> 関数は <code>StateT</code> という
+内部モナドの計算を入力状態と結果を梱包する関数に変換するような
+状態変換の関数を生成します。その結果、リスト(すなわち、List モナド
+の計算)を返す関数を <code>StateT&nbsp;s&nbsp;[]</code> へもちあげる
+ことになります。そこで、それは、
+<code>StateT&nbsp;(s&nbsp;->&nbsp;[(a,s)])</code> を返す関数に
+なります。すなわち、もちあげられた計算は、入力状態から、
+<em>多重の</em> (value,state) の組を生成します。
+この効果は、StateT の計算を「fork」し、もちあげられた関数が返すリストの
+値ごとに、計算の別の枝を生成します。もちろん、<code>StateT</code> 
+を別のモナドに適用すると <code>lift</code> 関数に対応して別の
+セマンティクスを生じます。
 </p>
 
 <a name="functor">
 <!--<h2 lang="en">Functors</h2>-->
-<h2 lang="ja">�ե��󥯥�</h2>
+<h2 lang="ja">ファンクタ</h2>
 </a>
 <!--
 <p lang="en">
@@ -252,10 +252,10 @@ the computational effects it is adding to the inner monad.
 </p>
 -->
 <p lang="ja">
-��ǤҤȤĤΥ�ʥ��Ѵ��Ҥμ�������������������ĥ�����褦�ˡ���ʥɤ�
-�Ѵ��ҥС�����������������ˡ�θ����Ϥ���ޤ���Ǥ��������줾���
-�Ѵ��Ҥμ����ϡ����줬������ʥɤ��ղä���׻����̤������˰�¸����
-���Ȥˤʤ�ޤ���
+上でひとつのモナド変換子の実装を精査し、以前主張したように、モナドの
+変換子バージョンを生成する魔法の公式はありませんでした。それぞれの
+変換子の実装は、それが内部モナドに付加する計算効果の性質に依存する
+ことになります。
 </p>
 <!--
 <p lang="en">
@@ -271,15 +271,15 @@ the Haskell monad template library.
 </p>
 -->
 <p lang="ja">
-�ǤϤ���ޤ�������ʥ��Ѵ��Ҥ������ˤϡ������Ĥ�������Ū�ʴ��פ�����ޤ���
-�������Ѵ��Ҥ�������ʥɤλȤ����ˤ�äƥ��롼�ײ��Ǥ������줾���
-���롼������Ѵ��Ҥϥ�ʥɴؿ���<dfn>�ե��󥯥�</dfn>��Ȥä�
-Ƴ�ФǤ��ޤ����ե��󥯥����绨�Ĥˤ����С������黻
+ではありますが、モナド変換子の理論には、いくつかの理論的な基盤があります。
+ある種の変換子は内部モナドの使い方によってグループ化でき、それぞれの
+グループ内で変換子はモナド関数と<dfn>ファンクタ</dfn>を使って
+導出できます。ファンクタは大雑把にいえば、写像演算
 <code>fmap&nbsp;::&nbsp;(a->b)&nbsp;->&nbsp;f&nbsp;a&nbsp;->&nbsp;f&nbsp;b</code>
-�򥵥ݡ��Ȥ��뷿�Ǥ�������ˤĤ��Ƥ�äȳؤӤ�����С�Mark Jones ��
-Haskell �Υ�ʥɥƥ�ץ졼�ȥ饤�֥��η����ˤʤä����ƶ��ϤΤ���
+をサポートする型です。これについてもっと学びたければ、Mark Jones の
+Haskell のモナドテンプレートライブラリの契機になった、影響力のある
 <a href="http://www-internal.cse.ogi.edu/~mpj/pubs/springschool95.ps">
-��ʸ</a> ������å����Ƥ���������
+論文</a> をチェックしてください。
 </p>
 
 <hr align="center" size="1" width="80%">
@@ -299,11 +299,11 @@ Haskell �Υ�ʥɥƥ�ץ졼�ȥ饤�֥��η����ˤʤä����ƶ��ϤΤ���
 <table lang="ja" width="100%">
  <tr>
   <td align="left" width="33%">Prev:
-   <a href="standardxformers.html">ɸ���ʥɤ��Ѵ��ҥС������</a></td>
+   <a href="standardxformers.html">標準モナドの変換子バージョン</a></td>
   <td align="center" width="33%">TOC:
-   <a href="index.html">�ܼ�</a></td>
+   <a href="index.html">目次</a></td>
   <td align="right" width="33%">Next:
-   <a href="xformerexamples.html">����˥�ʥ��Ѵ��Ҥ���</a></td>
+   <a href="xformerexamples.html">さらにモナド変換子の例</a></td>
  </tr>
 </table>	
 </body>

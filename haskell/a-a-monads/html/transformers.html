@@ -1,9 +1,9 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
+<!DOCTYPE html>
+<html lang="ja">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=EUC-JP">
+<meta charset="utf-8">
 <!--<title lang="en">Monad transformers</title>-->
-<title lang="ja">��ʥ��Ѵ���</title>
+<title lang="ja">モナド変換子</title>
 </head>
 <body>
 <!--
@@ -21,16 +21,16 @@
 <table lang="ja" width="100%">
  <tr>
   <td align="left" width="33%">Prev:
-   <a href="hardway.html">��ʥɤι������񤷤�</a></td>
+   <a href="hardway.html">モナドの合成は難しい</a></td>
   <td align="center" width="33%">TOC:
-   <a href="index.html">�ܼ�</a></td>
+   <a href="index.html">目次</a></td>
   <td align="right" width="33%">Next:
-   <a href="standardxformers.html">ɸ���ʥ��Ѵ���</a></td>
+   <a href="standardxformers.html">標準モナド変換子</a></td>
  </tr>
 </table>	
 
 <!--<h1 lang="en">Monad transformers</h1>-->
-<h1 lang="ja">��ʥ��Ѵ���</h1>
+<h1 lang="ja">モナド変換子</h1>
 <!--
 <ul lang="en">
   <li><a href="#type">Transformer type constructors</a></li>
@@ -38,8 +38,8 @@
 </ul>
 -->
 <ul lang="ja">
-  <li><a href="#type">�Ѵ��Ҥη����ۻ�</a></li>
-  <li><a href="#lifting">�������</a></li>
+  <li><a href="#type">変換子の型構築子</a></li>
+  <li><a href="#lifting">もちあげ</a></li>
 </ul>
   
 <hr align="center" size="1" width="80%">
@@ -51,14 +51,14 @@ monad type constructor, and they produce combined monadic types.
 </p>
 -->
 <p lang="ja">
-��ʥ��Ѵ��Ҥϥ�ʥɤι������ưפˤ��롢ɸ���ʥɤ������ǤǤ���
-��ʥ��Ѵ��Ҥη����ۻҤϥ�ʥɷ����ۻҤ˴ؤ��ƥѥ�᡼��������Ƥ���
-�������줿��ʥɤη����������ޤ���
+モナド変換子はモナドの合成を容易にする、標準モナドの特別版です。
+モナド変換子の型構築子はモナド型構築子に関してパラメータ化されており
+合成されたモナドの型を生成します。
 </p>
 
 <a name="type">
 <!--<h2 lang="en">Transformer type constructors</h2>-->
-<h2 lang="ja">�Ѵ��Ҥη����ۻ�</h2>
+<h2 lang="ja">変換子の型構築子</h2>
 </a>
 <!--
 <p lang="en">
@@ -72,13 +72,13 @@ performs a computation in the Reader monad and returns the result of type
 </p>
 -->
 <p lang="ja">
-�����ۻҤ� Haskell �Υ�ʥɤǤϴ��פȤ��Ƥ�����Ϥ����ޤ���
-<code>Reader&nbsp;r&nbsp;a</code> �� �����η��� <code>a</code> �ǡ�
-<code>r</code> �Ȥ������δĶ����� Reader ��ʥɤ��ͤη��Ǥ����Ȥ�
-�פ��Ф��Ƥ��������������ۻ� <code>Reader&nbsp;r</code> �ϡ�
-<code>Monad</code> ���饹�Υ��󥹥��󥹤ǡ�
-<code>runReader::(r->a)</code> �ؿ��Ϥ��� Reader��ʥɤη׻���¹Ԥ���
-�� <code>a</code> �η�̤��֤��ޤ���
+型構築子は Haskell のモナドでは基盤としての役割をはたします。
+<code>Reader&nbsp;r&nbsp;a</code> が 内部の型が <code>a</code> で、
+<code>r</code> という型の環境をもつ Reader モナドの値の型であことを
+思い出してください。型構築子 <code>Reader&nbsp;r</code> は、
+<code>Monad</code> クラスのインスタンスで、
+<code>runReader::(r->a)</code> 関数はその Readerモナドの計算を実行し、
+型 <code>a</code> の結果を返します。
 </p>
 <!--
 <p lang="en">
@@ -94,15 +94,15 @@ result of type <code>m&nbsp;a</code>.
 </p>
 -->
 <p lang="ja">
-<code>ReaderT</code> �Ȥ�Ф��Reader ��ʥɤ��Ѵ�����
-��¸�ߤ��ơ�
-�ɲåѥ�᡼���Ȥ��ƥ�ʥɷ����ۻҤ��դ��ä��ޤ���
-<code>ReaderT&nbsp;r&nbsp;m&nbsp;a</code> �� Reader ��
-<dfn>�١����Υ�ʥ�</dfn>�ǡ�<code>m</code> �� <dfn>������ʥ�</dfn>
-�Ǥ���褦�ʹ������줿��ʥɤ��ͤη��Ǥ���
-<code>ReaderT&nbsp;r&nbsp;m</code> �ϥ�ʥɥ��饹�Υ��󥹥��󥹤Ǥ��ꡢ
-<code>runReaderT::(r&nbsp;->&nbsp;m&nbsp;a)</code> �ؿ��ϡ��������줿
-��ʥɤη׻���¹Ԥ���<code>m&nbsp;a</code> �Ȥ������η�̤��֤��ޤ���
+<code>ReaderT</code> とよばれるReader モナドの変換子版
+が存在して、
+追加パラメータとしてモナド型構築子が付け加わります。
+<code>ReaderT&nbsp;r&nbsp;m&nbsp;a</code> は Reader が
+<dfn>ベースのモナド</dfn>で、<code>m</code> が <dfn>内部モナド</dfn>
+であるような合成されたモナドの値の型です。
+<code>ReaderT&nbsp;r&nbsp;m</code> はモナドクラスのインスタンスであり、
+<code>runReaderT::(r&nbsp;->&nbsp;m&nbsp;a)</code> 関数は、合成された
+モナドの計算を実行し、<code>m&nbsp;a</code> という型の結果を返します。
 </p>
 <!--
 <p lang="en">
@@ -115,12 +115,12 @@ transformer version by applying it to the Identity monad.  So
 </p>
 -->
 <p lang="ja">
-��ʥɤ��Ѵ����Ǥ�Ȥ��ȡ���ñ�˹�����ʥɤ������Ǥ��ޤ���
-<code>ReaderT&nbsp;r&nbsp;IO</code> �� Reader �� IO �ι�����ʥɤǤ���
-�ޤ����Ѵ����ǥ�ʥɤ�����ʥɤ�Ŭ�Ѥ��ơ����Ѵ����ǤΥ�ʥɤ�
-�������뤳�Ȥ��ǽ�Ǥ����Ĥޤꡢ
-<code>ReaderT&nbsp;r&nbsp;Identity</code> �� <code>Reader&nbsp;r</code>
-��Ʊ����ʥɤˤʤ�ޤ���
+モナドの変換子版を使うと、簡単に合成モナドを生成できます。
+<code>ReaderT&nbsp;r&nbsp;IO</code> は Reader と IO の合成モナドです。
+また、変換子版モナドを恒等モナドに適用して、非変換子版のモナドを
+生成することも可能です。つまり、
+<code>ReaderT&nbsp;r&nbsp;Identity</code> は <code>Reader&nbsp;r</code>
+と同じモナドになります。
 </p>
 <!--
 <p lang="en"><img src="info.png" align="left"></img>
@@ -131,14 +131,14 @@ have not left out any parenthesis in complex type expressions.
 </p>
 -->
 <p lang="ja"><img src="info.png" align="left"></img>
-�⤷�������ɤΥ���ѥ�������२�顼���Ф��顢����Ϸ����ۻҤ�������
-�Ȥ��Ƥ��ʤ��Ȥ������ȤǤ������������Υѥ�᡼���򷿹��ۻҤ��Ϥ�����
-���ǧ����ʣ���ʷ��μ��˳�̤��դ�˺��Ƥ��ʤ�����Τ���Ƥ���������
+もし、コードのコンパイル中に類エラーが出たら、それは型構築子が正しく
+使われていないということです。正しい数のパラメータを型構築子に渡したか
+を確認し、複雑な型の式に括弧を付け忘れていないかを確かめてください。
 </p>
 
 <a name="lifting">
 <!--<h2 lang="en">Lifting</h2>-->
-<h2 lang="ja">�������</h2>
+<h2 lang="ja">もちあげ</h2>
 </a>
 <!--
 <p lang="en">
@@ -150,11 +150,11 @@ functions from the inner monad into the combined monad.
 </p>
 -->
 <p lang="ja">
-��ʥ��Ѵ��ҤǺ�ä�������ʥɤ�Ȥ��ȡ�������ʥɤη�������Ū�ʴ�����
-���ʤ��Ƥ��ߤޤ������η�̡��狼��䤹����ñ��ʥ����ɤˤʤ�ޤ���
-���η׻��������� do �֥��å����ɲä��뤫���ˡ�������ʥɤ��ͤ�
-��������ˤϡ���������黻��Ȥä�������ʥɤ��顢������ʥɤ�
-�ؿ�������Ф����Ȥ��Ǥ��ޤ���
+モナド変換子で作った合成モナドを使うと、内部モナドの型の明示的な管理を
+しなくてすみます。その結果、わかりやすく、単純なコードになります。
+その計算の内部で do ブロックを追加するかわりに、内部モナドの値を
+処理するには、もちあげ演算を使って内部モナドから、合成モナドへ
+関数を持ち出すことができます。
 </p>
 <!--
 <p lang="en">
@@ -168,12 +168,12 @@ we will continue to develop our previous example in the Continuation monad.
 </p>
 -->
 <p lang="ja">
-���ʥɴؿ����ʥɤˤ��������Τ˻Ȥ� <code>liftM</code> ²�δؿ���
-�פ��Ф��Ƥ����������Ѵ��Ҥϡ������ʥɷ׻��������ʥɤؤ��������ؿ�
-<code>lift</code> ���󶡤��ޤ���¿�����Ѵ��Ҥ� <code>liftIO</code> �ؿ���
-�󶡤��Ƥ��ꡢ���δؿ��� <code>lift</code> �� <code>IO</code> ��ʥɤ�
-�׻����������뤳�Ȥ˺�Ŭ��������ΤǤ����ºݤ�ư���򸫤뤿��ˡ�
-���� Continuation ��ʥɤ���򤵤��ȯŸ�����ޤ��礦��
+非モナド関数をモナドにもちあげるのに使う <code>liftM</code> 族の関数を
+思い出してくさい。各変換子は、あるモナド計算を合成モナドへもちあげる関数
+<code>lift</code> を提供します。多くの変換子は <code>liftIO</code> 関数も
+提供しており、この関数は <code>lift</code> を <code>IO</code> モナドの
+計算をもちあげることに最適化したものです。実際の動きを見るために、
+前の Continuation モナドの例をさらに発展させましょう。
 </p>
 
 <a name="example"></a>
@@ -204,22 +204,22 @@ fun = (`runContT` return) $ do
 <table lang="ja" bgcolor="#bbaa55" width="100%">
 <tr bgcolor="#aabb55">
 <th align="left"><a href="../examples/example21.hs">example21.hs</a>
-�ǻȤ��륳����</th>
+で使えるコード</th>
 </tr>
 <tr><td><pre>
 fun :: IO String
 fun = (`runContT` return) $ do
         n   <- liftIO (readLn::IO Int)
-        str <- callCC $ \exit1 -> do     -- "exit1" �����
+        str <- callCC $ \exit1 -> do     -- "exit1" の定義
           when (n < 10) (exit1 (show n))
           let ns = map digitToInt (show (n `div` 2))
-          n' <- callCC $ \exit2 -> do    -- "exit2" �����
+          n' <- callCC $ \exit2 -> do    -- "exit2" の定義
             when ((length ns) < 3) (exit2 (length ns))
             when ((length ns) < 5) $ do liftIO $ putStrLn "Enter a number:"
                                         x <- liftIO (readLn::IO Int)
                                         exit2 x
             when ((length ns) < 7) $ do let ns' = map intToDigit (reverse ns)
-                                        exit1 (dropWhile (=='0') ns') -- 2 ��٥�æ��
+                                        exit1 (dropWhile (=='0') ns') -- 2 レベル脱出
             return $ sum ns
           return $ "(ns = " ++ (show ns) ++ ") " ++ (show n')
         return $ "Answer: " ++ str
@@ -232,9 +232,9 @@ changes become when using the monad transformer.
 </p>
 -->
 <p lang="ja">
-<code>ContT</code> ��Ȥä����δؿ����Ĥޤ� <code>Cont</code> ��
-�Ѵ����Ǥȡ������ΥС������Τ�ΤȤ���٤�ȡ���ʥ��Ѵ��Ҥ�
-�Ĥ������ѹ����ۤȤ����Ω���ʤ����Ȥ��狼��ޤ���
+<code>ContT</code> を使ったこの関数、つまり <code>Cont</code> の
+変換子版と、元々のバージョンのものとを比べると、モナド変換子を
+つかうと変更がほとんど目立たないことがわかります。
 </p>
 <!--
 <table lang="en" bgcolor="#bbaa55" width="100%" border="1">
@@ -280,8 +280,8 @@ fun = (`runCont<font color="red"><b>T</b></font>` <font color="red"><b>return</b
 -->
 <table lang="ja" bgcolor="#bbaa55" width="100%" border="1">
 <tr bgcolor="#aabb55">
-<th align="center">�� 19 ������Ҥˤʤä���ʥ�</th>
-<th align="center">�� 21 ���Ѵ��Ҥ��Ѥ���������ʥ�</th>
+<th align="center">例 19 の入れ子になったモナド</th>
+<th align="center">例 21 の変換子を用いた合成モナド</th>
 </tr>
 <tr><td><font size="-1"><pre>
 fun = do n <- (readLn::IO Int)
@@ -320,10 +320,10 @@ fun = (`runCont<font color="red"><b>T</b></font>` <font color="red"><b>return</b
 </font></pre></td></tr></table>
 
 <p>
-�׻�������������Ϥ��ɲä���ƶ��ϡ���ʥ��Ѵ��Ҥ�Ĥ����ȶ����ϰϤ�
-�Ĥ�������ޤ��������Ʊ����̤����뤿��ˡ���ǹ���������ʥɤ�
-�Ȥ�����ɬ�פ�<a href="hardway.html#comparison">�ѹ�</a>����٤Ƥߤ�
-��������
+計算の途中に入出力を追加する影響は、モナド変換子をつかうと狭い範囲に
+閉じ込められます。これを、同じ結果を得るために、手で合成したモナドを
+使う場合に必要な<a href="hardway.html#comparison">変更</a>と比べてみて
+下さい。
 </p>
 
 <hr align="center" size="1" width="80%">
@@ -343,11 +343,11 @@ fun = (`runCont<font color="red"><b>T</b></font>` <font color="red"><b>return</b
 <table lang="ja" width="100%">
  <tr>
   <td align="left" width="33%">Prev:
-   <a href="hardway.html">��ʥɤι������񤷤�</a></td>
+   <a href="hardway.html">モナドの合成は難しい</a></td>
   <td align="center" width="33%">TOC:
-   <a href="index.html">�ܼ�</a></td>
+   <a href="index.html">目次</a></td>
   <td align="right" width="33%">Next:
-   <a href="standardxformers.html">ɸ���ʥ��Ѵ���</a></td>
+   <a href="standardxformers.html">標準モナド変換子</a></td>
  </tr>
 </table>	
 

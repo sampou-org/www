@@ -1,7 +1,7 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
+<!DOCTYPE html>
+<html lang="ja">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=EUC-JP">
+<meta charset="utf-8">
 <title>Doing it with class</title>
 </head>
 <body>
@@ -27,17 +27,17 @@
 <table width="100%">
 <tr>
  <td align="left" width="33%">
-  Prev: <a href="meet.html">��ʥɤ˿����</a>
+  Prev: <a href="meet.html">モナドに触れる</a>
  </td>
  <td align="center" width="33%">
-  TOC: <a href="index.html">�ܼ�</a></td>
+  TOC: <a href="index.html">目次</a></td>
  <td align="right" width="33%">
-  Next: <a href="laws.html">��ʥ�§</a></td>
+  Next: <a href="laws.html">モナド則</a></td>
 </tr>
 </table>	
 </p>
 <!--<h1>Doing it with class</h1>-->
-<h1>���饹�ǻȤ�</h1>
+<h1>クラスで使う</h1>
 <!--
 <ul>
  <li><a href="#classes">Haskell type classes</a></li>
@@ -48,17 +48,17 @@
 </ul>
 -->
 <ul>
- <li><a href="#classes">Haskell �η����饹</a></li>
- <li><a href="#monad">Monad ���饹</a></li>
- <li><a href="#example2">����ΤĤŤ�</a></li>
- <li><a href="#donotation">do ��ˡ</a></li>
- <li><a href="#summary">����</a></li>
+ <li><a href="#classes">Haskell の型クラス</a></li>
+ <li><a href="#monad">Monad クラス</a></li>
+ <li><a href="#example2">例題のつづき</a></li>
+ <li><a href="#donotation">do 記法</a></li>
+ <li><a href="#summary">要約</a></li>
 </ul>
 
 <hr align="center" size="1" width="80%">
 
 <!--<a name="classes"><h2>Haskell type class</h2></a>-->
-<a name="classes"><h2>Haskell �η����饹</h2></a>
+<a name="classes"><h2>Haskell の型クラス</h2></a>
 <!--
 <p lang="en">
 The discussion in this chapter involves the Haskell type class system.
@@ -68,14 +68,14 @@ before continuing.
 </p>
 -->
 <p lang="ja">
-���ξϤǤε����� Haskell �η����饹�����ƥ�˴�Ϣ���Ƥ��ޤ���
-Haskell �η����饹�������ߤ��ʤ������ˤϡ���عԤ�����
+この章での議論は Haskell の型クラスシステムに関連しています。
+Haskell の型クラスに馴染みがない向きには、先へ行く前に
 <a href="http://www.sampou.org/haskell/tutorial-j/classes.html">
-������������Ƥ�������</a>��
+これで復習してください</a>。
 </p>
 
 <!--<a name="monad"><h2>The Monad class </h2></a>-->
-<a name="monad"><h2>Monad ���饹 </h2></a>
+<a name="monad"><h2>Monad クラス </h2></a>
 <!--
 <p lang="en">
 In Haskell, there is a standard <code>Monad</code> class that defines the names
@@ -92,19 +92,19 @@ and it has many benefits, so just do it!
 </p>
 -->
 <p lang="ja">
-Haskell �ˤϤդ��ĤΥ�ʥɴؿ� <code>return</code> �����
-<code>>>=</code> ��̾���ȥ����ͥ���Ȥ�������Ƥ���ɸ���
-<code>Monad</code> ������ޤ�����̩�ˤ����С��桼�������������ʥɤ�
-���� <code>Monad</code> ���饹�Υ��󥹥��󥹤Ȥ���ɬ�פϤ���ޤ���
-���������������Ƥ��������褤�Ǥ��礦��Haskell �ϸ�������ȹ��ޤ줿
-<code>Monad</code> ���饹�Υ��󥹥��󥹤��Ф������̤ʥ��ݡ��Ȥ򤷤ޤ���
-�桼�������������ʥɤ� <code>Monad</code> ���饹�Υ��󥹥��󥹤Ȥ���ȡ�
-����������ǽ��Ȥäơ��������ǡ����쥬��Ȥʥ����ɤ�񤯤��Ȥ��Ǥ��ޤ���
-����ˡ��桼�������������ʥɤ� <code>Monad</code> ���饹�Υ��󥹥���
-�Ȥ��뤳�Ȥǡ������ɤ��ɤ�¾�οͤ˽��פʾ����⤿�餷���ޤ���路����
-ɸ��Ū�ǤϤʤ��ؿ���̾����Ȥ����Ȥ��Ǥ��ʤ��褦�ˤ��뤳�Ȥ��Ǥ��ޤ���
-���ʤ������������ʥɤ� <code>Monad</code> ���󥹥��󥹤ˤ��뤳�Ȥϡ���
-ñ�Ǥ������������Τ⤿�����󤢤�ޤ����顢���Ҥ������ޤ��礦��
+Haskell にはふたつのモナド関数 <code>return</code> および
+<code>>>=</code> の名前とシグネチャとを定義している標準の
+<code>Monad</code> があります。厳密にいえば、ユーザが定義したモナドを
+この <code>Monad</code> クラスのインスタンスとする必要はありません。
+しかし、そうしておく方がよいでしょう。Haskell は言語中に組込まれた
+<code>Monad</code> クラスのインスタンスに対して特別なサポートをします。
+ユーザが定義したモナドを <code>Monad</code> クラスのインスタンスとすると、
+そうした機能を使って、より明解で、エレガントなコードを書くことができます。
+さらに、ユーザが定義したモナドを <code>Monad</code> クラスのインスタンス
+とすることで、コードを読む他の人に重要な情報をもたらし、まぎらわしく、
+標準的ではない関数の名前を使うことができないようにすることができます。
+あなたの定義したモナドを <code>Monad</code> インスタンスにすることは、簡
+単ですし、得られるものもたくさんありますから、ぜひそうしましょう。
 </p>
 <!--
 <p lang="en">The standard <code>Monad</code> class definition in Haskell looks
@@ -116,8 +116,8 @@ class Monad m where
 </pre></td></tr></table>
 </p>
 -->
-<p lang="ja">Haskell �ˤ�����ɸ��� <code>Monad</code> ���饹�������
-���褽���Τ褦�ˤʤäƤ��ޤ���
+<p lang="ja">Haskell における標準の <code>Monad</code> クラスの定義は
+およそ次のようになっています。
 </p>
 <p lang="ja">
 <table bgcolor="#bbaa55" width="100%"><tr><td><pre>
@@ -128,7 +128,7 @@ class Monad m where
 </p>
 
 <!--<a name="example2"><h2>Example continued</h2></a>-->
-<a name="example2"><h2>����ΤĤŤ�</h2></a>
+<a name="example2"><h2>例題のつづき</h2></a>
 <!--
 <p lang="en">
 Continuing the <a href="meet.html#example1">previous example</a>, we will
@@ -137,9 +137,9 @@ framework as an instance of the <code>Monad</code> class.
 </p>
 -->
 <p lang="ja">
-<a href="meet.html#example1">���ڡ���������</a> ��ĤŤ��ޤ��礦��
-����ɤϡ������ۻ� <code>Maybe</code> �� <code>Monad</code> ���饹��
-���󥹥��󥹤Ȥ��� Haskell �Υ�ʥɥե졼������Ŭ�礵���ޤ��礦��
+<a href="meet.html#example1">前ページの例題</a> をつづけましょう。
+こんどは、型構築子 <code>Maybe</code> を <code>Monad</code> クラスの
+インスタンスとして Haskell のモナドフレームワークに適合させましょう。
 </p>
 <!--
 <p lang="en">
@@ -157,13 +157,13 @@ instance Monad Maybe where
 </p>
 -->
 <p lang="ja">
-����������� <code>Maybe</code> �Ǥϥǡ������ۻ� <code>Just</code> ��
-��ʥɤ� <code>return</code> �ؿ������򤵤��Ƥ������ȡ������ơ�
-��ʥɤ� <code>>>=</code> «���ؿ������򤵤���Τ�
-��ñ�ʥ���ӥ͡��������������Ȥ�פ��Ф��Ƥ���������
-���Υ�ʥɤȤ��Ƥ���������Ū�� <code>Monad</code> ���饹��
-���󥹥��󥹤Ǥ��뤳�Ȥ򼡤Τ褦�� <code>Maybe</code> ��������뤳�Ȥ�
-��äƤ����ʤ��ޤ���
+前に定義した <code>Maybe</code> ではデータ構築子 <code>Just</code> に
+モナドの <code>return</code> 関数の役割をさせていたこと、そして、
+モナドの <code>>>=</code> 束縛関数の役割をさせるのに
+簡単なコンビネータを構成したことを思い出してください。
+このモナドとしての役割を、明示的に <code>Monad</code> クラスの
+インスタンスであることを次のように <code>Maybe</code> と宣言することに
+よっておこなえます。
 </p>
 <p lang="ja">
 <table bgcolor="#bbaa55" width="100%"><tr><td><pre>
@@ -189,13 +189,13 @@ fathersMaternalGrandmother s = (return s) >>= father >>= mother >>= mother
 </p>
 -->
 <p lang="ja">
-���ä���<code>Maybe</code> �� <code>Monad</code> ���饹�Υ��󥹥���
-�Ǥ����������Ƥ��ޤ��С�ʣ���ʷ׻���������Τˡ�ɸ���ʥɱ黻�Ҥ���
-�Ѥ��뤳�Ȥ��Ǥ��ޤ���
+いったん、<code>Maybe</code> を <code>Monad</code> クラスのインスタンス
+であると定義してしまえば、複雑な計算を構成するのに、標準モナド演算子を利
+用することができます。
 </p>
 <p lang="ja">
 <table bgcolor="#bbaa55" width="100%"><tr><td><pre>
--- ʣ�����¤Ӥ�������Τ˥�ʥɱ黻�Ҥ��Ȥ��ޤ�
+-- 複雑な並びを構成するのにモナド演算子が使えます
 maternalGrandfather :: Sheep -> Maybe Sheep
 maternalGrandfather s = (return s) >>= mother >>= father
 
@@ -212,11 +212,11 @@ instance of the <code>Monad</code> class in the standard prelude.
 </p>
 -->
 <p lang="ja">
-Haskell�Ǥϡ�<code>Maybe</code> �� <code>Monad</code> ���饹�Υ��󥹥���
-�Ȥ���ɸ��ץ��塼�ɤΤʤ����������Ƥޤ�������椨����ʬ���Ȥ�
-�������ɬ�פϤ���ޤ��󡣤��θ師���̤Υ�ʥɡ����ʤ�����ꥹ�ȹ��ۻ�
-��ɸ��ץ��塼����ǡ�<code>Monad</code> ���饹�Υ��󥹥��󥹤Ȥ���
-�������Ƥ��ޤ���
+Haskellでは、<code>Maybe</code> は <code>Monad</code> クラスのインスタンス
+として標準プレリュードのなかで定義されてます。それゆえ、自分自身で
+定義する必要はありません。この後見る別のモナド、すなわち、リスト構築子
+も標準プレリュード中で、<code>Monad</code> クラスのインスタンスとして
+定義されています。
 </p>
 <!--
 <p lang="en">
@@ -235,19 +235,19 @@ whereas the latter function is restricted to the strategy of the
 -->
 <p lang="ja">
 <img src="info.png" align="left"></img>
-��ʥɤ˺��Ѥ���ؿ���񤯤Ȥ��ˤϡ�����Υ�ʥɥ��󥹥��󥹤ǤϤʤ���
-<code>Monad</code> ���饹��Ȥ��褦�ˤ��ޤ��礦��
+モナドに作用する関数を書くときには、特定のモナドインスタンスではなく、
+<code>Monad</code> クラスを使うようにしましょう。
 <pre>doSomething :: (Monad m) => a -> m b</pre>
-�Ȥ����ؿ��Τۤ�����
+という関数のほうが、
 <pre>doSomething :: a -> Maybe b</pre>
-�Ȥ����ؿ�����Ϥ뤫�˽�����������ޤ���
-���Ԥϡ�¿���Υ�ʥɤη��ˤĤ��ơ��оݤȤʤ��ʥɤ������ޤ줿
-��ά�˰�¸�����̡��ο��񤤤򰷤����Ȥ��Ǥ��ޤ�������Ԥϸ�̩�ˡ�
-<code>Maybe</code> ��ʥ���ά�Ǥ��������ޤ���
+という関数よりもはるかに柔軟性があります。
+前者は、多くのモナドの型について、対象となるモナドに埋め込まれた
+戦略に依存する別々の振舞いを扱うことができますが、後者は厳密に、
+<code>Maybe</code> モナド戦略でしか扱えません。
 </p>
 
 <!--<a name="donotation"><h2>Do notation</h2></a>-->
-<a name="donotation"><h2>do ��ˡ</h2></a>
+<a name="donotation"><h2>do 記法</h2></a>
 <!--
 <p lang="en">
 Using the standard monadic function names is good, but another advantage
@@ -259,13 +259,13 @@ the <code>Monad</code> class can be used in a do-block in Haskell.
 </p>
 -->
 <p lang="ja">
-ɸ��Υ�ʥɴؿ�̾��Ȥ����ȤϤ褤���ȤǤ�����
-<code>Monad</code> ���饹��°���Ƥ��뤳�Ȥ������Τ⤦�ҤȤĤ� Haskell ��
-��do ��ˡ�פΥ��ݡ��ȤǤ���do ��ˡ��ɽ���ϤΤ���®��ˡ�ǡ���ʥɷ׻���
-���ۤ��뤿��Τ�ΤǤ�������ϡ��ꥹ�Ⱦ�η׻����ۤ���Τˡ��ꥹ��
-����ɽ�������Ϥ�®��ˡ�Ǥ���ΤȻ��Ƥ��ޤ���Haskell �Ǥϡ�������
-<code>Monad</code> ���饹�Υ��󥹥��󥹤ϡ�do�֥��å���ǻȤ����Ȥ�
-�Ǥ��ޤ���
+標準のモナド関数名を使うことはよいことですが、
+<code>Monad</code> クラスに属していることの利点のもうひとつは Haskell の
+「do 記法」のサポートです。do 記法は表現力のある速記法で、モナド計算を
+構築するためのものです。これは、リスト上の計算を構築するのに、リスト
+内包表記が強力な速記法であるのと似ています。Haskell では、あらゆる
+<code>Monad</code> クラスのインスタンスは、doブロック中で使うことが
+できます。
 </p>
 <!--
 <p lang="en">
@@ -282,14 +282,14 @@ for example.
 </p>
 -->
 <p lang="ja">
-�פ���ˡ����� do ��ˡ�ˤ���ʥɷ׻����ѿ���Ĥ��ä�����̿�᷿��������
-�ǽ񤯤��Ȥ��Ǥ��ޤ�����ʥɷ׻��η�̤򡢺���������黻��
-<code>&lt;-</code> ��Ĥ��äơ��ѿ��ˡֳ����Ƥ�פ��Ȥ��Ǥ��ޤ���
-�������Ƥ����ơ������ѿ��򤽤Τ��ȤΥ�ʥɷ׻��ǻȤ��ȡ���ưŪ��
-«�����¹Ԥ���ޤ�������α�¦�μ��η��ϥ�ʥɷ� <code>m a</code> �Ǥ���
-��������κ�¦�μ��ϡ��ѥ�����ǡ����Υ�ʥɤ�<em>��¦</em>���ͤ�
-�ޥå�����ѥ�����Ǥ���<code>(x:xs)</code> �ϡ����Ȥ��С�
-<code>Just [1,2,3]</code> �˥ޥå����ޤ���
+要するに、この do 記法によりモナド計算を変数をつかった擬似命令型スタイル
+で書くことができます。モナド計算の結果を、左向き矢印演算子
+<code>&lt;-</code> をつかって、変数に「割当てる」ことができます。
+そうしておいて、その変数をそのあとのモナド計算で使うと、自動的に
+束縛が実行されます。矢印の右側の式の型はモナド型 <code>m a</code> です。
+その矢印の左側の式は、パターンで、そのモナドの<em>内側</em>の値に
+マッチするパターンです。<code>(x:xs)</code> は、たとえば、
+<code>Just [1,2,3]</code> にマッチします。
 </p>
 <!--
 <p lang="en">
@@ -310,16 +310,16 @@ using do notation.
 </p>
 -->
 <p lang="ja">
-����� <code>Maybe</code> ��ʥɤ�Ĥ��ä� do ��ˡ����Ǥ���
+これは <code>Maybe</code> モナドをつかった do 記法の例です。
 </p>
 <p lang="ja">
 <table bgcolor="#bbaa55" width="100%">
 <tr bgcolor="#aabb55">
-<th align="left">�ץ�����ॳ���ɤ� <a
+<th align="left">プログラムコードは <a
  href="../examples/example2.hs">example2.hs</a></th>
 </tr>
 <tr><td><pre>
--- ʣ�����¤Ӥ��ۤ���Τ� do ��ˡ��Ȥ��ޤ�
+-- 複雑な並びを構築するのに do 記法も使えます
 mothersPaternalGrandfather :: Sheep -> Maybe Sheep
 mothersPaternalGrandfather s = do m  <- mother s
                                   gf <- father m
@@ -327,8 +327,8 @@ mothersPaternalGrandfather s = do m  <- mother s
 </pre></td></tr></table>
 </p>
 <p lang="ja">
-����ȡ����Ҥ� do ��ˡ��Ȥ�ʤ��ǽ񤤤�
-<code>fathersMaternalGrandmother</code> ����٤ޤ��礦��
+これと、前述の do 記法を使わないで書いた
+<code>fathersMaternalGrandmother</code> を比べましょう。
 </p>
 <!--
 <p lang="en">
@@ -341,9 +341,9 @@ mothersPaternalGrandfather s = do { m <- mother s; gf <- father m; father gf }
 </p>
 -->
 <p lang="ja">
-��Ǽ����� do �֥��å��ϡ��֥��å��Υ������ƥ�Ȥ��������
-�쥤�����ȥ롼����Ѥ��ƽ񤫤�Ƥ��ޤ���Haskell �Ǥϡ��֥졼����
-���ߥ�������Ѥ��ơ�do �֥��å���������뤳�Ȥ�Ǥ��ޤ���
+上で示した do ブロックは、ブロックのエクステントを定義する
+レイアウトルールを用いて書かれています。Haskell では、ブレースと
+セミコロンを用いて、do ブロックを定義することもできます。
 </p>
 <p lang="ja">
 <table bgcolor="#bbaa55" width="100%"><tr><td><pre>
@@ -361,11 +361,11 @@ the I/O monad later.
 </p>
 -->
 <p lang="ja">
-do ��ˡ��̿�᷿�Υץ�����ߥ󥰸���˻��Ƥ��ꡢ�����Ǥϡ��׻���
-���ñ��ʷ׻�������Ū���¤٤��鹽�ۤ����Ȥ������Ȥ����դ��Ƥ���������
-���λ������鸫��ȡ���ʥɤϤ���礭�ʵ��Ϥδؿ��ץ��������ǡ�
-̿�᷿����������Ϥ�Ф���ǽ��������ޤ������Υơ��ޤϡ���������Ѥ�
-I/O ��ʥɤ򰷤����ˤ���˳�ĥ���뤳�Ȥˤʤ�ޤ���
+do 記法は命令型のプログラミング言語に似ており、そこでは、計算が
+より単純な計算の明示的な並べから構築されるということに注意してください。
+この視点から見ると、モナドはより大きな規模の関数プログラム中で、
+命令型スタイルを創り出す可能性があります。このテーマは、後で副作用と
+I/O モナドを扱う時にさらに拡張することになります。
 </p>
 <!--
 <p lang="en">
@@ -378,11 +378,11 @@ where they are appropriate.
 </p>
 -->
 <p lang="ja">
-do ��ˡ��ñ�ʤ빽ʸ����Ǥ���ɸ��Υ�ʥɱ黻�Ҥ�Ĥ��äƤǤ��ʤ����Ȥϡ�
-do ��ˡ��Ĥ��äƤ�Ǥ��ޤ��󡣤�������do ��ˡ�ϡ����äȴʷ�������ʾ��
-������ޤ����Ȥ��ˡ���ʥɷ׻����¤Ӥ�Ĺ���Ȥ��ˤϴʷ�������ʤ�ΤǤ���
-ɸ��Υ�ʥ�«����ˡ�� do ��ˡ��ξ�������򤷡����줾���Ŭ�ڤʾ���Ŭ��
-�Ǥ���褦�ˤ��Ƥ����٤��Ǥ���
+do 記法は単なる構文糖衣です。標準のモナド演算子をつかってできないことは、
+do 記法をつかってもできません。しかし、do 記法は、ずっと簡潔で便利な場合
+があります。とくに、モナド計算の並びが長いときには簡潔で便利なものです。
+標準のモナド束縛記法と do 記法の両方を理解し、それぞれを適切な場所で適用
+できるようにしておくべきです。
 </p>
 <!--
 <p lang="en">
@@ -404,15 +404,15 @@ literally used to bind the value in the monad to the argument in the
 following lambda expression.
 </p>
 <p lang="ja">
-do ��ˡ����ɸ��Υ�ʥɱ黻�Ҥؤμºݤ��Ѵ��ϡ����͡�
-<code>x <- expr1</code> �Ȥ����ѥ�����Τ�Τϡ�
-<pre>expr1 >>= \x -></pre> �ˤʤꡢ�����Ƥ��ѿ��Τʤ�
-<code>expr2</code> �Ȥ������� <pre>expr2 >>= \_ -></pre> �ˤʤ�ޤ���
-���٤Ƥ� do �֥��å��ϥ�ʥɼ��ǽ���ʤ���Фʤ�ޤ���
-�ޤ���let ��� do �֥��å��κǽ�ǻȤ����Ȥ��Ǥ��ޤ�(��������
-do �֥��å���� let ��ϡ���in�ץ�����ɤ�Ȥ��ޤ���)��
-���Ҥ� <code>mothersPaternalGrandfather</code> ������ϼ��Τ褦���Ѵ���
-��ޤ���
+do 記法から標準のモナド演算子への実際の変換は、概ね、
+<code>x <- expr1</code> というパターンのものは、
+<pre>expr1 >>= \x -></pre> になり、割当てる変数のない
+<code>expr2</code> という式は <pre>expr2 >>= \_ -></pre> になります。
+すべての do ブロックはモナド式で終らなければなりません。
+また、let 節は do ブロックの最初で使うことができます(しかし、
+do ブロック中の let 節は、「in」キーワードを使いません)。
+前述の <code>mothersPaternalGrandfather</code> の定義は次のように変換さ
+れます。
 </p>
 <p>
 <table bgcolor="#bbaa55" width="100%"><tr><td><pre>
@@ -422,13 +422,13 @@ mothersPaternalGrandfather s = mother s >>= \m ->
 </pre></td></tr></table>
 </p>
 <p lang="ja">
-����ǡ��ʤ�«���黻�Ҥ����Τ褦��̾���Ǥ��뤫�����餫�ˤʤ�ޤ�����
-«���黻�Ҥ�ʸ���̤��ʥ�����ͤ򤽤Τ��Ȥ�³���˼��ΰ�����
-«������ΤǤ��� 
+これで、なぜ束縛演算子がそのような名前であるかが明らかになりました。
+束縛演算子は文字通りモナド中の値をそのあとに続くλ式の引数に
+束縛するのです。 
 </p>
 
 <!--<a name="summary"><h2>Summary</h2></a>-->
-<a name="summary"><h2>����</h2></a>
+<a name="summary"><h2>要約</h2></a>
 <!--
 <p lang="en">
 Haskell provides built-in support for monads.  To take advantage of Haskell's
@@ -438,11 +438,11 @@ of the <code>Monad</code> class and supply definitions of the <code>return</code
 </p>
 -->
 <p lang="ja">
-Haskell �ϥ�ʥɤ��Ф����Ȥ߹��ߥ��ݡ��Ȥ��󶡤��Ƥ��ޤ���Haskell ��
-��ʥɥ��ݡ��Ȥ��������ˤϡ���ʥɷ����ۻҤ� <code>Monad</code>
-���饹�Υ��󥹥��󥹤Ȥ�������������Υ�ʥɤ��б�����
-<code>return</code> �� <code>>>=</code> (�Х���ɤ�ȯ������)�ؿ��������
-�ʤ���Фʤ�ޤ���
+Haskell はモナドに対する組み込みサポートを提供しています。Haskell の
+モナドサポートを亨受するには、モナド型構築子を <code>Monad</code>
+クラスのインスタンスとして宣言し、そのモナドに対応する
+<code>return</code> と <code>>>=</code> (バインドと発音する)関数を定義し
+なければなりません。
 </p>
 
 <!--
@@ -453,9 +453,9 @@ imperative-style notation for describing computations with monads.
 </p>
 -->
 <p lang="ja">
-<code>Monad</code> ���饹�Υ��󥹥��󥹤Ǥ����ʥɤǤϡ�do ��ˡ��
-�Ȥ��ޤ������ε�ˡ�Ϲ�ʸ����ǡ���ʥɷ׻��ε��Ҥˡ�ñ���̿�᷿
-��������ε�ˡ���󶡤��ޤ���
+<code>Monad</code> クラスのインスタンスであるモナドでは、do 記法が
+使えます。この記法は構文糖衣で、モナド計算の記述に、単純な命令型
+スタイルの記法を提供します。
 </p>
 
 <hr align="center" size="1" width="80%">
@@ -480,13 +480,13 @@ imperative-style notation for describing computations with monads.
 <table width="100%">
  <tr>
   <td align="left" width="33%">
-   Prev: <a href="meet.html">��ʥɤ˿����</a>
+   Prev: <a href="meet.html">モナドに触れる</a>
   </td>
   <td align="center" width="33%">
-   TOC: <a href="index.html">�ܼ�</a>
+   TOC: <a href="index.html">目次</a>
   </td>
   <td align="right" width="33%">
-   Next: <a href="laws.html">��ʥ�§</a></td>
+   Next: <a href="laws.html">モナド則</a></td>
  </tr>
 </table>	
 </p>

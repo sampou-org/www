@@ -1,9 +1,9 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
+<!DOCTYPE html>
+<html lang="ja">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=EUC-JP">
+<meta charset="utf-8">
 <!--<title lang="en">More examples with monad transformers</title>-->
-<title lang="ja">����˥�ʥ��Ѵ��Ҥ���</title>
+<title lang="ja">さらにモナド変換子の例</title>
 </head>
 <body>
 <!--
@@ -21,16 +21,16 @@
 <table lang="ja" width="100%">
  <tr>
   <td align="left" width="33%">Prev:
-   <a href="xformeranatomy.html">��ʥ��Ѵ��Ҥβ�˶</a></td>
+   <a href="xformeranatomy.html">モナド変換子の解剖</a></td>
   <td align="center" width="33%">TOC:
-   <a href="index.html">�ܼ�</a></td>
+   <a href="index.html">目次</a></td>
   <td align="right" width="33%">Next:
-   <a href="stacking.html">�Ѵ��ҥ����å��δ���</a></td>
+   <a href="stacking.html">変換子スタックの管理</a></td>
  </tr>
 </table>	
 
 <!--<h1 lang="en">More examples with monad transformers</h1>-->
-<h1 lang="ja">����˥�ʥ��Ѵ��Ҥ���</h1>
+<h1 lang="ja">さらにモナド変換子の例</h1>
 <!--
 <ul lang="en">
   <li><a href="#example22">WriterT with IO</a></li>
@@ -39,9 +39,9 @@
 </ul>
 -->
 <ul lang="ja">
-  <li><a href="#example22">IO �� WriterT</a></li>
-  <li><a href="#example23">IO �� ReaderT</a></li>
-  <li><a href="#example24">List �� StateT</a></li>
+  <li><a href="#example22">IO と WriterT</a></li>
+  <li><a href="#example23">IO と ReaderT</a></li>
+  <li><a href="#example24">List と StateT</a></li>
 </ul>
 
 <hr align="center" size="1" width="80%">
@@ -56,18 +56,18 @@ applying a single transformer to a base monad.
 </p>
 -->
 <p lang="ja">
-�����Ǥϡ��ץ������ǥ�ʥɤ���ӥ�ʥ��Ѵ��Ҥ�Ȥ��Ϥ����Τ�ɬ�פ�
-���ȤϤ��٤�Ƚ�äƤ���Ϥ��Ǥ��������Τ���κ��ɤ���ˡ�ϡ��ºݤΥ����ɤ�
-�񤤤Ƥߤ뤳�ȤǤ�����ʬ�ǽ񤤤���ʥɤ�Ȥä��ץ�����ब�礬����ˤʤ�
-�ۤɡ��������줿��ʥɤ��Ѵ��Ҥ򺮤������Τ���ä����ˤʤäƤ���Τ�
-�狼��Ǥ��礦�����Τ��ȤˤĤ��Ƥϼ���ǰ����ޤ������ޤ��ϡ�ñ���
-�Ѵ��Ҥ�١����Υ�ʥɤ�Ŭ�Ѥ������Ū�ʥץ�������ޥ��������ʤ����
-�ʤ�ޤ���
+ここでは、プログラムでモナドおよびモナド変換子を使いはじめるのに必要な
+ことはすべて判っているはずです。熟練のための最良の方法は、実際のコードを
+書いてみることです。自分で書いたモナドを使ったプログラムが大がかりになる
+ほど、合成されたモナドに変換子を混ぜいれるのがやっかいになってくるのが
+わかるでしょう。このことについては次節で扱いますが、まずは、単一の
+変換子をベースのモナドに適用する基本的なプロセスをマスターしなければ
+なりません。
 </p>
 
 <a name="example22">
 <!--<h2 lang="en">WriterT with IO</h2>-->
-<h2 lang="en">IO �� WriterT</h2>
+<h2 lang="en">IO と WriterT</h2>
 </a>
 <!--
 <p lang="en">
@@ -77,10 +77,10 @@ The necessary changes should look something like this:
 </p>
 -->
 <p lang="ja">
-�� 17 ��<a href="writermonad.html#example">�ե������������륷�ߥ�졼��</a> 
-��Ĵ�����ơ����줾��Υ�������ȥ�˥����ॹ����פ�ޤޤ��뤳�Ȥ�
-���ޤ��礦(����ȥ�Υޡ����ˤĤ��ƤϿ��ۤ��ʤ��Ǥ褤�Ǥ��礦)��
-ɬ�פ��ѹ��ϰʲ��Τ褦�ʤ�ΤǤ���
+例 17 の<a href="writermonad.html#example">ファイアウォールシミュレータ</a> 
+を調整して、それぞれのログエントリにタイムスタンプを含ませることに
+しましょう(エントリのマージについては心配しないでよいでしょう)。
+必要な変更は以下のようなものです。
 </p>
 
 <!--
@@ -141,24 +141,24 @@ main = do args       <- getArgs
 <table lang="ja" bgcolor="#bbaa55" width="100%">
 <tr bgcolor="#aabb55">
 <th align="left"><a href="../examples/example22.hs">example22.hs</a>
-�ǻȤ��륳����</th>
+で使えるコード</th>
 </tr>
 <tr><td><pre>
--- ����ϥ�������ȥ�Υե����ޥå�
+-- これはログエントリのフォーマット
 data Entry = Log {<font color="red"><b>timestamp::ClockTime</b></font>, msg::String} deriving Eq
 
 instance Show Entry where
   show (Log <font color="red"><b>t</b></font> s) = <font color="red"><b>(show t) ++ " | "</b></font> ++ s
 
-<font color="red"><b>-- ����Ϲ������줿��ʥɤη�
+<font color="red"><b>-- これは合成されたモナドの型
 type LogWriter a = WriterT [Entry] IO a</b></font>
 
--- �����˥�å��������ɲ�
+-- ログにメッセージを追加
 logMsg :: String -> <font color="red"><b>LogWriter</b></font> ()
 logMsg s = <font color="red"><b>do t <- liftIO getClockTime</b></font>
               tell [Log <font color="red"><b>t</b></font> s]
 
--- ��ѥ��åȤν���
+-- 一パケットの処理
 filterOne :: [Rule] -> Packet -> <font color="red"><b>LogWriter</b></font> (Maybe Packet)
 filterOne rules packet = do rule <- return (match rules packet)
                             case rule of
@@ -169,17 +169,17 @@ filterOne rules packet = do rule <- return (match rules packet)
                                                (Rule Accept _ _) -> return (Just packet)
                                                (Rule Reject _ _) -> return Nothing
 
--- �ѥ��åȤΥꥹ�Ȥ�ե��륿�����ե��륿���줿�ѥ��åȤΥꥹ�Ȥ�
--- ��ư����������
+-- パケットのリストをフィルタし、フィルタされたパケットのリストと
+-- 活動ログを生成
 filterAll :: [Rule] -> [Packet] -> <font color="red"><b>LogWriter</b></font> [Packet]
 filterAll rules packets = do logMsg "STARTING PACKET FILTER"
                              out <- mapM (filterOne rules) packets
                              logMsg "STOPPING PACKET FILTER"
                              return (catMaybes out)
 
--- �������Υե�����̾�Υե����뤫��롼��ǡ������ɤߡ�
--- ��������Υե�����̾�Υե����뤫��ѥ��åȥǡ������ɤߡ�
--- �������줿�ѥ��åȤ���������׻���Υ���������
+-- 第一引数のファイル名のファイルからルールデータを読み、
+-- 第二引数のファイル名のファイルからパケットデータを読み、
+-- 受け入れたパケットを印字し、計算中のログを生成
 main :: IO ()
 main = do args       <- getArgs
           ruleData   <- readFile (args!!0)
@@ -195,7 +195,7 @@ main = do args       <- getArgs
 
 <a name="example23">
 <!--<h2 lang="en">ReaderT with IO</h2>-->
-<h2 lang="ja">IO �� ReaderT</h2>
+<h2 lang="ja">IO と ReaderT</h2>
 </a>
 <!--
 <p lang="en">
@@ -208,18 +208,18 @@ looking first.
 </p>
 -->
 <p lang="ja">
-����㤬�䤵��������Ȼפ��ʤ顢�⤦����ʣ������򸫤Ƥ���������
-�� 16 ��<a href="readermonad.html#example">�ƥ�ץ졼�ȥ����ƥ�</a>��
-̾���ΤĤ���ʣ���Υƥ�ץ졼�Ȥ�����ñ��Υƥ�ץ졼�ȥե������Ȥ����
-����ƥ�ץ졼������̡��Υե�����򤢤Ĥ�����Τ��ѹ�����Ȥ�����ΤǤ���
-��Ĥβ�ǽ���Τ�����
-<a href="../examples/example23.hs">�� 23</a> �˼�����Ƥ��ޤ����������
-���ʤ��Ǥ�äƤߤƤ���������
+上の例がやさしすぎると思うなら、もう少し複雑な例を見てください。
+例 16 の<a href="readermonad.html#example">テンプレートシステム</a>を
+名前のついた複数のテンプレートがある単一のテンプレートファイルを使うもの
+からテンプレート毎に別々のファイルをあつかうものに変更するというものです。
+一つの可能性のある解は
+<a href="../examples/example23.hs">例 23</a> に示されていますが、それを
+見ないでやってみてください。
 </p>
 
 <a name="example24">
 <!--<h2 lang="en">StateT with List</h2>-->
-<h2 lang="ja">List �� StateT</h2>
+<h2 lang="ja">List と StateT</h2>
 </a>
 <!--
 <p lang="en">
@@ -229,9 +229,9 @@ List monad to produce a monad for stateful nondeterministic computations.
 </p>
 -->
 <p lang="ja">
-������Ϥɤ�� IO ��ʥɤ�������ʥɤȤ������Ѥ��Ƥ��ޤ����������Ǥ�
-����˶�̣�������ߤޤ��礦��List ��ʥɤ� <code>StateT</code> �����
-���ƾ��֤�����������׻��Τ���Υ�ʥɤ��������ޤ���
+前の例はどれも IO モナドを内部モナドとして利用していました。ここでは
+さらに興味深い例をみましょう。List モナドと <code>StateT</code> を合成
+して状態をもつ非決定性計算のためのモナドを生成します。
 </p>
 <!--
 <p lang="en">
@@ -245,11 +245,11 @@ easily test all combinations of variable assignments.
 </p>
 -->
 <p lang="ja">
-���ζ��Ϥʥ�ʥɹ����μ�ˡ������­����(�����Ǥϡ���������)��Ŭ�Ѥ��ޤ���
-�����طʤˤ��륢���ǥ����ϡ��ۤʤ��ͤ��ꤦ��ʣ�����ѿ��ȡ����Τ褦��
-�ѿ���ޤࡢ��­���٤�ʣ���νҸ�򰷤��Ȥ�����ΤǤ������ߤ��ѿ��γ�����
-�Ҹ줬�׻��ξ��֤Ǥ��ꡢList ��ʥɤ������������ñ�ˡ����٤Ƥ��ѿ�����
-���ȹ礻��ƥ��Ȥ���Τ��ǽ�ˤ��ޤ���
+この強力なモナド合成の手法を制約充足問題(ここでは、論理問題)に適用します。
+その背景にあるアイディアは、異なる値を取りうる複数の変数と、そのような
+変数を含む、充足すべき複数の述語を扱うというものです。現在の変数の割当と
+述語が計算の状態であり、List モナドの非決定性が簡単に、すべての変数割当
+の組合せをテストするのを可能にします。
 </p>
 <!--
 <p lang="en">
@@ -258,8 +258,8 @@ problem, a simple predicate language:
 </p>
 -->
 <p lang="ja">
-�ޤ������������ɽ������Τ�ɬ�פ�������ۤ���Ȥ�������Ϥ�ޤ���
-ñ��ʽҸ����Ǥ���
+まず、論理問題を表現するのに必要な土台を構築するところから始めます。
+単純な述語言語です。
 </p>
 <!--
 <table lang="en" bgcolor="#bbaa55" width="100%">
@@ -307,35 +307,35 @@ check (Not p)        vars = liftM (not) (check p vars)
 <table lang="ja" bgcolor="#bbaa55" width="100%">
 <tr bgcolor="#aabb55">
 <th align="left"><a href="../examples/example24.hs">example24.hs</a>
-�ǻȤ��륳����</th>
+で使えるコード</th>
 </tr>
 <tr><td><pre>
--- �ޤ������������ɽ����������ȯ
+-- まず、論理問題を表現する言語を開発
 type Var   = String
 type Value = String
-data Predicate = Is    Var Value            -- ������ͤ�����ѿ�
-               | Equal Var Var              -- Ʊ����(������)������ѿ�
-	       | And   Predicate Predicate  -- ���˿�
-	       | Or    Predicate Predicate  -- �����ʤ��Ȥ�ɤ��餫����
-	       | Not   Predicate            -- ����Ͽ��ǤϤʤ�
+data Predicate = Is    Var Value            -- 特定の値を持つ変数
+               | Equal Var Var              -- 同じ値(非特定)を持つ変数
+	       | And   Predicate Predicate  -- 共に真
+	       | Or    Predicate Predicate  -- すくなくともどちらかが真
+	       | Not   Predicate            -- それは真ではない
   deriving (Eq, Show)
 
 type Variables = [(Var,Value)]
 
--- �ѿ������ꤷ���ͤ��������ʤ����Ȥ�ƥ���
+-- 変数が指定した値と等しくないことをテスト
 isNot :: Var -> Value -> Predicate
 isNot var value = Not (Is var value)
 
--- a �����ʤ顢b �⿿�Ǥʤ���Фʤ�ʤ�
+-- a が真なら、b も真でなければならない
 implies :: Predicate -> Predicate -> Predicate
 implies a b = Not (a `And` (Not b))
 
--- ��¾Ū OR
+-- 排他的 OR
 orElse :: Predicate -> Predicate -> Predicate
 orElse a b = (a `And` (Not b)) `Or` ((Not a) `And` b)
 
--- Ϳ����줿�ѿ�«���ǽҸ������å�
--- ��«���ѿ�������С�Nothing
+-- 与えられた変数束縛で述語をチェック
+-- 非束縛変数があれば、Nothing
 check :: Predicate -> Variables -> Maybe Bool
 check (Is var value) vars = do val <- lookup var vars
                                return (val == value)
@@ -355,8 +355,8 @@ combined monad.
 </p>
 -->
 <p lang="ja">
-�Ĥ���ɬ�פʤΤϡ�����­�����ɽ�������򤯤���Υ����ɤǤ���
-�����ǡ�������ʥɤ�������ޤ���
+つぎに必要なのは、制約充足問題を表現し、解くためのコードです。
+ここで、合成モナドを定義します。
 </p>
 
 <!--
@@ -416,47 +416,47 @@ getAllSolutions c i = evalStateT c i
 <th align="left">Code available in <a href="../examples/example24.hs">example24.hs</a></th>
 </tr>
 <tr><td><pre>
--- ��������η�
+-- 論理問題の型
 data ProblemState = PS {vars::Variables, constraints::[Predicate]}
 
--- ���֤Τ�����������׻��Τ���Υ�ʥɷ�
+-- 状態のある非決定性計算のためのモナド型
 type NDS a = StateT ProblemState [] a
 
--- �ѿ��θ���
+-- 変数の検索
 getVar :: Var -> NDS (Maybe Value)
 getVar v = do vs <- gets vars
               return $ lookup v vs
 
--- �ѿ�������
+-- 変数の設定
 setVar :: Var -> Value -> NDS ()
 setVar v x = do st <- get
                 vs' <- return $ filter ((v/=).fst) (vars st)
                 put $ st {vars=(v,x):vs'}
 
--- �ѿ����������٤ƤνҸ��������������å�
--- �����ϡ��Ҹ줬������ǻȤäƤ����ѿ���̤«���Ǥ��뤳�Ȥ���ͳ��
--- Nothing ���֤��Ȥ��˻Ȥ��ͤ���ꤹ�롣����� True �����ꤹ��ȡ�
--- ��ʬŪ�ʲ��������졢�Ǹ�� False �ͤ�Ȥäơ�
--- ���Ƥβ���������Ȥ�ɽ����
+-- 変数割当がすべての述語を満すかをチェック
+-- 引数は、述語がその中で使っている変数が未束縛であることを理由に
+-- Nothing を返すときに使う値を決定する。これを True に設定すると、
+-- 部分的な解を受け入れ、最後に False 値を使って、
+-- 全ての解を得たことを表す。
 isConsistent :: Bool -> NDS Bool
 isConsistent partial = do cs <- gets constraints
                           vs <- gets vars
                           let results = map (\p->check p vs) cs
                           return $ and (map (maybe partial id) results)
 
--- ������Τ������������ѿ�«���Τߤ��֤���
+-- 一貫性のある解を完成する変数束縛のみを返す。
 getFinalVars :: NDS Variables
 getFinalVars = do c <- isConsistent False
                   guard c
                   gets vars
 
--- ������Ф���ǽ�β�����롣���Τ���ˡ�����з׻�����������֤���
--- ɾ��������̤Υꥹ�Ȥκǽ�β򡢤ޤ��ϡ��򤬤ʤ���� Nothing ���֤���
+-- 問題に対する最初の解を得る。そのために、ソルバ計算を初期問題状態から
+-- 評価し、結果のリストの最初の解、または、解がなければ Nothing を返す。
 getSolution :: NDS a -> ProblemState -> Maybe a
 getSolution c i = listToMaybe (evalStateT c i)
 
--- ���������֤��饽��з׻���ɾ�����ơ�������Ф����ǽ��
--- ���٤Ƥβ�Υꥹ�Ȥ�������롣
+-- 初期問題状態からソルバ計算を評価して、問題に対する可能な
+-- すべての解のリストを取得する。
 getAllSolutions :: NDS a -> ProblemState -> [a]
 getAllSolutions c i = evalStateT c i
 </pre></td></tr></table>
@@ -485,25 +485,25 @@ Solve for the sex of Kibi and the sex of each parent.
 </p>
 -->
 <p lang="ja">
-����ǡ��Ҹ����Ⱦ��֤Τ������������ʥɤ����������򤯤Τ�Ŭ�Ѥ���
-�������Ǥ��ޤ�������Ȥ���ͭ̾�� Kalotan �ѥ����Ȥ��ޤ��礦��
-���Υѥ���ϡ�J. A. H. Hunter �� <i>Mathematical Brain-Teasers</i>,
-Dover Publications (1976) �Ȥ����ܤˤ���ޤ���
+これで、述語言語と状態のある非決定性モナドを論理問題を解くのに適用する
+準備ができました。例として有名な Kalotan パズルを使いましょう。
+このパズルは、J. A. H. Hunter の <i>Mathematical Brain-Teasers</i>,
+Dover Publications (1976) という本にあります。
 </p>
 <blockquote lang="ja">
-��������ϴ�̯���ʤΤ����²�Ǥ����ˤϾ�˿��¤��ꡢ���Ϥ����ɤ��� 2
-�Ĥο��¤ϸ���ʤ������뤤�ϡ������ɤ��� 2 �Ĥα��ϸ���ʤ��Ȥ�����ΤǤ���
+カロタンは奇妙な癖のある種族です。男は常に真実を語り、女はいちどきに 2
+つの真実は言わない、あるいは、いちどきに 2 つの嘘は言わないというものです。
 <br /><br />
-�������ؼ�(��򥦥���դȸƤӤޤ��礦)�����θ����Ϥ�ޤ�����������
-�դϤޤ�����������θ��դ��Τ�ޤ��󡣤���������������Υ��åץ�(����)��
-���λҤɤ�Υ��ӤȽв񤤤ޤ�����������դϥ��Ӥˡ֤��ߤ��ˤλҡ��פȤ���
-�ͤޤ��������Ӥϥ����������������Τǡ�������դˤ�ʬ��ޤ���Ǥ�����
+ある人類学者(彼をウォルフと呼びましょう)が彼らの研究を始めました。ウォル
+フはまだ、カロタンの言葉を知りません。ある日、カロタンのカップル(異性)と
+その子どものキビと出会いました。ウォルフはキビに「きみは男の子？」とたず
+ねました。キビはカロタン語で答えたので、ウォルフには分りませんでした。
 <br /><br />
-������դ�ξ��(�Ѹ���ΤäƤ���)����������ޤ������ҤȤ꤬���֥��Ӥϡ�
-��ʬ���ˤλҤ��Ȥ��äƤ���פȸ����⤦�ҤȤ꤬���֥��ӤϽ��λҡ����Ӥϱ�
-��Ĥ����פ��դ��ä��ޤ�����
+ウォルフは両親(英語を知っている)に説明を求めました。ひとりが、「キビは、
+自分は男の子だといっている」と言いもうひとりが、「キビは女の子。キビは嘘
+をついた」と付け加えました。
 <br /><br />
-����ξ�Ƥ����̤ȥ��Ӥ����̤򤢤ƤƤ���������
+この両親の性別とキビの性別をあててください。
 </blockquote>
 <!--
 <p lang="en">
@@ -512,8 +512,8 @@ the universe of allowed variables values:
 </p>
 -->
 <p lang="ja">
-���Υѥ����Ѥˤ����Ĥ��Ҹ���ɲä������Ĥ��줿�ѿ��ͤ��������������
-ɬ�פ�����Ǥ��礦��
+このパズル用にいくつか述語を追加し、許可された変数値の世界を定義する
+必要があるでしょう。
 </p>
 <!--
 <table lang="en" bgcolor="#bbaa55" width="100%">
@@ -545,25 +545,25 @@ tryAllValues var = do (setVar var "male") `mplus` (setVar var "female")
 <table lang="ja" bgcolor="#bbaa55" width="100%">
 <tr bgcolor="#aabb55">
 <th align="left"><a href="../examples/example24.hs">example24.hs</a>
-�ǻȤ��륳����</th>
+で使えるコード</th>
 </tr>
 <tr><td><pre>
--- �ˤ��ʤˤ������ʤ餽��Ͽ��Ǥʤ���Фʤ�ʤ�
+-- 男がなにか言うならそれは真でなければならない
 said :: Var -> Predicate -> Predicate
 said v p = (v `Is` "male") `implies` p
 
--- �ˤ�2�ĤΤ��Ȥ�����ʤ餽���Ͽ��Ǥʤ���Фʤ�ʤ�
--- ����2�ĤΤ��Ȥ�����ʤ�ҤȤĤϿ����⤦�ҤȤĤϵ��Ǥʤ���Фʤ�ʤ�
+-- 男が2つのことを言うならそれらは真でなければならない
+-- 女が2つのことを言うならひとつは真、もうひとつは偽でなければならない
 saidBoth :: Var -> Predicate -> Predicate -> Predicate
 saidBoth v p1 p2 = And ((v `Is` "male") `implies` (p1 `And` p2))
                        ((v `Is` "female") `implies` (p1 `orElse` p2))
 
--- ����Ĥ��Ȥϡ����ǤϤʤ��Ȥ��˿����ȸ����������뤤��
--- ���Ǥ���Ȥ��ˡ����ǤϤʤ��Ȥ�����������
+-- 嘘をつくとは、真ではないときに真だと言うか、あるいは
+-- 真であるときに、真ではないという言うこと
 lied :: Var -> Predicate -> Predicate
 lied v p = ((v `said` p) `And` (Not p)) `orElse` ((v `said` (Not p)) `And` p)
 
--- �ѿ��β�ǽ�����ꤹ�٤ƤˤĤ��ư������ƥ��Ȥ���
+-- 変数の可能な設定すべてについて一貫性をテストする
 tryAllValues :: Var -> NDS ()
 tryAllValues var = do (setVar var "male") `mplus` (setVar var "female")
                       c <- isConsistent True
@@ -577,8 +577,8 @@ language and get a solution that satisfies all of the predicates:
 </p>
 -->
 <p lang="ja">
-���Ȥ��٤����Ȥϡ��ѥ����Ҹ����ǵ��Ҥ������٤ƤνҸ������
-������뤳�Ȥ����Ǥ���
+あとすべきことは、パズルを述語言語で記述し、すべての述語を満す
+解を得ることだけです。
 </p>
 
 <!--
@@ -604,10 +604,10 @@ main = do let variables   = []
 <table lang="ja" bgcolor="#bbaa55" width="100%">
 <tr bgcolor="#aabb55">
 <th align="left"><a href="../examples/example24.hs">example24.hs</a>
-�ǻȤ��륳����</th>
+で使えるコード</th>
 </tr>
 <tr><td><pre>
--- ���������������٤Ƥ��ѿ�������������������
+-- 問題を定義し、すべての変数割当を試し、解を印字する
 main :: IO ()
 main = do let variables   = []
               constraints = [ Not (Equal "parent1" "parent2"),
@@ -632,13 +632,13 @@ assignments as the value of the computation.
 </p>
 -->
 <p lang="ja">
-���줾��� <code>tryAllValues</code> �θƤӽФ��ϲ���֤�ե��������ޤ���
-�ҤȤĤΥե������Ǥ�̾�����ѿ��� <code>"male"</code> �˳����Ƥ��ޤ���
-�⤦���äݤ��Υե������Ǥϡ�<code>"female"</code> �˳����Ƥ��ޤ���
-̷�⤹���ѿ����������������ե�������(<code>guard</code> �ؿ���)
-�õ��ޤ���<code>getFinalVars</code> �ؤθƤӽФ���
-<code>guard</code> ���Ŭ�Ѥ��ơ�̷�⤹���ѿ������Ƥ�õ��
-�Τ���γ����Ƥ�׻����ͤȤ����֤��ޤ���
+それぞれの <code>tryAllValues</code> の呼び出しは解空間をフォークします。
+ひとつのフォークでは名前付変数が <code>"male"</code> に割当てられます。
+もういっぽうのフォークでは、<code>"female"</code> に割当てられます。
+矛盾する変数割当を生成したフォークは(<code>guard</code> 関数で)
+消去されます。<code>getFinalVars</code> への呼び出しは
+<code>guard</code> を再適用して、矛盾する変数割当てを消去し、
+のこりの割当てを計算の値として返します。
 </p>
 
 <hr align="center" size="1" width="80%">
@@ -657,11 +657,11 @@ assignments as the value of the computation.
 <table lang="ja" width="100%">
  <tr>
   <td align="left" width="33%">Prev:
-   <a href="xformeranatomy.html">��ʥ��Ѵ��Ҥβ�˶</a></td>
+   <a href="xformeranatomy.html">モナド変換子の解剖</a></td>
   <td align="center" width="33%">TOC:
-   <a href="index.html">�ܼ�</a></td>
+   <a href="index.html">目次</a></td>
   <td align="right" width="33%">Next:
-   <a href="stacking.html">�Ѵ��ҥ����å��δ���</a></td>
+   <a href="stacking.html">変換子スタックの管理</a></td>
  </tr>
 </table>	
 

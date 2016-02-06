@@ -1,9 +1,9 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
+<!DOCTYPE html>
+<html lang="ja">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=EUC-JP">
+<meta charset="utf-8">
 <!--<title lang="en">Monad support in Haskell</title>-->
-<title lang="ja">Haskell �ˤ������ʥɤΥ��ݡ���</title>
+<title lang="ja">Haskell におけるモナドのサポート</title>
 </head>
 <body>
 <!--
@@ -21,16 +21,16 @@
 <table lang="ja" width="100%">
  <tr>
   <td align="left" width="33%">Prev:
-   <a href="exercises.html">��������</a></td>
+   <a href="exercises.html">練習問題</a></td>
   <td align="center" width="33%">TOC:
-   <a href="index.html">�ܼ�</a></td>
+   <a href="index.html">目次</a></td>
   <td align="right" width="33%">Next:
-   <a href="introII.html">Part II - ����ȥ����������</a></td>
+   <a href="introII.html">Part II - イントロダクション</a></td>
  </tr>
 </table>	
 
 <!--<h1 lang="en">Monad support in Haskell</h1>-->
-<h1 lang="ja">Haskell �ˤ������ʥɤΥ��ݡ���</h1>
+<h1 lang="ja">Haskell におけるモナドのサポート</h1>
 <!--
 <ul lang="en">
  <li><a href="#prelude">In the standard prelude</a></li>
@@ -39,9 +39,9 @@
 </ul>
 -->
 <ul lang="ja">
-  <li><a href="#prelude">ɸ��ץ��塼��</a></li>
-  <li><a href="#monad">Monad �⥸�塼��</a></li>
-  <li><a href="#summary">����</a></li>
+  <li><a href="#prelude">標準プレリュード</a></li>
+  <li><a href="#monad">Monad モジュール</a></li>
+  <li><a href="#summary">要約</a></li>
 </ul>
 
 <hr align="center" size="1" width="80%">
@@ -55,16 +55,16 @@ are each in their own libraries and are the subject of
 </p>
 -->
 <p lang="ja">
-Haskell �Ȥ߹��ߤǤΥ�ʥɤΥ��ݡ��Ȥϡ��ۤȤ�ɤΥ�ʥɶ��̤δؿ���
-�������ݡ��Ȥ���ɸ��ץ��塼�ɤȤ�����϶������Τʤ���ʥɴؿ���
-�������ݡ��Ȥ��� Monad �⥸�塼���ʬ�����Ƥ��ޤ����ġ��Υ�ʥɷ�
-�Ϥ��줾���ȼ��Υ饤�֥��ˤ��ꡢ���줬���Υ��塼�ȥꥢ���
-<a href="introII.html">Part II</a>�μ���Ǥ���
+Haskell 組み込みでのモナドのサポートは、ほとんどのモナド共通の関数を
+エクスポートする標準プレリュードとそれよりは共通性のないモナド関数を
+エクスポートする Monad モジュールに分けられています。個々のモナド型
+はそれぞれ独自のライブラリにあり、それがこのチュートリアルの
+<a href="introII.html">Part II</a>の主題です。
 </p>
 
 <a name="prelude">
 <!--<h2 lang="en">In the standard prelude</h2>-->
-<h2 lang="ja">ɸ��ץ��塼��</h2>
+<h2 lang="ja">標準プレリュード</h2>
 </a>
 <!--
 <p lang="en">
@@ -75,14 +75,14 @@ auxilliary functions for working with monadic data types.
 </p>
 -->
 <p lang="ja">
-Haskell 98 ��
+Haskell 98 の
 <a href="http://www.haskell.org/onlinelibrary/standard-prelude.html">
-ɸ��ץ��塼��</a>�ˤϡ���ʥɥǡ�������Ư�������Ĥ�������ؿ���
-�ä��ơ�<code>Monad</code> ���饹��������ޤޤ�Ƥ��ޤ���
+標準プレリュード</a>には、モナドデータ型で働くいくつかの補助関数に
+加えて、<code>Monad</code> クラスの定義が含まれています。
 </p>
 
 <!--<h3 lang="en">The <code>Monad</code> class</h3>-->
-<h3 lang="ja"><code>Monad</code> ���饹</h3>
+<h3 lang="ja"><code>Monad</code> クラス</h3>
 <!--
 <p lang="en">
 We have seen the <code>Monad</code> class before:
@@ -101,7 +101,7 @@ class  Monad m  where
 </p>
 -->
 <p lang="ja">
-����ޤǤ� <code>Monad</code> ���饹�򸫤Ƥ��ޤ�����
+これまでに <code>Monad</code> クラスを見てきました。
 </p>
 <table bgcolor="#bbaa55" width="100%"><tr><td><pre>
 class  Monad m  where
@@ -117,7 +117,7 @@ class  Monad m  where
 </pre></td></tr></table>
 
 <!--<h3 lang="en">The sequencing functions</h3>-->
-<h3 lang="ja">ľ�󲽴ؿ�</h3>
+<h3 lang="ja">直列化関数</h3>
 <!--
 <p lang="en">
 The <code>sequence</code> function takes a list of monadic computations,
@@ -131,9 +131,9 @@ sequence = foldr mcons (return [])
 </p>
 -->
 <p lang="ja">
-<code>sequence</code> �ؿ��ϥ�ʥɷ׻��Υꥹ�Ȥ��ꡢ
-���줾����˼¹Ԥ��ơ���̤Υꥹ�Ȥ��֤��ޤ���
-�⤷���η׻��Τɤ줫�����Ԥ���ȴؿ����Τ����Ԥ��ޤ���
+<code>sequence</code> 関数はモナド計算のリストを取り、
+それぞれを順に実行して、結果のリストを返します。
+もしその計算のどれかが失敗すると関数全体が失敗します。
 </p>
 <table bgcolor="#bbaa55" width="100%"><tr><td><pre>
 sequence :: Monad m => [m a] -> m [a] 
@@ -154,9 +154,9 @@ sequence_ = foldr (>>) (return ())
 </p>
 -->
 <p lang="ja">
-<code>sequence_</code> �ؿ���(�������������������)
-<code>sequence</code> ��Ʊ�����񤤤򤷤ޤ�������̤Υꥹ�Ȥ�
-�֤��ޤ��󡣤���ϥ�ʥɷ׻��������ѤΤߤ����פʾ��������Ǥ���
+<code>sequence_</code> 関数は(アンダースコアに注意)
+<code>sequence</code> と同じ振舞いをしますが、結果のリストは
+返しません。これはモナド計算の副作用のみが重要な場合に便利です。
 </p>
 <table bgcolor="#bbaa55" width="100%"><tr><td><pre>
 sequence_ :: Monad m => [m a] -> m () 
@@ -164,7 +164,7 @@ sequence_ = foldr (>>) (return ())
 </pre></td></tr></table>
 
 <!--<h3 lang="en">The mapping functions</h3>-->
-<h3 lang="ja">�����ؿ�</h3>
+<h3 lang="ja">写像関数</h3>
 <!--
 <p lang="en">
 The <code>mapM</code> function maps a monadic computation over a list
@@ -178,9 +178,9 @@ mapM f as = sequence (map f as)
 </p>
 -->
 <p lang="ja">
-<code>mapM</code> �ؿ��ϡ���ʥɷ׻����ͤΥꥹ�Ⱦ�˼�������
-��̤Υꥹ�Ȥ��֤��ޤ�������ϥꥹ�Ⱦ�� <code>map</code> �ؿ��Ⱦ��
-<code>sequence</code> �ؿ���Ȥä��������Ƥ��ޤ���
+<code>mapM</code> 関数は、モナド計算を値のリスト上に写像し、
+結果のリストを返します。これはリスト上の <code>map</code> 関数と上の
+<code>sequence</code> 関数を使って定義されています。
 </p>
 <table bgcolor="#bbaa55" width="100%"><tr><td><pre>
 mapM :: Monad m => (a -> m b) -> [a] -> m [b] 
@@ -201,10 +201,10 @@ mapM_ f as = sequence_ (map f as)
 -->
 
 <p lang="ja">
-������ˤ⡢��������������Ǥ�����ޤ���<code>mapM_</code> �ϡ�
-<code>sequence_</code> ��Ȥä��������Ƥ��ޤ���<code>mapM_</code>
-�ϡ�<code>mapM</code> ��Ʊ�����򤷤ޤ������ͤΥꥹ�Ȥ��֤��ޤ���
-��ʥɷ׻��������Ѥ��������פʾ��������Ǥ���
+こちらにも、アンダースコア版があります。<code>mapM_</code> は、
+<code>sequence_</code> を使って定義されています。<code>mapM_</code>
+は、<code>mapM</code> と同じ操作をしますが、値のリストは返しません。
+モナド計算の副作用だけが重要な場合に便利です。
 </p>
 <table bgcolor="#bbaa55" width="100%"><tr><td><pre>
 mapM_ :: Monad m => (a -> m b) -> [a] -> m () 
@@ -222,8 +222,8 @@ putString s = mapM_ putChar s
 </p>
 -->
 <p lang="ja">
-�����ؿ���ñ�����Ȥ��Ƥϡ�<code>IO</code> ��ʥ��Ѥ�
-<code>putString</code> �ؿ����ʲ��Τ褦������Ǥ��ޤ���
+写像関数の単純な例としては、<code>IO</code> モナド用の
+<code>putString</code> 関数が以下のように定義できます。
 </p>
 <table bgcolor="#bbaa55" width="100%"><tr><td><pre>
 putString :: [Char] -> IO ()
@@ -245,11 +245,11 @@ mapM :: Monad m => (a -> m b) -> [a] -> m [b]
 </p>
 -->
 <p lang="ja">
-<code>mapM</code> �ϡ�<code>map</code> �ؿ����̾�Υꥹ�Ⱦ�ǻȤ���Τ�
-Ʊ�ͤ���ˡ�ǡ�do �֥��å���ǻȤ����Ȥ��Ǥ��ޤ�������ϡ���ʥɶ��̤�
-�ѥ�����ǡ�&mdash; ��ʥ���ǻȤ�����ΥС������δؿ�(���ʤ����
-«����տޤ��Ƥ���ؿ�)�����ʥɥС�������Ʊ�ͤΥ����ͥ������Ĥ��Ȥ�
-�ʤ�ޤ������ؿ��ν��Ϥϥ�ʥ���ˤȤ�������ޤ���
+<code>mapM</code> は、<code>map</code> 関数が通常のリスト上で使えるのと
+同様の方法で、do ブロック中で使うことができます。これは、モナド共通の
+パターンで、&mdash; モナド中で使うためのバージョンの関数(すなわち、
+束縛を意図している関数)は非モナドバージョンと同様のシグネチャを持つことに
+なりますが、関数の出力はモナド中にとじこめられます。
 </p>
 <table bgcolor="#bbaa55" width="100%"><tr><td><pre>
 -- compare the non-monadic and monadic signatures
@@ -258,7 +258,7 @@ mapM :: Monad m => (a -> m b) -> [a] -> m [b]
 </pre></td></tr></table>
 
 <!--<h3 lang="en">The reverse binder function (<code>=&lt;&lt;</code>)</h3>-->
-<h3 lang="ja">������«���ؿ� (<code>=&lt;&lt;</code>)</h3>
+<h3 lang="ja">逆方向束縛関数 (<code>=&lt;&lt;</code>)</h3>
 <!--
 <p lang="en">
 The prelude also defines a binding function that takes it arguments
@@ -275,11 +275,11 @@ f =<< x = x >>= f
 </p>
 -->
 <p lang="ja">
-�ץ��塼�ɤǤ�ɸ���«���ؿ��Ȥϵս�ΰ�����Ȥ�«���ؿ����������Ƥ�
-�ޤ���ɸ���«���ؿ��� "<code>&gt;&gt;=</code>" �Ǥ��Τǡ���«���ؿ���
-"<code>=&lt;&lt;</code>" �Ǥ���«���黻�Ҥ��ⳬ��Ȥ��ƻȤ�����ǡ�
-������ս�Ǥ�ĤΤ������ʾ�礬���ꡢ���ξ���ͭ�ѤǤ���
-�����ñ��Ǥ���
+プレリュードでは標準の束縛関数とは逆順の引数をとる束縛関数が定義されてい
+ます。標準の束縛関数は "<code>&gt;&gt;=</code>" ですので、逆束縛関数は
+"<code>=&lt;&lt;</code>" です。束縛演算子が高階項として使われる場合で、
+引数を逆順でもつのが便利な場合があり、その場合に有用です。
+定義は単純です。
 </p>
 <table bgcolor="#bbaa55" width="100%"><tr><td><pre>
 (=<<) :: Monad m => (a -> m b) -> m a -> m b
@@ -288,7 +288,7 @@ f =<< x = x >>= f
 
 <a name="monad">
 <!--<h2 lang="en">In the Monad module</h2></a>-->
-<h2 lang="ja">Monad �⥸�塼��</h2></a>
+<h2 lang="ja">Monad モジュール</h2></a>
 
 <!--
 <p lang="en">
@@ -299,10 +299,10 @@ monadic operations.  To access these facilities, simply
 </p>
 -->
 <p lang="ja">
-ɸ��� Haskell 98 �饤�֥��� <code>Monad</code> �⥸�塼���
-�����٤ʥ�ʥɱ黻�Ѥ����Ĥ�������ʴؿ��򥨥����ݡ��Ȥ��Ƥ��ޤ���
-�����������ʴؿ���Ȥ��ˤ�ñ�� Haskell �Υץ���������
-<code>import Monad</code> �Ȥ�������Ǥ���
+標準の Haskell 98 ライブラリの <code>Monad</code> モジュールは
+より高度なモナド演算用いくつもの便利な関数をエクスポートしています。
+これらの便利な関数を使うには単に Haskell のプログラム中に
+<code>import Monad</code> とするだけです。
 </p>
 <!--
 <p lang="en">
@@ -315,7 +315,7 @@ more esoteric monad functions.
 -->
 
 <!--<h3>The <code>MonadPlus</code> class</h3>-->
-<h3><code>MonadPlus</code> ���饹</h3>
+<h3><code>MonadPlus</code> クラス</h3>
 <!--
 <p lang="en">
 The <code>Monad</code> module defines the <code>MonadPlus</code>
@@ -328,8 +328,8 @@ class Monad m => MonadPlus m where
 </p>
 -->
 <p lang="ja">
-<code>Monad</code> �⥸�塼��Ǥϥ������Ǥȥץ饹�黻�Ҥ���
-��ʥɤ��Ф��� <code>MonadPlus</code> ���饹���������Ƥ��ޤ���
+<code>Monad</code> モジュールではゼロ要素とプラス演算子をもつ
+モナドに対して <code>MonadPlus</code> クラスが定義されています。
 </p>
 <table bgcolor="#bbaa55" width="100%"><tr><td><pre>
 class Monad m => MonadPlus m where
@@ -338,7 +338,7 @@ class Monad m => MonadPlus m where
 </pre></td></tr></table>
 
 <!--<h3 lang="en">Monadic versions of list functions</h3>-->
-<h3 lang="en">�ꥹ�ȴؿ��Υ�ʥ���</h3>
+<h3 lang="en">リスト関数のモナド版</h3>
 <!--
 <p lang="en">
 Several functions are provided which generalize standard list-processing
@@ -347,9 +347,9 @@ the standard prelude and were described above.
 </p>
 -->
 <p lang="ja">
-ɸ��Υꥹ�Ƚ����ؿ����ʥɤ˰��̲�����ؿ��������Ĥ��������Ƥ��ޤ���
-<code>mapM</code> �ؿ��ϡ�ɸ��ץ��塼�ɤǥ������ݡ��Ȥ���Ƥ��ޤ���
-�������Ƥ����ҤΤȤ���Ǥ���
+標準のリスト処理関数をモナドに一般化する関数がいくつか定義されています。
+<code>mapM</code> 関数は、標準プレリュードでエクスポートされています。
+その内容は前述のとおりです。
 </p>
 <!--
 <p lang="en">
@@ -375,8 +375,8 @@ before calling <code>foldM</code>.
 </p>
 -->
 <p lang="ja">
-<code>foldM</code> �� <code>foldl</code> �Υ�ʥ��Ǥǡ��ꥹ�Ȥ��鹽��
-���줿��ʥɷ׻��Ϻ����鱦��«������ޤ�����������ϡ�
+<code>foldM</code> は <code>foldl</code> のモナド版で、リストから構築
+されたモナド計算は左から右へ束縛されます。その定義は、
 </p>
 <table bgcolor="#bbaa55" width="100%"><tr><td><pre>
 foldM :: (Monad m) => (a -> b -> m a) -> a -> [b] -> m a
@@ -384,19 +384,19 @@ foldM f a []     = return a
 foldM f a (x:xs) = f a x >>= \y -> foldM f y xs
 </pre></td></tr></table>
 <p lang="ja">
-�Ǥ�����������do �֥��å��κ��Ѥ�ͤ���С�<code>foldM</code> ������
-���򤹤�ΤϤ�ä��ưפǤ��礦��
+です。しかし、do ブロックの作用を考えれば、<code>foldM</code> の操作を
+理解するのはもっと容易でしょう。
 </p>
 <table bgcolor="#bbaa55" width="100%"><tr><td><pre>
--- ����������� Haskell �Υ����ɤǤϤʤ��������Τ�������Τ�ΤǤ�
+-- これは正しい Haskell のコードではなく、説明のためだけのものです
 foldM f a1 [x1,x2,...,xn] = do a2 <- f a1 x1
                                a3 <- f a2 x2
                                ...
                                f an xn
 </pre></td></tr></table>
 <p lang="ja">
-�����麸�ؤ�«���ϡ�<code>foldM</code> ��Ƥ��������ϥꥹ�Ȥ�ս��
-���Ƥ����ФǤ��ޤ���
+右から左への束縛は、<code>foldM</code> を呼ぶ前に入力リストを逆順に
+しておけばできます。
 </p>
 <!--
 <p lang="en">
@@ -423,29 +423,29 @@ than it is to use the <code>paternalGrandmother</code> function!
 </p>
 -->
 <p lang="ja">
-<a name="example3"></a> ���������Ӥ���Τ�궯�Ϥ��䤤�礻�ؿ���
-��������Τˡ�<code>foldM</code> ���Ȥ��ޤ���</p>
+<a name="example3"></a> クローン羊の例のより強力な問い合せ関数を
+作成するのに、<code>foldM</code> が使えます。</p>
 <table bgcolor="#bbaa55" width="100%">
 <tr bgcolor="#aabb55">
 <th align="left">
 <a href="../examples/example3.hs">example3.hs</a>
-�ǻȤ��륳����</th>
+で使えるコード</th>
 </tr>
 <tr><td><pre>
--- traceFamily �����Ĥ򸫤Ĥ��뤿��Υ����ͥ�å��ؿ��Ǥ�
+-- traceFamily は先祖を見つけるためのジェネリック関数です
 traceFamily :: Sheep -> [ (Sheep -> Maybe Sheep) ] -> Maybe Sheep
 traceFamily s l = foldM getParent s l
   where getParent s f = f s
 
--- traceFamily ��Ȥäơ�ʣ�����䤤�礻�򡢴�ñ�ˡ����Ƥˡ�����Ǥ��ޤ�
+-- traceFamily を使って、複雑な問い合せを、簡単に、明瞭に、定義できます
 mothersPaternalGrandfather s = traceFamily s [mother, father, father]
 paternalGrandmother s = traceFamily s [father, mother]
 </pre></td></tr></table>
 <p lang="ja">
-<code>traceFamily</code> �ؿ��� <code>foldM</code> ��Ȥäơ�
-�ȷϿޤ�Ǥ�եѥ������Ǥ�դο����ޤ��̤롢ñ�����ˡ��������ޤ���
-�ºݡ�<code>paternalGrandmother</code> �ؿ���Ȥ��������Ƥ�
-"<code>traceFamily s [father, mother]</code>"���񤱤ޤ���
+<code>traceFamily</code> 関数は <code>foldM</code> を使って、
+家系図を任意パターンの任意の深さまで遡る、単純な方法を作りだせます。
+実際、<code>paternalGrandmother</code> 関数を使うよりも明瞭に
+"<code>traceFamily s [father, mother]</code>"が書けます。
 </p>
 
 <!--
@@ -480,29 +480,29 @@ main = do files   <- getArgs
 </p>
 -->
 <p lang="ja">
-<a name="example4"></a><code>foldM</code> �Τ�ä�ŵ��Ū�ʻȤ����ϡ�
-do �֥��å�����ǻȤ��Ȥ�����ΤǤ���</p>
+<a name="example4"></a><code>foldM</code> のもっと典型的な使い方は、
+do ブロックの中で使うとういものです。</p>
 <table bgcolor="#bbaa55" width="100%">
 <tr bgcolor="#aabb55">
 <th align="left"><a href="../examples/example4.hs">example4.hs</a>
-�ǻȤ��륳����</th>
+で使えるコード</th>
 </tr>
 <tr><td><pre>
--- Dict ��ʸ���󤫤�ʸ����ؤ�ñ�ʤ�ͭ�¼����Ǥ�
+-- Dict は文字列から文字列への単なる有限写像です
 type Dict = FiniteMap String String
 
--- ��������ؿ��� foldl �ǻȤ��ޤ�
+-- この補助関数は foldl で使います
 addEntry :: Dict -> Entry -> Dict
 addEntry d e = addToFM d (key e) (value e)
 
--- ��������ؿ��� IO ��ʥɤ���� foldM �ȤȤ�˻Ȥ��ޤ�
+-- この補助関数は IO モナドの中で foldM とともに使います
 addDataFromFile :: Dict -> Handle -> IO Dict
 addDataFromFile dict hdl = do contents <- hGetContents hdl
                               entries  <- return (map read (lines contents))
                               return (foldl (addEntry) dict entries)
 
--- ���Υץ������ϡ����ޥ�ɥ饤�󤫤���ꤵ�줿���٤ƤΥե��������
--- ����ȥ꤫�鼭����ۤ��������Ϣ�ۥꥹ�ȤȤ��ư������Ϥ��ޤ�
+-- このプログラムは、コマンドラインから指定されたすべてのファイル中の
+-- エントリから辞書を構築し、それを連想リストとして印字出力します
 main :: IO ()
 main = do files   <- getArgs
           handles <- mapM openForReading files
@@ -525,9 +525,9 @@ filterM p (x:xs) = do b  <- p x
 </p>
 -->
 <p lang="ja">
-<code>filterM</code> �ؿ��ϥ�ʥ���ǥꥹ�ȴؿ� <code>filter</code> ��
-Ʊ�ͤ�Ư���򤷤ޤ������δؿ��ϥ�ʥ���ǿ����ͤ��֤��Ҹ���ͤΥꥹ�Ȥ�
-���ޤ��������ơ���ʥ���ǡ��Ҹ줬���ˤʤä��ͤΥꥹ�Ȥ��֤��ޤ���</p>
+<code>filterM</code> 関数はモナド内でリスト関数 <code>filter</code> と
+同様の働きをします。この関数はモナド内で真偽値を返す述語と値のリストを
+取ります。そして、モナド内で、述語が真になった値のリストを返します。</p>
 <table bgcolor="#bbaa55" width="100%"><tr><td><pre>
 filterM :: Monad m => (a -> m Bool) -> [a] -> m [a]
 filterM p []     = return []
@@ -560,22 +560,22 @@ main = do names <- getArgs
 </p>
 -->
 <p lang="ja">
-<a name="example5">�����</a> <code>filterM</code> �� IO ��ʥ����
-�ɤΤ褦�˻Ȥ��ơ��ꥹ�Ȥ���ǥ��쥯�ȥ�Υ���ȥ���������򤹤뤫��
-��������Ǥ���</p>
+<a name="example5">これは</a> <code>filterM</code> が IO モナド内で
+どのように使われて、リストからディレクトリのエントリだけを選択するかを
+示した例です。</p>
 <table bgcolor="#bbaa55" width="100%">
 <tr bgcolor="#aabb55">
 <th align="left"><a href="../examples/example5.hs">example5.hs</a>
-�ǻȤ��륳����</th>
+で使えるコード</th>
 </tr>
 <tr><td><pre>
 import Monad
 import Directory
 import System
 
--- ����: doesDirectoryExist �η��� FilePath -> IO Bool �Ǥ�
+-- 注意: doesDirectoryExist の型は FilePath -> IO Bool です
 
--- ���Υץ������ϥ��ޥ�ɥ饤�󤫤�ǥ��쥯�ȥ�̾������������ޤ�
+-- このプログラムはコマンドラインからディレクトリ名だけを印字します
 main :: IO ()
 main = do names <- getArgs
           dirs  <- filterM doesDirectoryExist names
@@ -597,9 +597,9 @@ zipWithM_ f xs ys = sequence_ (zipWith f xs ys)
 </p>
 -->
 <p lang="ja">
-<code>zipWithM</code> �ϥꥹ�Ⱦ�� <code>zipWith</code> �ؿ���
-��ʥ��ǤǤ���<code>zipWithM_</code> �ϡ��ؿ��η�̤�ΤƤ�ʳ���
-Ʊ�����񤤤򤷤ޤ�������ϥ�ʥɷ׻��������ѤΤߤ����פʤȤ��������Ǥ���
+<code>zipWithM</code> はリスト上の <code>zipWith</code> 関数の
+モナド版です。<code>zipWithM_</code> は、関数の結果を捨てる以外は
+同じ振舞いをします。これはモナド計算の副作用のみが重要なときに便利です。
 </p>
 <table bgcolor="#bbaa55" width="100%"><tr><td><pre>
 zipWithM ::(Monad m) => (a -> b -> m c) -> [a] -> [b] -> m [c]
@@ -610,7 +610,7 @@ zipWithM_ f xs ys = sequence_ (zipWith f xs ys)
 </pre></td></tr></table>
 
 <!--<h3 lang="en">Conditional monadic computations</h3>-->
-<h3 lang="ja">��Ｐ�Υ�ʥɷ׻�</h3>
+<h3 lang="ja">条件式のモナド計算</h3>
 
 <!--
 <p lang="en">
@@ -631,11 +631,11 @@ unless p s = when (not p) s
 </p>
 -->
 <p lang="ja">
-���ˤ�äƥ�ʥɷ׻���¹Ԥ��뤿��δؿ����դ��Ĥ���ޤ���
-<code>when</code> �ؿ��ϡ������ͤȥ�˥å�"()"���Υ�ʥɷ׻���
-��ꡢ�����Ͱ����� <code>True</code> �ΤȤ��Τߤ��η׻���¹Ԥ��ޤ���
-<code>unless</code> �ؿ���Ʊ�ͤǤ�����������ϡ������Ͱ�����
-<code>True</code> <em>�ǤϤʤ�������</em> �׻���¹Ԥ��ޤ���</p>
+条件によってモナド計算を実行するための関数がふたつあります。
+<code>when</code> 関数は、真偽値とユニット"()"型のモナド計算を
+取り、真偽値引数が <code>True</code> のときのみその計算を実行します。
+<code>unless</code> 関数も同様ですが、こちらは、真偽値引数が
+<code>True</code> <em>ではないかぎり</em> 計算を実行します。</p>
 
 <table bgcolor="#bbaa55" width="100%"><tr><td><pre>
 when :: (Monad m) => Bool -> m () -> m ()
@@ -646,7 +646,7 @@ unless p s = when (not p) s
 </pre></td></tr></table>
 
 <!--<h3><code>ap</code> and the lifting functions</h3>-->
-<h3><code>ap</code> ����ӥ�եȴؿ�</h3>
+<h3><code>ap</code> およびリフト関数</h3>
 <!--
 <p lang="en">
 <em>Lifting</em> is a monadic operation that converts a non-monadic
@@ -657,10 +657,10 @@ of a do block and can also allow for cleaner code within a do block.
 </p>
 -->
 <p lang="ja">
-<em>��ե�</em> �����ʥɴؿ����ʥ��;��Ʊ���δؿ����Ѵ�����
-��ʥɱ黻�Ǥ�����եȱ黻�Ҥˤ��֥�ʥɤإ�եȤ��줿�״ؿ����Ȥ���
-�������򤷤ޤ�����եȤ��줿�ؿ��� do �֥��å��γ�¦�ǥ�ʥ��ͤ����
-����Τ������ǡ�do �֥��å���Υ����ɤ򤹤ä��ꤵ���뤳�Ȥ��Ǥ��ޤ���
+<em>リフト</em> は非モナド関数をモナド値上の同等の関数に変換する
+モナド演算です。リフト演算子により「モナドへリフトされた」関数、という
+言い方をします。リフトされた関数は do ブロックの外側でモナド値を操作
+するのに便利で、do ブロック内のコードをすっきりさせることができます。
 </p>
 <!--
 <p lang="en">
@@ -673,8 +673,8 @@ liftM f = \a -> do { a' <- a; return (f a') }
 </p>
 -->
 <p lang="ja">
-�Ǥ�ñ��ʥ�եȱ黻�Ҥ� <code>liftM</code> �Ǥ�������ϰ�����ؿ���
-��ʥɤˤ��ޤ���</p>
+最も単純なリフト演算子は <code>liftM</code> です。これは一引数関数を
+モナドにします。</p>
 <table bgcolor="#bbaa55" width="100%"><tr><td><pre>
 liftM :: (Monad m) => (a -> b) -> (m a -> m b)
 liftM f = \a -> do { a' <- a; return (f a') }
@@ -693,16 +693,16 @@ in the <code>Monad</code> module.
 </p>
 -->
 <p lang="ja">
-��եȱ黻�Ҥ�¿�����δؿ��Ѥˤ��󶡤���Ƥ��ޤ���
-<code>liftM2</code> �� 2 �����ؿ����եȤ��ޤ���</p>
+リフト演算子は多引数の関数用にも提供されています。
+<code>liftM2</code> は 2 引数関数をリフトします。</p>
 <table bgcolor="#bbaa55" width="100%"><tr><td><pre>
 liftM2 :: (Monad m) => (a -> b -> c) -> (m a -> m b -> m c)
 liftM2 f = \a b -> do { a' <- a; b' <- b; return (f a' b') }
 </pre></td></tr></table>
 <p lang="ja">
-���ʤ��ѥ����󤬹���¿�����δؿ��ˤ�Ŭ�Ѥ���Ƥ��ޤ���
-<code>liftM5</code> �ޤǤδؿ��� <code>Monad</code> �⥸�塼���
-�������Ƥ��ޤ���
+おなじパターンが更に多引数の関数にも適用されています。
+<code>liftM5</code> までの関数が <code>Monad</code> モジュールで
+定義されています。
 </p>
 <!--
 <p lang="en">
@@ -734,10 +734,10 @@ The difference is even greater when lifting functions with more arguments.
 -->
 <p lang="ja">
 <a name="example6"></a>
-��եȱ黻�Ҥ��ɤΤ褦�˥����ɤ�ʷ�ˤ���Τ��򸫤�ˤϡ�
-<code>Maybe</code> ��ʥ���η׻���ͤ���������
-<code>swapNames::String&nbsp;->&nbsp;String</code> �Ȥ����ؿ���
-�Ȥ������Ȥ��ޤ��礦������ȡ���������ˤʤ�Ǥ��礦��</p>
+リフト演算子がどのようにコードを簡潔にするのかを見るには、
+<code>Maybe</code> モナド内の計算を考え、そこで
+<code>swapNames::String&nbsp;->&nbsp;String</code> という関数を
+使いたいとしましょう。すると、こんな風になるでしょう。</p>
 <table bgcolor="#bbaa55" width="100%"><tr><td><pre>
 getName :: String -> Maybe String
 getName name = do let db = [("John", "Smith, John"), ("Mike", "Caine, Michael")]
@@ -745,14 +745,14 @@ getName name = do let db = [("John", "Smith, John"), ("Mike", "Caine, Michael")]
                   return (swapNames tempName)
 </pre></td></tr></table>
 <p lang="ja">
-��������<code>liftM</code> �ؿ���Ȥ��ȡ�
-<code>liftM&nbsp;swapNames</code> ��
-<code>Maybe&nbsp;String&nbsp;->&nbsp;Maybe&nbsp;String</code> �Ȥ�������
-�ؿ��Ȥ��ƻȤ����Ȥ��Ǥ��ޤ���</p>
+しかし、<code>liftM</code> 関数を使うと、
+<code>liftM&nbsp;swapNames</code> を
+<code>Maybe&nbsp;String&nbsp;->&nbsp;Maybe&nbsp;String</code> という型の
+関数として使うことができます。</p>
 <table bgcolor="#bbaa55" width="100%">
 <tr bgcolor="#aabb55">
 <th align="left"><a href="../examples/example6.hs">example6.hs</a>
-�ǻȤ��륳����</th>
+で使えるコード</th>
 </tr>
 <tr><td><pre>
 getName :: String -> Maybe String
@@ -760,7 +760,7 @@ getName name = do let db = [("John", "Smith, John"), ("Mike", "Caine, Michael")]
                   liftM swapNames (lookup name db)
 </pre></td></tr></table>
 <p lang="ja">
-���ΰ㤤��¿�����δؿ����եȤ���ȹ����礭���ʤ�ޤ���
+この違いは多引数の関数をリフトすると更に大きくなります。
 </p>
 <!--
 <p lang="en">
@@ -790,24 +790,24 @@ allCombinations fn (l:ls) = foldl (liftM2 fn) l ls
 -->
 <p lang="ja">
 <a name="example7"></a>
-�����Υ�եȴؿ��Ϲⳬ�ؿ���Ĥ��ä����˴ʷ�ʹ��ۤ��ǽ�ˤ��ޤ���
-�ʲ���������򤹤�ˤϡ�<a href="listmonad.html#definition">�ꥹ��
-��ʥ�</a> �Υ�ʥɴؿ������(�ä� <code>>>=</code>) ����������ɬ�פ�
-����ޤ����ʲ��δؿ����եȱ黻�Ҥʤ��Ǽ������뤳�Ȥ��������Ƥߤޤ��礦��
+これらのリフト関数は高階関数をつかった非常に簡潔な構築を可能にします。
+以下の例を理解するには、<a href="listmonad.html#definition">リスト
+モナド</a> のモナド関数の定義(特に <code>>>=</code>) を復習する必要が
+あります。以下の関数をリフト演算子なしで実装することを想像してみましょう。
 </p>
 <table bgcolor="#bbaa55" width="100%">
 <tr bgcolor="#aabb55">
 <th align="left"><a href="../examples/example7.hs">example7.hs</a>
-�ǻȤ��륳����</th>
+で使えるコード</th>
 </tr>
 <tr><td><pre>
--- allCombinations ��Ϳ����줿�ꥹ�Ȥ����ǤΤ��٤Ƥ��ȹ礻�����
--- ���Τ����黻�ҤǾ��߹������̤�ޤ�ꥹ�Ȥ��֤��ޤ���
--- ���Ȥ��С�allCombinations (+) [[0,1],[1,2,3]] �ϡ�
---   [0+1,0+2,0+3,1+1,1+2,1+3]�����뤤�� [1,2,3,2,3,4] �Ȥʤꡢ
--- �ޤ���allCombinations (*) [[0,1],[1,2],[3,5]] �ϡ�
---   [0*1*3,0*1*5,0*2*3,0*2*5,1*1*3,1*1*5,1*2*3,1*2*5]�����뤤��
--- [0,0,0,0,3,5,6,10] �Ȥʤ�ޤ���
+-- allCombinations は与えられたリストの要素のすべての組合せた結果
+-- 全体を二項演算子で畳み込んだ結果を含むリストを返します。
+-- たとえば、allCombinations (+) [[0,1],[1,2,3]] は、
+--   [0+1,0+2,0+3,1+1,1+2,1+3]、あるいは [1,2,3,2,3,4] となり、
+-- また、allCombinations (*) [[0,1],[1,2],[3,5]] は、
+--   [0*1*3,0*1*5,0*2*3,0*2*5,1*1*3,1*1*5,1*2*3,1*2*5]、あるいは
+-- [0,0,0,0,3,5,6,10] となります。
 allCombinations :: (a -> a -> a) -> [[a]] -> [a]
 allCombinations fn []     = []
 allCombinations fn (l:ls) = foldl (liftM2 fn) l ls
@@ -829,19 +829,19 @@ working with higher-order functions and monads.
 </p>
 -->
 <p lang="ja">
-��Ϣ����ؿ��� <code>ap</code> �Ȥ�Ф�Ƥ����Τ�����ޤ���
-����ϡ����ˤ�äƤϡ�lift �ؿ���������ʤ�ΤǤ��� <code>ap</code>
-��ñ�˴ؿ�Ŭ�ѱ黻�� (<code>$</code>) ���ʥɤإ�եȤ�����ΤǤ���
+関連する関数に <code>ap</code> とよばれているものがあります。
+これは、場合によっては、lift 関数より便利なものです。 <code>ap</code>
+は単に関数適用演算子 (<code>$</code>) をモナドへリフトしたものです。
 </p>
 <table bgcolor="#bbaa55" width="100%"><tr><td><pre>
 ap :: (Monad m) => m (a -> b) -> m a -> m b
 ap = liftM2 ($)
 </pre></td></tr></table>
 <p lang="ja">
-<code>liftM2&nbsp;f&nbsp;x&nbsp;y</code> �ϡ�
-<code>return&nbsp;f&nbsp;`ap`&nbsp;x&nbsp;`ap`&nbsp;y</code> ��
-Ʊ���Ǥ��ꡢ����ʳ���¿�����ؿ��ˤĤ��Ƥ�Ʊ���Ǥ��뤳�Ȥ����դ��ޤ��礦��
-<code>ap</code> �Ϲⳬ�ؿ��ȥ�ʥɤ򤢤Ĥ��äƤ���Ȥ��ˤ������Ǥ���
+<code>liftM2&nbsp;f&nbsp;x&nbsp;y</code> は、
+<code>return&nbsp;f&nbsp;`ap`&nbsp;x&nbsp;`ap`&nbsp;y</code> と
+同等であり、それ以外の多引数関数についても同等であることに注意しましょう。
+<code>ap</code> は高階関数とモナドをあつかっているときには便利です。
 </p>
 
 <a name="example8"></a>
@@ -873,20 +873,20 @@ main = do let fns  = [("double",(2*)),      ("halve",(`div`2)),
 </p>
 -->
 <p lang="ja">
-<code>ap</code> �κ��ѤϤ����ǻȤ��Ƥ����ʥɤ���ά�˰�¸���ޤ���
-����椨�����Ȥ��С�<code>[(*2),(+3)]&nbsp;`ap`&nbsp[0,1,2]</code>
-�� <code>[0,2,4,3,4,5]</code> ����������
-<code>(Just&nbsp;(*2))&nbsp;`ap`&nbsp;(Just&nbsp;3)</code> ��
-<code>Just&nbsp;6</code> ���������ʤ�ޤ���
-�������ñ��ʤ�Τ� <code>ap</code> �����ⳬ�׻���Ԥ��Ȥ���
-�ɤΤ褦��ͭ�ѤǤ��뤫�򼨤�����ΤǤ���</p>
+<code>ap</code> の作用はそこで使われているモナドの戦略に依存します。
+それゆえ、たとえば、<code>[(*2),(+3)]&nbsp;`ap`&nbsp[0,1,2]</code>
+は <code>[0,2,4,3,4,5]</code> に等しく、
+<code>(Just&nbsp;(*2))&nbsp;`ap`&nbsp;(Just&nbsp;3)</code> は
+<code>Just&nbsp;6</code> に等しくなります。
+この例は単純なもので <code>ap</code> が、高階計算を行うときに
+どのように有用であるかを示したものです。</p>
 <table bgcolor="#bbaa55" width="100%">
 <tr bgcolor="#aabb55">
 <th align="left"><a href="../examples/example8.hs">example8.hs</a>
-�ǻȤ��륳����</th>
+で使えるコード</th>
 </tr>
 <tr><td><pre>
--- ���ޥ�ɤ򸡺�����ap �򥳥ޥ�ɥꥹ�Ȥؾ��߹���ǡ���̤�׻�
+-- コマンドを検索し、ap をコマンドリストへ畳み込んで、結果を計算
 main :: IO ()
 main = do let fns  = [("double",(2*)),      ("halve",(`div`2)),
                       ("square",(\x->x*x)), ("negate", negate),
@@ -899,7 +899,7 @@ main = do let fns  = [("double",(2*)),      ("halve",(`div`2)),
 </pre></td></tr></table>
 
 <!--<h3 lang="en">Functions for use with <code>MonadPlus</code></h3>-->
-<h3 lang="ja"><code>MonadPlus</code> �ǻȤ�����δؿ�</h3>
+<h3 lang="ja"><code>MonadPlus</code> で使うための関数</h3>
 
 <!--
 <p lang="en">
@@ -916,12 +916,12 @@ msum xs = foldr mplus mzero xs
 </p>
 -->
 <p lang="ja">
-<code>Monad</code> �⥸�塼��ˤϥ����ȥץ饹���ĥ�ʥɤǻȤ�
-�դ��Ĥδؿ�������ޤ����ǽ�δؿ��ϡ�<code>msum</code> �Ǥ���
-����ϡ������Υꥹ�Ⱦ�� <code>sum</code> �˻�������ΤǤ���
-<code>msum</code> �ϥ�ʥ��ͤΥꥹ�Ⱦ�����򤪤��ʤ���
-<code>mplus</code> �黻�Ҥ򡢽���ͤȤ��� <code>mzero</code> ���Ǥ�Ȥ���
-���Υꥹ�Ȥ˾��߹��ߤޤ���</p>
+<code>Monad</code> モジュールにはゼロとプラスをもつモナドで使う
+ふたつの関数があります。最初の関数は、<code>msum</code> です。
+これは、整数のリスト上の <code>sum</code> に似せたものです。
+<code>msum</code> はモナド値のリスト上で操作をおこない、
+<code>mplus</code> 演算子を、初期値として <code>mzero</code> 要素を使い、
+そのリストに畳み込みます。</p>
 <table bgcolor="#bbaa55" width="100%"><tr><td><pre>
 msum :: MonadPlus m => [m a] -> m a
 msum xs = foldr mplus mzero xs
@@ -936,11 +936,11 @@ and <code>mplus</code> definitions.
 </p>
 -->
 <p lang="ja">
-List ��ʥɤǤϡ�<code>msum</code> �� <code>concat</code> ��Ʊ���Ǥ���
-<code>Maybe</code> ��ʥɤǤ� <code>msum</code> �ϥꥹ�Ȥ���ǽ��
-��<code>Nothing</code>�ͤ��֤��ޤ���Ʊ�ͤˡ�¾�Υ�ʥɤǤο��񤤤�
-�ޤ��ˤ�����ʥɤǤ� <code>mzero</code> ����� <code>mplus</code>
-������������˰�¸���ޤ���
+List モナドでは、<code>msum</code> は <code>concat</code> と同等です。
+<code>Maybe</code> モナドでは <code>msum</code> はリストから最初の
+非<code>Nothing</code>値を返します。同様に、他のモナドでの振舞いは
+まさにそれらモナドでの <code>mzero</code> および <code>mplus</code>
+の定義の性質に依存します。
 </p>
 
 <a name="example9"></a>
@@ -974,8 +974,8 @@ lookupVar var (e:es) = let val = lookup var e
 </p>
 -->
 <p lang="ja">
-<code>msum</code> ��¿���κƵ��ؿ����ǽ�ˤ������߹���Ǥ����ɽ����
-�ʷ�ˤ��ޤ���<code>Maybe</code> ��ʥɤǤϡ����Ȥ��С�</p>
+<code>msum</code> は多くの再帰関数を可能にし、畳み込んでさらに表現を
+簡潔にします。<code>Maybe</code> モナドでは、たとえば、</p>
 <table bgcolor="#bbaa55" width="100%">
 <tr><td><pre>
 lookupVar :: Variable -> EnvironmentStack -> Maybe Value
@@ -984,20 +984,20 @@ lookupVar var (e:es) = let val = lookup var e
                        in maybe (lookupVar var es) Just val
 </pre></td></tr></table>
 <p lang="ja">
-�Ƚ񤯤����ˡ�
+と書くかわりに、
 </p>
 <table bgcolor="#bbaa55" width="100%">
 <tr bgcolor="#aabb55">
 <th align="left"><a href="../examples/example9.hs">example9.hs</a>
-�ǻȤ��륳����</th>
+で使えるコード</th>
 </tr>
 <tr><td><pre>
 type Variable = String
 type Value = String
 type EnvironmentStack = [[(Variable,Value)]]
 
--- lookupVar �ϴĶ������å������ѿ����ͤ򸡺����ޤ���
--- ����� msum �� Maybe ��ʥ���ǻȤ����ǽ����-Nothing �ͤ��֤��ޤ�
+-- lookupVar は環境スタックから変数の値を検索します。
+-- これは msum を Maybe モナド内で使い、最初の非-Nothing 値を返します
 lookupVar :: Variable -> EnvironmentStack -> Maybe Value
 lookupVar var stack = msum $ map (lookup var) stack
 </pre></td></tr></table>
@@ -1019,19 +1019,19 @@ in a list comprehension cause values that fail the predicate to become
 </p>
 -->
 <p lang="ja">
-��������ӥץ饹���ĥ�ʥɤǻȤ����դ��Ĥ�δؿ��� <code>guard</code>
-�ؿ��Ǥ���</p>
+ゼロおよびプラスをもつモナドで使う、ふたつめの関数は <code>guard</code>
+関数です。</p>
 <table bgcolor="#bbaa55" width="100%"><tr><td><pre>
 guard :: MonadPlus m => Bool -> m ()
 guard p = if p then return () else mzero
 </pre></td></tr></table>
 <p lang="ja">
-���δؿ������򤹤륳�Ĥϡ���������ӥץ饹���ĥ�ʥɤ��Ф��뵬§��
-<code>mzero&nbsp;>>=&nbsp;f&nbsp;==&nbsp;mzero</code> ��פ��Ф����ȤǤ���
-��������ȡ�<code>guard</code> �ؿ����ʥɱ黻���¤Ӥ�����֤��ȡ�
-���٤ƤΤ��� guard �� <code>False</code> �Ǥ���¹Ԥ���������ơ�
-<code>mzero</code> �ˤʤ�ޤ�������ϡ��ꥹ������ɽ���ǥ����ɽҸ줬
-�Ҹ���Ԥ�����<code>[]</code> �ˤʤ��ͤ�������ˡ��Ʊ�ͤǤ���
+この関数を理解するコツは、ゼロおよびプラスをもつモナドに対する規則、
+<code>mzero&nbsp;>>=&nbsp;f&nbsp;==&nbsp;mzero</code> を思い出すことです。
+そうすると、<code>guard</code> 関数をモナド演算の並びの中に置くと、
+すべてのその guard が <code>False</code> である実行が強制されて、
+<code>mzero</code> になります。これは、リスト内包表記でガード述語が
+述語を失敗させ、<code>[]</code> になる値を生む方法と同様です。
 </p>
 
 <a name="example10"></a>
@@ -1058,28 +1058,28 @@ getYoungerThan limit db = mapMaybe (\r -> do { guard (age r < limit); return r }
 </p>
 -->
 <p lang="ja">
-������� <code>Maybe</code> ��ʥɤǤ� <code>guard</code> �ؿ���
-�Ȥ������㼨�����ΤǤ���</p>
+次の例は <code>Maybe</code> モナドでの <code>guard</code> 関数の
+使い方を例示するものです。</p>
 <table bgcolor="#bbaa55" width="100%">
 <tr bgcolor="#aabb55">
 <th align="left"><a href="../examples/example10.hs">example10.hs</a>
-�ǻȤ��륳����</th>
+で使えるコード</th>
 </tr>
 <tr><td><pre>
 data Record = Rec {name::String, age::Int} deriving Show
 type DB = [Record]
 
--- getYoungerThan �ϻ��ꤷ��ǯ����㤤�ͤΡ����ƤΥ쥳���ɤ��֤��ޤ���
--- ����ϥ����ɴؿ����Ѥ��ơ������ͤ���Ӥ����ۤ���ǯ��οͤΥ쥳����
--- ��õ��Τ˻Ȥ��ޤ���������㼨�ˤ����ޤ��󡣼ºݤˤ�ñ�� filter
--- ��Ȥ���������Ǥ���filter �ε����ͤ���ä�ʣ���ʾ��ˤϡ�guard ��
--- ��ä����Ω�ĤǤ��礦��
+-- getYoungerThan は指定した年齢より若い人の、全てのレコードを返します。
+-- これはガード関数を用いて、制限値およびそれを越える年齢の人のレコード
+-- を消去するのに使います。これは例示にすぎません。実際には単に filter
+-- を使う方が明解です。filter の許容値がもっと複雑な場合には、guard が
+-- もっと役に立つでしょう。
 getYoungerThan :: Int -> DB -> [Record]
 getYoungerThan limit db = mapMaybe (\r -> do { guard (age r < limit); return r }) db
 </pre></td></tr></table>
 
 <a name="summary"><!--<h2 lang="en">Summary</h2>-->
-<h2 lang="ja">����</h2></a>
+<h2 lang="ja">要約</h2></a>
 <!--
 <p lang="en">
 Haskell provides a number of functions which are useful for working with monads
@@ -1092,13 +1092,13 @@ in their respective modules.
 </p>
 -->
 <p lang="ja">
-Haskell �Ǥ�ɸ��饤�֥��ǥ�ʥ��Ѥ������ʴؿ��򤤤��Ĥ��󶡤��Ƥ��ޤ���
-<code>Monad</code> ���饹�ȤۤȤ�ɤζ��̤Υ�ʥɴؿ���ɸ��ץ��塼��
-�ˤ���ޤ���<code>MonadPlus</code> ���饹�Ϥ���ۤ����ˤ˻Ȥ�����
-�ǤϤʤ�(�ȤϤ�������ͭ�Ѥ�)�ؿ��� <code>Monad</code> �⥸�塼������
-����Ƥ��ޤ���Haskell �饤�֥��ǡ�¿����¾�η��� <code>Monad</code>
-����� <code>MonadPlus</code> ���饹�Υ��󥹥��󥹤Ȥ��Ƥ��줾���
-�⥸�塼����������Ƥ��ޤ���
+Haskell では標準ライブラリでモナド用の便利な関数をいくつも提供しています。
+<code>Monad</code> クラスとほとんどの共通のモナド関数は標準プレリュード
+にあります。<code>MonadPlus</code> クラスはそれほど頻繁に使われるもの
+ではない(とはいえ非常に有用な)関数は <code>Monad</code> モジュールで定義
+されています。Haskell ライブラリで、多くの他の型は <code>Monad</code>
+および <code>MonadPlus</code> クラスのインスタンスとしてそれぞれの
+モジュールで宣言されています。
 </p>
 
 <hr align="center" size="1" width="80%">
@@ -1118,11 +1118,11 @@ Haskell �Ǥ�ɸ��饤�֥��ǥ�ʥ��Ѥ������ʴؿ��򤤤��Ĥ��󶡤��Ƥ��ޤ���
 <table lang="ja" width="100%">
  <tr>
   <td align="left" width="33%">Prev:
-   <a href="exercises.html">��������</a></td>
+   <a href="exercises.html">練習問題</a></td>
   <td align="center" width="33%">TOC:
-   <a href="index.html">�ܼ�</a></td>
+   <a href="index.html">目次</a></td>
   <td align="right" width="33%">Next:
-   <a href="introII.html">Part II - ����ȥ����������</a></td>
+   <a href="introII.html">Part II - イントロダクション</a></td>
  </tr>
 </table>	
 

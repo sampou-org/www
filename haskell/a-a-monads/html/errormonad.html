@@ -1,9 +1,9 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
+<!DOCTYPE html>
+<html lang="ja">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=EUC-JP">
+<meta charset="utf-8">
 <!--<title lang="en">The Error monad</title>-->
-<title lang="ja">Error ��ʥ�</title>
+<title lang="ja">Error モナド</title>
 </head>
 <body>
 <!--
@@ -21,16 +21,16 @@
 <table lang="ja" width="100%">
  <tr>
   <td align="left" width="33%">Prev:
-   <a href="maybemonad.html">Maybe ��ʥ�</a></td>
+   <a href="maybemonad.html">Maybe モナド</a></td>
   <td align="center" width="33%">TOC:
-   <a href="index.html">�ܼ�</a></td>
+   <a href="index.html">目次</a></td>
   <td align="right" width="33%">Next:
-   <a href="listmonad.html">List ��ʥ�</a></td>
+   <a href="listmonad.html">List モナド</a></td>
  </tr>
 </table>	
 
 <!--<h1 lang="en">The Error monad</h1>-->
-<h1 lang="ja">Error ��ʥ�</h1>
+<h1 lang="ja">Error モナド</h1>
 <!--
 <ul lang="en">
   <li><a href="#overview">Overview</a></li>
@@ -40,17 +40,17 @@
 </ul>
 -->
 <ul lang="ja">
-  <li><a href="#overview">����</a></li>
-  <li><a href="#motivation">ư��</a></li>
-  <li><a href="#definition">���</a></li>
-  <li><a href="#example">��</a></li>
+  <li><a href="#overview">概観</a></li>
+  <li><a href="#motivation">動機</a></li>
+  <li><a href="#definition">定義</a></li>
+  <li><a href="#example">例</a></li>
 </ul>
 
 <hr align="center" size="1" width="80%">
 
 <a name="overview">
 <!--<h2 lang="en">Overview</h2>-->
-<h2 lang="ja">����</h2></a>
+<h2 lang="ja">概観</h2></a>
 <!--
 <table lang="en" width="100%" cellpadding="3">
  <tr>
@@ -85,30 +85,30 @@
 -->
 <table lang="ja" width="100%" cellpadding="3">
  <tr>
-  <th align="left">�׻��Υ�����:</th>
-  <td>���Ԥ��뤤���㳰���ꤲ��׻�</td>
+  <th align="left">計算のタイプ:</th>
+  <td>失敗あるいは例外を投げる計算</td>
  </tr>
  <tr>
-  <th align="left">«����ά:</th>
-  <td>���ԤϤ��μ��Ԥ�ȯ��������ͳ/���˴ؤ�������Ͽ���롣
-   �����ͤ�«�����줿�ؿ���Х��ѥ���������ʳ����ͤ�«�����줿�ؿ���
-   ���ϤȤ��ƻȤ��ޤ���
+  <th align="left">束縛戦略:</th>
+  <td>失敗はその失敗が発生した理由/場所に関する情報を記録する。
+   失敗値は束縛された関数をバイパスし、それ以外の値は束縛された関数の
+   入力として使われます。
   </td>
  </tr>
  <tr>
-  <th align="left">���Ѿ���:</th>
-  <td>���Ԥ��뤤�ϥ��顼������¤�������㳰������Ĥ����ؿ��Τʤ�Ӥ���
-   �׻����ۤ��롣
+  <th align="left">利用場面:</th>
+  <td>失敗あるいはエラー処理を構造化する例外処理をつかう関数のならびから
+   計算を構築する。
   </td>
  </tr>
  <tr>
-  <th align="left">�����ȥץ饹:</th>
-  <td>�����϶��Υ��顼�ˤ��ɽ�����졢�ץ饹�黻�Ϻǽ�ΰ��������Ԥ���С�
-   2�Ĥ�ΰ�����¹Ԥ��ޤ���
+  <th align="left">ゼロとプラス:</th>
+  <td>ゼロは空のエラーにより表現され、プラス演算は最初の引数が失敗すれば、
+   2つめの引数を実行します。
   </td>
  </tr>
  <tr>
-  <th align="left">������:</th>
+  <th align="left">型の例:</th>
   <td><a href="http://www.haskell.org/onlinelibrary/standard-prelude.html#$tEither">
    Either String a</a></td>
  </tr>
@@ -116,7 +116,7 @@
 
 <a name="motivation">
 <!--<h2 lang="en">Motivation</h2>-->
-<h2 lang="ja">ư��</h2>
+<h2 lang="ja">動機</h2>
 </a>
 <!--
 <p lang="en">
@@ -127,10 +127,10 @@ it is handled.
 </p>
 -->
 <p lang="ja">
-Error ��ʥ�(Exception ��ʥɤȤ⤤���ޤ�)�ϡ�
-«�����줿�ؿ���Х��ѥ����뤳�Ȥǡ�ȯ�������Ȥ������顢
-�������������������Ȥ������㳰���ꤲ�뤳�Ȥ��Ǥ���
-�׻��򡢹���������ά�����񤷤Ƥ��ޤ���
+Error モナド(Exception モナドともいいます)は、
+束縛された関数をバイパスすることで、発生したところから、
+それを処理する処理するところへ例外を投げることができる
+計算を、合成する戦略を内包しています。
 </p>
 <!--
 <p lang="en">
@@ -148,22 +148,22 @@ instances of the <code>Error</code> and/or <code>MonadError</code> classes.
 -->
 <p lang="ja">
 <a href="http://www.haskell.org/ghc/docs/latest/html/base/Control.Monad.Error.html">
-<code>MonadError</code></a> ���饹�ϥ��顼����η��ȥ�ʥɷ����ۻ�
-�ˤ�äƥѥ�᡼��������Ƥ��ޤ���<code>Either String</code> ��
-���顼���Ƥε��Ҥ�ʸ��������Ǥ��륨�顼��ʥ��ѤΥ�ʥɷ����ۻ�
-�Ȥ��ƻȤ��Τ����̤��Ƥ��ޤ������Υ������䤽��¾�Τ褯���륱�����Ǥ�
-��̤Υ�ʥɤϤ��Ǥ� <code>MonadError</code> ���饹�Υ��󥹥��󥹤Ȥ���
-�������Ƥ��ޤ�����ʬ�ѤΥ��顼�η���������뤳�Ȥ�Ǥ��ޤ�����
-<code>Either String</code> ���뤤��
-<code>Either IOError</code> �ʳ��Υ�ʥɷ����ۻҤ�Ȥ��ޤ���
-�����Υ������Ǥϡ�<code>Error</code> �����/���뤤��
-<code>MonadError</code> ���饹�Υ��󥹥��󥹤�����Ū���������ɬ�פ�
-����ޤ���
+<code>MonadError</code></a> クラスはエラー情報の型とモナド型構築子
+によってパラメータ化されています。<code>Either String</code> を
+エラー内容の記述が文字列形式であるエラーモナド用のモナド型構築子
+として使うのが共通しています。そのケースやその他のよくあるケースでは
+結果のモナドはすでに <code>MonadError</code> クラスのインスタンスとして
+定義されています。自分用のエラーの型を定義することもできますし、
+<code>Either String</code> あるいは
+<code>Either IOError</code> 以外のモナド型構築子を使えます。
+これらのケースでは、<code>Error</code> および/あるいは
+<code>MonadError</code> クラスのインスタンスを明示的に定義する必要が
+あります。
 </p>
 
 <a name="definition">
 <!--<h2 lang="en">Definition</h2>-->
-<h2 lang="ja">���</h2>
+<h2 lang="ja">定義</h2>
 </a>
 <!--
 <p lang="en">
@@ -174,9 +174,9 @@ Haskell 98.  You don't need to understand them to take advantage of the
 </p>
 -->
 <p lang="ja">
-�ʲ��� <code>MonadError</code> ���饹�������ʣ���ѥ�᡼���η����饹��
-funDep �Ȥ���ɸ��� Haskell 98 �ˤϤʤ������ĥ��Ĥ��äƤ��ޤ���
-<code>MonadError</code> ���饹������������Τˤ�������򤹤�ɬ�פϤ���ޤ���
+以下の <code>MonadError</code> クラスの定義は複数パラメータの型クラスと
+funDep という標準の Haskell 98 にはない言語拡張をつかっています。
+<code>MonadError</code> クラスの利点を得るのにこれを理解する必要はありません。
 </p>
 
 <table bgcolor="#bbaa55" width="100%"><tr><td><pre>
@@ -202,16 +202,16 @@ Note that <code>handler</code> and the do-block must have the same return type.
 </p>
 -->
 <p lang="ja">
-<code>throwError</code> �ϥ�ʥɷ׻�����㳰������Ϥ�뤿���
-�Ȥ��ޤ���<code>catchError</code> ��ľ���Υ��顼����������̾��
-�¹Ԥ��������뤿��Υϥ�ɥ�ؿ����󶡤��ޤ���
-�褯�Ĥ����륤�ǥ�����ϡ�
+<code>throwError</code> はモナド計算内で例外処理を始めるために
+使われます。<code>catchError</code> は直前のエラーを処理し、通常の
+実行に復帰するためのハンドラ関数を提供します。
+よくつかわれるイディオムは、
 <pre>
 do { action1; action2; action3 } `catchError` handler 
 </pre>
-�Ǥ��������ǡ�<code>action</code> �ؿ��� <code>throwError</code> ��
-�Ƥ֤��Ȥ��Ǥ��ޤ���<code>handler</code> ����Ӥ��� do �֥��å���
-Ʊ���֤��ͷ���⤿�ʤ���Фʤ�ޤ���
+です。ここで、<code>action</code> 関数は <code>throwError</code> を
+呼ぶことができます。<code>handler</code> およびその do ブロックは
+同じ返り値型をもたなければなりません。
 </p>
 <!--
 <p lang="en">
@@ -222,10 +222,10 @@ for non-error (right) values.
 </p>
 -->
 <p lang="ja">
-<code>MonadError</code> ���饹�Υ��󥹥��󥹤Ȥ���������줿
-<code>Either e</code> �����ۻҤ�ľ٣Ū�ʤ�ΤǤ����ʲ���
-�����Ǥϡ�<code>Left</code> �ϥ��顼�ͤ˻Ȥ���<code>Right</code> ��
-�󥨥顼��(��������)�˻Ȥ��ޤ���
+<code>MonadError</code> クラスのインスタンスとして定義された
+<code>Either e</code> 型構築子は直截的なものです。以下の
+慣習では、<code>Left</code> はエラー値に使い、<code>Right</code> は
+非エラー値(正しい値)に使います。
 </p>
 
 <table bgcolor="#bbaa55" width="100%"><tr><td><pre>
@@ -237,7 +237,7 @@ instance MonadError (Either e) where
 
 <a name="example">
 <!--<h2 lang="en">Example</h2>-->
-<h2 lang="ja">��</h2>
+<h2 lang="ja">例</h2>
 </a>
 <!--
 <p lang="en">
@@ -251,13 +251,13 @@ and handled by printing an informative error message.
 </p>
 -->
 <p lang="ja">
-������ϡ�<code>ErrorMonad</code> �� <code>throwError</code> �����
-<code>catchError</code> ���㳰������Ȥäƥ������ޥ�������
-<code>Error</code> �ǡ������λȤ����򼨤�����ΤǤ���
-�������16�ʿ���ѡ�������������ʸ���˽в񤦤��㳰���ꤲ�ޤ���
-�ѡ������顼�βս��Ͽ���뤿��������� <code>Error</code> �ǡ�������
-�Ȥ��ޤ����㳰�ϴؿ���Ƥ֤��Ȥ���ª����ͭ�פʥ��顼��å�������
-������������򤷤ޤ���
+次の例は、<code>ErrorMonad</code> の <code>throwError</code> および
+<code>catchError</code> の例外機構を使ってカスタマイズした
+<code>Error</code> データ型の使い方を示したものです。
+この例は16進数をパースし、不正な文字に出会うと例外を投げます。
+パースエラーの箇所を記録するために特製に <code>Error</code> データ型を
+使います。例外は関数を呼ぶことで捕捉し、有益なエラーメッセージを
+印字する処理をします。
 </p>
 <!--
 <table lang=="en" bgcolor="#bbaa55" width="100%">
@@ -313,46 +313,46 @@ convert s = let (Right str) = do {n <- parseHex s; toString n} `catchError` prin
 <table lang="ja" bgcolor="#bbaa55" width="100%">
 <tr bgcolor="#aabb55">
 <th align="left"><a href="../examples/example12.hs">example12.hs</a>
-�ǻȤ��륳����</th>
+で使えるコード</th>
 </tr>
 <tr><td><pre>
--- ����ϥѡ������顼��ɽ�����뷿�Ǥ�
+-- これはパースエラーを表現する型です
 data ParseError = Err {location::Int, reason::String}
 
--- ����򥨥顼���饹�Υ��󥹥��󥹤Ȥ��ޤ�
+-- これをエラークラスのインスタンスとします
 instance Error ParseError where
   noMsg    = Err 0 "Parse Error"
   strMsg s = Err 0 s
 
--- ��ʥɷ����ۻҤˤĤ��Ƥϡ�Either ParseError ��Ȥ��ޤ�
--- ����� Left ParserError �Ǽ��Ԥ�ɽ������
--- �� a ������������̤� Right a ��ɽ�����ޤ�
+-- モナド型構築子については、Either ParseError を使います
+-- これは Left ParserError で失敗を表現し、
+-- 型 a の成功した結果は Right a で表現します
 type ParseMonad = Either ParseError
 
--- parseHexDigit �� ParseMonad ��ʥ���ǡ�ñ���16�ʿ��� 
--- Integer ���Ѵ������ġ�������ʸ�����Ф��ƥ��顼���ꤲ�ޤ�
+-- parseHexDigit は ParseMonad モナド内で、単一の16進数を 
+-- Integer に変換し、個々の不正文字に対してエラーを投げます
 parseHexDigit :: Char -> Int -> ParseMonad Integer
 parseHexDigit c idx = if isHexDigit c then
                         return (toInteger (digitToInt c))
                       else
                         throwError (Err idx ("Invalid character '" ++ [c] ++ "'"))
 
--- parseHex 16�ʿ���ʸ�����ѡ����� ParseMonad ��ʥ����
--- Integer ���Ѵ����ޤ���parseHexDigit ����Υѡ������顼��
--- parseHex ������㳰����������������ޤ���
+-- parseHex 16進数の文字列をパースし ParseMonad モナド内で
+-- Integer に変換します。parseHexDigit からのパースエラーは
+-- parseHex からの例外復帰を引き起こします。
 parseHex :: String -> ParseMonad Integer
 parseHex s = parseHex' s 0 1
   where parseHex' []      val _   = return val
         parseHex' (c:cs)  val idx = do d <- parseHexDigit c idx
                                        parseHex' cs ((val * 16) + d) (idx + 1)
 
--- toString �� Integer �� ParseMonad ��ʥ���� String ���Ѵ����ޤ�
+-- toString は Integer を ParseMonad モナド内で String に変換します
 toString :: Integer -> ParseMonad String
 toString n = return $ show n
 
--- convert ��16�ʿ�ʸ�����10��ʸ������Ѵ����ޤ���
--- ����ʸ�����ǤΥѡ������顼�Ͻ���ʸ����Ȥ���
--- ���顼��������å��������������ޤ���
+-- convert は16進数文字列を10進文字列に変換します。
+-- 入力文字列上でのパースエラーは出力文字列として
+-- エラーの説明メッセージを生成します。
 convert :: String -> String
 convert s = let (Right str) = do {n <- parseHex s; toString n} `catchError` printError
             in str
@@ -376,11 +376,11 @@ convert s = let (Right str) = do {n <- parseHex s; toString n} `catchError` prin
 <table lang="ja" width="100%">
  <tr>
   <td align="left" width="33%">Prev:
-   <a href="maybemonad.html">Maybe ��ʥ�</a></td>
+   <a href="maybemonad.html">Maybe モナド</a></td>
   <td align="center" width="33%">TOC:
-   <a href="index.html">�ܼ�</a></td>
+   <a href="index.html">目次</a></td>
   <td align="right" width="33%">Next:
-   <a href="listmonad.html">List ��ʥ�</a></td>
+   <a href="listmonad.html">List モナド</a></td>
  </tr>
 </table>	
 

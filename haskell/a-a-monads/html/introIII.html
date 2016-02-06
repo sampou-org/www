@@ -1,9 +1,9 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
+<!DOCTYPE html>
+<html lang="ja">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=EUC-JP">
+<meta charset="utf-8">
 <!--<title lang="en">Part III - Introduction</title>-->
-<title>Part III - ����ȥ����������</title>
+<title>Part III - イントロダクション</title>
 </head>
 <body>
 <!--
@@ -21,16 +21,16 @@
 <table lang="ja" width="100%">
  <tr>
   <td align="left" width="33%">Prev:
-   <a href="contmonad.html">Continuation ��ʥ�</a></td>
+   <a href="contmonad.html">Continuation モナド</a></td>
   <td align="center" width="33%">TOC:
-   <a href="index.html">�ܼ�</a></td>
+   <a href="index.html">目次</a></td>
   <td align="right" width="33%">Next:
-   <a href="hardway.html">��ʥɤι������񤷤�</a></td>
+   <a href="hardway.html">モナドの合成は難しい</a></td>
  </tr>
 </table>	
 
 <!--<h1 lang="en">Introduction</h1>-->
-<h1 lang="ja">����ȥ����������</h1>
+<h1 lang="ja">イントロダクション</h1>
 
 <hr align="center" size="1" width="80%">
 <!--
@@ -46,14 +46,14 @@ separately, unless the sub-computation is performed in a one-way monad.
 </p>
 -->
 <p lang="ja">
-Part I �Ǥϥ�ʥɤγ�ǰ��Ҳ𤷡�Part II �Ǥ�ɸ��� Haskell �饤�֥��
-�ˤ��뤤���Ĥ�Τ褯�Ȥ�졢ͭ�Ѥʥ�ʥɤˤĤ�������Ǥ���褦�ˤ��Ƥ���
-����������Ǥ��ʥɤ򤷤ä���Ȥ������ѤΤ�ΤȤ���ˤϽ�ʬ�ǤϤ���ޤ�
-�� ������ͳ�ϡ����¤������Ǥϡ�Ʊ���ˤդ��İʾ�Υ�ʥɤ������������
-���褦�ʷ׻����ۤ����ʤ뤳�Ȥ�¿������Ǥ������Ȥ��С����֤Τ����������
-�׻��Ȥ�����³�������Ϥ�¹Ԥ���׻��Ȥ��Ǥ��������η׻�����̩�ˤ⤦����
-����ʬ����ˤʤäƤ���Ȥ�����ʬ�׻����������Ǽ¹Ԥ���ʤ������ꡢ����
-��ʥɷ׻����̡��ˤ��뤳�Ȥ��Ǥ��ޤ���
+Part I ではモナドの概念を紹介し、Part II では標準の Haskell ライブラリ
+にあるいくつものよく使われ、有用なモナドについて理解できるようにしてきま
+した。これでもモナドをしっかりとした実用のものとするには十分ではありませ
+ん。 その理由は、現実の世界では、同時にふたつ以上のモナドの性質を合成し
+たような計算がほしくなることが多いからです。たとえば、状態のある非決定性
+計算とか、継続と入出力を実行する計算とかです。一方の計算が厳密にもう一方
+の部分集合になっているとき、部分計算が一方向で実行されないかぎり、その
+モナド計算を別々にすることができます。
 </p>
 <!--
 <p lang="en">
@@ -67,12 +67,12 @@ called <dfn>monad transformers</dfn>.
 </p>
 -->
 <p lang="ja">
-¿���ξ�硢���η׻��ϳ�Υ�������֤Ǥϼ¹ԤǤ��ޤ��󡣤����������ξ�硢
-ɬ�פȤ���Ƥ���Τ� 2 �ĤΥ�ʥɤε�ǽ��ñ��η׻��˹��������ʥɤǤ���
-�������ȹ礻��ɬ�פȤ���뤿�Ӥ�ɬ�פ��������Ŀ�������ʥɤ˥��󥹥���
-����񤯤Τ����Ψ�Ǥ������������Ǥ������ˡ�ɸ��Υ�ʥɤ�������ơ�
-ɬ�פ�ʣ�������������ˡ��ȯ����ۤ����褤�Ǥ��礦�����줫��������
-�����Τϡ��ޤ��ˡ�<dfn>��ʥ��Ѵ���</dfn> �Ȥ�Ф�Ƥ��뵻ˡ�Ǥ���
+多くの場合、この計算は隔離した状態では実行できません。ただし、今の場合、
+必要とされているのは 2 つのモナドの機能を単一の計算に合成するモナドです。
+新しい組合せが必要とされるたびに必要な性質をもつ新しいモナドにインスタン
+スを書くのは非効率ですし、御粗末です。代りに、標準のモナドを合成して、
+必要な複合を生成する方法を開発するほうがよいでしょう。これからやろうと
+いうのは、まさに、<dfn>モナド変換子</dfn> とよばれている技法です。
 </p>
 <!--
 <p lang="en">
@@ -83,9 +83,9 @@ they are re-examined.
 </p>
 -->
 <p lang="ja">
-��ʥ��Ѵ��ҤϤ��� Part III �μ���Ǥ�������ޤǤ����ƤӼ��󤲤���������
-�ɤΤ褦�ˡ���ʥ��Ѵ��Ҥ���긽��Ū��ǽ�Ϥ��ʥɤ�Ϳ����Τ��򸫤�
-�����ޤ��礦������ޤǤ�����ɻ���������Ƥ����Ȥ褤�Ǥ��礦��
+モナド変換子はこの Part III の主題です。これまでの例を再び取り挙げて説明し、
+どのように、モナド変換子がより現実的な能力をモナドに与えるのかを見て
+いきましょう。これまでの例を追試して復習しておくとよいでしょう。
 </p>
 
 <hr align="center" size="1" width="80%">
@@ -105,11 +105,11 @@ they are re-examined.
 <table lang="ja" width="100%">
  <tr>
   <td align="left" width="33%">Prev:
-   <a href="contmonad.html">Continuation ��ʥ�</a></td>
+   <a href="contmonad.html">Continuation モナド</a></td>
   <td align="center" width="33%">TOC:
-   <a href="index.html">�ܼ�</a></td>
+   <a href="index.html">目次</a></td>
   <td align="right" width="33%">Next:
-   <a href="hardway.html">��ʥɤι������񤷤�</a></td>
+   <a href="hardway.html">モナドの合成は難しい</a></td>
  </tr>
 </table>	
 </body>

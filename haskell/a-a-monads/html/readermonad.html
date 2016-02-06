@@ -1,9 +1,9 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
+<!DOCTYPE html>
+<html lang="ja">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=EUC-JP">
+<meta charset="utf-8">
 <!--<title lang="en">The Reader monad</title>-->
-<title lang="ja">Reader ��ʥ�</title>
+<title lang="ja">Reader モナド</title>
 </head>
 <body>
 <!--
@@ -21,16 +21,16 @@
 <table lang="ja" width="100%">
  <tr>
   <td align="left" width="33%">Prev:
-   <a href="statemonad.html">State ��ʥ�</a></td>
+   <a href="statemonad.html">State モナド</a></td>
   <td align="center" width="33%">TOC:
-   <a href="index.html">�ܼ�</a></td>
+   <a href="index.html">目次</a></td>
   <td align="right" width="33%">Next:
-   <a href="writermonad.html">Writer ��ʥ�</a></td>
+   <a href="writermonad.html">Writer モナド</a></td>
  </tr>
 </table>	
 
 <!--<h1 lang="en">The Reader monad</h1>-->
-<h1 lang="ja">Reader ��ʥ�</h1>
+<h1 lang="ja">Reader モナド</h1>
 
 <!--
 <ul lang="en">
@@ -41,17 +41,17 @@
 </ul>
 -->
 <ul lang="ja">
-  <li><a href="#overview">����</a></li>
-  <li><a href="#motivation">ư��</a></li>
-  <li><a href="#definition">���</a></li>
-  <li><a href="#example">��</a></li>
+  <li><a href="#overview">概観</a></li>
+  <li><a href="#motivation">動機</a></li>
+  <li><a href="#definition">定義</a></li>
+  <li><a href="#example">例</a></li>
 </ul>
 
 <hr align="center" size="1" width="80%">
 
 <a name="overview">
 <!--<h2 lang="en">Overview</h2>-->
-<h2 lang="ja">����</h2></a>
+<h2 lang="ja">概観</h2></a>
 <!--
 <table lang="en" width="100%" cellpadding="3">
  <tr>
@@ -82,33 +82,33 @@
 -->
 <table lang="ja" width="100%" cellpadding="3">
  <tr>
-  <th align="left">�׻��Υ�����:</th>
-  <td>��ͭ���줿�Ķ������ͤ��ɤ߹���׻�</td>
+  <th align="left">計算のタイプ:</th>
+  <td>共有された環境から値を読み込む計算</td>
  </tr>
  <tr>
-  <th align="left">«������ά:</th>
-  <td>��ʥɤ��ͤϴĶ������ͤؤδؿ���«�����줿�ؿ���«�����줿�ͤ�
-   Ŭ�Ѥ��졢ξ���Ȥⶦͭ���줿�Ķ��˥�����������
+  <th align="left">束縛の戦略:</th>
+  <td>モナドの値は環境から値への関数。束縛された関数は束縛された値に
+   適用され、両方とも共有された環境にアクセスする
   </td>
  </tr>
  <tr>
-  <th align="left">���Ѿ���:</th>
-  <td>�ѿ�«�����뤤��¾�ζ�ͭ�Ķ����ݻ�
+  <th align="left">利用場面:</th>
+  <td>変数束縛あるいは他の共有環境の保持
   </td>
  </tr>
  <tr>
-  <th align="left">��������ӥץ饹:</th>
-  <td>�ʤ�</td>
+  <th align="left">ゼロおよびプラス:</th>
+  <td>なし</td>
  </tr>
  <tr>
-  <th align="left">������:</th>
+  <th align="left">型の例:</th>
   <td><a href="http://www.haskell.org/ghc/docs/latest/html/base/Control.Monad.Reader.html">Reader [(String,Value)] a</a></td>
  </tr>
 </table>
 
 <a name="motivation">
 <!--<h2 lang="en">Motivation</h2>-->
-<h2 lang="ja">ư��</h2>
+<h2 lang="ja">動機</h2>
 </a>
 <!--
 <p lang="en">
@@ -120,11 +120,11 @@ they do not require the full generality of the State monad.
 </p>
 -->
 <p lang="ja">
-�����Ĥ��Υץ�����ߥ󥰤β���Ǥϡ�(�ѿ�«���ν���Τ褦��)��ͭ���줿
-�Ķ���Ǥη׻���ɬ�פȤʤ롣���������׻��Ǥϡ�ŵ��Ū�ˤϤ��δĶ�����
-�ͤ��ɤߡ��Ȥ��ˤ��ѹ����줿(���Ȥ��С�������«���䡢ʤ������«���ʤ�)
-�Ķ��Τʤ�����ʬŪ�ʷ׻���¹Ԥ��ޤ����������˰��̲����줿 State ��ʥ�
-�ޤǤ�ɬ�פ���ޤ���
+いくつかのプログラミングの課題では、(変数束縛の集合のような)共有された
+環境内での計算が必要となる。こうした計算では、典型的にはその環境から
+値を読み、ときには変更された(たとえば、新しい束縛や、覆い隠す束縛など)
+環境のなかで部分的な計算を実行しますが、完全に一般化された State モナド
+までは必要ありません。
 </p>
 <!--
 <p lang="en">
@@ -133,13 +133,13 @@ and is often a clearer and easier mechanism than using the State monad.
 </p>
 -->
 <p lang="ja">
-Reader ��ʥɤϤ��Τ褦�ʥ����פη׻��Τ�����ò������߷פ���Ƥ��ޤ���
-�����ơ�¿���ξ�� State ��ʥɤ�Ȥ��������ƤǴ�ñ�ʵ����Ǥ���
+Reader モナドはこのようなタイプの計算のために特化して設計されています。
+そして、多くの場合 State モナドを使うよりも明瞭で簡単な機構です。
 </p>
 
 <a name="definition">
 <!--<h2 lang="en">Definition</h2>-->
-<h2 lang="ja">���</h2>
+<h2 lang="ja">定義</h2>
 </a>
 <!--
 <p lang="en">
@@ -149,9 +149,9 @@ to fully understand these details to make use of the Reader monad.
 </p>
 -->
 <p lang="ja">
-�����Ǽ���������Ǥ� Haskell 98 ��ɸ��ˤϤʤ���ʣ���ѥ�᡼�������饹��
-��� funDeps ���Ȥ��Ƥ��ޤ������� Reader ��ʥɤ����Ѥ���Τˡ������
-�ܺ٤����ˤ����򤹤�ɬ�פϤ���ޤ���
+ここで示した定義では Haskell 98 の標準にはない、複数パラメータ型クラスお
+よび funDeps が使われています。この Reader モナドを利用するのに、これの
+詳細を完全には理解する必要はありません。
 </p>
 
 <table bgcolor="#bbaa55" width="100%"><tr><td><pre>
@@ -170,9 +170,9 @@ you simply apply <code>(runReader reader)</code> to an environment value.
 </p>
 -->
 <p lang="ja">
-Reader ��ʥ�����ͤϤ���Ķ����餢���ͤؤδؿ��Ǥ���Reader ��ʥɤ�
-�׻�����ǽ�Ū���ͤ���Ф��ˤ� <code>(runReader reader)</code> ��Ķ�
-���ͤ�Ŭ�Ѥ�������Ǥ��ߤޤ���
+Reader モナド中の値はある環境からある値への関数です。Reader モナドの
+計算から最終的な値を取り出すには <code>(runReader reader)</code> を環境
+の値に適用するだけですみます。
 </p>
 <!--
 <p lang="en">
@@ -184,10 +184,10 @@ same environment.
 </p>
 -->
 <p lang="ja">
-<code>return</code> �ؿ��ϴĶ���̵�뤷Ϳ����줿�ͤ���������
-<code>Reader</code> ��������ޤ���«���黻�Ҥϡ��Ķ���Ȥ�����¦�ΰ���
-�����ͤ���Ф���Ʊ���Ķ��ǡ������ͤ��Ф���«�����줿�ؿ���Ŭ�Ѥ���
-<code>Reader</code> ���������ޤ���
+<code>return</code> 関数は環境を無視し与えられた値を生成する
+<code>Reader</code> を作成します。束縛演算子は、環境を使い、左側の引数
+から値を取り出し、同じ環境で、その値に対して束縛された関数を適用する
+<code>Reader</code> を生成します。
 </p>
  
 <table bgcolor="#bbaa55" width="100%"><tr><td><pre>
@@ -213,16 +213,16 @@ current environment, and is typically used with a selector or lookup function.
 </p>
 -->
 <p lang="ja">
-<code>MonadReader</code> ���饹�� Reader ��ʥɤ�Ȥ��Ȥ�������������
-�ؿ��򤤤��Ĥ��󶡤��ޤ���<code>ask</code> �ؿ��ϴĶ��򸡺����ޤ���
-<code>local</code> �ؿ����ѹ����줿�Ķ��Τʤ��Ƿ׻���¹Ԥ��ޤ���
-<code>asks</code> �ؿ��ϸ��ߤδĶ�������Ȥ���ؿ����֤��ͤ����������ؿ��ǡ�
-����Ҵؿ����뤤��õ���ؿ��ȤȤ�˻Ȥ��Τ�����Ū�Ǥ���
+<code>MonadReader</code> クラスは Reader モナドを使うときに大変便利な
+関数をいくつも提供します。<code>ask</code> 関数は環境を検索します。
+<code>local</code> 関数は変更された環境のなかで計算を実行します。
+<code>asks</code> 関数は現在の環境を引数とする関数の返り値を得る便利関数で、
+選択子関数あるいは探索関数とともに使うのが一般的です。
 </p>
 
 <a name="example">
 <!--<h2 lang="en">Example</h2>-->
-<h2 lang="ja">��</h2>
+<h2 lang="ja">例</h2>
 </a>
 <!--
 <p lang="en">
@@ -237,13 +237,13 @@ that contains the additional variable bindings.
 </p>
 -->
 <p lang="ja">
-�ѿ��ִ���ƥ�ץ졼�ȤΥ��󥯥롼�ɤ�ޤ�ƥ�ץ졼�Ȥ���β����������
-�ͤ��ޤ��礦��Reader ��ʥɤ�Ȥ��С����ΤΥƥ�ץ졼�Ȥ��뤤�ϴ��Τ�
-�ѿ�«���δĶ����ݻ����뤳�Ȥ��Ǥ��ޤ�����������С��ѿ��ִ��������ä�
-�Ȥ��ˡ�<code>asks</code> �ؿ���Ȥä��ѿ����ͤ�õ���Ǥ��ޤ���
-�ƥ�ץ졼�Ȥ��������ѿ��������ȼ�äơ����󥯥롼�ɤ��줿��硢
-<code>local</code> �ؿ���Ȥäơ��ɲä��줿�ѿ�«����ޤ��ѹ��Τ��ä�
-�Ķ��ǡ��ƥ�ץ졼�Ȥ��ͤ��褹�뤳�Ȥ��Ǥ��ޤ���
+変数置換やテンプレートのインクルードを含むテンプレートを実体化する問題を
+考えましょう。Reader モナドを使えば、既知のテンプレートあるいは既知の
+変数束縛の環境を保持することができます。そうすれば、変数置換が起こった
+ときに、<code>asks</code> 関数を使って変数の値を探索できます。
+テンプレートが新しい変数の定義を伴って，インクルードされた場合、
+<code>local</code> 関数を使って、追加された変数束縛を含む変更のあった
+環境で、テンプレートの値を解決することができます。
 </p>
 
 <!--
@@ -301,38 +301,38 @@ resolve (C ts)   = (liftM concat) (mapM resolve ts)
 <table lang="ja" bgcolor="#bbaa55" width="100%">
 <tr bgcolor="#aabb55">
 <th align="left"><a href="../examples/example16.hs">example16.hs</a>
-�����ѤǤ��륳����</th>
+で利用できるコード</th>
 </tr>
 <tr><td><pre>
--- ����ϥƥ�ץ졼�Ȥ���ݹ�ʸɽ���Ǥ�
+-- これはテンプレートの抽象構文表現です
 --              Text       Variable     Quote        Include                   Compound
 data Template = T String | V Template | Q Template | I Template [Definition] | C [Template]
 data Definition = D Template Template
 
--- �Ķ���̾���դ��ƥ�ץ졼�Ȥ�Ϣ�ۥꥹ�Ȥ�̾���դ����ѿ��ͤ�
--- Ϣ�ۥꥹ�Ȥǹ�������Ƥ��ޤ�
+-- 環境は名前付きテンプレートの連想リストと名前付きの変数値の
+-- 連想リストで構成されています
 data Environment = Env {templates::[(String,Template)],
                         variables::[(String,String)]}
 
--- �Ķ������ѿ���õ��
+-- 環境から変数を探索
 lookupVar :: String -> Environment -> Maybe String
 lookupVar name env = lookup name (variables env)
 
--- �Ķ�����ƥ�ץ졼�Ȥ�õ��
+-- 環境からテンプレートを探索
 lookupTemplate :: String -> Environment -> Maybe Template
 lookupTemplate name env = lookup name (templates env)
 
--- �Ķ��˲�褵�줿����Υꥹ�Ȥ��ɲ�
+-- 環境に解決された定義のリストを追加
 addDefs :: [(String,String)] -> Environment -> Environment
 addDefs defs env = env {variables = defs ++ (variables env)}
                       
--- Definition ���褷��(name,value) ���Ȥ�����
+-- Definition を解決し、(name,value) の組を生成
 resolveDef :: Definition -> Reader Environment (String,String)
 resolveDef (D t d) = do name <- resolve t
                         value <- resolve d
                         return (name,value)
 
--- �ƥ�ץ졼�Ȥ��褷ʸ����ˤ���
+-- テンプレートを解決し文字列にする
 resolve :: Template -> Reader Environment (String)
 resolve (T s)    = return s
 resolve (V t)    = do varName  <- resolve t
@@ -356,8 +356,8 @@ To use the Reader monad to resolve a template <code>t</code> into a
 </p>
 -->
 <p lang="ja">
-�ƥ�ץ졼�� <code>t</code> ���褷��<code>String </code>�ˤ���Τ�
-ɬ�פʤΤ�ñ�� <code>runReader (resolve t) env</code> ��¹Ԥ��뤳�ȤǤ���
+テンプレート <code>t</code> を解決し、<code>String </code>にするのに
+必要なのは単に <code>runReader (resolve t) env</code> を実行することです。
 </p>
 
 <hr align="center" size="1" width="80%">
@@ -377,11 +377,11 @@ To use the Reader monad to resolve a template <code>t</code> into a
 <table lang="ja" width="100%">
  <tr>
   <td align="left" width="33%">Prev:
-   <a href="statemonad.html">State ��ʥ�</a></td>
+   <a href="statemonad.html">State モナド</a></td>
   <td align="center" width="33%">TOC:
-   <a href="index.html">�ܼ�</a></td>
+   <a href="index.html">目次</a></td>
   <td align="right" width="33%">Next:
-   <a href="writermonad.html">Writer ��ʥ�</a></td>
+   <a href="writermonad.html">Writer モナド</a></td>
  </tr>
 </table>	
 

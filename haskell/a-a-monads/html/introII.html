@@ -1,9 +1,9 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
+<!DOCTYPE html>
+<html lang="ja">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=EUC-JP">
+<meta charset="utf-8">
 <!--<title lang="en">Part II - Introduction</title>-->
-<title lang="en">Part II -����ȥ����������</title>
+<title lang="en">Part II -イントロダクション</title>
 </head>
 <body>
 <!--
@@ -18,18 +18,18 @@
 <table lang="ja" width="100%">
  <tr>
   <td align="left" width="33%">Prev:
-   <a href="monadfns.html">Haskell �ˤ������ʥɤΥ��ݡ���</a></td>
+   <a href="monadfns.html">Haskell におけるモナドのサポート</a></td>
   <td align="center" width="33%">TOC:
-   <a href="index.html">�ܼ�</a></td>
+   <a href="index.html">目次</a></td>
   <td align="right" width="33%">Next:
-   <a href="identitymonad.html">������ʥ�</a></td>
+   <a href="identitymonad.html">恒等モナド</a></td>
  </tr>
 </table>	
 
 <hr align="center" size="1" width="80%">
 
 <!--<h1 lang="en">Introduction</h1>-->
-<h1 lang="ja">����ȥ����������</h1>
+<h1 lang="ja">イントロダクション</h1>
 
 <!--
 <p lang="en">
@@ -42,11 +42,11 @@ Control.Monad</a>
 </p>
 -->
 <p lang="ja">
-Part II �����С����Ƥ����ʥɤϡ�Andy Gill �� Monad Template Library ��
-�˲ä��ơ�ɸ��� Haskell ���κ����ޤߤޤ������� Monad Template Library ��
-Glasgow Haskell Compiler �γ��إ饤�֥��
+Part II がカバーしているモナドは、Andy Gill の Monad Template Library を
+に加えて、標準の Haskell 型の混合を含みます。この Monad Template Library は
+Glasgow Haskell Compiler の階層ライブラリ
 <a href="http://www.haskell.org/ghc/docs/latest/html/base/Control.Monad.html">
-Control.Monad</a> �ʲ��˴ޤޤ�Ƥ��ޤ���
+Control.Monad</a> 以下に含まれています。
 </p>
 
 <!--
@@ -63,16 +63,16 @@ in the <a href="../examples/example16.hs">source code</a> for
 </p>
 -->
 <p lang="ja">
-�����Υ�ʥɤˤĤ��Ƥ������Τ����Ĥ��ϡ�
-<a href="http://www.haskell.org/hawiki">Haskell Wiki</a> ����ȤäƤ��ޤ���
-�����ǥ��С�����Ƥ����ʥɤ�¾�ˤ⡢Haskell �ǤϤ��������ʤȤ�����
-��ʥɤ��о줷�ޤ������Ȥ��С��ѡ�������ӥ͡�����ʥɥ饤�֥��
+これらのモナドについての説明のいくつかは、
+<a href="http://www.haskell.org/hawiki">Haskell Wiki</a> からとっています。
+ここでカバーされているモナドの他にも、Haskell ではいろいろなところに
+モナドが登場します。たとえば、パーザコンビネータモナドライブラリ
 <a href="http://www.cs.uu.nl/people/daan/papers/parsec.html">Parsec</a>
-�ʤɤǤ��������Υ�ʥɤϡ����Υ�ե���󥹤��ϰϤ�ۤ��Ƥ��ޤ�����
-���줾��Υ饤�֥�������ʸ�񤬤Ĥ��Ƥ��ޤ���
-<a href="readermonad.html#example">example 16</a> ��
-<a href="../examples/example16.hs">������������</a>�򸫤�С�
-Parsec �饤�֥���ʷ�ϵ���̣�廊�ޤ���
+などです。これらのモナドは、このリファレンスの範囲を越えていますが、
+それぞれのライブラリに説明文書がついています。
+<a href="readermonad.html#example">example 16</a> の
+<a href="../examples/example16.hs">ソースコード</a>を見れば、
+Parsec ライブラリの雰囲気が味わえます。
 </p>
 <!--
 <table lang="en" align="center" border="1" cellpadding="3">
@@ -137,59 +137,59 @@ Parsec �饤�֥���ʷ�ϵ���̣�廊�ޤ���
 </table>
 -->
 <table lang="ja" align="center" border="1" cellpadding="3">
-  <tr bgcolor="#cc9999"><th>��ʥ�</th>
-      <th>�׻��Υ�����</th>
-      <th><code>>>=</code> ���ȹ礻��ά</th>
+  <tr bgcolor="#cc9999"><th>モナド</th>
+      <th>計算のタイプ</th>
+      <th><code>>>=</code> の組合せ戦略</th>
   </tr>
   <tr><td><a href="identitymonad.html">Identity</a></td>
-      <td><em>N/A &mdash; ��ʥ��Ѵ��Ҥ�����</em></td>
-      <td>«�����줿�ؿ��������ͤ�Ŭ�Ѥ����</td>
+      <td><em>N/A &mdash; モナド変換子で利用</em></td>
+      <td>束縛された関数は入力値に適用される</td>
   </tr>
   <tr><td><a href="maybemonad.html">Maybe</a></td>
-      <td>��̤��֤��ʤ����⤷��ʤ��׻�</td>
-      <td><code>Nothing</code> �����Ϥ� <code>Nothing</code> �ν��Ϥˤʤꡢ<br>
-          <code>Just x</code> �����ϤǤ� <code>x</code> ��«�����줿�ؿ�
-          �����ϤȤʤ�
+      <td>結果を返さないかもしれない計算</td>
+      <td><code>Nothing</code> の入力は <code>Nothing</code> の出力になり、<br>
+          <code>Just x</code> の入力では <code>x</code> が束縛された関数
+          の入力となる
       </td>
   </tr>
   <tr><td><a href="errormonad.html">Error</a></td>
-      <td>���Ԥ��뤤���㳰���ꤲ����׻�</td>
-      <td>���ԤϤ��μ��ԤˤĤ��Ƥ����������Ͽ���롣
-       «���ϡ�«�����줿�ؿ���¹Ԥ��뤳�Ȥʤ����Ծ�����Ϥ�����
-       ���뤤�ϡ����������Ȥ����ͤ�«�����줿�ؿ������ϤȤ��ƻȤ�
+      <td>失敗あるいは例外を投げられる計算</td>
+      <td>失敗はその失敗についての説明情報を記録する。
+       束縛は、束縛された関数を実行することなく失敗情報を渡すか、
+       あるいは、成功したときの値を束縛された関数の入力として使う
       </td>
   </tr>
   <tr><td><a href="listmonad.html">[] (List)</a></td>
-      <td>��ǽ�ʷ�̤�ʣ���֤�����������׻�</td>
-      <td>«�����줿�ؿ������ϥꥹ�Ȥ˼���������̤Υꥹ�Ȥ�Ϣ�뤷�ơ����٤Ƥ�
-       ��ǽ�����Ϥ���Τ��٤Ƥη�̤Υꥹ�Ȥ�����
+      <td>可能な結果を複数返す、非決定性計算</td>
+      <td>束縛された関数を入力リストに写像し、結果のリストを連結して、すべての
+       可能な入力からのすべての結果のリストを得る
       </td>
   </tr>  
   <tr><td><a href="iomonad.html">IO</a></td>
-      <td>I/O ��Ԥ��׻�</td>
-      <td>I/O ư��Τʤ�Ӥ�«����˼¹Ԥ���
+      <td>I/O を行う計算</td>
+      <td>I/O 動作のならびを束縛順に実行する
       </td>
   </tr>  
   <tr><td><a href="statemonad.html">State</a></td>
-      <td>���֤��ݻ�����׻�</td>
-      <td>«�����줿�ؿ��������ͤ�Ŭ�Ѥ������Ϥ��줿���֤�Ŭ�Ѥ����
-       �������ܴؿ�����������
+      <td>状態を保持する計算</td>
+      <td>束縛された関数を入力値に適用し、入力された状態に適用される
+       状態遷移関数を生成する
       </td>
   </tr>
     <tr><td><a href="readermonad.html">Reader</a></td>
-      <td>��ͭ���줿�Ķ������ɤ߹��ߤ�Ԥ��׻�</td>
-      <td>«�����줿�ؿ���Ʊ���Ķ���Ȥ����Ϥ��ͤ�Ŭ�Ѥ����
+      <td>共有された環境から読み込みを行う計算</td>
+      <td>束縛された関数は同じ環境を使う入力の値に適用される
       </td>
   </tr>  
   <tr><td><a href="writermonad.html">Writer</a></td>
-      <td>�׻������ͤȤ��̤˥ǡ�����񤭽Ф��׻�</td>
-      <td>�񤭽Ф����ǡ������ͤȤ��̤��ݻ�����롣«�����줿�ؿ������Ϥ��줿
-       �ͤ�Ŭ�Ѥ��졢�񤭽Ф���ΤϽ񤭽Ф��ǡ������ȥ꡼����ɲä����
+      <td>計算する値とは別にデータを書き出す計算</td>
+      <td>書き出されるデータは値とは別に保持される。束縛された関数は入力された
+       値に適用され、書き出すものは書き出しデータストリームに追加される
       </td>
   </tr>  
   <tr><td><a href="contmonad.html">Cont</a></td>
-      <td>���Ǥ���ӺƳ�����ǽ�ʷ׻�</td>
-      <td>«�����줿�ؿ��Ϸ�³Ϣ��������������
+      <td>中断および再開が可能な計算</td>
+      <td>束縛された関数は継続連鎖中に挿入される
       </td>
   </tr>
 </table>
@@ -206,11 +206,11 @@ Parsec �饤�֥���ʷ�ϵ���̣�廊�ޤ���
 <table lang="ja" width="100%">
  <tr>
   <td align="left" width="33%">Prev:
-   <a href="monadfns.html">Haskell �ˤ������ʥɤΥ��ݡ���</a></td>
+   <a href="monadfns.html">Haskell におけるモナドのサポート</a></td>
   <td align="center" width="33%">TOC:
-   <a href="index.html">�ܼ�</a></td>
+   <a href="index.html">目次</a></td>
   <td align="right" width="33%">Next:
-   <a href="identitymonad.html">������ʥ�</a></td>
+   <a href="identitymonad.html">恒等モナド</a></td>
  </tr>
 </table>	
 
