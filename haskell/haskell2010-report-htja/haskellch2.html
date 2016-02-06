@@ -1,0 +1,2357 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd-->
+<html xmlns="http://www.w3.org/1999/xhtml"
+>
+<head><title>2 字句構造</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)" />
+<meta name="originator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)" />
+<!-- 2,html,xhtml -->
+<meta name="src" content="haskell.tex" />
+<meta name="date" content="2010-07-15 09:50:00" />
+<link rel="stylesheet" type="text/css" href="haskell.css" />
+</head><body
+>
+<!--l. 7--><div class="crosslinks"><p class="noindent">[<a
+href="haskellch3.html" >next</a>] [<a
+href="haskellch1.html" >prev</a>] [<a
+href="haskellch1.html#tailhaskellch1.html" >prev-tail</a>] [<a
+href="haskellch2.html#tailhaskellch2.html">tail</a>] [<a
+href="haskellpa1.html" >up</a>] </p></div>
+<h2 class="chapterHead"><span class="titlemark">Chapter&#x00A0;2</span><br /><a
+ id="x7-140002"></a>字句構造</h2><a
+ id="dx7-14001"></a>
+<p class="noindent">この章では，Haskell の下位レベルの字句構造について説明する．
+このレポートを初めて読む場合には，詳細のほとんどは飛ばしてかまわない．
+<h3 class="sectionHead"><span class="titlemark">2.1    </span> <a
+ id="x7-150002.1"></a>表記規約</h3>
+<p class="noindent">次にあげる表記規約は構文を表現するために用いる．
+ <p class="noindent">
+<div class="array"> <table id="TBL-1" class="array"
+cellpadding="0" cellspacing="0"
+><colgroup id="TBL-1-1g"><col
+id="TBL-1-1" /><col
+id="TBL-1-2" /></colgroup><tr
+ style="vertical-align:baseline;"><td  style="white-space:nowrap; text-align:center;"
+><div class="td11">  <span
+class="cmr-10">[</span><span
+class="cmmi-10">pattern</span><span
+class="cmr-10">]</span>   </div></td><td  style="white-space:nowrap; text-align:left;"
+><div class="td11">オプション                                                   </div></td>
+</tr><tr
+ style="vertical-align:baseline;"><td  style="white-space:nowrap; text-align:center;"
+><div class="td11">  <span
+class="cmsy-10">{</span><span
+class="cmmi-10">pattern</span><span
+class="cmsy-10">}</span> </div></td><td  style="white-space:nowrap; text-align:left;"
+><div class="td11">0回またはそれ以上の繰り返し                          </div></td>
+</tr><tr
+ style="vertical-align:baseline;"><td  style="white-space:nowrap; text-align:center;"
+><div class="td11">  <span
+class="cmr-10">(</span><span
+class="cmmi-10">pattern</span><span
+class="cmr-10">)</span>   </div></td><td  style="white-space:nowrap; text-align:left;"
+><div class="td11"> グループ化                                                  </div></td>
+</tr><tr
+ style="vertical-align:baseline;"><td  style="white-space:nowrap; text-align:center;"
+><div class="td11"> <span
+class="cmmi-10">pat</span><sub><span
+class="cmr-7">1</span></sub><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;pat</span><sub><span
+class="cmr-7">2</span></sub>  </div></td><td  style="white-space:nowrap; text-align:left;"
+><div class="td11"> 選択                                                      </div></td>
+</tr><tr
+ style="vertical-align:baseline;"><td  style="white-space:nowrap; text-align:center;"
+><div class="td11">  <span
+class="cmmi-10">pat</span><sub><span
+class="cmsy-7">&#x27E8;</span><span
+class="cmmi-7">pat</span><span
+class="cmsy-7">&#x2032;&#x27E9;</span></sub>  </div></td><td  style="white-space:nowrap; text-align:left;"
+><div class="td11">差&#8212; <span
+class="cmmi-10">pat</span> で生成された要素から</div></td>
+</tr><tr
+ style="vertical-align:baseline;"><td  style="white-space:nowrap; text-align:center;"
+><div class="td11">           </div></td><td  style="white-space:nowrap; text-align:left;"
+><div class="td11"> <span
+class="cmmi-10">pat</span><span
+class="cmsy-10">&#x2032;</span> で生成されたものを除いたもの     </div></td>
+</tr><tr
+ style="vertical-align:baseline;"><td  style="white-space:nowrap; text-align:center;"
+><div class="td11"> <span
+class="pcrr7t-">fibonacci</span> </div></td><td  style="white-space:nowrap; text-align:left;"
+><div class="td11"> 終端構文はタイプライタフォント           </div></td>
+</tr></table>                                                                                   </div>
+ <p class="noindent"> この節で構文といえば <span
+class="ptmri7t-">字句</span>構文のことなので，すべての白空白は明示的に表現する．
+隣接するシンボルの間には暗黙の空白は存在しない．
+次のような生成ルールをもつ BNF 風の構文を用いる．
+<div class="flushleft"
+>
+ <p class="noindent">
+<!--tex4ht:inline--><div class="tabular"> <table id="TBL-2" class="tabular"
+cellspacing="0" cellpadding="0"
+><colgroup id="TBL-2-1g"><col
+id="TBL-2-1" /><col
+id="TBL-2-2" /><col
+id="TBL-2-3" /><col
+id="TBL-2-4" /></colgroup><tr
+ style="vertical-align:baseline;" id="TBL-2-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-2-1-1"
+class="td11"> <span
+class="cmmi-10">nonterm  </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-2-1-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-1-3"
+class="td11"> <span
+class="cmmi-10">alt</span><sub><span
+class="cmr-7">1</span></sub><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;alt</span><sub><span
+class="cmr-7">2</span></sub><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmmi-10">&#x2026;</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;alt</span><sub><span
+class="cmmi-7">n</span></sub>  </td>
+</tr></table>
+</div></div>
+ <p class="noindent"> <span
+class="cmsy-10">|</span> および <span
+class="cmr-10">[</span><span
+class="cmmi-10">&#x2026;</span><span
+class="cmr-10">]</span> のようなメタロジック構文と（タイプライタフォントで与えられた）<span
+class="pcrr7t-">|</span> および <span
+class="pcrr7t-">[...]</span> のような具象終端構文を区別するようにしなければならない．
+しかし，これらの区別は通常文脈から明らかなものである．
+
+ <p class="noindent"> Haskell では Unicode <span class="cite">[<a
+href="haskellli3.html#Xunicode">2</a>]</span> 文字集合を使う．<a
+ id="dx7-15001"></a>しかしながら，ソースプログラムは現時点では早い段階の版で専ら使用されていた ASCII 文字集合<a
+ id="dx7-15002"></a>に偏ったものである．
+
+ <p class="noindent"> この構文は Unicode コンソーシアムが定義した Unicode 文字の性質に依存する．
+ Haskell コンパイラは利用可能な Unicode の新しいバージョンを使うことが推奨されている．
+<p class="noindent">
+<h3 class="sectionHead"><span class="titlemark">2.2    </span> <a
+ id="x7-160002.2"></a>プログラムの字句構造</h3>
+<div class="flushleft"
+>
+ <p class="noindent">
+<!--tex4ht:inline--><div class="tabular"> <table id="TBL-3" class="tabular"
+cellspacing="0" cellpadding="0"
+><colgroup id="TBL-3-1g"><col
+id="TBL-3-1" /><col
+id="TBL-3-2" /><col
+id="TBL-3-3" /><col
+id="TBL-3-4" /></colgroup><tr
+ style="vertical-align:baseline;" id="TBL-3-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-1-1"
+class="td11">          </td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-2-1"
+class="td11"> <span
+class="cmmi-10">program     </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-2-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-2-3"
+class="td11"> <span
+class="cmsy-10">{</span><span
+class="cmmi-10">&#x00A0;lexeme</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;whitespace</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">}                     </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-3-1"
+class="td11"> <span
+class="cmmi-10">lexeme      </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-3-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-3-3"
+class="td11"> <span
+class="cmmi-10">qvarid</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;qconid</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;qvarsym</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;qconsym                         </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-4-1"
+class="td11">          </td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-4-2"
+class="td11">    <span
+class="cmsy-10">|</span>   </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-4-3"
+class="td11"> <span
+class="cmmi-10">literal</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;special</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;reservedop</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;reservedid                    </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-5-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-5-1"
+class="td11"> <span
+class="cmmi-10">literal       </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-5-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-5-3"
+class="td11"> <span
+class="cmmi-10">integer</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;float</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;char</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;string                                 </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-6-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-6-1"
+class="td11"> <span
+class="cmmi-10">special       </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-6-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-6-3"
+class="td11"> <span
+class="pcrr7t-">(</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">)</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">,</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">;</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">[</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">]</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">`</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">{</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">}</span>                  </td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-7-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-7-1"
+class="td11"> <span
+class="ptmri7t-">&#x00A0;                     </span></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-3-8-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-8-1"
+class="td11"></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-9-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-9-1"
+class="td11"> <span
+class="cmmi-10">whitespace  </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-9-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-9-3"
+class="td11"> <span
+class="cmmi-10">whitestuff</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">{</span><span
+class="cmmi-10">whitestuff</span><span
+class="cmsy-10">}                     </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-10-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-10-1"
+class="td11"> <span
+class="cmmi-10">whitestuff  </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-10-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-10-3"
+class="td11"> <span
+class="cmmi-10">whitechar</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;comment</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;ncomment                             </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-11-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-11-1"
+class="td11"> <span
+class="cmmi-10">whitechar   </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-11-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-11-3"
+class="td11"> <span
+class="cmmi-10">newline</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;vertab</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;space</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;tab</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;uniWhite                   </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-12-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-12-1"
+class="td11"> <span
+class="cmmi-10">newline     </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-12-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-12-3"
+class="td11"> <span
+class="cmmi-10">return</span><span
+class="cmmi-10">&#x00A0;linefeed</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;return</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;linefeed</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;formfeed            </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-13-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-13-1"
+class="td11"> <span
+class="cmmi-10">return       </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-13-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-13-3"
+class="td11"> キャリッジリターン                                                                                  </td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-14-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-14-1"
+class="td11"> <span
+class="cmmi-10">linefeed     </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-14-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-14-3"
+class="td11"> ラインフィード                                                                                            </td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-15-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-15-1"
+class="td11"> <span
+class="cmmi-10">vertab       </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-15-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-15-3"
+class="td11"> 垂直タブ                                                                                        </td></tr><tr
+ style="vertical-align:baseline;" id="TBL-3-16-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-16-1"
+class="td11"> <span
+class="cmmi-10">formfeed </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-16-2"
+class="td11"> <span
+class="cmsy-10">&#x2192;</span> </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-16-3"
+class="td11"> フォームフィード</td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-17-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-17-1"
+class="td11"> <span
+class="cmmi-10">space        </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-17-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-17-3"
+class="td11"> 空白                                                                                                  </td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-18-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-18-1"
+class="td11"> <span
+class="cmmi-10">tab           </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-18-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-18-3"
+class="td11"> 水平タブ                                                                                    </td></tr><tr
+ style="vertical-align:baseline;" id="TBL-3-19-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-19-1"
+class="td11"> <span
+class="cmmi-10">uniWhite </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-19-2"
+class="td11"> <span
+class="cmsy-10">&#x2192;</span> </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-19-3"
+class="td11"> 白空白として定義されている任意の Unicode 文字</td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-20-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-20-1"
+class="td11"> <span
+class="ptmri7t-">&#x00A0;                     </span></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-3-21-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-21-1"
+class="td11"></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-22-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-22-1"
+class="td11"> <span
+class="cmmi-10">comment    </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-22-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-22-3"
+class="td11"> <span
+class="cmmi-10">dashes</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmr-10">[</span><span
+class="cmmi-10">&#x00A0;any</span><sub><span
+class="cmsy-7">&#x27E8;</span><span
+class="cmmi-7">symbol</span><span
+class="cmsy-7">&#x27E9;</span></sub><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">{</span><span
+class="cmmi-10">any</span><span
+class="cmsy-10">}</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmr-10">]</span><span
+class="cmmi-10">&#x00A0;newline                          </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-23-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-23-1"
+class="td11"> <span
+class="cmmi-10">dashes       </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-23-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-23-3"
+class="td11"> <span
+class="pcrr7t-">--</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">{</span><span
+class="pcrr7t-">-</span><span
+class="cmsy-10">}                                </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-24-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-24-1"
+class="td11"> <span
+class="cmmi-10">opencom     </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-24-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-24-3"
+class="td11"> <span
+class="pcrr7t-">{-</span>                                            </td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-25-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-25-1"
+class="td11"> <span
+class="cmmi-10">closecom    </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-25-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-25-3"
+class="td11"> <span
+class="pcrr7t-">-}</span>                                            </td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-26-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-26-1"
+class="td11"> <span
+class="cmmi-10">ncomment   </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-26-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-26-3"
+class="td11"> <span
+class="cmmi-10">opencom</span><span
+class="cmmi-10">&#x00A0;ANY seq</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">{</span><span
+class="cmmi-10">ncomment</span><span
+class="cmmi-10">&#x00A0;ANY seq</span><span
+class="cmsy-10">}</span><span
+class="cmmi-10">&#x00A0;closecom          </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-27-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-27-1"
+class="td11"> <span
+class="cmmi-10">ANY seq     </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-27-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-27-3"
+class="td11"> <span
+class="cmsy-10">{</span><span
+class="cmmi-10">ANY </span><span
+class="cmsy-10">}</span><sub><span
+class="cmsy-7">&#x27E8;{</span><span
+class="cmmi-7">ANY </span><span
+class="cmsy-7">}</span><span
+class="cmmi-7">&#x00A0;</span><span
+class="cmr-7">(</span><span
+class="cmmi-7">&#x00A0;opencom</span><span
+class="cmmi-7">&#x00A0;</span><span
+class="cmsy-7">|</span><span
+class="cmmi-7">&#x00A0;closecom</span><span
+class="cmmi-7">&#x00A0;</span><span
+class="cmr-7">)</span><span
+class="cmmi-7">&#x00A0;</span><span
+class="cmsy-7">{</span><span
+class="cmmi-7">ANY </span><span
+class="cmsy-7">}&#x27E9;</span></sub>             </td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-28-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-28-1"
+class="td11"> <span
+class="cmmi-10">ANY         </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-28-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-28-3"
+class="td11"> <span
+class="cmmi-10">graphic</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;whitechar                                               </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-29-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-29-1"
+class="td11"> <span
+class="cmmi-10">any          </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-29-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-29-3"
+class="td11"> <span
+class="cmmi-10">graphic</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;space</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;tab                                             </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-30-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-30-1"
+class="td11"> <span
+class="cmmi-10">graphic      </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-30-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-30-3"
+class="td11"> <span
+class="cmmi-10">small</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;large</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;symbol</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;digit</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;special</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">"</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">'</span>        </td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-31-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-31-1"
+class="td11"> <span
+class="ptmri7t-">&#x00A0;                     </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-32-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-32-1"
+class="td11">          </td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-33-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-33-1"
+class="td11"> <span
+class="cmmi-10">small        </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-33-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-33-3"
+class="td11"> <span
+class="cmmi-10">ascSmall</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;uniSmall</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">_</span>                          </td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-34-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-34-1"
+class="td11"> <span
+class="cmmi-10">ascSmall    </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-34-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-34-3"
+class="td11"> <span
+class="pcrr7t-">a</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">b</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmmi-10">&#x2026;</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">z</span>                                   </td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-35-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-35-1"
+class="td11"> <span
+class="cmmi-10">uniSmall    </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-35-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-35-3"
+class="td11"> 任意の Unicode 小文字                                                             </td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-36-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-36-1"
+class="td11"> <span
+class="ptmri7t-">&#x00A0;                     </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-37-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-37-1"
+class="td11">          </td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-38-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-38-1"
+class="td11"> <span
+class="cmmi-10">large         </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-38-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-38-3"
+class="td11"> <span
+class="cmmi-10">ascLarge</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;uniLarge                                              </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-39-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-39-1"
+class="td11"> <span
+class="cmmi-10">ascLarge    </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-39-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-39-3"
+class="td11"> <span
+class="pcrr7t-">A</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">B</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmmi-10">&#x2026;</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">Z</span>                                   </td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-40-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-40-1"
+class="td11"> <span
+class="cmmi-10">uniLarge    </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-40-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-40-3"
+class="td11"> 任意の Unicode 大文字あるい任意の Unicode 語頭文字                                         </td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-41-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-41-1"
+class="td11"> <span
+class="cmmi-10">symbol       </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-41-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-41-3"
+class="td11"> <span
+class="cmmi-10">ascSymbol</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;uniSymbol</span><sub><span
+class="cmsy-7">&#x27E8;</span><span
+class="cmmi-7">special</span><span
+class="cmmi-7">&#x00A0;</span><span
+class="cmsy-7">|</span><span
+class="cmmi-7">&#x00A0;</span><span
+class="pcrr7t-">_</span><span
+class="cmmi-7">&#x00A0;</span><span
+class="cmsy-7">|</span><span
+class="cmmi-7">&#x00A0;</span><span
+class="pcrr7t-">"</span><span
+class="cmmi-7">&#x00A0;</span><span
+class="cmsy-7">|</span><span
+class="cmmi-7">&#x00A0;</span><span
+class="pcrr7t-">'</span><span
+class="cmsy-7">&#x27E9;</span></sub>             </td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-42-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-42-1"
+class="td11"> <span
+class="ptmri7t-">&#x00A0;                     </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-43-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-43-1"
+class="td11">          </td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-44-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-44-1"
+class="td11"> <span
+class="cmmi-10">ascSymbol  </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-44-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-44-3"
+class="td11"> <span
+class="pcrr7t-">!</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">#</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">$</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">%</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">&amp;</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">&#x22C6;</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">+</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">.</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">/</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">&#x003C;</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">=</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">&#x003E;</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">?</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmr-10">@  </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-45-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-45-1"
+class="td11">          </td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-45-2"
+class="td11">    <span
+class="cmsy-10">|</span>   </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-45-3"
+class="td11"> <span
+class="pcrr7t-">\</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">^</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">-</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">~</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">:</span>                            </td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-46-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-46-1"
+class="td11"> <span
+class="cmmi-10">uniSymbol  </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-46-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-46-3"
+class="td11"> 任意の Unicode シンボルあるいは Unicode 句読点                                                 </td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-47-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-47-1"
+class="td11"> <span
+class="cmmi-10">digit         </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-47-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-47-3"
+class="td11"> <span
+class="cmmi-10">ascDigit</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;uniDigit                                               </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-48-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-48-1"
+class="td11"> <span
+class="cmmi-10">ascDigit     </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-48-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-48-3"
+class="td11"> <span
+class="pcrr7t-">0</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">1</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmmi-10">&#x2026;</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">9</span>                                   </td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-49-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-49-1"
+class="td11"> <span
+class="cmmi-10">uniDigit    </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-49-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-49-3"
+class="td11"> 任意の Unicode 十進数字                                                                 </td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-50-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-50-1"
+class="td11"> <span
+class="cmmi-10">octit         </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-50-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-50-3"
+class="td11"> <span
+class="pcrr7t-">0</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">1</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmmi-10">&#x2026;</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">7</span>                                   </td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-51-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-51-1"
+class="td11"> <span
+class="cmmi-10">hexit         </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-51-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-51-3"
+class="td11"> <span
+class="cmmi-10">digit</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">A</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmmi-10">&#x2026;</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">F</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">a</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmmi-10">&#x2026;</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">f</span>                      </td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-52-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-52-1"
+class="td11"> <span
+class="ptmri7t-">&#x00A0;                     </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-3-53-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-53-1"
+class="td11">          </td>
+</tr></table></div></div>
+<a
+ id="dx7-16001"></a>
+<a
+ id="dx7-16002"></a>
+<a
+ id="dx7-16003"></a>
+<a
+ id="dx7-16004"></a>
+<a
+ id="dx7-16005"></a>
+<a
+ id="dx7-16006"></a>
+<a
+ id="dx7-16007"></a>
+<a
+ id="dx7-16008"></a>
+<a
+ id="dx7-16009"></a>
+<a
+ id="dx7-16010"></a>
+<a
+ id="dx7-16011"></a>
+<a
+ id="dx7-16012"></a>
+<a
+ id="dx7-16013"></a>
+<a
+ id="dx7-16014"></a>
+<a
+ id="dx7-16015"></a>
+<a
+ id="dx7-16016"></a>
+<a
+ id="dx7-16017"></a>
+<a
+ id="dx7-16018"></a>
+<a
+ id="dx7-16019"></a>
+<a
+ id="dx7-16020"></a>
+<a
+ id="dx7-16021"></a>
+<a
+ id="dx7-16022"></a>
+<a
+ id="dx7-16023"></a>
+<a
+ id="dx7-16024"></a>
+<a
+ id="dx7-16025"></a>
+<a
+ id="dx7-16026"></a>
+<a
+ id="dx7-16027"></a>
+<a
+ id="dx7-16028"></a>
+<a
+ id="dx7-16029"></a>
+<a
+ id="dx7-16030"></a>
+<a
+ id="dx7-16031"></a>
+<a
+ id="dx7-16032"></a>
+<a
+ id="dx7-16033"></a>
+<a
+ id="dx7-16034"></a>
+<a
+ id="dx7-16035"></a>
+<a
+ id="dx7-16036"></a>
+<a
+ id="dx7-16037"></a>
+<p class="noindent">字句解析では「最長一致」規則を使うべきで，それぞれの位置で
+<span
+class="cmmi-10">字句</span>生成規則を満す最長の字句が読み込まれる．<a
+ id="dx7-16038"></a>したがって，<span
+class="pcrr7t-">case</span>は予約語であるが，<span
+class="pcrr7t-">cases</span>は予約語ではない．
+同様に，<span
+class="pcrr7t-">=</span> は予約されているが，
+<span
+class="pcrr7t-">==</span> および <span
+class="pcrr7t-">~=</span> は予約されていない．
+ <p class="noindent">あらゆる種類の<span
+class="cmmi-10">白空白</span>は字句を区切る適切な区切り子である．
+ <p class="noindent"><span
+class="cmmi-10">ANY</span> の範疇に入らない文字はHaskellでは使用できない．
+使用すれば字句解析エラーにならなければならない．
+
+<p class="noindent">
+<h3 class="sectionHead"><span class="titlemark">2.3    </span> <a
+ id="x7-170002.3"></a>コメント</h3>
+<p class="noindent"> コメント<a
+ id="dx7-17001"></a>は正当な白空白である．
+ <p class="noindent">通常のコメントは<a
+ id="dx7-17002"></a>2つ以上連続したダッシュ（たとえば，<span
+class="pcrr7t-">--</span>）で構成される字句で始まり次の改行までである．<span
+class="ptmri7t-">（コメント開始の）ダッシュの並びは正しい字句の一部にしては決してならない．
+</span>たとえば，「<span
+class="pcrr7t-">--&#x003E;</span>」あるいは「<span
+class="pcrr7t-">|--</span>」はコメントの開始には<span
+class="ptmri7t-">ならない</span>．そのわけは，両方ともに正しい字句だからである．
+一方，「<span
+class="pcrr7t-">--foo</span>」はコメントの開始になる．
+
+ <p class="noindent">ネストしたコメントは<a
+ id="dx7-17003"></a>「<span
+class="pcrr7t-">{-</span>」という字句で開始し，「<span
+class="pcrr7t-">-}</span>」で終了する．正しい字句で「<span
+class="pcrr7t-">{-</span>」から始まるものはない．
+したがって，たとえば，
+「<span
+class="pcrr7t-">{---</span>」は余分なダッシュが付いてはいるがネストしたコメントの開始となる．
+
+ <p class="noindent">コメントそのものは字句解析の対象にはならない．
+その代わりに最初の未対応「<span
+class="pcrr7t-">-}</span>」によって対応するネストしたコメントは終了する．
+ネストしたコメントは何段にもネストすることが可能で，「<span
+class="pcrr7t-">{-</span>」があらわれるたびに新しいネストしたコメントが開始され，それらは，それぞれ対応する「<span
+class="pcrr7t-">-}</span>」で終了する．
+
+ <p class="noindent">（ネストコメントではない）通常のコメント内では，文字列「<span
+class="pcrr7t-">{-</span>」および「<span
+class="pcrr7t-">-}</span>」は特別な意味を持たない．
+また，ネストコメント内ではダッシュの並びには特別な意味はない．
+
+ <p class="noindent">ネストコメントはコンパイラに対するプラグマとしても用いられる．
+これについては<a
+href="haskellch12.html#x19-18800012">12<!--tex4ht:ref: pragmas --></a>で説明する．
+
+ <p class="noindent">コードをネストコメントでコメントアウトした場合には，コメントアウトしたコード中の文字列（リテラル）内にある <span
+class="pcrr7t-">{-</span> あるいは <span
+class="pcrr7t-">-}</span> の出現に影響を受ける．
+また，コメントアウトされたコード中の行コメント内の<span
+class="pcrr7t-">{-</span> あるいは <span
+class="pcrr7t-">-}</span> の出現にも影響を受ける．
+
+<p class="noindent">
+<h3 class="sectionHead"><span class="titlemark">2.4    </span> <a
+ id="x7-180002.4"></a>識別子および演算子</h3>
+<a
+ id="dx7-18001"></a>
+<a
+ id="dx7-18002"></a>
+<div class="flushleft"
+>
+ <p class="noindent">
+<!--tex4ht:inline--><div class="tabular"> <table id="TBL-4" class="tabular"
+cellspacing="0" cellpadding="0"
+><colgroup id="TBL-4-1g"><col
+id="TBL-4-1" /><col
+id="TBL-4-2" /><col
+id="TBL-4-3" /><col
+id="TBL-4-4" /></colgroup><tr
+ style="vertical-align:baseline;" id="TBL-4-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-1-1"
+class="td11"> <span
+class="cmmi-10">varid       </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-1-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-1-3"
+class="td11"> <span
+class="cmr-10">(</span><span
+class="cmmi-10">small</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">{</span><span
+class="cmmi-10">small</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;large</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;digit</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">'</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">}</span><span
+class="cmr-10">)</span><sub><span
+class="cmsy-7">&#x27E8;</span><span
+class="cmmi-7">reservedid</span><span
+class="cmsy-7">&#x27E9;</span></sub>             </td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-4-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-2-1"
+class="td11"> <span
+class="cmmi-10">conid       </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-2-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-2-3"
+class="td11"> <span
+class="cmmi-10">large</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">{</span><span
+class="cmmi-10">small</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;large</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;digit</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">'</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">}                 </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-4-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-3-1"
+class="td11"> <span
+class="cmmi-10">reservedid  </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-3-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-3-3"
+class="td11"> <span
+class="pcrr7t-">case</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">class</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">data</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">default</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">deriving</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">do</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">else</span> </td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-4-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-4-1"
+class="td11">          </td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-4-2"
+class="td11">    <span
+class="cmsy-10">|</span>   </td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-4-3"
+class="td11"> <span
+class="pcrr7t-">foreign</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">if</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">import</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">in</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">infix</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">infixl</span>         </td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-4-5-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-5-1"
+class="td11">          </td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-5-2"
+class="td11">    <span
+class="cmsy-10">|</span>   </td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-5-3"
+class="td11"> <span
+class="pcrr7t-">infixr</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">instance</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">let</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">module</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">newtype</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">of</span>     </td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-4-6-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-6-1"
+class="td11">          </td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-6-2"
+class="td11">    <span
+class="cmsy-10">|</span>   </td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-6-3"
+class="td11"> <span
+class="pcrr7t-">then</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">type</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">where</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">_</span>                            </td>
+</tr></table></div></div>
+<a
+ id="dx7-18003"></a>
+<a
+ id="dx7-18004"></a>
+<a
+ id="dx7-18005"></a>
+
+<p class="noindent">識別子は英字ではじまり，英字，数字，アンダースコア，シングルクウォートが 0 個ないしそれ以上つづく．
+識別子は字句としては 2 つの名前空間（<a
+href="haskellch1.html#x6-130001.4">1.4<!--tex4ht:ref: namespaces --></a>節）に分けられ区別される．
+小文字で始まる識別子（変数識別子）と，大文字で始まる識別子（構成子識別子）である．
+識別子では，大文字，小文字は区別される．
+<span
+class="pcrr7t-">name</span>，
+<span
+class="pcrr7t-">naMe</span>，<span
+class="pcrr7t-">Name</span>はそれぞれ別の識別子である（最初の 2 つは変数識別子，最後のものは構成子識別子である）．
+
+ <p class="noindent">アンダースコア「<span
+class="pcrr7t-">_</span>」は小文字と見なされ，小文字が出現可能な場所で使用できる．
+しかしながら，「<span
+class="pcrr7t-">_</span>」それ自身は予約済の識別子であり，パターンにおいてワイルドカードとして使用する．
+未使用の識別子に対して警告を出すコンパイラではアンダースコアで始まる識別子に対する警告は抑制することを推奨されている．
+それ故、プログラマは不使用 を期待されているような「<span
+class="pcrr7t-">_foo</span>」をパラメータとして使用することも可能である．
+
+<div class="flushleft"
+>
+ <p class="noindent">
+<!--tex4ht:inline--><div class="tabular"> <table id="TBL-5" class="tabular"
+cellspacing="0" cellpadding="0"
+><colgroup id="TBL-5-1g"><col
+id="TBL-5-1" /><col
+id="TBL-5-2" /><col
+id="TBL-5-3" /><col
+id="TBL-5-4" /></colgroup><tr
+ style="vertical-align:baseline;" id="TBL-5-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-5-1-1"
+class="td11"> <span
+class="cmmi-10">varsym     </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-5-1-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-5-1-3"
+class="td11"> <span
+class="cmr-10">(</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmmi-10">symbol</span><sub><span
+class="cmsy-7">&#x27E8;</span><span
+class="pcrr7t-">:</span><span
+class="cmsy-7">&#x27E9;</span></sub><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">{</span><span
+class="cmmi-10">symbol</span><span
+class="cmsy-10">}</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmr-10">)</span><sub><span
+class="cmsy-7">&#x27E8;</span><span
+class="cmmi-7">reservedop</span><span
+class="cmmi-7">&#x00A0;</span><span
+class="cmsy-7">|</span><span
+class="cmmi-7">&#x00A0;dashes</span><span
+class="cmsy-7">&#x27E9;</span></sub>        </td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-5-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-5-2-1"
+class="td11"> <span
+class="cmmi-10">consym     </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-5-2-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-5-2-3"
+class="td11"> <span
+class="cmr-10">(</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">:</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">{</span><span
+class="cmmi-10">symbol</span><span
+class="cmsy-10">}</span><span
+class="cmr-10">)</span><sub><span
+class="cmsy-7">&#x27E8;</span><span
+class="cmmi-7">reservedop</span><span
+class="cmsy-7">&#x27E9;</span></sub>                     </td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-5-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-5-3-1"
+class="td11"> <span
+class="cmmi-10">reservedop  </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-5-3-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-5-3-3"
+class="td11"> <span
+class="pcrr7t-">..</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">:</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">::</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">=</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">\</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">&#x003C;-</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">-&#x003E;</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span class="obeylines-h"><span class="verb"><span
+class="pcrr7t-">@</span></span></span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">~</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">=&#x003E;</span> </td>
+</tr></table></div></div>
+<a
+ id="dx7-18006"></a>
+<a
+ id="dx7-18007"></a>
+<a
+ id="dx7-18008"></a>
+
+<p class="noindent"> <span
+class="ptmri7t-">演算子シンボル</span> <a
+ id="dx7-18009"></a>は 1 つ以上のシンボル文字で上記のように構成される．また，字句としては 2 つの名前空間（<a
+href="haskellch1.html#x6-130001.4">1.4<!--tex4ht:ref: namespaces -->節</a>）に分けられ区別される．
+     <ul class="itemize1">
+     <li class="itemize">コロンで始まる演算子シンボルは構成子である．
+     </li>
+     <li class="itemize">それ以外の文字ではじまる演算子シンボルは通常の識別子である．</li></ul>
+
+<p class="noindent"> コロンそのもの「<span
+class="pcrr7t-">:</span>」は，Haskell のリスト構成子専用に予約されていることに注意すること．
+この扱いは，他にリスト構文，「<span
+class="pcrr7t-">[]</span>」や「<span
+class="pcrr7t-">[a,b]</span>などと同じである．
+
+ <p class="noindent">前置符号反転演算子の特別な構文除けば，すべての演算子は中置である．
+しかしながら，中置演算子は
+<span
+class="ptmri7t-">セクション</span><a
+ id="dx7-18010"></a>で部分適用演算子として使用できる（<a
+href="haskellch3.html#x8-300003.5">3.5<!--tex4ht:ref: sections --> 節参照</a>）．
+標準の中置演算子はすべてあらかじめ定義済のシンボルである．
+また，再定義可能である．
+ <p class="noindent">今後，このレポートでは 6 種類の名前<a
+ id="dx7-18011"></a>を使いわける．
+
+<div class="flushleft"
+>
+ <p class="noindent">
+<!--tex4ht:inline--><div class="tabular"> <table id="TBL-6" class="tabular"
+cellspacing="0" cellpadding="0"
+><colgroup id="TBL-6-1g"><col
+id="TBL-6-1" /><col
+id="TBL-6-2" /><col
+id="TBL-6-3" /><col
+id="TBL-6-4" /></colgroup><tr
+ style="vertical-align:baseline;" id="TBL-6-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-6-1-1"
+class="td11"> <span
+class="cmmi-10">varid  </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-6-1-2"
+class="td11">  <span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;      </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-6-1-3"
+class="td11"> <span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="cmr-10">（</span>変数<span
+class="cmr-10">）      </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-6-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-6-2-1"
+class="td11"> <span
+class="cmmi-10">conid  </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-6-2-2"
+class="td11">  <span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;      </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-6-2-3"
+class="td11"> <span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="cmr-10">（</span>構成子<span
+class="cmr-10">）  </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-6-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-6-3-1"
+class="td11"> <span
+class="cmmi-10">tyvar  </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-6-3-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-6-3-3"
+class="td11"> <span
+class="cmmi-10">varid               </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-6-3-4"
+class="td11"> <span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="cmr-10">（</span>型変数<span
+class="cmr-10">）      </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-6-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-6-4-1"
+class="td11"> <span
+class="cmmi-10">tycon  </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-6-4-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-6-4-3"
+class="td11"> <span
+class="cmmi-10">conid               </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-6-4-4"
+class="td11"> <span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="cmr-10">（</span>型構成子<span
+class="cmr-10">）  </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-6-5-"><td  style="white-space:nowrap; text-align:left;" id="TBL-6-5-1"
+class="td11"> <span
+class="cmmi-10">tycls   </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-6-5-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-6-5-3"
+class="td11"> <span
+class="cmmi-10">conid               </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-6-5-4"
+class="td11"> <span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="cmr-10">（</span>型クラス<span
+class="cmr-10">）        </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-6-6-"><td  style="white-space:nowrap; text-align:left;" id="TBL-6-6-1"
+class="td11"> <span
+class="cmmi-10">modid  </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-6-6-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-6-6-3"
+class="td11"> <span
+class="cmsy-10">{</span><span
+class="cmmi-10">conid</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">.</span><span
+class="cmsy-10">}</span><span
+class="cmmi-10">&#x00A0;conid</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-6-6-4"
+class="td11"> <span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="cmr-10">（</span>モジュール<span
+class="cmr-10">）             </span></td>
+</tr></table></div></div>
+<a
+ id="dx7-18012"></a>
+<a
+ id="dx7-18013"></a>
+<a
+ id="dx7-18014"></a>
+<a
+ id="dx7-18015"></a>
+<a
+ id="dx7-18016"></a>
+<a
+ id="dx7-18017"></a>
+ <p class="noindent">変数と型変数は小文字で始まる識別子で表現され，それ以外の 4 つは大文字で始まる識別子で表現される．
+また，変数と構成子は中置形式をもち，それ以外の 4 つは中置形式はもたない．
+モジュール名は複数の <span
+class="cmmi-10">conid</span> をドットで区切って並べたものである．
+名前空間については <a
+href="haskellch1.html#x6-130001.4">1.4<!--tex4ht:ref: namespaces --></a> 節で議論する．
+
+<a
+ id="dx7-18018"></a>
+ <p class="noindent">状況によっては，名前の前にモジュール名を置いて<span
+class="ptmri7t-">修飾</span>することもある．
+この修飾子の付加は変数，構成子，型構成子，型クラスに対して行われるもので，型変数，モジュール名に対しては行われない．
+修飾された名前についての詳細な議論は <a
+href="haskellch5.html#x11-980005">5<!--tex4ht:ref: modules --></a>章で行う．
+
+<div class="flushleft"
+>
+ <p class="noindent">
+<!--tex4ht:inline--><div class="tabular"> <table id="TBL-7" class="tabular"
+cellspacing="0" cellpadding="0"
+><colgroup id="TBL-7-1g"><col
+id="TBL-7-1" /><col
+id="TBL-7-2" /><col
+id="TBL-7-3" /><col
+id="TBL-7-4" /></colgroup><tr
+ style="vertical-align:baseline;" id="TBL-7-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-7-1-1"
+class="td11"> <span
+class="cmmi-10">qvarid   </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-7-1-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-7-1-3"
+class="td11"> <span
+class="cmr-10">[</span><span
+class="cmmi-10">modid</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">.</span><span
+class="cmr-10">]</span><span
+class="cmmi-10">&#x00A0;varid    </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-7-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-7-2-1"
+class="td11"> <span
+class="cmmi-10">qconid    </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-7-2-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-7-2-3"
+class="td11"> <span
+class="cmr-10">[</span><span
+class="cmmi-10">modid</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">.</span><span
+class="cmr-10">]</span><span
+class="cmmi-10">&#x00A0;conid    </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-7-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-7-3-1"
+class="td11"> <span
+class="cmmi-10">qtycon    </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-7-3-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-7-3-3"
+class="td11"> <span
+class="cmr-10">[</span><span
+class="cmmi-10">modid</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">.</span><span
+class="cmr-10">]</span><span
+class="cmmi-10">&#x00A0;tycon    </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-7-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-7-4-1"
+class="td11"> <span
+class="cmmi-10">qtycls     </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-7-4-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-7-4-3"
+class="td11"> <span
+class="cmr-10">[</span><span
+class="cmmi-10">modid</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">.</span><span
+class="cmr-10">]</span><span
+class="cmmi-10">&#x00A0;tycls     </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-7-5-"><td  style="white-space:nowrap; text-align:left;" id="TBL-7-5-1"
+class="td11"> <span
+class="cmmi-10">qvarsym  </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-7-5-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-7-5-3"
+class="td11"> <span
+class="cmr-10">[</span><span
+class="cmmi-10">modid</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">.</span><span
+class="cmr-10">]</span><span
+class="cmmi-10">&#x00A0;varsym  </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-7-6-"><td  style="white-space:nowrap; text-align:left;" id="TBL-7-6-1"
+class="td11"> <span
+class="cmmi-10">qconsym  </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-7-6-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-7-6-3"
+class="td11"> <span
+class="cmr-10">[</span><span
+class="cmmi-10">modid</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">.</span><span
+class="cmr-10">]</span><span
+class="cmmi-10">&#x00A0;consym  </span></td>
+</tr></table></div></div>
+
+<a
+ id="dx7-18019"></a>
+<a
+ id="dx7-18020"></a>
+<a
+ id="dx7-18021"></a>
+<a
+ id="dx7-18022"></a>
+<a
+ id="dx7-18023"></a>
+<a
+ id="dx7-18024"></a>
+<p class="noindent">修飾された名前は全体で 1 つの字句なので，修飾子と名前の間に空白を置くことはできない．
+字句解析は単純に以下に示すように行われる．
+<!--tex4ht:inline--><div class="tabular"> <table id="TBL-8" class="tabular"
+cellspacing="0" cellpadding="0" rules="groups"
+><colgroup id="TBL-8-1g"><col
+id="TBL-8-1" /></colgroup><colgroup id="TBL-8-2g"><col
+id="TBL-8-2" /></colgroup><tr
+class="hline"><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-8-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-8-1-1"
+class="td11">これは </td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-1-2"
+class="td11">このように字句解析される                 </td></tr><tr
+class="hline"><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-8-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-8-2-1"
+class="td11"> <span
+class="pcrr7t-">f.g</span> </td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-2-2"
+class="td11"> <span
+class="pcrr7t-">f</span><span
+class="pcrr7t-">&#x00A0;.</span><span
+class="pcrr7t-">&#x00A0;g</span> （3 つのトークン）</td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-8-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-8-3-1"
+class="td11"> <span
+class="pcrr7t-">F.g</span> </td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-3-2"
+class="td11"> <span
+class="pcrr7t-">F.g</span>（修飾された &#8216;g&#8217;）       </td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-8-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-8-4-1"
+class="td11"> <span
+class="pcrr7t-">f..</span> </td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-4-2"
+class="td11"> <span
+class="pcrr7t-">f</span><span
+class="pcrr7t-">&#x00A0;..</span>（2 つのトークン）       </td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-8-5-"><td  style="white-space:nowrap; text-align:left;" id="TBL-8-5-1"
+class="td11"> <span
+class="pcrr7t-">F..</span> </td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-5-2"
+class="td11"> <span
+class="pcrr7t-">F..</span>（修飾された &#8216;.&#8217;）        </td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-8-6-"><td  style="white-space:nowrap; text-align:left;" id="TBL-8-6-1"
+class="td11"> <span
+class="pcrr7t-">F.</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-6-2"
+class="td11"> <span
+class="pcrr7t-">F</span><span
+class="pcrr7t-">&#x00A0;.</span>（2 つのトークン）         </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-8-7-"><td  style="white-space:nowrap; text-align:left;" id="TBL-8-7-1"
+class="td11">     </td>
+</tr></table>                                                                                   </div>
+ 修飾子が名前の構文的扱いを変更することはない．たとえば，<span
+class="pcrr7t-">Prelude.+</span> は中置演算子であり，プレリュード（<a
+href="haskellch4.html#x10-820004.4.2">4.4.2<!--tex4ht:ref: fixity --></a> 節）で定義されている <span
+class="pcrr7t-">+</span> と同じ結合性を持つ．
+
+<p class="noindent">
+<h3 class="sectionHead"><span class="titlemark">2.5    </span> <a
+ id="x7-190002.5"></a>数値リテラル</h3>
+<a
+ id="dx7-19001"></a>
+<div class="flushleft"
+>
+ <p class="noindent">
+<!--tex4ht:inline--><div class="tabular"> <table id="TBL-9" class="tabular"
+cellspacing="0" cellpadding="0"
+><colgroup id="TBL-9-1g"><col
+id="TBL-9-1" /><col
+id="TBL-9-2" /><col
+id="TBL-9-3" /><col
+id="TBL-9-4" /></colgroup><tr
+ style="vertical-align:baseline;" id="TBL-9-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-9-1-1"
+class="td11"> <span
+class="cmmi-10">decimal      </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-9-1-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-9-1-3"
+class="td11"> <span
+class="cmmi-10">digit</span><span
+class="cmsy-10">{</span><span
+class="cmmi-10">digit</span><span
+class="cmsy-10">} </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-9-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-9-2-1"
+class="td11"> <span
+class="cmmi-10">octal          </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-9-2-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-9-2-3"
+class="td11"> <span
+class="cmmi-10">octit</span><span
+class="cmsy-10">{</span><span
+class="cmmi-10">octit</span><span
+class="cmsy-10">}  </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-9-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-9-3-1"
+class="td11"> <span
+class="cmmi-10">hexadecimal  </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-9-3-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-9-3-3"
+class="td11"> <span
+class="cmmi-10">hexit</span><span
+class="cmsy-10">{</span><span
+class="cmmi-10">hexit</span><span
+class="cmsy-10">} </span></td>
+</tr></table></div></div>
+<a
+ id="dx7-19002"></a>
+<a
+ id="dx7-19003"></a>
+<a
+ id="dx7-19004"></a>
+<div class="flushleft"
+>
+<p class="noindent">
+<!--tex4ht:inline--><div class="tabular"><table id="TBL-10" class="tabular"
+cellspacing="0" cellpadding="0"
+><colgroup id="TBL-10-1g"><col
+id="TBL-10-1" /><col
+id="TBL-10-2" /><col
+id="TBL-10-3" /><col
+id="TBL-10-4" /></colgroup><tr
+ style="vertical-align:baseline;" id="TBL-10-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-10-1-1"
+class="td11"> <span
+class="cmmi-10">integer   </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-10-1-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-10-1-3"
+class="td11"> <span
+class="cmmi-10">decimal                                  </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-10-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-10-2-1"
+class="td11">         </td><td  style="white-space:nowrap; text-align:center;" id="TBL-10-2-2"
+class="td11">    <span
+class="cmsy-10">|</span>   </td><td  style="white-space:nowrap; text-align:left;" id="TBL-10-2-3"
+class="td11"> <span
+class="pcrr7t-">0o</span><span
+class="cmmi-10">&#x00A0;octal</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">0O</span><span
+class="cmmi-10">&#x00A0;octal                   </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-10-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-10-3-1"
+class="td11">         </td><td  style="white-space:nowrap; text-align:center;" id="TBL-10-3-2"
+class="td11">    <span
+class="cmsy-10">|</span>   </td><td  style="white-space:nowrap; text-align:left;" id="TBL-10-3-3"
+class="td11"> <span
+class="pcrr7t-">0x</span><span
+class="cmmi-10">&#x00A0;hexadecimal</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">0X</span><span
+class="cmmi-10">&#x00A0;hexadecimal  </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-10-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-10-4-1"
+class="td11"> <span
+class="ptmri7t-">&#x00A0;                 </span></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-10-5-"><td  style="white-space:nowrap; text-align:left;" id="TBL-10-5-1"
+class="td11"></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-10-6-"><td  style="white-space:nowrap; text-align:left;" id="TBL-10-6-1"
+class="td11"> <span
+class="ptmri7t-">&#x00A0;                 </span></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-10-7-"><td  style="white-space:nowrap; text-align:left;" id="TBL-10-7-1"
+class="td11"></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-10-8-"><td  style="white-space:nowrap; text-align:left;" id="TBL-10-8-1"
+class="td11"> <span
+class="cmmi-10">float      </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-10-8-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-10-8-3"
+class="td11"> <span
+class="cmmi-10">decimal</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">.</span><span
+class="cmmi-10">&#x00A0;decimal</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmr-10">[</span><span
+class="cmmi-10">exponent</span><span
+class="cmr-10">]         </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-10-9-"><td  style="white-space:nowrap; text-align:left;" id="TBL-10-9-1"
+class="td11">         </td><td  style="white-space:nowrap; text-align:center;" id="TBL-10-9-2"
+class="td11">    <span
+class="cmsy-10">|</span>   </td><td  style="white-space:nowrap; text-align:left;" id="TBL-10-9-3"
+class="td11"> <span
+class="cmmi-10">decimal</span><span
+class="cmmi-10">&#x00A0;exponent                      </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-10-10-"><td  style="white-space:nowrap; text-align:left;" id="TBL-10-10-1"
+class="td11"> <span
+class="ptmri7t-">&#x00A0;                 </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-10-11-"><td  style="white-space:nowrap; text-align:left;" id="TBL-10-11-1"
+class="td11">         </td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-10-12-"><td  style="white-space:nowrap; text-align:left;" id="TBL-10-12-1"
+class="td11"> <span
+class="cmmi-10">exponent  </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-10-12-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-10-12-3"
+class="td11"> <span
+class="cmr-10">(</span><span
+class="pcrr7t-">e</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">E</span><span
+class="cmr-10">)</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmr-10">[</span><span
+class="pcrr7t-">+</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">-</span><span
+class="cmr-10">]</span><span
+class="cmmi-10">&#x00A0;decimal              </span></td>
+</tr></table></div></div>
+<a
+ id="dx7-19005"></a>
+<a
+ id="dx7-19006"></a>
+<p class="noindent"> There are two distinct kinds of numeric literals: integer and floating. Integer literals may be given in decimal (the
+default), octal (prefixed by <span
+class="pcrr7t-">0o</span> or <span
+class="pcrr7t-">0O</span>) or hexadecimal notation (prefixed by <span
+class="pcrr7t-">0x</span> or <span
+class="pcrr7t-">0X</span>). Floating literals are always
+decimal. A floating literal must contain digits both before and after the decimal point; this ensures that a decimal
+point cannot be mistaken for another use of the dot character. Negative numeric literals are discussed in Section&#x00A0;<a
+href="haskellch3.html#x8-280003.4">3.4<!--tex4ht:ref: operators --></a>.
+The typing of numeric literals is discussed in Section&#x00A0;<a
+href="haskellch6.html#x13-1360006.4.1">6.4.1<!--tex4ht:ref: numeric-literals --></a>.
+<p class="noindent">
+<h3 class="sectionHead"><span class="titlemark">2.6    </span> <a
+ id="x7-200002.6"></a>文字リテラルおよび文字列リテラル</h3>
+<a
+ id="dx7-20001"></a>
+<a
+ id="dx7-20002"></a>
+<div class="flushleft"
+>
+ <p class="noindent">
+<!--tex4ht:inline--><div class="tabular"> <table id="TBL-11" class="tabular"
+cellspacing="0" cellpadding="0"
+><colgroup id="TBL-11-1g"><col
+id="TBL-11-1" /><col
+id="TBL-11-2" /><col
+id="TBL-11-3" /><col
+id="TBL-11-4" /></colgroup><tr
+ style="vertical-align:baseline;" id="TBL-11-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-11-1-1"
+class="td11"> <span
+class="cmmi-10">char    </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-11-1-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-11-1-3"
+class="td11"> <span
+class="pcrr7t-">'</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmr-10">(</span><span
+class="cmmi-10">graphic</span><sub><span
+class="cmsy-7">&#x27E8;</span><span
+class="pcrr7t-">'</span><span
+class="cmmi-7">&#x00A0;</span><span
+class="cmsy-7">|</span><span
+class="cmmi-7">&#x00A0;</span><span
+class="pcrr7t-">\</span><span
+class="cmsy-7">&#x27E9;</span></sub><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;space</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;escape</span><sub><span
+class="cmsy-7">&#x27E8;</span><span
+class="pcrr7t-">\&amp;</span><span
+class="cmsy-7">&#x27E9;</span></sub><span
+class="cmr-10">)</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">'</span>               </td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-11-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-11-2-1"
+class="td11"> <span
+class="cmmi-10">string   </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-11-2-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-11-2-3"
+class="td11"> <span
+class="pcrr7t-">"</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">{</span><span
+class="cmmi-10">graphic</span><sub><span
+class="cmsy-7">&#x27E8;</span><span
+class="pcrr7t-">"</span><span
+class="cmmi-7">&#x00A0;</span><span
+class="cmsy-7">|</span><span
+class="cmmi-7">&#x00A0;</span><span
+class="pcrr7t-">\</span><span
+class="cmsy-7">&#x27E9;</span></sub><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;space</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;escape</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;gap</span><span
+class="cmsy-10">}</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">"</span>             </td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-11-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-11-3-1"
+class="td11"> <span
+class="cmmi-10">escape   </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-11-3-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-11-3-3"
+class="td11"> <span
+class="pcrr7t-">\</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmr-10">(</span><span
+class="cmmi-10">&#x00A0;charesc</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;ascii</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;decimal</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">o</span><span
+class="cmmi-10">&#x00A0;octal</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">x</span><span
+class="cmmi-10">&#x00A0;hexadecimal</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmr-10">)  </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-11-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-11-4-1"
+class="td11"> <span
+class="cmmi-10">charesc  </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-11-4-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-11-4-3"
+class="td11"> <span
+class="pcrr7t-">a</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">b</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">f</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">n</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">r</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">t</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">v</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">\</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">"</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">'</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">&amp;</span>             </td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-11-5-"><td  style="white-space:nowrap; text-align:left;" id="TBL-11-5-1"
+class="td11"> <span
+class="cmmi-10">ascii     </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-11-5-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-11-5-3"
+class="td11"> <span
+class="pcrr7t-">^</span><span
+class="cmmi-10">cntrl</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">NUL</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">SOH</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">STX</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">ETX</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">EOT</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">ENQ</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">ACK</span>     </td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-11-6-"><td  style="white-space:nowrap; text-align:left;" id="TBL-11-6-1"
+class="td11">        </td><td  style="white-space:nowrap; text-align:center;" id="TBL-11-6-2"
+class="td11">    <span
+class="cmsy-10">|</span>   </td><td  style="white-space:nowrap; text-align:left;" id="TBL-11-6-3"
+class="td11"> <span
+class="pcrr7t-">BEL</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">BS</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">HT</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">LF</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">VT</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">FF</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">CR</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">SO</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">SI</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">DLE</span>    </td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-11-7-"><td  style="white-space:nowrap; text-align:left;" id="TBL-11-7-1"
+class="td11">        </td><td  style="white-space:nowrap; text-align:center;" id="TBL-11-7-2"
+class="td11">    <span
+class="cmsy-10">|</span>   </td><td  style="white-space:nowrap; text-align:left;" id="TBL-11-7-3"
+class="td11"> <span
+class="pcrr7t-">DC1</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">DC2</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">DC3</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">DC4</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">NAK</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">SYN</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">ETB</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">CAN</span>       </td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-11-8-"><td  style="white-space:nowrap; text-align:left;" id="TBL-11-8-1"
+class="td11">        </td><td  style="white-space:nowrap; text-align:center;" id="TBL-11-8-2"
+class="td11">    <span
+class="cmsy-10">|</span>   </td><td  style="white-space:nowrap; text-align:left;" id="TBL-11-8-3"
+class="td11"> <span
+class="pcrr7t-">EM</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">SUB</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">ESC</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">FS</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">GS</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">RS</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">US</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">SP</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">DEL</span>       </td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-11-9-"><td  style="white-space:nowrap; text-align:left;" id="TBL-11-9-1"
+class="td11"> <span
+class="cmmi-10">cntrl     </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-11-9-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-11-9-3"
+class="td11"> <span
+class="cmmi-10">ascLarge</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmr-10">@</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">[</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">\</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">]</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">^</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">_</span>                    </td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-11-10-"><td  style="white-space:nowrap; text-align:left;" id="TBL-11-10-1"
+class="td11"> <span
+class="cmmi-10">gap      </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-11-10-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-11-10-3"
+class="td11"> <span
+class="pcrr7t-">\</span><span
+class="cmmi-10">&#x00A0;whitechar</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">{</span><span
+class="cmmi-10">whitechar</span><span
+class="cmsy-10">}</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">\</span>                          </td>
+</tr></table></div></div>
+<a
+ id="dx7-20003"></a>
+<a
+ id="dx7-20004"></a>
+<a
+ id="dx7-20005"></a>
+<a
+ id="dx7-20006"></a>
+<a
+ id="dx7-20007"></a>
+<a
+ id="dx7-20008"></a>
+<a
+ id="dx7-20009"></a>
+<a
+ id="dx7-20010"></a>
+<a
+ id="dx7-20011"></a>
+<a
+ id="dx7-20012"></a>
+<a
+ id="dx7-20013"></a>
+<a
+ id="dx7-20014"></a>
+<a
+ id="dx7-20015"></a>
+<a
+ id="dx7-20016"></a>
+<a
+ id="dx7-20017"></a>
+<p class="noindent"> Character literals are written between single quotes, as in <span
+class="pcrr7t-">'a'</span>, and strings between double quotes, as in
+<span
+class="pcrr7t-">"Hello"</span>.
+ <p class="noindent"> Escape codes may be used in characters and strings to represent special characters. Note that a single quote&#x00A0;<span
+class="pcrr7t-">'</span> may
+be used in a string, but must be escaped in a character; similarly, a double quote&#x00A0;<span
+class="pcrr7t-">"</span> may be used in a character, but
+must be escaped in a string. <span
+class="pcrr7t-">\</span> must always be escaped. The category <span
+class="cmmi-10">charesc</span> also includes portable representations
+for the characters 「alert」 (<span
+class="pcrr7t-">\a</span>), 「backspace」 (<span
+class="pcrr7t-">\b</span>), 「form feed」 (<span
+class="pcrr7t-">\f</span>), 「new line」 (<span
+class="pcrr7t-">\n</span>), 「carriage return」 (<span
+class="pcrr7t-">\r</span>),
+「horizontal tab」 (<span
+class="pcrr7t-">\t</span>), and 「vertical tab」 (<span
+class="pcrr7t-">\v</span>).
+ <p class="noindent"> Escape characters for the Unicode<a
+ id="dx7-20018"></a> character set, including control characters such as <span
+class="pcrr7t-">\^X</span>, are also provided.
+Numeric escapes such as <span
+class="pcrr7t-">\137</span> are used to designate the character with decimal representation 137; octal
+(e.g.&#x00A0;<span
+class="pcrr7t-">\o137</span>) and hexadecimal (e.g.&#x00A0;<span
+class="pcrr7t-">\x37</span>) representations are also allowed.
+ <p class="noindent"> Consistent with the 「maximal munch」 rule, <a
+ id="dx7-20019"></a>numeric escape characters in strings consist of all consecutive digits and
+may be of arbitrary length. Similarly, the one ambiguous ASCII escape code, <span
+class="pcrr7t-">"\SOH"</span>, is parsed as a string of length
+1. The escape character <span
+class="pcrr7t-">\&amp;</span> is provided as a 「null character」 to allow strings such as <span
+class="pcrr7t-">"\137\&amp;9"</span> および <span
+class="pcrr7t-">"\SO\&amp;H"</span> to
+be constructed (both of length two). Thus <span
+class="pcrr7t-">"\&amp;"</span> is equivalent to <span
+class="pcrr7t-">""</span> and the character <span
+class="pcrr7t-">'\&amp;'</span>&#x00A0;is disallowed. Further
+equivalences of characters are defined in Section&#x00A0;<a
+href="haskellch6.html#x13-1190006.1.2">6.1.2<!--tex4ht:ref: characters --></a>.
+ <p class="noindent"> A string may include a 「gap」&#8212;two backslants enclosing white characters&#8212;which is ignored. This allows one to
+write long strings on more than one line by writing a backslant at the end of one line and at the start of the next. For
+example,
+     <div class="quote">
+     <div class="verbatim" id="verbatim-2">
+"Here&#x00A0;is&#x00A0;a&#x00A0;backslant&#x00A0;\\&#x00A0;as&#x00A0;well&#x00A0;as&#x00A0;\137,&#x00A0;\
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;\a&#x00A0;numeric&#x00A0;escape&#x00A0;character,&#x00A0;and&#x00A0;\^X,&#x00A0;a&#x00A0;control&#x00A0;character."
+</div>
+     <p class="noindent"></div>
+<p class="noindent"> String literals are actually abbreviations for lists of characters (see Section&#x00A0;<a
+href="haskellch3.html#x8-340003.7">3.7<!--tex4ht:ref: lists --></a>).
+<p class="noindent">
+<h3 class="sectionHead"><span class="titlemark">2.7    </span> <a
+ id="x7-210002.7"></a>レイアウト</h3>
+<a
+ id="dx7-21001"></a>
+<p class="noindent"> Haskell permits the omission of the braces and semicolons used in several grammar productions, by using <span
+class="ptmri7t-">layout </span>to
+convey the same information. This allows both layout-sensitive and layout-insensitive styles of coding, which can be
+freely mixed within one program. Because layout is not required, Haskell programs can be straightforwardly
+produced by other programs.
+ <p class="noindent"> The effect of layout on the meaning of a Haskell program can be completely specified by adding braces and
+semicolons in places determined by the layout. The meaning of this augmented program is now layout
+insensitive.
+ <p class="noindent"> Informally stated, the braces and semicolons are inserted as follows. The layout (or 「off-side」) rule<a
+ id="dx7-21002"></a> takes effect
+whenever the open brace is omitted after the keyword <span
+class="pcrr7t-">where</span>, <span
+class="pcrr7t-">let</span>, <span
+class="pcrr7t-">do</span>, or <span
+class="pcrr7t-">of</span>. When this happens, the indentation of
+the next lexeme (whether or not on a new line) is remembered and the omitted open brace is inserted (the whitespace
+preceding the lexeme may include comments). For each subsequent line, if it contains only whitespace or is indented
+more, then the previous item is continued (nothing is inserted); if it is indented the same amount, then a new
+item begins (a semicolon is inserted); and if it is indented less, then the layout list ends (a close brace
+is inserted). If the indentation of the non-brace lexeme immediately following a <span
+class="pcrr7t-">where</span>, <span
+class="pcrr7t-">let</span>, <span
+class="pcrr7t-">do</span> or
+<span
+class="pcrr7t-">of</span> is less than or equal to the current indentation level, then instead of starting a layout, an empty list
+「<span
+class="pcrr7t-">{}</span>」 is inserted, and layout processing occurs for the current level (i.e. insert a semicolon or close
+brace). A close brace is also inserted whenever the syntactic category containing the layout list ends; that
+is, if an illegal lexeme is encountered at a point where a close brace would be legal, a close brace is
+inserted. The layout rule matches only those open braces that it has inserted; an explicit open brace
+must be matched by an explicit close brace. Within these explicit open braces, <span
+class="ptmri7t-">no </span>layout processing is
+performed for constructs outside the braces, even if a line is indented to the left of an earlier implicit open
+brace.
+ <p class="noindent"> Section&#x00A0;<a
+href="haskellch10.html#x17-17800010.3">10.3<!--tex4ht:ref: layout --></a> gives a more precise definition of the layout rules.
+ <p class="noindent"> Given these rules, a single newline may actually terminate several layout lists. Also, these rules permit:
+     <div class="quote">
+     <div class="verbatim" id="verbatim-3">
+f&#x00A0;x&#x00A0;=&#x00A0;let&#x00A0;a&#x00A0;=&#x00A0;1;&#x00A0;b&#x00A0;=&#x00A0;2
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;g&#x00A0;y&#x00A0;=&#x00A0;exp2
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;in&#x00A0;exp1
+</div>
+     <p class="noindent"></div>
+<p class="noindent"> making <span
+class="pcrr7t-">a</span>, <span
+class="pcrr7t-">b</span> および <span
+class="pcrr7t-">g</span> all part of the same layout list.
+ <p class="noindent"> As an example, Figure&#x00A0;<a
+href="#x7-210031">2.1<!--tex4ht:ref: layout-before --></a> shows a (somewhat contrived) module and Figure&#x00A0;<a
+href="#x7-210042">2.2<!--tex4ht:ref: layout-after --></a> shows the result of applying the
+layout rule to it. Note in particular: (a)&#x00A0;the line beginning <span
+class="pcrr7t-">}};pop</span>, where the termination of the previous line
+invokes three applications of the layout rule, corresponding to the depth (3) of the nested <span
+class="pcrr7t-">where</span> clauses, (b)&#x00A0;the
+close braces in the <span
+class="pcrr7t-">where</span> clause nested within the tuple and <span
+class="pcrr7t-">case</span> expression, inserted because the end of the tuple
+was detected, and (c)&#x00A0;the close brace at the very end, inserted because of the column 0 indentation of the end-of-file
+token.
+<hr class="figure" /><div class="figure"
+>
+<a
+ id="x7-210031"></a><a
+ id="x7-210042"></a>
+<div class="center"
+>
+ <p class="noindent">
+<div class="fbox"><div class="minipage"><div class="verbatim" id="verbatim-4">
+module&#x00A0;AStack(&#x00A0;Stack,&#x00A0;push,&#x00A0;pop,&#x00A0;top,&#x00A0;size&#x00A0;)&#x00A0;where
+&#x00A0;<br />data&#x00A0;Stack&#x00A0;a&#x00A0;=&#x00A0;Empty
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;|&#x00A0;MkStack&#x00A0;a&#x00A0;(Stack&#x00A0;a)
+&#x00A0;<br />
+&#x00A0;<br />push&#x00A0;::&#x00A0;a&#x00A0;-&#x003E;&#x00A0;Stack&#x00A0;a&#x00A0;-&#x003E;&#x00A0;Stack&#x00A0;a
+&#x00A0;<br />push&#x00A0;x&#x00A0;s&#x00A0;=&#x00A0;MkStack&#x00A0;x&#x00A0;s
+&#x00A0;<br />
+&#x00A0;<br />size&#x00A0;::&#x00A0;Stack&#x00A0;a&#x00A0;-&#x003E;&#x00A0;Int
+&#x00A0;<br />size&#x00A0;s&#x00A0;=&#x00A0;length&#x00A0;(stkToLst&#x00A0;s)&#x00A0;&#x00A0;where
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;stkToLst&#x00A0;&#x00A0;Empty&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;=&#x00A0;[]
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;stkToLst&#x00A0;(MkStack&#x00A0;x&#x00A0;s)&#x00A0;&#x00A0;=&#x00A0;x:xs&#x00A0;where&#x00A0;xs&#x00A0;=&#x00A0;stkToLst&#x00A0;s
+&#x00A0;<br />
+&#x00A0;<br />pop&#x00A0;::&#x00A0;Stack&#x00A0;a&#x00A0;-&#x003E;&#x00A0;(a,&#x00A0;Stack&#x00A0;a)
+&#x00A0;<br />pop&#x00A0;(MkStack&#x00A0;x&#x00A0;s)
+&#x00A0;<br />&#x00A0;&#x00A0;=&#x00A0;(x,&#x00A0;case&#x00A0;s&#x00A0;of&#x00A0;r&#x00A0;-&#x003E;&#x00A0;i&#x00A0;r&#x00A0;where&#x00A0;i&#x00A0;x&#x00A0;=&#x00A0;x)&#x00A0;--&#x00A0;(pop&#x00A0;Empty)&#x00A0;is&#x00A0;an&#x00A0;error
+&#x00A0;<br />
+&#x00A0;<br />top&#x00A0;::&#x00A0;Stack&#x00A0;a&#x00A0;-&#x003E;&#x00A0;a
+&#x00A0;<br />top&#x00A0;(MkStack&#x00A0;x&#x00A0;s)&#x00A0;=&#x00A0;x&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;--&#x00A0;(top&#x00A0;Empty)&#x00A0;is&#x00A0;an&#x00A0;error
+</div>
+<p class="noindent">                                                                               </div></div>
+</div>
+<br /><div class="caption"
+><span class="id">Figure&#x00A0;2.1: </span><span
+class="content">A sample program</span></div><!--tex4ht:label?: x7-210031 -->
+<div class="center"
+>
+ <p class="noindent">
+<div class="fbox"><div class="minipage"><div class="verbatim" id="verbatim-5">
+module&#x00A0;AStack(&#x00A0;Stack,&#x00A0;push,&#x00A0;pop,&#x00A0;top,&#x00A0;size&#x00A0;)&#x00A0;where
+&#x00A0;<br />{data&#x00A0;Stack&#x00A0;a&#x00A0;=&#x00A0;Empty
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;|&#x00A0;MkStack&#x00A0;a&#x00A0;(Stack&#x00A0;a)
+&#x00A0;<br />
+&#x00A0;<br />;push&#x00A0;::&#x00A0;a&#x00A0;-&#x003E;&#x00A0;Stack&#x00A0;a&#x00A0;-&#x003E;&#x00A0;Stack&#x00A0;a
+&#x00A0;<br />;push&#x00A0;x&#x00A0;s&#x00A0;=&#x00A0;MkStack&#x00A0;x&#x00A0;s
+&#x00A0;<br />
+&#x00A0;<br />;size&#x00A0;::&#x00A0;Stack&#x00A0;a&#x00A0;-&#x003E;&#x00A0;Int
+&#x00A0;<br />;size&#x00A0;s&#x00A0;=&#x00A0;length&#x00A0;(stkToLst&#x00A0;s)&#x00A0;&#x00A0;where
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;{stkToLst&#x00A0;&#x00A0;Empty&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;=&#x00A0;[]
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;;stkToLst&#x00A0;(MkStack&#x00A0;x&#x00A0;s)&#x00A0;&#x00A0;=&#x00A0;x:xs&#x00A0;where&#x00A0;{xs&#x00A0;=&#x00A0;stkToLst&#x00A0;s
+&#x00A0;<br />
+&#x00A0;<br />}};pop&#x00A0;::&#x00A0;Stack&#x00A0;a&#x00A0;-&#x003E;&#x00A0;(a,&#x00A0;Stack&#x00A0;a)
+&#x00A0;<br />;pop&#x00A0;(MkStack&#x00A0;x&#x00A0;s)
+&#x00A0;<br />&#x00A0;&#x00A0;=&#x00A0;(x,&#x00A0;case&#x00A0;s&#x00A0;of&#x00A0;{r&#x00A0;-&#x003E;&#x00A0;i&#x00A0;r&#x00A0;where&#x00A0;{i&#x00A0;x&#x00A0;=&#x00A0;x}})&#x00A0;--&#x00A0;(pop&#x00A0;Empty)&#x00A0;is&#x00A0;an&#x00A0;error
+&#x00A0;<br />
+&#x00A0;<br />;top&#x00A0;::&#x00A0;Stack&#x00A0;a&#x00A0;-&#x003E;&#x00A0;a
+&#x00A0;<br />;top&#x00A0;(MkStack&#x00A0;x&#x00A0;s)&#x00A0;=&#x00A0;x&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;--&#x00A0;(top&#x00A0;Empty)&#x00A0;is&#x00A0;an&#x00A0;error
+&#x00A0;<br />}
+</div>
+<p class="noindent">                                                                               </div></div>
+</div>
+<div class="caption"
+><span class="id">Figure&#x00A0;2.2: </span><span
+class="content">Sample program with layout expanded</span></div><!--tex4ht:label?: x7-210042 -->
+</div><hr class="endfigure" />
+<!--l. 7--><div class="crosslinks"><p class="noindent">[<a
+href="haskellch3.html" >next</a>] [<a
+href="haskellch1.html" >prev</a>] [<a
+href="haskellch1.html#tailhaskellch1.html" >prev-tail</a>] [<a
+href="haskellch2.html" >front</a>] [<a
+href="haskellpa1.html" >up</a>] </p></div>
+ <p class="noindent"> <a
+ id="tailhaskellch2.html"></a>
+</body></html>

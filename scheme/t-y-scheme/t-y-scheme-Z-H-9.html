@@ -1,0 +1,311 @@
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--
+
+Generated from t-y-scheme.tex by tex2page, v 20060531
+(running on Gauche 0.8.7, unix), 
+(c) Dorai Sitaram, 
+http://www.ccs.neu.edu/~dorai/tex2page/tex2page-doc.html
+
+-->
+<head>
+<title>
+独習 Scheme 三週間 Teach Yourself Scheme in Fixnum Days
+</title>
+<link rel="stylesheet" type="text/css" href="t-y-scheme-Z-S.css" title=default>
+<meta name=robots content="noindex,follow">
+<meta name=description content="A practical
+introduction to the programming language Scheme">
+
+<meta name=author content="Dorai Sitaram">
+
+<link rev=made href="mailto:ds26@gte.com">
+</head>
+<body>
+<div id=slidecontent>
+<div align=right class=navigation>[Go to <span><a href="t-y-scheme.html">first</a>, <a href="t-y-scheme-Z-H-8.html">previous</a></span><span>, <a href="t-y-scheme-Z-H-10.html">next</a></span> page<span>; &nbsp;&nbsp;</span><span><a href="t-y-scheme-Z-H-1.html#node_toc_start">contents</a></span><span><span>; &nbsp;&nbsp;</span><a href="t-y-scheme-Z-H-25.html#node_index_start">index</a></span>]</div>
+<p></p>
+<a name="node_chap_7"></a>
+<h1 class=chapter>
+<div class=chapterheading><a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_7">Chapter 7</a></div><br>
+<a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_7">I/O</a></h1>
+<p><a name="node_idx_326"></a></p>
+<p>
+Schemeは、入力ポートから読んだり、出力ポートへ書きだしたりする入出力
+(I/O)手続きをもっています。ポートはコンソールやファイルあるいは文字列
+と結びつけることができます。</p>
+<p>
+</p>
+<a name="node_sec_7.1"></a>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_7.1">7.1&nbsp;&nbsp;読み込み</a></h2>
+<p></p>
+<p>
+Scheme のリーダー手続きはオプションの引数としてポートをとります。
+ポートが指定されない場合には現在の入力ポート(通常コンソール)を
+仮定します。</p>
+<p>
+<a name="node_idx_328"></a></p>
+<p>
+</p>
+<p>
+読み込みは、文字ベースか行ベースかあるいはS式ベースでできます。
+読み込みが実行されるたびに、ポートの状態は変化して次の読み込みが既に
+読まれたものに続く対象を読み込みます。ポートに読み込むものが
+なくなれば、リーダー手続きは end-of-file あるいは eof オブジェクト
+と呼ばれる特別なデータを返します。このデータは、<code class=scheme><span class=variable>eof-object?</span></code>述語を
+満たす唯一の値です。</p>
+<p>
+<a name="node_idx_330"></a><a name="node_idx_332"></a><a name="node_idx_334"></a></p>
+<p>
+</p>
+<p>
+手続き<code class=scheme><span class=variable>read-char</span></code>は次の文字をポートから読みます。
+<code class=scheme><span class=variable>read-line</span></code>は次の行を読み、それを文字列として返します(最後の
+改行は含まれません)。手続き<code class=scheme><span class=variable>read</span></code>は次のS式を読みます。</p>
+<p>
+</p>
+<a name="node_sec_7.2"></a>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_7.2">7.2&nbsp;&nbsp;書き出し</a></h2>
+<p></p>
+<p>
+Schemeのライター手続きは書き出される対象とオプション引数として出力
+ポートをとります。ポートが指定されない場合には現在の出力ポート(
+通常はコンソール)が仮定されます。</p>
+<p>
+書き出しは文字ベースあるいはS式ベースでできます。</p>
+<p>
+<a name="node_idx_336"></a></p>
+<p>
+</p>
+<p>
+手続き<code class=scheme><span class=variable>write-char</span></code>は与えられた(<code class=verbatim>#\</code>以外の)文字を出力ポートに
+書き出します。</p>
+<p>
+<a name="node_idx_338"></a><a name="node_idx_340"></a><a name="node_idx_342"></a></p>
+<p>
+</p>
+<p>
+手続き<code class=scheme><span class=variable>write</span></code>および<code class=scheme><span class=variable>display</span></code>はともに与えられたS式をポートに
+書き出します。違いは、<code class=scheme><span class=variable>write</span></code>はマシンが読み取り可能なフォーマットにし、
+<code class=scheme><span class=variable>display</span></code>はそうではない、ということです。たとえば、<code class=scheme><span class=variable>write</span></code>は
+文字列に対しては、二重引用符を使い、文字に対しては <code class=verbatim>#\</code> 構文を
+使いますが、<code class=scheme><span class=variable>display</span></code>はそうではありません。</p>
+<p>
+</p>
+<p>
+手続き<code class=scheme><span class=variable>newline</span></code>は出力ポート上で新しい行を開始します。</p>
+<p>
+<a name="node_idx_344"></a><a name="node_idx_346"></a></p>
+<p>
+</p>
+<a name="node_sec_7.3"></a>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_7.3">7.3&nbsp;&nbsp;ファイルポート</a></h2>
+<p><a name="node_idx_348"></a><a name="node_idx_350"></a><a name="node_idx_352"></a><a name="node_idx_354"></a></p>
+<p>
+Scheme の I/O 手続きは対象が標準入力あるいは標準出力である場合には
+引数でポートを指定する必要はありません。しかし、こうしたポートを
+明示的に指定する必要がある場合には、引数なしの手続き
+<code class=scheme><span class=variable>current-input-port</span></code>および<code class=scheme><span class=variable>current-output-port</span></code>がこれを提供してくれ
+ます。すなわち、</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>display</span> <span class=selfeval>9</span>)
+(<span class=variable>display</span> <span class=selfeval>9</span> (<span class=variable>current-output-port</span>))
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>は同じふるまいです。</p>
+<p>
+<a name="node_idx_356"></a><a name="node_idx_358"></a></p>
+<p>
+</p>
+<p>
+ポートはファイルをオープンすることでそのファイルに結びつけることが
+できます。手続き <code class=scheme><span class=variable>open-input-file</span></code> はファイル名を引数としてとり、
+そのファイルに結びついた新しい入力ポートを返します。存在しない入力
+ファイルをオープンしようとするか、既に存在する出力ファイルをオープン
+しようとするとエラーになります。</p>
+<p>
+<a name="node_idx_360"></a><a name="node_idx_362"></a></p>
+<p>
+</p>
+<p>
+ポート上でなにか I/O を実行したあとは、<code class=scheme><span class=variable>close-input-port</span></code>あるいは
+<code class=scheme><span class=variable>close-output-port</span></code> でそれをクローズしなければなりません。</p>
+<p>
+</p>
+<p>
+以下のように、一言<code class=scheme><span class=variable>hello</span></code>だけを含むファイル<code class=verbatim>hello.txt</code>があるとします。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=variable>i</span> (<span class=variable>open-input-file</span> <span class=selfeval>&quot;hello.txt&quot;</span>))
+
+(<span class=variable>read-char</span> <span class=variable>i</span>)
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#\h</span>
+
+(<span class=keyword>define</span> <span class=variable>j</span> (<span class=variable>read</span> <span class=variable>i</span>))
+
+<span class=variable>j</span>
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=variable>ello</span>
+</pre><p></p>
+<p>
+</p>
+<p>
+ファイル <code class=verbatim>greeting.txt</code> は以下のようなプログラムをリスナーに食わせる
+前には存在していないと仮定してください。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=variable>o</span> (<span class=variable>open-output-file</span> <span class=selfeval>&quot;greeting.txt&quot;</span>))
+
+(<span class=variable>display</span> <span class=selfeval>&quot;hello&quot;</span> <span class=variable>o</span>)
+(<span class=variable>write-char</span> <span class=selfeval>#\space</span> <span class=variable>o</span>)
+(<span class=variable>display</span> <span class=keyword>'</span><span class=variable>world</span> <span class=variable>o</span>)
+(<span class=variable>newline</span> <span class=variable>o</span>)
+
+(<span class=variable>close-output-port</span> <span class=variable>o</span>)
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>今や、ファイル <code class=verbatim>greeting.txt</code> には以下の行が含まれているでしょう。</p>
+<p>
+</p>
+<pre class=verbatim>hello world&nbsp;
+</pre><p></p>
+<p>
+</p>
+<a name="node_sec_7.3.1"></a>
+<h3 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_7.3.1">7.3.1&nbsp;&nbsp;ファイルポートの自動オープンと自動クローズ</a></h3>
+<p><a name="node_idx_364"></a><a name="node_idx_366"></a></p>
+<p>
+Scheme は <code class=scheme><span class=variable>call-with-input-file</span></code> と <code class=scheme><span class=variable>call-with-output-file</span></code> という
+ポートのオープンと使用後のクローズの面倒をみてくれる手続きを
+用意しています。</p>
+<p>
+</p>
+<p>
+<code class=scheme><span class=variable>call-with-input-file</span></code> はファイル名と手続きをひとつ
+引数としてとります。この手続きはファイル上にオープンした入力ポート
+に適用されます。この手続きが終了するとポートのクローズを確認後
+手続きの結果が返されます。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>call-with-input-file</span> <span class=selfeval>&quot;hello.txt&quot;</span>
+  (<span class=keyword>lambda</span> (<span class=variable>i</span>)
+    (<span class=keyword>let*</span> ((<span class=variable>a</span> (<span class=variable>read-char</span> <span class=variable>i</span>))
+           (<span class=variable>b</span> (<span class=variable>read-char</span> <span class=variable>i</span>))
+           (<span class=variable>c</span> (<span class=variable>read-char</span> <span class=variable>i</span>)))
+      (<span class=variable>list</span> <span class=variable>a</span> <span class=variable>b</span> <span class=variable>c</span>))))
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  (<span class=selfeval>#\h</span> <span class=selfeval>#\e</span> <span class=selfeval>#\l</span>)
+</pre><p></p>
+<p>
+</p>
+<p>
+手続き <code class=scheme><span class=variable>call-with-output-file</span></code> は出力ファイルに対して類似のサービスを
+提供します。</p>
+<p>
+<a name="node_idx_368"></a><a name="node_idx_370"></a></p>
+<p>
+</p>
+<a name="node_sec_7.4"></a>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_7.4">7.4&nbsp;&nbsp;文字列ポート</a></h2>
+<p><a name="node_idx_372"></a></p>
+<p>
+ポートが文字列に結びついていると便利なことが多いです。それで、
+手続き <code class=scheme><span class=variable>open-input-string</span></code> は与えられた文字列にポートを結びつけます。
+このポート上のリーダー手続きは文字列を読み取ります。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=variable>i</span> (<span class=variable>open-input-string</span> <span class=selfeval>&quot;hello world&quot;</span>))
+
+(<span class=variable>read-char</span> <span class=variable>i</span>)
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#\h</span>
+
+(<span class=variable>read</span> <span class=variable>i</span>)
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=variable>ello</span>
+
+(<span class=variable>read</span> <span class=variable>i</span>)
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=variable>world</span>
+</pre><p></p>
+<p>
+<a name="node_idx_374"></a></p>
+<p>
+</p>
+<p>
+手続き <code class=scheme><span class=variable>open-output-string</span></code> は最終的には文字列を生成するのに
+使われる出力ポートを新たに生成します。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=variable>o</span> (<span class=variable>open-output-string</span>))
+
+(<span class=variable>write</span> <span class=keyword>'</span><span class=variable>hello</span> <span class=variable>o</span>)
+(<span class=variable>write-char</span> <span class=selfeval>#\,</span> <span class=variable>o</span>)
+(<span class=variable>display</span> <span class=selfeval>&quot; &quot;</span> <span class=variable>o</span>)
+(<span class=variable>display</span> <span class=selfeval>&quot;world&quot;</span> <span class=variable>o</span>)
+</pre><p></p>
+<p>
+<a name="node_idx_376"></a></p>
+<p>
+</p>
+<p>
+手続き <code class=scheme><span class=variable>get-output-string</span></code> を文字列ポート <code class=scheme><span class=variable>o</span></code> に蓄積された文字列を
+取得するのに使えます。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>get-output-string</span> <span class=variable>o</span>)
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>&quot;hello, world&quot;</span>
+</pre><p></p>
+<p>
+文字列ポートは明示的にクローズする必要はありません。</p>
+<p>
+<a name="node_idx_378"></a><a name="node_idx_380"></a></p>
+<p>
+</p>
+<a name="node_sec_7.5"></a>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_7.5">7.5&nbsp;&nbsp;ファイルのロード</a></h2>
+<p></p>
+<p>
+Scheme のコードを含むファイルをロードする手続き <code class=scheme><span class=variable>load</span></code> については
+すでに見ました。ファイルを<em>ロードすること</em>は、そのファイルに
+含まれているすべての Scheme のフォームを順に評価することにあります。</p>
+<p>
+</p>
+<p>
+ファイルは別のファイルをロードすることができます。これは、
+大きなプログラムをいくつものファイルに分割するときによく使います。
+残念ながら、フルパスを指定されないかぎり、<code class=scheme><span class=variable>load</span></code> の引数のファイルは
+Scheme のカレントディレクトリに依存します。フルパス名を与えることは
+不便なこともあります。プログラムファイルをひとつかたまりとして
+(おたがいの相対関係は維持したままで)移動したい場合で、おそらく
+いろいろなマシンに移動したい場合があるからです。</p>
+<p>
+<a name="node_idx_382"></a></p>
+<p>
+</p>
+<p>
+MzScheme では、ロードするファイルを決定するのにとても
+便利な <code class=scheme><span class=variable>load-relative</span></code> 手続きを用意しています。
+<code class=scheme><span class=variable>load-relative</span></code> は <code class=scheme><span class=variable>load</span></code> と同様にパス名を引数としてとります。
+ファイル <code class=scheme><span class=variable>foo.scm</span></code> 中に <code class=scheme><span class=variable>load-relative</span></code> の呼び出しがあると
+引数のパスは呼んでいる<code class=scheme><span class=variable>foo.scm</span></code>のディレクトリからのパスであると
+推定してくれます。特に、このパス名は Scheme のカレントディレクトリ
+とは独立しています。また、それゆえに、複数ファイルで開発するには
+便利なものです。
+</p>
+<p>
+</p>
+<p>
+</p>
+<div class=smallskip></div>
+<p style="margin-top: 0pt; margin-bottom: 0pt">
+<div align=right class=navigation>[Go to <span><a href="t-y-scheme.html">first</a>, <a href="t-y-scheme-Z-H-8.html">previous</a></span><span>, <a href="t-y-scheme-Z-H-10.html">next</a></span> page<span>; &nbsp;&nbsp;</span><span><a href="t-y-scheme-Z-H-1.html#node_toc_start">contents</a></span><span><span>; &nbsp;&nbsp;</span><a href="t-y-scheme-Z-H-25.html#node_index_start">index</a></span>]</div>
+</p>
+<p></p>
+</div>
+</body>
+</html>

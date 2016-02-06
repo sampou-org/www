@@ -1,0 +1,173 @@
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--
+
+Generated from t-y-scheme.tex by tex2page, v 20060531
+(running on Gauche 0.8.7, unix), 
+(c) Dorai Sitaram, 
+http://www.ccs.neu.edu/~dorai/tex2page/tex2page-doc.html
+
+-->
+<head>
+<title>
+独習 Scheme 三週間 Teach Yourself Scheme in Fixnum Days
+</title>
+<link rel="stylesheet" type="text/css" href="t-y-scheme-Z-S.css" title=default>
+<meta name=robots content="noindex,follow">
+<meta name=description content="A practical
+introduction to the programming language Scheme">
+
+<meta name=author content="Dorai Sitaram">
+
+<link rev=made href="mailto:ds26@gte.com">
+</head>
+<body>
+<div id=slidecontent>
+<div align=right class=navigation>[Go to <span><a href="t-y-scheme.html">first</a>, <a href="t-y-scheme-Z-H-20.html">previous</a></span><span>, <a href="t-y-scheme-Z-H-22.html">next</a></span> page<span>; &nbsp;&nbsp;</span><span><a href="t-y-scheme-Z-H-1.html#node_toc_start">contents</a></span><span><span>; &nbsp;&nbsp;</span><a href="t-y-scheme-Z-H-25.html#node_index_start">index</a></span>]</div>
+<p></p>
+<a name="node_chap_B"></a>
+<h1 class=chapter>
+<div class=chapterheading><a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_B">Appendix B</a></div><br>
+<a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_B">Scheme で書いた DOS のバッチファイル</a></h1>
+<p>
+<a name="node_idx_534"></a></p>
+<p>
+DOS のシェルスクリプトは<em>バッチファイル</em>という名で知られています。
+例の&#8220;Hello, World!&#8221;を出力する DOS のバッチファイルは以下のように
+なっています。</p>
+<p>
+</p>
+<pre class=verbatim>echo Hello, World!&nbsp;
+</pre><p></p>
+<p>
+</p>
+<p>
+これは DOS コマンドの <code class=verbatim>echo</code> を使っています。このバッチファイルを
+<code class=verbatim>hello.bat</code> とします。これはオペレーティングシステムに実行ファイルで
+あることを認識させるためです。こうしておいて、環境変数 PATH にある
+ディレクトリに置くと、DOS プロンプトで以下のようにタイプするか</p>
+<p>
+</p>
+<pre class=verbatim>hello.bat&nbsp;
+</pre><p></p>
+<p>
+単に</p>
+<p>
+</p>
+<pre class=verbatim>hello&nbsp;
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>とタイプするたびに、即座にそっけない挨拶が得られます。</p>
+<p>
+</p>
+<p>
+この hello バッチファイルの Scheme バージョンは同じ出力を Scheme を
+使って実行しますが、DOS にファイルの中のコマンドをデフォルトの
+バッチファイルではなく、Scheme として解釈するように教えるための
+何かが必要です。Scheme バッチファイルは <code class=verbatim>hello.bat</code> という名前にし、
+その中身は、以下のようになります。</p>
+<p>
+</p>
+<pre class=verbatim>;@echo off&nbsp;
+;goto :start&nbsp;
+#|&nbsp;
+:start&nbsp;
+echo. &gt; c:\_temp.scm&nbsp;
+echo (load (find-executable-path &quot;hello.bat&quot; &gt;&gt; c:\_temp.scm&nbsp;
+echo &quot;hello.bat&quot;)) &gt;&gt; c:\_temp.scm&nbsp;
+mzscheme -r c:\_temp.scm %1 %2 %3 %4 %5 %6 %7 %8 %9&nbsp;
+goto :eof&nbsp;
+|#&nbsp;
+&nbsp;
+(display &quot;Hello, World!&quot;)&nbsp;
+(newline)&nbsp;
+&nbsp;
+;:eof&nbsp;
+</pre><p></p>
+<p>
+</p>
+<p>
+<code class=verbatim>|#</code> までの行は標準の DOS バッチです。そのあとの部分は
+挨拶のための Scheme のコードです。最後にまた 標準の DOS バッチの
+行が一行あります。それは、<code class=verbatim>;:eof</code> です。</p>
+<p>
+</p>
+<p>
+ユーザが DOS プロンプトで <code class=verbatim>hello</code> とタイプすると DOS は
+<code class=verbatim>hello.bat</code> を通常のバッチファイルとして読み、走らせます。
+最初の行、<code class=verbatim>;@echo off</code> はコマンドが走ったときのエコーを
+オフにします。スクリプトの効果を曇らせる度の過ぎたエコーは
+欲しくないからです。2 行目 <code class=verbatim>;goto :start</code> は先の <code class=verbatim>:start</code> 
+ラベルのラインまでジャンプを実行します。<code class=verbatim>echo</code> ではじまる
+3 行は以下の内容の <code class=verbatim>c:\_temp.tmp</code> という一時ファイルを作ります。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>load</span> (<span class=variable>find-executable-path</span> <span class=selfeval>&quot;hello.bat&quot;</span> <span class=selfeval>&quot;hello.bat&quot;</span>))
+</pre><p></p>
+<p>
+</p>
+<p>
+次のバッチコマンドは MzScheme の呼び出しです。
+<code class=verbatim>-r</code> オプションは Scheme のファイル <code class=verbatim>c:\_temp.scm</code> を
+ロードします。すべての引数(ここの例では引数はありません)は
+ベクタ <code class=scheme><span class=variable>argv</span></code> にあり Scheme から利用可能です。
+この Scheme の呼び出しは下で見るように Scheme のスクリプトを
+評価します。Scheme から復帰したあと、バッチファイルを
+きれいにまきあげなければなりません。次のバッチコマンドは
+<code class=verbatim>goto :eof</code> で、これは、すべての Scheme のコードを避け、
+まさにこのファイルの最後(ラベル <code class=verbatim>;:eof</code> を含む)に飛ぶため
+制御コードです。こうして、スクリプトは終了します。</p>
+<p>
+</p>
+<p>
+これで、どのように Scheme の呼び出しおこなわれるか、すなわち、
+このバッチファイルに埋め込まれた Scheme 式をどのように走らせる
+かを理解することができます。<code class=verbatim>c:\_temp.scm</code> のロードによって
+Scheme は <code class=verbatim>hello.bat</code> ファイルのフルパス名を
+(<code class=scheme><span class=variable>find-executable-path</span></code> を使って)推論します。そして、<code class=verbatim>hello.bat</code>
+を<em>ロード</em>します。</p>
+<p>
+</p>
+<p>
+これで、Scheme のスクリプトファイルが Scheme ファイルとして実行され、
+そのファイルの中の Scheme のフォームが元のスクリプトの引数に
+ベクタ <code class=scheme><span class=variable>argv</span></code> を通じてアクセスできます。</p>
+<p>
+</p>
+<p>
+さて、Scheme はスクリプト内のバッチコマンドを回避しなければなりません。
+これは、これらのバッチコマンドの前にセミコロンがついているか、
+<code class=verbatim>#| ... |#</code> で囲まれているので、簡単です。これらは Scheme の
+コメントをつくります。</p>
+<p>
+</p>
+<p>
+ファイルののこりはもちろん、Scheme そのものです。
+そこにある式は、順に評価されます。(最後の式 <code class=verbatim>;:eof</code> は
+Scheme ではコメントなので問題ありません。) すべての式の
+評価が終了してしまえば、Scheme は終了します。</p>
+<p>
+要するに、<code class=verbatim>hello</code> と DOS プロンプトでタイプすれば、</p>
+<p>
+</p>
+<pre class=verbatim>Hello, World!&nbsp;
+</pre><p></p>
+<p>
+</p>
+
+<p class=noindent>が表示され、また DOS プロンプトに戻ります。
+</p>
+<p>
+</p>
+<div class=smallskip></div>
+<p style="margin-top: 0pt; margin-bottom: 0pt">
+<div align=right class=navigation>[Go to <span><a href="t-y-scheme.html">first</a>, <a href="t-y-scheme-Z-H-20.html">previous</a></span><span>, <a href="t-y-scheme-Z-H-22.html">next</a></span> page<span>; &nbsp;&nbsp;</span><span><a href="t-y-scheme-Z-H-1.html#node_toc_start">contents</a></span><span><span>; &nbsp;&nbsp;</span><a href="t-y-scheme-Z-H-25.html#node_index_start">index</a></span>]</div>
+</p>
+<p></p>
+</div>
+</body>
+</html>

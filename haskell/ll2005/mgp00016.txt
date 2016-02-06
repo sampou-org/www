@@ -1,0 +1,10 @@
+
+Haskell を楽しもう
+
+日本語の解説サイト，入門サイトの増加
+そのうち入門書やクックブックも出版されるかも
+
+「情報処理」連載: Haskell プログラミング
+http://www.ipsj.or.jp/07editj/promenade/
+
+Happy Hacking with Haskell! 

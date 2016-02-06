@@ -1,0 +1,603 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<title>Meet the Monads</title>
+</head>
+<body>
+
+<!--
+<p lang="en">
+<table width="100%">
+<tr>
+ <td align="left" width="33%">Prev: <a href="introduction.html">Introduction</a></td>
+ <td align="center" width="33%">TOC: <a href="index.html">Contents</a></td>
+ <td align="right" width="33%">Next: <a href="class.html">Doing it with class</a></td>
+</tr>
+</table>
+</p>
+-->
+<p lang="ja">
+<table width="100%">
+<tr>
+ <td align="left" width="33%">Prev: <a href="introduction.html">
+  イントロダクション</a></td>
+ <td align="center" width="33%">TOC: <a href="index.html">目次</a></td>
+ <td align="right" width="33%">Next: <a href="class.html">class で使う</a></td>
+</tr>
+</table>
+</p>
+<!--
+<p lang="en">
+<h1>Meet the Monads</h1>
+<ul>
+<li><a href="#typeconstructors">Type constructors</a></li>
+<li><a href="#maybe">Maybe a monad</a></li>
+<li><a href="#list">A list is also a monad</a></li>
+<li><a href="#example1">An example</a></li>
+<li><a href="#summary">Summary</a></li>
+</ul>
+</p>
+-->
+<p lang="ja">
+<h1>モナドに触れる</h1>
+<ul>
+<li><a href="#typeconstructors">型構築子</a></li>
+<li><a href="#maybe">Maybe というモナド</a></li>
+<li><a href="#example1">例</a></li>
+<li><a href="#list">リストもモナド</a></li>
+<li><a href="#summary">要約</a></li>
+</ul>
+</p>
+
+<hr align="center" size="1" width="80%">
+
+<!--
+<p lang="en">
+We will use the <code>Maybe</code> type constructor
+throughout this chapter, so you should familiarize yourself with the
+definition and usage of
+<a href="http://www.haskell.org/onlinelibrary/maybe.html">
+<code>Maybe</code></a> before continuing.
+</p>
+-->
+<p lang="ja">
+この章をつうじて、<code>Maybe</code> 型構築子を使うので、先にすすむ前に
+<a href="http://www.haskell.org/onlinelibrary/maybe.html">
+<code>Maybe</code></a> の使いかたと定義になれておかなければなりません。
+</p>
+
+<!--
+<a name="typeconstructors"><h2>Type constructors</h2></a>
+-->
+<a name="typeconstructors"><h2>型構築子</h2></a>
+
+<!--
+<p lang="en">
+To understand monads in Haskell, you need to be comfortable dealing with
+type constructors.  A <em>type constructor</em> is a parameterized type
+definition used with polymorphic types.  By supplying a type constructor
+with one or more concrete types, you can construct a new concrete type
+in Haskell.  In the definition of <code>Maybe</code>:
+<pre>
+  data Maybe a = Nothing | Just a
+</pre>
+<code>Maybe</code> is a type constructor and <code>Nothing</code>
+and <code>Just</code> are data constructors.  You can construct a data value
+by applying the <code>Just</code> data constructor to a value:
+<pre>
+  country = Just "China"
+</pre>
+In the same way, you can construct a type by applying the <code>Maybe</code> 
+type constructor to a type:
+<pre>
+  lookupAge :: DB -> String -> Maybe Int
+</pre>
+</p>
+-->
+<p lang="ja">
+Haskell のモナドを理解するためには、型構築子の扱いになじんでいる必要があ
+ります。<em>型構築子</em> は多相型をもちいたパラメータ化された型定義です。
+Haskell では、一つ以上の具体的な型にたいして、型構築子を適用すると
+新しい具体的な型を構築できます。<code>Maybe</code> の定義は、
+<pre>
+  data Maybe a = Nothing | Just a
+</pre>
+です。<code>Maybe</code> は型構築子で <code>Nothing</code> および
+<code>Just</code> はデータ構築子です。<code>Just</code> データ構築子を
+ある値に適用してデータ値を構成できます。
+<pre>
+  country = Just "China"
+</pre>
+同様に、<code>Maybe</code> 型構築子をある型に適用して型を構成できます。
+<pre>
+  lookupAge :: DB -> String -> Maybe Int
+</pre>
+</p>
+<!--
+<p lang="en">
+Polymorphic types are like containers that are capable of holding values
+of many different types.  So <code>Maybe Int</code> can be thought of as
+a <code>Maybe</code> container holding an <code>Int</code> value (or
+<code>Nothing</code>) and <code>Maybe String</code> would be a <code>Maybe</code>
+container holding a <code>String</code> value (or <code>Nothing</code>).
+In Haskell, we can also make the type of the container polymorphic, so we
+could write "<code>m a</code>" to represent a container of some type holding
+a value of some type!
+</p>
+-->
+<p lang="ja">
+多相型は多くの異る型の値を保持できるコンテナのようなものです。それゆえ、
+<code>Maybe Int</code> は <code>Int</code> の値(あるいは
+<code>Nothing</code>)を保持する <code>Maybe</code> コンテナと看倣せ、
+また、<code>Maybe String</code> は <code>String</code> の値(あるいは
+<code>Nothing</code>)を保持する <code>Maybe</code> コンテナと看倣せます。
+Haskell ではこのコンテナの型も多相にすることができます。それゆえ、
+「<code>m a</code>」と書いて、ある型の値を保持するある型のコンテナを表現
+することができます。
+</p>
+<!--
+<p lang="en">
+We often use type variables with type constructors to describe abstract features
+of a computation.  For example, the polymorphic type <code>Maybe a</code> is
+the type of all computations that may return a value or <code>Nothing</code>.
+In this way, we can talk about the properties of the container apart from any
+details of what the container might hold.
+</p>
+-->
+<p lang="ja">
+計算の抽象的な機能を表現するのに型構築子とともに型変数をよく使います。
+たとえば、多相型 <code>Maybe a</code> は、ある値または
+<code>Nothing</code> を返し得るすべての計算の型です。同様に、コンテナが
+どのようなものを保持するかという詳細から離れて、コンテナの性質について
+議論することができます。
+</p>
+<!--
+<p lang="en">
+<img src="info.png" align="left"></img>
+If you get messages about "kind errors" from the compiler when working with
+monads, it means that you are not using the type constructors correctly.
+<br clear="all"></p>
+-->
+<p lang="ja">
+<img src="info.png" align="left"></img>
+モナドを使っていて、コンパイラが「kind errors」に関するエラーを出したら、
+それは、型構築子を正しく使っていないという意味です。
+<br clear="all"></p>
+
+<!--
+<a name="maybe"><h2>Maybe a monad</h2></a>
+-->
+<a name="maybe"><h2>Maybe というモナド</h2></a>
+<!--
+<p lang="en">In Haskell a monad is represented as a type constructor
+(call it <code>m</code>), a function that builds values of that type
+(<code>a&nbsp;->&nbsp;m&nbsp;a</code>), and a function that combines values
+of that type with computations that produce values of that type to
+produce a new computation for values of that type
+(<code>m&nbsp;a&nbsp;->&nbsp;(a&nbsp;->&nbsp;m&nbsp;b)&nbsp;->&nbsp;m&nbsp;b</code>).
+Note that the container is the same, but the type of the contents of the container
+can change.  It is customary to call the monad type constructor "<code>m</code>" when
+discussing monads in general.  The function that builds values of that
+type is traditionally called "<code>return</code>" and the third function is known
+as "bind" but is written "<code>>>=</code>".  The signatures of the functions are:
+<table bgcolor="#bbaa55" width="100%"><tr><td><pre>
+-- the type of monad m
+data m a = ... 
+
+-- return is a type constructor that creates monad instances 
+return :: a -> m a
+
+-- bind is a function that combines a monad instance m a with a computation
+-- that produces another monad instance m b from a's to produce a new
+-- monad instance m b
+(>>=) :: m a -> (a -> m b) -> m b
+</pre></td></tr></table>
+</p>
+-->
+<p lang="ja">
+Haskell ではモナドは型構築子(これを <code>m</code> と呼ぶことにします)、
+その型の値を構築する関数(<code>a&nbsp;->&nbsp;m&nbsp;a</code>)、および、
+その型の値とその型の値を生成する計算とを組合せて、その型の新しい計算を
+生成する関数
+(<code>m&nbsp;a&nbsp;->&nbsp;(a&nbsp;->&nbsp;m&nbsp;b)&nbsp;->&nbsp;m&nbsp;b</code>)
+で表現されます。ここで、コンテナは同じですが、コンテナの内容の型は変りう
+ることに注意してください。モナドの型構築子を「<code>m</code>」とするのは、
+モナドに関して一般的な議論をするときの習慣です。この型の値を構築する関数
+は伝統的には「<code>return</code>」とよばれます。また 3 つめの関数は
+「<code>bind</code>」として知られていますが、「<code>>>=</code>」と書きます。
+これらの関数のシグネチャは
+<table bgcolor="#bbaa55" width="100%"><tr><td><pre>
+-- モナド m の型
+data m a = ... 
+
+-- return はモナドのインスタンスを作る型構築子 
+return :: a -> m a
+
+-- bind はモナドのインスタンス m a と、 
+-- a から別のモナドのインスタンス m b を作る計算と
+-- を組み合わせて新しいモナドのインスタンス m b を作る
+(>>=) :: m a -> (a -> m b) -> m b
+</pre></td></tr></table>
+となります。
+</p>
+<!--
+<p lang="en">
+Roughly speaking, the monad type constructor defines a type of computation, the
+<code>return</code> function creates primitive values of that
+computation type and <code>>>=</code> combines computations of that
+type together to make more complex computations of that type.  
+Using the container analogy, the type constructor <code>m</code> is a
+container that can hold different values.  <code>m a</code> is a container holding
+a value of type <code>a</code>.  The <code>return</code> function
+puts a value into a monad container.  The <code>>>=</code> function
+takes the value from a monad container and passes it to a function to
+produce a monad container containing a new value, possibly of a different
+type.  The <code>>>=</code> function is known as "bind" because it
+binds the value in a monad container to the first argument of a
+function.  By adding logic to the binding function, a monad can implement
+a specific strategy for combining computations in the monad.
+</p>
+-->
+<p lang="ja">
+おおざっぱに言うと、モナドの型構築子は計算の型を定義し、
+<code>return</code> 関数はこの計算の型のプリミティブな値を生成し、
+<code>>>=</code> はこの型の計算を組み合わせて、この型のより複雑な計算を
+作り出します。コンテナのアナロジーを用いれば、型構築子 <code>m</code> は
+異なる値を保持できるコンテナです。<code>m a</code> は型 <code>a</code>
+の値を保持するコンテナです。<code>return</code> 関数は一つの値を、一つの
+コンテナにいれる関数です。<code>>>=</code> 関数はモナドからその値をとり、
+それを新しい値(別の型の可能性もある値)を含むモナドコンテナをつくる関数に
+渡します。<code>>>=</code> 関数は、モナドコンテナ中の値を関数の第一引数
+に束縛するので、「bind」として知られています。この束縛関数にロジックを追
+加することで、モナドはそのモナド中の計算を組合せる特定の戦略を実装するこ
+とができます。
+</p>
+<!--
+<p lang="en">
+This will all become clearer after the example below, but if you feel
+particularly confused at this point you might try looking at
+this <a href="analogy.html">physical analogy of a monad</a>
+before continuing.
+</p>
+-->
+<p lang="ja">
+このことは、下の例を見たあとならわかりやすくなってきますが、この点について、
+ひどく訳がわからない感じがするなら、次に進む前に、ここの
+<a href="analogy.html">モナドの物理的なアナロジー</a>を見ると
+いいでしょう。
+</p>
+
+<!--<a name="example1"><h2>An example</h2></a>-->
+<a name="example1"><h2>ひとつの例</h2></a>
+
+<!--
+<p lang="en">
+Suppose that we are writing a program to keep track of sheep cloning
+experiments.  We would certainly want to know the genetic history of all
+of our sheep, so we would need <code>mother</code> and <code>father</code>
+functions.  But since these are cloned sheep, they may not always have both a
+mother and a father!
+</p>
+-->
+<p lang="ja">
+羊のクローン実験の記録をとるプログラムを書いているとしましょう。すべての
+羊の遺伝履歴を知りたいでしょうから、<code>mother</code> と
+<code>father</code> という関数が必要になるでしょう。でも、クローン羊なの
+で常に母と父の両方がいるとは限りません。
+</p>
+<!--
+<p lang="en">
+We would represent the possibility of not having a mother or father
+using the <code>Maybe</code> type constructor in our Haskell code:
+
+<table bgcolor="#bbaa55" width="100%"><tr><td><pre>
+type Sheep = ...
+
+father :: Sheep -> Maybe Sheep
+father = ...
+
+mother :: Sheep -> Maybe Sheep
+mother = ...
+</pre></td></tr></table>
+</p>
+-->
+<p lang="ja">
+Haskell のコードでは型構築子 <code>Maybe</code> をつかって、母あるいは
+父をもたない可能性を表現しましょう。
+<table bgcolor="#bbaa55" width="100%"><tr><td><pre>
+type Sheep = ...
+
+father :: Sheep -> Maybe Sheep
+father = ...
+
+mother :: Sheep -> Maybe Sheep
+mother = ...
+</pre></td></tr></table>
+</p>
+<!--
+<p lang="en">
+Then, defining functions to find grandparents is a little more complicated,
+because we have to handle the possibility of not having a parent:
+<table bgcolor="#bbaa55" width="100%"><tr><td><pre>
+maternalGrandfather :: Sheep -> Maybe Sheep
+maternalGrandfather s = case (mother s) of
+                          Nothing -> Nothing
+                          Just m  -> father m
+</pre></td></tr></table>
+and so on for the other grandparent combinations.
+</p>
+-->
+<p lang="ja">
+こうすると、祖父を見つける関数の定義は少し複雑です。どちらかの親をもたない
+可能性を処理しなければならないからです。
+<table bgcolor="#bbaa55" width="100%"><tr><td><pre>
+maternalGrandfather :: Sheep -> Maybe Sheep
+maternalGrandfather s = case (mother s) of
+                          Nothing -> Nothing
+                          Just m  -> father m
+</pre></td></tr></table>
+さらに、ほかの祖父母の組合せを処理しなければなりません。
+</p>
+<!--
+<p lang="en">
+It gets even worse if we want to find great grandparents:
+<table bgcolor="#bbaa55" width="100%"><tr><td><pre>
+mothersPaternalGrandfather :: Sheep -> Maybe Sheep
+mothersPaternalGrandfather s = case (mother s) of
+                                 Nothing -> Nothing
+                                 Just m  -> case (father m) of
+                                              Nothing -> Nothing
+                                              Just gf -> father gf
+</pre></td></tr></table>
+</p>
+-->
+<p lang="ja">
+曾祖父を見つけようとするとさらに状況は悪くなります。
+<table bgcolor="#bbaa55" width="100%"><tr><td><pre>
+mothersPaternalGrandfather :: Sheep -> Maybe Sheep
+mothersPaternalGrandfather s = case (mother s) of
+                                 Nothing -> Nothing
+                                 Just m  -> case (father m) of
+                                              Nothing -> Nothing
+                                              Just gf -> father gf
+</pre></td></tr></table>
+</p>
+<!--
+<p lang="en">
+Aside from being ugly, unclear, and difficult to maintain, this is
+just too much work.  It is clear that a <code>Nothing</code> value at
+any point in the computation will cause <code>Nothing</code> to be the
+final result, and it would be much nicer to implement this notion
+once in a single place and remove all of the explicit <code>case</code>
+testing scattered all over the code.  This will make the code easier
+to write, easier to read and easier to change.  So good programming
+style would have us create a combinator that captures the behavior
+we want:
+<table bgcolor="#bbaa55" width="100%">
+<tr bgcolor="#aabb55">
+<th align="left">Code available in <a href="../examples/example1.hs">example1.hs</a></th>
+</tr>
+<tr><td><pre>
+-- comb is a combinator for sequencing operations that return Maybe
+comb :: Maybe a -> (a -> Maybe b) -> Maybe b
+comb Nothing  _ = Nothing
+comb (Just x) f = f x
+
+-- now we can use `comb` to build complicated sequences
+mothersPaternalGrandfather :: Sheep -> Maybe Sheep
+mothersPaternalGrandfather s = (Just s) `comb` mother `comb` father `comb` father 
+</pre></td></tr></table>
+</p>
+-->
+<p lang="ja">
+醜く、不明瞭で、保守しにくいばかりでなく、これではあまりに面倒です。
+計算途中での <code>Nothing</code>値はどこにあっても最終的な結果を
+<code>Nothing</code> にしてしまうということは明かです。このことの記述を
+一箇所に集約し、コードのなかにまき散らされているすべての明示的
+<code>case</code> による検査を取り除けば、コードはずっと良くなる
+ことでしょう。こうすれば、コードは書きやすく、読みやすく、変更しやすい
+ものになるでしょう。よいプログラミングスタイルは求める振舞いを捕捉する
+組合せ子をつくることです。
+<table bgcolor="#bbaa55" width="100%">
+<tr bgcolor="#aabb55">
+<th align="left"><a href="../examples/example1.hs">example1.hs</a>
+で利用可能なコード</th>
+</tr>
+<tr><td><pre>
+-- comb は Maybe を返す操作の並びに対する組合せ子
+comb :: Maybe a -> (a -> Maybe b) -> Maybe b
+comb Nothing  _ = Nothing
+comb (Just x) f = f x
+
+-- こうすると `comb` をつかって複雑な並びを構築できる
+mothersPaternalGrandfather :: Sheep -> Maybe Sheep
+mothersPaternalGrandfather s = (Just s) `comb` mother `comb` father `comb` father 
+</pre></td></tr></table>
+</p>
+<!--
+<p lang="en">
+The combinator is a huge success!  The code is much cleaner and easier
+to write, understand and modify.  Notice also that the <code>comb</code> function
+is entirely polymorphic &mdash; it is not specialized for <code>Sheep</code> in any
+way.  In fact, <em>the combinator captures a general strategy for combining
+computations that may fail to return a value.</em>  Thus, we can apply the
+same combinator to other computations that may fail to return a value,
+such as database queries or dictionary lookups.
+</p>
+-->
+<p lang="ja">
+この組合せ子は大成功です。コードはずっと明瞭で書きやすく、理解も変更もし
+やすいものになりました。<code>comb</code> 関数は完全に多相的であることに
+も注目してください。これは決して <code>Sheep</code> に特定化されたもので
+はないということです。実際、<em>この組合せ子は、値を返すのに失敗する可能
+性のある計算を合成するための一般的戦略を捕捉しています。</em> したがって、
+同じこの組合せ子を、データベースへの問い合わせや辞書の検索などのように、
+値を返せない可能性のある計算に適用することができます。
+</p>
+<!--
+<p lang="en">
+The happy outcome is that common sense programming practice has led us to
+create a monad without even realizing it.  The <code>Maybe</code> type
+constructor along with the <code>Just</code> function
+(acts like <code>return</code>) and our combinator (acts like <code>>>=</code>)
+together form a simple monad for building computations which may not return
+a value.  All that remains to make this monad truly useful is to
+make it conform to the monad framework built into the Haskell language.
+That is the subject of the next chapter.
+</p>
+-->
+<p lang="ja">
+嬉しい結果は、プログラミング実践の常識が企らずもモナドの創造につながった
+ということです。<code>Just</code>関数(<code>return</code> のように振舞う)
+をともなう型構築子 <code>Maybe</code>と、いま定義した組合せ子
+(<code>>>=</code> のように振舞う)とで、値を返さない可能性のある計算を
+構築する単純なモナドを構成します。このモナドを本当に役に立つものにするた
+めにあとやるべきことは、Haskell 言語で構築されたモナドのフレームワークに
+すりあわせことだけです。これは次章の主題です。
+</p>
+
+<!--<a name="list"><h2>A list is also a monad</h2></a>-->
+<a name="list"><h2>リストもモナド</h2></a>
+
+<!--
+<p lang="en">
+We have seen that the <code>Maybe</code> type constructor is a monad
+for building computations which may fail to return a value.  You may
+be surprised to know that another common Haskell type constructor,
+<code>[]</code> (for building lists), is also a monad.  The List monad
+allows us to build computations which can return 0, 1, or more values.
+</p> 
+-->
+<p lang="ja">
+型構築子 <code>Maybe</code> が、値を返さない可能性のある計算を構築するた
+めのモナドであることを見ました。もうひとつ、Haskell ではおなじみのリスト
+を構築する型構築子 <code>[]</code>がモナドであると知ればびっくりするかも
+しれませんね。リストモナドを使えば、0個、1個、あるいはもっと多くの値を返
+しうる計算を構成することができます。
+</p> 
+<!--
+<p lang="en">
+The <code>return</code> function for lists simply creates a singleton list
+(<code>return&nbsp;x&nbsp;=&nbsp;[x]</code>).  The binding operation
+for lists creates a new list containing the results of applying the function
+to all of the values in the original list
+(<code>l&nbsp;>>=&nbsp;f&nbsp;=&nbsp;concatMap&nbsp;f&nbsp;l</code>).
+</p>
+-->
+<p lang="ja">
+リストの <code>return</code> 関数は単純に一要素のリストを生成します
+(<code>return&nbsp;x&nbsp;=&nbsp;[x]</code>)。リストの束縛演算は元のリス
+トに含まれるすべての値にたいして、関数を適用した結果を含む新しいリストを
+生成します
+(<code>l&nbsp;>>=&nbsp;f&nbsp;=&nbsp;concatMap&nbsp;f&nbsp;l</code>)。 
+</p>
+<!--
+<p lang="en">
+One use of functions which return lists is to represent
+<em>ambiguous</em> computations &mdash; that is computations which may
+have 0, 1, or more allowed outcomes.  In a computation composed from
+ambigous subcomputations, the ambiguity may compound, or it may
+eventually resolve into a single allowed outcome or no allowed outcome
+at all.  During this process, the set of possible computational states
+is represented as a list.  The List monad thus embodies a strategy for
+performing simultaneous computations along all allowed paths of an
+ambiguous computation.
+</p>
+-->
+<p lang="ja">
+リストを返す関数のひとつの使い道は、<em>曖昧な</em>計算 &mdash; すなわち、
+0個、1個あるいはそれ以上の出力を許すような計算を表現することです。
+曖昧な部分計算から組み合わされた計算のなかでは、曖昧さも合成されます。
+あるいは、偶々一つの値だけの出力も可能であり、ひとつの出力もないというこ
+とも可能です。この過程において、可能な計算状態の集合はリストによって表現
+されます。したがって、リストモナドは、曖昧な計算のすべての許されたすべて
+パスにそった、同時並行計算を行う戦略を具現しています。
+</p>
+<!--
+<p lang="en">
+Examples of this use of the List monad, and contrasting examples using
+the Maybe monad will be presented shortly.  But first, we must see how
+useful monads are defined in Haskell.
+</p>
+-->
+<p lang="ja">
+List モナドのこの使い方の例と、Maybe モナドの例との対比はすぐに示します。
+しかし、まず、Haskellでは有用なモナドがどのように定義されているかをみて
+おかなければなりません。
+</p>
+
+<!--<a name="summary"><h2>Summary</h2></a>-->
+<a name="summary"><h2>要約</h2></a>
+<!--
+<p lang="en">
+We have seen that a monad is a type constructor, a function called
+<code>return</code>, and a combinator function called <code>bind</code>
+or <code>>>=</code>.  These three elements work together to encapsulate
+a strategy for combining computations to produce more complex computations.
+</p>
+-->
+<p lang="ja">
+モナドが、型構築子と、<code>return</code> と呼ばれる関数と、
+<code>bind</code> あるいは <code>>>=</code> とよばれる組合せ子関数で
+あることを見ました。この3つの要素が共に機能して、計算の合成戦略を
+カプセル化し、さらに複雑な計算を創りだします。
+</p>
+<!--
+<p lang="en">
+Using the <code>Maybe</code> type constructor, we saw how good programming
+practice led us to define a simple monad that could be used to build complex
+computations out of sequences of computations that could each fail to return a
+value.  The resulting <code>Maybe</code> monad encapsulates a strategy for
+combining computations that may not return values.  By codifying the strategy
+in a monad, we have achieved a degree of modularity and flexibility that
+is not present when the computations are combined in an ad hoc manner.
+</p>
+-->
+<p lang="ja">
+型構築子 <code>Maybe</code> を用いて、良いプログラミングの実践により、
+それぞれが値を返すのに失敗するような計算の並びから複雑な計算を
+構築するために利用できる単純なモナドをどのように定義するかを見ました。
+<code>Maybe</code> モナドの結果は値を返さないかもしれない計算を合成する
+戦略をカプセル化しています。モナド中のこの戦略をプログラムコードにする
+ことで、アドホックな方法で組合せた計算にはない、モジュラリティと
+柔軟性を達成できました。
+</p>
+<!--
+<p lang="en">
+We have also seen that another common Haskell type constructor, 
+<code>[]</code>, is a monad.  The List monad encapsulates a strategy for
+combining computations that can return 0, 1, or multiple values.
+</p>
+-->
+<p lang="ja">
+また、もうひとつのよくある Haskell の型構築子、<code>[]</code> もモナド
+であることを見ました。リストモナドは 0個、1個あるいはそれ以上の複数の
+値を返し得る計算の組合せ戦略をカプセル化したものです。
+</p>
+
+<hr align="center" size="1" width="80%">
+
+<!--
+<p lang="en">
+<table width="100%">
+<tr>
+ <td align="left" width="33%">Prev: <a href="introduction.html">Introduction</a></td>
+ <td align="center" width="33%">TOC: <a href="index.html">Contents</a></td>
+ <td align="right" width="33%">Next: <a href="class.html">Doing it with class</a></td>
+</tr>
+</table>
+</p>
+-->
+<p lang="ja">
+<table width="100%">
+<tr>
+ <td align="left" width="33%">Prev: <a href="introduction.html">
+  イントロダクション</a></td>
+ <td align="center" width="33%">TOC: <a href="index.html">目次</a></td>
+ <td align="right" width="33%">Next: <a href="class.html">class で使う</a></td>
+</tr>
+</table>
+</p>
+
+</body>
+</html>

@@ -1,0 +1,339 @@
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--
+
+Generated from t-y-scheme.tex by tex2page, v 20060531
+(running on Gauche 0.8.7, unix), 
+(c) Dorai Sitaram, 
+http://www.ccs.neu.edu/~dorai/tex2page/tex2page-doc.html
+
+-->
+<head>
+<title>
+独習 Scheme 三週間 Teach Yourself Scheme in Fixnum Days
+</title>
+<link rel="stylesheet" type="text/css" href="t-y-scheme-Z-S.css" title=default>
+<meta name=robots content="noindex,follow">
+<meta name=description content="A practical
+introduction to the programming language Scheme">
+
+<meta name=author content="Dorai Sitaram">
+
+<link rev=made href="mailto:ds26@gte.com">
+</head>
+<body>
+<div id=slidecontent>
+<div align=right class=navigation>[Go to <span><a href="t-y-scheme.html">first</a>, <a href="t-y-scheme-Z-H-19.html">previous</a></span><span>, <a href="t-y-scheme-Z-H-21.html">next</a></span> page<span>; &nbsp;&nbsp;</span><span><a href="t-y-scheme-Z-H-1.html#node_toc_start">contents</a></span><span><span>; &nbsp;&nbsp;</span><a href="t-y-scheme-Z-H-25.html#node_index_start">index</a></span>]</div>
+<p></p>
+<a name="node_chap_A"></a>
+<h1 class=chapter>
+<div class=chapterheading><a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_A">Appendix A</a></div><br>
+<a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_A">Scheme の方言</a></h1>
+<p></p>
+<p>
+<a name="node_idx_498"></a><a name="node_idx_500"></a></p>
+<p>
+</p>
+<p>
+Scheme のメージャな方言はどれも、R5RS の仕様[<a href="t-y-scheme.hlog">cite{r5rs}</a>] を
+実装しています。R5RS に記述されている機能だけを使って、こうした
+方言間でポータブルな Scheme のコードを書くことができます。
+しかし、R5RS はコンセンサスの欠如や回避できないシステム依存性
+のために自明でないプログラミングで無視できない、いくつかの問題に
+ついては沈黙しています。それ故、さまざまな方言が、非標準で、固有の
+方法でこれらの問題に対応しています。</p>
+<p>
+<a name="node_idx_502"></a></p>
+<p>
+</p>
+<p>
+この文書では、MzScheme [<a href="t-y-scheme.hlog">cite{mzscheme}</a>] という Scheme の方言を
+使っています。それにともなって、非標準の機能もいくつか使用しています。
+この文書で使われている、方言依存の機能の完全なリストは、
+コマンドライン(リスナーセッションの開始とシェルスクリプトの両方)、
+<code class=scheme><span class=keyword>define-macro</span></code>、<code class=scheme><span class=variable>delete-file</span></code>、<code class=scheme><span class=variable>file-exists?</span></code>、
+<code class=scheme><span class=variable>file-or-directory-modify-seconds</span></code>、<code class=scheme><span class=keyword>fluid-let</span></code>、
+<code class=scheme><span class=variable>gensym</span></code>、<code class=scheme><span class=variable>getenv</span></code>、<code class=scheme><span class=variable>get-output-string</span></code>、
+<code class=scheme><span class=variable>load-relative</span></code>、<code class=scheme><span class=variable>open-input-string</span></code>、
+<code class=scheme><span class=variable>open-output-string</span></code>、<code class=scheme><span class=variable>read-line</span></code>、<code class=scheme><span class=variable>reverse!</span></code>、
+<code class=scheme><span class=variable>system</span></code>、<code class=scheme><span class=keyword>unless</span></code>、<code class=scheme><span class=keyword>when</span></code> です。</p>
+<p>
+</p>
+<p>
+これらのうち二つをのぞけば、どれも MzScheme のデフォルトの環境で
+あるものです。ないもの二つというのは、<code class=scheme><span class=keyword>define-macro</span></code> および <code class=scheme><span class=variable>system</span></code>
+で、MzScheme の標準ライブラリで提供されています。これらは
+以下のフォームを使って、明示的にMzSchemeにロードすることができます。</p>
+<p>
+</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>require</span> (<span class=variable>lib</span> <span class=selfeval>&quot;defmacro.ss&quot;</span>)) <span class=comment>;define-macro を提供</span>
+(<span class=variable>require</span> (<span class=variable>lib</span> <span class=selfeval>&quot;process.ss&quot;</span>))  <span class=comment>;system を提供</span>
+</pre><p> </p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>これらのフォームを置く良い場所は、MzScheme の<em>初期化ファイル</em>
+(あるいは<em>init ファイル</em>)で、Unix ではユーザのホーム
+ディレクトリの <code class=verbatim>.maschemerc</code> ファイルです。<a name="node_call_footnote_Temp_16"></a><sup><small><a href="#node_footnote_Temp_16">1</a></small></sup></p>
+<p>
+</p>
+<p>
+非標準機能のうちのいくつか(たとえば、<code class=scheme><span class=variable>file-exists?</span></code>、<code class=scheme><span class=variable>delete-file</span></code>)
+は実際にはデファクトスタンダードで多くの Scheme で提供されています。
+それ以外の機能のいくつか(たとえば、<code class=scheme><span class=keyword>when</span></code>、<code class=scheme><span class=keyword>unless</span></code>)は、
+早晩、それらをプリミティブとしていない Scheme 方言のどれにでも、
+ロード可能な「プラグイン」定義(この文書で与えた)があります。
+のこりは、方言特有の定義があります(たとえば、<code class=scheme><span class=variable>load-relative</span></code>)。</p>
+<p>
+</p>
+<p>
+本章では、お使いの Scheme 方言に、この文書で使っている、非標準の機能
+を組み込む方法を解説します。お使いの Scheme 方言について、さらに詳しくは、
+実装者(付録 <a href="t-y-scheme-Z-H-24.html#node_chap_E">E</a>)が提供している文書にあたってください。</p>
+<p>
+</p>
+<p>
+<a name="node_idx_504"></a></p>
+<p>
+</p>
+<a name="node_sec_A.1"></a>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_A.1">A.1&nbsp;&nbsp;起動と init ファイル</a></h2>
+<p><a name="node_idx_506"></a><a name="node_idx_508"></a></p>
+<p>
+</p>
+<p>
+MzScheme と同様に、多くの Scheme 方言は、可能であれば、init ファイルを
+ロードします。この init ファイルは通常ユーザのホームディレクトリに
+置かれます。この init ファイルは非標準の機能の定義を置く場所として
+便利です。たとえば、非標準手続き <code class=scheme><span class=variable>file-or-directory-modify-seconds</span></code> を
+Scheme の Guile [<a href="t-y-scheme.hlog">cite{guile}</a>] 方言に追加するには、以下のコードを Guile
+の init ファイル <code class=verbatim>~/.guile</code> に置いておけば可能です。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=variable>file-or-directory-modify-seconds</span>
+  (<span class=keyword>lambda</span> (<span class=variable>f</span>)
+    (<span class=variable>vector-ref</span> (<span class=variable>stat</span> <span class=variable>f</span>) <span class=selfeval>9</span>)))
+</pre><p></p>
+<p>
+</p>
+<p>
+また、いろいろな Scheme 方言はそれぞれの別の名前のリスナー起動
+コマンドを持っています。以下の表は、いくつかの Scheme 方言の
+起動コマンドと init ファイルです。</p>
+<p>
+</p>
+<table><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<em>Dialect name</em>  </td><td>   <em>Command</em>  </td><td>   <em>Init&nbsp;file</em>  </td></tr>
+<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bigloo  </td><td>   <code class=verbatim>bigloo</code>  </td><td>   <code class=verbatim>~/.bigloorc</code>  </td></tr>
+<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Chicken  </td><td>   <code class=verbatim>csi</code>  </td><td>   <code class=verbatim>~/.csirc</code>  </td></tr>
+<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Gambit  </td><td>   <code class=verbatim>gsi</code>  </td><td>   <code class=verbatim>~/gambc.scm</code>  </td></tr>
+<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Gauche  </td><td>   <code class=verbatim>gosh</code>  </td><td>   <code class=verbatim>~/.gaucherc</code>  </td></tr>
+<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Guile  </td><td>   <code class=verbatim>guile</code>  </td><td>   <code class=verbatim>~/.guile</code>  </td></tr>
+<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kawa  </td><td>   <code class=verbatim>kawa</code>  </td><td>   <code class=verbatim>~/.kawarc.scm</code>  </td></tr>
+<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MIT Scheme (Unix)  </td><td>   <code class=verbatim>scheme</code>  </td><td>   <code class=verbatim>~/.scheme.init</code>  </td></tr>
+<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MIT Scheme (Win)  </td><td>   <code class=verbatim>scheme</code>  </td><td>   <code class=verbatim>~/scheme.ini</code>  </td></tr>
+<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MzScheme (Unix, Mac OS X)  </td><td>   <code class=verbatim>mzscheme</code>  </td><td>    <code class=verbatim>~/.mzschemerc</code>  </td></tr>
+<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MzScheme (Win, Mac OS Classic)  </td><td>   <code class=verbatim>mzscheme</code>  </td><td>   <code class=verbatim>~/mzschemerc.ss</code>  </td></tr>
+<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SCM  </td><td>   <code class=verbatim>scm</code>  </td><td>   <code class=verbatim>~/ScmInit.scm</code>  </td></tr>
+<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;STk  </td><td>   <code class=verbatim>snow</code>  </td><td>   <code class=verbatim>~/.stkrc</code>  </td></tr>
+</table><p></p>
+<p>
+</p>
+<p>
+<a name="node_idx_510"></a></p>
+<p>
+</p>
+<a name="node_sec_A.2"></a>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_A.2">A.2&nbsp;&nbsp;シェルスクリプト</a></h2>
+<p>Guile で書いたシェルスクリプトの最初の一行は以下のようになります。</p>
+<p>
+</p>
+<pre class=scheme><span class=selfeval>&quot;:&quot;</span><span class=comment>;exec guile -s $0 &quot;$@&quot;</span>
+</pre><p></p>
+<p>
+</p>
+<p>
+このスクリプトでは、手続き呼び出し <code class=scheme>(<span class=variable>command-line</span>)</code> は
+スクリプトの名前と引数のリストを返します。引数にだけアクセス
+したいのであれば、このリストの <code class=scheme><span class=variable>cdr</span></code> をとればいいだけです。</p>
+<p>
+Gauche [<a href="t-y-scheme.hlog">cite{gauche}</a>] のシェルスクリプトの最初はこんな風になります。</p>
+<p>
+</p>
+<pre class=scheme><span class=selfeval>&quot;:&quot;</span><span class=comment>; exec gosh -- $0 &quot;$@&quot;</span>
+</pre><p></p>
+<p>
+このスクリプトでは、変数 <code class=scheme><span class=global>*argv*</span></code> がスクリプトへの引数のリストを
+保持しています。</p>
+<p>
+SCM で書いたシェルスクリプトはこんな感じです。</p>
+<p>
+</p>
+<pre class=scheme><span class=selfeval>&quot;:&quot;</span><span class=comment>;exec scm -l $0 &quot;$@&quot;</span>
+</pre><p></p>
+<p>
+</p>
+<p>
+このスクリプトでは、変数 <code class=scheme><span class=global>*argv*</span></code> に Scheme の実行ファイル名、
+スクリプトの名前、オプション <code class=verbatim>-l</code>、それにスクリプトへの引数が
+含まれています。引数にだけアクセスしたいのであれば、このリストの
+<code class=scheme><span class=variable>cdddr</span></code> をとればいいです。</p>
+<p>
+STk [<a href="t-y-scheme.hlog">cite{stk}</a>] のシェルスクリプトの最初は以下のとおり。</p>
+<p>
+</p>
+<pre class=scheme><span class=selfeval>&quot;:&quot;</span><span class=comment>;exec snow -f $0 &quot;$@&quot;</span>
+</pre><p></p>
+<p>
+</p>
+<p>
+このスクリプトでは、変数 <code class=scheme><span class=global>*argv*</span></code> がスクリプトへの引数のリストを
+保持しています。</p>
+<p>
+<a name="node_idx_512"></a></p>
+<p>
+</p>
+<a name="node_sec_A.3"></a>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_A.3">A.3&nbsp;&nbsp;<code class=scheme><span class=keyword>define-macro</span></code></a></h2>
+<p></p>
+<p>
+<a name="node_idx_514"></a><a name="node_idx_516"></a><a name="node_idx_518"></a><a name="node_idx_520"></a><a name="node_idx_522"></a>このテキストでは使われている <code class=scheme><span class=keyword>define-macro</span></code> は Scheme の方言
+Bigloo [<a href="t-y-scheme.hlog">cite{bigloo}</a>]、Chicken&nbsp;[<a href="t-y-scheme.hlog">cite{chicken}</a>]、Gambit[<a href="t-y-scheme.hlog">cite{gambit}</a>]、
+Gauche&nbsp;[<a href="t-y-scheme.hlog">cite{gauche}</a>]、Guile、MzScheme および 
+Pocket Scheme [<a href="t-y-scheme.hlog">cite{pocketscheme}</a>] にあらわれます。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define-macro</span> <span class=variable>MACRO-NAME</span>
+  (<span class=keyword>lambda</span> <span class=variable>MACRO-ARGS</span>
+    <span class=variable>MACRO-BODY</span> ...))
+</pre><p></p>
+<p>
+<a name="node_idx_524"></a></p>
+<p>
+MIT Scheme [<a href="t-y-scheme.hlog">cite{mitscheme}</a>] version 7.7.1 およびそれ以降では
+これは以下のように書かれます。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define-syntax</span> <span class=variable>MACRO-NAME</span>
+  (<span class=variable>rsc-macro-transformer</span>
+    (<span class=keyword>let</span> ((<span class=variable>xfmr</span> (<span class=keyword>lambda</span> <span class=variable>MACRO-ARGS</span> <span class=variable>MACRO-BODY</span> ...)))
+      (<span class=keyword>lambda</span> (<span class=variable>e</span> <span class=variable>r</span>)
+        (<span class=variable>apply</span> <span class=variable>xfmr</span> (<span class=variable>cdr</span> <span class=variable>e</span>))))))
+</pre><p></p>
+<p>
+それより前のバージョンの MIT Scheme では以下のようになっています。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>syntax-table-define</span> <span class=variable>system-global-syntax-table</span> <span class=keyword>'</span><span class=variable>MACRO-NAME</span>
+  (<span class=variable>macro</span> <span class=variable>MACRO-ARGS</span>
+    <span class=variable>MACRO-BODY</span> ...))
+</pre><p></p>
+<p>
+<a name="node_idx_526"></a><a name="node_idx_528"></a></p>
+<p>
+</p>
+
+<p class=noindent>SCM&nbsp;[<a href="t-y-scheme.hlog">cite{scm}</a>] および Kawa [<a href="t-y-scheme.hlog">cite{kawa}</a>] では以下です。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>defmacro</span> <span class=variable>MACRO-NAME</span> <span class=variable>MACRO-ARGS</span>
+  <span class=variable>MACRO-BODY</span> ...)
+</pre><p></p>
+<p>
+<a name="node_idx_530"></a></p>
+<p>
+STk [<a href="t-y-scheme.hlog">cite{stk}</a>] では以下です。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define-macro</span> (<span class=variable>MACRO-NAME</span> . <span class=variable>MACRO-ARGS</span>)
+  <span class=variable>MACRO-BODY</span> ...)
+</pre><p></p>
+<p>
+<a name="node_idx_532"></a></p>
+<p>
+</p>
+<a name="node_sec_A.4"></a>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_A.4">A.4&nbsp;&nbsp;<code class=scheme><span class=variable>load-relative</span></code></a></h2>
+<p>手続き <code class=scheme><span class=variable>load-relative</span></code> は Guile では以下のように定義できます。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=variable>load-relative</span>
+  (<span class=keyword>lambda</span> (<span class=variable>f</span>)
+    (<span class=keyword>let*</span> ((<span class=variable>n</span> (<span class=variable>string-length</span> <span class=variable>f</span>))
+           (<span class=variable>full-pathname?</span>
+             (<span class=keyword>and</span> (<span class=variable>&gt;</span> <span class=variable>n</span> <span class=selfeval>0</span>)
+                  (<span class=keyword>let</span> ((<span class=variable>c0</span> (<span class=variable>string-ref</span> <span class=variable>f</span> <span class=selfeval>0</span>)))
+                    (<span class=keyword>or</span> (<span class=variable>char=?</span> <span class=variable>c0</span> <span class=selfeval>#\/</span>)
+                        (<span class=variable>char=?</span> <span class=variable>c0</span> <span class=selfeval>#\~</span>))))))
+      (<span class=variable>basic-load</span>
+        (<span class=keyword>if</span> <span class=variable>full-pathname?</span> <span class=variable>f</span>
+            (<span class=keyword>let</span> ((<span class=variable>clp</span> (<span class=variable>current-load-port</span>)))
+              (<span class=keyword>if</span> <span class=variable>clp</span>
+                  (<span class=variable>string-append</span>
+                    (<span class=variable>dirname</span> (<span class=variable>port-filename</span> <span class=variable>clp</span>)) <span class=selfeval>&quot;/&quot;</span> <span class=variable>f</span>)
+                  <span class=variable>f</span>)))))))
+</pre><p></p>
+<p>
+SCM では以下です。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=variable>load-relative</span>
+  (<span class=keyword>lambda</span> (<span class=variable>f</span>)
+    (<span class=keyword>let*</span> ((<span class=variable>n</span> (<span class=variable>string-length</span> <span class=variable>f</span>))
+           (<span class=variable>full-pathname?</span>
+            (<span class=keyword>and</span> (<span class=variable>&gt;</span> <span class=variable>n</span> <span class=selfeval>0</span>)
+                 (<span class=keyword>let</span> ((<span class=variable>c0</span> (<span class=variable>string-ref</span> <span class=variable>f</span> <span class=selfeval>0</span>)))
+                   (<span class=keyword>or</span> (<span class=variable>char=?</span> <span class=variable>c0</span> <span class=selfeval>#\/</span>)
+                       (<span class=variable>char=?</span> <span class=variable>c0</span> <span class=selfeval>#\~</span>))))))
+    (<span class=variable>load</span> (<span class=keyword>if</span> (<span class=keyword>and</span> <span class=global>*load-pathname*</span> <span class=variable>full-pathname?</span>)
+              (<span class=variable>in-vicinity</span> (<span class=variable>program-vicinity</span>) <span class=variable>f</span>)
+              <span class=variable>f</span>)))))
+</pre><p></p>
+<p>
+STk では、以下の <code class=scheme><span class=variable>load-relative</span></code> の定義は <code class=scheme><span class=variable>load</span></code> を使わない
+ようにしているときにのみちゃんと働きます。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=global>*load-pathname*</span> <span class=selfeval>#f</span>)
+
+(<span class=keyword>define</span> <span class=variable>stk%load</span> <span class=variable>load</span>)
+
+(<span class=keyword>define</span> <span class=variable>load-relative</span>
+  (<span class=keyword>lambda</span> (<span class=variable>f</span>)
+    (<span class=keyword>fluid-let</span> ((<span class=global>*load-pathname*</span>
+                  (<span class=keyword>if</span> (<span class=variable>not</span> <span class=global>*load-pathname*</span>) <span class=variable>f</span>
+                      (<span class=keyword>let*</span> ((<span class=variable>n</span> (<span class=variable>string-length</span> <span class=variable>f</span>))
+                             (<span class=variable>full-pathname?</span>
+                               (<span class=keyword>and</span> (<span class=variable>&gt;</span> <span class=variable>n</span> <span class=selfeval>0</span>)
+                                    (<span class=keyword>let</span> ((<span class=variable>c0</span> (<span class=variable>string-ref</span> <span class=variable>f</span> <span class=selfeval>0</span>)))
+                                      (<span class=keyword>or</span> (<span class=variable>char=?</span> <span class=variable>c0</span> <span class=selfeval>#\/</span>)
+                                          (<span class=variable>char=?</span> <span class=variable>c0</span> <span class=selfeval>#\~</span>))))))
+                        (<span class=keyword>if</span> <span class=variable>full-pathname?</span> <span class=variable>f</span>
+                            (<span class=variable>string-append</span>
+                              (<span class=variable>dirname</span> <span class=global>*load-pathname*</span>)
+                              <span class=selfeval>&quot;/&quot;</span> <span class=variable>f</span>))))))
+      (<span class=variable>stk%load</span> <span class=global>*load-pathname*</span>))))
+
+(<span class=keyword>define</span> <span class=variable>load</span>
+  (<span class=keyword>lambda</span> (<span class=variable>f</span>)
+    (<span class=variable>error</span> <span class=selfeval>&quot;Don't use load.  Use load-relative instead.&quot;</span>)))
+</pre><p>
+</p>
+<p>
+</p>
+<div class=footnoterule><hr></div><p></p>
+<div class=footnote><p><a name="node_footnote_Temp_16"></a><sup><small><a href="#node_call_footnote_Temp_16">1</a></small></sup> <code class=verbatim>~/filename</code> という
+記法をユーザのホームディレクトリにある <code class=verbatim>filename</code> というファイルを
+あらわすのに使います。</p>
+</div>
+<div class=smallskip></div>
+<p style="margin-top: 0pt; margin-bottom: 0pt">
+<div align=right class=navigation>[Go to <span><a href="t-y-scheme.html">first</a>, <a href="t-y-scheme-Z-H-19.html">previous</a></span><span>, <a href="t-y-scheme-Z-H-21.html">next</a></span> page<span>; &nbsp;&nbsp;</span><span><a href="t-y-scheme-Z-H-1.html#node_toc_start">contents</a></span><span><span>; &nbsp;&nbsp;</span><a href="t-y-scheme-Z-H-25.html#node_index_start">index</a></span>]</div>
+</p>
+<p></p>
+</div>
+</body>
+</html>

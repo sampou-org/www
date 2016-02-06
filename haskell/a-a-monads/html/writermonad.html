@@ -1,0 +1,523 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<!--<title>The Writer monad</title>-->
+<title>Writer モナド</title>
+</head>
+<body>
+
+<!--
+<table lang="en" width="100%">
+ <tr>
+  <td align="left" width="33%">Prev:
+   <a href="readermonad.html">The Reader monad</a></td>
+  <td align="center" width="33%">TOC:
+   <a href="index.html">Contents</a></td>
+  <td align="right" width="33%">Next:
+   <a href="contmonad.html">The Continuation monad</a></td>
+ </tr>
+</table>
+-->
+<table lang="ja" width="100%">
+ <tr>
+  <td align="left" width="33%">Prev:
+   <a href="readermonad.html">Reader モナド</a></td>
+  <td align="center" width="33%">TOC:
+   <a href="index.html">Contents</a></td>
+  <td align="right" width="33%">Next:
+   <a href="contmonad.html">Continuation モナド</a></td>
+ </tr>
+</table>	
+
+<h1>The Writer monad</h1>
+<h1 lang="ja">Writer モナド</h1>
+
+<!--
+<ul lang="en">
+  <li><a href="#overview">Overview</a></li>
+  <li><a href="#motivation">Motivation</a></li>
+  <li><a href="#definition">Definition</a></li>
+  <li><a href="#example">Example</a></li>
+</ul>
+-->
+<ul lang="ja">
+  <li><a href="#overview">概観</a></li>
+  <li><a href="#motivation">動機</a></li>
+  <li><a href="#definition">定義</a></li>
+  <li><a href="#example">例</a></li>
+</ul>
+
+<hr align="center" size="1" width="80%">
+
+<a name="overview">
+<!--<h2 lang="en">Overview</h2>-->
+<h2 lang="ja">概観</h2></a>
+<!--
+<table lang="en" width="100%" cellpadding="3">
+  <tr>
+    <th align="left">Computation type:</th>
+    <td>Computations which produce a stream of data in addition to the
+    computed values.
+  </tr>
+  <tr>
+    <th align="left">Binding strategy:</th>
+    <td>A Writer monad value is a (computation value, log value) pair.
+    Binding replaces the computation value with the result of applying the bound
+    function to the previous value and appends any log data from the computation
+    to the existing log data.
+    </td>
+  </tr>
+  <tr>
+    <th align="left">Useful for:</th>
+    <td>Logging, or other computations that produce output "on the side".
+    </td>
+  </tr>
+  <tr>
+    <th align="left">Zero and plus:</th>
+    <td>None.</td>
+  </tr>
+  <tr>
+    <th align="left">Example type:</th>
+    <td><a href="http://www.haskell.org/ghc/docs/latest/html/base/Control.Monad.Writer.html">Writer [String] a</a></td>
+  </tr>
+</table>
+-->
+<table lang="ja" width="100%" cellpadding="3">
+  <tr>
+    <th align="left">計算のタイプ:</th>
+    <td>計算された値にとは別にデータのストリームを生成する計算
+  </tr>
+  <tr>
+    <th align="left">束縛の戦略:</th>
+    <td>Writer モナド値は (計算の値, ログの値) という組みです。束縛によっ
+     て計算の値は、束縛された関数を直前の値に適用した結果で置き換え、その
+     計算で得られた、なにがしかのログデータを既存のログデータに追加します。
+    </td>
+  </tr>
+  <tr>
+    <th align="left">利用場面:</th>
+    <td>ログあるいは他の出力を「別に」生成する計算
+    </td>
+  </tr>
+  <tr>
+    <th align="left">ゼロおよびプラス:</th>
+    <td>なし</td>
+  </tr>
+  <tr>
+    <th align="left">型の例:</th>
+    <td><a href="http://www.haskell.org/ghc/docs/latest/html/base/Control.Monad.Writer.html">Writer [String] a</a></td>
+  </tr>
+</table>
+
+<!--<a name="motivation"><h2>Motivation</h2></a>-->
+<a name="motivation"><h2>動機</h2></a>
+<!--
+<p lang="en">It is often desirable for a computation to generate output
+ "on the side".  Logging and tracing are the most common examples
+ in which data is generated during a computation that we want to
+ retain but is not the primary result of the computation.
+</p>
+-->
+<p lang="ja">「別に」出力を生成するという計算が欲しい場面はよくあることです。
+ 計算中に本質の結果ではないですが取っておきたいデータを作るような
+ ログやトレースがよくある例でしょう。
+</p>
+<!--
+ <p lang="en">
+ Explicitly managing the logging or tracing data can clutter up
+ the code and invite subtle bugs such as missed log entries.
+ The Writer monad provides a cleaner way to manage the output
+ without cluttering the main computation.
+</p>
+-->
+<p lang="ja">
+ ログやトレースのデータを明示的に管理するのはコードを取り散らかし、
+ ログエントリをとりこぼすなどの微妙なバグを招きます。Writer モナドは
+ メインの計算を取り散らかすことなく出力を管理する明快な方法を
+ 提供します。
+</p>
+
+<a name="definition">
+<!--<h2 lang="en">Definition</h2>-->
+<h2 lang="ja">定義</h2></a>
+<!--
+<p lang="en">
+The definition shown here uses multi-parameter type classes
+and funDeps, which are not standard Haskell 98.  It is not necessary
+to fully understand these details to make use of the Writer monad.
+</p>
+-->
+<p lang="ja">
+ここで示した定義では Haskell 98 の標準にはない、複数パラメータ型クラスお
+よび funDeps が使われています。この Writer モナドを利用するのに、これの
+詳細を完全には理解する必要はありません。
+</p>
+<!--
+<p lang="en">
+The good news is that monoids are simpler than monads.  A monoid
+is a set of objects, a single identity element, and an associative binary operator
+over the set of objects.  A monoid must obey some mathematical laws,
+such that applying the operator to any values from the set gives another
+value in the set, and whenever one operand of the operator is the identity
+element the result is equal to the other operand.  You may notice that
+these laws are the same as the laws governing <code>mzero</code> and
+<code>mplus</code> for instances of <code>MonadPlus</code>.  That is because
+monads with a zero and plus are monads that are also monoids!
+</p>
+-->
+<p lang="ja">
+モノイドがモナドよりシンプルであるということは良いことです。モノイド
+はオブジェクトの集合、単一の単位元そして集合上で定義された
+結合的二項演算子です。モノイドはいくつかの数学的法則に従わなければ
+なりません。その集合上のどのような値に演算子を適用しても
+結果はその集合の値になること。演算子の一方のオペランドが単位元であれば
+結果はもう一方のオペランドに等しくなること。これらの法則は、
+<code>MonadPlus</code> のインスタンスの <code>mzero</code> および
+<code>mplus</code> を支配している法則であることに気づいたことと
+思います。これは、ゼロおよびプラスをもつモナドは、モナドであると
+同時にモノイドであるということです。
+</p>
+
+<!--
+<p lang="en">
+Some examples of mathematical monoids are the natural numbers with
+identity element 0 and binary operator for addition, and also the
+natural numbers with identity element 1 and binary operator for multiplication. 
+</p>
+-->
+<p lang="ja">
+数学的なモノイドの例としては、単位元 0 をもつ自然数と加法二項演算子で
+あるとか、単位元 1 をもつ自然数と乗法二項演算子があります。
+</p>
+<!--
+<p lang="en">
+In Haskell, a monoid consists of a type, an identity element,
+and a binary operator.  Haskell defines the <code>Monoid</code> class 
+(in Data.Monoid) to provide a standard convention for working with monoids:
+the identity element is named <code>mempty</code> and the operator is named
+<code>mappend</code>.
+</p>
+-->
+<p lang="ja">
+Haskell ではモノイドは、型と単位元と二項演算子で構成されます。
+Haskell では <code>Monoid</code> クラスが((in Data.Monoid で)定義され
+モノイドの標準的な機能が提供されています。単位元は、<code>mempty</code> 
+という名前であり、演算子は <code>mappend</code> です。
+</p>
+<!--
+<p lang="en">
+The most commonly used standard monoid in Haskell is
+the list, but functions of type <code>(a&nbsp;->&nbsp;a)</code> also form a monoid.
+</p>
+-->
+<p lang="ja">
+Haskell でもっともよく使われる標準モノイドはリストですが、
+<code>(a&nbsp;->&nbsp;a)</code> という型の関数もモノイドを構成します。
+</p>
+<!--
+<p lang="en">
+<img src="warn.png" align="left"></img>
+Care should be taken when using a list as the monoid for a Writer, as there may
+be a performance penalty associated with the <code>mappend</code> operation
+as the output grows.  In that case, a data structure that supports fast
+append operations would be a more appropriate choice.
+</p>
+-->
+<p lang="ja">
+<img src="warn.png" align="left"></img>
+リストを Writer 用のモノイドとしてリストを使うには注意が必要です。
+それは、出力が大きくなるにつれ <code>mappend</code> 演算に伴う
+パフォーマンス上のペナルティが大きくなるからです。この場合、
+早いアペンド操作をサポートするしかるべきデータ構造を選択すべきです。
+</p>
+
+<table bgcolor="#bbaa55" width="100%"><tr><td><pre>
+newtype Writer w a = Writer { runWriter :: (a,w) } 
+ 
+instance (Monoid w) => Monad (Writer w) where 
+    return a             = Writer (a,mempty) 
+    (Writer (a,w)) >>= f = let (a',w') = runWriter $ f a in Writer (a',w `mappend` w')
+</pre></td></tr></table>
+
+<!--
+<p lang="en">
+The Writer monad maintains a (value,log) pair, where the log type must be
+a monoid.  The <code>return</code> function simply returns the value
+along with an empty log.  Binding executes the bound function using the current
+value as input, and appends any log output to the existing log.
+</p>
+-->
+<p lang="ja">
+Writer モナドは (値,ログ) という組を保持します。ここで、ログの型は
+モノイドでなければなりません。<code>return</code> 関数は単純に空ログ付き
+の値を返します。束縛によって、入力として現在の値を使う束縛された関数が
+実行され、すべてのログ出力が既存のログに追加されます。
+</p>
+
+<table bgcolor="#bbaa55" width="100%"><tr><td><pre>
+class (Monoid w, Monad m) => MonadWriter w m | m -> w where 
+    pass   :: m (a,w -> w) -> m a 
+    listen :: m a -> m (a,w) 
+    tell   :: w -> m () 
+ 
+instance (Monoid w) => MonadWriter (Writer w) where 
+    pass   (Writer ((a,f),w)) = Writer (a,f w) 
+    listen (Writer (a,w))     = Writer ((a,w),w) 
+    tell   s                  = Writer ((),s) 
+ 
+listens :: (MonadWriter w m) => (w -> w) -> m a -> m (a,w) 
+listens f m = do (a,w) <- listen m; return (a,f w)
+ 
+censor :: (MonadWriter w m) => (w -> w) -> m a -> m a 
+censor f m = pass $ do a <- m; return (a,f)
+</pre></td></tr></table>
+<!--
+<p lang="en">
+The <code>MonadWriter</code> class provides a number of convenience functions
+for working with Writer monads.  The simplest and most useful is <code>tell</code>,
+which adds one or more entries to the log.  The <code>listen</code> function
+turns a Writer that returns a value <code>a</code> and produces output <code>w</code>
+into a Writer that produces a value <code>(a,w)</code> and still produces output
+<code>w</code>.  This allows the computation to "listen" to the log output
+generated by a Writer.
+</p>
+-->
+<p lang="ja">
+<code>MonadWriter</code> クラスは Writer モナドで機能するいくつもの便利
+関数を提供しています。もっとも単純でもっとも有用なのは
+<code>tell</code> です。この関数は、1つ以上のエントリをログに追加します。
+<code>listen</code> 関数は、a 型の値を返し、出力 <code>w</code> を生成
+する Writer を、値 <code>(a,w)</code> を生成し、さらに、出力
+<code>w</code> を、生成するような Writer に変換します。
+これは Writer によって作られたログを「リッスン」する計算を可能にします。
+</p>
+<!--
+<p lang="en">
+The <code>pass</code> function is slightly more complicated.  It converts a
+Writer that produces a value <code>(a,f)</code> and output <code>w</code>
+into a Writer that produces a value <code>a</code> and output <code>f w</code>.
+This is somewhat cumbersome, so the helper function <code>censor</code> is
+normally used.  The <code>censor</code> function takes a function and
+a Writer and produces a new Writer whose output is the same but whose log
+entry has been modified by the function.
+</p>
+-->
+<p lang="ja">
+ <code>pass</code> 関数は少し複雑です。これは、値 <code>(a,f)</code> 
+ および出力 <code>w</code> を生成する Writer を、値 a および出力
+ <code>f w</code> を生成する Writer に変換します。これはちょっと面倒
+ なので通常は補助関数 <code>censor</code> を使います。
+ <code>censor</code> 関数は、関数と Writer を引数にとり、ログが
+ その関数によって変換される以外は同じ出力の新しい Writer を返します。
+</p>
+<!--
+<p lang="en">
+The <code>listens</code> function operates just like <code>listen</code>
+except that the log part of the value is modified by the supplied function.
+</p>
+-->
+<p lang="ja">
+ <code>listens</code> 関数は値のログ部分が引数であたえられた関数で
+変更されている以外は <code>listen</code> と同じ操作をします。
+</p>
+
+<a name="example">
+<!--<h2 lang="en">Example</h2>-->
+<h2 lang="ja">例</h2>
+</a>
+<!--
+<p lang="en">
+In this example, we imagine a very simple firewall that filters packets
+based on a rulebase of rules matching the source and destination hosts
+and the payload of the packet.  The firewall's primary job is packet
+filtering, but we would also like it to produce a log of its activity. 
+</p>
+-->
+<p lang="ja">
+この例では、ソースおよびデスティネーションホスト、それに
+パケットのペイロードにマッチするルールに基づくルールベースの
+パケットフィルタリングをおこなう非常に単純なファイアウォールを
+想定します。このファイアウォールの主たる仕事はパケット
+フィルタリングですが、実際の動作のログも生成させたいということです。
+</p>
+<!--
+<table lang="en" bgcolor="#bbaa55" width="100%">
+<tr bgcolor="#aabb55">
+<th align="left">Code available in <a href="../examples/example17.hs">example17.hs</a></th>
+</tr>
+<tr><td><pre>
+-- this is the format of our log entries
+data Entry = Log {count::Int, msg::String} deriving Eq
+
+-- add a message to the log
+logMsg :: String -> Writer [Entry] ()
+logMsg s = tell [Log 1 s]
+
+-- this handles one packet
+filterOne :: [Rule] -> Packet -> Writer [Entry] (Maybe Packet)
+filterOne rules packet = do rule <- return (match rules packet)
+                            case rule of
+                              Nothing  -> do logMsg ("DROPPING UNMATCHED PACKET: " ++ (show packet))
+                                             return Nothing
+                              (Just r) -> do when (logIt r) (logMsg ("MATCH: " ++ (show r) ++ " <=> " ++ (show packet)))
+                                             case r of
+                                               (Rule Accept _ _) -> return (Just packet)
+                                               (Rule Reject _ _) -> return Nothing
+</pre></td></tr></table>
+-->
+<table lang="ja" bgcolor="#bbaa55" width="100%">
+ <tr bgcolor="#aabb55">
+  <th align="left"><a href="../examples/example17.hs">example17.hs</a>
+   で使えるコード</th>
+ </tr>
+<tr><td><pre>
+-- これはログエントリのフォーマットです
+data Entry = Log {count::Int, msg::String} deriving Eq
+
+-- メッセージをログに追加
+logMsg :: String -> Writer [Entry] ()
+logMsg s = tell [Log 1 s]
+
+-- これは一つのパケットを扱います
+filterOne :: [Rule] -> Packet -> Writer [Entry] (Maybe Packet)
+filterOne rules packet = do rule <- return (match rules packet)
+                            case rule of
+                              Nothing  -> do logMsg ("DROPPING UNMATCHED PACKET: " ++ (show packet))
+                                             return Nothing
+                              (Just r) -> do when (logIt r) (logMsg ("MATCH: " ++ (show r) ++ " <=> " ++ (show packet)))
+                                             case r of
+                                               (Rule Accept _ _) -> return (Just packet)
+                                               (Rule Reject _ _) -> return Nothing
+</pre></td></tr></table>
+<!--
+<p lang="en">
+That was pretty simple, but what if we want to merge duplicate consecutive
+log entries?  None of the existing functions allow us to modify the output
+from previous stages of the computation, but we can use a "delayed logging"
+trick to only add a log entry only after we get a new entry that doesn't match
+the ones before it.
+</p>
+-->
+<p lang="ja">
+これは非常に単純ですが、連続して重複したエントリをマージしたいとしたら
+どうしますか。計算の前段からの出力を変更できる既存の関数というのはあり
+ません。しかし、「遅延ログ」というトリックを使ってそれ以前のログに
+マッチしない新しいエントリが得られた後にのみログを追加することができます。
+</p>
+<!--
+<table lang="en" bgcolor="#bbaa55" width="100%">
+<tr bgcolor="#aabb55">
+<th align="left">Code available in <a href="../examples/example17.hs">example17.hs</a></th>
+</tr>
+<tr><td><pre>
+-- merge identical entries at the end of the log
+-- This function uses [Entry] as both the log type and the result type.
+-- When two identical messages are merged, the result is just the message
+-- with an incremented count.  When two different messages are merged,
+-- the first message is logged and the second is returned as the result.
+mergeEntries :: [Entry] -> [Entry] -> Writer [Entry] [Entry]
+mergeEntries []   x    = return x
+mergeEntries x    []   = return x
+mergeEntries [e1] [e2] = let (Log n msg)   = e1
+                             (Log n' msg') = e2
+                         in if msg == msg' then
+                              return [(Log (n+n') msg)]
+                            else
+                              do tell [e1]
+                                 return [e2]
+
+-- This is a complex-looking function but it is actually pretty simple.
+-- It maps a function over a list of values to get a list of Writers,
+-- then runs each writer and combines the results.  The result of the function
+-- is a writer whose value is a list of all the values from the writers and whose
+-- log output is the result of folding the merge operator into the individual
+-- log entries (using 'initial' as the initial log value).
+groupSame :: (Monoid a) => a -> (a -> a -> Writer a a) -> [b] -> (b -> Writer a c) -> Writer a [c]
+groupSame initial merge []     _  = do tell initial
+                                       return []
+groupSame initial merge (x:xs) fn = do (result,output) <- return (runWriter (fn x))
+                                       new             <- merge initial output
+                                       rest            <- groupSame new merge xs fn
+                                       return (result:rest)
+     
+-- this filters a list of packets, producing a filtered packet list and a log of
+-- the activity in which consecutive messages are merged
+filterAll :: [Rule] -> [Packet] -> Writer [Entry] [Packet]
+filterAll rules packets = do tell [Log 1 "STARTING PACKET FILTER"]
+                             out <- groupSame [] mergeEntries packets (filterOne rules)
+                             tell [Log 1 "STOPPING PACKET FILTER"]
+                             return (catMaybes out)
+</pre></td></tr></table>
+-->
+<table lang="ja" bgcolor="#bbaa55" width="100%">
+ <tr bgcolor="#aabb55">
+  <th align="left"><a href="../examples/example17.hs">example17.hs</a>
+   で使えるコード
+  </th>
+ </tr>
+ <tr><td><pre>
+-- ログの最後で同一のエントリをマージする
+-- この関数は、[Entry] をログの型および結果の型として使う
+-- 2 つの同一のメッセージがマージされると、その結果は、そのメッセージと
+-- インクリメントされたカウントになる。2 つの異るメッセージがマージ
+-- されると、最初のメッセージがログとなり、ふたつ目のメッセージは
+-- 結果として返される
+mergeEntries :: [Entry] -> [Entry] -> Writer [Entry] [Entry]
+mergeEntries []   x    = return x
+mergeEntries x    []   = return x
+mergeEntries [e1] [e2] = let (Log n msg)   = e1
+                             (Log n' msg') = e2
+                         in if msg == msg' then
+                              return [(Log (n+n') msg)]
+                            else
+                              do tell [e1]
+                                 return [e2]
+
+-- これは複雑な外観の関数ですが、実際にはたいへんシンプルである
+-- これは関数を値のリストにマップして、Writer のリストを得た後、それぞれ
+-- の Writer を実行し、結果を合成する。この関数の結果は、その値が
+-- すべての Writer からの値すべてのリストで、そのログ出力は、
+-- (initila をログの初期値として)、マージ演算子を個々のログエントリに
+-- 畳み込んだ結果です。
+groupSame :: (Monoid a) => a -> (a -> a -> Writer a a) -> [b] -> (b -> Writer a c) -> Writer a [c]
+groupSame initial merge []     _  = do tell initial
+                                       return []
+groupSame initial merge (x:xs) fn = do (result,output) <- return (runWriter (fn x))
+                                       new             <- merge initial output
+                                       rest            <- groupSame new merge xs fn
+                                       return (result:rest)
+     
+-- これはパケットのリストをフィルタし、フィルタされたパケットのリストと
+-- 連続したメッセージがマージされた活動ログを生成する
+filterAll :: [Rule] -> [Packet] -> Writer [Entry] [Packet]
+filterAll rules packets = do tell [Log 1 "STARTING PACKET FILTER"]
+                             out <- groupSame [] mergeEntries packets (filterOne rules)
+                             tell [Log 1 "STOPPING PACKET FILTER"]
+                             return (catMaybes out)
+</pre></td></tr></table>
+
+<hr align="center" size="1" width="80%">
+<!--
+<table lang="en" width="100%">
+ <tr>
+  <td align="left" width="33%">Prev:
+   <a href="readermonad.html">The Reader monad</a></td>
+  <td align="center" width="33%">TOC:
+   <a href="index.html">Contents</a></td>
+  <td align="right" width="33%">Next:
+   <a href="contmonad.html">The Continuation monad</a></td>
+ </tr>
+</table>
+-->
+<table lang="ja" width="100%">
+ <tr>
+  <td align="left" width="33%">Prev:
+   <a href="readermonad.html">Reader モナド</a></td>
+  <td align="center" width="33%">TOC:
+   <a href="index.html">Contents</a></td>
+  <td align="right" width="33%">Next:
+   <a href="contmonad.html">Continuation モナド</a></td>
+ </tr>
+</table>	
+
+</body>

@@ -1,0 +1,14 @@
+
+Haskell のコード断片 (1)
+
+quick sort
+ qsort :: Ord a => [a] -> [a]
+ qsort []     = []
+ qsort (a:xs) = qsort less_than_a ++ [a] ++ qsort not_less_than_a
+
+                where less_than_a     = [ x | x <- xs, x < a ]
+                      not_less_than_a = [ x | x <- xs, not (x < a) ]
+
+「How (どうやって計算するか)」ではなく
+「What (何を計算するか)」を書く
+

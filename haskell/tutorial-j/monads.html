@@ -1,0 +1,722 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>A Gentle Introduction to Haskell: About Monads</title>
+</head>
+<body bgcolor="#ffffff">
+<p>
+<i>やさしい Haskell 入門 (バージョン 98 )</i><br>
+<a href="stdclasses.html">back</a>
+<a href="numbers.html">next</a>
+<a href="index.html">top</a>
+</p>
+<hr>
+<p>
+<a name="tut-monads"></a>
+<a name="sect9"></a>
+<h2>9<tt>&nbsp;&nbsp;</tt>モナドについて</h2>
+</p>
+<p>
+はじめて Haskell にふれる多くのひとにとって <em>モナド</em>
+( <i>monad</i> ) の概念は謎です。Haskell ではモナドに頻繁に出会います。
+I/O システムはモナドによって構成されていますし、モナドのための特別な構文
+( <tt>do</tt> 式)も用意されています。また、モナドのためだけのモジュール
+も標準ライブラリに含まれています。このセクションではモナドを使ったプログ
+ラミングについて詳細にみていきましょう。
+</p>
+<p>
+このセクションは他のセクションにくらべるとおそらく「やさしい」というわけ
+にいかないでしょう。ここでは、モナドをふくむ言語の特徴を示すだけではなく、
+もっと壮大な絵を明かにしようとおもいます。なぜモナドがこれほど重要なツー
+ルであり、どのようにこれを使うか、ということです。だれにとっても、わかる
+モナドの説明は、これだ、というものはありません。詳細な説明は、
+<tt>haskell.org</tt> から辿れるでしょう。モナドをつかった、実際のプログ
+ラミング入門としてよい文献として Wadler の Monads for Functional
+Programming [<a href="haskell-tutorial.html#$wadler:mffp">10</a>] をあげ
+ておきましょう。
+</p>
+<p>
+<a name="tut-monadic-classes"></a>
+<a name="sect9.1"></a>
+<h3>9.1<tt>&nbsp;&nbsp;</tt>モナドのクラス</h3>
+</p>
+<p>
+プレリュードには Haskell でつかうモナドを定義したクラスがいくつもありま
+す。これらのクラスは圏論( category theory )におけるモナドの構成を基礎と
+しています。圏論の用語はモナドのクラスや演算にその名前をのこしていますが、
+モナドのクラスの使い方を直観的に理解するにはこういった抽象数学に通じてい
+る必要はありません。
+</p>
+<p>
+モナドは <tt>IO</tt> のような多相型の上に構成されます。モナド自身はイン
+スタンス宣言によって定義されます。このインスタンス宣言には、 
+<tt>Functor</tt>、<tt>Monad</tt> および <tt>MonadPlus</tt> というモナド
+のクラスの一部あるいは全部の型にたいするものです。モナドのクラスはどれも
+導出されることはありません。<tt>IO</tt> のほかに、リスト (<tt>[]</tt>) 
+と <tt>Maybe</tt> というモナドクラスの型がプレリュードに定義されています。 
+</p>
+<p>
+数学的にはモナドは、モナドの演算に対する一連の法則により支配されています。
+この法則の概念はなにもモナドに限ったことではありません。Haskell ではほか
+にも、すくなくとも非公式には、法則に支配されている演算があります。例をあ
+げると <tt>x&nbsp;/=&nbsp;y</tt> と <tt>not&nbsp;(x&nbsp;==&nbsp;y)</tt> 
+とは比較されるあらゆる型の値に対して同じでなければなりません。しかし、こ
+れを保証するものはなにもありません。<tt>==</tt> と <tt>/=</tt> とは 
+<tt>Eq</tt> クラスのなかでは別のメソッドです。しかも、<tt>==</tt> と 
+<tt>=/</tt> とが関連をもつものであることを保証する手段はありません。
+おなじように、ここでしめすモナドの法則は、Haskell では保証できません。し
+かし、モナドのクラスのインスタンスであれば、どれも満すべき法則です。モナ
+ドの法則はモナドの構造の底流にあるものへの洞察をあたえるものです。これら
+の法則を検証しながら、モナドをどのように使うかの感覚をおぼえましょう。
+</p>
+<p>
+<tt>Functor</tt> クラスはすでに <a
+href="classes.html#tut-type-classes">5</a> 章で議論しています。このクラ
+スは一つの演算 <tt>fmap</tt> のみを定義しています。このマップ関数はひと
+つの演算をコンテナ内のオブジェクトに適用し、(多相型は別の型の値のコ
+ンテナとして考えることが可能です) 同じ形のコンテナを返します。つぎの法則
+は <tt>Functor</tt> クラスの <tt>map</tt> に適用されます。
+</p>
+<p>
+<table >
+ <tr>
+  <td><tt>fmap&nbsp;id</tt></td>
+  <td align=center>=</td>
+  <td><tt>id</tt></td>
+ </tr>
+ <tr>
+  <td><tt>fmap&nbsp;(f&nbsp;.&nbsp;g)</tt></td>
+  <td align=center>=</td>
+  <td><tt>fmap&nbsp;f&nbsp;.&nbsp;fmap&nbsp;g</tt></td>
+ </tr>
+</table>
+</p>
+<p>
+これらの法則は、コンテナの形は <tt>map</tt> によって変更されないというこ
+とと、コンテナの中身がマップの演算によってならび変えられことはないという
+ことを保証するものです。
+</p>
+<p>
+<tt>Monad</tt> クラスは 2 つの基本演算を定義しています。それは、
+<tt>&gt;&gt;=</tt> (bind) と <tt>return</tt> です。
+<tt><br>
+<br>
+infixl&nbsp;1&nbsp;&nbsp;&gt;&gt;,&nbsp;&gt;&gt;=<br>
+class&nbsp;&nbsp;Monad&nbsp;m&nbsp;&nbsp;where<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(&gt;&gt;=)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;m&nbsp;a&nbsp;-&gt;&nbsp;(a&nbsp;-&gt;&nbsp;m&nbsp;b)&nbsp;-&gt;&nbsp;m&nbsp;b<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(&gt;&gt;)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;m&nbsp;a&nbsp;-&gt;&nbsp;m&nbsp;b&nbsp;-&gt;&nbsp;m&nbsp;b<br>
+&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;a&nbsp;-&gt;&nbsp;m&nbsp;a<br>
+&nbsp;&nbsp;&nbsp;&nbsp;fail&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;String&nbsp;-&gt;&nbsp;m&nbsp;a<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;m&nbsp;&gt;&gt;&nbsp;k&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;m&nbsp;&gt;&gt;=&nbsp;\_&nbsp;-&gt;&nbsp;k<br>
+<br>
+</tt>
+この bind 演算、<tt>&gt;&gt;</tt> と <tt>&gt;&gt;=</tt> はふたつのモナド
+の値を合成し、<tt>return</tt> 演算は値をモナド(コンテナ)の中へ投入します。
+<tt>&gt;&gt;=</tt> のシグネチャ
+<tt>Monad&nbsp;m&nbsp;=&gt;&nbsp;m&nbsp;a&nbsp;-&gt;&nbsp;(a&nbsp;-&gt;&nbsp;m&nbsp;b)&nbsp;-&gt;&nbsp;m&nbsp;b</tt> 
+をみれば、この演算を理解するのに役立ちます。
+<tt>ma&nbsp;&gt;&gt;=&nbsp;\v&nbsp;-&gt;&nbsp;mb</tt> は <tt>a</tt> 型の
+値を含むモナドの値 <tt>ma</tt> と、型 <tt>a</tt> の値 <tt>v</tt> をとり
+モナドの値 <tt>mb</tt> を返す関数とを、合成します。その結果、<tt>ma</tt> 
+と <tt>mb</tt> は合成されて、<tt>b</tt> 型の値を含むモナドの値となります。
+<tt>&gt;&gt;</tt> は第二引数の関数が最初のモナド演算の結果生成されて値を
+必要としない場合に用いられます。
+</p>
+<p>
+bind の正確な意味は、もちろん、そのモナドに依存します。たとえば、IO モナ
+ドでは <tt>x&nbsp;&gt;&gt;=&nbsp;y</tt> はふたつのアクションを順に実行し
+ます。最初のアクションの結果はふたつめのアクションに渡されます。別の組み
+込みのモナド、リストと <tt>Maybe</tt> について見てみましょう。これらのモ
+ナド演算は、ゼロ個あるいはそれ以上を値を一つの計算から次の計算へ渡すとい
+うことで理解できます。この例を簡単にみていきましょう。
+</p>
+<p>
+<tt>do</tt> 構文を使うとモナド演算の鎖を簡単に表記できます。<tt>do</tt> 
+の基本的な変換は以下のふたつのルールでとらえることができます。
+<tt><br>
+<br>
+&nbsp;&nbsp;do&nbsp;e1&nbsp;;&nbsp;e2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e1&nbsp;&gt;&gt;&nbsp;e2<br>
+&nbsp;&nbsp;do&nbsp;p&nbsp;&lt;-&nbsp;e1;&nbsp;e2&nbsp;&nbsp;=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e1&nbsp;&gt;&gt;=&nbsp;\p&nbsp;-&gt;&nbsp;e2<br>
+<br>
+</tt>
+<tt>do</tt> のふたつめの形式におけるパターンは反駁可能で、パターンマッチ
+が失敗すると <tt>fail</tt> 演算が呼ばれます。これが呼ばれると
+( <tt>IO</tt> モナドのときと同様に)エラーが発生するか、あるいは、(リスト
+モナドのときと同様に)「zero」が返されます。次のものはもっと複雑な変換で
+す。
+<tt><br>
+<br>
+&nbsp;&nbsp;&nbsp;do&nbsp;p&nbsp;&lt;-&nbsp;e1;&nbsp;e2&nbsp;&nbsp;=&nbsp;&nbsp;&nbsp;e1&nbsp;&gt;&gt;=&nbsp;(\v&nbsp;-&gt;&nbsp;case&nbsp;v&nbsp;of&nbsp;p&nbsp;-&gt;&nbsp;e2;&nbsp;_&nbsp;-&gt;&nbsp;fail&nbsp;"s")&nbsp;&nbsp;&nbsp;&nbsp;<br>
+<br>
+</tt>
+ここで、<tt>"s"</tt> は <tt>do</tt> 文の位置を同定する文字列で、これは
+エラーメッセージのなかで使われるかもしれないものです。たとえば、I/O モナ
+ドのなかで、 <tt>'a'&nbsp;&lt;-&nbsp;getChar</tt> のようなアクションは、
+もし、型付けされた文字が 'a' ではなかった場合、<tt>fail</tt> を呼ぶでしょ
+う。こんどの場合はプログラムが停止します。なぜなら I/O モナドでは、
+<tt>fail</tt> は <tt>error</tt> を呼ぶからです。
+</p>
+<p>
+<tt>&gt;&gt;=</tt> および <tt>return</tt> を支配している法則は以下の通り
+です。
+</p>
+<p>
+<table >
+ <tr>
+  <td><tt>return&nbsp;a&nbsp;&gt;&gt;=&nbsp;k</tt></td>
+  <td align=center>=</td>
+  <td><tt>k&nbsp;a</tt></td>
+ </tr>
+ <tr>
+  <td><tt>m&nbsp;&gt;&gt;=&nbsp;return</tt></td>
+  <td align=center>=</td>
+  <td><tt>m</tt></td>
+ </tr>
+ <tr>
+  <td><tt>xs&nbsp;&gt;&gt;=&nbsp;return&nbsp;.&nbsp;f</tt></td>
+  <td align=center>=</td>
+  <td><tt>fmap&nbsp;f&nbsp;xs</tt></td>
+ </tr>
+ <tr>
+  <td><tt>m&nbsp;&gt;&gt;=&nbsp;(\x&nbsp;-&gt;&nbsp;k&nbsp;x&nbsp;&gt;&gt;=&nbsp;h)</tt></td><td align=center>=</td>
+  <td><tt>(m&nbsp;&gt;&gt;=&nbsp;k)&nbsp;&gt;&gt;=&nbsp;h</tt></td>
+ </tr>
+</table>
+</p>
+<p>
+クラス <tt>MonadZero</tt> は <I>zero</I> 要素および <tt>plus</tt> 演算を
+もつモナドに対して定義されています。
+<tt><br>
+<br>
+class&nbsp;&nbsp;(Monad&nbsp;m)&nbsp;=&gt;&nbsp;MonadZero&nbsp;m&nbsp;&nbsp;where<br>
+&nbsp;&nbsp;&nbsp;&nbsp;mzero&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;m&nbsp;a<br>
+&nbsp;&nbsp;&nbsp;&nbsp;mplus&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;m&nbsp;a&nbsp;-&gt;&nbsp;m&nbsp;a&nbsp;-&gt;&nbsp;m&nbsp;a<br>
+<br>
+</tt>
+zero 要素は次の法則に従わなければなりません。
+</p>
+<p>
+<table >
+ <tr>
+  <td><tt>m&nbsp;&gt;&gt;=&nbsp;\x&nbsp;-&gt;&nbsp;mzero</tt></td>
+  <td align=center>=</td>
+  <td><tt>mzero</tt></td>
+ </tr>
+ <tr>
+  <td><tt>mzero&nbsp;&gt;&gt;=&nbsp;m</tt></td>
+  <td align=center>=</td>
+  <td><tt>mzero</tt></td>
+ </tr>
+</table>
+</p>
+<p>
+リストについていえば、zero 値は <tt>[]</tt>、つまり空リストです。I/O モ
+ナドは zero 要素をもちません。つまり、このクラスには属しません。
+</p>
+<p>
+<tt>mplus</tt> 演算を支配している法則は以下のようになっています。
+</p>
+<p>
+<table >
+ <tr>
+  <td><tt>m&nbsp;`mplus`&nbsp;mzero</tt></td>
+  <td align=center>=</td>
+  <td><tt>m</tt></td>
+ </tr>
+ <tr>
+  <td><tt>mzero&nbsp;`mplus`&nbsp;m</tt></td>
+  <td align=center>=</td>
+  <td><tt>m</tt></td>
+ </tr>
+</table>
+</p>
+<p>
+この <tt>mplus</tt> 演算はリストモナドではふつうの連結演算です。
+</p>
+<p>
+<a name="sect9.2"></a>
+<h3>9.2<tt>&nbsp;&nbsp;</tt>組み込みモナド</h3>
+</p>
+<p>
+モナド演算とそれらを支配する法則があるとなにが構築することができるでしょ
+うか。I/O モナドについてはすでに詳しくしらべましたので、あとのふたつのモ
+ナドからはじめましょう。
+</p>
+<p>
+リストのモナド bind はリスト中のそれぞれの値にたいしての一連の計算を結合
+します。リストを使う場合は、<tt>&gt;&gt;=</tt> のシグネチャは以下のよう
+になります。
+<tt><br>
+<br>
+(&gt;&gt;=)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;[a]&nbsp;-&gt;&nbsp;(a&nbsp;-&gt;&nbsp;[b])&nbsp;-&gt;&nbsp;[b]&nbsp;<br>
+<br>
+</tt>
+これは、<tt>a</tt> のリストと <tt>a</tt> を <tt>b</tt>のリストへ写像する
+関数が与えられたとき、bind が、この関数を、入力それぞれの <tt>a</tt> に
+適用して、生成したすべての <tt>b</tt> のリストを一つのリストに連結します。
+<tt>return</tt> 関数は単一要素リストを生成します。これらの演算については
+既になれていることとおもいます。リストの内包表記はこのリストについて定義
+されたモナド演算を使って簡単に表現することができます。以下の 3 つの式は
+すべて同じ式を別の構文で表現したものです。
+<tt><br>
+<br>
+[(x,y)&nbsp;|&nbsp;x&nbsp;&lt;-&nbsp;[1,2,3]&nbsp;,&nbsp;y&nbsp;&lt;-&nbsp;[1,2,3],&nbsp;x&nbsp;/=&nbsp;y]<br>
+<br>
+do&nbsp;x&nbsp;&lt;-&nbsp;[1,2,3]<br>
+&nbsp;&nbsp;&nbsp;y&nbsp;&lt;-&nbsp;[1,2,3]<br>
+&nbsp;&nbsp;&nbsp;True&nbsp;&lt;-&nbsp;return&nbsp;(x&nbsp;/=&nbsp;y)<br>
+&nbsp;&nbsp;&nbsp;return&nbsp;(x,y)<br>
+<br>
+[1,2,3]&nbsp;&gt;&gt;=&nbsp;(\&nbsp;x&nbsp;-&gt;&nbsp;[1,2,3]&nbsp;&gt;&gt;=&nbsp;(\y&nbsp;-&gt;&nbsp;return&nbsp;(x/=y)&nbsp;&gt;&gt;=<br>
+&nbsp;&nbsp;&nbsp;(\r&nbsp;-&gt;&nbsp;case&nbsp;r&nbsp;of&nbsp;True&nbsp;-&gt;&nbsp;return&nbsp;(x,y)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;fail&nbsp;"")))<br>
+<br>
+</tt>
+この定義は、このモナドでは <tt>fail</tt> の定義が空リストであることに依
+存しています。基本的には、それぞれの <tt>&lt;-</tt> は、のこりのモナド計
+算へつぎつぎと渡される値の集合を生成します。ですから、
+<tt>x&nbsp;&lt;-&nbsp;[1,2,3]</tt> はのこりのモナド計算を 3 回起動するこ
+とになります。リストの各要素について 1 回ずつです。戻りの式 
+<tt>(x,y)</tt> はそれを取り巻く bind の可能な組み合わせすべてについて評
+価されます。この意味ではリストモナドは多重値の引数をとる関数を記
+述しているものと考えることができます。たとえば、つぎの関数を考えてみましょ
+う。
+<tt><br>
+<br>
+mvLift2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;(a&nbsp;-&gt;&nbsp;b&nbsp;-&gt;&nbsp;c)&nbsp;-&gt;&nbsp;[a]&nbsp;-&gt;&nbsp;[b]&nbsp;-&gt;&nbsp;[c]<br>
+mvLift2&nbsp;f&nbsp;x&nbsp;y&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;do&nbsp;x'&nbsp;&lt;-&nbsp;x<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;y'&nbsp;&lt;-&nbsp;y<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;(f&nbsp;x'&nbsp;y')<br>
+<br>
+</tt>
+これは、通常の 2 引数関数を多重値(引数リスト)上の関数に変え
+ます。できた関数は 2 つの引数のすべての組み合わせのそれぞれに対して一つ
+の値を返します。たとえば、
+</p>
+<p>
+<table >
+ <tr>
+  <td><tt>mvLift2&nbsp;(+)&nbsp;[1,3]&nbsp;[10,20,30]</tt></td>
+  <td align=center>=&gt;</td>
+  <td><tt>[11,21,31,13,23,33]</tt></td>
+ </tr>
+ <tr>
+  <td><tt>mvLift2&nbsp;(\a&nbsp;b-&gt;[a,b])&nbsp;"ab"&nbsp;"cd"</tt></td>
+  <td align=center>=&gt;</td>
+  <td><tt>["ac","ad","bc","bd"]</tt></td>
+ </tr>
+ <tr>
+  <td><tt>mvLift2&nbsp;(*)&nbsp;[1,2,4]&nbsp;[]</tt></td>
+  <td align=center>=&gt;</td>
+  <td><tt>[]</tt></td>
+ </tr>
+</table>
+</p>
+<p>
+この関数はモナドライブラリの関数 <tt>LiftM2</tt> の特別版です。これを、
+関数 <tt>f</tt> をリストモナドの外から、多重値上の計算をおこなうリストモ
+ナドの世界へ持ち込んだものと考えることができます。
+</p>
+<p>
+<tt>Maybe</tt> に対して定義されたモナドはリストモナドに類似しています。
+値 <tt>Nothing</tt> は <tt>[]</tt> の、<tt>Just&nbsp;x</tt> は 
+<tt>[x]</tt> のように機能します。
+</p>
+<p>
+<a name="sect9.3"></a>
+<h3>9.3<tt>&nbsp;&nbsp;</tt>モナドを使う</h3>
+</p>
+<p>
+モナド演算子とその法則について説明するだけではモナドがなんの役に立つのか
+わかりません。モナドがもたらす効用は、<em>モジュール化</em>
+( <i>modularity</i> )です。すなわち、演算をモナド的に定義することで、底
+流にある計算機というものを隠蔽し、新しい特徴をモナドに透過的に結びつける
+ことを可能にします。
+Wadler の論文 [<a href="haskell-tutorial.html#$wadler:mffp">10</a>] はモ
+ナドを使っていかにモジュール化プログラムを構築するかの秀逸な例です。この
+論文から直接、例をとるところからはじめましょう。状態モナドをもとによく似
+た定義のさらに複雑なモナドを構築します。
+</p>
+<p>
+簡単にいうと、状態の型 <tt>S</tt> についての状態モナドというのは次のよう
+なものです。
+<tt><br>
+<br>
+data&nbsp;SM&nbsp;a&nbsp;=&nbsp;SM&nbsp;(S&nbsp;-&gt;&nbsp;(a,S))&nbsp;&nbsp;--&nbsp;The&nbsp;monadic&nbsp;type<br>
+<br>
+instance&nbsp;Monad&nbsp;SM&nbsp;where<br>
+&nbsp;&nbsp;--&nbsp;defines&nbsp;state&nbsp;propagation<br>
+&nbsp;&nbsp;SM&nbsp;c1&nbsp;&gt;&gt;=&nbsp;fc2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;SM&nbsp;(\s0&nbsp;-&gt;&nbsp;let&nbsp;(r,s1)&nbsp;=&nbsp;c1&nbsp;s0&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SM&nbsp;c2&nbsp;=&nbsp;fc2&nbsp;r&nbsp;in<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c2&nbsp;s1)<br>
+&nbsp;&nbsp;return&nbsp;k&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;SM&nbsp;(\s&nbsp;-&gt;&nbsp;(k,s))<br>
+<br>
+&nbsp;--&nbsp;extracts&nbsp;the&nbsp;state&nbsp;from&nbsp;the&nbsp;monad<br>
+readSM&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;SM&nbsp;S<br>
+readSM&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;SM&nbsp;(\s&nbsp;-&gt;&nbsp;(s,s))<br>
+<br>
+&nbsp;--&nbsp;extracts&nbsp;the&nbsp;state&nbsp;from&nbsp;the&nbsp;monad<br>
+updateSM&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;(S&nbsp;-&gt;&nbsp;S)&nbsp;-&gt;&nbsp;SM&nbsp;()&nbsp;&nbsp;--&nbsp;alters&nbsp;the&nbsp;state<br>
+updateSM&nbsp;f&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;SM&nbsp;(\s&nbsp;-&gt;&nbsp;((),&nbsp;f&nbsp;s))&nbsp;<br>
+<br>
+--&nbsp;run&nbsp;a&nbsp;computation&nbsp;in&nbsp;the&nbsp;SM&nbsp;monad<br>
+runSM&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;S&nbsp;-&gt;&nbsp;SM&nbsp;a&nbsp;-&gt;&nbsp;(a,S)<br>
+runSM&nbsp;s0&nbsp;(SM&nbsp;c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;c&nbsp;s0<br>
+<br>
+</tt>
+この例では新しい型 <tt>SM</tt> を定義して、型 <tt>S</tt> を暗黙に運ぶ計
+算を表現しています。すなわち、<tt>SM&nbsp;t</tt> 型の計算は、型 
+<tt>t</tt> の値を定義し、一方で、型 <tt>S</tt> の状態と読み出しと書きこ
+みといった相互作用をします。<tt>SM</tt> の定義は単純で、一つの状態をとり、
+2 つの結果を返す関数で構成されています。ひとつ(任意の型)は返り値で、もう
+ひとつは更新された状態です。ここでは型シノニムはつかえません。
+<tt>SM</tt> という名前がインスタンス宣言で必要になるからです。こういった
+ところで<tt>newtype</tt> 宣言を <tt>data</tt> 宣言のかわりによく使います。
+</p>
+<p>
+このインスタンス宣言は、モナドの「配管」を定義しています。ふたつの
+計算の直列化と空の計算の定義です。直列化( <tt>&gt;&gt;=</tt> 演算子)は、
+(構築子 <tt>SM</tt> で表示されている)計算を定義しており、この計算は初期
+状態 <tt>s0</tt> を <tt>c1</tt> へ渡し、この計算で得られ値 <tt>r</tt> を
+ふたつめの計算 <tt>c2</tt> を返す関数に渡します。そして、最後に、
+<tt>c1</tt> で得られた状態を <tt>c2</tt> に渡し、全体の結果を、計算 
+<tt>c2</tt> の結果とします。
+</p>
+<p>
+<tt>return</tt> の定義はもっと簡単です。<tt>return</tt> は状態をまったく
+変更しません。値をモナドに入れ込むだけです。
+</p>
+<p>
+<tt>&gt;&gt;=</tt> と <tt>return</tt> は基本的なモナドの直列化演算ですが、
+<em>モナドプリミティブ</em>( <i>monadic primitives</i> )も必要になります。モ
+ナドプリミティブはモナド抽象の中でもちいられる単なる演算子で、モナドが機
+能するよう「車輪とギア」を接続します。
+たとえば、<tt>IO</tt> モナドでは <tt>putChar</tt> のような演算子はプリミ
+ティブです。それは、これらの演算子は <tt>IO</tt> モナドの内部的な仕事を
+のみ取り扱うからです。
+同様にして、状態モナドは 2 つのプリミティブ <tt>readSM</tt> と 
+<tt>updateSM</tt> を使います。これらが、このモナドの内部構造に依存してい
+ることに注目してください。<tt>SM</tt> 型の定義を変更すると、これらのプリ
+ミティブも変更しなくてはなりません。
+</p>
+<p>
+<tt>readSM</tt> および <tt>updateSM</tt> の定義は単純です。
+<tt>readSM</tt> は状態を観察できるようモナドの外へ状態を持ち出します。一
+方、<tt>updateSM</tt> はユーザがそのモナドの状態を変更することを許します。
+( <tt>writeSM</tt> をプリミティブとすることも可能なのですが、状態を扱う
+場合には update の方がより自然な場合がおおいようです。)
+</p>
+<p>
+最後に必要な関数はこのモナドの計算を駆動する関数 <tt>runSM</tt> です。こ
+の関数は初期状態と計算をとり、返り値と最終状態の両方を返す関数です。
+</p>
+<p>
+より大きな視点でみると、やらんとしていることは、すべての計算を一連のステッ
+プ( <tt>SM&nbsp;a</tt> 型の関数)として定義し、<tt>&gt;&gt;=</tt> と 
+<tt>return</tt> を使って直列にならべることです。これらのステップは状態と
+( <tt>readSM</tt> あるいは <tt>updateSM</tt> をつうじて)やりとりするか、
+あるいは、状態を無視します。しかし、この状態の使用(不使用)は隠蔽されてい
+て、<tt>S</tt> を使用するしないに依存して、計算をべつべつに駆動あるいは
+直列化することはありません。
+</p>
+<p>
+この簡単な状態モナドの例をいくつも示すかわりに、状態モナドをつかったもっ
+と複雑な例に進みましょう。リソースを利用する計算のための、ちょっとした <em>
+埋め込み言語</em> ( <i>embedded language</i> ) を定義します。つまり、特
+別な目的のための言語を Haskell の型と関数の集合として構築します。
+このような言語は Haskell の基本ツールを使います。関数と型を使って、対象
+分野に特化した型と演算ライブラリを構築します。
+</p>
+<p>
+ここでの例では、なんらかのリソースを必要とする計算を考えましょう。もしリ
+ソースが利用可能であるばあい、計算が先へすすみ、リソースが利用できないと
+きには、計算が保留されます。これから定義するモナドによって制御されている
+リソースを使う計算を表示するために、型 <tt>R</tt> を使います。<tt>R</tt> 
+の定義は次のようになります。
+<tt><br>
+<br>
+data&nbsp;R&nbsp;a&nbsp;=&nbsp;R&nbsp;(Resource&nbsp;-&gt;&nbsp;(Resource,&nbsp;Either&nbsp;a&nbsp;(R&nbsp;a)))<br>
+<br>
+</tt>
+おのおのの計算は、利用可能なリソースから、計算した後の残りにリソースと 
+<tt>a</tt> 型の結果あるいは保留された計算とのペアへの関数です。その型は 
+<tt>R&nbsp;a</tt> でこれはリソースが使い果されるところまで計算をつづけま
+す。
+</p>
+<p>
+<tt>R</tt> の <tt>Monad</tt> インスタンスは以下のようになります。
+<tt><br>
+<br>
+instance&nbsp;Monad&nbsp;R&nbsp;where<br>
+&nbsp;&nbsp;R&nbsp;c1&nbsp;&gt;&gt;=&nbsp;fc2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;R&nbsp;(\r&nbsp;-&gt;&nbsp;case&nbsp;c1&nbsp;r&nbsp;of<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(r',&nbsp;Left&nbsp;v)&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;let&nbsp;R&nbsp;c2&nbsp;=&nbsp;fc2&nbsp;v&nbsp;in<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c2&nbsp;r'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(r',&nbsp;Right&nbsp;pc1)&nbsp;-&gt;&nbsp;(r',&nbsp;Right&nbsp;(pc1&nbsp;&gt;&gt;=&nbsp;fc2)))<br>
+&nbsp;&nbsp;return&nbsp;v&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;R&nbsp;(\r&nbsp;-&gt;&nbsp;(r,&nbsp;(Left&nbsp;v)))<br>
+<br>
+</tt>
+この <tt>Resource</tt> 型は状態モナドのなかの状態と同じ扱いになります。
+この定義はこんな風に読みます。「リソースを消費する」ふたつの計算、
+<tt>c1</tt> と( <tt>c2</tt> を生成する) <tt>fc2</tt> を合成するためには、
+初期リソースを <tt>c1</tt> へ渡す。結果は、
+
+<ul>
+ <li>値 <tt>v</tt> とのこりのリソースで、これらは次の計算
+     ( <tt>fc2&nbsp;v</tt> )の呼出し)を決定するために使われます。
+     さもなければ、</li>
+ <li>保留された計算 <tt>pc1</tt> とその保留の時点でのこっているリソース</li>
+</ul>
+
+です。計算の保留の際は、ふたつめの計算を考慮にいれておかなくてはいけません。
+<tt>pc1</tt> は最初の計算 <tt>c1</tt> だけを保留しますので、計算全体を保
+留するためには <tt>c2</tt> をこれに bind しておく必要があります。
+<tt>return</tt> の定義は、<tt>v</tt> をこのモナドへ投入するが、リソース
+を変更しないというものです。
+</p>
+<p>
+このインスタンス宣言はこのモナドの基本構造を定義していますが、リソースが
+どのよに使われるのかは決められていません。このモナドは多くの型のリソース
+を制御するのに使うことが可能でおおくのタイプのリソース使用ポリシーを実装
+することができるでしょう。例として、非常に単純なリソースの定義をあげましょ
+う。<tt>Resource</tt> として <tt>Integer</tt> を選択し、これを利用可能な
+計算ステップ数を表現するものとします。
+<tt><br>
+<br>
+type&nbsp;Resource&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;Integer<br>
+<br>
+</tt>
+次の関数は、利用可能なステップ数がなくなるまで、1ステップを消費します。
+<tt><br>
+<br>
+step&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;a&nbsp;-&gt;&nbsp;R&nbsp;a<br>
+step&nbsp;v&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;c&nbsp;where<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c&nbsp;=&nbsp;R&nbsp;(\r&nbsp;-&gt;&nbsp;if&nbsp;r&nbsp;/=&nbsp;0&nbsp;then&nbsp;(r-1,&nbsp;Left&nbsp;v)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else&nbsp;(r,&nbsp;Right&nbsp;c))<br>
+<br>
+</tt>
+<tt>Left</tt> と <tt>Right</tt> 構築子は <tt>Either</tt> 型のものです。
+この関数は利用可能な計算ステップリソースが一つでもあれば、<tt>v</tt> を
+返すことで <tt>R</tt> 内の計算を継続します。もし、利用可能なステップがな
+ければ、<tt>step</tt> 関数は現在の計算を保留し(この保留は <tt>c</tt> 
+で捕捉されます)、この保留された計算をモナドへ戻します。
+</p>
+<p>
+これで、一連の「リソースを用いる」計算(このモナド)を定義するツールを手に
+入れましたので、<tt>step</tt> を用いてリソースの使用状況の形式を表現する
+こができます。最後に、このモナドでは計算はどのように表現されるのかに言及
+しておく必要があります。
+</p>
+<p>
+このモナド内でインクリメントを行う関数を考えてみましょう。
+<tt><br>
+<br>
+inc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;R&nbsp;Integer&nbsp;-&gt;&nbsp;R&nbsp;Integer<br>
+inc&nbsp;i&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;do&nbsp;iValue&nbsp;&lt;-&nbsp;i<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;step&nbsp;(iValue+1)<br>
+<br>
+</tt>
+これは、計算の1ステップをインクリメントする関数を定義しています。
+<tt>&lt;-</tt> はこのモナドから引数の値を引出すのに必要なものです。
+<tt>iValue</tt> の型は <tt>R&nbsp;Integer</tt> ではなくて 
+<tt>Integer</tt> です。
+</p>
+<p>
+しかし、この定義は一般のインクリメント関数に比べると満足のいくものではあ
+りません。なんとか、既存の <tt>+</tt> 演算子を「ドレスアップ」して、この
+モナドの世界で機能するようにできないものでしょうか。<em>持ち上げ</em>
+( <i>lifting</i> )をおこなう関数の集りから始めましょう。これらの関数は、
+既存の機能をモナド内へ持ち込みます。
+<tt>lift1</tt> の定義(これは<tt>Monad</tt> ライブラリの中の 
+<tt>liftM1</tt> とは少し違うものです)を考察してみましょう。
+<tt><br>
+<br>
+lift1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;(a&nbsp;-&gt;&nbsp;b)&nbsp;-&gt;&nbsp;(R&nbsp;a&nbsp;-&gt;&nbsp;R&nbsp;b)<br>
+lift1&nbsp;f&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;\ra1&nbsp;-&gt;&nbsp;do&nbsp;a1&nbsp;&lt;-&nbsp;ra1<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;step&nbsp;(f&nbsp;a1)<br>
+<br>
+</tt>
+この関数は単一引数関数 <tt>f</tt> をとり、<tt>R</tt> 内で1ステップ消費し
+て持ち上げられた関数を実行する関数です。この <tt>lift1</tt> を用いると
+<tt>inc</tt> は次のようになります。
+<tt><br>
+<br>
+inc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;R&nbsp;Integer&nbsp;-&gt;&nbsp;R&nbsp;Integer<br>
+inc&nbsp;i&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;lift1&nbsp;(i+1)<br>
+<br>
+</tt>
+これで、ましにはなりましたが、理想的というわけにはいきません。まず、次の 
+<tt>lift2</tt> を加えてみましょう。
+<tt><br>
+<br>
+lift2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;(a&nbsp;-&gt;&nbsp;b&nbsp;-&gt;&nbsp;c)&nbsp;-&gt;&nbsp;(R&nbsp;a&nbsp;-&gt;&nbsp;R&nbsp;b&nbsp;-&gt;&nbsp;R&nbsp;c)<br>
+lift2&nbsp;f&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;\ra1&nbsp;ra2&nbsp;-&gt;&nbsp;do&nbsp;a1&nbsp;&lt;-&nbsp;ra1<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a2&nbsp;&lt;-&nbsp;ra2<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;step&nbsp;(f&nbsp;a1&nbsp;a2)<br>
+<br>
+</tt>
+この関数は、持ち上げられた関数内での評価の順番を明示的に設定していること
+に注目してください。<tt>a1</tt> を生成する計算は、<tt>a2</tt> を生成する
+計算より前におこなわれます。
+</p>
+<p>
+<tt>lift2</tt>を使うと <tt>R</tt> モナド内で新しいバージョンの 
+<tt>==</tt> を生成することができます。
+<tt><br>
+<br>
+(==*)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;Ord&nbsp;a&nbsp;=&gt;&nbsp;R&nbsp;a&nbsp;-&gt;&nbsp;R&nbsp;a&nbsp;-&gt;&nbsp;R&nbsp;Bool<br>
+(==*)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;lift2&nbsp;(==)<br>
+<br>
+</tt>
+この新しい関数については少しちがう名前をつかわなければなりませんでした。
+それは <tt>==</tt> はすでに使われていますから当然です。しかし、場合によっ
+ては、持ち上げ前の関数と持ち上げ後の関数とでおなじ名前を用いることができ
+ます。
+以下のインスタンス宣言は、<tt>Num</tt> のすべての演算子が <tt>R</tt> な
+いで使えるようにするものです。
+<tt><br>
+<br>
+instance&nbsp;Num&nbsp;a&nbsp;=&gt;&nbsp;Num&nbsp;(R&nbsp;a)&nbsp;where<br>
+&nbsp;&nbsp;(+)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;lift2&nbsp;(+)<br>
+&nbsp;&nbsp;(-)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;lift2&nbsp;(-)<br>
+&nbsp;&nbsp;negate&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;lift1&nbsp;negate<br>
+&nbsp;&nbsp;(*)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;lift2&nbsp;(*)<br>
+&nbsp;&nbsp;abs&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;lift1&nbsp;abs<br>
+&nbsp;&nbsp;fromInteger&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;return&nbsp;.&nbsp;fromInteger<br>
+<br>
+</tt>
+Haskell プログラムでは、<tt>fromInteger</tt> 関数が、すべての整数定数に
+ついて暗黙のうちに適用されます。(これについては、<a
+href="numbers.html#tut-num-constants">10.3</a> を参照してください。) こ
+の定義のおかげで整数定数は型 <tt>R&nbsp;Integer</tt> となることがでます。
+やっとこれで、自然で完全なインクリメント関数を書くことができます。
+<tt><br>
+<br>
+inc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;R&nbsp;Integer&nbsp;-&gt;&nbsp;R&nbsp;Integer<br>
+inc&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;x&nbsp;+&nbsp;1<br>
+<br>
+</tt>
+<tt>Eq</tt> クラスは <tt>Num</tt> クラスと同じやりかたで持ち上げることは
+できないことに注意してください。<tt>==*</tt> のシグネチャは <tt>==</tt> 
+の多重定義でなんとかなるようなものではありません。それは <tt>==*</tt> の
+結果が <tt>Bool</tt> ではなくて、<tt>R&nbsp;Bool</tt> であるからです。
+</p>
+<p>
+<tt>R</tt> 中で興味のわく計算を表現するためには、条件式が必要です。
+<tt>if</tt> は使えませんから( <tt>if</tt> は条件式として、
+<tt>R&nbsp;Bool</tt> ではなくて <tt>Bool</tt> 型が必要です。)、
+<tt>ifR</tt> という名前の関数を考えます。
+<tt><br>
+<br>
+ifR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;R&nbsp;Bool&nbsp;-&gt;&nbsp;R&nbsp;a&nbsp;-&gt;&nbsp;R&nbsp;a&nbsp;-&gt;&nbsp;R&nbsp;a<br>
+ifR&nbsp;tst&nbsp;thn&nbsp;els&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;do&nbsp;t&nbsp;&lt;-&nbsp;tst<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;t&nbsp;then&nbsp;thn&nbsp;else&nbsp;els<br>
+<br>
+</tt>
+これで、<tt>R</tt> モナドのなかで大きなプログラムを書く準備がととのいま
+した。
+<tt><br>
+<br>
+fact&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;R&nbsp;Integer&nbsp;-&gt;&nbsp;R&nbsp;Integer<br>
+fact&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ifR&nbsp;(x&nbsp;==*&nbsp;0)&nbsp;1&nbsp;(x&nbsp;*&nbsp;fact&nbsp;(x-1))<br>
+<br>
+</tt>
+さて、次は一般の階乗関数と全く同じものというわけにはではありませんが、十
+分に読みやすくなっています。<tt>+</tt> あるいは <tt>if</tt> のような既存
+の演算子に新しい定義を与えると、Haskell のなかの埋め込み言語の基本的な部
+分を作ることにほかなりません。モナドは特に、これらの埋め込み言語の意味論
+をクリーンでモジュール性のある方法でカプセル化するのに便利です。
+</p>
+<p>
+これで、なにかプログラムを走らせる準備ができました。以下の関数は、プログ
+ラムを、最大計算ステップ数をあたえられた <tt>M</tt> の中で動作させるもの
+です。
+<tt><br>
+<br>
+run&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;Resource&nbsp;-&gt;&nbsp;R&nbsp;a&nbsp;-&gt;&nbsp;Maybe&nbsp;a<br>
+run&nbsp;s&nbsp;(R&nbsp;p)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;case&nbsp;(p&nbsp;s)&nbsp;of&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(_,&nbsp;Left&nbsp;v)&nbsp;-&gt;&nbsp;Just&nbsp;v<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;Nothing<br>
+<br>
+</tt>
+割当てられたステップ数ないに計算が終了するかどうかを <tt>Maybe</tt> 型を
+利用して扱います。それで、次のような計算が可能になります。
+</p>
+<p>
+<table >
+ <tr>
+  <td><tt>run&nbsp;10&nbsp;(fact&nbsp;2)</tt></td>
+  <td align=center>=&gt;</td>
+  <td><tt>Just&nbsp;2</tt></td>
+ </tr>
+ <tr>
+  <td><tt>run&nbsp;10&nbsp;(fact&nbsp;20)</tt></td>
+  <td align=center>=&gt;</td>
+  <td><tt>Nothing</tt></td>
+ </tr>
+</table>
+</p>
+<p>
+ここにきて、このモナドにいくつかの興味深い機能を加えることができます。次
+の関数を考えてみましょう。
+<tt><br>
+<br>
+(|||)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;R&nbsp;a&nbsp;-&gt;&nbsp;R&nbsp;a&nbsp;-&gt;&nbsp;R&nbsp;a<br>
+<br>
+</tt>
+この関数は 2 つの計算を並列に実行し、最初に終った方の結果を返します。こ
+の関数のは例えば、こんな風に定義できるでしょう。
+<tt><br>
+<br>
+c1&nbsp;|||&nbsp;c2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;oneStep&nbsp;c1&nbsp;(\c1'&nbsp;-&gt;&nbsp;c2&nbsp;|||&nbsp;c1')<br>
+&nbsp;&nbsp;&nbsp;where<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;oneStep&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;R&nbsp;a&nbsp;-&gt;&nbsp;(R&nbsp;a&nbsp;-&gt;&nbsp;R&nbsp;a)&nbsp;-&gt;&nbsp;R&nbsp;a<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;oneStep&nbsp;(R&nbsp;c1)&nbsp;f&nbsp;=<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;R&nbsp;(\r&nbsp;-&gt;&nbsp;case&nbsp;c1&nbsp;1&nbsp;of<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(r',&nbsp;Left&nbsp;v)&nbsp;-&gt;&nbsp;(r+r'-1,&nbsp;Left&nbsp;v)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(r',&nbsp;Right&nbsp;c1')&nbsp;-&gt;&nbsp;&nbsp;--&nbsp;r'&nbsp;must&nbsp;be&nbsp;0<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;let&nbsp;R&nbsp;next&nbsp;=&nbsp;f&nbsp;c1'&nbsp;in<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;next&nbsp;(r+r'-1))<br>
+<br>
+</tt>
+これは、<tt>c1</tt> で 1 ステップで、<tt>c1</tt> が終了すればその
+値を返すか、または、<tt>c1</tt> が保留された計算( <tt>c1'</tt> )を返した
+ときには、<tt>c2&nbsp;|||&nbsp;c1'</tt> を評価する、のどちらかです。
+この <tt>oneStep</tt> 関数はその引数内で単一ステップを消費し、評価された
+値を返すか、あるいは、のこりの計算を <tt>f</tt> に渡すかのどちらかです。
+<tt>oneStep</tt> の定義は単純です。これは <tt>c1</tt> にリソース引数とし
+て 1 を与えます。もし、それで最終の値に到達したら、その値が返ります。返
+されるステップカウント値(計算がステップを消費せずに戻ることはありえます。
+ですからこのときリソースカウントが 0 である必要はありません)も調整されて
+います。この計算が保留された場合、調整されたリソースカウントが最後の計算
+に渡されます。
+</p>
+<p>
+これで、<tt>run&nbsp;100&nbsp;(fact&nbsp;(-1)&nbsp;|||&nbsp;(fact&nbsp;3))
+</tt>のような式をループに陥ることなしで評価することができます。計算が相
+互に実行されるからです。(先に定義した <tt>fact</tt> では <tt>-1</tt> を
+与えるとループに陥ります。
+この基本構造の上にいろいろなバリエーションを考えることができます。たとえ
+ば、状態を拡張して計算のステップのトレースを含むようにすることも可能です。
+このモナドを <tt>IO</tt> モナドへ埋め込むことも可能です。そうすれば、
+<tt>M</tt> 内の計算は外界とやりとりすることが可能になります。
+
+ここでの例はこのチュートリアルの他の部分より高度なものですが、システムの
+基本的な意味論を定義する道具としてのモナドの力をよく説明しています。また、
+この例を小規模の<em>領域限定言語</em>( <i>Domain Specific Language</i> )
+のモデルとなることを説明しました。あるいは、Haskell がこうしたものを定義
+するのに適しているということも示しました。
+おおくの DSL が Haskell で開発されています。おおくの例が、
+<tt>haskell.org</tt> にありますので参照してください。特に興味ある例は、
+リアクションのあるアニメーションのための言語 Fran とコンピュータミュージッ
+クのための言語 Haskore です。
+</p>
+<hr>
+<p>
+<i>A Gentle Introduction to Haskell, Version 98</i><br>
+<a href="stdclasses.html">back</a>
+<a href="numbers.html">next</a>
+<a href="index.html">top</a>
+</p>
+</body>
+</html>

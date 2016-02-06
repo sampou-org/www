@@ -1,0 +1,13 @@
+
+Haskell この一年：アプリ
+
+注目のアプリケーション
+Darcs: リビジョンコントロールシステム
+パッチ代数理論？に基づくシステム
+Pugs: Perl 6 インタープリタ
+驚異の開発スピード
+一ヶ月でHaskellを覚えて
+一ヶ月で最初のリリース
+Monadius !!
+Haskell in Practice
+

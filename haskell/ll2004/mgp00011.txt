@@ -1,0 +1,14 @@
+
+Haskell の処理系 GHC(1)
+
+Glasgow Haskell Compiler 6.2.1
+言語処理系
+ghc：コンパイラ
+ghci：対話型評価環境 REPL
+Haskell で実装されている
+プロファイラ
+開発者
+コア開発メンバーは Microsoft Research に在籍
+ライセンス
+Glasgow Haskell License (BSD風ライセンス)
+

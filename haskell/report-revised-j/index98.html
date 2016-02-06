@@ -1,0 +1,897 @@
+
+<html>
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
+  <!--<title>Haskell 98 Contents</title>-->
+  <title>Haskell 98 目次</title>
+ </head>
+
+ <body bgcolor="#ffffff">
+  <p>
+   <i>The Haskell 98 Report</i><br />
+   <a href="index.html">top</a> | <a href="prelude-index.html">function
+   index</a> <br />
+  </p>
+
+  <!--<h3>Haskell 98 Report: Contents</h3>-->
+  <h3>Haskell 98 レポート: 目次</h3>
+  <!--
+  <ul>
+   <!--==============================================================-->
+   <!--<li><a href="intro.html#sect1">1<tt>&nbsp;&nbsp;</tt>
+    Introduction</a></li>-->
+   <li><a href="intro.html#sect1">1<tt>&nbsp;&nbsp;</tt>
+    イントロダクション</a></li>
+   <!--<li><a href="intro.html#sect1.1">1.1<tt>&nbsp;&nbsp;</tt>Program
+    Structure</a></li>-->
+   <li><a href="intro.html#sect1.1">1.1<tt>&nbsp;&nbsp;</tt>
+    プログラムの構造</a></li>
+   <!--<li><a href="intro.html#sect1.2">1.2<tt>&nbsp;&nbsp;</tt>The Haskell
+    Kernel</a></li>-->
+   <li><a href="intro.html#sect1.2">1.2<tt>&nbsp;&nbsp;</tt>Haskell 
+    のカーネル</a></li>
+   <!--<li><a href="intro.html#sect1.3">1.3<tt>&nbsp;&nbsp;</tt>Values and
+    Types</a></li>-->
+   <li><a href="intro.html#sect1.3">1.3<tt>&nbsp;&nbsp;</tt>
+    値と型</a></li>
+   <!--<li><a href="intro.html#sect1.4">1.4<tt>&nbsp;&nbsp;</tt>
+    Namespaces</a></li>-->
+   <li><a href="intro.html#sect1.4">1.4<tt>&nbsp;&nbsp;</tt>
+    名前空間</a></li>
+   <!--==============================================================-->
+   <!--<li><a href="lexemes.html#sect2">2<tt>&nbsp;&nbsp;</tt>Lexical
+    Structure</a></li>-->
+   <li><a href="lexemes.html#sect2">2<tt>&nbsp;&nbsp;</tt>
+    字句構造</a></li>
+   <!--<li><a href="lexemes.html#sect2.1">2.1<tt>&nbsp;&nbsp;</tt>Notational
+    Conventions</a></li>-->
+   <li><a href="lexemes.html#sect2.1">2.1<tt>&nbsp;&nbsp;</tt>
+    表記規約</a></li>
+   <!--<li><a href="lexemes.html#sect2.2">2.2<tt>&nbsp;&nbsp;</tt>Lexical
+    Program Structure</a></li>-->
+   <li><a href="lexemes.html#sect2.2">2.2<tt>&nbsp;&nbsp;</tt>
+    字句上のプログラム構造</a></li>
+   <!--<li><a href="lexemes.html#sect2.3">2.3<tt>&nbsp;&nbsp;</tt>
+    Comments</a></li>-->
+   <li><a href="lexemes.html#sect2.3">2.3<tt>&nbsp;&nbsp;</tt>
+    コメント</a></li>
+   <!--<li><a href="lexemes.html#sect2.4">2.4<tt>&nbsp;&nbsp;</tt>Identifiers
+    and Operators</a></li>-->
+   <li><a href="lexemes.html#sect2.4">2.4<tt>&nbsp;&nbsp;</tt>
+    識別子と演算子</a></li>
+   <!--<li><a href="lexemes.html#sect2.5">2.5<tt>&nbsp;&nbsp;</tt>Numeric
+    Literals</a></li>-->
+   <li><a href="lexemes.html#sect2.5">2.5<tt>&nbsp;&nbsp;</tt>
+    数値リテラル</a></li>
+   <!--<li><a href="lexemes.html#sect2.6">2.6<tt>&nbsp;&nbsp;</tt>Character and
+    String Literals</a></li>-->
+   <li><a href="lexemes.html#sect2.6">2.6<tt>&nbsp;&nbsp;</tt>
+    文字および文字列リテラル</a></li>
+   <!--<li><a href="lexemes.html#sect2.7">2.7<tt>&nbsp;&nbsp;</tt>
+    Layout</a></li>-->
+   <li><a href="lexemes.html#sect2.7">2.7<tt>&nbsp;&nbsp;</tt>
+    レイアウト</a></li>
+   <!--==============================================================-->
+   <!--<li><a href="exps.html#sect3">3<tt>&nbsp;&nbsp;</tt>
+    Expressions</a></li>-->
+   <li><a href="exps.html#sect3">3<tt>&nbsp;&nbsp;</tt>式</a></li>
+   <!--<li><a href="exps.html#sect3.1">3.1<tt>&nbsp;&nbsp;</tt>
+    Errors</a></li>-->
+   <li><a href="exps.html#sect3.1">3.1<tt>&nbsp;&nbsp;</tt>
+    エラー</a></li>
+   <!--<li><a href="exps.html#sect3.2">3.2<tt>&nbsp;&nbsp;</tt>Variables,
+    Constructors, Operators, and Literals</a></li>-->
+   <li><a href="exps.html#sect3.2">3.2<tt>&nbsp;&nbsp;</tt>
+    変数、構成子、演算子、リテラル</a></li>
+   <!--<li><a href="exps.html#sect3.3">3.3<tt>&nbsp;&nbsp;</tt>Curried
+    Applications and Lambda Abstractions</a></li>-->
+   <li><a href="exps.html#sect3.3">3.3<tt>&nbsp;&nbsp;</tt>
+    カリー化された適用とラムダ抽象</a></li>
+   <!--<li><a href="exps.html#sect3.4">3.4<tt>&nbsp;&nbsp;</tt>Operator
+    Applications</a></li>-->
+   <li><a href="exps.html#sect3.4">3.4<tt>&nbsp;&nbsp;</tt>
+    演算子適用</a></li>
+   <!--<li><a href="exps.html#sect3.5">3.5<tt>&nbsp;&nbsp;</tt>
+    Sections</a></li>-->
+   <li><a href="exps.html#sect3.5">3.5<tt>&nbsp;&nbsp;</tt>
+    セクション</a></li>
+   <!--<li><a href="exps.html#sect3.6">3.6<tt>&nbsp;&nbsp;</tt>Conditionals</a>
+    </li>-->
+   <li><a href="exps.html#sect3.6">3.6<tt>&nbsp;&nbsp;</tt>
+    条件式</a></li>
+   <!--<li><a href="exps.html#sect3.7">3.7<tt>&nbsp;&nbsp;</tt>
+    Lists</a></li>-->
+   <li><a href="exps.html#sect3.7">3.7<tt>&nbsp;&nbsp;</tt>リスト</a></li>
+   <!--<li><a href="exps.html#sect3.8">3.8<tt>&nbsp;&nbsp;</tt>
+    Tuples</a></li>-->
+   <li><a href="exps.html#sect3.8">3.8<tt>&nbsp;&nbsp;</tt>
+    タプル</a></li>
+   <!--<li><a href="exps.html#sect3.9">3.9<tt>&nbsp;&nbsp;</tt>
+    Unit Expressions and Parenthesized Expressions</a></li>-->
+   <li><a href="exps.html#sect3.9">3.9<tt>&nbsp;&nbsp;</tt>
+    ユニット式と括弧でくくられた式</a></li>
+   <!--<li><a href="exps.html#sect3.10">3.10<tt>&nbsp;&nbsp;</tt>Arithmetic
+    Sequences</a></li>-->
+   <li><a href="exps.html#sect3.10">3.10<tt>&nbsp;&nbsp;</tt>
+    数列</a></li>
+   <!--<li><a href="exps.html#sect3.11">3.11<tt>&nbsp;&nbsp;</tt>List
+    Comprehensions</a></li>-->
+   <li><a href="exps.html#sect3.11">3.11<tt>&nbsp;&nbsp;</tt>
+    リスト内包表記</a></li>
+   <!--<li><a href="exps.html#sect3.12">3.12<tt>&nbsp;&nbsp;</tt>Let
+    Expressions</a></li>-->
+   <li><a href="exps.html#sect3.12">3.12<tt>&nbsp;&nbsp;</tt>
+    let 式</a></li>
+   <!--<li><a href="exps.html#sect3.13">3.13<tt>&nbsp;&nbsp;</tt>Case
+    Expressions</a></li>-->
+   <li><a href="exps.html#sect3.13">3.13<tt>&nbsp;&nbsp;</tt>
+    case 式</a></li>
+   <!--<li><a href="exps.html#sect3.14">3.14<tt>&nbsp;&nbsp;</tt>Do
+    Expressions</a></li>-->
+   <li><a href="exps.html#sect3.14">3.14<tt>&nbsp;&nbsp;</tt>
+    do 式</a></li>
+   <!--<li><a href="exps.html#sect3.15">3.15<tt>&nbsp;&nbsp;</tt>Datatypes with
+    Field Labels</a></li>-->
+   <li><a href="exps.html#sect3.15">3.15<tt>&nbsp;&nbsp;</tt>
+    フィールドラベルをもつデータ型</a></li>
+   <!--<li><a href="exps.html#sect3.15.1">3.15.1<tt>&nbsp;&nbsp;</tt>Field
+    Selection</a></li>-->
+   <li><a href="exps.html#sect3.15.1">3.15.1<tt>&nbsp;&nbsp;</tt>
+    フィールドの選択</a></li>
+   <!--<li><a
+    href="exps.html#sect3.15.2">3.15.2<tt>&nbsp;&nbsp;</tt>Construction
+    Using Field Labels</a></li>-->
+   <li><a href="exps.html#sect3.15.2">3.15.2<tt>&nbsp;&nbsp;</tt>
+    フィールドラベルを用いた構築</a></li>
+   <!--<li><a href="exps.html#sect3.15.3">3.15.3<tt>&nbsp;&nbsp;</tt>Updates
+    Using Field Labels</a></li>-->
+   <li><a href="exps.html#sect3.15.3">3.15.3<tt>&nbsp;&nbsp;</tt>
+    フィールドラベルを用いた更新</a></li>
+   <!--<li><a href="exps.html#sect3.16">3.16<tt>&nbsp;&nbsp;</tt>Expression
+    Type-Signatures</a></li>-->
+   <li><a href="exps.html#sect3.16">3.16<tt>&nbsp;&nbsp;</tt>
+    式の型シグネチャ</a></li>
+   <!--<li><a href="exps.html#sect3.17">3.17<tt>&nbsp;&nbsp;</tt>Pattern
+    Matching</a></li>-->
+   <li><a href="exps.html#sect3.17">3.17<tt>&nbsp;&nbsp;</tt>
+    パターン照合</a></li>
+   <!--<li><a
+    href="exps.html#sect3.17.1">3.17.1<tt>&nbsp;&nbsp;</tt>Patterns</a></li>-->
+   <li><a href="exps.html#sect3.17.1">3.17.1<tt>&nbsp;&nbsp;</tt>
+    パターン</a></li>
+   <!--<li><a href="exps.html#sect3.17.2">3.17.2<tt>&nbsp;&nbsp;</tt>Informal
+    Semantics of Pattern Matching</a></li>-->
+   <li><a href="exps.html#sect3.17.2">3.17.2<tt>&nbsp;&nbsp;</tt>
+    パターン照合の非形式的セマンティクス</a></li>
+   <!--<li><a href="exps.html#sect3.17.3">3.17.3<tt>&nbsp;&nbsp;</tt>
+    Semantics of Pattern Matching</a></li>-->
+   <li><a href="exps.html#sect3.17.3">3.17.3<tt>&nbsp;&nbsp;</tt>
+    パターン照合の形式的セマンティクス</a></li>
+   <!--==============================================================-->
+   <!--<li><a href="decls.html#sect4">4<tt>&nbsp;&nbsp;</tt>Declarations and
+    Bindings</a></li>-->
+   <li><a href="decls.html#sect4">4<tt>&nbsp;&nbsp;</tt>
+    宣言と束縛</a></li>
+   <!--<li><a href="decls.html#sect4.1">4.1<tt>&nbsp;&nbsp;</tt>Overview of
+    Types and Classes</a></li>-->
+   <li><a href="decls.html#sect4.1">4.1<tt>&nbsp;&nbsp;</tt>
+    型およびクラスの概要</a></li>
+   <!--<li><a href="decls.html#sect4.1.1">4.1.1<tt>&nbsp;&nbsp;</tt>Kinds</a></li>-->
+   <li><a href="decls.html#sect4.1.1">4.1.1<tt>&nbsp;&nbsp;</tt>類</a></li>
+   <!--<li><a href="decls.html#sect4.1.2">4.1.2<tt>&nbsp;&nbsp;</tt>Syntax of
+    Types</a></li>-->
+   <li><a href="decls.html#sect4.1.2">4.1.2<tt>&nbsp;&nbsp;</tt>
+    型の構文</a></li>
+   <!--<li><a href="decls.html#sect4.1.3">4.1.3<tt>&nbsp;&nbsp;</tt>Syntax of
+    Class Assertions and Contexts</a></li>-->
+   <li><a href="decls.html#sect4.1.3">4.1.3<tt>&nbsp;&nbsp;</tt>
+    クラス表明および文脈の構文</a></li>
+   <!--<li><a href="decls.html#sect4.1.4">4.1.4<tt>&nbsp;&nbsp;</tt>Semantics
+    of Types and Classes</a></li>-->
+   <li><a href="decls.html#sect4.1.4">4.1.4<tt>&nbsp;&nbsp;</tt>
+    型およびクラスのセマンティクス</a></li>
+   <!--<li><a href="decls.html#sect4.2">4.2<tt>&nbsp;&nbsp;</tt>User-Defined
+    Datatypes</a></li>-->
+   <li><a href="decls.html#sect4.2">4.2<tt>&nbsp;&nbsp;</tt>
+    ユーザ定義のデータ型</a></li>
+   <!--<li><a href="decls.html#sect4.2.1">4.2.1<tt>&nbsp;&nbsp;</tt>Algebraic
+    Datatype Declarations</a></li>-->
+   <li><a href="decls.html#sect4.2.1">4.2.1<tt>&nbsp;&nbsp;</tt>
+    代数的データ型宣言</a></li>
+   <!--<li><a href="decls.html#sect4.2.2">4.2.2<tt>&nbsp;&nbsp;</tt>Type
+    Synonym Declarations</a></li>-->
+   <li><a href="decls.html#sect4.2.2">4.2.2<tt>&nbsp;&nbsp;</tt>
+    型シノニム宣言</a></li>
+   <!--<li><a href="decls.html#sect4.2.3">4.2.3<tt>&nbsp;&nbsp;</tt>Datatype
+    Renamings</a></li>-->
+   <li><a href="decls.html#sect4.2.3">4.2.3<tt>&nbsp;&nbsp;</tt>
+    データ型名の付け替え</a></li>
+   <!--<li><a href="decls.html#sect4.3">4.3<tt>&nbsp;&nbsp;</tt>Type Classes
+    and Overloading</a></li>-->
+   <li><a href="decls.html#sect4.3">4.3<tt>&nbsp;&nbsp;</tt>
+    型クラスと多重定義</a></li>
+   <!--<li><a href="decls.html#sect4.3.1">4.3.1<tt>&nbsp;&nbsp;</tt>Class
+    Declarations</a></li>-->
+   <li><a href="decls.html#sect4.3.1">4.3.1<tt>&nbsp;&nbsp;</tt>
+    クラス宣言</a></li>
+   <!--<li><a href="decls.html#sect4.3.2">4.3.2<tt>&nbsp;&nbsp;</tt>Instance
+    Declarations</a></li>-->
+   <li><a href="decls.html#sect4.3.2">4.3.2<tt>&nbsp;&nbsp;</tt>
+    インスタンス宣言</a></li>
+   <!--<li><a href="decls.html#sect4.3.3">4.3.3<tt>&nbsp;&nbsp;</tt>Derived
+    Instances</a></li>-->
+   <li><a href="decls.html#sect4.3.3">4.3.3<tt>&nbsp;&nbsp;</tt>
+    導出インスタンス</a></li>
+   <!--<li><a href="decls.html#sect4.3.4">4.3.4<tt>&nbsp;&nbsp;</tt>Ambiguous
+    Types, and Defaults for Overloaded Numeric Operations</a></li>-->
+   <li><a href="decls.html#sect4.3.4">4.3.4<tt>&nbsp;&nbsp;</tt>
+    曖昧な型と多重定義された数値演算のデフォルト定義</a></li>
+   <!--<li><a href="decls.html#sect4.4">4.4<tt>&nbsp;&nbsp;</tt>Nested
+    Declarations</a></li>-->
+   <li><a href="decls.html#sect4.4">4.4<tt>&nbsp;&nbsp;</tt>
+    入れ子になった宣言</a></li>
+   <!--<li><a href="decls.html#sect4.4.1">4.4.1<tt>&nbsp;&nbsp;</tt>Type
+    Signatures</a></li>-->
+   <li><a href="decls.html#sect4.4.1">4.4.1<tt>&nbsp;&nbsp;</tt>
+    型シグネチャ</a></li>
+   <!--<li><a href="decls.html#sect4.4.2">4.4.2<tt>&nbsp;&nbsp;</tt>Fixity
+    Declarations</a></li>-->
+   <li><a href="decls.html#sect4.4.2">4.4.2<tt>&nbsp;&nbsp;</tt>
+    結合性宣言</a></li>
+   <!--<li><a href="decls.html#sect4.4.3">4.4.3<tt>&nbsp;&nbsp;</tt>Funtion
+    and Pattern Bindings</a></li>-->
+   <li><a href="decls.html#sect4.4.3">4.4.3<tt>&nbsp;&nbsp;</tt>
+    関数束縛とパターン束縛</a></li>
+   <!--<li><a
+    href="decls.html#sect4.4.3.1">4.4.3.1<tt>&nbsp;&nbsp;</tt>Function
+    bindings</a></li>-->
+   <li><a href="decls.html#sect4.4.3.1">4.4.3.1<tt>&nbsp;&nbsp;</tt>
+    関数束縛</a></li>
+   <!--<li><a href="decls.html#sect4.4.3.2">4.4.3.2<tt>&nbsp;&nbsp;</tt>Pattern
+    bindings</a></li>-->
+   <li><a href="decls.html#sect4.4.3.2">4.4.3.2<tt>&nbsp;&nbsp;</tt>
+    パターン束縛</a></li>
+   <!--<li><a href="decls.html#sect4.5">4.5<tt>&nbsp;&nbsp;</tt>Static
+    Semantics of Function and Pattern Bindings</a></li>-->
+   <li><a href="decls.html#sect4.5">4.5<tt>&nbsp;&nbsp;</tt>
+    関数束縛およびパターン束縛の静的セマンティクス</a></li>
+   <!--<li><a href="decls.html#sect4.5.1">4.5.1<tt>&nbsp;&nbsp;</tt>Dependency
+    Analysis</a></li>-->
+   <li><a href="decls.html#sect4.5.1">4.5.1<tt>&nbsp;&nbsp;</tt>
+    依存性解析</a></li>
+   <!--<li><a
+    href="decls.html#sect4.5.2">4.5.2<tt>&nbsp;&nbsp;</tt>Generalization</a>
+    </li>-->
+   <li><a href="decls.html#sect4.5.2">4.5.2<tt>&nbsp;&nbsp;</tt>
+    一般化</a></li>
+   <!--<li><a href="decls.html#sect4.5.3">4.5.3<tt>&nbsp;&nbsp;</tt>Context
+    Reduction Errors</a></li>-->
+   <li><a href="decls.html#sect4.5.3">4.5.3<tt>&nbsp;&nbsp;</tt>
+    文脈簡約エラー</a></li>
+   <!--<li><a
+    href="decls.html#sect4.5.4">4.5.4<tt>&nbsp;&nbsp;</tt>Monomorphism</a></li>-->
+   <li><a href="decls.html#sect4.5.4">4.5.4<tt>&nbsp;&nbsp;</tt>
+    単相性</a></li>
+   <!--<li><a href="decls.html#sect4.5.5">4.5.5<tt>&nbsp;&nbsp;</tt>The
+    Monomorphism Restriction</a></li>-->
+   <li><a href="decls.html#sect4.5.5">4.5.5<tt>&nbsp;&nbsp;</tt>
+    単相性制限</a></li>
+   <!-- <li><a href="decls.html#sect4.6">4.6<tt>&nbsp;&nbsp;</tt>Kind
+    Inference</a></li>-->
+   <li><a href="decls.html#sect4.6">4.6<tt>&nbsp;&nbsp;</tt>
+    類の推論</a></li>
+   <!--==============================================================-->
+   <!--<li><a href="modules.html#sect5">5<tt>&nbsp;&nbsp;</tt>Modules</a></li>-->
+   <li><a href="modules.html#sect5">5<tt>&nbsp;&nbsp;</tt>モジュール</a></li>
+   <!--<li><a href="modules.html#sect5.1">5.1<tt>&nbsp;&nbsp;</tt>Module
+    Structure</a></li>-->
+   <li><a href="modules.html#sect5.1">5.1<tt>&nbsp;&nbsp;</tt>
+    モジュール構造</a></li>
+   <!--<li><a href="modules.html#sect5.2">5.2<tt>&nbsp;&nbsp;</tt>Export
+    Lists</a></li>-->
+   <li><a href="modules.html#sect5.2">5.2<tt>&nbsp;&nbsp;</tt>
+    エクスポートリスト</a></li>
+   <!--<li><a href="modules.html#sect5.3">5.3<tt>&nbsp;&nbsp;</tt>Import
+    Declarations</a></li>-->
+   <li><a href="modules.html#sect5.3">5.3<tt>&nbsp;&nbsp;</tt>
+    インポート宣言</a></li>
+   <!--<li><a href="modules.html#sect5.3.1">5.3.1<tt>&nbsp;&nbsp;</tt>What is
+    imported</a></li>-->
+   <li><a href="modules.html#sect5.3.1">5.3.1<tt>&nbsp;&nbsp;</tt>
+    インポートされるもの</a></li>
+   <!--<li><a href="modules.html#sect5.3.2">5.3.2<tt>&nbsp;&nbsp;</tt>Qualified
+    import</a></li>-->
+   <li><a href="modules.html#sect5.3.2">5.3.2<tt>&nbsp;&nbsp;</tt>
+    修飾子付インポート</a></li>
+   <!--<li><a href="modules.html#sect5.3.3">5.3.3<tt>&nbsp;&nbsp;</tt>Local
+    aliases</a></li>-->
+   <li><a href="modules.html#sect5.3.3">5.3.3<tt>&nbsp;&nbsp;</tt>
+    局所的な別名</a></li>
+   <!--<li><a
+    href="modules.html#sect5.3.4">5.3.4<tt>&nbsp;&nbsp;</tt>Examples</a></li>-->
+   <li><a
+    href="modules.html#sect5.3.4">5.3.4<tt>&nbsp;&nbsp;</tt>例</a></li>
+   <!--<li><a href="modules.html#sect5.4">5.4<tt>&nbsp;&nbsp;</tt>Importing and
+    Exporting Instance Declarations</a></li>-->
+   <li><a href="modules.html#sect5.4">5.4<tt>&nbsp;&nbsp;</tt>
+    インスタンス宣言のインポートとエクスポート</a></li>
+   <!--<li><a href="modules.html#sect5.5">5.5<tt>&nbsp;&nbsp;</tt>Name Clashes
+    and Closure</a></li>-->
+   <li><a href="modules.html#sect5.5">5.5<tt>&nbsp;&nbsp;</tt>
+    名前の衝突とクロージャ</a></li>
+   <!--<li><a href="modules.html#sect5.5.1">5.5.1<tt>&nbsp;&nbsp;</tt>Qualified
+    names</a></li>-->
+   <li><a href="modules.html#sect5.5.1">5.5.1<tt>&nbsp;&nbsp;</tt>
+    修飾された名前</a></li>
+   <!--<li><a href="modules.html#sect5.5.2">5.5.2<tt>&nbsp;&nbsp;</tt>Name
+    clashes</a></li>-->
+   <li><a href="modules.html#sect5.5.2">5.5.2<tt>&nbsp;&nbsp;</tt>
+    名前の衝突</a></li>
+   <!--<li><a
+    href="modules.html#sect5.5.3">5.5.3<tt>&nbsp;&nbsp;</tt>Closure</a></li>-->
+   <li><a
+    href="modules.html#sect5.5.3">5.5.3<tt>&nbsp;&nbsp;</tt>クロージャ</a></li>
+   <!--<li><a href="modules.html#sect5.6">5.6<tt>&nbsp;&nbsp;</tt>Standard
+    Prelude</a></li>-->
+   <li><a href="modules.html#sect5.6">5.6<tt>&nbsp;&nbsp;</tt>
+    標準プレリュード</a></li>
+   <!--<li><a href="modules.html#sect5.6.1">5.6.1<tt>&nbsp;&nbsp;</tt>The
+    <tt>Prelude</tt> Module</a></li>-->
+   <li><a href="modules.html#sect5.6.1">5.6.1<tt>&nbsp;&nbsp;</tt>
+    <tt>Prelude</tt> モジュール</a></li>
+   <!--<li><a href="modules.html#sect5.6.2">5.6.2<tt>&nbsp;&nbsp;</tt>Shadowing
+    Prelude Names</a></li>-->
+   <li><a href="modules.html#sect5.6.2">5.6.2<tt>&nbsp;&nbsp;</tt>
+    プレリュード名の隠蔽</a></li>
+   <!--<li><a href="modules.html#sect5.7">5.7<tt>&nbsp;&nbsp;</tt>Separate
+    Compilation</a></li>-->
+   <li><a href="modules.html#sect5.7">5.7<tt>&nbsp;&nbsp;</tt>
+    分割コンパイル</a></li>
+   <!--<li><a href="modules.html#sect5.8">5.8<tt>&nbsp;&nbsp;</tt>Abstract
+    Datatypes</a></li>-->
+   <li><a href="modules.html#sect5.8">5.8<tt>&nbsp;&nbsp;</tt>
+    抽象データ型</a></li>
+   <!--==============================================================-->
+   <!--<li><a href="basic.html#sect6">6<tt>&nbsp;&nbsp;</tt>Predefined Types
+    and Classes</a></li>-->
+   <li><a href="basic.html#sect6">6<tt>&nbsp;&nbsp;</tt>
+    定義ずみの型およびクラス</a></li>
+   <!--<li><a href="basic.html#sect6.1">6.1<tt>&nbsp;&nbsp;</tt>Standard
+    Haskell Types</a></li>-->
+   <li><a href="basic.html#sect6.1">6.1<tt>&nbsp;&nbsp;</tt>
+    Haskell の標準型</a></li>
+   <!--<li><a
+    href="basic.html#sect6.1.1">6.1.1<tt>&nbsp;&nbsp;</tt>Booleans</a></li>-->
+   <li><a href="basic.html#sect6.1.1">6.1.1<tt>&nbsp;&nbsp;</tt>
+    真理値</a></li>
+   <!--<li><a href="basic.html#sect6.1.2">6.1.2<tt>&nbsp;&nbsp;</tt>Characters
+    and Strings</a></li>-->
+   <li><a href="basic.html#sect6.1.2">6.1.2<tt>&nbsp;&nbsp;</tt>
+    文字と文字列</a></li>
+   <!--<li><a
+   href="basic.html#sect6.1.3">6.1.3<tt>&nbsp;&nbsp;</tt>Lists</a></li>-->
+   <li><a href="basic.html#sect6.1.3">6.1.3<tt>&nbsp;&nbsp;</tt>
+    リスト</a></li>
+   <!--<li><a
+   href="basic.html#sect6.1.4">6.1.4<tt>&nbsp;&nbsp;</tt>Tuples</a></li>-->
+   <li><a href="basic.html#sect6.1.4">6.1.4<tt>&nbsp;&nbsp;</tt>
+    タプル</a></li>
+   <!--<li><a href="basic.html#sect6.1.5">6.1.5<tt>&nbsp;&nbsp;</tt>The Unit
+    Datatype</a></li>-->
+   <li><a href="basic.html#sect6.1.5">6.1.5<tt>&nbsp;&nbsp;</tt>
+    ユニットデータ型</a></li>
+   <!--<li><a href="basic.html#sect6.1.6">6.1.6<tt>&nbsp;&nbsp;</tt>Function
+    Types</a></li>-->
+   <li><a href="basic.html#sect6.1.6">6.1.6<tt>&nbsp;&nbsp;</tt>
+    関数の型</a></li>
+   <!--<li><a href="basic.html#sect6.1.7">6.1.7<tt>&nbsp;&nbsp;</tt>The IO and
+    IOError Types</a></li>-->
+   <li><a href="basic.html#sect6.1.7">6.1.7<tt>&nbsp;&nbsp;</tt>
+    IO 型および IOError 型</a></li>
+   <!--<li><a href="basic.html#sect6.1.8">6.1.8<tt>&nbsp;&nbsp;</tt>Other
+    Types</a></li>-->
+   <li><a href="basic.html#sect6.1.8">6.1.8<tt>&nbsp;&nbsp;</tt>
+    その他の型</a></li>
+   <!--<li><a href="basic.html#sect6.2">6.2<tt>&nbsp;&nbsp;</tt>Strict
+    Evaluation</a></li>-->
+   <li><a href="basic.html#sect6.2">6.2<tt>&nbsp;&nbsp;</tt>
+    正格評価</a></li>
+   <!--<li><a href="basic.html#sect6.3">6.3<tt>&nbsp;&nbsp;</tt>Standard
+    Haskell Classes</a></li>-->
+   <li><a href="basic.html#sect6.3">6.3<tt>&nbsp;&nbsp;</tt>
+    Haskell の標準クラス</a></li>
+   <!--<li><a href="basic.html#sect6.3.1">6.3.1<tt>&nbsp;&nbsp;</tt>The Eq
+    Class</a></li>-->
+   <li><a href="basic.html#sect6.3.1">6.3.1<tt>&nbsp;&nbsp;</tt>
+    Eq クラス</a></li>
+   <!--<li><a href="basic.html#sect6.3.2">6.3.2<tt>&nbsp;&nbsp;</tt>The Ord
+    Class</a></li>-->
+   <li><a href="basic.html#sect6.3.2">6.3.2<tt>&nbsp;&nbsp;</tt>
+    Ord クラス</a></li>
+   <!--<li><a href="basic.html#sect6.3.3">6.3.3<tt>&nbsp;&nbsp;</tt>The Read
+    and Show Classes</a></li>-->
+   <li><a href="basic.html#sect6.3.3">6.3.3<tt>&nbsp;&nbsp;</tt>
+    Read クラスと Show クラス</a></li>
+   <!--<li><a href="basic.html#sect6.3.4">6.3.4<tt>&nbsp;&nbsp;</tt>The Enum
+    Class</a></li>-->
+   <li><a href="basic.html#sect6.3.4">6.3.4<tt>&nbsp;&nbsp;</tt>
+    Enum クラス</a></li>
+   <!--<li><a href="basic.html#sect6.3.5">6.3.5<tt>&nbsp;&nbsp;</tt>The Functor
+    Class</a></li>-->
+   <li><a href="basic.html#sect6.3.5">6.3.5<tt>&nbsp;&nbsp;</tt>
+    Functor クラス</a></li>
+   <!--<li><a href="basic.html#sect6.3.6">6.3.6<tt>&nbsp;&nbsp;</tt>The Monad
+    Class</a></li>-->
+   <li><a href="basic.html#sect6.3.6">6.3.6<tt>&nbsp;&nbsp;</tt>
+    Monad クラス</a></li>
+   <!--<li><a href="basic.html#sect6.3.7">6.3.7<tt>&nbsp;&nbsp;</tt>The Bounded
+    Class</a></li>-->
+   <li><a href="basic.html#sect6.3.7">6.3.7<tt>&nbsp;&nbsp;</tt>
+    Bounded クラス</a></li>
+   <!--<li><a href="basic.html#sect6.4">6.4<tt>&nbsp;&nbsp;</tt>Numbers</a></li>-->
+   <li><a href="basic.html#sect6.4">6.4<tt>&nbsp;&nbsp;</tt>
+    数値</a></li>
+   <!--<li><a href="basic.html#sect6.4.1">6.4.1<tt>&nbsp;&nbsp;</tt>Numeric
+    Literals</a></li>-->
+   <li><a href="basic.html#sect6.4.1">6.4.1<tt>&nbsp;&nbsp;</tt>
+    数値リテラル</a></li>
+   <!--<li><a href="basic.html#sect6.4.2">6.4.2<tt>&nbsp;&nbsp;</tt>Arithmetic
+    and Number-Theoretic Operations</a></li>-->
+   <li><a href="basic.html#sect6.4.2">6.4.2<tt>&nbsp;&nbsp;</tt>
+    算術的演算子と数論的演算子</a></li>
+   <!--<li><a
+    href="basic.html#sect6.4.3">6.4.3<tt>&nbsp;&nbsp;</tt>Exponentiation
+    and Logarithms</a></li>-->
+   <li><a href="basic.html#sect6.4.3">6.4.3<tt>&nbsp;&nbsp;</tt>
+    指数と対数</a></li>
+   <!--<li><a href="basic.html#sect6.4.4">6.4.4<tt>&nbsp;&nbsp;</tt>Magnitude
+    and Sign</a></li>-->
+   <li><a href="basic.html#sect6.4.4">6.4.4<tt>&nbsp;&nbsp;</tt>
+    絶対値と符号</a></li>
+   <!--<li><a
+    href="basic.html#sect6.4.5">6.4.5<tt>&nbsp;&nbsp;</tt>Trigonometric
+    Functions</a></li>-->
+   <li><a href="basic.html#sect6.4.5">6.4.5<tt>&nbsp;&nbsp;</tt>
+    三角関数</a></li>
+   <!--<li><a href="basic.html#sect6.4.6">6.4.6<tt>&nbsp;&nbsp;</tt>Coercions
+    and Component Extraction</a></li>-->
+   <li><a href="basic.html#sect6.4.6">6.4.6<tt>&nbsp;&nbsp;</tt>
+    型変換および構成要素の取り出し</a></li>
+   <!--==============================================================-->
+   <!--<li><a href="io-13.html#sect7">7<tt>&nbsp;&nbsp;</tt>Basic
+    Input/Output</a></li>-->
+   <li><a href="io-13.html#sect7">7<tt>&nbsp;&nbsp;</tt>
+    基本 I/O</a></li>
+   <!--<li><a href="io-13.html#sect7.1">7.1<tt>&nbsp;&nbsp;</tt>Standard I/O
+    Functions</a></li>-->
+   <li><a href="io-13.html#sect7.1">7.1<tt>&nbsp;&nbsp;</tt>
+    標準 I/O 関数</a></li>
+   <!--<li><a href="io-13.html#sect7.2">7.2<tt>&nbsp;&nbsp;</tt>Sequencing I/O
+    Operations</a></li>-->
+   <li><a href="io-13.html#sect7.2">7.2<tt>&nbsp;&nbsp;</tt>
+    I/O 操作の直列化</a></li>
+   <!--<li><a href="io-13.html#sect7.3">7.3<tt>&nbsp;&nbsp;</tt>Exception
+    Handling in the I/O Monad</a></li>-->
+   <li><a href="io-13.html#sect7.3">7.3<tt>&nbsp;&nbsp;</tt>
+    I/O モナドの例外処理</a></li>
+   <!--==============================================================-->
+   <!--<li><a href="standard-prelude.html#sect8">8<tt>&nbsp;&nbsp;</tt>Standard
+    Prelude</a></li>-->
+   <li><a href="standard-prelude.html#sect8">8<tt>&nbsp;&nbsp;</tt>
+    標準プレリュード</a></li>
+   <!--<li><a
+    href="standard-prelude.html#sect8.1">8.1<tt>&nbsp;&nbsp;</tt>Prelude
+    <tt>PreludeList</tt></a></li>-->
+   <li><a href="standard-prelude.html#sect8.1">8.1<tt>&nbsp;&nbsp;</tt>
+    プレリュード <tt>PreludeList</tt></a></li>
+   <!--<li><a
+    href="standard-prelude.html#sect8.2">8.2<tt>&nbsp;&nbsp;</tt>Prelude
+    <tt>PreludeText</tt></a></li>-->
+   <li><a href="standard-prelude.html#sect8.2">8.2<tt>&nbsp;&nbsp;</tt>
+    プレリュード <tt>PreludeText</tt></a></li>
+   <!--<li><a
+    href="standard-prelude.html#sect8.3">8.3<tt>&nbsp;&nbsp;</tt>Prelude
+    <tt>PreludeIO</tt></a></li>-->
+   <li><a href="standard-prelude.html#sect8.3">8.3<tt>&nbsp;&nbsp;</tt>
+    プレリュード <tt>PreludeIO</tt></a></li>
+   <!--==============================================================-->
+   <!--<li><a href="syntax-iso.html#sect9">9<tt>&nbsp;&nbsp;</tt>Syntax
+    Reference</a></li>-->
+   <li><a href="syntax-iso.html#sect9">9<tt>&nbsp;&nbsp;</tt>
+    構文リファレンス</a></li>
+   <!--<li><a href="syntax-iso.html#sect9.1">9.1<tt>&nbsp;&nbsp;</tt>Notational
+    Conventions</a></li>-->
+   <li><a href="syntax-iso.html#sect9.1">9.1<tt>&nbsp;&nbsp;</tt>
+    記法上の慣習</a></li>
+   <!--<li><a href="syntax-iso.html#sect9.2">9.2<tt>&nbsp;&nbsp;</tt>Lexical
+    Syntax</a></li>-->
+   <li><a href="syntax-iso.html#sect9.2">9.2<tt>&nbsp;&nbsp;</tt>
+    字句構文</a></li>
+   <!--<li><a href="syntax-iso.html#sect9.3">9.3<tt>&nbsp;&nbsp;</tt>Layout</a>
+    </li>-->
+   <li><a href="syntax-iso.html#sect9.3">9.3<tt>&nbsp;&nbsp;</tt>
+    レイアウト</a></li>
+   <!--<li><a href="syntax-iso.html#sect9.4">9.4<tt>&nbsp;&nbsp;</tt>Literate
+    comments</a></li>-->
+   <li><a href="syntax-iso.html#sect9.4">9.4<tt>&nbsp;&nbsp;</tt>
+    文芸的コメント</a></li>
+   <!--<li><a
+    href="syntax-iso.html#sect9.5">9.5<tt>&nbsp;&nbsp;</tt>Context-Free
+    Syntax</a></li>-->
+   <li><a href="syntax-iso.html#sect9.5">9.5<tt>&nbsp;&nbsp;</tt>
+    文脈自由構文</a></li>
+   <li><a href="literate.html">9.6<tt>&nbsp;&nbsp;</tt>
+    文藝的コメント</a></li>
+   <!--==============================================================-->
+   <!--<li><a href="derived.html#sect10">10<tt>&nbsp;&nbsp;</tt>Specification
+    of Derived Instances</a></li>-->
+   <li><a href="derived.html#sect10">10<tt>&nbsp;&nbsp;</tt>
+    導出インスタンスの特化</a></li>
+   <!--<li><a href="derived.html#sect10.1">10.1<tt>&nbsp;&nbsp;</tt>Derived
+    instances of <tt>Eq</tt> and <tt>Ord</tt></a></li>-->
+   <li><a href="derived.html#sect10.1">10.1<tt>&nbsp;&nbsp;</tt>
+    <tt>Eq</tt> および <tt>Ord</tt> の導出インスタンス</a></li>
+   <!--<li><a href="derived.html#sect10.2">10.2<tt>&nbsp;&nbsp;</tt>Derived
+    instances of <tt>Enum</tt></a></li>-->
+   <li><a href="derived.html#sect10.2">10.2<tt>&nbsp;&nbsp;</tt>
+    <tt>Enum</tt> の導出インスタンス</a></li>
+   <!--<li><a href="derived.html#sect10.3">10.3<tt>&nbsp;&nbsp;</tt>Derived
+    instances of <tt>Bounded</tt></a></li>-->
+   <li><a href="derived.html#sect10.3">10.3<tt>&nbsp;&nbsp;</tt>
+    <tt>Bounded</tt> の導出インスタンス</a></li>
+   <!--<li><a href="derived.html#sect10.4">10.4<tt>&nbsp;&nbsp;</tt>Derived
+    instances of <tt>Read</tt> and <tt>Show</tt></a></li>-->
+   <li><a href="derived.html#sect10.4">10.4<tt>&nbsp;&nbsp;</tt>
+    <tt>Read</tt> および <tt>Show</tt> の導出インスタンス</a></li>
+   <!--<li><a href="derived.html#sect10.5">10.5<tt>&nbsp;&nbsp;</tt>An
+    Example</a></li>-->
+   <li><a href="derived.html#sect10.5">10.5<tt>&nbsp;&nbsp;</tt>
+    例</a></li>
+   <!--==============================================================-->
+   <!--
+   <li><a href="pragmas.html#sect11">11<tt>&nbsp;&nbsp;</tt>Compiler
+    Pragmas</a></li>
+   <li><a
+    href="pragmas.html#sect11.1">11.1<tt>&nbsp;&nbsp;</tt>Inlining</a></li>
+   <li><a
+    href="pragmas.html#sect11.2">11.2<tt>&nbsp;&nbsp;</tt>Specialization</a>
+    </li>
+   -->
+   <li><a href="pragmas.html#sect11">11<tt>&nbsp;&nbsp;</tt>
+    コンパイラプラグマ</a></li>
+   <li><a href="pragmas.html#sect11.1">11.1<tt>&nbsp;&nbsp;</tt>
+    インライン展開</a></li>
+   <li><a href="pragmas.html#sect11.2">11.2<tt>&nbsp;&nbsp;</tt>
+    特化</a>
+    </li>
+   <!--==============================================================-->
+   <!--
+   <li><a href="ratio.html#sect12">12<tt>&nbsp;&nbsp;</tt>Rational
+    Numbers</a></li>
+   <li><a href="ratio.html#sect12.1">12.1<tt>&nbsp;&nbsp;</tt>Library
+    <tt>Ratio</tt></a></li>
+   -->
+   <li><a href="ratio.html#sect12">12<tt>&nbsp;&nbsp;</tt>
+    有理数</a></li>
+   <li><a href="ratio.html#sect12.1">12.1<tt>&nbsp;&nbsp;</tt>
+    <tt>Ratio</tt> ライブラリ</a></li>
+   <!--==============================================================-->
+   <!--
+   <li><a href="complex.html#sect13">13<tt>&nbsp;&nbsp;</tt>Complex
+    Numbers</a></li>
+   <li><a href="complex.html#sect13.1">13.1<tt>&nbsp;&nbsp;</tt>Library
+    <tt>Complex</tt></a></li>
+   -->
+   <li><a href="complex.html#sect13">13<tt>&nbsp;&nbsp;</tt>
+    複素数</a></li>
+   <li><a href="complex.html#sect13.1">13.1<tt>&nbsp;&nbsp;</tt>
+    <tt>Complex</tt> ライブラリ</a></li>
+   <!--==============================================================-->
+   <!--
+   <li><a href="numeric.html#sect14">14<tt>&nbsp;&nbsp;</tt>Numeric</a></li>
+   <li><a href="numeric.html#sect14.1">14.1<tt>&nbsp;&nbsp;</tt>Showing
+    functions</a></li>
+   <li><a href="numeric.html#sect14.2">14.2<tt>&nbsp;&nbsp;</tt>Reading
+    functions</a></li>
+   <li><a
+    href="numeric.html#sect14.3">14.3<tt>&nbsp;&nbsp;</tt>Miscellaneous</a>
+    </li>
+   <li><a href="numeric.html#sect14.4">14.4<tt>&nbsp;&nbsp;</tt>Library
+    <tt>Numeric</tt></a></li>
+   -->
+   <li><a href="numeric.html#sect14">14<tt>&nbsp;&nbsp;</tt>数値</a></li>
+   <li><a href="numeric.html#sect14.1">14.1<tt>&nbsp;&nbsp;</tt>
+    表示関数</a></li>
+   <li><a href="numeric.html#sect14.2">14.2<tt>&nbsp;&nbsp;</tt>
+    読み込み関数</a></li>
+   <li><a
+    href="numeric.html#sect14.3">14.3<tt>&nbsp;&nbsp;</tt>その他</a>
+    </li>
+   <li><a href="numeric.html#sect14.4">14.4<tt>&nbsp;&nbsp;</tt>
+    <tt>Numeric</tt> ライブラリ</a></li>
+   <!--==============================================================-->
+   <!--
+   <li><a href="ix.html#sect15">15<tt>&nbsp;&nbsp;</tt>Indexing
+    Operations</a></li>
+   <li><a href="ix.html#sect15.1">15.1<tt>&nbsp;&nbsp;</tt>Deriving
+    Instances of <tt>Ix</tt></a></li>
+   <li><a href="ix.html#sect15.2">15.2<tt>&nbsp;&nbsp;</tt>Library
+    <tt>Ix</tt></a></li>
+   -->
+   <li><a href="ix.html#sect15">15<tt>&nbsp;&nbsp;</tt>
+    インデックス演算</a></li>
+   <li><a href="ix.html#sect15.1">15.1<tt>&nbsp;&nbsp;</tt>
+    <tt>Ix</tt> インスタンスの導出</a></li>
+   <li><a href="ix.html#sect15.2">15.2<tt>&nbsp;&nbsp;</tt>
+    <tt>Ix</tt> ライブラリ</a></li>
+   <!--==============================================================-->
+   <!--
+   <li><a href="array.html#sect16">16<tt>&nbsp;&nbsp;</tt>Arrays</a></li>
+   <li><a href="array.html#sect16.1">16.1<tt>&nbsp;&nbsp;</tt>Array
+    Construction</a></li>
+   <li><a
+    href="array.html#sect16.1.1">16.1.1<tt>&nbsp;&nbsp;</tt>Accumulated
+    Arrays</a></li>
+   <li><a href="array.html#sect16.2">16.2<tt>&nbsp;&nbsp;</tt>Incremental
+    Array Updates</a></li>
+   <li><a href="array.html#sect16.3">16.3<tt>&nbsp;&nbsp;</tt>Derived
+    Arrays</a></li>
+   <li><a href="array.html#sect16.4">16.4<tt>&nbsp;&nbsp;</tt>Library
+    <tt>Array</tt></a></li>
+   -->
+   <li><a href="array.html#sect16">16<tt>&nbsp;&nbsp;</tt>配列</a></li>
+   <li><a href="array.html#sect16.1">16.1<tt>&nbsp;&nbsp;</tt>
+    配列の構築</a></li>
+   <li><a href="array.html#sect16.1.1">16.1.1<tt>&nbsp;&nbsp;</tt>
+    蓄積配列</a></li>
+   <li><a href="array.html#sect16.2">16.2<tt>&nbsp;&nbsp;</tt>
+    配列の漸進更新</a></li>
+   <li><a href="array.html#sect16.3">16.3<tt>&nbsp;&nbsp;</tt>
+    導出配列</a></li>
+   <li><a href="array.html#sect16.4">16.4<tt>&nbsp;&nbsp;</tt>
+    <tt>Array</tt> ライブラリ</a></li>
+   <!--==============================================================-->
+   <!--
+   <li><a href="list.html#sect17">17<tt>&nbsp;&nbsp;</tt>List Utilities</a>
+    </li>
+   <li><a href="list.html#sect17.1">17.1<tt>&nbsp;&nbsp;</tt>Indexing
+    lists</a></li>
+   <li><a href="list.html#sect17.2">17.2<tt>&nbsp;&nbsp;</tt>"Set"
+    operations</a></li>
+   <li><a href="list.html#sect17.3">17.3<tt>&nbsp;&nbsp;</tt>List
+    transformations</a></li>
+   <li><a href="list.html#sect17.4">17.4<tt>&nbsp;&nbsp;unfoldr</tt></a></li>
+   <li><a href="list.html#sect17.5">17.5<tt>&nbsp;&nbsp;</tt>Predicates</a>
+    </li>
+   <li><a href="list.html#sect17.6">17.6<tt>&nbsp;&nbsp;</tt>The
+    "<tt>By</tt>" operations</a></li>
+   <li><a href="list.html#sect17.7">17.7<tt>&nbsp;&nbsp;</tt>The
+    "<tt>generic</tt>" operations</a></li>
+   <li><a href="list.html#sect17.8">17.8<tt>&nbsp;&nbsp;</tt>Further
+    "<tt>zip</tt>" operations</a></li>
+   <li><a href="list.html#sect17.9">17.9<tt>&nbsp;&nbsp;</tt>Library
+    <tt>List</tt></a></li>
+   -->
+   <li><a href="list.html#sect17">17<tt>&nbsp;&nbsp;</tt>
+    リストユーティリティ</a>
+    </li>
+   <li><a href="list.html#sect17.1">17.1<tt>&nbsp;&nbsp;</tt>
+    リストのインデックス付け</a></li>
+   <li><a href="list.html#sect17.2">17.2<tt>&nbsp;&nbsp;</tt>
+    「集合」演算</a></li>
+   <li><a href="list.html#sect17.3">17.3<tt>&nbsp;&nbsp;</tt>
+    リストの変換</a></li>
+   <li><a href="list.html#sect17.4">17.4<tt>&nbsp;&nbsp;unfoldr</tt></a></li>
+   <li><a href="list.html#sect17.5">17.5<tt>&nbsp;&nbsp;</tt>述語</a>
+    </li>
+   <li><a href="list.html#sect17.6">17.6<tt>&nbsp;&nbsp;</tt>
+    "<tt>By</tt>" 演算</a></li>
+   <li><a href="list.html#sect17.7">17.7<tt>&nbsp;&nbsp;</tt>
+    "<tt>generic</tt>" 演算</a></li>
+   <li><a href="list.html#sect17.8">17.8<tt>&nbsp;&nbsp;</tt>
+    追加の "<tt>zip</tt>" 演算</a></li>
+   <li><a href="list.html#sect17.9">17.9<tt>&nbsp;&nbsp;</tt>
+    <tt>List</tt> ライブラリ</a></li>
+   <!--==============================================================-->
+   <li><a href="maybe.html#sect18">18<tt>&nbsp;&nbsp;</tt>Maybe
+    ユーティリティ</a></li>
+   <li><a href="maybe.html#sect18.1">18.1<tt>&nbsp;&nbsp;</tt>
+    <tt>Maybe</tt> ライブラリ</a></li>
+   <!--==============================================================-->
+   <!--
+   <li><a href="char.html#sect19">19<tt>&nbsp;&nbsp;</tt>Character
+    Utilities</a></li>
+   <li><a href="char.html#sect19.1">19.1<tt>&nbsp;&nbsp;</tt>Library
+    <tt>Char</tt></a></li>
+   -->
+   <li><a href="char.html#sect19">19<tt>&nbsp;&nbsp;</tt>
+    文字ユーティリティ</a></li>
+   <li><a href="char.html#sect19.1">19.1<tt>&nbsp;&nbsp;</tt>
+    <tt>Char</tt> ライブラリ</a></li>
+   <!--==============================================================-->
+   <!--
+   <li><a href="monad.html#sect20">20<tt>&nbsp;&nbsp;</tt>Monad
+    Utilities</a></li>
+   <li><a href="monad.html#sect20.1">20.1<tt>&nbsp;&nbsp;</tt>Naming
+    conventions</a></li>
+   <li><a href="monad.html#sect20.2">20.2<tt>&nbsp;&nbsp;</tt>Class
+    <tt>MonadPlus</tt></a></li>
+   <li><a href="monad.html#sect20.3">20.3<tt>&nbsp;&nbsp;</tt>Functions</a>
+    </li>
+   <li><a href="monad.html#sect20.4">20.4<tt>&nbsp;&nbsp;</tt>Library
+    <tt>Monad</tt></a></li>
+   -->
+   <li><a href="monad.html#sect20">20<tt>&nbsp;&nbsp;</tt>
+    モナドユーティリティ</a></li>
+   <li><a href="monad.html#sect20.1">20.1<tt>&nbsp;&nbsp;</tt>
+    命名上の慣習</a></li>
+   <li><a href="monad.html#sect20.2">20.2<tt>&nbsp;&nbsp;</tt>
+    <tt>MonadPlus</tt> クラス</a></li>
+   <li><a href="monad.html#sect20.3">20.3<tt>&nbsp;&nbsp;</tt>関数</a>
+    </li>
+   <li><a href="monad.html#sect20.4">20.4<tt>&nbsp;&nbsp;</tt>
+    <tt>Monad</tt> ライブラリ</a></li>
+   <!--==============================================================-->
+   <!--
+   <li><a href="io.html#sect21">21<tt>&nbsp;&nbsp;</tt>Input/Output</a></li>
+   <li><a href="io.html#sect21.1">21.1<tt>&nbsp;&nbsp;</tt>I/O Errors</a></li>
+   <li><a href="io.html#sect21.2">21.2<tt>&nbsp;&nbsp;</tt>Files and
+    Handles</a></li>
+   <li><a href="io.html#sect21.2.1">21.2.1<tt>&nbsp;&nbsp;</tt>Standard
+    Handles</a></li>
+   <li><a href="io.html#sect21.2.2">21.2.2<tt>&nbsp;&nbsp;</tt>Semi-Closed
+    Handles</a></li>
+   <li><a href="io.html#sect21.2.3">21.2.3<tt>&nbsp;&nbsp;</tt>File
+    locking</a></li>
+   <li><a href="io.html#sect21.3">21.3<tt>&nbsp;&nbsp;</tt>Opening and
+    Closing Files</a></li>
+   <li><a href="io.html#sect21.3.1">21.3.1<tt>&nbsp;&nbsp;</tt>Opening
+    Files</a></li>
+   <li><a href="io.html#sect21.3.2">21.3.2<tt>&nbsp;&nbsp;</tt>Closing
+    Files</a></li>
+   <li><a href="io.html#sect21.4">21.4<tt>&nbsp;&nbsp;</tt>Determining the
+    Size of a File</a></li>
+   <li><a href="io.html#sect21.5">21.5<tt>&nbsp;&nbsp;</tt>Detecting the
+    End of Input</a></li>
+   <li><a href="io.html#sect21.6">21.6<tt>&nbsp;&nbsp;</tt>Buffering
+    Operations</a></li>
+   <li><a href="io.html#sect21.6.1">21.6.1<tt>&nbsp;&nbsp;</tt>Flushing
+    Buffers</a></li>
+   <li><a href="io.html#sect21.7">21.7<tt>&nbsp;&nbsp;</tt>Repositioning
+    Handles</a></li>
+   <li><a href="io.html#sect21.7.1">21.7.1<tt>&nbsp;&nbsp;</tt>Revisiting
+    an I/O Position</a></li>
+   <li><a href="io.html#sect21.7.2">21.7.2<tt>&nbsp;&nbsp;</tt>Seeking to a
+    new Position</a></li>
+   <li><a href="io.html#sect21.8">21.8<tt>&nbsp;&nbsp;</tt>Handle
+    Properties</a></li>
+   <li><a href="io.html#sect21.9">21.9<tt>&nbsp;&nbsp;</tt>Text Input and
+    Output</a></li>
+   <li><a href="io.html#sect21.9.1">21.9.1<tt>&nbsp;&nbsp;</tt>Checking for
+    Input</a></li>
+   <li><a href="io.html#sect21.9.2">21.9.2<tt>&nbsp;&nbsp;</tt>Reading
+    Input</a></li>
+   <li><a href="io.html#sect21.9.3">21.9.3<tt>&nbsp;&nbsp;</tt>Reading
+    Ahead</a></li>
+   <li><a href="io.html#sect21.9.4">21.9.4<tt>&nbsp;&nbsp;</tt>Reading The
+    Entire Input</a></li>
+   <li><a href="io.html#sect21.9.5">21.9.5<tt>&nbsp;&nbsp;</tt>Text
+    Output</a></li>
+   <li><a href="io.html#sect21.10">21.10<tt>&nbsp;&nbsp;</tt>Examples</a></li>
+   <li><a href="io.html#sect21.10.1">21.10.1<tt>&nbsp;&nbsp;</tt>Summing
+    Two Numbers</a></li>
+   <li><a href="io.html#sect21.10.2">21.10.2<tt>&nbsp;&nbsp;</tt>Copying
+    Files</a></li>
+   <li><a href="io.html#sect21.11">21.11<tt>&nbsp;&nbsp;</tt>Library
+    <tt>IO</tt></a></li>
+   -->
+   <li><a href="io.html#sect21">21<tt>&nbsp;&nbsp;</tt>入出力</a></li>
+   <li><a href="io.html#sect21.1">21.1<tt>&nbsp;&nbsp;</tt>I/O エラー</a></li>
+   <li><a href="io.html#sect21.2">21.2<tt>&nbsp;&nbsp;</tt>
+    ファイルとハンドル</a></li>
+   <li><a href="io.html#sect21.2.1">21.2.1<tt>&nbsp;&nbsp;</tt>
+    標準ハンドル</a></li>
+   <li><a href="io.html#sect21.2.2">21.2.2<tt>&nbsp;&nbsp;</tt>
+    ハンドルのセミクローズ</a></li>
+   <li><a href="io.html#sect21.2.3">21.2.3<tt>&nbsp;&nbsp;</tt>
+    ファイルのロック</a></li>
+   <li><a href="io.html#sect21.3">21.3<tt>&nbsp;&nbsp;</tt>
+    ファイルのオープンとクローズ</a></li>
+   <li><a href="io.html#sect21.3.1">21.3.1<tt>&nbsp;&nbsp;</tt>
+    ファイルのオープン</a></li>
+   <li><a href="io.html#sect21.3.2">21.3.2<tt>&nbsp;&nbsp;</tt>
+    ファイルのクローズ</a></li>
+   <li><a href="io.html#sect21.4">21.4<tt>&nbsp;&nbsp;</tt>
+    ファイルサイズの決定</a></li>
+   <li><a href="io.html#sect21.5">21.5<tt>&nbsp;&nbsp;</tt>
+    入力終端の検出</a></li>
+   <li><a href="io.html#sect21.6">21.6<tt>&nbsp;&nbsp;</tt>
+    バッファリング操作</a></li>
+   <li><a href="io.html#sect21.6.1">21.6.1<tt>&nbsp;&nbsp;</tt>
+    バッファのフラッシュ</a></li>
+   <li><a href="io.html#sect21.7">21.7<tt>&nbsp;&nbsp;</tt>
+    ハンドルの再配置</a></li>
+   <li><a href="io.html#sect21.7.1">21.7.1<tt>&nbsp;&nbsp;</tt>
+    I/O 位置の再訪</a></li>
+   <li><a href="io.html#sect21.7.2">21.7.2<tt>&nbsp;&nbsp;</tt>
+    新しい位置へのシーク</a></li>
+   <li><a href="io.html#sect21.8">21.8<tt>&nbsp;&nbsp;</tt>
+    ハンドルの性質</a></li>
+   <li><a href="io.html#sect21.9">21.9<tt>&nbsp;&nbsp;</tt>
+    テキスト入出力</a></li>
+   <li><a href="io.html#sect21.9.1">21.9.1<tt>&nbsp;&nbsp;</tt>
+    入力のためのチェック</a></li>
+   <li><a href="io.html#sect21.9.2">21.9.2<tt>&nbsp;&nbsp;</tt>
+    入力の読み込み</a></li>
+   <li><a href="io.html#sect21.9.3">21.9.3<tt>&nbsp;&nbsp;</tt>
+    先読</a></li>
+   <li><a href="io.html#sect21.9.4">21.9.4<tt>&nbsp;&nbsp;</tt>
+    入力全体の読み込み</a></li>
+   <li><a href="io.html#sect21.9.5">21.9.5<tt>&nbsp;&nbsp;</tt>
+    テキスト出力</a></li>
+   <li><a href="io.html#sect21.10">21.10<tt>&nbsp;&nbsp;</tt>例</a></li>
+   <li><a href="io.html#sect21.10.1">21.10.1<tt>&nbsp;&nbsp;</tt>
+    二つの数の和</a></li>
+   <li><a href="io.html#sect21.10.2">21.10.2<tt>&nbsp;&nbsp;</tt>
+    ファイルのコピー</a></li>
+   <li><a href="io.html#sect21.11">21.11<tt>&nbsp;&nbsp;</tt>
+    <tt>IO</tt> ライブラリ</a></li>
+   <!--==============================================================-->
+   <!--
+   <li><a href="directory.html#sect22">22<tt>&nbsp;&nbsp;</tt>Directory
+    Functions</a></li>
+   -->
+   <li><a href="directory.html#sect22">22<tt>&nbsp;&nbsp;</tt>
+    ディレクトリ関数</a></li>
+   <!--==============================================================-->
+   <!--
+   <li><a href="system.html#sect23">23<tt>&nbsp;&nbsp;</tt>System
+    Functions</a></li>
+   -->
+   <li><a href="system.html#sect23">23<tt>&nbsp;&nbsp;</tt>
+    システム関数</a></li>
+   <!--==============================================================-->
+   <!--
+   <li><a href="time.html#sect24">24<tt>&nbsp;&nbsp;</tt>Dates and
+    Times</a></li>
+   <li><a href="time.html#sect24.1">24.1<tt>&nbsp;&nbsp;</tt>Library
+    <tt>Time</tt></a></li>
+   -->
+   <li><a href="time.html#sect24">24<tt>&nbsp;&nbsp;</tt>
+    日付と時刻</a></li>
+   <li><a href="time.html#sect24.1">24.1<tt>&nbsp;&nbsp;</tt>
+    <tt>Time</tt> ライブラリ</a></li>
+   <!--==============================================================-->
+   <!--<li><a href="locale.html#sect25">25<tt>&nbsp;&nbsp;</tt>Locale</a></li>
+   <li><a href="locale.html#sect25.1">25.1<tt>&nbsp;&nbsp;</tt>Library
+    <tt>Locale</tt></a></li>-->
+   <li><a href="locale.html#sect25">25<tt>&nbsp;&nbsp;</tt>ロケール</a></li>
+   <li><a href="locale.html#sect25.1">25.1<tt>&nbsp;&nbsp;</tt>
+    <tt>Locale</tt> ライブラリ</a></li>
+   <!--==============================================================-->
+   <!--
+   <li><a href="cputime.html#sect26">26<tt>&nbsp;&nbsp;</tt>CPU
+   Time</a></li>
+   -->
+   <li><a href="cputime.html#sect26">26<tt>&nbsp;&nbsp;</tt>CPU 時刻</a></li>
+   <!--==============================================================-->
+   <!--<li><a href="random.html#sect27">27<tt>&nbsp;&nbsp;</tt>Random
+    Numbers</a></li>
+   <li><a href="random.html#sect27.1">27.1<tt>&nbsp;&nbsp;</tt>The
+    <tt>RandomGen</tt> class, and the <tt>StdGen</tt> generator</a></li>
+   <li><a href="random.html#sect27.2">27.2<tt>&nbsp;&nbsp;</tt>The
+    <tt>Random</tt> class</a></li>
+   <li><a href="random.html#sect27.3">27.3<tt>&nbsp;&nbsp;</tt>The global
+    random number generator</a></li>-->
+   <li><a href="random.html#sect27">27<tt>&nbsp;&nbsp;</tt>
+    乱数</a></li>
+   <li><a href="random.html#sect27.1">27.1<tt>&nbsp;&nbsp;</tt>
+    <tt>RandomGen</tt> クラスと<tt>StdGen</tt> 生成器</a></li>
+   <li><a href="random.html#sect27.2">27.2<tt>&nbsp;&nbsp;</tt>
+    <tt>Random</tt> クラス</a></li>
+   <li><a href="random.html#sect27.3">27.3<tt>&nbsp;&nbsp;</tt>
+    グローバル乱数生成器</a></li>
+   <!--==============================================================-->
+  </ul>
+ </body>
+</html>

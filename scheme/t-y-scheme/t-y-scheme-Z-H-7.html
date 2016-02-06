@@ -1,0 +1,346 @@
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--
+
+Generated from t-y-scheme.tex by tex2page, v 20060531
+(running on Gauche 0.8.7, unix), 
+(c) Dorai Sitaram, 
+http://www.ccs.neu.edu/~dorai/tex2page/tex2page-doc.html
+
+-->
+<head>
+<title>
+独習 Scheme 三週間 Teach Yourself Scheme in Fixnum Days
+</title>
+<link rel="stylesheet" type="text/css" href="t-y-scheme-Z-S.css" title=default>
+<meta name=robots content="noindex,follow">
+<meta name=description content="A practical
+introduction to the programming language Scheme">
+
+<meta name=author content="Dorai Sitaram">
+
+<link rev=made href="mailto:ds26@gte.com">
+</head>
+<body>
+<div id=slidecontent>
+<div align=right class=navigation>[Go to <span><a href="t-y-scheme.html">first</a>, <a href="t-y-scheme-Z-H-6.html">previous</a></span><span>, <a href="t-y-scheme-Z-H-8.html">next</a></span> page<span>; &nbsp;&nbsp;</span><span><a href="t-y-scheme-Z-H-1.html#node_toc_start">contents</a></span><span><span>; &nbsp;&nbsp;</span><a href="t-y-scheme-Z-H-25.html#node_index_start">index</a></span>]</div>
+<p></p>
+<a name="node_chap_5"></a>
+<h1 class=chapter>
+<div class=chapterheading><a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_5">Chapter 5</a></div><br>
+<a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_5">レキシカル変数</a></h1>
+<p><a name="node_idx_274"></a><a name="node_idx_276"></a><a name="node_idx_278"></a></p>
+<p>
+Schemeの変数はレキシカルスコープをもちます。すなわち、変数は
+プログラムテキストのある特定の連続した広がり内のフォームにだけ
+見えています。これまで見てきた<em>グローバル</em>変数も例外ではありません。
+グローバル変数のスコープはプログラム全体で、たしかに連続していますね。</p>
+<p>
+</p>
+<p>
+すでにいくつか<em>ローカル</em>変数の例も見ています。それは、
+<code class=scheme><span class=keyword>lambda</span></code>パラメータで、この手続きが呼出されるたびに束縛され、
+そのスコープはこの手続きの本体です。たとえば、</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=variable>x</span> <span class=selfeval>9</span>)
+(<span class=keyword>define</span> <span class=variable>add2</span> (<span class=keyword>lambda</span> (<span class=variable>x</span>) (<span class=variable>+</span> <span class=variable>x</span> <span class=selfeval>2</span>)))
+
+<span class=variable>x</span>        <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>9</span>
+
+(<span class=variable>add2</span> <span class=selfeval>3</span>) <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>5</span>
+(<span class=variable>add2</span> <span class=variable>x</span>) <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>11</span>
+
+<span class=variable>x</span>        <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>9</span>
+</pre><p></p>
+<p>
+</p>
+<p>
+ここでは、グローバル変数<code class=scheme><span class=variable>x</span></code>とローカル変数<code class=scheme><span class=variable>x</span></code>がありますが、
+後者は手続き<code class=scheme><span class=variable>add2</span></code>でもたらされたものです。グローバルの
+<code class=scheme><span class=variable>x</span></code>は常に<code class=scheme><span class=selfeval>9</span></code>です。ローカルの<code class=scheme><span class=variable>x</span></code>は最初の<code class=scheme><span class=variable>add2</span></code>の呼出しでは
+<code class=scheme><span class=selfeval>3</span></code>に束縛されます。2回目の呼び出しではグローバルの<code class=scheme><span class=variable>x</span></code>の値、
+すなわち、<code class=scheme><span class=selfeval>9</span></code>に束縛されます。この手続きの呼び出しから
+返ってくれば、グローバルの<code class=scheme><span class=variable>x</span></code>はあいかわらず<code class=scheme><span class=selfeval>9</span></code>です。</p>
+<p>
+フォーム<code class=scheme><span class=keyword>set!</span></code>は変数のレキシカル束縛を変更します。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>set!</span> <span class=variable>x</span> <span class=selfeval>20</span>)
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>は<code class=scheme><span class=variable>x</span></code>のグローバル束縛を<code class=scheme><span class=selfeval>9</span></code>から<code class=scheme><span class=selfeval>20</span></code>へ変更します。
+それは<code class=scheme><span class=keyword>set!</span></code>から見えている<code class=scheme><span class=variable>x</span></code>の束縛だからです。
+もし、<code class=scheme><span class=keyword>set!</span></code>が<code class=scheme><span class=variable>add2</span></code>の本体内にあればローカルな<code class=scheme><span class=variable>x</span></code>を
+変更したでしょう。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=variable>add2</span>
+  (<span class=keyword>lambda</span> (<span class=variable>x</span>)
+    (<span class=keyword>set!</span> <span class=variable>x</span> (<span class=variable>+</span> <span class=variable>x</span> <span class=selfeval>2</span>))
+    <span class=variable>x</span>))
+</pre><p></p>
+<p>
+</p>
+<p>
+ここの<code class=scheme><span class=keyword>set!</span></code>はローカル変数<code class=scheme><span class=variable>x</span></code>に2を加えます。この手続きはローカルの
+<code class=scheme><span class=variable>x</span></code>の新しい値を返します(効果という意味では、この手続きは前の<code class=scheme><span class=variable>add</span></code>と
+なんら区別はつきません)。まえと同じようにグローバルの<code class=scheme><span class=variable>x</span></code>について
+<code class=scheme><span class=variable>add2</span></code>を呼んでみましょう。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>add2</span> <span class=variable>x</span>) <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>22</span>
+</pre><p></p>
+<p>
+</p>
+
+<p class=noindent>(グローバルの<code class=scheme><span class=variable>x</span></code>は今は<code class=scheme><span class=selfeval>9</span></code>ではなく、<code class=scheme><span class=selfeval>20</span></code>であることを思い
+出してください。)</p>
+<p>
+</p>
+<p>
+<code class=scheme><span class=variable>add2</span></code>の内側にある<code class=scheme><span class=keyword>set!</span></code>は<code class=scheme><span class=variable>add2</span></code>が使うローカル変数の<code class=scheme><span class=variable>x</span></code>に影響を
+与えるだけです。ローカル変数はグローバル<code class=scheme><span class=variable>x</span></code>の値に束縛されますが、
+後者はローカルの<code class=scheme><span class=variable>x</span></code>に<code class=scheme><span class=keyword>set!</span></code>によってひきよせられるような
+ことはありません。</p>
+<p>
+</p>
+<pre class=scheme><span class=variable>x</span> <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>20</span>
+</pre><p></p>
+<p>
+</p>
+<p>
+ここでの議論のすべては、ローカル変数とグローバル変数に
+同じ識別子をつかっているからこその議論です。どのような
+テキストであっても、識別子名<code class=scheme><span class=variable>x</span></code>は字面上もっも近い
+変数名を参照します。このことは、外側のすべてのグローバルな<code class=scheme><span class=variable>x</span></code>を
+覆い隠すということです。つまり、<code class=scheme><span class=variable>add2</span></code>の中ではパラメータ<code class=scheme><span class=variable>x</span></code>は
+グローバルな<code class=scheme><span class=variable>x</span></code>を覆い隠しています。</p>
+<p>
+</p>
+<p>
+手続きの本体は、それを囲むスコープにある、パラメータが
+覆い隠していない変数にアクセスしたり変更したりすることができます。
+そうすると次のような興味深いプログラムをつくることができます。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=variable>counter</span> <span class=selfeval>0</span>)
+
+(<span class=keyword>define</span> <span class=variable>bump-counter</span>
+  (<span class=keyword>lambda</span> ()
+    (<span class=keyword>set!</span> <span class=variable>counter</span> (<span class=variable>+</span> <span class=variable>counter</span> <span class=selfeval>1</span>))
+    <span class=variable>counter</span>))
+</pre><p></p>
+<p>
+</p>
+<p>
+手続き<code class=scheme><span class=variable>bump-counter</span></code>は引数なしの手続き(<em>サンク</em>とも言う)です。
+これは、ローカル変数をもちませんので、なにも覆い隠すものはありません。
+呼ばれるたびに<em>グローバル</em>変数<code class=scheme><span class=variable>counter</span></code>を変更し、1ずつカウント
+アップし、<code class=scheme><span class=variable>counter</span></code>の現在の値を返します。以下は、連続で
+<code class=scheme><span class=variable>bump-counter</span></code>を呼んだ例です。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>bump-counter</span>) <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>1</span>
+(<span class=variable>bump-counter</span>) <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>2</span>
+(<span class=variable>bump-counter</span>) <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>3</span>
+</pre><p></p>
+<p>
+<a name="node_idx_280"></a><a name="node_idx_282"></a></p>
+<a name="node_sec_5.1"></a>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_5.1">5.1&nbsp;&nbsp;<code class=scheme><span class=keyword>let</span></code>と<code class=scheme><span class=keyword>let*</span></code></a></h2>
+<p></p>
+<p>
+ローカル変数は手続きを明示的に生成しなくても導入することができます。
+スペシャルフォーム<code class=scheme><span class=keyword>let</span></code>はその本体で利用するローカル変数のリストを
+導入します。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>let</span> ((<span class=variable>x</span> <span class=selfeval>1</span>)
+      (<span class=variable>y</span> <span class=selfeval>2</span>)
+      (<span class=variable>z</span> <span class=selfeval>3</span>))
+  (<span class=variable>list</span> <span class=variable>x</span> <span class=variable>y</span> <span class=variable>z</span>))
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  (<span class=selfeval>1</span> <span class=selfeval>2</span> <span class=selfeval>3</span>)
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent><code class=scheme><span class=keyword>lambda</span></code>のときと同様、<code class=scheme><span class=keyword>let</span></code>本体内で、ローカルな
+<code class=scheme><span class=variable>x</span></code>(<code class=scheme><span class=selfeval>1</span></code>に束縛されている)はグローバルな<code class=scheme><span class=variable>x</span></code>(これは<code class=scheme><span class=selfeval>20</span></code>に束縛
+されています)を覆い隠します。</p>
+<p>
+</p>
+<p>
+ローカル変数の初期化(<code class=scheme><span class=variable>x</span></code>は<code class=scheme><span class=selfeval>1</span></code>に、<code class=scheme><span class=variable>y</span></code>は<code class=scheme><span class=selfeval>2</span></code>に、
+<code class=scheme><span class=variable>z</span></code>は<code class=scheme><span class=selfeval>3</span></code>に束縛)は<code class=scheme><span class=keyword>let</span></code>の本体とは考えません。それゆえ、
+初期化部での<code class=scheme><span class=variable>x</span></code>への参照は、グローバルに対する参照であって
+ローカルの<code class=scheme><span class=variable>x</span></code>への参照ではありません。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>let</span> ((<span class=variable>x</span> <span class=selfeval>1</span>)
+      (<span class=variable>y</span> <span class=variable>x</span>))
+  (<span class=variable>+</span> <span class=variable>x</span> <span class=variable>y</span>))
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>21</span>
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent><code class=scheme><span class=variable>x</span></code>は<code class=scheme><span class=selfeval>1</span></code>に束縛され、<code class=scheme><span class=variable>y</span></code>は<em>グローバル</em>の<code class=scheme><span class=variable>x</span></code>
+すなわち<code class=scheme><span class=selfeval>20</span></code>に束縛されますので、このようになります。</p>
+<p>
+</p>
+<p>
+<code class=scheme><span class=keyword>let</span></code>のレキシカル変数のリストが直列に導入されるほうが
+便利なときがあります。つまり、あとからの変数の初期化は
+前にでてきた変数の<em>レキシカルスコープ</em>内でおこる
+ということです。フォーム<code class=scheme><span class=keyword>let*</span></code>はこれを行います。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>let*</span> ((<span class=variable>x</span> <span class=selfeval>1</span>)
+       (<span class=variable>y</span> <span class=variable>x</span>))
+  (<span class=variable>+</span> <span class=variable>x</span> <span class=variable>y</span>))
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>2</span>
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent><code class=scheme><span class=variable>y</span></code>の初期化中の、<code class=scheme><span class=variable>x</span></code>は直上の<code class=scheme><span class=variable>x</span></code>を参照しています。
+この例は<code class=scheme><span class=keyword>let</span></code>が入れ子になった以下のプログラムと完全に同等
+(実際以下の場合の便利な省略形として便利)です。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>let</span> ((<span class=variable>x</span> <span class=selfeval>1</span>))
+  (<span class=keyword>let</span> ((<span class=variable>y</span> <span class=variable>x</span>))
+    (<span class=variable>+</span> <span class=variable>x</span> <span class=variable>y</span>)))
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>2</span>
+</pre><p></p>
+<p>
+レキシカル変数が束縛された値は手続きであってもかまいません。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>let</span> ((<span class=variable>cons</span> (<span class=keyword>lambda</span> (<span class=variable>x</span> <span class=variable>y</span>) (<span class=variable>+</span> <span class=variable>x</span> <span class=variable>y</span>))))
+  (<span class=variable>cons</span> <span class=selfeval>1</span> <span class=selfeval>2</span>))
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>3</span>
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>この<code class=scheme><span class=keyword>let</span></code>本体中では、レキシカル変数<code class=scheme><span class=variable>cons</span></code>は引数を足します。
+外側では、<code class=scheme><span class=variable>cons</span></code>はあいかわらずドット対を作ります。</p>
+<p>
+<a name="node_idx_284"></a></p>
+<p>
+</p>
+<a name="node_sec_5.2"></a>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_5.2">5.2&nbsp;&nbsp;<code class=scheme><span class=keyword>fluid-let</span></code></a></h2>
+<p></p>
+<p>
+</p>
+<p>
+レキシカル変数は、隠蔽されることがなければ、そのスコープの始めから
+終りまで見えています。ときには、レキシカル変数を臨時にある値にするのが
+便利なことがあります。これを行うには<code class=scheme><span class=keyword>fluid-let</span></code>フォームを使います。
+<a name="node_call_footnote_Temp_4"></a><sup><small><a href="#node_footnote_Temp_4">1</a></small></sup></p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>fluid-let</span> ((<span class=variable>counter</span> <span class=selfeval>99</span>))
+  (<span class=variable>display</span> (<span class=variable>bump-counter</span>)) (<span class=variable>newline</span>)
+  (<span class=variable>display</span> (<span class=variable>bump-counter</span>)) (<span class=variable>newline</span>)
+  (<span class=variable>display</span> (<span class=variable>bump-counter</span>)) (<span class=variable>newline</span>))
+</pre><p></p>
+<p>
+</p>
+
+<p class=noindent>これは<code class=scheme><span class=keyword>let</span></code>と同じように見えますが、グローバル変数<code class=scheme><span class=variable>counter</span></code>を
+隠蔽せずに、<code class=scheme><span class=keyword>fluid-let</span></code>本体へつづける前に、それを臨時に<code class=scheme><span class=selfeval>99</span></code>
+に設定します。したがって、本体部の<code class=scheme><span class=variable>display</span></code>は以下のような
+出力をします。</p>
+<p>
+</p>
+<pre class=verbatim>100&nbsp;
+101&nbsp;
+102&nbsp;
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent><code class=scheme><span class=keyword>fluid-let</span></code>式が評価された後は、グローバルの<code class=scheme><span class=variable>counter</span></code>は、
+<code class=scheme><span class=keyword>fluid-let</span></code>の前の値に復帰します。</p>
+<p>
+</p>
+<pre class=scheme><span class=variable>counter</span> <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>3</span>
+</pre><p></p>
+<p>
+</p>
+<p>
+<code class=scheme><span class=keyword>fluid-let</span></code>は<code class=scheme><span class=keyword>let</span></code>とは全く違う効果があることに注意してください。
+<code class=scheme><span class=keyword>fluid-let</span></code>は、<code class=scheme><span class=keyword>let</span></code>がやるように、新しいレキシカル変数を導入する、という
+ことはありません。<em>既存の</em>レキシカル変数の束縛を変更し、<code class=scheme><span class=keyword>fluid-let</span></code>
+が済んだとたんにその変更はなかったことになります。</p>
+<p>
+これを理解するために、次のプログラムを考えてみましょう。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>let</span> ((<span class=variable>counter</span> <span class=selfeval>99</span>))
+  (<span class=variable>display</span> (<span class=variable>bump-counter</span>)) (<span class=variable>newline</span>)
+  (<span class=variable>display</span> (<span class=variable>bump-counter</span>)) (<span class=variable>newline</span>)
+  (<span class=variable>display</span> (<span class=variable>bump-counter</span>)) (<span class=variable>newline</span>))
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>これはひとつ前の例の<code class=scheme><span class=keyword>fluid-let</span></code>を<code class=scheme><span class=keyword>let</span></code>で置き換えたものです。
+出力はこうなります。</p>
+<p>
+</p>
+<pre class=scheme><span class=selfeval>4</span>
+<span class=selfeval>5</span>
+<span class=selfeval>6</span>
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>すなわち、グローバルの<code class=scheme><span class=variable>counter</span></code>は最初<code class=scheme><span class=selfeval>3</span></code>で<code class=scheme><span class=variable>bump-counter</span></code>
+が呼出されるごとに更新されます。新しいレキシカル変数<code class=scheme><span class=variable>counter</span></code>は
+初期化部で<code class=scheme><span class=selfeval>99</span></code>になっていますが<code class=scheme><span class=variable>bump-counter</span></code>の呼び出しにはなんら
+影響力をもちません。<code class=scheme><span class=variable>bump-counter</span></code>への呼び出しはローカルの<code class=scheme><span class=variable>counter</span></code>
+のスコープ内にありますが、<code class=scheme><span class=variable>bump-counter</span></code>の本体はそのスコープ内にはない
+からです。<code class=scheme><span class=variable>bump-counter</span></code>本体部は<em>グローバル</em>の<code class=scheme><span class=variable>counter</span></code>を参照
+しており、その最終の値は<code class=scheme><span class=selfeval>6</span></code>です。</p>
+<p>
+</p>
+<pre class=scheme><span class=variable>counter</span> <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>6</span>
+</pre><p>
+</p>
+<p>
+</p>
+<div class=footnoterule><hr></div><p></p>
+<div class=footnote><p><a name="node_footnote_Temp_4"></a><sup><small><a href="#node_call_footnote_Temp_4">1</a></small></sup> <code class=scheme><span class=keyword>fluid-let</span></code>は非標準のスペシャルフォームです。Schemeにおける
+<code class=scheme><span class=keyword>fluid-let</span></code>の定義については<a href="t-y-scheme-Z-H-10.html#node_sec_8.3">8.3</a>を参照してください。</p>
+</div>
+<div class=smallskip></div>
+<p style="margin-top: 0pt; margin-bottom: 0pt">
+<div align=right class=navigation>[Go to <span><a href="t-y-scheme.html">first</a>, <a href="t-y-scheme-Z-H-6.html">previous</a></span><span>, <a href="t-y-scheme-Z-H-8.html">next</a></span> page<span>; &nbsp;&nbsp;</span><span><a href="t-y-scheme-Z-H-1.html#node_toc_start">contents</a></span><span><span>; &nbsp;&nbsp;</span><a href="t-y-scheme-Z-H-25.html#node_index_start">index</a></span>]</div>
+</p>
+<p></p>
+</div>
+</body>
+</html>

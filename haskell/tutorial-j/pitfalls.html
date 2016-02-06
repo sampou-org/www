@@ -1,0 +1,114 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>A Gentle Introduction to Haskell: Typing Pitfalls</title>
+</head>
+<body bgcolor="#ffffff">
+<p>
+<i>やさしい Haskell 入門 (バージョン 98)</i><br>
+<a href="modules.html">back</a>
+<a href="arrays.html">next</a>
+<a href="index.html">top</a><hr>
+</p>
+<a name="sect12"></a>
+<h2>12<tt>&nbsp;&nbsp;</tt>型付けの落し穴</h2>
+<p>
+この短いセクションでは Haskell の型システムを使うさい、初心者に共通の 2、
+3 の問題について直観的な説明をします。
+</p>
+<a name="sect12.1"></a>
+<h3>12.1<tt>&nbsp;&nbsp;</tt>let-束縛の多相性</h3>
+<p>
+Hidler-Milner の型システムをつかうどの言語にも<em>let-束縛の多相性</em>
+( <i>let-bound polymorphism</i> ) と呼ばれるものがあります。これは、
+<tt>let</tt> あるいは <tt>where</tt> 節をもちいた束縛のない識別子はその
+多相性に関して制限があるからです。特に、<em>ラムダ束縛された</em>
+( <i>lambda-bound</i> ) 関数 (すなわち、別の関数の引数になった関数) はふ
+たつの方法ではインスタンス化できません。たとえば、以下のプログラムは不正
+なプログラムです。
+<tt><br>
+<br>
+let&nbsp;f&nbsp;g&nbsp;&nbsp;=&nbsp;&nbsp;(g&nbsp;[],&nbsp;g&nbsp;'a')&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;ill-typed&nbsp;expression<br>
+in&nbsp;f&nbsp;(\x-&gt;x)<br>
+<br>
+</tt>
+なぜなら、主型が <tt>a-&gt;a</tt> であるようなラムダ抽象に束縛された関数 
+<tt>g</tt> が <tt>f</tt> 内でふたつの別の方法でつかわれているからです。
+一度は <tt>[a]-&gt;[a]</tt> という型で、そして、もう一度は 
+<tt>Char-&gt;Char</tt> という型で使われています。
+</p>
+<a name="sect12.2"></a>
+<h3>12.2<tt>&nbsp;&nbsp;</tt>数値の多重定義</h3>
+<p>
+数が多重定義されること、数の型変換が他の言語とおなじように暗黙のうちに起
+こることはないことをよく忘れてしまします。より一般的な数値式が本当に総称
+的なものにはなれないこともあります。よくある数値の型付けエラーは次のよう
+なものです。
+<tt><br>
+<br>
+average&nbsp;xs&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;sum&nbsp;xs&nbsp;/&nbsp;length&nbsp;xs&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;Wrong!<br>
+<br>
+</tt>
+<tt>(/)</tt> は分数の引数を必要とします。しかし、<tt>length</tt> の結果
+は <tt>Int</tt> です。この型の不一致は明示的な型変換によって訂正しなけれ 
+ばなりません。
+<tt><br>
+<br>
+average&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;(Fractional&nbsp;a)&nbsp;=&gt;&nbsp;[a]&nbsp;-&gt;&nbsp;a<br>
+average&nbsp;xs&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;sum&nbsp;xs&nbsp;/&nbsp;fromIntegral&nbsp;(length&nbsp;xs)<br>
+<br>
+</tt>
+</p>
+<a name="sect12.3"></a>
+<h3>12.3<tt>&nbsp;&nbsp;</tt>単相性限定</h3>
+<p>
+Haskell の型システムはふつうの Hidley-Milner の型システムにはない型クラ
+スに関連した制限があります。これを、<em>単相性限定</em>
+( <i>monomorphism restriction</i> ) といいます。この制限がある理由は 
+subtle 型の曖昧性に関連しています。これについての詳細は、レポート(
+<a href="../report-j/decls.html#sect:monomorphism-restriction">&sect;4.5.5</a>
+) を参照してください。
+</p>
+<p>
+この単相性限定の謂は(単一の識別子への束縛を含む)パターン束縛により束縛を
+うける識別子で明示的な型シグネチャをもたないものは、<em>単相的</em>
+( <i>monomorphic</i> ) でなければならない、というものです。
+識別子は、多重定義されていないか、あるいは、多重定義されていても少くとも
+ひとつの限定的な多重定義のなかで用いられ、エクスポートされていないときに
+は、単相的識別子です。
+</p>
+<p>
+この制限に違反すると、静的型エラーがおこります。この問題を回避するもっと
+も単純な方法は明示的な型シグネチャをつけることです。<em>あらゆる</em>型
+シグネチャ(これが正しいものであれば)この問題を回避できます。
+</p>
+<p>
+よくあるこの制限違反は高階関数的な手法で関数を定義する際におこります。標
+準プレリュードにある <tt>sum</tt> の定義から例をあげましょう。
+<tt><br>
+<br>
+sum&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;foldl&nbsp;(+)&nbsp;0<br>
+<br>
+</tt>
+ここにあるようにすると、静的型エラーがおこります。この問題は明示的な型シ
+グネチャを付加することで解決します。
+<tt><br>
+<br>
+sum&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;(Num&nbsp;a)&nbsp;=&gt;&nbsp;[a]&nbsp;-&gt;&nbsp;a<br>
+<br>
+</tt>
+また、この問題は以下のように書けば起こりませんでした。
+<tt><br>
+<br>
+sum&nbsp;xs&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;foldl&nbsp;(+)&nbsp;0&nbsp;xs<br>
+<br>
+</tt>
+なぜなら、この制限はパターン束縛にのみ適用されるからです。
+</p>
+<hr>
+<i>A Gentle Introduction to Haskell, Version 98</i><br>
+<a href="modules.html">back</a>
+<a href="arrays.html">next</a>
+<a href="index.html">top</a>
+</body>
+</html>

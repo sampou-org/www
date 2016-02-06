@@ -1,0 +1,16 @@
+
+Haskell の特徴
+
+再帰的代数的データ型をユーザが定義できる
+  data Tree a = Leaf a | Branch [Tree a]
+
+コンストラクタによるパターンマッチング
+  depth :: Tree a -> Int
+  depth (Leaf a)      = 0
+  depth (Branch ts) = 1 + foldl max 0 (map depth ts)
+
+リスト内包表記
+  [(i,c)| i <- [1,2,3], c <- ['a','b']]
+
+    ⇒ [(1,'a'),(1,'b'),(2,'a'),(2,'b'),(3,'a'),(3,'b')]
+

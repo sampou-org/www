@@ -1,0 +1,428 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>A Gentle Introduction to Haskell: Functions</title>
+</head>
+<body bgcolor="#ffffff">
+<i>やさしい Haskell 入門 ( Version 98 )</i><br>
+<a href="goodies.html">back</a>
+<a href="patterns.html">next</a>
+<a href="index.html">top</a>
+<hr>
+<p>
+<a name="tut-functions"></a>
+<a name="sect3"></a>
+<h2>3<tt>&nbsp;&nbsp;</tt>関数</h2>
+</p>
+<p>
+Haskell は関数型言語ですから、関数が主役だろうという想像ができます。まさ
+にそのとおりです。この節では Haskell における関数の貌をいくつか見てい
+きます。
+</p>
+<p>
+先ず、ふたつの引数を足す関数の定義を考えましょう。
+<tt><br>
+<br>
+add&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;Integer&nbsp;-&gt;&nbsp;Integer&nbsp;-&gt;&nbsp;Integer<br>
+add&nbsp;x&nbsp;y&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;x&nbsp;+&nbsp;y<br>
+<br>
+</tt>
+これは、<em>カリー化</em>(<i>curry</i>)された関数の一例です。(「<em>カリー
+</em>」という呼び名はこの概念を有名にした、Haskell Curry から来ています。
+<em>アンカリー化</em>(<i>uncurry</i>)された関数をえるには、<em>タプル</em>を使います。
+<tt><br>
+<br>
+add&nbsp;(x,y)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;x&nbsp;+&nbsp;y<br>
+<br>
+</tt>
+しかし、こうしてしまうと、この <tt>add</tt> は1引数の関数になってしまい
+ます。) 関数 <tt>add</tt> の適用は <tt>add&nbsp;</tt>e<sub>1</sub>
+e<sub>2</sub> という形式になります。これは、
+<tt>(add&nbsp;</tt>e<sub>1</sub><tt>)&nbsp;</tt>e<sub>2</sub> と同等の式
+です。なぜかというと関数適用は<em>左</em>結合性をもつからです。いいかえ
+れば、関数 <tt>add</tt> を最初の引数に適用すると、新しい関数ができて、こ
+れをふたつめの引数に適用するということです。このことは、関数 
+<tt>add</tt> の型 <tt>Integer-&gt;Integer-&gt;Integer</tt> とも整合がと
+れています。この型は、<tt>Integer-&gt;(Integer-&gt;Integer)</tt> と同等
+のものです。ここで、 <tt>-&gt;</tt> は<em>右</em>結合性をもっています。
+実際この <tt>add</tt> を使うと前とはちがうやり方で <tt>inc</tt> を定義す
+ることができます。
+<tt><br>
+<br>
+inc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;add&nbsp;1<br>
+<br>
+</tt>
+この例は、カリー化された関数の<em>部分適用</em> (<i>partial
+application</i>) の一例であり、関数が返りの値となる例のひとつです。
+今度は関数を引数としてわたす例を考えてみましょう。よくしられた 
+<tt>map</tt> 関数が完璧な例です。
+<tt><br>
+<br>
+map&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;(a-&gt;b)&nbsp;-&gt;&nbsp;[a]&nbsp;-&gt;&nbsp;[b]<br>
+map&nbsp;f&nbsp;&nbsp;[]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;[]<br>
+map&nbsp;f&nbsp;(x:xs)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;f&nbsp;x&nbsp;:&nbsp;map&nbsp;f&nbsp;xs<br>
+<br>
+</tt>
+[関数適用はどんな中置演算子よりも高い優先順位をもっています。そのため、2
+つめの等式の右辺は <tt>(f&nbsp;x)&nbsp;:&nbsp;(map&nbsp;f&nbsp;xs)</tt> 
+のように構文解析されます。] この <tt>map</tt> 関数は多相型であり、その型
+は、最初の引数が関数であることを明示しています。さらに、2つの <tt>a</tt> 
+は同じ型にインスタンス化されなければならないことに注意してください。
+( <tt>b</tt> についても同じです。) <tt>map</tt> の使用例をみると、リスト
+の要素をそれぞれ1だけ増加させることができます。
+</p>
+<p>
+<tt>map&nbsp;(add&nbsp;1)&nbsp;[1,2,3]</tt>    =&gt;    <tt>[2,3,4]</tt>
+</p>
+<p>
+これらの例は関数が第一級の対象であることを示しています。このような使いか
+たをする関数はふつう<em>高階</em> (<i>higher-order</i>) 関数とよばれます。
+</p>
+<p>
+<a name="tut-lambda"></a>
+<a name="sect3.1"></a>
+<h3>3.1<tt>&nbsp;&nbsp;</tt>ラムダ抽象</h3>
+</p>
+<p>
+等式を使わずに<em>ラムダ抽象</em> (<i>lambda abstraction</i>) を使って無
+名関数を定義することができます。たとえば、<tt>inc</tt> と同等の関数は 
+<tt>\x&nbsp;-&gt;&nbsp;x+1</tt> と書く
+ことができます。同様に、<tt>add</tt> と同等の関数は 
+<tt>\x&nbsp;-&gt;&nbsp;\y&nbsp;-&gt;&nbsp;x+y</tt> と書けます。入れ子に
+なったラムダ抽象は簡略化して、<tt>\x&nbsp;y&nbsp;-&gt;&nbsp;x+y</tt> と
+書いても同じことです。そして、
+<tt><br>
+<br>
+inc&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;x+1<br>
+add&nbsp;x&nbsp;y&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;x+y<br>
+<br>
+</tt>
+という等式は、
+<tt><br>
+<br>
+inc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;\x&nbsp;&nbsp;&nbsp;-&gt;&nbsp;x+1<br>
+add&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;\x&nbsp;y&nbsp;-&gt;&nbsp;x+y<br>
+<br>
+</tt>
+という等式を簡略化して書いたものと同等ということです。この同等性について
+はこれから説明します。
+</p>
+<p>
+一般に <tt>x</tt> があって、その型が t<sub>1</sub> で、<tt>exp</tt> の型
+が t<sub>2</sub> である場合、<tt>\x-&gt;exp</tt> の型は 
+t<sub>1</sub><tt>-&gt;</tt>t<sub>2</sub> ということになります。
+</p>
+<p>
+<a name="tut-infix-ops"></a>
+<a name="sect3.2"></a>
+<h3>3.2<tt>&nbsp;&nbsp;</tt>中置演算子</h3>
+<p>
+中置演算子は関数なので、等式を使って定義することができます。たとえば、リ
+ストの連結演算子を定義すると、このようになります。
+<tt><br>
+<br>
+(++)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;[a]&nbsp;-&gt;&nbsp;[a]&nbsp;-&gt;&nbsp;[a]<br>
+[]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;++&nbsp;ys&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ys<br>
+(x:xs)&nbsp;++&nbsp;ys&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;x&nbsp;:&nbsp;(xs++ys)<br>
+<br>
+</tt>[中置演算子の字句は、すべて「記号」で構成されます。これは、英数字で
+構成される一般の識別子とは対照的です ( <a
+href="../report-j/lexemes.html#ids">&sect;2.3</a> )。
+Haskell にはマイナス( <tt>-</tt> )をのぞき前置演算子はありません。マイナ
+ス( <tt>-</tt> )は前置演算子にも、中置演算子にもなります。]
+</p>
+<p>
+もうひとつ、関数上の重要な中置演算子、<em>関数合成</em>( <i>function
+composition</i> )の例を見てみましょう。
+<tt><br>
+<br>
+(.)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;(b-&gt;c)&nbsp;-&gt;&nbsp;(a-&gt;b)&nbsp;-&gt;&nbsp;(a-&gt;c)<br>
+f&nbsp;.&nbsp;g&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;\&nbsp;x&nbsp;-&gt;&nbsp;f&nbsp;(g&nbsp;x)<br>
+<br>
+</tt>
+</p>
+<p>
+<a name="tut-sections"></a>
+<a name="sect3.2.1"></a>
+<h4>3.2.1<tt>&nbsp;&nbsp;</tt>セクション</h4>
+</p>
+<p>
+中置演算子はまさに関数ですから、関数と同じように、部分適用が可能です。
+Haskell では中置演算子の部分適用のことを<em>セクション</em>
+( <i>section</i> )といいます。例を見ましょう。
+</p>
+<p>
+<table >
+ <tr>
+  <td align=center><tt>(x+)</tt></td>
+  <td align=center>=</td>
+  <td align=center><tt>\y&nbsp;-&gt;&nbsp;x+y</tt></td>
+ </tr>
+ <tr>
+  <td align=center><tt>(+y)</tt></td>
+  <td align=center>=</td>
+  <td align=center><tt>\x&nbsp;-&gt;&nbsp;x+y</tt></td>
+ </tr>
+ <tr>
+  <td align=center><tt>(+)</tt></td>
+  <td align=center>=</td>
+  <td align=center><tt>\x&nbsp;y&nbsp;-&gt;&nbsp;x+y</tt></td>
+ </tr>
+</table>
+</p>
+<p>
+[ここでの括弧は必須です。]
+</p>
+<p>
+上の例の最後のセクションの形式は中置演算子から同等の関数値へ変換する働き
+をします。この形式は中置演算子を関数の引数として渡すときに便利な方法です。
+たとえば、<tt>map&nbsp;(+)&nbsp;[1,2,3]</tt> のようにします。(読者の皆さ
+んはここで、関数のリストが返されていることを確かめてください。) 関数の型
+を与える際にも必要になります。これはすでに <tt>(++)</tt> および
+<tt>(.)</tt> の例で示しましたね。さて、これですでに定義した <tt>add</tt> 
+が <tt>(+)</tt>、<tt>inc</tt> が <tt>(+1)</tt> で定義できることがわかり
+ます。実際これらの定義がすっきりします。
+<tt><br>
+<br>
+inc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;(+&nbsp;1)<br>
+add&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;(+)<br>
+<br>
+</tt>
+</p>
+<p>
+中置演算子を関数値に変換できましたが、それでは、その逆は可能なのでしょう
+か。可能です。関数値をバッククウォートで括るだけです。たとえば、
+<tt>x&nbsp;`add`&nbsp;y</tt> は、<tt>add&nbsp;x&nbsp;y</tt> と同じです。
+(これは、<tt>add</tt> が<em>バッククオート</em> で括るのであって、文字の
+場合の<em>アポストロフィ</em>(あるいは<em>シングルクウォート</em>)で括る
+わけではありません。つまり、<tt>'f'</tt> は文字で、<tt>`f`</tt> は中置演
+算子です。幸い、ほとんどの ASCII 端末ではこのふたつを区別できるようになっ
+ています。(手で書くとそうはいかないようです。) 関数によっては、中置演算
+子にしたほうが読みやすくなります。たとえば、リストの要素かどうかを調べる
+述語関数 <tt>elem</tt> がその例です。<tt>x&nbsp;`elem`&nbsp;xs</tt> は直
+観的に「<tt>x</tt> が属しているのは <tt>xs</tt> である。( <tt>x</tt> is
+an element of <tt>xs</tt> )」と読めます。
+</p>
+<p>
+[前置/中置演算子 <tt>-</tt> のセクションについてはいくつかの特別なルール
+があります。(<a href="../report-j/exps.html#sections">&sect;3.5</a>,<a
+href="../report-j/exps.html#operators">&sect;3.4</a>)。]
+</p>
+<p>
+ここまでで、読者のみなさんは関数の定義のしかたにいろいろあって、混乱した
+かもしれません。これらの定義のメカニズムのサポートを決定するにあたっては、
+歴史的な慣習も部分的には反映されていますし、一貫性を確保したい(たとえば、
+中置演算子と普通の関数の取り扱いなど)という要望も反映されています。
+</p>
+<p>
+<a name="sect3.2.2"></a>
+<h4>3.2.2<tt>&nbsp;&nbsp;</tt>結合性宣言</h4>
+</p>
+<p>
+<em>結合性宣言</em>(<i> fixity declaration</i> ) はすべての中置演算子と
+中置構築子 ( <tt>`elem`</tt> のような一般の識別子に由来するものも含む)に
+対しておこなうことができます。この宣言では 0 から 9 までの優先レベル( 9 
+が最強です。一般の関数適用の優先レベルは 10 と仮定されています。)と、右
+結合性、左結合性をもつ、あるいは結合性をもたない、という指定をします。例
+をあげると <tt>++</tt> と <tt>.</tt> の結合性宣言は、
+<tt><br>
+<br>
+infixr&nbsp;5&nbsp;++<br>
+infixr&nbsp;9&nbsp;.<br>
+<br>
+</tt>
+です。両方とも右結合性が指定されています。<tt>++</tt> は優先レベル 5 
+で <tt>.</tt> は優先レベル 9 と指定されています。左結合性は 
+<tt>infixl</tt> を使って指定し、結合性のないことは <tt>infix</tt> で指定
+します。おなじ結合性宣言で 1 つ以上の演算子の結合性について指定できます。
+もし、ある演算子に対して、結合性宣言をしない場合はデフォルトで 
+<tt>infixl&nbsp;9</tt> が指定されたことになります。( 結合性ルールの定義
+の詳細については <a href="../report-j/modules.html#fixity">&sect;5.6</a> 
+参照のこと。) 
+</p>
+<p>
+<a name="tut-non-strict"></a>
+<a name="sect3.3"></a>
+<h3>3.3<tt>&nbsp;&nbsp;</tt>関数は非正格</h3>
+</p>
+<p>
+<tt>bot</tt> が次のように定義されているとしましょう。
+<tt><br>
+<br>
+bot&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;bot<br>
+<br>
+</tt>
+<tt>bot</tt> は停止しない式です。このような停止しない式の<em>値</em>を抽
+象的に _|_(ボトムと読む)と表わします。ある種の実行時エラーになる式、たと
+えば、<tt>1/0</tt> のような式もこの値を持ちます。このようなエラーは回復
+不可能で、プログラムはこれ以上継続することはできなくなります。I/O システ
+ムのエラー(たとえば、EOF エラーなど)は回復可能で、べつの方法で取り扱い
+ます。(このような I/O エラーは、実はエラーではなく、例外です。例外につい
+ての詳細は <a href="io.html#tut-io">7</a> 節でふれます。)
+</p>
+<p>
+関数 <tt>f</tt> が<em>正格</em> ( <i>strict</i> ) であるとは、停止しない
+式に適用されれば、その適用式も停止しないことをいいます。いいかえると、
+<tt>f&nbsp;bot</tt> が _|_ の時でかつその時にかぎり、<tt>f</tt> は正格で
+あるといいます。ほとんどのプログラミング言語では、<em>すべて</em>の関数
+が正格です。ただ、 Haskell では違います。簡単な例、つねに 1 を返す関数 
+<tt>const1</tt> を考えましょう。定義は、
+<tt><br>
+<br>
+const1&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br>
+<br>
+</tt>
+です。<tt>const1&nbsp;bot</tt> の値は Haskell では <tt>1</tt> です。操作
+的な観点からいうと、<tt>const1</tt> はその引数の値を「必要」としないので、
+引数は決して評価されません。だから停止しない計算に陥いることがないのです。
+こういうわけで、非正格関数は「遅延関数 ( lazy function ) 」とも呼ばれ、
+その引数の評価については「遅延評価」とか「必要呼び評価」とかいわれていま
+す。
+</p>
+<p>
+Haskell では、エラーや停止しない値は、意味論的に同じものですから、上の引数
+にはエラーも含まれています。たとえば、 <tt>const1&nbsp;(1/0)</tt> もちゃ
+んと評価されて <tt>1</tt> になります。
+</p>
+<p>
+非正格関数は多くの場面で、たいへん役に立ちます。そのなかで、主要な利点は、
+プログラマが評価の順に気をくばらなくてもよい、ということです。計算上高価
+な値を、必要もないのに余分な計算をしなければならないかもしれない、などと
+心配せずに関数へ渡すことができます。重要な例のひとつは、<em>無限の</em>
+( <i>infinite</i> ) データ構造です。
+</p>
+<p>
+もうひとつ別のやりかたで非正格関数を説明しましょう。Haskell は伝統的な言
+語のように<em>代入</em> ( <i>assignment</i> ) ではなく、<em>定義</em>
+( <i>definition</i> ) を用いて計算をすすめます。たとえば、
+<tt><br>
+<br>
+v&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1/0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+<br>
+</tt>
+のような宣言は、「 <tt>v</tt> を <tt>1/0</tt> と定義する」と読みます。こ
+れは、「 <tt>1/0</tt> を計算し、その結果を <tt>v</tt> へ格納する」とは読
+みません。<tt>v</tt> の値(定義)が必要になったときにのみゼロ除算エラーが
+発生します。宣言それだけでは計算は起こりません。代入を必要とするプロ
+グラミングではその代入の順序に細心の注意をはらう必要があります。プログラ
+ムの意味は代入がおこる順序に依存します。一方、定義はずっと単純で、プログ
+ラムの意味には影響あたえず、どのような順で出現してもかまいません。
+</p>
+<p>
+<a name="tut-infinite"></a>
+<a name="sect3.4"></a>
+<h3>3.4<tt>&nbsp;&nbsp;</tt>「無限の」データ構造</h3>
+</p>
+<p>
+Haskell の非正格な性質の利点のひとつは、データコンストラクタもが非正格で
+あることです。このことはべつに驚くべきことではありません。コンストラクタ
+は特殊な関数にすぎません(ふつうの関数との違いは、パターンマッチで使われ
+るということです)。たとえば、リストの構築子、<tt>:</tt> は非正格です。
+</p>
+<p>
+非正格の構築子で(概念的に)<em>無限の</em>( <i>infinite</i> )データ構造を
+定義することができます。これは、1 の無限リストです。
+<tt><br>
+<br>
+ones&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1&nbsp;:&nbsp;ones<br>
+<br>
+</tt>
+さらに面白いのは、<tt>numsFrom</tt> 関数です。
+<tt><br>
+<br>
+numsFrom&nbsp;n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;n&nbsp;:&nbsp;numsFrom&nbsp;(n+1)<br>
+<br>
+</tt>
+<tt>numsFrom&nbsp;n</tt> は <tt>n</tt> から始まる無限の整数リストです。
+これを使って、平方数の無限リストを構成することができます。
+<tt><br>
+<br>
+squares&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;map&nbsp;(^2)&nbsp;(numsFrom&nbsp;0)<br>
+<br>
+</tt>
+(ここで、セクションの使いかたに注目してください。<tt>^</tt> は中置の指数
+演算子です。)
+</p>
+<p>
+当然のことながら、実際の計算では、そこから、有限の部分を取り出したいわけ
+です。Haskell ではこの用途で使える関数があらかじめたくさん定義されていま
+す。<tt>take</tt>、<tt>takeWhile</tt>、<tt>filter</tt> 等々です。Haskell 
+の定義には多くの組み込みの関数や型が含まれています。これらを「標準プレリュー
+ド( Standard Prelude )」と呼びます。標準プレリュード全体は、Haskell
+Report の付録 A にあります。リスト上の数多くの有用な関数が 
+<tt>PreludeList</tt> の部分にありますので、参照してください。例をあげま
+しょう。<tt>take</tt> はリストから最初の <tt>n</tt> 個の要素を取り出しま
+す。
+</p>
+<p>
+<tt>take&nbsp;5&nbsp;squares</tt>    =&gt;    <tt>[0,1,4,9,16]</tt>
+</p>
+<p>
+上にあげた、<tt>ones</tt> の定義は、<em>循環リスト</em>( <i>circular
+list</i> )の例です。ほとんどの場合、遅延性は効率の面で非常に重要です。表
+現が本当の循環リストとして実装されるので、空間が節約できます。
+</p>
+<p>
+循環性を使用した別の例をみてみましょう。フィボナッチ数列はつぎのような循
+環数列をつかって効率よく計算することができます。
+<tt><br>
+<br>
+fib&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1&nbsp;:&nbsp;1&nbsp;:&nbsp;[&nbsp;a+b&nbsp;|&nbsp;(a,b)&nbsp;&lt;-&nbsp;zip&nbsp;fib&nbsp;(tail&nbsp;fib)&nbsp;]<br>
+<br>
+</tt>
+ここで、<tt>zip</tt> は標準プレリュードにある関数で、引数のふたつのリス
+トの要素を互いにペアにしたリストを返す関数です。
+<tt><br>
+<br>
+zip&nbsp;(x:xs)&nbsp;(y:ys)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;(x,y)&nbsp;:&nbsp;zip&nbsp;xs&nbsp;ys<br>
+zip&nbsp;&nbsp;xs&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ys&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;[]<br>
+<br>
+</tt>
+無限リスト <tt>fib</tt> が自分自身をつかってどのように定義されているかに
+注目してください。「自分の尻尾をおいかける」ような定義になっていますね。
+実際、この計算を絵にえがくと図 1 のようになります。
+</p>
+<p>
+<div align=center>
+<img src="fig1.gif" alt="Fib Example"> 
+<h4>図 1</h4>
+</div>
+</p>
+<p>
+無限リストの応用のさらにもうひとつの例については <a
+href="patterns.html#tut-lazy-patterns">4.4</a> 節を参照のこと
+</p>
+<p>
+<a name="sect3.5"></a>
+<h3>3.5<tt>&nbsp;&nbsp;</tt>エラー関数</h3>
+</p>
+<p>
+Haskell には <tt>error</tt> という組み込みの関数があります。この関数の型
+は <tt>String-&gt;a</tt> です。これはすこしばかり奇妙な関数です。型から
+すると、この関数の返す値の型は多相の型で実際の型がわかりません。この型の
+引数を受けとるわけではないからです。
+</p>
+<p>
+すべての型によって「共有」される値 _|_ というのが<em>存在</em>します。
+実際、意味論的には、<tt>error</tt> の返す値は常にこの値です(すべてのエラー
+の値は _|_ であることを思い出してください)。しかし、実装はチェックのため
+の <tt>error</tt> の文字列引数を印字するというのが妥当なところでしょう。
+それで、この関数は、なにか「誤りがあった場合」、プログラムを停止させたい
+ときに便利です。たとえば、標準プレリュードでは、<tt>head</tt> の定義は以
+下のようになっています。
+<tt><br>
+<br>
+head&nbsp;(x:xs)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;x<br>
+head&nbsp;&nbsp;[]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;error&nbsp;"head{PreludeList}:&nbsp;head&nbsp;[]"<br>
+<br>
+</tt>
+</p>
+<hr>
+<p>
+<i>A Gentle Introduction to Haskell, Version 98</i><br>
+<a href="goodies.html">back</a>
+<a href="patterns.html">next</a>
+<a href="index.html">top</a>
+</p>
+</body>
+</html>

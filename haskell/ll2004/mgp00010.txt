@@ -1,0 +1,14 @@
+
+Haskell の処理系 Hugs
+
+Haskell User's Gofer System
+Hugs 98 Nov 2003 -- 最新安定バージョン
+開発バージョン   -- Unicode Char に対応
+言語処理系
+hugs：対話型評価環境 REPL
+runhugs：スクリプトインタープリタ
+C で実装されている
+お手軽な Haskell 環境
+言語拡張
+ヒアドキュメント
+

@@ -1,0 +1,216 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<!--<title lang="en">Part II - Introduction</title>-->
+<title lang="en">Part II -イントロダクション</title>
+</head>
+<body>
+<!--
+<table lang="en" width="100%">
+ <tr>
+  <td align="left" width="33%">Prev: <a href="monadfns.html">Monad support in Haskell</a></td>
+  <td align="center" width="33%">TOC: <a href="index.html">Contents</a></td>
+  <td align="right" width="33%">Next: <a href="identitymonad.html">The Identity monad</a></td>
+ </tr>
+</table>	
+-->
+<table lang="ja" width="100%">
+ <tr>
+  <td align="left" width="33%">Prev:
+   <a href="monadfns.html">Haskell におけるモナドのサポート</a></td>
+  <td align="center" width="33%">TOC:
+   <a href="index.html">目次</a></td>
+  <td align="right" width="33%">Next:
+   <a href="identitymonad.html">恒等モナド</a></td>
+ </tr>
+</table>	
+
+<hr align="center" size="1" width="80%">
+
+<!--<h1 lang="en">Introduction</h1>-->
+<h1 lang="ja">イントロダクション</h1>
+
+<!--
+<p lang="en">
+The monads covered in Part II include a mixture of standard Haskell types that
+are monads as well as monad classes from Andy Gill's Monad Template Library.
+The Monad Template Library is included in the Glasgow Haskell Compiler's
+hierarchical libraries under
+<a href="http://www.haskell.org/ghc/docs/latest/html/base/Control.Monad.html">
+Control.Monad</a>
+</p>
+-->
+<p lang="ja">
+Part II がカバーしているモナドは、Andy Gill の Monad Template Library を
+に加えて、標準の Haskell 型の混合を含みます。この Monad Template Library は
+Glasgow Haskell Compiler の階層ライブラリ
+<a href="http://www.haskell.org/ghc/docs/latest/html/base/Control.Monad.html">
+Control.Monad</a> 以下に含まれています。
+</p>
+
+<!--
+<p lang="en">
+Some of the documentation for these monads comes from the excellent
+<a href="http://www.haskell.org/hawiki">Haskell Wiki</a>.  In addition to
+the monads covered here, monads appear many other places in Haskell,
+such as the <a href="http://www.cs.uu.nl/people/daan/papers/parsec.html">Parsec</a>
+monadic combinator parsing library.  These monads
+are beyond the scope of this reference, but they are thoroughly documented
+on their own.  You can get a taste of the Parsec library by looking
+in the <a href="../examples/example16.hs">source code</a> for
+<a href="readermonad.html#example">example 16</a>.
+</p>
+-->
+<p lang="ja">
+これらのモナドについての説明のいくつかは、
+<a href="http://www.haskell.org/hawiki">Haskell Wiki</a> からとっています。
+ここでカバーされているモナドの他にも、Haskell ではいろいろなところに
+モナドが登場します。たとえば、パーザコンビネータモナドライブラリ
+<a href="http://www.cs.uu.nl/people/daan/papers/parsec.html">Parsec</a>
+などです。これらのモナドは、このリファレンスの範囲を越えていますが、
+それぞれのライブラリに説明文書がついています。
+<a href="readermonad.html#example">example 16</a> の
+<a href="../examples/example16.hs">ソースコード</a>を見れば、
+Parsec ライブラリの雰囲気が味わえます。
+</p>
+<!--
+<table lang="en" align="center" border="1" cellpadding="3">
+  <tr bgcolor="#cc9999"><th>Monad</th>
+      <th>Type of computation</th>
+      <th>Combination strategy for <code>>>=</code></th>
+  </tr>
+  <tr><td><a href="identitymonad.html">Identity</a></td>
+      <td><em>N/A &mdash; Used with monad transformers</em></td>
+      <td>The bound function is applied to the input value.
+      </td>
+  </tr>
+  <tr><td><a href="maybemonad.html">Maybe</a></td>
+      <td>Computations which may not return a result</td>
+      <td><code>Nothing</code> input gives <code>Nothing</code> output<br>
+          <code>Just x</code> input uses <code>x</code> as input to the bound function.
+      </td>
+  </tr>
+  <tr><td><a href="errormonad.html">Error</a></td>
+      <td>Computations which can fail or throw exceptions</td>
+      <td>Failure records information describing the failure.  Binding passes
+      failure information on without executing the bound function, or uses
+      successful values as input to the bound function.
+      </td>
+  </tr>
+  <tr><td><a href="listmonad.html">[] (List)</a></td>
+      <td>Non-deterministic computations which can return multiple possible results</td>
+      <td>Maps the bound function onto the input list and concatenates the
+      resulting lists to get a list of all possible results from all possible inputs.
+      </td>
+  </tr>  
+  <tr><td><a href="iomonad.html">IO</a></td>
+      <td>Computations which perform I/O</td>
+      <td>Sequential execution of I/O actions in the order of binding. 
+      </td>
+  </tr>  
+  <tr><td><a href="statemonad.html">State</a></td>
+      <td>Computations which maintain state</td>
+      <td>The bound function is applied to the input value to
+      produce a state transition function which is applied to
+      the input state.
+      </td>
+  </tr>
+    <tr><td><a href="readermonad.html">Reader</a></td>
+      <td>Computations which read from a shared environment</td>
+      <td>The bound function is applied to the value of the input
+      using the same environment.
+      </td>
+  </tr>  
+  <tr><td><a href="writermonad.html">Writer</a></td>
+      <td>Computations which write data in addition to computing values</td>
+      <td>Written data is maintained separately from values.
+      The bound function is applied to the input value and anything it
+      writes is appended to the write data stream.
+      </td>
+  </tr>  
+  <tr><td><a href="contmonad.html">Cont</a></td>
+      <td>Computations which can be interrupted and restarted</td>
+      <td>The bound function is inserted into the continuation chain.
+      </td>
+  </tr>
+</table>
+-->
+<table lang="ja" align="center" border="1" cellpadding="3">
+  <tr bgcolor="#cc9999"><th>モナド</th>
+      <th>計算のタイプ</th>
+      <th><code>>>=</code> の組合せ戦略</th>
+  </tr>
+  <tr><td><a href="identitymonad.html">Identity</a></td>
+      <td><em>N/A &mdash; モナド変換子で利用</em></td>
+      <td>束縛された関数は入力値に適用される</td>
+  </tr>
+  <tr><td><a href="maybemonad.html">Maybe</a></td>
+      <td>結果を返さないかもしれない計算</td>
+      <td><code>Nothing</code> の入力は <code>Nothing</code> の出力になり、<br>
+          <code>Just x</code> の入力では <code>x</code> が束縛された関数
+          の入力となる
+      </td>
+  </tr>
+  <tr><td><a href="errormonad.html">Error</a></td>
+      <td>失敗あるいは例外を投げられる計算</td>
+      <td>失敗はその失敗についての説明情報を記録する。
+       束縛は、束縛された関数を実行することなく失敗情報を渡すか、
+       あるいは、成功したときの値を束縛された関数の入力として使う
+      </td>
+  </tr>
+  <tr><td><a href="listmonad.html">[] (List)</a></td>
+      <td>可能な結果を複数返す、非決定性計算</td>
+      <td>束縛された関数を入力リストに写像し、結果のリストを連結して、すべての
+       可能な入力からのすべての結果のリストを得る
+      </td>
+  </tr>  
+  <tr><td><a href="iomonad.html">IO</a></td>
+      <td>I/O を行う計算</td>
+      <td>I/O 動作のならびを束縛順に実行する
+      </td>
+  </tr>  
+  <tr><td><a href="statemonad.html">State</a></td>
+      <td>状態を保持する計算</td>
+      <td>束縛された関数を入力値に適用し、入力された状態に適用される
+       状態遷移関数を生成する
+      </td>
+  </tr>
+    <tr><td><a href="readermonad.html">Reader</a></td>
+      <td>共有された環境から読み込みを行う計算</td>
+      <td>束縛された関数は同じ環境を使う入力の値に適用される
+      </td>
+  </tr>  
+  <tr><td><a href="writermonad.html">Writer</a></td>
+      <td>計算する値とは別にデータを書き出す計算</td>
+      <td>書き出されるデータは値とは別に保持される。束縛された関数は入力された
+       値に適用され、書き出すものは書き出しデータストリームに追加される
+      </td>
+  </tr>  
+  <tr><td><a href="contmonad.html">Cont</a></td>
+      <td>中断および再開が可能な計算</td>
+      <td>束縛された関数は継続連鎖中に挿入される
+      </td>
+  </tr>
+</table>
+<hr align="center" size="1" width="80%">
+<!--
+<table lang="en" width="100%">
+ <tr>
+  <td align="left" width="33%">Prev: <a href="monadfns.html">Monad support in Haskell</a></td>
+  <td align="center" width="33%">TOC: <a href="index.html">Contents</a></td>
+  <td align="right" width="33%">Next: <a href="identitymonad.html">The Identity monad</a></td>
+ </tr>
+</table>	
+-->
+<table lang="ja" width="100%">
+ <tr>
+  <td align="left" width="33%">Prev:
+   <a href="monadfns.html">Haskell におけるモナドのサポート</a></td>
+  <td align="center" width="33%">TOC:
+   <a href="index.html">目次</a></td>
+  <td align="right" width="33%">Next:
+   <a href="identitymonad.html">恒等モナド</a></td>
+ </tr>
+</table>	
+
+</body>		

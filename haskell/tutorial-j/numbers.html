@@ -1,0 +1,289 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>A Gentle Introduction to Haskell: Numbers</title>
+</head>
+<body bgcolor="#ffffff">
+<p>
+<i>やさしい Haskell 入門</i><br>
+<a href="monads.html">back</a>
+<a href="modules.html">next</a>
+<a href="index.html">top</a>
+</p>
+<hr>
+<p>
+<a name="sect10"></a>
+<h2>10<tt>&nbsp;&nbsp;</tt>数</h2>
+</p>
+<p>
+Haskell にはさまざまな数値型があります。これらは Scheme [<a
+href="haskell-tutorial.html#$RRRRS">7</a>] の数値型をもとにしており、
+Scheme は Common Lisp [<a
+href="haskell-tutorial.html#$steele:common-lisp">8</a>] をもとにしていま
+す。(しかし、これらの言語は動的な型付けをおこないます。) 標準の型には、
+固定長および任意倍長の整数、それぞれの整数で構成された比(分数)、単精度お
+よび倍精度の実数、複素数の浮動小数が含まれています。ここでは数値クラス構
+造の基本的性格の概略を説明します。詳細についてはレポートの <a
+href="../report-j/basic.html#numbers">&sect;6.3</a> 節を参照してください。
+</p>
+<p>
+<a name="sect10.1"></a>
+<h3>10.1<tt>&nbsp;&nbsp;</tt>数値クラスの構造</h3>
+</p>
+<p>
+数値型クラス(クラス <tt>Num</tt> とその下にあるクラス)は Haskell の標準
+クラスの多くを考慮しています。<tt>Num</tt> は <tt>Eq</tt> のサブクラスで
+すが、<tt>Ord</tt> のサブクラスではないこを注意しておきます。これは、順
+序述語は複素数には適用できないことによります。しかしながら、
+<tt>Num</tt> クラスのサブクラス <tt>Real</tt> は <tt>Ord</tt> のサブクラ
+スです。
+</p>
+<p>
+<tt>Num</tt> クラスはすべての数値型に共通するいくつかの基本演算を備えて
+います。これには、加算、減算、符号反転、乗算、絶対値が含まれています。
+<tt><br>
+<br>
+(+),&nbsp;(-),&nbsp;(*)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;(Num&nbsp;a)&nbsp;=&gt;&nbsp;a&nbsp;-&gt;&nbsp;a&nbsp;-&gt;&nbsp;a<br>
+negate,&nbsp;abs&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;(Num&nbsp;a)&nbsp;=&gt;&nbsp;a&nbsp;-&gt;&nbsp;a<br>
+<br>
+</tt>
+[<tt>negate</tt> は Haskell では唯一採用された前置演算子 - (マイナス)
+を適用する関数です。これの呼出しを <tt>(-)</tt> と書くことはできません。
+それは、(-) と書けば、減算関数になってしまうからです。そこで、
+この <tt>nagate</tt> という名前をかわりに使うわけです。
+たとえば、<tt>-x*y</tt> は <tt>negate&nbsp;(x*y)</tt> と同値です。
+(前置のマイナスは中置のマイナスとおなじ優先度をもちますので、当然、
+乗算より優先度は低いわけです。)]
+</p>
+<p>
+<tt>Num</tt> には除算演算子が<em>ない</em>ことに注意してください。
+2 つの別の種類の除算演算子がオーバラップしない 2 つの <tt>Num</tt> のサ
+ブクラスで定義されています。クラス <tt>Integral</tt> では全数
+整数除算演算と剰余演算子が提供されています。<tt>Integral</tt> 
+の標準インスタンスは <tt>Integer</tt> (範囲制限のない整数あるいは数学で
+いうところの整数、一般には「bignum」としてしられているもの) と 
+<tt>Int</tt> (範囲限定のある、計算機上の整数、範囲は最低でも 29 bit の符
+号付 2 進数)です。一部の Haskell ではこれらのほかに別の integral 型が提
+供されています。<tt>Integral</tt> は <tt>Num</tt> の直接のサブクラスでは
+なく、<tt>Real</tt> のサブクラスであることに注目してください。その意味す
+るところは、ガウス整数を提供するつもりはないということです。
+</p>
+<p>
+他のすべての数値型はどれも <tt>Fractional</tt> クラスに属します。このク
+ラスは普通の除算演算子 <tt>(/)</tt> を備えています。そのサブクラスには、
+<tt>Floating</tt> があり、三角関数、対数関数、指数関数を備えています。
+</p>
+<p>
+<tt>Fractionnal</tt> と <tt>Real</tt> のサブクラスである 
+<tt>RealFrac</tt> は関数 <tt>properFraction</tt> を備えています。この関
+数は数を整数部分と小数部分にわけます。また、それぞれ別のルールで整数に丸
+める関数群もそなえています。
+<tt><br>
+<br>
+properFraction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;(Fractional&nbsp;a,&nbsp;Integral&nbsp;b)&nbsp;=&gt;&nbsp;a&nbsp;-&gt;&nbsp;(b,a)<br>
+truncate,&nbsp;round,<br>
+floor,&nbsp;ceiling:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;(Fractional&nbsp;a,&nbsp;Integral&nbsp;b)&nbsp;=&gt;&nbsp;a&nbsp;-&gt;&nbsp;b<br>
+<br>
+</tt>
+</p>
+<p>
+<tt>RealFloat</tt> は <tt>Floating</tt> と <tt>RealFrac</tt> のサブクラ
+スで浮動小数部への効率てきなアクセスのためにいくつかの特別な関数を備えて
+います。それは、<tt>exponent</tt> と <tt>significand</tt> です。標準の型 
+<tt>Float</tt> と <tt>Double</tt> は <tt>RealFloat</tt> クラスになります。
+</p>
+<a name="sect10.2"></a>
+<h3>10.2<tt>&nbsp;&nbsp;</tt>構造のある数値型</h3>
+<p>
+標準の型、<tt>Int</tt>、<tt>Integer</tt>、<tt>Float</tt>、
+<tt>Double</tt> はプリミティブです。その他はこれらからタイプ構築子により
+構築されます。
+</p>
+<p>
+<tt>Complex</tt> ( <tt>Complex</tt> ライブラリにあります) はタイプ構築子
+であり、<tt>RealFloat</tt> 型から <tt>Floating</tt> クラスの複素数のクラ
+スを構築します。
+<tt><br>
+<br>
+data&nbsp;(RealFloat&nbsp;a)&nbsp;=&gt;&nbsp;Complex&nbsp;a&nbsp;=&nbsp;!a&nbsp;:+&nbsp;!a&nbsp;&nbsp;deriving&nbsp;(Eq,&nbsp;Text)<br>
+<br>
+</tt>
+<tt>!</tt> の記号は正格性フラグです。これらについては <a
+href="moretypes.html#tut-strict-flag">6.3</a> 節で議論しました。
+引数の型を限定している文脈 <tt>(RealFloat&nbsp;a)&nbsp;=&gt;</tt> に注目
+してください。つまり、標準の複素数型は <tt>Complex&nbsp;Float</tt> であ
+り、<tt>Complex&nbsp;Double</tt> だということです。また、<tt>data</tt> 
+宣言から、複素数は <I>x</I> <tt>:+</tt> <I>y</I> のように書くということ
+がわかります。引数はそれぞれ、実数部と虚数部です。<tt>:+</tt> はデータ構
+築子ですから、これをパターンマッチングに使用することができます。
+<tt><br>
+<br>
+conjugate&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;(RealFloat&nbsp;a)&nbsp;=&gt;&nbsp;Complex&nbsp;a&nbsp;-&gt;&nbsp;Complex&nbsp;a<br>
+conjugate&nbsp;(x:+y)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;x&nbsp;:+&nbsp;(-y)<br>
+<br>
+</tt>
+</p>
+<p>
+同様にして、型構築子 <tt>Ratio</tt> (これは、<tt>Rational</tt> ライ
+ブラリに含まれています)は、<tt>Integral</tt> のインスタンスから 
+<tt>RealFrac</tt> クラスの分数クラスを生成します。( <tt>Rational</tt> は 
+<tt>Ratio&nbsp;Integer</tt> の型シノニムです。) しかし、<tt>Ratio</tt> 
+は抽象型構築子です。データ構築子 <tt>:+</tt> のかわりに、分数はふたつの
+整数からひとつの分数を形成する「<tt>%</tt>」関数をつかいます。パターンマッ
+チングのかわりに、構成要素を引出す関数が用意されています。
+<tt><br>
+<br>
+(%)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;(Integral&nbsp;a)&nbsp;=&gt;&nbsp;a&nbsp;-&gt;&nbsp;a&nbsp;-&gt;&nbsp;Ratio&nbsp;a<br>
+numerator,&nbsp;denominator&nbsp;&nbsp;::&nbsp;(Integral&nbsp;a)&nbsp;=&gt;&nbsp;Ratio&nbsp;a&nbsp;-&gt;&nbsp;a<br>
+<br>
+</tt>
+</p>
+<p>
+この差はの理由はなんでしょう。直積形式の複素数はユニークに決定できます。
+すなわち、<tt>:+</tt> を含む同一性は明白です。一方、分数ではユニークに決
+定できません。しかし、正規(規約)形式を持ちます。これは、この抽象データ型
+の実装が保持すべきものです。たとえば、<tt>numerator&nbsp;(x%y)</tt> は 
+<tt>x</tt> に等しいとはかぎりません。しかし、<tt>x:+y</tt> の実数部は常
+に <tt>x</tt> です。
+</p>
+<a name="tut-num-constants"></a>
+<a name="sect10.3"></a>
+<h3>10.3<tt>&nbsp;&nbsp;</tt>数値型変換と多重定義されたリテラル</h3>
+<p>
+標準プレリュードと標準ライブラリには明示的な型変換をおこなう多重定義関数
+がいくつか備わっています。
+<tt><br>
+<br>
+fromInteger&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;(Num&nbsp;a)&nbsp;=&gt;&nbsp;Integer&nbsp;-&gt;&nbsp;a<br>
+fromRational&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;(Fractional&nbsp;a)&nbsp;=&gt;&nbsp;Rational&nbsp;-&gt;&nbsp;a<br>
+toInteger&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;(Integral&nbsp;a)&nbsp;=&gt;&nbsp;a&nbsp;-&gt;&nbsp;Integer<br>
+toRational&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;(RealFrac&nbsp;a)&nbsp;=&gt;&nbsp;a&nbsp;-&gt;&nbsp;Rational<br>
+fromIntegral&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;(Integral&nbsp;a,&nbsp;Num&nbsp;b)&nbsp;=&gt;&nbsp;a&nbsp;-&gt;&nbsp;b<br>
+fromRealFrac&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;(RealFrac&nbsp;a,&nbsp;Fractional&nbsp;b)&nbsp;=&gt;&nbsp;a&nbsp;-&gt;&nbsp;b<br>
+<br>
+fromIntegral&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;fromInteger&nbsp;.&nbsp;toInteger<br>
+fromRealFrac&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;fromRational&nbsp;.&nbsp;toRational<br>
+<br>
+</tt>
+</p>
+<p>
+これらのうちふたつは、多重定義数値リテラルを実現するために、暗黙のうちに
+使用されています。(小数を含まない)整数は実際には、<tt>Integer</tt> のよ
+うな数値に <tt>fromInteger</tt> を適用したものと同等です。おなじように、
+浮動小数は <tt>Rational</tt> のような数値に <tt>fromRationa</tt> を適用
+したものとみなします。ですから、<tt>7</tt> の型は 
+<tt>(Num&nbsp;a)&nbsp;=&gt;&nbsp;a</tt> であり、<tt>7.3</tt> の型は 
+<tt>(Fractional&nbsp;a)&nbsp;=&gt;&nbsp;a</tt> です。つまり、数値リテラ
+ルは、たとえば、総称数値関数でもちいることができます。
+<tt><br>
+<br>
+halve&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;(Fractional&nbsp;a)&nbsp;=&gt;&nbsp;a&nbsp;-&gt;&nbsp;a<br>
+halve&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;x&nbsp;*&nbsp;0.5<br>
+<br>
+</tt>
+数値のいくぶん間接的な多重定義の方法には、数値を与えられた型の数値として
+解釈するためのメソッドを、<tt>Integral</tt> あるいは <tt>Fractional</tt> 
+のインスタンス宣言によって指定できるという利点があります。(これが可能な
+のは、<tt>fromInteger</tt> と <tt>fromRational</tt> はそれぞれ対応するク
+ラスの演算子であるからです。) たとえば、<tt>Num</tt> のインスタンスであ
+る <tt>(RealFloat&nbsp;a)&nbsp;=&gt;&nbsp;Complex&nbsp;a</tt> は次のメソッ
+ドを含んでいます。
+<tt><br>
+<br>
+fromInteger&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;fromInteger&nbsp;x&nbsp;:+&nbsp;0<br>
+<br>
+</tt>
+これは、つまり、<tt>fromInteger</tt> の <tt>Complex</tt> 版インスタンス
+は、実数部が適切な <tt>fromInteger</tt> の <tt>RealFloat</tt> 版インスタ
+ンスにより生成される、複素数を生成するために定義されたものである、という
+ことです。この伝でいけば、ユーザ定義の数値型(例えば、4 元数)でさえも多重
+定義の数を利用することができます。
+</p>
+<p>
+もうひとつ例をあげましょう。<a href="goodies.html#tut-values-etc">2</a> 
+節の <tt>inc</tt> の最初の定義を思い出してください。
+<tt><br>
+<br>
+inc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;Integer&nbsp;-&gt;&nbsp;Integer<br>
+inc&nbsp;n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;n+1<br>
+<br>
+</tt>
+型シグネチャを無視すれば、もっとも一般的な <tt>inc</tt> の型は 
+<tt>(Num&nbsp;a)&nbsp;=&gt;&nbsp;a-&gt;a</tt> です。しかし、この明示的な
+型シグネチャは正当なものです。それは、これが主型<em>より限定的</em>である
+からに他なりません。(主型より一般的な型では静的エラーが発生します。) こ
+の型シグネチャには、<tt>inc</tt> の型を限定するという効果があります。そ
+して、この場合には、<tt>inc&nbsp;(1::Float)</tt> のようにすると型付け不
+可能ということになります。
+</p>
+<a name="sect10.4"></a>
+<h3>10.4<tt>&nbsp;&nbsp;</tt>デフォルトの数値型</h3>
+<p>
+以下のような関数の定義を考えてみてください。
+<tt><br>
+<br>
+rms&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;(Floating&nbsp;a)&nbsp;=&gt;&nbsp;a&nbsp;-&gt;&nbsp;a&nbsp;-&gt;&nbsp;a<br>
+rms&nbsp;x&nbsp;y&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;sqrt&nbsp;((x^2&nbsp;+&nbsp;y^2)&nbsp;*&nbsp;0.5)<br>
+<br>
+</tt>
+この指数関数 <tt>(^)</tt> (3 つある、それぞれ別の型付けがされている標
+準の指数関数のうちのひとつ、これについてはレポートの 6.8.5 節を参照のこ
+と)の型は 
+<tt>(Num&nbsp;a,&nbsp;Integral&nbsp;b)&nbsp;=&gt;&nbsp;a&nbsp;-&gt;&nbsp;b&nbsp;-&gt;&nbsp;a</tt> 
+です。また、<tt>2</tt> は <tt>(Num&nbsp;a)&nbsp;=&gt;&nbsp;a</tt> という
+型ですから、<tt>x^2</tt> の型は 
+<tt>(Num&nbsp;a,&nbsp;Integral&nbsp;b)&nbsp;=&gt;&nbsp;a</tt> となります。
+これには問題があります。それは、<tt>b</tt> という型変数についての多重定
+義を解決するほうほうがないということです。なぜなら、これは文脈のなかにあ
+りますが、しかし、型式からは消えてしまっているからです。根本的には、プロ
+グラマは、<tt>x</tt> は自乗するよう指定したのであって、2 が <tt>Int</tt> 
+の値であるか <tt>Integer</tt> の値であるかを指定したわけではありません。
+もちろん、この問題は解決するこができます。
+<tt><br>
+<br>
+rms&nbsp;x&nbsp;y&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;sqrt&nbsp;((x&nbsp;^&nbsp;(2::Integer)&nbsp;+&nbsp;y&nbsp;^&nbsp;(2::Integer))&nbsp;*&nbsp;0.5)<br>
+<br>
+</tt>
+しかしながら、これは、すぐに面倒になるのは明白です。
+</p>
+<p>
+実際、このての多重定義の曖昧性は数値に限ったことではありません。
+<tt><br>
+<br>
+show&nbsp;(read&nbsp;"xyz")<br>
+<br>
+</tt>
+この文字列はどのような型だと仮定して読めばいいのでしょうか。これは指数関数の
+ときの曖昧性よりもさらに深刻な問題です。なぜなら、先程の場合では、
+<tt>Integral</tt> のインスタンスであればよいわけですが、今度の場合は
+<tt>Text</tt> のどのインスタンスがこの曖昧性の解決に用いられるかによって
+期待できる振舞いがすっかりかわってしまうからです。
+</p>
+<p>
+この多重定義の曖昧性の問題は一般の場合と数値の場合ではちがってきますので、
+Haskell では数値に限って解決法を提供しています。各モジュールには<em>デフォ
+ルト宣言</em> ( <i>default declaration</i> ) があり、これはキーワード 
+<tt>default</tt> とそれにつづく括弧でくくられ、コンマで区切られた数値の
+モノタイプ (monotype) (型変数を含まない型) で構成されています。曖昧な型
+変数がみつかった場合(たとえば、上例の <tt>b</tt> )、すくなくともクラスの
+ひとつが数値であり、かつ、そのクラスのすべてが標準のものであれば、デフォ
+ルトリストが参照されて、型変数の文脈を満足する最初のものが使用されます。
+たとえば、もし、デフォルト宣言 <tt>default&nbsp;(Int,&nbsp;Float)</tt> 
+があれば、上の曖昧な指数は型 <tt>Int</tt> と解決されるでしょう。(詳細に
+ついてはレポートの <a
+href="../report-j/decls.html#default-decls">&sect;4.3.4</a> を参照してくだ
+さい。)
+</p>
+<p>
+「デフォルトのデフォルト」は <tt>(Integer,&nbsp;Double)</tt> ですが、
+<tt>(Integer,&nbsp;Rational,&nbsp;Double)</tt> でもかまわないでしょう。
+注意深いプログラマなら、<tt>default&nbsp;()</tt> を好むかもしれません。
+これは、デフォルトがないということです。
+</p>
+<hr>
+<i>A Gentle Introduction to Haskell, Version 98</i><br>
+<a href="monads.html">back</a>
+<a href="modules.html">next</a>
+<a href="index.html">top</a>
+</body>
+</html>

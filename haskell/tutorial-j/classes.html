@@ -1,0 +1,490 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>A Gentle Introduction to Haskell: Classes</title>
+</head>
+<body bgcolor="#ffffff">
+<p>
+<i>やさしい Haskell 入門 ( バージョン 98 )</i><br>
+<a href="patterns.html">back</a>
+<a href="moretypes.html">next</a>
+<a href="index.html">top</a>
+</p>
+<hr>
+<p>
+<a name="tut-type-classes"></a>
+<a name="sect5"></a>
+<h2>5<tt>&nbsp;&nbsp;</tt>型クラスと多重定義</h2>
+</p>
+<p>
+最後に他のプログラミング言語とは違う Haskell の型システムの特徴について
+説明しましょう。すでに述べてきた多相は、<em>パラメータ</em>
+( <i>parametric</i> )多相とよばれるものです。このほかに
+<em>アドホック</em>多相とよばれる種類のものもあります。これは
+<em>多重定義</em>( <i>overloading</i> )という呼びかたのほうがよく知られ
+ているかもしれません。アドホック多相の例をいくつかあげると、
+<ul>
+ <li>
+ <p>
+ <tt>1</tt>、<tt>2</tt> などのリテラルは、固定長の整数と任意長の整数の両
+ 方でつかわれることが多い。
+ </p>
+ </li>
+ <li>
+ <p>
+ <tt>+</tt> のような数値演算子は何種類もの数値上で定義されることが多い。
+ </p>
+ </li>
+ <li>
+ <p>
+ 同値演算子( Haskell では <tt>==</tt> )はふつう数値とその他多く(すべてで
+ はない)の型の上で動作することが多い。
+ </p>
+ </li>
+</ul>
+こうした多重定義されたものの振舞いはそれぞれの型によって違いがあるという
+ことに注意してください。(実際には、振舞いが定義されていないか、エラーに
+なる場合もあります。) また、一方で、パラメータ多相では型そのものは重要で
+はないことに注意してください。(たとえば、<tt>fringe</tt> は木の葉の要素
+の種類がなんであるかには関係ありません。) Haskell では、
+<em>型クラス</em>( <i>class type</i> )によってアドホック多相あるいは多重
+定義を制御する方法が提供されています。
+</p>
+<p>
+単純ですが、重要な例、同値性の例からはじめましょう。同値性を定義したい型
+には多くの型があります。しかし、いくつかの型については同値性を定義したく
+ないこともあります。たとえば、一般的にいって、関数が同値であるかどうかの
+判定は計算では処理が困難です。その一方で、ふたつのリストが同じかどうかを比
+較したいことはよくあることです。(ここで、同値性といっているのは、「値同値
+性」のことです。対照的な概念としては、「ポインタ同値性」というのがありま
+す。たとえば、Java 言語の <tt>==</tt> です。ポインタ同値性は参照透明性を
+持ちません。それゆえに純粋な関数型言語とは相性がよくありません。) このこ
+とをもっと明かにするために、リストの要素かどうかを検証する <tt>elem</tt> 
+という関数の定義をみてみましょう。
+<tt><br>
+<br>
+x&nbsp;`elem`&nbsp;&nbsp;[]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;False<br>
+x&nbsp;`elem`&nbsp;(y:ys)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;x==y&nbsp;||&nbsp;(x&nbsp;`elem`&nbsp;ys)<br>
+<br>
+</tt>
+[ <a href="functions.html#tut-lambda">3.1</a> 節で議論した構文的な理由に
+より、<tt>elem</tt> を定義するのに中置形式を選択します。<tt>==</tt> と 
+<tt>||</tt> は、それぞれ、同値演算子と論理和演算子です。]
+</p>
+<p>
+直観的にいえば、<tt>elem</tt> の型は <tt>a-&gt;[a]-&gt;Bool</tt> 「でな
+ければなりません。」 しかし、そのためには <tt>==</tt> の型は 
+<tt>a-&gt;a-&gt;Bool</tt> でなければなりません。さきほど、全ての型につい
+て <tt>==</tt> を定義したいわけではないと言ったばかりにもかかわらずです。
+</p>
+<p>
+さらに、こんなことにも注目しています。もし、 <tt>==</tt> を全ての型の上
+で定義できたとしても、ふたつのリストを比較することと、ふたつの数を比較す
+ることは全然違うことです。こういう意味で、これらいろいろな仕事をさせるた
+めに、<tt>==</tt> が多重定義できることを期待するわけです。
+</p>
+<p>
+<em>型クラス</em>( <i>type class</i> )はこのふたつの問題を解決するのに都
+合のよい仕組です。型クラスを使うと型をいずれかのクラスのインスタンスとし
+て定義できます。また、クラスに付随した多重定義された<em>操作</em>の定義
+をおこなうことができます。たとえば、同値演算子を含むクラスの定義をしてみ
+ましょう。
+<tt><br>
+<br>
+class&nbsp;Eq&nbsp;a&nbsp;where&nbsp;<br>
+&nbsp;&nbsp;(==)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;a&nbsp;-&gt;&nbsp;a&nbsp;-&gt;&nbsp;Bool<br>
+<br>
+</tt>
+ここでは、<tt>Eq</tt> は定義するクラスの名前です。また <tt>==</tt> はこ
+のクラスでの唯一の操作です。この宣言は、「型 <tt>a</tt> がクラス 
+<tt>Eq</tt> のインスタンスであるのは、(多重定義された) <tt>==</tt> が存
+在し、そのうえで定義された適切な型をもつ場合である」と読むことができます。
+(このとき、<tt>==</tt> は同じ型の対象の組の上でのみ定義されることに注意
+してください。)
+</p>
+<p>
+型 <tt>a</tt> がクラス <tt>Eq</tt> のインスタンスでなければならない、と
+いう制約は、 <tt>Eq&nbsp;a</tt> のように書きます。ということは、
+<tt>Eq&nbsp;a</tt> は型式ではなく、型に対する制約を表現していますので、
+<em>文脈</em>( <i>context</i> )と呼ばれます。文脈は型式の前に置きます。
+たとえば、上のクラス宣言の効果は、次のような型を <tt>==</tt> に割当るこ
+とになります。
+<tt><br>
+<br>
+(==)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;(Eq&nbsp;a)&nbsp;=&gt;&nbsp;a&nbsp;-&gt;&nbsp;a&nbsp;-&gt;&nbsp;Bool<br>
+<br>
+</tt>
+これは、「クラス <tt>Eq</tt> のインスタンスであるような型 <tt>a</tt> の
+それぞれに対して、<tt>==</tt> は <tt>a-&gt;a-&gt;Bool</tt> という型をもつ」
+と読むことができます。これは、まさに <tt>elem</tt> の例で使われている 
+<tt>==</tt> の型です。実際にも、この文脈による制約が <tt>elem</tt> の主
+型に波及します。
+<tt><br>
+<br>
+elem&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;(Eq&nbsp;a)&nbsp;=&gt;&nbsp;a&nbsp;-&gt;&nbsp;[a]&nbsp;-&gt;&nbsp;Bool<br>
+<br>
+</tt>
+これは、「クラス <tt>Eq</tt> のインスタンスであるような型 <tt>a</tt> の
+それぞれに対して、<tt>elem</tt> は <tt>a-&gt;[a]-&gt;Bool</tt> という型
+をもつ」と読むべきです。これこそ、求めていたものに他なりません。これは、
+<tt>elem</tt> がすべての型の上で定義されているわけではなく、その要素につ
+いて同値性の比較方法がわかっている型の上で定義されているということを示し
+ています。
+</p>
+<p>
+ここまではいいでしょう。しかし、どのようにして、どの型が <tt>Eq</tt> ク
+ラスのインスタンスになるかを指定し、その型に対する <tt>==</tt> の実際の
+振舞いを指定するのでしょうか。これは、<em>インスタンス宣言</em>
+( <i>instance declaration</i> )でおこないます。たとえば、
+<tt><br>
+<br>
+instance&nbsp;Eq&nbsp;Integer&nbsp;where&nbsp;<br>
+&nbsp;&nbsp;x&nbsp;==&nbsp;y&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;x&nbsp;`integerEq`&nbsp;y<br>
+<br>
+</tt>
+のようにします。<tt>==</tt> の定義は<em>メソッド</em>( <i>method</i> )と
+呼びます。<tt>integerEq</tt> 関数は、この場合、たまたま、整数の同値性を
+比較するプリミティブ関数ですが、一般には、右辺では適正なものであれば、ど
+のような式でもよいことになっています。これは、一般の関数の定義と同じです。
+この宣言全体は、「 <tt>Integer</tt> 型はクラス <tt>Eq</tt> のインスタン
+スで、ここに、操作 <tt>==</tt> に対応するメソッドを定義する。」 と読むこ
+とができます。この宣言をすれば、任意倍長の整数の同値性を <tt>==</tt> を
+用いて比較することができます。同様にして、
+<tt><br>
+<br>
+instance&nbsp;Eq&nbsp;Float&nbsp;where<br>
+&nbsp;&nbsp;x&nbsp;==&nbsp;y&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;x&nbsp;`floatEq`&nbsp;y<br>
+<br>
+</tt>
+により浮動小数の比較を <tt>==</tt> を用いておこなうことができます。
+</p>
+<p>
+前に定義した <tt>Tree</tt> のような再帰的な型でも同じよう扱うことができ
+ます。
+<tt><br>
+<br>
+instance&nbsp;(Eq&nbsp;a)&nbsp;=&gt;&nbsp;Eq&nbsp;(Tree&nbsp;a)&nbsp;where&nbsp;<br>
+&nbsp;&nbsp;Leaf&nbsp;a&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;==&nbsp;Leaf&nbsp;b&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;a&nbsp;==&nbsp;b<br>
+&nbsp;&nbsp;(Branch&nbsp;l1&nbsp;r1)&nbsp;==&nbsp;(Branch&nbsp;l2&nbsp;r2)&nbsp;&nbsp;=&nbsp;&nbsp;(l1==l2)&nbsp;&amp;&amp;&nbsp;(r1==r2)<br>
+&nbsp;&nbsp;_&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;==&nbsp;_&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;False<br>
+<br>
+</tt>
+最初の行の <tt>&nbsp;Eq&nbsp;a&nbsp;</tt> という文脈は必須です。なぜなら、
+葉のもつ要素(型は <tt>a</tt> )は 2 番目の行の同値性を用いて比較します。
+付加される制約は本質的には、<tt>a</tt> の木の同値性の比較は、すでにその
+やりかたが知れている <tt>a</tt> の同値性比較を用いて実現できるということ
+です。もし、文脈をインスタンス宣言から取り除くと、静的型エラーが発生しま
+す。
+</p>
+<p>
+Haskell レポート、特にプレリュードには便利な型クラスの例が豊富に含まれて
+います。実際には、<tt>Eq</tt> クラスの定義は前に定義したものよりは、もう
+すこし規模がおおきいものです。
+<tt><br>
+<br>
+class&nbsp;&nbsp;Eq&nbsp;a&nbsp;&nbsp;where<br>
+&nbsp;&nbsp;(==),&nbsp;(/=)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;a&nbsp;-&gt;&nbsp;a&nbsp;-&gt;&nbsp;Bool<br>
+&nbsp;&nbsp;x&nbsp;/=&nbsp;y&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;not&nbsp;(x&nbsp;==&nbsp;y)<br>
+<br>
+</tt>
+これは、ふたつの操作子をもつクラスの例です。ひとつは同値性の操作子、もう
+ひとつは、非同値性の操作子です。この例は、また、
+<em>デフォルトメソッド</em>の使い方の例示になっています。この場合は非同
+値性操作 <tt>/=</tt> がそれです。ある特定の操作に対するメソッドがインス
+タンス宣言に含まれていないければ、そのクラス宣言中に定義されているデフォ
+ルトメソッドがあれば、それが使われます。たとえば、まえに定義した 3 つの 
+<tt>Eq</tt> クラスのインスタンスは上のクラス宣言で完全に動作します。この
+とき、望む非同値性の正しい定義(同値性の論理否定)がつくりだされています。
+</p>
+<p>
+Haskell では<em>クラス拡張</em>( <i>class extension</i> )の記法もサポー
+トされています。たとえば、<tt>Eq</tt> クラスからすべての操作を
+<em>継承</em>( <i>inherit</i> )した  <tt>Ord</tt> クラスを定義したいとし
+ましょう。このクラスは <tt>Eq</tt> クラスから継承した操作のほかに、比較
+操作子と min 関数および max 関数をもつものとします。
+<tt><br>
+<br>
+class&nbsp;&nbsp;(Eq&nbsp;a)&nbsp;=&gt;&nbsp;Ord&nbsp;a&nbsp;&nbsp;where<br>
+&nbsp;&nbsp;(&lt;),&nbsp;(&lt;=),&nbsp;(&gt;=),&nbsp;(&gt;)&nbsp;&nbsp;::&nbsp;a&nbsp;-&gt;&nbsp;a&nbsp;-&gt;&nbsp;Bool<br>
+&nbsp;&nbsp;max,&nbsp;min&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;a&nbsp;-&gt;&nbsp;a&nbsp;-&gt;&nbsp;a<br>
+<br>
+</tt>
+このクラス宣言の文脈に注目してください。<tt>Eq</tt> は <tt>Ord</tt> の
+<em>スーパークラス</em>( <i>super class</i> )であるといいます。(反対に、
+<tt>Ord</tt> は <tt>Eq</tt> の<em>サブクラス</em>( <i>subclass</i> )であ
+るといいます。) <tt>Ord</tt> のインスタンスである型はすべて <tt>Eq</tt> 
+のインスタンスでなければなりません。(次節では <tt>Ord</tt> の完全な定義
+をプレリュードから抜きだし紹介します。)
+</p>
+<p>
+このようなクラスの包含の利点のひとつは、文脈の簡略化にあります。
+<tt>Eq</tt> と <tt>Ord</tt> の両方のクラスの操作を使用する関数に対する型
+式は文脈 <tt>(Eq&nbsp;a,&nbsp;Ord&nbsp;a)</tt> ではなくて 
+<tt>(Ord&nbsp;a)</tt> を利用することができます。それは、<tt>Ord</tt> が
+<tt>Eq</tt> を包含しているからです。さらに重要なことは、サブクラスの操作
+に対するメソッドは、スーパークラスの操作に対するメソッドが存在することを
+仮定することができるということです。たとえば、プレリュード中の 
+<tt>Ord</tt> の宣言は、<tt>(&lt;)</tt> に対応するデフォルトメソッドを含
+んでいます。
+<tt><br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&lt;&nbsp;y&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;x&nbsp;&lt;=&nbsp;y&nbsp;&amp;&amp;&nbsp;x&nbsp;/=&nbsp;y<br>
+<br>
+</tt>
+<tt>Ord</tt> の使用方法の一例として、<a
+href="goodies.html#tut-list-comps">2.4.1</a> 節で定義した <tt>quicksort
+</tt> の主型の型付を見ると次のようになります。
+<tt><br>
+<br>
+quicksort&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;&nbsp;(Ord&nbsp;a)&nbsp;=&gt;&nbsp;[a]&nbsp;-&gt;&nbsp;[a]<br>
+<br>
+</tt>
+いいかえれば、<tt>quicksort</tt> は順序付の型の値のリスト上でのみ操作で
+きるということです。この <tt>quicksort</tt> に対する型付は定義のなかの比
+較操作子<tt>&lt;</tt> と <tt>&gt;=</tt> の使い方から導かれます。
+</p>
+<p>
+Haskell では<em>多重継承</em>( <i>multiple inheritance</i> )も認められて
+います。それはクラスは 2 つ以上のスーパークラスを持つこともあるからです。
+たとえば、次の宣言をみてみましょう。
+<tt><br>
+<br>
+class&nbsp;(Eq&nbsp;a,&nbsp;Show&nbsp;a)&nbsp;=&gt;&nbsp;C&nbsp;a&nbsp;where&nbsp;...<br>
+<br>
+</tt>
+これは、<tt>C</tt> というクラスをつくっていますが、操作を <tt>Eq</tt> と 
+<tt>Show</tt> の両方から継承しています。
+</p>
+<p>
+Haskell ではクラスメソッドはトップレベルの宣言として扱われます。これらは、
+ふつうの変数と同様に同じ名前空間を共有します。名前はクラスメソッドと変数
+名あるいは別のクラスのメソッドとの両方を表示するのには使えません。
+</p>
+<p>
+文脈は<em>データ</em>宣言のなかで使うことができます。これについては
+<a href="../report-j/decls.html#datatype-decls">&sect;4.2.1</a> を参照して
+ください。
+</p>
+<p>
+クラスメソッドには、あらゆる型変数(定義しようとしているものを除く)の上の
+制約を付加することができます。たとえば、
+<tt><br>
+<br>
+class&nbsp;C&nbsp;a&nbsp;where<br>
+&nbsp;&nbsp;m&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;Show&nbsp;b&nbsp;=&gt;&nbsp;a&nbsp;-&gt;&nbsp;b<br>
+<br>
+</tt>
+このようなクラスでは、メソッド <tt>m</tt> は型 <tt>b</tt> が 
+<tt>Show</tt> クラスに属していることを要求します。しかしながら、メソッド 
+<tt>m</tt> は型 <tt>a</tt> については、いかなるクラス制約も付加しません。
+これらは、クラス宣言のなかの文脈でおこなう必要があります。
+</p>
+<p>
+ここまで、「1階の」型を使ってきました。つまり、型構築子 
+<tt>Tree</tt> はこれまで常にひとつの引数と組になっていました。たとえば、
+<tt>Tree&nbsp;Integer</tt> ( <tt>Integer</tt> 型の値を含む木)、あるいは、
+<tt>Tree&nbsp;a</tt> ( <tt>a</tt> 型の値を含む木の族をあらわす)です。し
+かし、<tt>Tree</tt> それ自身は型構築子であり、ひとつの型を引数としてとり、
+ひとつの型を返します。Haskell にはこの種の値はありませんが、このような
+「高階の」型はクラス宣言のなかで使用することができます。
+</p>
+<p>
+まずはじめに、以下のような <tt>Functor</tt> クラス (これはプレリュードか
+らの引用) を考えましょう。
+<tt><br>
+<br>
+class&nbsp;Functor&nbsp;f&nbsp;where<br>
+&nbsp;&nbsp;fmap&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;(a&nbsp;-&gt;&nbsp;b)&nbsp;-&gt;&nbsp;f&nbsp;a&nbsp;-&gt;&nbsp;f&nbsp;b<br>
+<br>
+</tt>
+<tt>fmap</tt> 関数は以前につかった <tt>map</tt> 関数を一般化したものです。
+型変数 <tt>f</tt> は <tt>f&nbsp;a</tt> のなかで他の型に適用されます。こ
+のように、型変数が <tt>Tree</tt> のような引数をとる型に束縛されることが
+期待されます。型 <tt>Tree</tt> に対する <tt>Functor</tt> のインスタンス
+は、
+<tt><br>
+<br>
+instance&nbsp;Functor&nbsp;Tree&nbsp;where<br>
+&nbsp;&nbsp;fmap&nbsp;f&nbsp;(Leaf&nbsp;x)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;Leaf&nbsp;&nbsp;&nbsp;(f&nbsp;x)<br>
+&nbsp;&nbsp;fmap&nbsp;f&nbsp;(Branch&nbsp;t1&nbsp;t2)&nbsp;=&nbsp;Branch&nbsp;(fmap&nbsp;f&nbsp;t1)&nbsp;(fmap&nbsp;f&nbsp;t2)<br>
+<br>
+</tt>
+となります。このインスタンス宣言は <tt>Tree&nbsp;a</tt> ではなく 
+<tt>Tree</tt> が <tt>Functor</tt> のインスタンスであることを宣言していま
+す。こうした能力は大変便利なものです。これは総称的「コンテナ」型を記述す
+る能力のあることを示し、<tt>fmap</tt> のような、任意の木、リストあるいは
+他の型の上で統一的に動作する関数を可能にします。
+</p>
+<p>
+[型適用は関数適用とおなじやりかたで書きます。型 <tt>T&nbsp;a&nbsp;b</tt> 
+は <tt>(T&nbsp;a)&nbsp;b</tt> のように構文解析されます。タプルのような特
+別な構文を使う型はカリー化可能な別のスタイルで書きます。関数については、
+<tt>(-&gt;)</tt> が型構築子です。<tt>f&nbsp;-&gt;&nbsp;g</tt> と 
+<tt>(-&gt;)&nbsp;f&nbsp;g</tt> とは同じです。同様に、<tt>[a]</tt> と 
+<tt>[]&nbsp;a</tt> とは同じです。タプルについては、型構築子(同時にデー
+タ構築子でもありますが)は <tt>(,)</tt>、<tt>(,,)</tt> などとなります。]
+</p>
+<p>
+すでにご存知のように、型システムは式の中で型付けエラーを検出します。しか
+し、不正な型式に起因するエラーについてはどうでしょうか。式
+<tt>(+)&nbsp;1&nbsp;2&nbsp;3</tt> は型エラーになります。それは、
+<tt>(+)</tt> は 2 つしか引数をとらないからです。同様に、
+<tt>Tree&nbsp;Int&nbsp;Int</tt> は、ある種のエラーを起こすはずです。それ
+は、<tt>Tree</tt> 型はひとつの引数しかとらないからです。では、Haskell は
+どのようにして不正な型式を検出するのでしょうか。その答は、型の正当性を確
+認する第 2 の型システムにあります。それぞれの型は<em>類</em>
+( <i>kind</i> )と結びついています。これはその型が正しく使用されることを
+確認するものです。
+</p>
+<p>
+型式は別々の<em>類</em>に分類されます。これは次の 2 つの形式をとります。
+<ul>
+ <li>
+     <p>
+     記号 * は具体的なデータ対象に結びついた型の類をあらわす。すなわち、
+     もし、値 <i>v</i> の型が <i>t</i> であるなら、<i>v</i> の類は * で
+     なければならない。
+     </p>
+ </li>
+ <li>
+     <p>
+     もし、<font face="symbol">k</font><sub>1</sub> と <font
+     face="symbol">k</font><sub>2</sub> とが類ならば、<font
+     face="symbol">k</font><sub>1</sub>-&gt;<font
+     face="symbol">k</font><sub>2</sub> は  <font
+     face="symbol">k</font><sub>1</sub> という類の型をとり、<font
+     face="symbol">k</font><sub>2</sub> という類の型を返す型の類である。
+     </p>
+ </li>
+</ul>
+型構築子 <tt>Tree</tt> の類は、 *-&gt;* であり、<tt>Tree&nbsp;Int</tt> 
+の類は * です。<tt>Functor</tt> クラスのメンバーはすべて、類 *-&gt;* で
+なければならず、類付けのエラーは、次のような宣言により引き起こされます。
+<tt><br>
+<br>
+instance&nbsp;Functor&nbsp;Integer&nbsp;where&nbsp;...<br>
+<br>
+</tt>
+なぜなら、<tt>Integer</tt> の類は * だからである。
+</p>
+<p>
+類は Haskell のプログラムの直接あらわれることはありません。コンパイラが
+型検査の前に類を推論します。「類宣言」のようなものは必要ありません。型シ
+グネチャが類エラーをおこすとき以外は、類は Haskell のプログラムの後ろに
+隠れています。類は非常にシンプルなので、コンパイラは、類衝突がおこれば、
+その旨のエラーメッセージを表示することができなければなりません。類に関す
+る詳細は <a href="../report-j/decls.html#type-syntax">&sect;4.1.1</a> や 
+<a href="../report-j/decls.html#kindinference">&sect;4.6</a> を参照してく
+ださい。
+</p>
+<p>
+<h3>別の見方</h3>
+</p>
+<p>
+型クラスの使い方のさらに進んだ例にいくまえに、Haskell の型クラスのふたつ
+の別の観点について言及してもいいかと思います。第一は、オブジェクト指向プ
+ログラミング( OOP )とのアナロジーによる観点です。OOP に関してよくある次
+のような謂は、単純にクラスを<em>型クラス</em>へ置き換え、オブジェクトを
+<em>型</em>へ置き換えれば、ほぼ Haskell の型クラス機構になります。
+</p>
+<p>
+「<em>クラス</em>は<em>操作</em>の共通集合を捕捉するものである。ある特定
+の<em>オブジェクト</em>はクラスのインスタンスであり、おのおのの操作に対
+応する<em>メソッド</em>をもつ。クラスは階層構造をもつことがあり、<em>スー
+パークラス</em>や<em>サブクラス</em>という概念があり、操作/メソッドの継
+承も許されている。<em>デフォルトメソッド</em>がある操作と結びつくことも
+ある。」
+</p>
+<p>
+OOP と<em>対比すると</em>、型はオブジェクトではないというのは明かで、特
+に、オブジェクトや型の可変の内部状態などという概念はありません。いくつか
+の OOP 言語に対する利点は、Haskell のメソッドは完全に型安全であるという
+ことです。必要なクラスのなかにはない型の値にメソッドを適用しようとしてい
+るかどうかは、実行時ではなくコンパイル時に検出されます。つまり、メソッド
+が実行時に「検索」されるのではなく、単純に高階関数として引き渡されるだけ
+です。
+</p>
+<p>
+パラメータ多相とアドホック多相と関係を考察すると別の見方をすることができ
+ます。すべての型の上で全称修飾することで型の族を定義するさいに、パラメー
+タ多相がどれほど便利かということは既に示しました。しかしながら、ときには、
+このような全称修飾では広すぎることもあります。もっと小さい型の集合の上で
+限量修飾をしたい場合があります。たとえば、比較同値性をもつような型の集合
+の上で、ということです。型クラスは、これを実現する構造的方法とみなすこと
+ができます。実際のところは、パラメータ多相は一種の多重定義とみなすことが
+できるのです。まさに、多重定義は暗黙にすべての型の上で起こるのであって、
+限定された型の集合(つまり、型クラス)上で起こるのではありません。
+</p>
+<p>
+<h3>他の言語との比較</h3>
+</p>
+<p>
+Haskell で用いられるクラスは C++ や Java のようなオブジェクト指向言語で
+用いられるクラスに類似しています。しかし、いくつかの重大な相違があります。 
+<ul>
+ <li>
+     <p>
+     Haskell は、型の定義とその型に結びついているメソッドの定義を分離す
+     る。 C++ や Java のクラスは、ふつう、データ構造(メンバー変数)とその
+     データ構造と結びついた関数(メソッド)との両方を定義する。Haskell 
+     ではこれらの定義は別々におこなう。
+     </p>
+ </li>
+ <li>
+     <p>
+     Haskell のクラスにより定義されたクラスメソッドは、C++ のクラスにお
+     ける仮想関数に対応している。クラスのインスタンスのそれぞれは、各メ
+     ソッドについてそのインスタンス自身の定義を与えます。デフォルトメソッ
+     ドはベースクラスの仮想関数のデフォルト定義に対応している。
+     </p>
+ </li>
+ <li>
+     <p>
+     Haskell のクラスは大筋では Java のインタフェースに類似している。
+     Java のインタフェース宣言とおなじように、Haskell のクラス宣言はオブ
+     ジェクトそのものを定義するのではなく、オブジェクトを使う手順を定義
+     している。
+     </p>
+ </li>
+ <li>
+     <p>
+     Haskell は、型の違う関数が共通の名前を共有するような C++ 流の多重定義
+     はサポートしていない。
+     </p>
+ </li>
+ <li>
+     <p>
+     Haskell のオブジェクトの型は暗黙の型変換を受けない。値が投入あるい
+     は投出される <tt>Object</tt> のようなすべての基になるようなクラスは
+     ない。
+     </p>
+ </li>
+ <li>
+     <p>
+     C++ や Java ではオブジェクトの実行時表現に( VTable のような)同定情
+     報を付加する。Haskell ではこのような情報は、型システムを通じて物理
+     的にではなく、論理的に、値に付加する。
+     </p>
+ </li>
+ <li>
+     <p>
+     Haskell のクラスシステムには、( public あるいは private などといっ
+     たクラス構成要素のような)アクセスコントロールの機構は組込まれていな
+     い。
+     </p>
+ </li>
+</ul>
+</p>
+<hr>
+<p>
+<i>A Gentle Introduction to Haskell, Version 98</i><br>
+<a href="patterns.html">back</a>
+<a href="moretypes.html">next</a>
+<a href="index.html">top</a>
+</p>
+</body>
+</html>
+
+
+
+

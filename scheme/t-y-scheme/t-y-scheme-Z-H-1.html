@@ -1,0 +1,328 @@
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--
+
+Generated from t-y-scheme.tex by tex2page, v 20060531
+(running on Gauche 0.8.7, unix), 
+(c) Dorai Sitaram, 
+http://www.ccs.neu.edu/~dorai/tex2page/tex2page-doc.html
+
+-->
+<head>
+<title>
+独習 Scheme 三週間 Teach Yourself Scheme in Fixnum Days
+</title>
+<link rel="stylesheet" type="text/css" href="t-y-scheme-Z-S.css" title=default>
+<meta name=robots content="noindex,follow">
+<meta name=description content="A practical
+introduction to the programming language Scheme">
+
+<meta name=author content="Dorai Sitaram">
+
+<link rev=made href="mailto:ds26@gte.com">
+</head>
+<body>
+<div id=slidecontent>
+<div align=right class=navigation>[Go to <span><a href="t-y-scheme.html">first</a>, <a href="t-y-scheme.html">previous</a></span><span>, <a href="t-y-scheme-Z-H-2.html">next</a></span> page<span>; &nbsp;&nbsp;</span><span class=disable>contents</span><span><span class=disable>; &nbsp;&nbsp;</span><a href="t-y-scheme-Z-H-25.html#node_index_start">index</a></span>]</div>
+<p></p>
+<p>
+<a name="node_tag_Temp_1"></a>
+</p>
+<p>
+</p>
+<p>
+</p>
+<h1 class=title>独習 Scheme 三週間 <br> Teach Yourself Scheme in Fixnum Days</h1>
+<p>
+</p>
+<div class=smallskip></div>
+<p style="margin-top: 0pt; margin-bottom: 0pt">
+</p>
+<p>
+</p>
+<div align=center>&nbsp;Original: &#8220;Teach Yourself Scheme in Fixnum Days&#8221;&nbsp;</div>
+
+<div align=center>&nbsp;&copy;&nbsp;<a href="http://www.ccs.neu.edu/home/dorai/">Dorai Sitaram</a>, 1998&#8211;2003&nbsp;</div>
+
+<div align=center>&nbsp;All Rights Reserved&nbsp;</div>
+
+<div align=center>&nbsp;<code class=verbatim>ds26</code> <em>at</em> <code class=verbatim>gte.com</code>&nbsp;</div>
+
+<div align=center>&nbsp;<a href="http://www.ccs.neu.edu/home/dorai/t-y-scheme/t-y-scheme-html.tar.gz">[Download archive containing
+<em>all</em> the pages of this document]</a>&nbsp;</div>
+
+<div align=center>&nbsp;<a href="http://www.ccs.neu.edu/home/dorai/t-y-scheme/t-y-scheme.tar.gz">[Download TeX source
+for this document]</a>&nbsp;</div>
+
+<div align=center>&nbsp;Cover art by Margaret Wong&nbsp;</div>
+
+<div align=center>&nbsp;日本語訳: Nobuo Yamashita&nbsp;</div>
+
+<div align=center>&nbsp;<code class=verbatim>nobsun</code> <em>at</em> <code class=verbatim>sampou.org</code>&nbsp;</div>
+
+<div align=center>&nbsp;<a href="t-y-scheme-html.tar.gz">[日本語訳<em>全ページ</em>のダウンロード]</a>&nbsp;</div>
+
+<div align=center>&nbsp;<a href="t-y-scheme.tar.gz">[日本語訳 TeX ソースのダウンロード]</a>&nbsp;</div>
+
+<p>
+</p>
+<div class=bigskip></div>
+<p style="margin-top: 0pt; margin-bottom: 0pt">
+</p>
+<p>
+</p>
+<p>
+<h1 class=beginsection>もくじ</h1>
+<a name="node_toc_start"></a></p>
+
+<p class=noindent></p>
+<div class=medskip></div>
+<p style="margin-top: 0pt; margin-bottom: 0pt">
+</p>
+
+<p class=noindent><b>
+&nbsp; &nbsp; <a name="node_toc_node_chap_Temp_2"></a><a href="t-y-scheme-Z-H-2.html#node_chap_Temp_2">まえがき</a></b><br>
+</p>
+<div class=medskip></div>
+<p style="margin-top: 0pt; margin-bottom: 0pt">
+</p>
+
+<p class=noindent><b>
+&nbsp; &nbsp; <a name="node_toc_node_chap_1"></a><a href="t-y-scheme-Z-H-3.html#node_chap_1">1&nbsp;&nbsp;Schemeに入力しよう</a></b><br>
+</p>
+<div class=medskip></div>
+<p style="margin-top: 0pt; margin-bottom: 0pt">
+</p>
+
+<p class=noindent><b>
+&nbsp; &nbsp; <a name="node_toc_node_chap_2"></a><a href="t-y-scheme-Z-H-4.html#node_chap_2">2&nbsp;&nbsp;データ型</a></b><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_2.1"></a><a href="t-y-scheme-Z-H-4.html#node_sec_2.1">2.1&nbsp;&nbsp;単純データ型</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_2.1.1"></a><a href="t-y-scheme-Z-H-4.html#node_sec_2.1.1">2.1.1&nbsp;&nbsp;真理値</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_2.1.2"></a><a href="t-y-scheme-Z-H-4.html#node_sec_2.1.2">2.1.2&nbsp;&nbsp;数値</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_2.1.3"></a><a href="t-y-scheme-Z-H-4.html#node_sec_2.1.3">2.1.3&nbsp;&nbsp;文字</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_2.1.4"></a><a href="t-y-scheme-Z-H-4.html#node_sec_2.1.4">2.1.4&nbsp;&nbsp;シンボル</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_2.2"></a><a href="t-y-scheme-Z-H-4.html#node_sec_2.2">2.2&nbsp;&nbsp;合成データ型</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_2.2.1"></a><a href="t-y-scheme-Z-H-4.html#node_sec_2.2.1">2.2.1&nbsp;&nbsp;文字列</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_2.2.2"></a><a href="t-y-scheme-Z-H-4.html#node_sec_2.2.2">2.2.2&nbsp;&nbsp;ベクタ</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_2.2.3"></a><a href="t-y-scheme-Z-H-4.html#node_sec_2.2.3">2.2.3&nbsp;&nbsp;ドット対とリスト</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_2.2.4"></a><a href="t-y-scheme-Z-H-4.html#node_sec_2.2.4">2.2.4&nbsp;&nbsp;データ型間の変換</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_2.3"></a><a href="t-y-scheme-Z-H-4.html#node_sec_2.3">2.3&nbsp;&nbsp;そのほかのデータ型</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_2.4"></a><a href="t-y-scheme-Z-H-4.html#node_sec_2.4">2.4&nbsp;&nbsp;S式</a><br>
+</p>
+<div class=medskip></div>
+<p style="margin-top: 0pt; margin-bottom: 0pt">
+</p>
+
+<p class=noindent><b>
+&nbsp; &nbsp; <a name="node_toc_node_chap_3"></a><a href="t-y-scheme-Z-H-5.html#node_chap_3">3&nbsp;&nbsp;フォーム</a></b><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_3.1"></a><a href="t-y-scheme-Z-H-5.html#node_sec_3.1">3.1&nbsp;&nbsp;手続き</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_3.1.1"></a><a href="t-y-scheme-Z-H-5.html#node_sec_3.1.1">3.1.1&nbsp;&nbsp;手続きパラメータ</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_3.1.2"></a><a href="t-y-scheme-Z-H-5.html#node_sec_3.1.2">3.1.2&nbsp;&nbsp;可変長の引数</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_3.2"></a><a href="t-y-scheme-Z-H-5.html#node_sec_3.2">3.2&nbsp;&nbsp;<code class=scheme><span class=variable>apply</span></code></a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_3.3"></a><a href="t-y-scheme-Z-H-5.html#node_sec_3.3">3.3&nbsp;&nbsp;直列化</a><br>
+</p>
+<div class=medskip></div>
+<p style="margin-top: 0pt; margin-bottom: 0pt">
+</p>
+
+<p class=noindent><b>
+&nbsp; &nbsp; <a name="node_toc_node_chap_4"></a><a href="t-y-scheme-Z-H-6.html#node_chap_4">4&nbsp;&nbsp;条件式</a></b><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_4.1"></a><a href="t-y-scheme-Z-H-6.html#node_sec_4.1">4.1&nbsp;&nbsp;<code class=scheme><span class=keyword>when</span></code>と<code class=scheme><span class=keyword>unless</span></code></a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_4.2"></a><a href="t-y-scheme-Z-H-6.html#node_sec_4.2">4.2&nbsp;&nbsp;<code class=scheme><span class=keyword>cond</span></code></a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_4.3"></a><a href="t-y-scheme-Z-H-6.html#node_sec_4.3">4.3&nbsp;&nbsp;<code class=scheme><span class=keyword>case</span></code></a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_4.4"></a><a href="t-y-scheme-Z-H-6.html#node_sec_4.4">4.4&nbsp;&nbsp;<code class=scheme><span class=keyword>and</span></code>と<code class=scheme><span class=keyword>or</span></code></a><br>
+</p>
+<div class=medskip></div>
+<p style="margin-top: 0pt; margin-bottom: 0pt">
+</p>
+
+<p class=noindent><b>
+&nbsp; &nbsp; <a name="node_toc_node_chap_5"></a><a href="t-y-scheme-Z-H-7.html#node_chap_5">5&nbsp;&nbsp;レキシカル変数</a></b><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_5.1"></a><a href="t-y-scheme-Z-H-7.html#node_sec_5.1">5.1&nbsp;&nbsp;<code class=scheme><span class=keyword>let</span></code>と<code class=scheme><span class=keyword>let*</span></code></a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_5.2"></a><a href="t-y-scheme-Z-H-7.html#node_sec_5.2">5.2&nbsp;&nbsp;<code class=scheme><span class=keyword>fluid-let</span></code></a><br>
+</p>
+<div class=medskip></div>
+<p style="margin-top: 0pt; margin-bottom: 0pt">
+</p>
+
+<p class=noindent><b>
+&nbsp; &nbsp; <a name="node_toc_node_chap_6"></a><a href="t-y-scheme-Z-H-8.html#node_chap_6">6&nbsp;&nbsp;再帰</a></b><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_6.1"></a><a href="t-y-scheme-Z-H-8.html#node_sec_6.1">6.1&nbsp;&nbsp;<code class=scheme><span class=keyword>letrec</span></code></a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_6.2"></a><a href="t-y-scheme-Z-H-8.html#node_sec_6.2">6.2&nbsp;&nbsp;名前つき <code class=scheme><span class=keyword>let</span></code></a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_6.3"></a><a href="t-y-scheme-Z-H-8.html#node_sec_6.3">6.3&nbsp;&nbsp;反復</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_6.4"></a><a href="t-y-scheme-Z-H-8.html#node_sec_6.4">6.4&nbsp;&nbsp;手続きのリスト上への写像</a><br>
+</p>
+<div class=medskip></div>
+<p style="margin-top: 0pt; margin-bottom: 0pt">
+</p>
+
+<p class=noindent><b>
+&nbsp; &nbsp; <a name="node_toc_node_chap_7"></a><a href="t-y-scheme-Z-H-9.html#node_chap_7">7&nbsp;&nbsp;I/O</a></b><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_7.1"></a><a href="t-y-scheme-Z-H-9.html#node_sec_7.1">7.1&nbsp;&nbsp;読み込み</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_7.2"></a><a href="t-y-scheme-Z-H-9.html#node_sec_7.2">7.2&nbsp;&nbsp;書き出し</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_7.3"></a><a href="t-y-scheme-Z-H-9.html#node_sec_7.3">7.3&nbsp;&nbsp;ファイルポート</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_7.3.1"></a><a href="t-y-scheme-Z-H-9.html#node_sec_7.3.1">7.3.1&nbsp;&nbsp;ファイルポートの自動オープンと自動クローズ</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_7.4"></a><a href="t-y-scheme-Z-H-9.html#node_sec_7.4">7.4&nbsp;&nbsp;文字列ポート</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_7.5"></a><a href="t-y-scheme-Z-H-9.html#node_sec_7.5">7.5&nbsp;&nbsp;ファイルのロード</a><br>
+</p>
+<div class=medskip></div>
+<p style="margin-top: 0pt; margin-bottom: 0pt">
+</p>
+
+<p class=noindent><b>
+&nbsp; &nbsp; <a name="node_toc_node_chap_8"></a><a href="t-y-scheme-Z-H-10.html#node_chap_8">8&nbsp;&nbsp;マクロ</a></b><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_8.1"></a><a href="t-y-scheme-Z-H-10.html#node_sec_8.1">8.1&nbsp;&nbsp;テンプレートとしての展開指定</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_8.2"></a><a href="t-y-scheme-Z-H-10.html#node_sec_8.2">8.2&nbsp;&nbsp;マクロの内側での変数捕捉の回避</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_8.3"></a><a href="t-y-scheme-Z-H-10.html#node_sec_8.3">8.3&nbsp;&nbsp;<code class=scheme><span class=keyword>fluid-let</span></code></a><br>
+</p>
+<div class=medskip></div>
+<p style="margin-top: 0pt; margin-bottom: 0pt">
+</p>
+
+<p class=noindent><b>
+&nbsp; &nbsp; <a name="node_toc_node_chap_9"></a><a href="t-y-scheme-Z-H-11.html#node_chap_9">9&nbsp;&nbsp;構造体</a></b><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_9.1"></a><a href="t-y-scheme-Z-H-11.html#node_sec_9.1">9.1&nbsp;&nbsp;デフォルトの初期化</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_9.2"></a><a href="t-y-scheme-Z-H-11.html#node_sec_9.2">9.2&nbsp;&nbsp;<code class=scheme><span class=keyword>defstruct</span></code> の定義</a><br>
+</p>
+<div class=medskip></div>
+<p style="margin-top: 0pt; margin-bottom: 0pt">
+</p>
+
+<p class=noindent><b>
+&nbsp; &nbsp; <a name="node_toc_node_chap_10"></a><a href="t-y-scheme-Z-H-12.html#node_chap_10">10&nbsp;&nbsp;A-リストとテーブル</a></b><br>
+</p>
+<div class=medskip></div>
+<p style="margin-top: 0pt; margin-bottom: 0pt">
+</p>
+
+<p class=noindent><b>
+&nbsp; &nbsp; <a name="node_toc_node_chap_11"></a><a href="t-y-scheme-Z-H-13.html#node_chap_11">11&nbsp;&nbsp;システムインタフェース</a></b><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_11.1"></a><a href="t-y-scheme-Z-H-13.html#node_sec_11.1">11.1&nbsp;&nbsp;ファイルの確認と削除</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_11.2"></a><a href="t-y-scheme-Z-H-13.html#node_sec_11.2">11.2&nbsp;&nbsp;オペレーティングシステムコマンドの呼び出し</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_11.3"></a><a href="t-y-scheme-Z-H-13.html#node_sec_11.3">11.3&nbsp;&nbsp;環境変数</a><br>
+</p>
+<div class=medskip></div>
+<p style="margin-top: 0pt; margin-bottom: 0pt">
+</p>
+
+<p class=noindent><b>
+&nbsp; &nbsp; <a name="node_toc_node_chap_12"></a><a href="t-y-scheme-Z-H-14.html#node_chap_12">12&nbsp;&nbsp;オブジェクトとクラス</a></b><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_12.1"></a><a href="t-y-scheme-Z-H-14.html#node_sec_12.1">12.1&nbsp;&nbsp;単純なオブジェクトシステム</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_12.2"></a><a href="t-y-scheme-Z-H-14.html#node_sec_12.2">12.2&nbsp;&nbsp;クラスはインスタンスでもある</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_12.3"></a><a href="t-y-scheme-Z-H-14.html#node_sec_12.3">12.3&nbsp;&nbsp;多重継承</a><br>
+</p>
+<div class=medskip></div>
+<p style="margin-top: 0pt; margin-bottom: 0pt">
+</p>
+
+<p class=noindent><b>
+&nbsp; &nbsp; <a name="node_toc_node_chap_13"></a><a href="t-y-scheme-Z-H-15.html#node_chap_13">13&nbsp;&nbsp;ジャンプ</a></b><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_13.1"></a><a href="t-y-scheme-Z-H-15.html#node_sec_13.1">13.1&nbsp;&nbsp;<code class=scheme><span class=variable>call-with-current-continuation</span></code></a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_13.2"></a><a href="t-y-scheme-Z-H-15.html#node_sec_13.2">13.2&nbsp;&nbsp;脱出継続</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_13.3"></a><a href="t-y-scheme-Z-H-15.html#node_sec_13.3">13.3&nbsp;&nbsp;ツリーマッチング</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_13.4"></a><a href="t-y-scheme-Z-H-15.html#node_sec_13.4">13.4&nbsp;&nbsp;コルーチン</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_13.4.1"></a><a href="t-y-scheme-Z-H-15.html#node_sec_13.4.1">13.4.1&nbsp;&nbsp;コルーチンを使ったツリーマッチング</a><br>
+</p>
+<div class=medskip></div>
+<p style="margin-top: 0pt; margin-bottom: 0pt">
+</p>
+
+<p class=noindent><b>
+&nbsp; &nbsp; <a name="node_toc_node_chap_14"></a><a href="t-y-scheme-Z-H-16.html#node_chap_14">14&nbsp;&nbsp;非決定性</a></b><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_14.1"></a><a href="t-y-scheme-Z-H-16.html#node_sec_14.1">14.1&nbsp;&nbsp;<code class=scheme><span class=keyword>amb</span></code>の解説</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_14.2"></a><a href="t-y-scheme-Z-H-16.html#node_sec_14.2">14.2&nbsp;&nbsp;Scheme における <code class=scheme><span class=keyword>amb</span></code> の実装</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_14.3"></a><a href="t-y-scheme-Z-H-16.html#node_sec_14.3">14.3&nbsp;&nbsp;Scheme 中で <code class=scheme><span class=keyword>amb</span></code> を使う</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_14.4"></a><a href="t-y-scheme-Z-H-16.html#node_sec_14.4">14.4&nbsp;&nbsp;論理パズル</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_14.4.1"></a><a href="t-y-scheme-Z-H-16.html#node_sec_14.4.1">14.4.1&nbsp;&nbsp;カロタンパズル</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_14.4.2"></a><a href="t-y-scheme-Z-H-16.html#node_sec_14.4.2">14.4.2&nbsp;&nbsp;地図の塗り分け</a><br>
+</p>
+<div class=medskip></div>
+<p style="margin-top: 0pt; margin-bottom: 0pt">
+</p>
+
+<p class=noindent><b>
+&nbsp; &nbsp; <a name="node_toc_node_chap_15"></a><a href="t-y-scheme-Z-H-17.html#node_chap_15">15&nbsp;&nbsp;エンジン</a></b><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_15.1"></a><a href="t-y-scheme-Z-H-17.html#node_sec_15.1">15.1&nbsp;&nbsp;クロック</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_15.2"></a><a href="t-y-scheme-Z-H-17.html#node_sec_15.2">15.2&nbsp;&nbsp;フラットなエンジン</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_15.3"></a><a href="t-y-scheme-Z-H-17.html#node_sec_15.3">15.3&nbsp;&nbsp;入れ子可能なエンジン</a><br>
+</p>
+<div class=medskip></div>
+<p style="margin-top: 0pt; margin-bottom: 0pt">
+</p>
+
+<p class=noindent><b>
+&nbsp; &nbsp; <a name="node_toc_node_chap_16"></a><a href="t-y-scheme-Z-H-18.html#node_chap_16">16&nbsp;&nbsp;シェルスクリプト</a></b><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_16.1"></a><a href="t-y-scheme-Z-H-18.html#node_sec_16.1">16.1&nbsp;&nbsp;Hello, World! ふたたび</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_16.2"></a><a href="t-y-scheme-Z-H-18.html#node_sec_16.2">16.2&nbsp;&nbsp;引数をもつスクリプト</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_16.3"></a><a href="t-y-scheme-Z-H-18.html#node_sec_16.3">16.3&nbsp;&nbsp;例</a><br>
+</p>
+<div class=medskip></div>
+<p style="margin-top: 0pt; margin-bottom: 0pt">
+</p>
+
+<p class=noindent><b>
+&nbsp; &nbsp; <a name="node_toc_node_chap_17"></a><a href="t-y-scheme-Z-H-19.html#node_chap_17">17&nbsp;&nbsp;CGI スクリプト</a></b><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_17.1"></a><a href="t-y-scheme-Z-H-19.html#node_sec_17.1">17.1&nbsp;&nbsp;例: 環境変数の表示</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_17.2"></a><a href="t-y-scheme-Z-H-19.html#node_sec_17.2">17.2&nbsp;&nbsp;例: 選択された環境変数の表示</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_17.3"></a><a href="t-y-scheme-Z-H-19.html#node_sec_17.3">17.3&nbsp;&nbsp;CGI スクリプトユーティリティ</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_17.4"></a><a href="t-y-scheme-Z-H-19.html#node_sec_17.4">17.4&nbsp;&nbsp;CGI による電卓</a><br>
+</p>
+<div class=medskip></div>
+<p style="margin-top: 0pt; margin-bottom: 0pt">
+</p>
+
+<p class=noindent><b>
+&nbsp; &nbsp; <a name="node_toc_node_chap_A"></a><a href="t-y-scheme-Z-H-20.html#node_chap_A">A&nbsp;&nbsp;Scheme の方言</a></b><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_A.1"></a><a href="t-y-scheme-Z-H-20.html#node_sec_A.1">A.1&nbsp;&nbsp;起動と init ファイル</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_A.2"></a><a href="t-y-scheme-Z-H-20.html#node_sec_A.2">A.2&nbsp;&nbsp;シェルスクリプト</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_A.3"></a><a href="t-y-scheme-Z-H-20.html#node_sec_A.3">A.3&nbsp;&nbsp;<code class=scheme><span class=keyword>define-macro</span></code></a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_A.4"></a><a href="t-y-scheme-Z-H-20.html#node_sec_A.4">A.4&nbsp;&nbsp;<code class=scheme><span class=variable>load-relative</span></code></a><br>
+</p>
+<div class=medskip></div>
+<p style="margin-top: 0pt; margin-bottom: 0pt">
+</p>
+
+<p class=noindent><b>
+&nbsp; &nbsp; <a name="node_toc_node_chap_B"></a><a href="t-y-scheme-Z-H-21.html#node_chap_B">B&nbsp;&nbsp;Scheme で書いた DOS のバッチファイル</a></b><br>
+</p>
+<div class=medskip></div>
+<p style="margin-top: 0pt; margin-bottom: 0pt">
+</p>
+
+<p class=noindent><b>
+&nbsp; &nbsp; <a name="node_toc_node_chap_C"></a><a href="t-y-scheme-Z-H-22.html#node_chap_C">C&nbsp;&nbsp;数値計算のテクニック</a></b><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_C.1"></a><a href="t-y-scheme-Z-H-22.html#node_sec_C.1">C.1&nbsp;&nbsp;シンプソン法</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_C.2"></a><a href="t-y-scheme-Z-H-22.html#node_sec_C.2">C.2&nbsp;&nbsp;適用可能な区間長</a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a name="node_toc_node_sec_C.3"></a><a href="t-y-scheme-Z-H-22.html#node_sec_C.3">C.3&nbsp;&nbsp;異常積分</a><br>
+</p>
+<div class=medskip></div>
+<p style="margin-top: 0pt; margin-bottom: 0pt">
+</p>
+
+<p class=noindent><b>
+&nbsp; &nbsp; <a name="node_toc_node_chap_D"></a><a href="t-y-scheme-Z-H-23.html#node_chap_D">D&nbsp;&nbsp;無限に対応するクロック</a></b><br>
+</p>
+<div class=medskip></div>
+<p style="margin-top: 0pt; margin-bottom: 0pt">
+</p>
+
+<p class=noindent><b>
+&nbsp; &nbsp; <a name="node_toc_node_chap_E"></a><a href="t-y-scheme-Z-H-24.html#node_chap_E">E&nbsp;&nbsp;References</a></b><br>
+</p>
+<div class=medskip></div>
+<p style="margin-top: 0pt; margin-bottom: 0pt">
+</p>
+
+<p class=noindent><b>
+&nbsp; &nbsp; <a name="node_toc_node_chap_F"></a><a href="t-y-scheme-Z-H-25.html#node_chap_F">F&nbsp;&nbsp;Index</a></b><br>
+</p>
+<p>
+</p>
+<div class=smallskip></div>
+<p style="margin-top: 0pt; margin-bottom: 0pt">
+<div align=right class=navigation>[Go to <span><a href="t-y-scheme.html">first</a>, <a href="t-y-scheme.html">previous</a></span><span>, <a href="t-y-scheme-Z-H-2.html">next</a></span> page<span>; &nbsp;&nbsp;</span><span class=disable>contents</span><span><span class=disable>; &nbsp;&nbsp;</span><a href="t-y-scheme-Z-H-25.html#node_index_start">index</a></span>]</div>
+</p>
+<p></p>
+</div>
+</body>
+</html>

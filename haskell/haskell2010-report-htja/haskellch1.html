@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd-->
+<html xmlns="http://www.w3.org/1999/xhtml"
+>
+<head><title>1 イントロダクション</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)" />
+<meta name="originator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)" />
+<!-- 2,html,xhtml -->
+<meta name="src" content="haskell.tex" />
+<meta name="date" content="2010-07-15 09:50:00" />
+<link rel="stylesheet" type="text/css" href="haskell.css" />
+</head><body
+>
+<!--l. 7--><div class="crosslinks"><p class="noindent">[<a
+href="haskellch2.html" >next</a>] [<a
+href="haskellch1.html#tailhaskellch1.html">tail</a>] [<a
+href="haskellpa1.html" >up</a>] </p></div>
+<h2 class="chapterHead"><span class="titlemark">Chapter&#x00A0;1</span><br /><a
+ id="x6-90001"></a>イントロダクション</h2>
+<p class="noindent"> Haskell<a
+ id="dx6-9001"></a> は汎用の純粋関数型プログラミング言語で，プログラミング言語設計の分野における最近の革新が多く取入れられている．
+Haskell が提供するのは，高階関数，非正格の意味論，静的多相型付け，ユーザ定義の代数デー タ型，パターン照合，リスト内包表記，モジュールシステム，モナド I/O システムである．
+また，さらに次のような豊かなプリミティブデータ型が用意されている．
+リスト，配列，任意倍長整数，固定倍長整数，浮動小数点数．Haskell は非正格関数型言語に関する長年の研究を凝縮したものであり，また，その頂点に立つものである．
+ <p class="noindent"> この報告書は Haskell で書かれたプログラムの構文とそのプログラムの意味に対する非形式的抽象意味論を定義するものである．<a
+ id="dx6-9002"></a>Haskell のプログラムがどのように処理され、解釈され、コンパイルされるかなどといった部分に依存する実装の問題には触れない．
+ここではとりあげない問題にはプロ グラミング環境の性質や未定義（すなわち，形式的には <span
+class="cmsy-10">&#x22A5;</span> と評価される）プログラムに関するエラーメッセージも含まれる．
+
+<h3 class="sectionHead"><span class="titlemark">1.1    </span> <a
+ id="x6-100001.1"></a>プログラム構造</h3>
+<a
+ id="dx6-10001"></a>
+<p class="noindent">この節では Haskell の抽象構文としてと抽象意味論としての構造について説明する．
+また，そのような構造が報告書の残りの部分の組み立てと，どのように関係しているかについても説明する．
+     <ol  class="enumerate1" >
+     <li
+  class="enumerate" id="x6-10003x1">最上位レベルでは Haskell プログラムとは<span
+class="ptmri7t-">モジュール</span>の集まりである．モジュールについては&#x00A0;<a
+href="haskellch5.html#x11-980005">5<!--tex4ht:ref: modules --></a>章で説明する．モジュールは名前空間の制御と大規模プログラムにおけるソフトウェアの再利用の手段を提供している．
+     </li>
+     <li
+  class="enumerate" id="x6-10005x2">モジュールの最上位レベルは<span
+class="ptmri7t-">宣言</span>の集まりである．宣言にはいくつかの種類があるが，そのすべてについて&#x00A0;<a
+href="haskellch4.html#x10-620004">4<!--tex4ht:ref: declarations --></a>章で説明する．宣言は通常の値，データ型，型クラス，結合性情報などを定義する．
+     </li>
+     <li
+  class="enumerate" id="x6-10007x3">その下のレベルは<span
+class="ptmri7t-">式</span>である．これについては&#x00A0;<a
+href="haskellch3.html#x8-220003">3<!--tex4ht:ref: expressions --></a>章で説明する．式はひとつの<span
+class="ptmri7t-">値</span>を表示（denote）するものであり，
+     <span
+class="ptmri7t-">静的型</span>をもつ．式はHaskellプログラミングの核心であり，「小さい Haskell プログラムそのもの」である．
+     </li>
+     <li
+  class="enumerate" id="x6-10009x4">最下位レベルにあるのは Haskell の<span
+class="ptmri7t-">字句構造</span>である．これについては&#x00A0;<a
+href="haskellch2.html#x7-140002">2<!--tex4ht:ref: lexical-structure --></a>章で定義する．字句構造はテキストファイルにおける Haskell プログラムの具体的表現を捉えたものである．
+     </li></ol>
+<p class="noindent">この報告書では Haskell の構文構造をボトムアップに説明していく．
+ <p class="noindent">上では言及しなかったが，<a
+href="haskellch6.html#x13-1160006">6<!--tex4ht:ref: basic-types-and-classes --></a>章では Haskell に標準で組み込まれている型と型クラスについて，<a
+href="haskellch7.html#x14-1420007">7<!--tex4ht:ref: io --></a>章で
+は，Haskellでの I/O 機能（すなわち，Haskell のプログラムはどのようにして外界と交信するか）について議論する．
+いくつかの章では，プレリュード，具象構文，文芸的プログラミング，導出インスタンスの仕様，それにほとんどの Haskell コンパイラでサポートされているプラグマについても説明する．
+ <p class="noindent"> この報告書では，Haskell プログラムの断片はタイプライタフォントで示す．
+     <div class="quote">
+     <div class="verbatim" id="verbatim-1">
+&#x00A0;let&#x00A0;x&#x00A0;=&#x00A0;1
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;z&#x00A0;=&#x00A0;x+y
+&#x00A0;<br />&#x00A0;in&#x00A0;&#x00A0;z+1
+</div>
+     <p class="noindent"></div>
+<p class="noindent">プログラム断片において任意の Haskell コード片を表す「穴」は 
+<span
+class="pcrr7t-">if</span><span
+class="cmmi-10">&#x00A0;e</span><sub><span
+class="cmr-7">1</span></sub><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">then</span><span
+class="cmmi-10">&#x00A0;e</span><sub><span
+class="cmr-7">2</span></sub><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">else</span><span
+class="cmmi-10">&#x00A0;e</span><sub><span
+class="cmr-7">3</span></sub> のようにイタリック体で書く．概してイタリックの名前はニーモニックになっていて，<span
+class="cmmi-10">e</span> は式を，<span
+class="cmmi-10">d</span> は宣言を，
+declarations, <span
+class="cmmi-10">t</span> は型を表す．
+
+<p class="noindent">
+<h3 class="sectionHead"><span class="titlemark">1.2    </span> <a
+ id="x6-110001.2"></a>Haskell カーネル</h3>
+<a
+ id="dx6-11001"></a>
+<p class="noindent"> Haskell は関数プログラミングの世界で人気になった多くの便利な構文構造を採用した．この報告書では，そういった糖衣構文の意味をより単純な構成に変換することで与える．
+これらの変換が完全に適用されれば、結果は Haskell <span
+class="ptmri7t-">カーネル</span>と呼ぶ Haskell の小さなサブセットで書かれたプログラムになる．
+ <p class="noindent">このカーネルは形式的に仕様化されてはいないが，本質的には，直接的な表示的意味論をもつラムダ計算に少し糖衣構文をつけくわえたものである．
+それぞれの構文構造のカーネルへの変換は，その構文を導入した時に与える．
+このような部品化設計をすることによって，Haskell プログラミングに関する論証が行いやすくなり，この言語の実装者に使いやすい指針となる．
+<p class="noindent">
+<h3 class="sectionHead"><span class="titlemark">1.3    </span> <a
+ id="x6-120001.3"></a>値および型</h3>
+<a
+ id="dx6-12001"></a>
+<a
+ id="dx6-12002"></a>
+<a
+ id="dx6-12003"></a>
+<p class="noindent">1つの式は<a
+ id="dx6-12004"></a>評価されると1つの<span
+class="ptmri7t-">値</span>となり，1つの静的な<span
+class="ptmri7t-">型</span>を持つ．
+Haskell においては型と値が混ざることはない．
+しかしながら，型システムはさまざまな種類のユーザ定義のデータ型を許している．
+また
+ id="dx6-12005"></a> （伝統的な Hindley-Milner の<a
+ id="dx6-12006"></a> 型構造を使用した）パラメータ多相ばかりではなく，<span
+class="ptmri7t-">アドホック</span>多相あるいは（<span
+class="ptmri7t-">型<span
+class="ptmri7t-">クラス</span>を使用した）<span
+class="ptmri7t-">多重定義</span>も許されている．
+<a id="dx6-12007"></a>
+ <p class="noindent"> Haskell におけるエラーは意味論としては<span
+class="cmsy-10">&#x22A5; </span>（「ボトム」）<a
+ id="dx6-12008"></a>)と同等である．
+エラーは技術的にはプログラムが停止しないことと区別がつかないので，Haskell ではエラー検出あるいはエラー発生時の動作についての機構は言語には含まない．
+もちろん，実装ではエラーに関して有用な情報を提供しようとすることになろう．
+&#x00A0;<a
+href="haskellch3.html#x8-230003.1">3.1<!--tex4ht:ref: basic-errors --></a>節を参照のこと．
+
+<p class="noindent">
+<h3 class="sectionHead"><span class="titlemark">1.4    </span> <a
+ id="x6-130001.4"></a>名前空間</h3>
+<a
+ id="dx6-13001"></a>
+<p class="noindent"> Haskell には6種類の名前がある．
+<span
+class="ptmri7t-">変数名</span>および<span
+class="ptmri7t-">構成子名 </span>は値を表示（denote）し，<span
+class="ptmri7t-">型変数名</span>，
+<span
+class="ptmri7t-">型構成子名</span>，<span
+class="ptmri7t-">型クラス名</span>型システムに関わる実体を参照し，<span
+class="ptmri7t-">モジュール名は</span>モジュールを参照する．
+命名にあたっては以下の制約がある．
+     <ol  class="enumerate1" >
+     <li
+  class="enumerate" id="x6-13003x1">変数名と型変数名は小文字あるいはアンダースコアではじまる識別子である．
+     それ以外の4種類の名前は大文字ではじまる識別子である．
+     </li>
+     <li
+  class="enumerate" id="x6-13005x2">ひとつの識別子を同じ有効範囲で型構成子名およびクラス名として同時に使用してはならない．</li></ol>
+
+<p class="noindent">この 2 つだけが制約である．
+たとえば，<span
+class="pcrr7t-">Int</span> は一つの有効範囲のなかで同時にモジュール名，クラス名，構成子名になることができる．
+<!--l. 7--><div class="crosslinks"><p class="noindent">[<a
+href="haskellch2.html" >next</a>] [<a
+href="haskellch1.html" >front</a>] [<a
+href="haskellpa1.html" >up</a>] </p></div>
+ <p class="noindent"> <a
+ id="tailhaskellch1.html"></a>
+</body></html>

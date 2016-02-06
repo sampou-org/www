@@ -1,0 +1,3624 @@
+
+<html>
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
+  <!--<title>The Haskell 98 Report: Expressions</title>-->
+  <title>Haskell 98 Report: 式</title>
+ </head>
+
+ <body bgcolor="#ffffff">
+  <p><i>The Haskell 98 Report</i><br />
+   <a href="index.html">top</a> | <a href="lexemes.html">back</a> | <a
+   href="decls.html">next</a> | <a href="index98.html">contents</a> | <a
+   href="prelude-index.html">function index</a> <br />
+  </p>
+
+  <hr />
+  <p><a name="expressions"></a><a name="sect3"></a></p>
+  <!--<h2>3<tt>&nbsp;&nbsp;</tt>Expressions</h2>-->
+  <h2>3<tt>&nbsp;&nbsp;</tt>式</h2>
+  <!--
+  <p> In this chapter, we describe the syntax and informal semantics of
+   Haskell <i>expressions</i>, including their translations into the
+   Haskell kernel, where appropriate. Except in the case of <tt>let
+   </tt>expressions, these translations preserve both the static and
+   dynamic semantics. Free variables and constructors used in these
+   translations always refer to entities defined by the <tt>Prelude</tt>.
+   For example, "<tt>concatMap</tt>" used in the translation of list
+   comprehensions (Section <a
+   href="exps.html#list-comprehensions">3.11</a>) means the
+   <tt>concatMap</tt> defined by the <tt>Prelude</tt>, regardless of
+   whether or not the identifier "<tt>concatMap</tt>" is in scope where the
+   list comprehension is used, and (if it is in scope) what it is bound to.</p>
+  -->
+  <p>この節では、Haskell の<em>式</em>の構文と非形式的セマンティクスにつ
+   いて説明する。また、必要な個所では、Haskell カーネルへの変換について
+   も説明する。<tt>let</tt> 式の場合をのぞけば、これらの変換は静的なセマ
+   ンティクスと動的なセマンティクスの両方を保存する。
+   これらの変換のなかで用いられる自由変数と構成子は常に
+   <tt>Prelude</tt> で定義されたものを参照する。たとえば、
+   リストの内包表記(<a href="exps.html#list-comprehensions">3.11</a> 節)
+   の変換で使用される "<tt>concatMap</tt>" の意味は <tt>Prelude</tt> で
+   定義された <tt>concatMap</tt> である。これは、識別子 "<tt>concatMap</tt>" 
+   がそのリスト内包表記が使われているスコープにあるかどうかは関係なく、
+   また、もしスコープ内にあった場合でもそれが束縛されているものには関係
+   ない。</p>
+  <!--
+  <p> In the syntax that follows, there are some families of nonterminals
+   indexed by precedence levels (written as a superscript). Similarly, the
+   nonterminals <i>op</i>, <i>varop</i>, and <i>conop</i> may have a double
+   index: a letter <i>l</i>, <i>r</i>, or <i>n</i> for left-, right- or
+   non-associativity and a precedence level. A precedence-level variable
+   <i>i</i> ranges from 0 to 9; an associativity variable <i>a</i> varies
+   over <i>{l, r, n}</i>. For example</p>
+  -->
+  <p>以下の構文には、優先レベルのインデックスが(右肩に)ついた非終端記号
+   の族がいくつかある。同様に非終端記号 <i>op</i>、<i>varop</i> および
+   <i>conop</i> にはインデックスが 2 つ付くものがある。片方の文字 <i>l</i>
+   および <i>r</i> は、それぞれ左結合性、右結合性を、文字 <i>n</i> は結合
+   性がないことを示し、もう一方は優先レベルを示している。優先レベル変数 
+   <i>i</i> は 0 から 9 までの範囲であり、結合性変数 <i>a</i> は
+   <i>{l, r, n}</i> のうちどれかである。したがって、たとえば、</p>
+
+  <table cellspacing="0" cellspacing="0">
+   <tr>
+    <td width="100"> aexp</td>
+    <td width="20"> <tt>-&gt;</tt></td>
+    <td width="250"> <tt>(</tt> exp<sup>i+1</sup> qop<sup>(a,i)</sup> <tt>)
+     </tt></td>
+   </tr>
+  </table>
+  <!--
+  <p>actually stands for 30 productions, with 10 substitutions for <i>i
+   </i>and 3 for <i>a</i>.</p>
+  -->
+  <p>は <i>i</i> について 10 通り、<i>a</i> について 3 通りの全部で 30
+  通りの式が生成される。</p>
+  <p></p>
+  <table cellspacing="0" cellspacing="0">
+   <tr>
+    <td width="100"></td>
+    <td width="20"></td>
+    <td width="250"></td>
+   </tr>
+   <tr></tr>
+   <tr>
+    <td> exp</td>
+    <td> <tt>-&gt;</tt></td>
+    <td> exp<sup>0</sup> <tt>::</tt> [context <tt>=&gt;</tt>] type</td>
+    <td> (expression type signature)</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> exp<sup>0</sup></td>
+   </tr>
+   <tr>
+    <td> exp<sup>i</sup></td>
+    <td> <tt>-&gt;</tt></td>
+    <td> exp<sup>i+1</sup> [qop<sup>(n,i)</sup> exp<sup>i+1</sup>]</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> lexp<sup>i</sup></td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> rexp<sup>i</sup></td>
+   </tr>
+   <tr>
+    <td> lexp<sup>i</sup></td>
+    <td> <tt>-&gt;</tt></td>
+    <td> (lexp<sup>i</sup> | exp<sup>i+1</sup>) qop<sup>(l,i)</sup>
+     exp<sup>i+1</sup></td>
+   </tr>
+   <tr>
+    <td> lexp<sup>6</sup></td>
+    <td> <tt>-&gt;</tt></td>
+    <td> <tt>-</tt> exp<sup>7</sup></td>
+   </tr>
+   <tr>
+    <td> rexp<sup>i</sup></td>
+    <td> <tt>-&gt;</tt></td>
+    <td> exp<sup>i+1</sup> qop<sup>(r,i)</sup> (rexp<sup>i</sup> |
+     exp<sup>i+1</sup>)</td>
+   </tr>
+   <tr>
+    <td> exp<sup>10</sup></td>
+    <td> <tt>-&gt;</tt></td>
+    <td> <tt>\</tt> apat<sub>1</sub> ... apat<sub>n</sub> <tt>-&gt;</tt>
+     exp</td>
+    <td> (lambda abstraction, n&gt;=1)</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> <tt>let</tt> decls <tt>in</tt> exp</td>
+    <td> (let expression)</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> <tt>if</tt> exp <tt>then</tt> exp <tt>else</tt> exp</td>
+    <td> (conditional)</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> <tt>case</tt> exp <tt>of</tt> <tt>{</tt> alts <tt>}</tt></td>
+    <td> (case expression)</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> <tt>do</tt> <tt>{</tt> stmts <tt>}</tt></td>
+    <td> (do expression)</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> fexp</td>
+   </tr>
+   <tr>
+    <td> fexp</td>
+    <td> <tt>-&gt;</tt></td>
+    <td> [fexp] aexp</td>
+    <td> (function application)</td>
+   </tr>
+   <tr>
+    <td> aexp</td>
+    <td> <tt>-&gt;</tt></td>
+    <td> qvar</td>
+    <td> (variable)</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> gcon</td>
+    <td> (general constructor)</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> literal</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> <tt>(</tt> exp <tt>)</tt></td>
+    <td> (parenthesized expression)</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> <tt>(</tt> exp<sub>1</sub> <tt>,</tt> ... <tt>,</tt>
+     exp<sub>k</sub> <tt>)</tt></td>
+    <td> (tuple, k&gt;=2)</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> <tt>[</tt> exp<sub>1</sub> <tt>,</tt> ... <tt>,</tt>
+     exp<sub>k</sub> <tt>]</tt></td>
+    <td> (list, k&gt;=1)</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> <tt>[</tt> exp<sub>1</sub> [<tt>,</tt> exp<sub>2</sub>]
+     <tt>..</tt> [exp<sub>3</sub>] <tt>]</tt></td>
+    <td> (arithmetic sequence)</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> <tt>[</tt> exp <tt>|</tt> qual<sub>1</sub> <tt>,</tt> ...
+     <tt>,</tt> qual<sub>n</sub> <tt>]</tt></td>
+    <td> (list comprehension, n&gt;=1)</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> <tt>(</tt> exp<sup>i+1</sup> qop<sup>(a,i)</sup> <tt>)</tt></td>
+    <td> (left section)</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> <tt>(</tt> lexp<sup>i</sup> qop<sup>(l,i)</sup> <tt>)</tt></td>
+    <td> (left section)</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> <tt>(</tt> qop<sup>(a,i)</sup><sub>&lt;<tt>-</tt>&gt;</sub>
+     exp<sup>i+1</sup> <tt>)</tt></td>
+    <td> (right section)</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> <tt>(</tt> qop<sup>(r,i)</sup><sub>&lt;<tt>-</tt>&gt;</sub>
+     rexp<sup>i</sup> <tt>)</tt></td>
+    <td> (right section)</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> qcon <tt>{</tt> fbind<sub>1</sub> <tt>,</tt> ... <tt>,</tt>
+     fbind<sub>n</sub> <tt>}</tt></td>
+    <td> (labeled construction, n&gt;=0)</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> aexp<sub>&lt;qcon&gt;</sub> <tt>{</tt> fbind<sub>1</sub>
+     <tt>,</tt> ... <tt>,</tt> fbind<sub>n</sub> <tt>}</tt></td>
+    <td> (labeled update, n &gt;= 1)</td>
+   </tr>
+  </table>
+  <!--
+  <p> Expressions involving infix operators are disambiguated by the
+   operator's fixity (see Section <a href="decls.html#fixity">4.4.2</a>).
+   Consecutive unparenthesized operators with the same precedence must both
+   be either left or right associative to avoid a syntax error. Given an
+   unparenthesized expression "<i>x qop</i><sup><i>(a,i)</i></sup><i> y
+   qop</i><sup><i>(b,j)</i></sup><i> z</i>", parentheses must be added
+   around either "<i>x qop</i><sup><i>(a,i)</i></sup><i> y</i>" or "<i>y
+   qop</i><sup><i>(b,j)</i></sup> <i>z</i>" when <i>i=j</i> unless
+   <i>a=b=l</i> or <i>a=b=r</i>.</p>
+  -->
+  <p>中置演算子を含くむ式は演算子の結合性 (<a
+   href="decls.html#fixity">4.4.2</a> 節を見よ)により曖昧性がとりのぞか
+   れる。同じ優先レベルの演算子が括弧なしで連続するときには、構文エラー
+   を避けるためには、そのどちらの演算子も左もしくは右結合性をもたなけれ
+   ばならない。括弧のない式 "<i>x qop</i><sup><i>(a,i)</i></sup>
+   <i>y qop</i><sup><i>(b,j)</i></sup><i> z</i>" では <i>i=j</i> で、
+   <i>a=b=l</i> または <i>a=b=r</i> ではなければ、"<i>x
+   qop</i><sup><i>(a,i)</i></sup><i> y</i>" のまわりか、"<i>y
+   qop</i><sup><i>(b,j)</i></sup> <i>z</i>" のまわりに括弧が必要である。
+   </p>
+  <!--
+  <p> Negation is the only prefix operator in Haskell ; it has the same
+   precedence as the infix <tt>-</tt> operator defined in the Prelude (see
+   Section <a href="decls.html#fixity">4.4.2</a>, Figure <a
+   href="decls.html#prelude-fixities">4.1</a>).</p>
+  -->
+  <p>符号反転演算子は Haskell では唯一の前置演算子で、プレリュード内で中
+   置の <tt>-</tt> 演算子と同じ優先レベルをもつものとして定義されている。
+   (<a href="decls.html#fixity">4.4.2</a> 節, 図
+   <a href="decls.html#prelude-fixities">4.1</a> を参照せよ)
+  </p>
+  <!--
+  <p>The grammar is ambiguous regarding the extent of lambda abstractions,
+   let expressions, and conditionals. The ambiguity is resolved by the
+   meta-rule that each of these constructs extends as far to the right as
+   possible.</p>
+  -->
+  <p>この文法はλ抽象、let式、条件式の拡張については曖昧である。この曖昧
+   さは各構成ができるだけ右へ拡張されるというメタ規則により解決される。</p>
+  <!--
+  <p> Sample parses are shown below.</p>
+  -->
+  <p>構文解析の例を以下にしめす。</p>
+  <p></p>
+  <table>
+   <tr>
+    <td> これは</td>
+    <td> このように構文解析される</td>
+   </tr>
+   <tr>
+    <td> <tt>f&nbsp;x&nbsp;+&nbsp;g&nbsp;y</tt></td>
+    <td> <tt>(f&nbsp;x)&nbsp;+&nbsp;(g&nbsp;y)</tt></td>
+   </tr>
+   <tr>
+    <td><tt>-&nbsp;f&nbsp;x&nbsp;+&nbsp;y</tt></td>
+    <td> <tt>(-&nbsp;(f&nbsp;x))&nbsp;+&nbsp;y</tt></td>
+   </tr>
+   <tr>
+    <td><tt>let&nbsp;{&nbsp;...&nbsp;}&nbsp;in&nbsp;x&nbsp;+&nbsp;y</tt></td>
+    <td> <tt>let&nbsp;{&nbsp;...&nbsp;}&nbsp;in&nbsp;(x&nbsp;+&nbsp;y)</tt>
+     </td>
+   </tr>
+   <tr>
+    <td><tt>z&nbsp;+&nbsp;let&nbsp;{&nbsp;...&nbsp;}&nbsp;in&nbsp;x&nbsp;+&nbsp;y</tt>
+     </td>
+    <td>
+     <tt>z&nbsp;+&nbsp;(let&nbsp;{&nbsp;...&nbsp;}&nbsp;in&nbsp;(x&nbsp;+&nbsp;y))</tt>
+     </td>
+   </tr>
+   <tr>
+    <td><tt>f&nbsp;x&nbsp;y&nbsp;::&nbsp;Int</tt></td>
+    <td> <tt>(f&nbsp;x&nbsp;y)&nbsp;::&nbsp;Int</tt></td>
+   </tr>
+   <tr>
+    <td><tt>\&nbsp;x&nbsp;-&gt;&nbsp;a+b&nbsp;::&nbsp;Int</tt></td>
+    <td> <tt>\&nbsp;x&nbsp;-&gt;&nbsp;((a+b)&nbsp;::&nbsp;Int</tt>)</td>
+   </tr>
+  </table>
+  <p></p>
+  <!--
+  <p> <i>A note about parsing.</i> Expressions that involve the interaction
+   of fixities with the let/lambda meta-rule may be hard to parse. For
+   example, the expression 
+  -->
+  <p><em>構文解析に関するノート</em> let/lambda メタルールにある結合性の
+   相互関連は構文解析が難しい。例えば、式
+   <tt><br />
+   <br />
+   &nbsp;&nbsp;let&nbsp;x&nbsp;=&nbsp;True&nbsp;in&nbsp;x&nbsp;==&nbsp;x&nbsp;==&nbsp;True<br />
+   <br />
+   </tt>
+  <!--
+   cannot possibly mean
+  -->
+   は、次のような意味にはならない。
+   <tt><br />
+   <br />
+   &nbsp;&nbsp;let&nbsp;x&nbsp;=&nbsp;True&nbsp;in&nbsp;(x&nbsp;==&nbsp;x&nbsp;==&nbsp;True)<br />
+   <br />
+   </tt>
+  <!--
+   because <tt>(==)</tt> is a non-associative operator; so the
+   expression must parse thus: 
+  -->
+   なぜなら、<tt>(==)</tt> は結合性をもたない演算子であるから、この式は
+   以下のように構文解析されなければならないからだ。
+   <tt><br />
+   <br />
+   &nbsp;&nbsp;(let&nbsp;x&nbsp;=&nbsp;True&nbsp;in&nbsp;(x&nbsp;==&nbsp;x))&nbsp;==&nbsp;True<br />
+   <br />
+   </tt>
+  <!--
+   However, implementations may well use a post-parsing pass to deal
+   with fixities, so they may well incorrectly deliver the former parse.
+   Programmers are advised to avoid constructs whose parsing involves an
+   interaction of (lack of) associativity with the let/lambda meta-rule.</p>
+  -->
+   しかしながら、実装では、結合性を扱うためにうまく構文解析後のパスをう
+   まく使うことができる。プログラマは let/lmabda メタルールの結合性(の欠
+   如)の相互関係を含むような構成を避けたほうが良い。</p>
+  <!--
+  <p> For the sake of clarity, the rest of this section shows the syntax of
+   expressions without their precedences.</p>
+  -->
+  <p>明解であることを旨とし、この節の以下の部分では式の構文を優先レベル
+  なしでしめすこととする。</p>
+
+  <p><a name="basic-errors"></a></p>
+  <p> <a name="sect3.1"></a></p>
+  <!--<h3>3.1<tt>&nbsp;&nbsp;</tt>Errors</h3>-->
+  <h3>3.1<tt>&nbsp;&nbsp;</tt>エラー</h3>
+  <!--
+  <p>Errors during expression evaluation, denoted by <i>_|_</i>, are
+   indistinguishable by a Haskell program from non-termination. Since
+   Haskell is a non-strict language, all Haskell types include <i>_|_</i>.
+   That is, a value of any type may be bound to a computation that, when
+   demanded, results in an error. When evaluated, errors cause immediate
+   program termination and cannot be caught by the user. The Prelude
+   provides two functions to directly cause such errors: 
+   -->
+  <p>式の評価中のエラー(<i>_|_</i> と表示する)は、停止しないことと
+   Haskell のプログラムには、区別できない。
+   Haskell は遅延評価の言語であるから、すべての Haskell の型は
+   <i>_|_</i> を含む。すなわち、すべての型の値は、必要があれば、結果がエ
+   ラーになる計算に束縛されうる。評価時のエラーは、ただちにプログラムは
+   停止させ、ユーザが補足することはできない。プレリュードでは、このよう
+   なエラーを直接引き起こすための関数が 2 つ用意されている。
+   <tt><br />
+   <br />
+   error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;String&nbsp;-&gt;&nbsp;a<br />
+   undefined&nbsp;::&nbsp;a<br />
+   <br />
+   </tt>
+  <!--
+    A call to <tt>error</tt> terminates execution of the program and
+   returns an appropriate error indication to the operating system. It
+   should also display the string in some system-dependent manner. When
+   <tt>undefined</tt> is used, the error message is created by the
+   compiler.</p>
+  -->
+   <tt>error</tt> の呼び出しはプログラムの実行を停止させ、オペレーティン
+   グシステムに適切なエラー表示を返す。この関数は、同時に文字列をなんら
+   かのシステムに依存した方法で画面に表示する。<tt>undefined</tt> が使わ
+   れた場合のエラーメッセージはコンパイラが生成する。</p> 
+  <!--
+  <p> Translations of Haskell expressions use <tt>error</tt> and
+   <tt>undefined</tt> to explicitly indicate where execution time errors
+   may occur. The actual program behavior when an error occurs is up to the
+   implementation. The messages passed to the <tt>error</tt> function in
+   these translations are only suggestions; implementations may choose to
+   display more or less information when an error occurs.</p>
+  -->
+
+  <p><a name="vars-and-lits"></a></p>
+  <p> <a name="sect3.2"></a></p>
+  <!--<h3>3.2<tt>&nbsp;&nbsp;</tt>Variables, Constructors, Operators, and
+   Literals</h3>-->
+  <h3>3.2<tt>&nbsp;&nbsp;</tt>変数、構成子、演算子、リテラル</h3>
+
+  <table cellspacing="0" cellspacing="0">
+   <tr>
+    <td width="100"> aexp</td>
+    <td width="20"> <tt>-&gt;</tt></td>
+    <td width="250"> qvar</td>
+    <td> (variable)</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> gcon</td>
+    <td> (general constructor)</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> literal</td>
+   </tr>
+  </table>
+  <table cellspacing="0" cellspacing="0">
+   <tr>
+    <td width="100"></td>
+    <td width="20"></td>
+    <td width="250"></td>
+   </tr>
+   <tr>
+    <td> gcon</td>
+    <td> <tt>-&gt;</tt></td>
+    <td> <tt>() </tt></td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> <tt>[] </tt></td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> <tt>(,</tt>{<tt>,</tt>}<tt>) </tt></td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> qcon</td>
+   </tr>
+   <tr>
+    <td> var</td>
+    <td> <tt>-&gt;</tt></td>
+    <td> varid | <tt>(</tt> varsym <tt>)</tt></td>
+    <td> (variable)</td>
+   </tr>
+   <tr>
+    <td> qvar</td>
+    <td> <tt>-&gt;</tt></td>
+    <td> qvarid | <tt>(</tt> qvarsym <tt>)</tt></td>
+    <td> (qualified variable)</td>
+   </tr>
+   <tr>
+    <td> con</td>
+    <td> <tt>-&gt;</tt></td>
+    <td> conid | <tt>(</tt> consym <tt>)</tt></td>
+    <td> (constructor)</td>
+   </tr>
+   <tr>
+    <td> qcon</td>
+    <td> <tt>-&gt;</tt></td>
+    <td> qconid | <tt>(</tt> gconsym <tt>)</tt></td>
+    <td> (qualified constructor)</td>
+   </tr>
+   <tr>
+    <td> varop</td>
+    <td> <tt>-&gt;</tt></td>
+    <td> varsym | `varid `</td>
+    <td> (variable operator)</td>
+   </tr>
+   <tr>
+    <td> qvarop</td>
+    <td> <tt>-&gt;</tt></td>
+    <td> qvarsym | `qvarid `</td>
+    <td> (qualified variable operator)</td>
+   </tr>
+   <tr>
+    <td> conop</td>
+    <td> <tt>-&gt;</tt></td>
+    <td> consym | `conid `</td>
+    <td> (constructor operator)</td>
+   </tr>
+   <tr>
+    <td> qconop</td>
+    <td> <tt>-&gt;</tt></td>
+    <td> gconsym | `qconid `</td>
+    <td> (qualified constructor operator)</td>
+   </tr>
+   <tr>
+    <td> op</td>
+    <td> <tt>-&gt;</tt></td>
+    <td> varop | conop</td>
+    <td> (operator)</td>
+   </tr>
+   <tr>
+    <td> qop</td>
+    <td> <tt>-&gt;</tt></td>
+    <td> qvarop | qconop</td>
+    <td> (qualified operator)</td>
+   </tr>
+   <tr>
+    <td> gconsym</td>
+    <td> <tt>-&gt;</tt></td>
+    <td> <tt>:</tt> | qconsym</td>
+   </tr>
+  </table>
+  <!--
+  <p> Haskell provides special syntax to support infix notation. An
+   <i>operator</i> is a function that can be applied using infix syntax
+   (Section <a href="exps.html#operators">3.4</a>), or partially applied
+   using a <i>section</i> (Section <a href="exps.html#sections">3.5</a>).</p>
+  -->
+  <p> Haskell では中置記法をサポートする特別な構文が用意されている。
+   <em>演算子</em>は中置構文(<a href="exps.html#operators">3.4</a> 節)
+   で適用できる関数であり、また、<em>セクション</em>
+   (<a href="exps.html#sections">3.5</a> 節)を使って部分適用可能である。
+   </p>
+  <!--
+  <p> An <i>operator</i> is either an <i>operator symbol</i>, such as
+   <tt>+</tt> or <tt>$$</tt>, or is an ordinary identifier enclosed in
+   grave accents (backquotes), such as `<tt>op</tt>`. For example, instead
+   of writing the prefix application <tt>op&nbsp;x&nbsp;y</tt>, one can
+   write the infix application <tt>x</tt> `<tt>op</tt>`<tt>&nbsp;y</tt>. If
+   no fixity declaration is given for `<tt>op</tt>` then it defaults to
+   highest precedence and left associativity (see Section <a
+   href="decls.html#fixity">4.4.2</a>).</p>
+  -->
+  <p> <em>演算子</em>は、<tt>+</tt> や <tt>$$</tt> のような<em>演算子シ
+   ンボル</em>、あるいは、`<tt>op</tt>` のように、通常の識別子をバックク
+   オートでかこったもののどちらかである。たとえば、前置適用
+   <tt>op&nbsp;x&nbsp;y</tt> のように書くかわりに
+   <tt>x</tt> `<tt>op</tt>`<tt>&nbsp;y</tt> のように中置適用に書くことも
+   できる。もし、`<tt>op</tt>` に対して、結合性宣言がなければ、これは
+   デフォルトで最も高い優先どと左結合性をもつ。
+   ( <a href="decls.html#fixity">4.4.2</a> 節を見よ。)</p>
+  <!--
+  <p> Dually, an operator symbol can be converted to an ordinary identifier
+   by enclosing it in parentheses. For example, <tt>(+)&nbsp;x&nbsp;y</tt>
+   is equivalent to <tt>x&nbsp;+&nbsp;y</tt>, and
+   <tt>foldr&nbsp;(*)&nbsp;1&nbsp;xs</tt> is equivalent to
+   <tt>foldr&nbsp;(\x&nbsp;y&nbsp;-&gt;&nbsp;x*y)&nbsp;1&nbsp;xs</tt>.</p>
+  -->
+  <p>その逆に、演算子シンボルは括弧でかこむことで通常の識別に変換するこ
+   とができる。たとえば、<tt>(+)&nbsp;x&nbsp;y</tt> は 
+   <tt>x&nbsp;+&nbsp;y</tt> と同等である。また
+   <tt>foldr&nbsp;(*)&nbsp;1&nbsp;xs</tt> は
+   <tt>foldr&nbsp;(\x&nbsp;y&nbsp;-&gt;&nbsp;x*y)&nbsp;1&nbsp;xs</tt> と
+   同等である。
+  </p>
+  <!--
+  <p> Special syntax is used to name some constructors for some of the
+   built-in types, as found in the production for <i>gcon</i> and
+   <i>literal</i>. These are described in Section <a
+   href="basic.html#basic-types">6.1</a>.</p>
+  -->
+  <p>組み込み型のいくつかの構成子に対しては、命名に特別な構文を用いる。
+   これは、<i>gcon</i> および <i>literal</i> の生成ルールに現われる。こ
+   れらについては <a href="basic.html#basic-types">6.1</a> 節で説明する。
+  </p>
+  <!--
+  <p> An integer literal represents the application of the function
+   <tt>fromInteger</tt> to the appropriate value of type <tt>Integer</tt>.
+   Similarly, a floating point literal stands for an application of
+   <tt>fromRational</tt> to a value of type <tt>Rational</tt> (that is,
+   <tt>Ratio&nbsp;Integer</tt>).</p>
+  -->
+  <p>整数リテラルは、<tt>Integer</tt> 型の対応する値への、関数
+   <tt>fromInteger</tt> の適用を表現している。同様に、浮動小数リテラルは
+   <tt>fromRational</tt> の <tt>Rational</tt> (すなわち、
+   <tt>Ratio&nbsp;Integer</tt>) 型の値への適用を表わす。</p>
+
+  <p></p>
+  <table border="2" cellpadding="3">
+   <tr>
+    <td>
+     <!--<h3>Translation:</h3>-->
+     <h3>変換:</h3>
+     <!--
+     <p> The integer literal <i>i</i> is equivalent to <tt>fromInteger</tt>
+      <i>i</i>, where <tt>fromInteger</tt> is a method in class <tt>Num</tt>
+      (see Section <a href="basic.html#numeric-literals">6.4.1</a>).</p>
+     -->
+     <p>整数リテラル <i>i</i> は <tt>fromInteger</tt>
+      <i>i</i> と同等でる。ここでは <tt>fromInteger</tt> は <tt>Num</tt>
+      クラスのメソッドである(<a href="basic.html#numeric-literals">6.4.1</a>
+      節を見よ)。</p>
+     <!--
+     <p> The floating point literal <i>f</i> is equivalent to
+      <tt>fromRational </tt>(<i>n</i> <tt>Ratio.%</tt> <i>d</i>), where
+      <tt>fromRational</tt> is a method in class <tt>Fractional </tt>and
+      <tt>Ratio.%</tt> constructs a rational from two integers, as defined
+      in the <tt>Ratio</tt> library. The integers <i>n</i> and <i>d</i> are
+      chosen so that <i>n/d = f</i>.</p>
+     -->
+     <p> 小数リテラル <i></i> は <tt>fromRational </tt>(<i>n</i>
+      <tt>Ratio.%</tt> <i>d</i>) と同等である。ここでは、
+      <tt>fromRational</tt> は <tt>Fractional</tt> のメソッドであり、
+      <tt>Ratio.%</tt> は <tt>Ratio</tt> ライブラリに定義されているように、
+      二つの整数から有理数を構築する。整数 <i>n</i> と <i>d</i> は 
+      <i>n/d = f</i> となるように選ばれる。</p>
+    </td>
+   </tr>
+  </table>
+
+  <p><a name="applications"></a></p>
+  <p> <a name="sect3.3"></a></p>
+  <!--<h3>3.3<tt>&nbsp;&nbsp;</tt>
+  Curried Applications and Lambda Abstractions</h3>-->
+  <h3>3.3<tt>&nbsp;&nbsp;</tt>カリー化された適用とラムダ抽象</h3>
+  
+  <p><a name="lambda-abstractions"></a></p>
+  <table cellspacing="0" cellspacing="0">
+   <tr>
+    <td width="100"> fexp</td>
+    <td width="20"> <tt>-&gt;</tt></td>
+    <td width="250"> [fexp] aexp</td>
+    <td> (function application)</td>
+   </tr>
+   <tr>
+    <td> exp</td>
+    <td> <tt>-&gt;</tt></td>
+    <td> <tt>\</tt> apat<sub>1</sub> ... apat<sub>n</sub> <tt>-&gt;</tt>
+     exp</td>
+    <td> (lambda abstraction, n&gt;=1)</td>
+   </tr>
+  </table>
+  <!--
+  <p> <i>Function application</i> is written <i>e</i><sub><i>1</i></sub><i>
+   e</i><sub><i>2</i></sub>. Application associates to the left, so the
+   parentheses may be omitted in <tt>(f&nbsp;x)&nbsp;y</tt>. Because
+   <i>e</i><sub><i>1</i></sub> could be a data constructor, partial
+   applications of data constructors are allowed.</p>
+  -->
+  <p> <em>関数適用</em>は、
+   <i>e</i><sub><i>1</i></sub><i>e</i><sub><i>2</i></sub> と書く。適用は左
+   結合性をもつので、<tt>(f&nbsp;x)&nbsp;y</tt> の括弧は省略することができ
+   る。<i>e</i><sub><i>1</i></sub> はデータ構成子である可能性もあるので、
+   データ構成子の部分適用は許されている。
+  </p>
+  <!--
+  <p> <i>Lambda abstractions</i> are written <tt>\</tt><i>
+   p</i><sub><i>1</i></sub><i> ... p</i><sub><i>n</i></sub><i>
+   </i><tt>-&gt;</tt><i> e</i>, where the <i>p</i><sub><i>i</i></sub> are
+   <i>patterns</i>. An expression such as <tt>\x:xs-&gt;x</tt> is
+   syntactically incorrect; it may legally be written as
+   <tt>\(x:xs)-&gt;x</tt>.</p>
+  -->
+  <p> ラムダ抽象は
+   <tt>\</tt><i> p</i><sub><i>1</i></sub>
+   <i>... p</i><sub><i>n</i></sub><i> </i><tt>-&gt;</tt><i> e</i>
+   と書く。ここで、<i>p</i><sub><i>i</i></sub> は<em>パターン</em>である。
+   <tt>\x:xs-&gt;x</tt> のような式は構文としては正しくない。正しくは、
+   <tt>\(x:xs)-&gt;x</tt> と書く。</p>
+  <!--
+  <p> The set of patterns must be <i>linear</i>---no variable may appear
+   more than once in the set.</p>
+  -->
+  <p>パターンの集合は<em>線形</em>でなければならない。すなわち、集合の中
+  で 2 回以上出現してはならない。</p>
+
+  <p></p>
+
+  <table border="2" cellpadding="3">
+   <tr>
+    <td>
+     <!--<h3>Translation:</h3>-->
+     <h3>変換:</h3>
+     <!-- The following identity holds: -->
+     以下の同一性が保存される: 
+     <div align="center">
+      <table>
+       <tr>
+        <td><tt>\</tt><i> p</i><sub><i>1</i></sub><i> ...
+         p</i><sub><i>n</i></sub><i> </i><tt>-&gt;</tt><i> e </i></td>
+
+        <td align="center"> <i>=</i></td>
+
+        <td> <tt>\</tt><i> x</i><sub><i>1</i></sub><i> ...
+         x</i><sub><i>n</i></sub><i>
+         </i><tt>-&gt;&nbsp;case&nbsp;(</tt><i>x</i><sub><i>1</i></sub><tt>,</tt><i>
+         ...</i><tt>,</tt><i>
+         x</i><sub><i>n</i></sub><tt>)&nbsp;of&nbsp;(</tt><i>p</i><sub><i>1</i></sub><tt>,</tt><i>
+         ...</i><tt>,</tt><i>
+         p</i><sub><i>n</i></sub><tt>)&nbsp;-&gt;</tt><i> e </i></td>
+       </tr>
+      </table>
+     </div>
+     <!--where the <i>x</i><sub><i>i</i></sub> are new identifiers.-->
+     ここで、<i>x</i><sub><i>i</i></sub> は新しい識別子である。
+     </td>
+   </tr>
+  </table>
+  <!--
+  <p>Given this translation combined with the semantics of case expressions
+   and pattern matching described in Section <a
+   href="exps.html#case-semantics">3.17.3</a>, if the pattern fails to
+   match, then the result is <i>_|_</i>.</p>
+  -->
+  <p><a href="exps.html#case-semantics">3.17.3</a> 節で解説するが、この
+   case 式とパターン照合のセマンティクスを組合せるこの変換は、もし、パター
+   ン照合に失敗すると、<i>_|_</i>となる。</p>
+
+  <p> <a name="operators"></a></p>
+  <p> <a name="sect3.4"></a></p>
+  <!--<h3>3.4<tt>&nbsp;&nbsp;</tt>Operator Applications</h3>-->
+  <h3>3.4<tt>&nbsp;&nbsp;</tt>演算子適用</h3>
+
+  <table cellspacing="0" cellspacing="0">
+   <tr>
+    <td width="100"> exp</td>
+    <td width="20"> <tt>-&gt;</tt></td>
+    <td width="250"> exp<sub>1</sub> qop exp<sub>2</sub></td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> <tt>-</tt> exp</td>
+    <td> (prefix negation)</td>
+   </tr>
+   <tr>
+    <td> qop</td>
+    <td> <tt>-&gt;</tt></td>
+    <td> qvarop | qconop</td>
+    <td> (qualified operator)</td>
+   </tr>
+  </table>
+  <!--
+  <p> The form <i>e</i><sub><i>1</i></sub><i> qop e</i><sub><i>2</i></sub>
+   is the infix application of binary operator <i>qop</i> to expressions
+   <i>e</i><sub><i>1</i></sub> and <i>e</i><sub><i>2</i></sub>.</p>
+  -->
+  <p><i>e</i><sub><i>1</i></sub><i> qop e</i><sub><i>2</i></sub> という
+   形式は二項演算子 <i>qop</i> の式 <i>e</i><sub><i>1</i></sub> および
+   <i>e</i><sub><i>2</i></sub> への中置適用である。</p>
+  <!--
+  <p> The special form <tt>-</tt><i>e</i> denotes prefix negation, the only
+   prefix operator in Haskell , and is syntax for
+   <tt>negate&nbsp;</tt><i>(e)</i>. The binary <tt>-</tt> operator does not
+   necessarily refer to the definition of <tt>-</tt> in the Prelude; it may
+   be rebound by the module system. However, unary <tt>-</tt> will always
+   refer to the <tt>negate</tt> function defined in the Prelude. There is
+   no link between the local meaning of the <tt>-</tt> operator and unary
+   negation.</p>
+  -->
+  <p>特別な形式 <tt>-</tt><i>e</i> は前置の符号判定演算子を表わす。この
+   演算子は Haskell における唯一の前置演算子であり、
+   <tt>negate&nbsp;</tt><i>(e)</i>という意味の構文である。二項演算子
+   <tt>-</tt> はプレリュード中の <tt>-</tt> の定義への参照を必要としない。 
+   モジュールシステムにより再束縛される。いっぽうで、単項演算子  <tt>-</tt>
+   は常にプレリュード中で定義された <tt>negate</tt> 関数を参照する。
+   <tt>-</tt> 演算子の局所的な意味と単項の符号反転演算との間にはなんの結び
+   つきもない。 </p>
+  <!--
+  <p> Prefix negation has the same precedence as the infix operator <tt>-
+   </tt>defined in the Prelude (see Table <a
+   href="decls.html#prelude-fixities">4.1</a>). Because <tt>e1-e2</tt>
+   parses as an infix application of the binary operator <tt>-</tt>, one
+   must write <tt>e1(-e2)</tt> for the alternative parsing. Similarly,
+   <tt>(-)</tt> is syntax for
+   <tt>(\&nbsp;x&nbsp;y&nbsp;-&gt;&nbsp;x-y)</tt>, as with any infix
+   operator, and does not denote
+   <tt>(\&nbsp;x&nbsp;-&gt;&nbsp;-x)</tt>---one must use <tt>negate</tt>
+   for that.</p>
+  -->
+  <p>前置の符号反転演算子はプレリュード中に定義されている中置演算子
+   <tt>-</tt> と同じ優先順位である
+   (表 <a href="decls.html#prelude-fixities">2</a> を見よ)。
+   <tt>e1-e2</tt> は二項演算子 <tt>e1-e2</tt> の中置適用として構文解析さ
+   れるので、これを単項演算子として構文解析させるためには、
+   <tt>e1(-e2)</tt> と表記しなければならない。<tt>(-)</tt> は、他のすべ
+   ての中置演算子と同様に、
+   <tt>(\&nbsp;x&nbsp;y&nbsp;-&gt;&nbsp;x-y)</tt> という意味の構文であり、
+   <tt>(\&nbsp;x&nbsp;-&gt;&nbsp;-x)</tt>ということではない。後者の意味
+   を用いるのなら <tt>negate</tt> を使わなければならない。</p>
+  <p></p>
+  <table border="2" cellpadding="3">
+   <tr>
+    <td>
+     <!--<h3>Translation:</h3>-->
+     <h3>変換:</h3>
+     <!--The following identities hold:-->
+     以下の同一性が保存される:
+     <div align="center">
+      <table>
+       <tr>
+        <td><i>e</i><sub><i>1</i></sub><i> op e</i><sub><i>2</i></sub></td>
+        <td align="center"> <i>=</i></td>
+        <td> <tt>(</tt><i>op</i><tt>)</tt><i> e</i><sub><i>1</i></sub><i>
+         e</i><sub><i>2</i></sub></td>
+       </tr>
+       <tr>
+        <td><tt>-</tt><i>e</i></td>
+        <td align="center"> <i>=</i></td>
+        <td> <tt>negate</tt><i> (e) </i></td>
+       </tr>
+      </table>
+     </div>
+    </td>
+   </tr>
+  </table>
+
+  <p><a name="sections"></a></p>
+  <p> <a name="sect3.5"></a></p>
+  <!--<h3>3.5<tt>&nbsp;&nbsp;</tt>Sections</h3>-->
+  <h3>3.5<tt>&nbsp;&nbsp;</tt>セクション</h3>
+  <table cellspacing="0" cellspacing="0">
+   <tr>
+    <td width="100"> aexp</td>
+    <td width="20"> <tt>-&gt;</tt></td>
+    <td width="250"> <tt>(</tt> exp<sup>i+1</sup> qop<sup>(a,i)</sup>
+     <tt>)</tt></td>
+    <td> (left section)</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> <tt>(</tt> lexp<sup>i</sup> qop<sup>(l,i)</sup> <tt>)</tt></td>
+    <td> (left section)</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> <tt>(</tt> qop<sup>(a,i)</sup><sub>&lt;<tt>-</tt>&gt;</sub>
+     exp<sup>i+1</sup> <tt>)</tt></td>
+    <td> (right section)</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> <tt>(</tt> qop<sup>(r,i)</sup><sub>&lt;<tt>-</tt>&gt;</sub>
+     rexp<sup>i</sup> <tt>)</tt></td>
+    <td> (right section)</td>
+   </tr>
+  </table>
+  <!--
+  <p> <i>Sections</i> are written as <tt>(</tt><i> op e </i><tt>)</tt> or
+   <tt>(</tt><i> e op </i><tt>)</tt>, where <i>op</i> is a binary operator
+   and <i>e</i> is an expression. Sections are a convenient syntax for
+   partial application of binary operators.</p>
+  -->
+  <p><em>セクション</em> は <tt>(</tt><i> op e </i><tt>)</tt> あるいは
+   <tt>(</tt><i> e op </i><tt>)</tt> のように書く。ここで、<i>op</i> は
+   二項演算子であり、<i>e</i> は式である。セクションは二項演算子の部分適
+   用をあらわすのに便利な構文である。</p> 
+  <!--
+  <p> Syntactic precedence rules apply to sections as follows.
+   <tt>(</tt><i>op e</i><tt>)</tt> is legal if and only if <tt>(x</tt><i>
+   op e</i><tt>)</tt> parses in the same way as <tt>(x</tt><i> op
+   </i><tt>(</tt><i>e</i><tt>))</tt>; and similarly for <tt>(</tt><i>e
+   op</i><tt>)</tt>. For example, <tt>(*a+b)</tt> is syntactically invalid,
+   but <tt>(+a*b)</tt> and <tt>(*(a+b))</tt> are valid. Because
+   <tt>(+)</tt> is left associative, <tt>(a+b+)</tt> is syntactically
+   correct, but <tt>(+a+b)</tt> is not; the latter may legally be written
+   as <tt>(+(a+b))</tt>. 
+  -->
+  <p>セクションに適用される構文上の優先順位は以下の通りである。
+   <tt>(</tt><i>op e</i><tt>)</tt> は、 <tt>(x</tt><i> op
+   e</i><tt>)</tt> が、<tt>(x</tt><i> op
+   </i><tt>(</tt><i>e</i><tt>))</tt> として構文解析されるとき、そのとき
+   に限り、正しい。 <tt>(</tt><i>e op</i><tt>)</tt> についても同様である。
+   たとえば、 <tt>(*a+b)</tt> は構文上あやまりであるが、<tt>(+a*b)</tt>
+   および <tt>(*(a+b))</tt> は構文上正しい。<tt>(+)</tt> は左結合性をも
+   つので、<tt>(a+b+)</tt> は構文的に正しいが、<tt>(+a+b)</tt> は正しく
+   ない。後者は <tt>(+(a+b))</tt> と書くことで正しい構文になる。</p>
+
+  <!-- As another example, the expression -->
+   もうひとつ例をあげよう。次の式
+   <tt><br />
+   <br />
+   &nbsp;&nbsp;(let&nbsp;n&nbsp;=&nbsp;10&nbsp;in&nbsp;n&nbsp;+)<br />
+   <br />
+   </tt>
+   <!-- is invalid because, by the let/lambda meta-rule (Section <a
+   href="exps.html#expressions">3</a>), the expression -->
+   は、正しくない。それは、let/lambda メタルール
+   (<a href="exps.html#expressions">3</a> 章)により、式
+   <tt><br />
+   <br />
+   &nbsp;&nbsp;(let&nbsp;n&nbsp;=&nbsp;10&nbsp;in&nbsp;n&nbsp;+&nbsp;x)<br />
+   <br />
+   </tt>
+  <!-- parses as -->
+   は、
+   <tt><br />
+   <br />
+   &nbsp;&nbsp;(let&nbsp;n&nbsp;=&nbsp;10&nbsp;in&nbsp;(n&nbsp;+&nbsp;x))<br />
+   <br />
+   </tt>
+   <!-- rather than -->
+   と構文解析され、
+   <tt><br />
+   <br />
+   &nbsp;&nbsp;((let&nbsp;n&nbsp;=&nbsp;10&nbsp;in&nbsp;n)&nbsp;+&nbsp;x)<br />
+   <br />
+   </tt>
+   と構文解析されるわけではないからである。
+  </p>
+  <!--
+  <p> Because <tt>-</tt> is treated specially in the grammar,
+   <tt>(-</tt><i> exp</i><tt>)</tt> is not a section, but an application of
+   prefix negation, as described in the preceding section. However, there
+   is a <tt>subtract </tt>function defined in the Prelude such that
+   <tt>(subtract</tt><i> exp</i><tt>)</tt> is equivalent to the disallowed
+   section. The expression <tt>(+&nbsp;(-</tt><i> exp</i><tt>))</tt> can
+   serve the same purpose.</p>
+  -->
+  <p> <tt>-</tt> は文法上、特別扱いで、<tt>(-</tt><i> exp</i><tt>)</tt>
+   はセクションではなく、前節で説明したように前置の符号反転演算子の適用
+   である。しかしながら、<tt>subtract</tt> 関数は、プレリュードでは
+   <tt>(subtract</tt><i> exp</i><tt>)</tt> が上で許されていなかったセク
+   ションの代りにつかえるように定義されている。式 <tt>(+&nbsp;(-</tt><i>
+   exp</i><tt>))</tt> を同じ目的で使用できる。</p>
+  <p></p>
+  <table border="2" cellpadding="3">
+   <tr>
+    <td>
+     <!--<h3>Translation:</h3>-->
+     <h3>変換:</h3>
+     <!-- The following identities hold: -->
+     以下の同一性が保存される
+     <div align="center">
+      <table>
+       <tr>
+        <td><tt>(</tt><i>op e</i><tt>)</tt></td>
+        <td align="center"> <i>=</i></td>
+        <td> <tt>\</tt><i> x </i><tt>-&gt;</tt><i> x op e</i></td>
+       </tr>
+       <tr>
+        <td><tt>(</tt><i>e op</i><tt>)</tt></td>
+        <td align="center"> <i>=</i></td>
+        <td> <tt>\</tt><i> x </i><tt>-&gt;</tt><i> e op x </i></td>
+       </tr>
+      </table>
+     </div>
+     <!--
+     where <i>op</i> is a binary operator, <i>e</i> is an expression, and
+     <i>x</i> is a variable that does not occur free in <i>e</i>.-->
+     ここで、<i>op</i> は二項演算子、<i>e</i> は式、<i>x</i> は <i>e</i>
+     中で自由変数ではない。
+    </td>
+   </tr>
+  </table>
+
+  <p><a name="conditionals"></a></p>
+  <p> <a name="sect3.6"></a></p>
+  <!--<h3>3.6<tt>&nbsp;&nbsp;</tt>Conditionals</h3>-->
+  <h3>3.6<tt>&nbsp;&nbsp;</tt>条件式</h3>
+
+  <table cellspacing="0" cellspacing="0">
+   <tr>
+    <td width="100"> exp</td>
+    <td width="20"> <tt>-&gt;</tt></td>
+    <td width="250"> <tt>if</tt> exp<sub>1</sub> <tt>then</tt>
+     exp<sub>2</sub> <tt>else</tt> exp<sub>3</sub></td>
+   </tr>
+  </table>
+  <!--
+  <p> A <i>conditional expression </i>has the form <tt>if</tt><i>
+   e</i><sub><i>1</i></sub><i> </i><tt>then</tt><i>
+   e</i><sub><i>2</i></sub><i> </i><tt>else</tt><i>
+   e</i><sub><i>3</i></sub> and returns the value of
+   <i>e</i><sub><i>2</i></sub> if the value of <i>e</i><sub><i>1</i></sub>
+   is <tt>True</tt>, <i>e</i><sub><i>3</i></sub> if
+   <i>e</i><sub><i>1</i></sub> is <tt>False</tt>, and <i>_|_ </i>otherwise.</p>
+  -->
+  <p><em>条件式</em>は
+   <tt>if</tt><i> e</i><sub><i>1</i></sub><i> </i><tt>then</tt><i>
+   e</i><sub><i>2</i></sub><i> </i><tt>else</tt><i>
+   e</i><sub><i>3</i></sub> という形式をもち、
+   <i>e</i><sub><i>1</i></sub> の値が <tt>True</tt> のとき、
+   <i>e</i><sub><i>2</i></sub> の値を返し、<i>e</i><sub><i>1</i></sub>
+   が <tt>False</tt> のとき <i>e</i><sub><i>3</i></sub> を返す。それ以外
+   の場合には <i>_|_</i> を返す。</p>
+
+  <p></p>
+
+  <table border="2" cellpadding="3">
+   <tr>
+    <td>
+     <!--<h3>Translation:</h3>-->
+     <h3>変換:</h3>
+     <!-- The following identities hold: -->
+     以下の同一性が保存される
+     <div align="center">
+      <table>
+       <tr>
+        <td><tt>if</tt><i> e</i><sub><i>1</i></sub><i> </i><tt>then</tt><i>
+         e</i><sub><i>2</i></sub><i> </i><tt>else</tt><i>
+         e</i><sub><i>3</i></sub></td>
+        <td align="center"> <i>=</i></td>
+        <td> <tt>case</tt><i> e</i><sub><i>1</i></sub><i>
+         </i><tt>of&nbsp;{&nbsp;True&nbsp;-&gt;</tt><i>
+         e</i><sub><i>2</i></sub><i>
+         </i><tt>;&nbsp;False&nbsp;-&gt;</tt><i>
+         e</i><sub><i>3</i></sub><i> </i><tt>} </tt></td>
+       </tr>
+      </table>
+     </div>
+     <!--
+     where <tt>True</tt> and <tt>False</tt> are the two nullary
+     constructors from the type <tt>Bool</tt>, as defined in the Prelude.
+     The type of <i>e</i><sub><i>1</i></sub> must be <tt>Bool</tt>;
+     <i>e</i><sub><i>2</i></sub> and <i>e</i><sub><i>3</i></sub> must have
+     the same type, which is also the type of the entire conditional
+     expression.
+     -->
+     ここで、<tt>True</tt> および <tt>False</tt> はプレリュードで定義さ
+     れている <tt>Bool</tt> 型の無引数データ構成子である。
+     <i>e</i><sub><i>1</i></sub> の型は <tt>Bool</tt> でなければならず、
+     <i>e</i><sub><i>2</i></sub> および <i>e</i><sub><i>3</i></sub> は同
+     じ型で、当該の条件式全体の型でなければならない。
+    </td>
+   </tr>
+  </table>
+
+  <p><a name="lists"></a></p>
+  <p> <a name="sect3.7"></a></p>
+  <!--<h3>3.7<tt>&nbsp;&nbsp;</tt>Lists</h3>-->
+  <h3>3.7<tt>&nbsp;&nbsp;</tt>リスト</h3>
+
+  <table cellspacing="0" cellspacing="0">
+   <tr>
+    <td width="100"> exp</td>
+    <td width="20"> <tt>-&gt;</tt></td>
+    <td width="250"> exp<sub>1</sub> qop exp<sub>2</sub></td>
+   </tr>
+   <tr>
+    <td> aexp</td>
+    <td> <tt>-&gt;</tt></td>
+    <td> <tt>[</tt> exp<sub>1</sub> <tt>,</tt> ... <tt>,</tt>
+     exp<sub>k</sub> <tt>]</tt></td>
+    <td> (k&gt;=1)</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> gcon</td>
+   </tr>
+   <tr>
+    <td> gcon</td>
+    <td> <tt>-&gt;</tt></td>
+    <td> <tt>[] </tt></td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> qcon</td>
+   </tr>
+   <tr>
+    <td> qcon</td>
+    <td> <tt>-&gt;</tt></td>
+    <td> <tt>(</tt> gconsym <tt>) </tt></td>
+   </tr>
+   <tr>
+    <td> qop</td>
+    <td> <tt>-&gt;</tt></td>
+    <td> qconop</td>
+   </tr>
+   <tr>
+    <td> qconop</td>
+    <td> <tt>-&gt;</tt></td>
+    <td> gconsym</td>
+   </tr>
+   <tr>
+    <td> gconsym</td>
+    <td> <tt>-&gt;</tt></td>
+    <td> <tt>: </tt></td>
+   </tr>
+  </table>
+  <!--
+  <p> <i>Lists</i> are written
+   <tt>[</tt><i>e</i><sub><i>1</i></sub><tt>,</tt><i> ...</i><tt>,</tt><i>
+   e</i><sub><i>k</i></sub><tt>]</tt>, where <i>k&gt;=1</i>. The list
+   constructor is <tt>:</tt>, and the empty list is denoted <tt>[]</tt>.
+   Standard operations on lists are given in the Prelude (see Section <a
+   href="basic.html#basic-lists">6.1.3</a>, and Chapter <a
+   href="standard-prelude.html#stdprelude">8</a> notably Section <a
+   href="standard-prelude.html#preludelist">8.1</a>).</p>
+  -->
+  <p><em>リスト</em>は
+   <tt>[</tt><i>e</i><sub><i>1</i></sub><tt>,</tt><i>...</i><tt>,</tt><i>
+   e</i><sub><i>k</i></sub><tt>]</tt> のように書く。ここで
+   <i>k&gt;=1</i> である。リスト構成子は  <tt>:</tt> であり、空リストは
+   <tt>[]</tt> と書きあらわす。リスト上の標準的な演算はプレリュードであ
+   たえられている(<a href="basic.html#basic-lists">6.1.3</a> 節をみよ。
+   また、<a href="standard-prelude.html#stdprelude">8</a> 章の特に、
+   <a href="standard-prelude.html#preludelist">8.1</a> 節を見よ)。</p> 
+
+  <p></p>
+
+  <table border="2" cellpadding="3">
+   <tr>
+    <td>
+     <!--<h3>Translation:</h3>-->
+     <h3>変換:</h3>
+     <!--The following identity holds:-->
+     次の同一性が保存される:
+     <div align="center">
+      <table>
+       <tr>
+        <td><tt>[</tt><i>e</i><sub><i>1</i></sub><tt>,</tt><i>
+         ...</i><tt>,</tt><i> e</i><sub><i>k</i></sub><tt>]</tt></td>
+        <td align="center"> <i>=</i></td>
+        <td> <i>e</i><sub><i>1</i></sub><i>
+         </i><tt>:&nbsp;(</tt><i>e</i><sub><i>2</i></sub><i>
+         </i><tt>:&nbsp;(</tt><i> ...
+         </i><tt>(</tt><i>e</i><sub><i>k</i></sub><i> </i><tt>:&nbsp;[])))
+         </tt></td>
+       </tr>
+      </table>
+     </div>
+     <!--
+     where <tt>:</tt> and <tt>[]</tt> are constructors for lists, as
+     defined in the Prelude (see Section <a
+     href="basic.html#basic-lists">6.1.3</a>). The types of
+     <i>e</i><sub><i>1</i></sub> through <i>e</i><sub><i>k</i></sub> must
+     all be the same (call it <i>t</i>), and the type of the overall
+     expression is <tt>[</tt><i>t</i><tt>]</tt> (see Section <a
+     href="decls.html#type-syntax">4.1.2</a>).
+     -->
+     ここで、 <tt>:</tt> and <tt>[]</tt> プレリュードに定義されているよ
+     うに、リストの構成子である。
+     (<a href="basic.html#basic-lists">6.1.3</a> 節を見よ。)
+     <i>e</i><sub><i>1</i></sub> から、<i>e</i><sub><i>k</i></sub> の型
+     はすべて同じ(これを <i>t</i> としよう)でなければならない。そして式
+     全体の型は <tt>[</tt><i>t</i><tt>]</tt> である。
+     (<a href="decls.html#type-syntax">4.1.2</a> 節を見よ。)
+    </td>
+   </tr>
+  </table>
+  <!--
+  <p>The constructor "<tt>:</tt>" is reserved solely for list construction;
+   like <tt>[]</tt>, it is considered part of the language syntax, and
+   cannot be hidden or redefined. It is a right-associative operator, with
+   precedence level 5 (Section <a href="decls.html#fixity">4.4.2</a>).</p>
+  -->
+  <p>構成子の「<tt>:</tt>」は、<tt>[]</tt> も同様で、リストの構築専用に
+   予約されている。これはこの言語の構文の一部と考えられ、隠蔽や再定義は
+   できない。<tt>:</tt> は右結合性をもつ演算子で、その優先レベルは 5 
+   (<a href="decls.html#fixity">4.4.2</a>) 節を見よ)である。</p>
+   
+  <p> <a name="tuples"></a></p>
+  <p> <a name="sect3.8"></a></p>
+  <!--<h3>3.8<tt>&nbsp;&nbsp;</tt>Tuples</h3>-->
+  <h3>3.8<tt>&nbsp;&nbsp;</tt>タプル</h3>
+
+  <table cellspacing="0" cellspacing="0">
+   <tr>
+    <td width="100"></td>
+    <td width="20"></td>
+    <td width="250"></td>
+   </tr>
+   <tr>
+    <td> aexp</td>
+    <td> <tt>-&gt;</tt></td>
+    <td> <tt>(</tt> exp<sub>1</sub> <tt>,</tt> ... <tt>,</tt>
+     exp<sub>k</sub> <tt>)</tt></td>
+    <td> (k&gt;=2)</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> qcon</td>
+   </tr>
+   <tr>
+    <td> qcon</td>
+    <td> <tt>-&gt;</tt></td>
+    <td> <tt>(,</tt>{<tt>,</tt>}<tt>) </tt></td>
+   </tr>
+  </table>
+  <!--
+  <p> <i>Tuples</i> are written
+   <tt>(</tt><i>e</i><sub><i>1</i></sub><tt>,</tt><i> ...</i><tt>,</tt><i>
+   e</i><sub><i>k</i></sub><tt>)</tt>, and may be of arbitrary length
+   <i>k&gt;=2</i>. The constructor for an <i>n</i>-tuple is denoted by
+   <tt>(,</tt>...<tt>,)</tt>, where there are <i>n-1</i> commas. Thus
+   <tt>(a,b,c)</tt> and <tt>(,,)&nbsp;a&nbsp;b&nbsp;c</tt> denote the same
+   value. Standard operations on tuples are given in the Prelude (see
+   Section <a href="basic.html#basic-tuples">6.1.4</a> and Chapter <a
+   href="standard-prelude.html#stdprelude">8</a>).</p>
+  -->
+  <p><em>タプル</em> は
+   <tt>(</tt><i>e</i><sub><i>1</i></sub><tt>,</tt><i>...</i><tt>,</tt><i>
+   e</i><sub><i>k</i></sub><tt>)</tt> と書き、任意の長さ <i>k&gt;=2</i>
+   をとりうる。<i>n</i>-タプルの構成子は <tt>(,</tt>...<tt>,)</tt> と書
+   き表わす。ここで、コンマは <i>n-1</i> 個である。したがって、
+   <tt>(a,b,c)</tt> および <tt>(,,)&nbsp;a&nbsp;b&nbsp;c</tt> は同じ値を
+   あらわす。タプル上の標準演算はプレリュードで定義されている
+   (<a href="basic.html#basic-tuples">6.1.4</a> 節および
+   <a href="standard-prelude.html#stdprelude">8</a> 章を見よ)。</p> 
+
+  <p></p>
+
+  <table border="2" cellpadding="3">
+   <tr>
+    <td>
+     <!--<h3>Translation:</h3>-->
+     <h3>変換:</h3>
+     <!--
+     <tt>(</tt><i>e</i><sub><i>1</i></sub><tt>,</tt><i>
+     ...</i><tt>,</tt><i> e</i><sub><i>k</i></sub><tt>)</tt> for
+     <i>k&gt;=2</i> is an instance of a <i>k</i>-tuple as defined in the
+     Prelude, and requires no translation. If <i>t</i><sub><i>1</i></sub>
+     through <i>t</i><sub><i>k</i></sub> are the types of
+     <i>e</i><sub><i>1</i></sub> through <i>e</i><sub><i>k</i></sub>,
+     respectively, then the type of the resulting tuple is
+     <tt>(</tt><i>t</i><sub><i>1</i></sub><tt>,</tt><i>
+     ...</i><tt>,</tt><i> t</i><sub><i>k</i></sub><tt>)</tt> (see Section
+     <a href="decls.html#type-syntax">4.1.2</a>).
+     -->
+     <tt><i>k&gt;=2</i> に対して
+     (</tt><i>e</i><sub><i>1</i></sub><tt>,</tt><i> ...</i><tt>,</tt><i>
+     e</i><sub><i>k</i></sub><tt>)</tt>
+     は、プレリュードの定義により <i>k</i>-タプルのインスタンスであり、
+     変換を必要としない。もし、<i>t</i><sub><i>1</i></sub> から
+     <i>t</i><sub><i>k</i></sub> までが、それぞれ
+     <i>e</i><sub><i>1</i></sub> から <i>e</i><sub><i>k</i></sub> までの型
+     をもつならタプル全体の型は
+     <tt>(</tt><i>t</i><sub><i>1</i></sub><tt>,</tt><i>
+     ...</i><tt>,</tt><i> t</i><sub><i>k</i></sub><tt>)</tt> 
+     である(<a href="decls.html#type-syntax">4.1.2</a> 節を見よ)。
+    </td>
+   </tr>
+  </table>
+
+  <p><a name="unit-expression"></a></p>
+  <p> <a name="sect3.9"></a></p>
+  <!--<h3>3.9<tt>&nbsp;&nbsp;</tt>Unit Expressions and Parenthesized
+   Expressions</h3>-->
+  <h3>3.9<tt>&nbsp;&nbsp;</tt>ユニット式と括弧でくくられた式</h3>
+
+  <table cellspacing="0" cellspacing="0">
+   <tr>
+    <td width="100"> aexp</td>
+    <td width="20"> <tt>-&gt;</tt></td>
+    <td width="250"> gcon</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> <tt>(</tt> exp <tt>) </tt></td>
+   </tr>
+   <tr>
+    <td> gcon</td>
+    <td> <tt>-&gt;</tt></td>
+    <td> <tt>() </tt></td>
+   </tr>
+  </table>
+  <!--
+  <p> The form <tt>(</tt><i>e</i><tt>)</tt> is simply a <i>parenthesized
+   expression</i>, and is equivalent to <i>e</i>. The <i>unit
+   expression</i> <tt>()</tt> has type <tt>()</tt> (see Section <a
+   href="decls.html#type-syntax">4.1.2</a>). It is the only member of that
+   type apart from _|_, and can be thought of as the "nullary tuple" (see
+   Section <a href="basic.html#basic-trivial">6.1.5</a>).</p>
+  -->
+  <p><tt>(</tt><i>e</i><tt>)</tt> という形式は単なる
+    <em>括弧でくくられた式</em>であり、<i>e</i> と同等である。
+    <em>ユニット式</em> <tt>()</tt> は <tt>()</tt> 型
+    (<a href="decls.html#type-syntax">4.1.2</a> 節を見よ)の、
+    _|_ 以外の唯一の要素である。これは無引数タプルとみなすことができる。
+    (<a href="basic.html#basic-trivial">6.1.5</a> 節を見よ。)</p>
+
+  <p></p>
+
+  <table border="2" cellpadding="3">
+   <tr>
+    <td>
+     <!--<h3>Translation:</h3>-->
+     <h3>変換:</h3>
+     <!--<tt>(</tt><i>e</i><tt>)</tt> is equivalent to <i>e</i>.-->
+     <tt>(</tt><i>e</i><tt>)</tt> は <i>e</i> と同等である。
+    </td>
+   </tr>
+  </table>
+
+  <p><a name="arithmetic-sequences"></a></p>
+  <p> <a name="sect3.10"></a></p>
+  <!--<h3>3.10<tt>&nbsp;&nbsp;</tt>Arithmetic Sequences</h3>-->
+  <h3>3.10<tt>&nbsp;&nbsp;</tt>数列</h3>
+  <table cellspacing="0" cellspacing="0">
+   <tr>
+    <td width="100"> aexp</td>
+    <td width="20"> <tt>-&gt;</tt></td>
+    <td width="250"> <tt>[</tt> exp<sub>1</sub> [<tt>,</tt>
+     exp<sub>2</sub>] <tt>..</tt> [exp<sub>3</sub>] <tt>]</tt></td>
+   </tr>
+  </table>
+  <!--
+  <p> The <i>arithmetic sequence
+   </i><tt>[</tt><i>e</i><sub><i>1</i></sub><tt>,</tt><i>
+   e</i><sub><i>2</i></sub><i> </i><tt>..</tt><i>
+   e</i><sub><i>3</i></sub><tt>]</tt> denotes a list of values of type
+   <i>t</i>, where each of the <i>e</i><sub><i>i</i></sub> has type
+   <i>t</i>, and <i>t</i> is an instance of class <tt>Enum</tt>.</p>
+  -->
+  <p><em>数列</em><tt>[</tt><i>e</i><sub><i>1</i></sub><tt>,</tt>
+   <i>e</i><sub><i>2</i></sub><i></i>
+   <tt>..</tt><i>e</i><sub><i>3</i></sub><tt>]</tt>
+   は型 <i>t</i> の値のリストを表す。ここで、各
+   <i>e</i><sub><i>i</i></sub> の型は <i>t</i> であり、<i>t</i> は
+   <tt>Enum</tt> クラスのインスタンスである。</p>
+
+  <p></p>
+
+  <table border="2" cellpadding="3">
+   <tr>
+    <td>
+     <!--<h3>Translation:</h3>-->
+     <h3>変換:</h3>
+     <!--Arithmetic sequences satisfy these identities:-->
+     数列は以下の同一性を満す。
+     <div align="center">
+      <table>
+       <tr>
+        <td><tt>[&nbsp;</tt><i>e</i><sub><i>1</i></sub><tt>..&nbsp;]</tt></td>
+        <td align="center"> <i>=</i></td>
+        <td> <tt>enumFrom</tt> <i>e</i><sub><i>1</i></sub></td>
+       </tr>
+       <tr>
+        <td><tt>[&nbsp;</tt><i>e</i><sub><i>1</i></sub><tt>,</tt><i>e</i><sub><i>2</i></sub><tt>..&nbsp;]</tt>
+         </td>
+        <td align="center"> <i>=</i></td>
+        <td> <tt>enumFromThen</tt> <i>e</i><sub><i>1</i></sub>
+         <i>e</i><sub><i>2</i></sub></td>
+       </tr>
+       <tr>
+        <td><tt>[&nbsp;</tt><i>e</i><sub><i>1</i></sub><tt>..</tt><i>e</i><sub><i>3</i></sub><tt>&nbsp;]</tt>
+         </td>
+        <td align="center"> <i>=</i></td>
+        <td> <tt>enumFromTo</tt> <i>e</i><sub><i>1</i></sub>
+         <i>e</i><sub><i>3</i></sub></td>
+       </tr>
+       <tr>
+        <td><tt>[&nbsp;</tt><i>e</i><sub><i>1</i></sub><tt>,</tt><i>e</i><sub><i>2</i></sub><tt>..</tt><i>e</i><sub><i>3</i></sub><tt>&nbsp;]</tt>
+         </td>
+        <td align="center"> <i>=</i></td>
+        <td> <tt>enumFromThenTo</tt> <i>e</i><sub><i>1</i></sub>
+         <i>e</i><sub><i>2</i></sub> <i>e</i><sub><i>3</i></sub></td>
+       </tr>
+      </table>
+     </div>
+     <!--
+     where <tt>enumFrom</tt>, <tt>enumFromThen</tt>, <tt>enumFromTo</tt>,
+     and <tt>enumFromThenTo </tt>are class methods in the class
+     <tt>Enum</tt> as defined in the Prelude (see Figure <a
+     href="basic.html#standard-classes">6.1</a>).
+     -->
+     ここで <tt>enumFrom</tt>、<tt>enumFromThen</tt>、
+     <tt>enumFromTo</tt> および、<tt>enumFromThenTo</tt> は
+     <tt>Enum</tt> クラスのクラスメソッドであり、プレリュードで定義され
+     ている(図 <a href="basic.html#standard-classes">6.1</a> を見よ)。
+    </td>
+   </tr>
+  </table>
+  <!--
+  <p> The semantics of arithmetic sequences therefore depends entirely on
+   the instance declaration for the type <i>t</i>. See Section <a
+   href="basic.html#enum-class">6.3.4</a> for more details of which
+   <tt>Prelude </tt>types are in <tt>Enum</tt> and their semantics.</p>
+  -->
+  <p>これ故、数列のセマンティクスは型 <i>t</i> の対するインスタンス宣言
+   に全面的に依存する。
+   どの <tt>Prelude</tt> 型が <tt>Enum</tt> クラスのインスタンスであるかの
+   詳細は 図 <a href="basic.html#enum-class">6.3.4</a> 節を見よ。</p>
+
+  <p><a name="list-comprehensions"></a></p>
+  <p> <a name="sect3.11"></a></p>
+  <!--<h3>3.11<tt>&nbsp;&nbsp;</tt>List Comprehensions</h3>-->
+  <h3>3.11<tt>&nbsp;&nbsp;</tt>リスト内包表記</h3>
+
+  <table cellspacing="0" cellspacing="0">
+   <tr>
+    <td width="100"> aexp</td>
+    <td width="20"> <tt>-&gt;</tt></td>
+    <td width="250"> <tt>[</tt> exp <tt>|</tt> qual<sub>1</sub> <tt>,</tt>
+     ... <tt>,</tt> qual<sub>n</sub> <tt>]</tt></td>
+    <!--<td> (list comprehention, n&gt;=1)</td>-->
+    <td> (リスト内包表記, n&gt;=1)</td>
+   </tr>
+   <tr>
+    <td> qual</td>
+    <td> <tt>-&gt;</tt></td>
+    <td> pat <tt>&lt;-</tt> exp</td>
+    <!--<td> (generator)</td>-->
+    <td> (生成器)</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> <tt>let</tt> decls</td>
+    <!--<td> (local declaration)</td>-->
+    <td> (局所宣言)</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> exp</td>
+    <!--<td> (ガード)</td>-->
+   </tr>
+  </table>
+  <!--
+  <p> A <i>list comprehension</i> has the form <tt>[</tt><i> e
+   </i><tt>|</tt><i> q</i><sub><i>1</i></sub><tt>,</tt><i>
+   ...</i><tt>,</tt><i> q</i><sub><i>n</i></sub><i> </i><tt>]</tt><i>,
+   n&gt;=1,</i> where the <i>q</i><sub><i>i</i></sub> qualifiers are either
+   </p>
+  -->
+  <p><em>リストの内包表記</em>は <tt>[</tt><i> e </i><tt>|</tt><i>
+  q</i><sub><i>1</i></sub><tt>,</tt><i> ...</i><tt>,</tt><i>
+  q</i><sub><i>n</i></sub><i> </i><tt>]</tt><i>,n&gt;=1,</i> という形式を
+  持つ。ここでは、<i>q</i><sub><i>i</i></sub> という限定子は以下のいずれか
+  である。</p>
+  <!--
+  <ul>
+   <li><i>generators</i> of the form <i>p </i><tt>&lt;-</tt><i> e</i>,
+    where <i>p</i> is a pattern (see Section <a
+    href="exps.html#pattern-matching">3.17</a>) of type <i>t</i> and
+    <i>e</i> is an expression of type <tt>[</tt><i>t</i><tt>]
+    </tt></li>
+   <li><i>guards</i>, which are arbitrary expressions of type <tt>Bool</tt>
+    </li>
+   <li><i>local bindings</i> that provide new definitions for use in the
+    generated expression <i>e</i> or subsequent guards and generators.</li>
+  </ul>
+  -->
+  <ul>
+   <li> <em>生成器</em>、形式は <i>p </i><tt>&lt;-</tt><i> e</i>。
+	ここで、<i>p</i> は型 <i>t</i> のパターン 
+	(<a href="exps.html#pattern-matching">3.17</a> 節を見よ)であり、
+	<i>e</i> は型 <tt>[</tt><i>t</i><tt>]</tt> の式
+   <li> <em>ガード</em>、<tt>Bool</tt> 型の任意の式
+   <li> <em>局所束縛</em>、生成される式 <i>e</i> 、あるいは、後につづく
+	ガードあるいは生成器で使用される新しい定義を供給する。
+  </ul>
+  <!--
+  <p> Such a list comprehension returns the list of elements produced by
+   evaluating <i>e</i> in the successive environments created by the
+   nested, depth-first evaluation of the generators in the qualifier list.
+   Binding of variables occurs according to the normal pattern matching
+   rules (see Section <a href="exps.html#pattern-matching">3.17</a>), and
+   if a match fails then that element of the list is simply skipped over.
+   Thus:
+   -->
+  <p>このような、リストの内包表記は、限定子リストのなかの入れ子になった、
+   深さ優先評価によって作られた一連の環境のなかで <i>e</i> を評価するこ
+   とで作りだされた要素のリストを返す。変数の束縛は通常のパターン照合の
+   ルール(<a href="exps.html#pattern-matching">3.17</a> 節を見よ)にした
+   がって起こり、もし、照合が失敗すればそのリストの要素は単にスキップさ
+   れる。したがって、
+
+   <tt><br />
+   <br />
+   [&nbsp;x&nbsp;|&nbsp;&nbsp;xs&nbsp;&nbsp;&nbsp;&lt;-&nbsp;[&nbsp;[(1,2),(3,4)],&nbsp;[(5,4),(3,2)]&nbsp;],&nbsp;<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(3,x)&nbsp;&lt;-&nbsp;xs&nbsp;]<br />
+   <br />
+   </tt>
+   <!--
+   yields the list <tt>[4,2]</tt>. If a qualifier is a guard, it must
+   evaluate to <tt>True</tt> for the previous pattern match to succeed. As
+   usual, bindings in list comprehensions can shadow those in outer scopes;
+   for example:</p>
+   -->
+   は <tt>[4,2]</tt> というリストになる。もし、限定子がガードなら、先行する
+   パターン照合が成功するためには、そのガードが評価されて <tt>True</tt>
+   にならねばならない。通常とおなじようにリストの内包表記中の束縛は外側
+   の束縛を覆い隠す。たとえば、</p>
+  <p></p>
+
+  <table>
+   <tr>
+    <td>
+     <tt>[&nbsp;x&nbsp;|&nbsp;x&nbsp;&lt;-&nbsp;x,&nbsp;x&nbsp;&lt;-&nbsp;x&nbsp;]</tt>
+     </td>
+    <td> =</td>
+    <td>
+     <tt>[&nbsp;z&nbsp;|&nbsp;y&nbsp;&lt;-&nbsp;x,&nbsp;z&nbsp;&lt;-&nbsp;y]</tt>
+    </td>
+   </tr>
+  </table>
+
+  <p></p>
+
+  <table border="2" cellpadding="3">
+   <tr>
+    <td>
+     <!--<h3>Translation:</h3>-->
+     <h3>変換:</h3>
+     <!--
+     List comprehensions satisfy these identities, which may be used as a
+     translation into the kernel:
+     -->
+     リストの内包表記は以下の同一性を満す。これはカーネルへの変換時にも用
+     いられる。
+     <div align="center">
+      <table>
+       <tr>
+        <td><tt>[&nbsp;</tt><i> e</i><tt>&nbsp;|&nbsp;True&nbsp;]</tt></td>
+        <td align="center"> =</td>
+        <td> <tt>[</tt><i>e</i><tt>]</tt></td>
+       </tr>
+       <tr>
+        <td><tt>[&nbsp;</tt><i>
+         e</i><tt>&nbsp;|&nbsp;</tt><i>q</i><tt>&nbsp;]</tt></td>
+        <td align="center"> =</td>
+        <td> <tt>[</tt><i> e </i><tt>|</tt><i>
+         q</i><tt>,&nbsp;True&nbsp;]</tt></td>
+       </tr>
+       <tr>
+        <td><tt>[&nbsp;</tt><i>
+         e</i><tt>&nbsp;|&nbsp;</tt><i>b</i><tt>,</tt><i> Q </i><tt>]</tt></td>
+        <td align="center"> =</td>
+        <td> <tt>if</tt><i> b </i><tt>then</tt><i> </i><tt>[&nbsp;</tt><i>
+         e</i><tt>&nbsp;|&nbsp;</tt><i>Q</i><tt>&nbsp;]</tt><i>
+         </i><tt>else&nbsp;[]</tt></td>
+       </tr>
+       <tr>
+        <td><tt>[&nbsp;</tt><i> e</i><tt>&nbsp;|&nbsp;</tt><i>p
+         </i><tt>&lt;-</tt><i> l</i><tt>,</tt><i> Q</i><tt>&nbsp;]</tt></td>
+        <td align="center"> =</td>
+        <td> <tt>let&nbsp;ok</tt><i> p </i><tt>=</tt><i>
+         </i><tt>[&nbsp;</tt><i>
+         e</i><tt>&nbsp;|&nbsp;</tt><i>Q</i><tt>&nbsp;]</tt></td>
+       </tr>
+       <tr>
+        <td></td>
+        <td align="center"></td>
+        <td> <tt>&nbsp;&nbsp;&nbsp;&nbsp;ok&nbsp;_&nbsp;=&nbsp;[]</tt></td>
+       </tr>
+       <tr>
+        <td></td>
+        <td align="center"></td>
+        <td> <tt>in&nbsp;concatMap&nbsp;ok</tt><i> l</i></td>
+       </tr>
+       <tr>
+        <td><tt>[&nbsp;</tt><i> e</i><tt>&nbsp;|&nbsp;let</tt><i>
+         decls</i><tt>,</tt><i> Q</i><tt>&nbsp;]</tt></td>
+        <td align="center"> =</td>
+        <td> <tt>let</tt><i> decls </i><tt>in</tt><i>
+         </i><tt>[&nbsp;</tt><i>
+         e</i><tt>&nbsp;|&nbsp;</tt><i>Q</i><tt>&nbsp;] </tt></td>
+       </tr>
+      </table>
+     </div>
+     <!--
+     where <i>e</i> ranges over expressions, <i>p</i> over patterns,
+     <i>l</i> over list-valued expressions, <i>b</i> over boolean
+     expressions, <i>decls</i> over declaration lists, <i>q</i> over
+     qualifiers, and <i>Q</i> over sequences of qualifiers. <tt>ok</tt> is
+     a fresh variable. The function <tt>concatMap</tt>, and boolean value
+     <tt>True</tt>, are defined in the Prelude.
+     -->
+     ここで <i>e</i> のとりうる範囲は式、<i>p</i> のとりうる範囲はパター
+     ン、<i>l</i> のとりうる範囲はリスト値の式、<i>b</i> のとりうる範囲
+     はブール式、<i>decls</i> は宣言リスト、<i>q</i> は限定子の、
+     <i>Q</i> は限定子のリストである。
+     <tt>ok</tt> は新しい変数である。関数 <tt>concatMap</tt> および
+     真理値 <tt>True</tt> はプレリュードで定義されている。
+    </td>
+   </tr>
+  </table>
+  <!--
+  <p> As indicated by the translation of list comprehensions, variables
+   bound by <tt>let</tt> have fully polymorphic types while those defined
+   by <tt>&lt;-</tt> are lambda bound and are thus monomorphic (see Section
+   <a href="decls.html#monomorphism">4.5.4</a>).</p>
+  -->
+  <p>リスト内包表記の変換に示されているように <tt>let</tt> によって束
+   縛された変数は完全な多相型になる。一方で、<tt>&lt;-</tt> で定義された
+   変数はラムダ束縛であるので単相型になる。
+   (<a href="decls.html#monomorphism">4.5.4</a> 節を見よ。)</p> 
+
+  <p><a name="let-expressions"></a></p>
+  <p> <a name="sect3.12"></a></p>
+  <!--<h3>3.12<tt>&nbsp;&nbsp;</tt>Let Expressions</h3>-->
+  <h3>3.12<tt>&nbsp;&nbsp;</tt>let 式</h3>
+
+  <table cellspacing="0" cellspacing="0">
+   <tr>
+    <td width="100"> exp</td>
+    <td width="20"> <tt>-&gt;</tt></td>
+    <td width="250"> <tt>let</tt> decls <tt>in</tt> exp</td>
+   </tr>
+  </table>
+  <!--
+  <p> <i>Let expressions</i> have the general form <tt>let&nbsp;{</tt><i>
+   d</i><sub><i>1</i></sub><i> </i><tt>;</tt><i> ... </i><tt>;</tt><i>
+   d</i><sub><i>n</i></sub><i> </i><tt>}&nbsp;in</tt><i> e</i>, and
+   introduce a nested, lexically-scoped, mutually-recursive list of
+   declarations (<tt>let</tt> is often called <tt>letrec</tt> in other
+   languages). The scope of the declarations is the expression <i>e </i>and
+   the right hand side of the declarations. Declarations are described in
+   Chapter <a href="decls.html#declarations">4</a>. Pattern bindings are
+   matched lazily; an implicit <tt>~</tt> makes these patterns irrefutable.
+   For example, 
+  -->
+  <p><em>Let 式</em> は
+   <tt>let&nbsp;{</tt><i> d</i><sub><i>1</i></sub><i> </i><tt>;</tt><i> ...  </i><tt>;</tt><i> d</i><sub><i>n</i></sub><i> </i><tt>}&nbsp;in</tt><i> e</i>
+   という一般形式を持ち、入れ子でレキシカルスコープで相互再帰的な宣言リスト
+   (このような <tt>let</tt> は他の言語ではよく <tt>letrec</tt> と呼ばれる)
+   を持つ。宣言のスコープ(有効範囲)は、式 <i>e</i> および宣言の右辺である。
+   宣言については <a href="decls.html#declarations">4</a> 章を参照のこと。
+   パターン束縛は遅延照合となる。すなわち暗黙の <tt>~</tt> がパターンを反駁
+   不可にする。たとえば、
+   <tt><br />
+   <br />
+   let&nbsp;(x,y)&nbsp;=&nbsp;undefined&nbsp;in&nbsp;</tt><i>e</i><tt><br />
+   <br />
+   </tt>
+   <!-- does not cause an execution-time error until <tt>x</tt> or
+   <tt>y</tt> is evaluated.</p>-->
+   は <tt>x</tt> あるいは <tt>y</tt> が評価されるまでは実行時エラーを起こさ
+   ない。</p>
+
+  <p></p>
+
+  <table border="2" cellpadding="3">
+   <tr>
+    <td>
+     <!--<h3>Translation:</h3>-->
+     <h3>変換:</h3>
+     <!--
+     The dynamic semantics of the expression <tt>let&nbsp;{</tt><i>
+     d</i><sub><i>1</i></sub><i> </i><tt>;</tt><i> ... </i><tt>;</tt><i>
+     d</i><sub><i>n</i></sub><i> </i><tt>}&nbsp;in</tt><i>
+     e</i><sub><i>0</i></sub> are captured by this translation: After
+     removing all type signatures, each declaration
+     <i>d</i><sub><i>i</i></sub> is translated into an equation of the form
+     <i>p</i><sub><i>i</i></sub><i> </i><tt>=</tt><i>
+     e</i><sub><i>i</i></sub>, where <i>p</i><sub><i>i</i></sub> and
+     <i>e</i><sub><i>i</i></sub> are patterns and expressions respectively,
+     using the translation in Section <a
+     href="decls.html#function-bindings">4.4.3</a>. Once done, these
+     identities hold, which may be used as a translation into the
+     kernel:
+     -->
+     式
+     <tt>let&nbsp;{</tt><i> d</i><sub><i>1</i></sub><i> </i><tt>;</tt><i>
+     ...  </i><tt>;</tt><i> d</i><sub><i>n</i></sub><i>
+     </i><tt>}&nbsp;in</tt><i> e</i><sub><i>0</i></sub> 
+     の動的セマンティクスは次の変換により捕捉される。すべての型シグネチャー
+     を除いた後、各宣言 <i>d</i><sub><i>i</i></sub> は
+     <i>p</i><sub><i>i</i></sub><i> </i><tt>=</tt><i>
+     e</i><sub><i>i</i></sub> という形式の等式に変換される。ここで、
+     <i>p</i><sub><i>i</i></sub> および <i>e</i><sub><i>i</i></sub> はパ
+     ターンおよび再帰的に <a
+     href="decls.html#function-bindings">4.4.3</a> 節の変換を使う式であ
+     る。一旦変換が行われると以下の同等性が保持さる。これはカーネルへの
+     変換として用いられる。
+
+     <div align="center">
+      <table>
+       <tr>
+        <td><tt>let&nbsp;{</tt><i>p</i><sub><i>1</i></sub><tt>=</tt><i>e</i><sub><i>1</i></sub><tt>;&nbsp;</tt>
+         ...
+         <tt>;&nbsp;</tt><i>p</i><sub><i>n</i></sub><tt>=</tt><i>e</i><sub><i>n</i></sub><tt>}&nbsp;in</tt>
+         <i>e</i><sub><i>0</i></sub></td>
+        <td align="center">=</td>
+        <td> <tt>let&nbsp;(~</tt><i>p</i><sub><i>1</i></sub><tt>,</tt> ...
+         <tt>,~</tt><i>p</i><sub><i>n</i></sub><tt>)&nbsp;=&nbsp;(</tt><i>e</i><sub><i>1</i></sub><tt>,</tt>
+         ... <tt>,</tt><i>e</i><sub><i>n</i></sub><tt>)&nbsp;in</tt>
+         <i>e</i><sub><i>0</i></sub></td>
+       </tr>
+       <tr>
+        <td><tt>let&nbsp;</tt><i>p</i><tt>&nbsp;=&nbsp;</tt><i>e</i><sub><i>1</i></sub>
+         <tt>&nbsp;in&nbsp;</tt> <i>e</i><sub><i>0</i></sub></td>
+        <td align="center">=</td>
+        <td>
+         <tt>case&nbsp;</tt><i>e</i><sub><i>1</i></sub><tt>&nbsp;of&nbsp;~</tt><i>p</i><tt>&nbsp;-&gt;&nbsp;</tt><i>e</i><sub><i>0</i></sub>
+         </td>
+       </tr>
+       <tr>
+        <td></td>
+        <td align="center"></td>
+        <!--<td> where no variable in <i>p</i> appears free in
+         <i>e</i><sub><i>1</i></sub></td>-->
+        <td>ここでは <i></i> 内の変数が
+	 <i>e</i><sub><i>1</i></sub></td> 内で自由変数としてあらわれない。</td>
+       </tr>
+       <tr>
+        <td><tt>let&nbsp;</tt><i>p</i><tt>&nbsp;=&nbsp;</tt><i>e</i><sub><i>1</i></sub>
+	 <tt>&nbsp;in&nbsp;</tt> <i>e</i><sub><i>0</i></sub></td>
+        <td align="center">=</td>
+        <td>
+         <tt>let&nbsp;</tt><i>p</i><tt>&nbsp;=&nbsp;fix&nbsp;(&nbsp;\&nbsp;~</tt><i>p</i><tt>&nbsp;-&gt;&nbsp;</tt><i>e</i><sub><i>1</i></sub><tt>)&nbsp;in</tt>
+         <i>e</i><sub><i>0</i></sub></td>
+       </tr>
+      </table>
+     </div>
+     <!--
+     where <tt>fix</tt> is the least fixpoint operator. Note the use of the
+     irrefutable patterns <tt>~</tt><i>p</i>. This translation does not
+     preserve the static semantics because the use of <tt>case
+     </tt>precludes a fully polymorphic typing of the bound variables. The
+     static semantics of the bindings in a <tt>let</tt> expression are
+     described in Section <a href="decls.html#pattern-bindings">4.4.3</a>.
+     -->
+     ここで <tt>fix</tt> は最小不動点演算子である。反駁不可パターン
+     <tt>~</tt><i>p</i> の使い方に注意すること。この変換は静的セマンティ
+     クスを保存しない、なぜなら、<tt>case</tt> の使用が束縛変数の完全な
+     多相型付けをはばんでいるからである。<tt>let</tt> 式での束縛の静的セ
+     マンティクスは <a href="decls.html#pattern-bindings">4.4.3</a> 節で
+     解説する。
+    </td>
+   </tr>
+  </table>
+
+  <p><a name="case"></a></p>
+  <p> <a name="sect3.13"></a></p>
+  <!--<h3>3.13<tt>&nbsp;&nbsp;</tt>Case Expressions</h3>-->
+  <h3>3.13<tt>&nbsp;&nbsp;</tt>case 式</h3>
+
+  <table cellspacing="0" cellspacing="0">
+   <tr>
+    <td width="100"></td>
+    <td width="20"></td>
+    <td width="250"></td>
+   </tr>
+   <tr>
+    <td> exp</td>
+    <td> <tt>-&gt;</tt></td>
+    <td> <tt>case</tt> exp <tt>of</tt> <tt>{</tt> alts <tt>} </tt></td>
+   </tr>
+   <tr>
+    <td> alts</td>
+    <td> <tt>-&gt;</tt></td>
+    <td> alt<sub>1</sub> <tt>;</tt> ... <tt>;</tt> alt<sub>n</sub></td>
+    <td> (n&gt;=1)</td>
+   </tr>
+   <tr>
+    <td> alt</td>
+    <td> <tt>-&gt;</tt></td>
+    <td> pat <tt>-&gt;</tt> exp [<tt>where</tt> decls]</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> pat gdpat [<tt>where</tt> decls]</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td></td>
+    <td> (empty alternative)</td>
+   </tr>
+   <tr>
+    <td> gdpat</td>
+    <td> <tt>-&gt;</tt></td>
+    <td> gd <tt>-&gt;</tt> exp [ gdpat ]</td>
+   </tr>
+   <tr>
+    <td> gd</td>
+    <td> <tt>-&gt;</tt></td>
+    <td> <tt>|</tt> exp<sup>0</sup></td>
+   </tr>
+  </table>
+
+  <!--<p> A <i>case expression</i> has the general form</p>-->
+  <p><em>case 式</em>は一般的には以下の形式を持つ。</p>
+
+  <p> <tt>case</tt><i> e
+   </i><tt>of&nbsp;{&nbsp;</tt><i>p</i><sub><i>1</i></sub><i>
+   match</i><sub><i>1</i></sub><i> </i><tt>;</tt><i> ... </i><tt>;</tt><i>
+   p</i><sub><i>n</i></sub><i> match</i><sub><i>n</i></sub><i> </i><tt>}
+   </tt></p>
+
+  <!--
+  <p> where each <i>match</i><sub><i>i</i></sub> is of the general form</p>
+  -->
+  <p> ここで、各 <i>match</i><sub><i>i</i></sub> は以下の一般的形式をもつ。</p>
+  <p></p>
+
+  <table>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt><i> g</i><sub><i>i1</i></sub></td>
+    <td> <tt>-&gt;</tt><i> e</i><sub><i>i1</i></sub></td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <i>...</i></td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt><i> g</i><sub><i>im</i><sub><i>i</i></sub></sub></td>
+    <td> <tt>-&gt;</tt><i> e</i><sub><i>im</i><sub><i>i</i></sub></sub></td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>where</tt><i> decls</i><sub><i>i</i></sub></td>
+   </tr>
+  </table>
+  <!--
+  <p> (Notice that in the syntax rule for <i>gd</i>, the "<tt>|</tt>" is a
+   terminal symbol, not the syntactic metasymbol for alternation.) Each
+   alternative <i>p</i><sub><i>i</i></sub><i> match</i><sub><i>i</i></sub>
+   consists of a pattern <i>p</i><sub><i>i</i></sub> and its matches,
+   <i>match</i><sub><i>i</i></sub>. Each match in turn consists of a
+   sequence of pairs of guards <i>g</i><sub><i>ij</i></sub> and bodies
+   <i>e</i><sub><i>ij</i></sub> (expressions), followed by optional
+   bindings (<i>decls</i><sub><i>i</i></sub>) that scope over all of the
+   guards and expressions of the alternative. An alternative of the form</p>
+  -->
+  <p> ( <i>gd</i> に対する構文ルールでは、"<tt>|</tt>" は終端シンボルであり、
+   選択肢のためのメタシンボルではないことに注意 ) 各選択肢
+   <i>p</i><sub><i>i</i></sub><i> match</i><sub><i>i</i></sub> はパター
+   ン部 <i>p</i><sub><i>i</i></sub> および照合部
+   <i>match</i><sub><i>i</i></sub> から構成される。各照合部はさらに
+   ガード部 <i>g</i><sub><i>ij</i></sub> とボディ部
+   <i>e</i><sub><i>ij</i></sub> (expressions) の対のならびから構成される。
+   同様に、当該ガード部および当該選択肢の式を
+   有効範囲とする付加的な束縛 (<i>decls</i><sub><i>i</i></sub>) が続く。
+   以下の形式 
+  </p>
+  <p> <i>pat </i><tt>-&gt;</tt><i> exp </i><tt>where</tt><i> decls </i></p>
+  <!--<p> is treated as shorthand for:</p>-->
+  <p> は次のものの省略形として扱う。</p>
+  <p></p>
+  <table>
+   <tr>
+    <td></td>
+    <td> <i>pat </i><tt>|&nbsp;True</tt></td>
+    <td> <tt>-&gt;</tt><i> exp</i></td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>where</tt><i> decls </i></td>
+   </tr>
+  </table>
+
+  <!--
+  <p> A case expression must have at least one alternative and each
+   alternative must have at least one body. Each body must have the same
+   type, and the type of the whole expression is that type.</p>
+  -->
+  <p>case 式は少くとも 1 つの選択肢を持たねばならない。また、各選択肢は
+   少くとも 1 つのボディ部をもたなければならない。各ボディ部は同じ型
+   でなければならず、この型が当該 case 式全体の型である。</p> 
+  <!--
+  <p> A case expression is evaluated by pattern matching the expression
+   <i>e </i>against the individual alternatives. The alternatives are tried
+   sequentially, from top to bottom. If <i>e</i> matches the pattern in the
+   alternative, the guards for that alternative are tried sequentially from
+   top to bottom, in the environment of the case expression extended first
+   by the bindings created during the matching of the pattern, and then by
+   the <i>decls</i><sub><i>i</i></sub> in the <tt>where</tt> clause
+   associated with that alternative. If one of the guards evaluates to
+   <tt>True</tt>, the corresponding right-hand side is evaluated in the
+   same environment as the guard. If all the guards evaluate to
+   <tt>False</tt>, matching continues with the next alternative. If no
+   match succeeds, the result is <i>_|_</i>. Pattern matching is described
+   in Section <a href="exps.html#pattern-matching">3.17</a>, with the
+   formal semantics of case expressions in Section <a
+   href="exps.html#case-semantics">3.17.3</a>.</p>
+  -->
+  <p> case 式は、式 <i>e</i> を個別の選択肢にパターン照合することによっ
+   て評価される。選択肢は上から下へ順に試される。<i>e</i> が選択肢最初に
+   成功した照合により対応するボディ部の評価がおこなわれる。
+   このとき、当該の case 式の環境はその選択肢を照合するときに作られた束
+   縛と、その選択肢に対応する <i>decls</i><sub><i>i</i></sub> とによって
+   拡張される。もし、照合がすべて失敗すると結果は <i>_|_</i> になる。パ
+   ターン照合については <a href="exps.html#pattern-matching">3.17</a> 節
+   で解説し、<a href="exps.html#case-semantics">3.17.3</a> 節で、case 式
+   の形式的セマンティクスをについても解説する。
+  </p>
+  <!--
+  <p> <i>A note about parsing.</i> The expression 
+  -->
+  <p> <em>構文解析に関するノート</em> 次の式
+   <tt><br />
+   <br />
+   &nbsp;&nbsp;case&nbsp;x&nbsp;of&nbsp;{&nbsp;(a,_)&nbsp;|&nbsp;let&nbsp;b&nbsp;=&nbsp;not&nbsp;a&nbsp;in&nbsp;b&nbsp;::&nbsp;Bool&nbsp;-&gt;&nbsp;a&nbsp;}<br />
+   <br />
+   </tt>
+   <!--
+   is tricky to parse correctly. It has a single unambiguous parse,
+   namely
+   -->
+   は正しく構文解析できる巧妙な例である。曖昧でない単一の構文解析、すなわち、
+   <tt><br />
+   <br />
+   &nbsp;&nbsp;case&nbsp;x&nbsp;of&nbsp;{&nbsp;(a,_)&nbsp;|&nbsp;(let&nbsp;b&nbsp;=&nbsp;not&nbsp;a&nbsp;in&nbsp;b&nbsp;::&nbsp;Bool)&nbsp;-&gt;&nbsp;a&nbsp;}<br />
+   <br />
+   </tt>
+   を持つ。
+  <!--
+   However, the phrase <tt>Bool&nbsp;-&gt;&nbsp;a</tt> is
+   syntactically valid as a type, and parsers with limited lookahead may
+   incorrectly commit to this choice, and hence reject the program.
+   Programmers are advised, therefore, to avoid guards that end with a type
+   signature --- indeed that is why a <i>gd</i> contains an
+   <i>exp</i><sup><i>0</i></sup> not an <i>exp</i>.</p>
+  -->
+   しかしながら、<tt>Bool&nbsp;-&gt;&nbsp;a</tt> 句は型の構文としては
+   正当であり、先読みが制限された構文解析器では誤ってこの選択にたどりつ
+   くことがありえる。それゆえ、このプログラム拒否れる。それ故、プログラ
+   マは、型シグネチャーでおわるガードは避け べきである。実際それが、
+   <i>gd</i> が <i>exp</i> ではなく <i>exp</i><sup><i>0</i></sup> を
+   を含む理由である</p>
+  
+  <a name="do-expressions"></a></p>
+  <p> <a name="sect3.14"></a></p>
+  <!--<h3>3.14<tt>&nbsp;&nbsp;</tt>Do Expressions</h3>-->
+  <h3>3.14<tt>&nbsp;&nbsp;</tt> do 式</h3>
+
+  <table cellspacing="0" cellspacing="0">
+   <tr>
+    <td width="100"> exp</td>
+    <td width="20"> <tt>-&gt;</tt></td>
+    <td width="250"> <tt>do</tt> <tt>{</tt> stmts <tt>}</tt></td>
+    <td> (do expression)</td>
+   </tr>
+   <tr>
+    <td> stmts</td>
+    <td> <tt>-&gt;</tt></td>
+    <td> stmt<sub>1</sub> ... stmt<sub>n</sub> exp [<tt>;</tt>]</td>
+    <td> (n&gt;=0)</td>
+   </tr>
+   <tr>
+    <td> stmt</td>
+    <td> <tt>-&gt;</tt></td>
+    <td> exp <tt>; </tt></td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> pat <tt>&lt;-</tt> exp <tt>; </tt></td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> <tt>let</tt> decls <tt>; </tt></td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> <tt>;</tt></td>
+    <td> (empty statement)</td>
+   </tr>
+  </table>
+  <!--
+  <p> A <i>do expression</i> provides a more conventional syntax for
+   monadic programming. It allows an expression such as
+   -->
+  <em>do 式</em>はモナドプログラミングの習慣的な構文である。次のような式
+    <tt><br />
+   <br />
+   &nbsp;&nbsp;putStr&nbsp;"x:&nbsp;"&nbsp;&nbsp;&nbsp;&nbsp;&gt;&gt;&nbsp;<br />
+   &nbsp;&nbsp;getLine&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&gt;&gt;=&nbsp;\l&nbsp;-&gt;<br />
+   &nbsp;&nbsp;return&nbsp;(words&nbsp;l)<br />
+   <br />
+   </tt>
+   <!-- to be written in a more traditional way as:-->
+   を以下のような古典的な書き方にすることができる。
+   <tt><br />
+   <br />
+   &nbsp;&nbsp;do&nbsp;putStr&nbsp;"x:&nbsp;"<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l&nbsp;&lt;-&nbsp;getLine<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;(words&nbsp;l)<br />
+   <br />
+   </tt>
+   となる。
+  </p>
+
+  <table border="2" cellpadding="3">
+   <tr>
+    <td>
+     <!--<h3>Translation:</h3>-->
+     <h3>変換:</h3>
+     <!--
+     Do expressions satisfy these identities, which may be used as a
+     translation into the kernel, after eliminating empty <i>stmts</i>:
+     -->
+     do 式は以下の同一性を満し、これらは、空の <i>stmts</i>を除去した後、
+     カーネルへの変換に用いることができる。
+     <div align="center">
+      <table>
+       <tr>
+        <td><tt>do&nbsp;{</tt><i>e</i><tt>}</tt></td>
+        <td align="center">=</td>
+        <td> <i>e</i></td>
+       </tr>
+       <tr>
+        <td><tt>do&nbsp;{</tt><i>e</i><tt>;</tt><i>stmts</i><tt>}</tt></td>
+        <td align="center">=</td>
+        <td> <i>e</i>
+         <tt>&gt;&gt;&nbsp;do&nbsp;{</tt><i>stmts</i><tt>}</tt></td>
+       </tr>
+       <tr>
+        <td><tt>do&nbsp;{</tt><i>p</i><tt>&nbsp;&lt;-&nbsp;</tt><i>e</i><tt>;&nbsp;</tt><i>stmts</i><tt>}</tt>
+        </td>
+        <td align="center">=</td>
+        <td>
+         <tt>let&nbsp;ok&nbsp;</tt><i>p</i><tt>&nbsp;=&nbsp;do&nbsp;{</tt><i>stmts</i><tt>}</tt></td>
+       </tr>
+       <tr>
+	<td></td>
+        <td align="center"></td>
+        <td>
+         <tt>&nbsp;&nbsp;&nbsp;&nbsp;ok&nbsp;_&nbsp;=&nbsp;fail&nbsp;"..."</tt></td>
+       </tr>
+       <tr>
+        <td></td>
+        <td align="center"></td>
+        <td>
+         <tt>&nbsp;&nbsp;in&nbsp;</tt><i>e</i><tt>&nbsp;&gt;&gt;=&nbsp;ok</tt>
+         </td>
+       </tr>
+       <tr>
+        <td><tt>do&nbsp;{let</tt>
+         <i>decls</i><tt>;&nbsp;</tt><i>stmts</i><tt>}</tt></td>
+        <td align="center">=</td>
+        <td> <tt>let</tt> <i>decls</i>
+         <tt>in&nbsp;do&nbsp;{</tt><i>stmts</i><tt>}</tt></td>
+       </tr>
+      </table>
+     </div>
+     <!--
+     The ellipsis <tt>"..."</tt> stands for a compiler-generated error
+     message, passed to <tt>fail</tt>, preferably giving some indication of
+     the location of the pattern-match failure; the functions
+     <tt>&gt;&gt;</tt>, <tt>&gt;&gt;=</tt>, and <tt>fail</tt> are
+     operations in the class <tt>Monad</tt>, as defined in the Prelude; and
+     <tt>ok</tt> is a fresh identifier.
+     -->
+     <tt>"..."</tt> はコンパイラのエラーメッセージをあらわしている。これ
+     は <tt>fail</tt> に渡される。パターン照合失敗の個所を示すようにする
+     ことが多い。関数 <tt>&gt;&gt;</tt>、<tt>&gt;&gt;=</tt>、および、
+     <tt>fail</tt> は<tt>Monad</tt> クラスの演算でありプレリュードで定義さ
+     れている。また、<tt>ok</tt> は初出の識別子である。
+    </td>
+   </tr>
+  </table>
+  <!--
+  <p>As indicated by the translation of <tt>do</tt>, variables bound by
+   <tt>let</tt> have fully polymorphic types while those defined by
+   <tt>&lt;-</tt> are lambda bound and are thus monomorphic.</p>
+  -->
+  <p><tt>do</tt> の変換で示されているように、<tt>let</tt> で束縛された変
+   数は完全な多相型である。一方、<tt>&lt;-</tt> で定義されている変数は
+   ラムダ束縛であるので、単相型である。
+  </p>
+
+  <p><a name="field-ops"></a></p>
+  <p> <a name="sect3.15"></a></p>
+  <!--<h3>3.15<tt>&nbsp;&nbsp;</tt>Datatypes with Field Labels</h3>-->
+  <h3>3.15<tt>&nbsp;&nbsp;</tt>フィールドラベルをもつデータ型</h3>
+  <!--
+  <p>A datatype declaration may optionally define field labels (see Section
+   <a href="decls.html#datatype-decls">4.2.1</a>). These field labels can
+   be used to construct, select from, and update fields in a manner that is
+   independent of the overall structure of the datatype.</p>
+  -->
+  <p>データ型宣言は、その型の構成要素のいくつかあるいはすべてにフィール
+   ドラベルを定義することができる(<a href="decls.html#datatype-decls">
+   4.2.1</a> 節を見よ)。これらのフィールドラベルは、データ型全体の構造
+   とは独立に、構築、選択、更新することが可能である。</p>
+  <!--
+  <p> Different datatypes cannot share common field labels in the same
+   scope. A field label can be used at most once in a constructor. Within a
+   datatype, however, a field label can be used in more than one
+   constructor provided the field has the same typing in all constructors.
+   To illustrate the last point, consider: 
+  -->
+  <p>同じスコープで、異るデータ型が同じフィールド名を共有することはでき
+   ない。ひとつのフィールドラベルはひとつの構成子中に高々1度しか使えない。
+   しかしながら、同じフィールド名はひとつ のデータ型の中で、すべての構築
+   子のなかで、同じ型付けのフィールドに対して、一度以上使うことができる。
+   最後の要点を説明すると、
+   <tt><br />
+   <br />
+   &nbsp;&nbsp;data&nbsp;S&nbsp;=&nbsp;S1&nbsp;{&nbsp;x&nbsp;::&nbsp;Int&nbsp;}&nbsp;|&nbsp;S2&nbsp;{&nbsp;x&nbsp;::&nbsp;Int&nbsp;}&nbsp;&nbsp;&nbsp;--&nbsp;OK<br />
+   &nbsp;&nbsp;data&nbsp;T&nbsp;=&nbsp;T1&nbsp;{&nbsp;y&nbsp;::&nbsp;Int&nbsp;}&nbsp;|&nbsp;T2&nbsp;{&nbsp;y&nbsp;::&nbsp;Bool&nbsp;}&nbsp;&nbsp;--&nbsp;NG<br />
+   <br />
+   </tt>
+   <!--
+   Here <tt>S</tt> is legal but <tt>T</tt> is not, because <tt>y</tt>
+   is given inconsistent typings in the latter.</p>
+   -->
+   ここで、<tt>S</tt> は正しいが、<tt>T</tt> は正しくない、それは
+   <tt>y</tt> は後者では型付けの整合性がとれていないからである。</p>
+
+  <p> <a name="sect3.15.1"></a></p>
+  <!--<h4>3.15.1<tt>&nbsp;&nbsp;</tt>Field Selection</h4>-->
+  <h4>3.15.1<tt>&nbsp;&nbsp;</tt>フィールドの選択</h4>
+
+  <table cellspacing="0" cellspacing="0">
+   <tr>
+    <td width="100"> aexp</td>
+    <td width="20"> <tt>-&gt;</tt></td>
+    <td width="250"> qvar</td>
+   </tr>
+  </table>
+  <!--
+  <p> Field labels are used as selector functions. When used as a variable,
+   a field label serves as a function that extracts the field from an
+   object. Selectors are top level bindings and so they may be shadowed by
+   local variables but cannot conflict with other top level bindings of the
+   same name. This shadowing only affects selector functions; in record
+   construction (Section <a
+   href="exps.html#record-construction">3.15.2</a>) and update (Section <a
+   href="exps.html#record-update">3.15.3</a>), field labels cannot be
+   confused with ordinary variables.</p>
+  -->
+  <p>フィールド名は選択子関数として使用する。変数として使用するときは、
+   フィールド名はオブジェクトからそのフィールドを取り出す関数として働く。
+   選択子はトップレベルの束縛なので局所変数によって覆い隠される。しかし、
+   同じ名前の他のトップレベルの束縛とは衝突することは出来ない。局所変数
+   による隠蔽は選択子関数にのみ効果があり、レコード構築
+   (<a href="exps.html#record-construction">3.15.2</a> 節)や更新
+   (<a href="exps.html#record-update">3.15.3</a> 節)では、フィールド
+   ドラベルを普通の変数と混同してはならない。</p>
+
+  <p></p>
+
+  <table border="2" cellpadding="3">
+   <tr>
+    <td>
+     <!--<h3>Translation:</h3>-->
+     <h3>変換:</h3>
+     <!--
+     A field label <i>f</i> introduces a selector function defined as:
+     -->
+     フィールドラベル <i>f</i> は以下のような定義の選択子関数を導入する。
+     <div align="center">
+      <table>
+       <tr>
+        <td> <i>f</i><tt>&nbsp;x</tt></td>
+        <td align="center">=</td>
+        <td><tt>case&nbsp;x&nbsp;of&nbsp;{</tt>
+         <i>C</i><sub><i>1</i></sub><i> p</i><sub><i>11</i></sub><i>
+         ...p</i><sub><i>1k</i></sub> <tt>&nbsp;-&gt;&nbsp;</tt>
+         <i>e</i><sub><i>1</i></sub> <tt>;</tt> <i>...</i> <tt>;</tt>
+         <i>C</i><sub><i>n</i></sub><i> p</i><sub><i>n1</i></sub><i>
+         ...p</i><sub><i>nk</i></sub> <tt>&nbsp;-&gt;&nbsp;</tt>
+         <i>e</i><sub><i>n</i></sub> <tt>}</tt></td>
+       </tr>
+      </table>
+     </div>
+     <!--
+     where <i>C</i><sub><i>1</i></sub><i> ...C</i><sub><i>n</i></sub> are
+     all the constructors of the datatype containing a field labeled with
+     <i>f</i>, <i>p</i><sub><i>ij</i></sub> is <tt>y</tt> when <i>f</i>
+     labels the <i>j</i>th component of <i>C</i><sub><i>i</i></sub> or
+     <tt>_</tt> otherwise, and <i>e</i><sub><i>i</i></sub> is <tt>y</tt>
+     when some field in <i>C</i><sub><i>i</i></sub> has a label of <i>f</i>
+     or <tt>undefined</tt> otherwise.
+     -->
+     ここで <i>C</i><sub><i>1</i></sub><i> ...C</i><sub><i>n</i></sub> は
+     <i>f</i> というラベルをもつフィールド含むすべての構成子で、
+     <i>p</i><sub><i>ij</i></sub> は <i>f</i> が
+     <i>C</i><sub><i>i</i></sub> の <i>j</i> 番目のフィールドのラベルであ
+     るときは<tt>y</tt>、さもなければ <tt>_</tt>、そして、
+     <i>e</i><sub><i>i</i></sub> は  <i>C</i><sub><i>i</i></sub> のいくつ
+     かのフィールドのラベルが <i>f</i> のとき <tt>y</tt> となり、さもなけ
+     れば、<tt>undefined</tt> となる。
+    </td>
+   </tr>
+  </table>
+
+  <p><a name="record-construction"></a></p>
+  <p><a name="sect3.15.2"></a></p>
+  <h4>3.15.2<tt>&nbsp;&nbsp;</tt>フィールドラベルを用いた構築</h4>
+
+  <table cellspacing="0" cellspacing="0">
+   <tr>
+    <td width="100"> aexp</td>
+    <td width="20"> <tt>-&gt;</tt></td>
+    <td width="250"> qcon <tt>{</tt> fbind<sub>1</sub> <tt>,</tt> ...
+     <tt>,</tt> fbind<sub>n</sub> <tt>}</tt></td>
+    <td> (labeled construction, n&gt;=0)</td>
+   </tr>
+   <tr>
+    <td> fbind</td>
+    <td> <tt>-&gt;</tt></td>
+    <td> qvar <tt>=</tt> exp</td>
+   </tr>
+  </table>
+  <!--
+  <p> A constructor with labeled fields may be used to construct a value in
+   which the components are specified by name rather than by position.
+   Unlike the braces used in declaration lists, these are not subject to
+   layout; the <tt>{</tt> and <tt>}</tt> characters must be explicit. (This
+   is also true of field updates and field patterns.) Construction using
+   field labels is subject to the following constraints:</p>
+  -->
+  <p>ラベルの付いたフィールドをもつ構成子は構成要素が位置ではなく名前で
+   指定される値を構成するのに使用できる。宣言リストで用いるブレースとは
+   違い、これらはレイアウトの支配を受けない。<tt>{</tt> および
+   <tt>}</tt> は明示的に書かねばならない。(これはフィールドパターンおよ
+   びフィールド更新のときにも真である。) フィールド名を用いた構築は以下
+   の制約にしたがう： 
+  <ul>
+   <!--<li>Only field labels declared with the specified constructor may be
+    mentioned.</li>-->
+   <li> 指定した構成子のフィールドラベルとして宣言したものだけが言及の対象
+      となる。</li>
+   <!--<li>A field label may not be mentioned more than once.</li>-->
+   <li> フィールド名を2度以上言及することはできない。</li>
+   <!--<li>Fields not mentioned are initialized to _|_.</li>-->
+   <li> 言及されないフィールドは ⊥ に初期化される。
+   <!--<li>A compile-time error occurs when any strict fields (fields whose
+    declared types are prefixed by <tt>!</tt>) are omitted during
+    construction. Strict fields are discussed in Section <a
+    href="decls.html#strictness-flags">4.2.1</a>.</li>-->
+   <li> 正格フィールド(その型の宣言に <tt>!</tt> が付いているもの)が構築
+    時に言及されなかった場合にはコンパイルエラーが起きる。正格フィールド
+    については <a href="decls.html#strictness-flags">4.2.1</a> 節で議論
+    する。</li>
+  </ul>
+  <!--
+  <p>The expression <tt>F&nbsp;{}</tt>, where <tt>F</tt> is a data
+   constructor, is legal <i>whether or not </i><tt>F</tt><i> was declared
+   with record syntax</i> (provided <tt>F</tt> has no strict fields --- see
+   the third bullet above); it denotes <tt>F</tt><i>
+   _|_</i><sub><i>1</i></sub><i> ... _|_</i><sub><i>n</i></sub>, where
+   <i>n</i> is the arity of <tt>F</tt>.</p>
+  -->
+  <p>式 <tt>F&nbsp;{}</tt> は <tt>F</tt> がデータコンストラクタであるな
+   ら、<tt>F</tt> が<em>レコード構文</em>
+   (この場合、<tt>F</tt> は正格フィールドをもたない -- 上の三番目
+   の項目をみよ)<em>で定義されいるかどうかにかかわらず</em>、
+   <tt>F</tt><i>
+   _|_</i><sub><i>1</i></sub><i> ... _|_</i><sub><i>n</i></sub> を表わす。
+   なお、<i>n</i> は <tt>F</tt> の引数の数である。</p>
+  <p></p>
+  <table border="2" cellpadding="3">
+   <tr>
+    <td>
+     <!--<h3>Translation:</h3>-->
+     <h3>変換:</h3>
+     <!--
+     In the binding <i>f</i> <tt>=</tt> <i>v</i>, the field <i>f</i> labels
+     <i>v</i>.
+     -->
+     束縛 <i>f</i> <tt>=</tt> <i>v</i> において、フィールド <i>f</i> は
+     <i>v</i> のラベルである。
+     <div align="center">
+      <table>
+       <tr>
+        <td> <i>C</i> <tt>{</tt> <i>bs</i> <tt>}</tt></td>
+        <td align="center">=</td>
+        <td> <i>C (pick</i><sup><i>C</i></sup><sub><i>1</i></sub><i> bs
+         </i><tt>undefined</tt><i>)
+         ...(pick</i><sup><i>C</i></sup><sub><i>k</i></sub><i> bs
+         </i><tt>undefined</tt><i>)</i></td>
+       </tr>
+      </table>
+     </div>
+     <!-- where <i>k</i> is the arity of <i>C</i>.-->
+     ここで <i>k</i> は <i>C</i> の引数の数。
+     <!--
+     <p> The auxiliary function
+      <i>pick</i><sup><i>C</i></sup><sub><i>i</i></sub><i> bs d</i> is
+      defined as follows:</p>
+     -->
+     <p>補助関数 <i>pick</i><sup><i>C</i></sup><sub><i>i</i></sub><i> bs
+      d</i> は以下のように定義される。</p>
+     <!--
+     <blockquote>
+      <p>If the <i>i</i>th component of a constructor <i>C</i> has the
+       field label <i>f</i>, and if <i>f=v</i> appears in the binding list
+       <i>bs</i>, then <i>pick</i><sup><i>C</i></sup><sub><i>i</i></sub><i>
+       bs d</i> is <i>v</i>. Otherwise,
+       <i>pick</i><sup><i>C</i></sup><sub><i>i</i></sub><i> bs d</i> is the
+       default value <i>d</i>.</p>
+     </blockquote>
+     -->
+     <blockquote>
+      <p>もし、構成子 <i>C</i> の <i>i</i>番目の構成要素のフィールド名が
+      <i>f</i> であり、<i>f=v</i> が束縛リスト <i>bs</i> 中に出現するな
+      ら、<i>pick</i><sup><i>C</i></sup><sub><i>i</i></sub><i> bs d</i>
+      は <i>v</i> である。さもなければ、
+      <i>pick</i><sup><i>C</i></sup><sub><i>i</i></sub><i> bs d</i> はデ
+      フォルト値 <i>d</i> である。</p> 
+     </blockquote>
+    </td>
+   </tr>
+  </table>
+
+  <p><a name="record-update"></a></p>
+  <p> <a name="sect3.15.3"></a></p>
+  <!--<h4>3.15.3<tt>&nbsp;&nbsp;</tt>Updates Using Field Labels</h4>-->
+  <h4>3.15.3<tt>&nbsp;&nbsp;</tt>フィールドラベルを用いた更新</h4>
+
+  <table cellspacing="0" cellspacing="0">
+   <tr>
+    <td width="100"> aexp</td>
+    <td width="20"> <tt>-&gt;</tt></td>
+    <td width="250"> aexp<sub>&lt;qcon&gt;</sub> <tt>{</tt>
+     fbind<sub>1</sub> <tt>,</tt> ... <tt>,</tt> fbind<sub>n</sub>
+     <tt>}</tt></td>
+    <td> (labeled update, n&gt;=1)</td>
+   </tr>
+  </table>
+  <!--
+  <p> Values belonging to a datatype with field labels may be
+   non-destructively updated. This creates a new value in which the
+   specified field values replace those in the existing value. Updates are
+   restricted in the following ways:</p>
+  -->
+  <p>フィールドラベルを持つ、データ型に属する値は非破壊的に更新すること
+   ができる。これにより、指定したフィールドの値がそれまでの値と置き換え
+   た新しい値がつくられる。更新は次のような方法に限られる。
+  <ul>
+   <!--<li>All labels must be taken from the same datatype.</li>-->
+   <li>すべてのラベルは同じデータ型からのものでなくてはならない。</li>
+   <!--<li>At least one constructor must define all of the labels mentioned in
+    the update.</li>-->
+   <li>すくなくとも 1 つの構成子は更新に際して言及されたすべてのラベルを定
+     義していなければならない。</li>
+   <!--<li>No label may be mentioned more than once.</li>-->
+   <li>2 度以上言及されるラベルはない。</li>
+   <!--<li>An execution error occurs when the value being updated does not
+    contain all of the specified labels.</li>-->
+   <li>更新すべき値がすべての指定したラベルを含んでいない場合には実行時エ
+     ラーが起こる。</li>
+  </ul>
+
+  <table border="2" cellpadding="3">
+   <tr>
+    <td>
+     <!--<h3>Translation:</h3>-->
+     <h3>変換:</h3>
+     <!--Using the prior definition of <i>pick</i>,-->
+     前述の <i>pick</i> を用いて、
+     <div align="center">
+      <table>
+       <tr>
+        <td> <i>e</i> <tt>{</tt> <i>bs</i> <tt>}</tt></td>
+        <td align="center">=</td>
+        <td> <tt>case</tt> <i>e</i> <tt>of</tt></td>
+       </tr>
+       <tr>
+        <td></td>
+        <td align="center"></td>
+        <td><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt><i>C</i><sub><i>1</i></sub><i>
+         v</i><sub><i>1</i></sub><i> ...
+         v</i><sub><i>k</i><sub><i>1</i></sub></sub> <tt>-&gt;</tt>
+         <i>C</i><sub><i>1</i></sub><i>
+         (pick</i><sup><i>C</i><sub><i>1</i></sub></sup><sub><i>1</i></sub><i>
+         bs v</i><sub><i>1</i></sub><i>) ...
+         (pick</i><sup><i>C</i><sub><i>1</i></sub></sup><sub><i>k</i><sub><i>1</i></sub></sub><i>
+         bs v</i><sub><i>k</i><sub><i>1</i></sub></sub><i>)</i></td>
+       </tr>
+       <tr>
+        <td></td>
+        <td align="center"></td>
+        <td><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt>
+         ...</td>
+       </tr>
+       <tr>
+        <td></td>
+        <td align="center"></td>
+        <td><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt><i>C</i><sub><i>j</i></sub><i>
+         v</i><sub><i>1</i></sub><i> ...
+         v</i><sub><i>k</i><sub><i>j</i></sub></sub> <tt>-&gt;</tt>
+         <i>C</i><sub><i>j</i></sub><i>
+         (pick</i><sup><i>C</i><sub><i>j</i></sub></sup><sub><i>1</i></sub><i>
+         bs v</i><sub><i>1</i></sub><i>) ...
+         (pick</i><sup><i>C</i><sub><i>j</i></sub></sup><sub><i>k</i><sub><i>j</i></sub></sub><i>
+         bs v</i><sub><i>k</i><sub><i>j</i></sub></sub><i>)</i></td>
+       </tr>
+       <tr>
+        <td></td>
+        <td align="center"></td>
+        <td><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_&nbsp;-&gt;&nbsp;error&nbsp;"Update&nbsp;error"</tt></td>
+       </tr>
+      </table>
+     </div>
+     <!--
+     where
+     <i>{C</i><sub><i>1</i></sub><i>,...,C</i><sub><i>j</i></sub><i>}</i>
+     is the set of constructors containing all labels in <i>bs</i>, and
+     <i>k</i><sub><i>i</i></sub> is the arity of
+     <i>C</i><sub><i>i</i></sub>.
+     -->
+     ここで、
+     <i>{C</i><sub><i>1</i></sub><i>,...,C</i><sub><i>j</i></sub><i>}</i>
+     は <i>b</i> に現れるすべてのラベルを含む構成子の集合であり、
+     <i>k</i><sub><i>i</i></sub> は <i>C</i><sub><i>i</i></sub>の引数の数
+     である。
+    </td>
+   </tr>
+  </table>
+  <!--
+  <p>Here are some examples using labeled fields: 
+  -->
+  <p>以下はラベル付きフィールドを使った例である。
+   <tt><br />
+   <br />
+   data&nbsp;T&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;C1&nbsp;{f1,f2&nbsp;::&nbsp;Int}<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;C2&nbsp;{f1&nbsp;::&nbsp;Int,<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f3,f4&nbsp;::&nbsp;Char}<br />
+   <br />
+   </tt></p>
+  <p></p>
+  <table>
+   <tr>
+    <!--<td> Expression</td>-->
+    <td>式</td>
+    <!--<td> Translation</td>-->
+    <td>変換</td>
+   </tr>
+   <tr>
+    <td> <tt>C1&nbsp;{f1&nbsp;=&nbsp;3}</tt></td>
+    <td> <tt>C1&nbsp;3&nbsp;undefined</tt></td>
+   </tr>
+   <tr>
+    <td><tt>C2&nbsp;{f1&nbsp;=&nbsp;1,&nbsp;f4&nbsp;=&nbsp;'A',&nbsp;f3&nbsp;=&nbsp;'B'}</tt>
+     </td>
+    <td> <tt>C2&nbsp;1&nbsp;'B'&nbsp;'A'</tt></td>
+   </tr>
+   <tr>
+    <td><tt>x&nbsp;{f1&nbsp;=&nbsp;1}</tt></td>
+    <td>
+     <tt>case&nbsp;x&nbsp;of&nbsp;C1&nbsp;_&nbsp;f2&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;C1&nbsp;1&nbsp;f2</tt>
+     </td>
+   </tr>
+   <tr>
+    <td></td>
+    <td>
+     <tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C2&nbsp;_&nbsp;f3&nbsp;f4&nbsp;-&gt;&nbsp;C2&nbsp;1&nbsp;f3&nbsp;f4</tt>
+     </td>
+   </tr>
+  </table>
+  <!--
+  <p> The field <tt>f1</tt> is common to both constructors in T. This
+   example translates expressions using constructors in field-label
+   notation into equivalent expressions using the same constructors without
+   field labels. A compile-time error will result if no single constructor
+   defines the set of field labels used in an update, such as
+   <tt>x&nbsp;{f2&nbsp;=&nbsp;1,&nbsp;f3&nbsp;=&nbsp;'x'}</tt>.</p>
+  -->
+  <p>フィールド f1 は T の二つの構成子に共通している。この例は、フィール
+   ドラベル記法による構成子を使った式を同等のフィールドラベルのない構築
+   子を使った式へ変換する。もし、更新のなかで使用するフィールド名の集合、
+   たとえば、<tt>x&nbsp;{f2&nbsp;=&nbsp;1,&nbsp;f3&nbsp;=&nbsp;'x'}</tt>
+   を定義する単一構成子がなければ、コンパイル時エラーとなる。</p>
+
+  <p><a name="expression-type-sigs"></a></p>
+  <p> <a name="sect3.16"></a></p>
+
+  <!--<h3>3.16<tt>&nbsp;&nbsp;</tt>Expression Type-Signatures</h3>-->
+  <h3>3.16<tt>&nbsp;&nbsp;</tt>式の型シグネチャ</h3>
+
+  <table cellspacing="0" cellspacing="0">
+   <tr>
+    <td width="100"> exp</td>
+    <td width="20"> <tt>-&gt;</tt></td>
+    <td width="250"> exp <tt>::</tt> [context <tt>=&gt;</tt>] type</td>
+   </tr>
+  </table>
+  <!--
+  <p> <i>Expression type-signatures</i> have the form <i>e
+   </i><tt>::</tt><i> t</i>, where <i>e </i>is an expression and <i>t</i>
+   is a type (Section <a href="decls.html#type-syntax">4.1.2</a>); they are
+   used to type an expression explicitly and may be used to resolve
+   ambiguous typings due to overloading (see Section <a
+   href="decls.html#default-decls">4.3.4</a>). The value of the expression
+   is just that of <i>exp</i>. As with normal type signatures (see Section
+   <a href="decls.html#type-signatures">4.4.1</a>), the declared type may
+   be more specific than the principal type derivable from <i>exp</i>, but
+   it is an error to give a type that is more general than, or not
+   comparable to, the principal type.</p>
+  -->
+  <p><em>式の型シグネチャ</em>は <i>e </i><tt>::</tt><i> t</i> という形
+   式をもつ。ここで、<i>e</i> は式、<i>t</i> は型 (<a
+   href="decls.html#type-syntax">4.1.2</a>節)である。式の型シグネチャは
+   式を明示的に型付けするのに用い、多重定義 (<a
+   href="decls.html#default-decls">4.3.4</a> 節を見よ)によっておこる型の
+   曖昧さを解決するために用いることができる。当該の式の値はまさに
+   <i>exp</i> の値である。一般の型シグネチャ (<a
+   href="decls.html#type-signatures">4.4.1</a> 節を見よ)と同様に、式
+   <i>exp</i> から導出される主型よりもより特殊な型を宣言することができる。
+   しかし、主型より一般的なものや主型と比較できないような型を指定すると
+   エラーとなる。</p> 
+
+  <table border="2" cellpadding="3">
+   <tr>
+    <td>
+     <!--<h3>Translation:</h3>-->
+     <h3>変換:</h3>
+     <div align="center">
+      <table>
+       <tr>
+        <td> <i>e </i><tt>::</tt><i> t</i></td>
+        <td align="center"> =</td>
+        <td> <tt>let&nbsp;{</tt><i> v </i><tt>::</tt><i>
+         t</i><tt>;&nbsp;</tt><i> v </i><tt>=</tt><i> e
+         </i><tt>}&nbsp;in&nbsp;</tt><i>v </i></td>
+       </tr>
+      </table>
+     </div>
+    </td>
+   </tr>
+  </table>
+
+  <p><a name="pattern-matching"></a></p>
+  <p><a name="sect3.17"></a></p>
+
+  <!--<h3>3.17<tt>&nbsp;&nbsp;</tt>Pattern Matching</h3>-->
+  <h3>3.17<tt>&nbsp;&nbsp;</tt>パターン照合</h3>
+
+  <p><a name="patterns"></a></p>
+  <!--
+  <p> <i>Patterns</i> appear in lambda abstractions, function definitions,
+   pattern bindings, list comprehensions, do expressions, and case
+   expressions. However, the first five of these ultimately translate into
+   case expressions, so defining the semantics of pattern matching for case
+   expressions is sufficient.</p>
+  -->
+  <p><em>パターン</em>は、ラムダ抽象、関数定義、パターン束縛、リスト内包
+   表記、do 式、case 式に出現する。しかしながら、これらのうち、最初の5つ
+   は最終的には、case 式に変換される。それゆえ、パターン照合のセマンティ
+   クスは case 式対するもので十分である。</p>
+
+  <p><a name="pattern-definitions"></a></p>
+  <p> <a name="sect3.17.1"></a></p>
+  <!--<h4>3.17.1<tt>&nbsp;&nbsp;</tt>Patterns</h4>-->
+  <h4>3.17.1<tt>&nbsp;&nbsp;</tt>パターン</h4>
+
+  <!--<p> Patterns have this syntax:</p>-->
+  <p>パターンの構文は以下のとおり:</p>
+
+  <table cellspacing="0" cellspacing="0">
+   <tr>
+    <td width="100"></td>
+    <td width="20"></td>
+    <td width="250"></td>
+   </tr>
+   <tr></tr>
+   <tr>
+    <td> pat</td>
+    <td> <tt>-&gt;</tt></td>
+    <td> var <tt>+</tt> integer</td>
+    <td> (successor pattern)</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> pat<sup>0</sup></td>
+   </tr>
+   <tr>
+    <td> pat<sup>i</sup></td>
+    <td> <tt>-&gt;</tt></td>
+    <td> pat<sup>i+1</sup> [qconop<sup>(n,i)</sup> pat<sup>i+1</sup>]</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> lpat<sup>i</sup></td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> rpat<sup>i</sup></td>
+   </tr>
+   <tr>
+    <td> lpat<sup>i</sup></td>
+    <td> <tt>-&gt;</tt></td>
+    <td> (lpat<sup>i</sup> | pat<sup>i+1</sup>) qconop<sup>(l,i)</sup>
+     pat<sup>i+1</sup></td>
+   </tr>
+   <tr>
+    <td> lpat<sup>6</sup></td>
+    <td> <tt>-&gt;</tt></td>
+    <td> <tt>-</tt> (integer | float)</td>
+    <td> (negative literal)</td>
+   </tr>
+   <tr>
+    <td> rpat<sup>i</sup></td>
+    <td> <tt>-&gt;</tt></td>
+    <td> pat<sup>i+1</sup> qconop<sup>(r,i)</sup> (rpat<sup>i</sup> |
+     pat<sup>i+1</sup>)</td>
+   </tr>
+   <tr>
+    <td> pat<sup>10</sup></td>
+    <td> <tt>-&gt;</tt></td>
+    <td> apat</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> gcon apat<sub>1</sub> ... apat<sub>k</sub></td>
+    <td> (arity gcon = k, k&gt;=1)</td>
+   </tr>
+   <tr>
+    <td> apat</td>
+    <td> <tt>-&gt;</tt></td>
+    <td> var [<tt>@</tt> apat]</td>
+    <td> (as pattern)</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> gcon</td>
+    <td> (arity gcon = 0)</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> qcon <tt>{</tt> fpat<sub>1</sub> <tt>,</tt> ... <tt>,</tt>
+     fpat<sub>k</sub> <tt>}</tt></td>
+    <td> (labeled pattern, k&gt;=0)</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> literal</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> <tt>_</tt></td>
+    <td> (wildcard)</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> <tt>(</tt> pat <tt>)</tt></td>
+    <td> (parenthesized pattern)</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> <tt>(</tt> pat<sub>1</sub> <tt>,</tt> ... <tt>,</tt>
+     pat<sub>k</sub> <tt>)</tt></td>
+    <td> (tuple pattern, k&gt;=2)</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> <tt>[</tt> pat<sub>1</sub> <tt>,</tt> ... <tt>,</tt>
+     pat<sub>k</sub> <tt>]</tt></td>
+    <td> (list pattern, k&gt;=1)</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td> <tt>|</tt></td>
+    <td> <tt>~</tt> apat</td>
+    <td> (irrefutable pattern)</td>
+   </tr>
+   <tr>
+    <td> fpat</td>
+    <td> <tt>-&gt;</tt></td>
+    <td> qvar <tt>=</tt> pat</td>
+   </tr>
+  </table>
+  <!--
+  <p> The arity of a constructor must match the number of sub-patterns
+   associated with it; one cannot match against a partially-applied
+   constructor.</p>
+  -->
+  <p>構成子の引数の数は、それに対応するサブパターンの数と一致しなければ
+   ならない。部分適用された構成子に対して一致することはできない。</p>
+  <!--
+  <p> All patterns must be <i>linear </i>---no variable may appear more
+   than once. For example, this definition is illegal: <tt><br />
+   &nbsp;&nbsp;f&nbsp;(x,x)&nbsp;=&nbsp;x
+   --&nbsp;ILLEGAL;&nbsp;x&nbsp;used&nbsp;twice&nbsp;in&nbsp;pattern<br />
+   </tt></p>
+  -->
+  <p>すべてのパターンは<em>線型</em>でなければならない。すなわち、一つの
+   変数は 2 度以上出現してはならない。例えば: <tt><br />
+   &nbsp;&nbsp;f&nbsp;(x,x)&nbsp;=&nbsp;x
+   --&nbsp;ILLEGAL;&nbsp;x&nbsp;が&nbsp;2度&nbsp;パターンのなかで使われている<br />
+   </tt></p>
+  <!--
+  <p> Patterns of the form <i>var</i><tt>@</tt><i>pat</i> are called
+   <i>as-patterns</i>, and allow one to use <i>var </i>as a name for the
+   value being matched by <i>pat</i>. For example, 
+  -->
+  <p><i>var</i><tt>@</tt><i>pat</i> という形式のパターンは<em>アズパター
+   ン</em>とよばれ、<i>var</i> を <i>pat</i> でマッチした値に対する名前
+   として使用することができる。例えば、
+   <tt><br />
+   <br />
+   case&nbsp;e&nbsp;of&nbsp;{&nbsp;xs@(x:rest)&nbsp;-&gt;&nbsp;if&nbsp;x==0&nbsp;then&nbsp;rest&nbsp;else&nbsp;xs&nbsp;}<br />
+   <br />
+   </tt>
+   <!--is equivalent to: -->
+   は以下と同等である。
+   <tt><br />
+   <br />
+   let&nbsp;{&nbsp;xs&nbsp;=&nbsp;e&nbsp;}&nbsp;in<br />
+   &nbsp;&nbsp;case&nbsp;xs&nbsp;of&nbsp;{&nbsp;(x:rest)&nbsp;-&gt;&nbsp;if&nbsp;x==0&nbsp;then&nbsp;rest&nbsp;else&nbsp;xs&nbsp;}<br />
+   <br />
+   </tt></p>
+  <!--
+  <p> Patterns of the form <tt>_</tt> are <i>wildcards</i> and are useful
+   when some part of a pattern is not referenced on the right-hand-side. It
+   is as if an identifier not used elsewhere were put in its place. For
+   example, 
+  -->
+  <p><tt>_</tt> という形式のパターンは<em>ワイルドカード</em>であり、パ
+   ターンの一部が右辺で参照されないような場合に便利である。その場所を示
+   す以外では使われない認識子のようなものである。たとえば、
+   <tt><br />
+   <br />
+   case&nbsp;e&nbsp;of&nbsp;{&nbsp;[x,_,_]&nbsp;&nbsp;-&gt;&nbsp;&nbsp;if&nbsp;x==0&nbsp;then&nbsp;True&nbsp;else&nbsp;False&nbsp;}<br />
+   <br />
+   </tt>
+   <!--is equivalent to: -->
+   は以下と同等である。
+   <tt><br />
+   <br />
+   case&nbsp;e&nbsp;of&nbsp;{&nbsp;[x,y,z]&nbsp;&nbsp;-&gt;&nbsp;&nbsp;if&nbsp;x==0&nbsp;then&nbsp;True&nbsp;else&nbsp;False&nbsp;}<br />
+   <br />
+   </tt></p>
+
+  <p> <a name="sect3.17.2"></a></p>
+  <!--
+  <h4>3.17.2<tt>&nbsp;&nbsp;</tt>Informal Semantics of Pattern Matching</h4>
+  -->
+  <h4>3.17.2<tt>&nbsp;&nbsp;</tt>パターン照合の非形式的セマンティクス</h4>
+  <!--
+  <p> Patterns are matched against values. Attempting to match a pattern
+   can have one of three results: it may <i>fail</i>; it may
+   <i>succeed</i>, returning a binding for each variable in the pattern; or
+   it may <i>diverge</i> (i.e. return <i>_|_</i>). Pattern matching
+   proceeds from left to right, and outside to inside, according to the
+   following rules:</p>
+  -->
+  <p>パターンは値に対して照合される。パターンを照合しようする場合、つぎ
+   の 3 つのうちの一つが起こる。<em>失敗</em>、<em>成功</em>して当該パター
+   ンの各変数の束縛を返す、<em>発散</em>(すなわち、<i>_|_</i> が返る)。
+   パターン照合は以下のルールに従い、左から右へ、外から内へと進む。</p>
+  <ol>
+   <!--
+   <li>Matching the pattern <i>var</i> against a value <i>v</i> always
+    succeeds and binds <i>var</i> to <i>v</i>.
+    <p></p>
+   </li>
+   -->
+   <li><p>値 <i>v</i> に対するパターン <i>var</i> の照合は常に成功し、
+    <i>var</i> を <i>v</i> に束縛する。</p></li>
+   <!--
+   <li> Matching the pattern <tt>~</tt><i>apat</i> against a value <i>v</i>
+    always succeeds. The free variables in <i>apat</i> are bound to the
+    appropriate values if matching <i>apat</i> against <i>v</i> would
+    otherwise succeed, and to <i>_|_</i> if matching <i>apat</i> against
+    <i>v</i> fails or diverges. (Binding does <i>not</i> imply evaluation.)
+    <p> Operationally, this means that no matching is done on a
+     <tt>~</tt><i>apat</i> pattern until one of the variables in
+     <i>apat</i> is used. At that point the entire pattern is matched
+     against the value, and if the match fails or diverges, so does the
+     overall computation.</p>
+    <p></p></li>
+   -->
+   <li><p>値 <i>v</i> に対するパターン <tt>~</tt><i>apat</i> の照合は
+    常に成功する。<i>v</i> の <i>apat</i> への照合が成功すれば、
+     <i>apat</i> 中の自由変数は対応する値に束縛される。もし、<i>v</i> の
+     <i>apat</i> への照合が失敗するか、発散すれば、<i>apat</i> 中の自由
+     変数は <i>_|_</i> に束縛される。(束縛は評価を強制<em>しない</em>)。</p>
+    <p>操作的にいえば、パターン <tt>~</tt><i>apat</i> 上の照合は、パターン
+     <i>apat</i> 中の変数のひとつが使用されるまでは起こらないということ
+     である。使用の時点でパターン全体がその値に照合され、もし、照合が失
+     敗あるいは発散すれば、計算全体が失敗あるいは発散する。</p>
+   </li>
+   <!--
+   <li> Matching the wildcard pattern <tt>_</tt> against any value always
+    succeeds, and no binding is done.
+    <p></p>
+   </li>
+   -->
+   <li><p>値のワイルドカードパターン <tt>_</tt> への照合は常に成功するが、
+    束縛は起こらない。</p></li>
+   <!--
+   <li> Matching the pattern <i>con pat</i> against a value, where
+    <i>con</i> is a constructor defined by <tt>newtype</tt>, depends on the
+    value:
+    <ul>
+     <li>If the value is of the form <i>con v</i>, then <i>pat</i> is
+      matched against <i>v</i>.</li>
+
+     <li>If the value is <i>_|_</i>, then <i>pat</i> is matched against
+      <i>_|_</i>.</li>
+    </ul>
+    That is, constructors associated with <tt>newtype</tt> serve only to
+    change the type of a value.
+    <p></p>
+   </li>
+   -->
+   <li><p>ある値へのパターン <I>con pat</I> の照合は、<I>con</I>
+    が <tt>newtype</tt> で定義されたものであれば、その値が、
+    <ul>
+     <li>もし、<i>con v</i> という形式をもつなら <i>pat</i> は
+      <i>v</i> と照合する</li>
+     <li>もし、値が <i>_|_</i> なら <i>pat</i> は <i>_|_</i> と照合する</li>
+    </ul> 
+    すなわち、<tt>newtype</tt> に対応する構成子は値の型の変更をのみ提供
+    する。</p></li>
+   <!--
+   <li> Matching the pattern <i>con pat</i><sub><i>1</i></sub><i>
+    ...pat</i><sub><i>n</i></sub> against a value, where <i>con</i> is a
+    constructor defined by <tt>data</tt>, depends on the value:
+    <ul>
+     <li>If the value is of the form <i>con v</i><sub><i>1</i></sub><i>
+      ...v</i><sub><i>n</i></sub>, sub-patterns are matched left-to-right
+      against the components of the data value; if all matches succeed, the
+      overall match succeeds; the first to fail or diverge causes the
+      overall match to fail or diverge, respectively.
+      <p></p>
+     </li>
+
+     <li>If the value is of the form <i>con' v</i><sub><i>1</i></sub><i>
+      ...v</i><sub><i>m</i></sub>, where <i>con</i> is a different
+      constructor to <i>con'</i>, the match fails.
+      <p></p>
+     </li>
+   
+     <li>If the value is <i>_|_</i>, the match diverges.</li>
+    </ul>
+
+    <p></p>
+   </li>
+   -->
+   <li><p><i>con</i> が <tt>data</tt> により定義された構成子でるとすると、
+    パターン <i>con
+    pat</i><sub><i>1</i></sub><i>...pat</i><sub><i>n</i></sub> のある
+    値への照合は、その値に依存する:
+    <ul>
+     <li>もし、その値が <i>con
+    v</i><sub><i>1</i></sub><i>...v</i><sub><i>n</i></sub> という形式を
+    もつなら、サブパターンはデータ値の構成要素に対して左から右へ照合する。
+    すべての照合が成功すれば、照合全体は成功する。最初に失敗あるいは発散
+    したところから順に照合全体の失敗あるいは発散が発生する。
+     </li>
+     <li>もし、その値が <i>_|_</i> であれば、照合は発散する。</li>
+    </ul>
+    </p></li>
+   <!--
+   <li> Matching against a constructor using labeled fields is the same as
+    matching ordinary constructor patterns except that the fields are
+    matched in the order they are named in the field list. All fields
+    listed must be declared by the constructor; fields may not be named
+    more than once. Fields not named by the pattern are ignored (matched
+    against <tt>_</tt>).
+    <p></p>
+   </li>
+   -->
+   <li><p>ラベル付フィールドをもちいた構成子に対する照合は、フィールドが
+    フィールドリストで名前付けられた順番に照合されるということを除けば、
+    通常の構成子パターンの照合と同じである。リストアップされているすべ
+    てのフィールドはその構成子によって宣言されていなければならない。フィー
+    ルドは 2度以上名付けられてはいけない。パターンによって名付けられて
+    いないフィールドは( <tt>_</tt> と照合され)無視される。
+    </p></li>
+   <!--
+   <li><p>Matching a numeric, character, or string literal pattern <i>k</i>
+    against a value <i>v </i>succeeds if <i>v </i><tt>==</tt><i> k</i>,
+    where <tt>== </tt>is overloaded based on the type of the pattern. The
+    match diverges if this test diverges.
+    <p> The interpretation of numeric literals is exactly as described in
+     Section <a href="exps.html#vars-and-lits">3.2</a>; that is, the
+     overloaded function <tt>fromInteger</tt> or <tt>fromRational</tt> is
+     applied to an <tt>Integer</tt> or <tt>Rational</tt> literal (resp) to
+     convert it to the appropriate type.</p>
+   </li>
+   -->
+   <li><p>数値、文字あるいは文字列リテラルのパターン <i>k</i> の値 <i>v</i>
+    への照合は、<i>v </i><tt>==</tt><i> k</i> であれば成功する。ここで、
+    <tt>==</tt> はそのパターンの型で多重定義されているものとする。もしこ
+    のテストが発散すれば照合は発散する。</p>
+    <p>数値リテラルの解釈は <a href="exps.html#vars-and-lits">3.2</a> 節
+    で解説したとおりである。すなわち、多重定義された
+    <tt>fromInteger</tt> あるいは <tt>fromRational</tt> を
+    <tt>Integer</tt> 型あるいは <tt>Rational</tt> 型のリテラル (resp) に
+    適用して、適切な型に変換する。
+    </p></li>
+   <!--
+   <li><p>Matching an <i>n</i><tt>+</tt><i>k</i> pattern (where <i>n</i> is a
+    variable and <i>k</i> is a positive integer literal) against a value
+    <i>v</i> succeeds if <i>x </i><tt>&gt;=</tt><i> k</i>, resulting in the
+    binding of <i>n</i> to <i>x </i><tt>-</tt><i> k</i>, and fails
+    otherwise. Again, the functions <tt>&gt;=</tt> and <tt>-</tt> are
+    overloaded, depending on the type of the pattern. The match diverges if
+    the comparison diverges.</p>
+    <p> The interpretation of the literal <i>k</i> is the same as in
+     numeric literal patterns, except that only integer literals are
+     allowed.</p>
+    </li>
+   -->
+   <li><p>パターン <i>n</i><tt>+</tt><i>k</i> (ここで <i>n</i> は変数、
+    <i>k</i> は正の整数リテラル) の値 <i>v</i> への照合は、<i>x</i>
+    <tt>&gt;=</tt> <i>k</i> であるときに成功し、結果として、<i>n</i> を
+    <i>x</i> <tt>-</tt> <i>k</i> に束縛する。また、それ以外の場合には照
+    合は失敗する。さらに関数 <tt>&gt;=</tt> および <tt>-</tt> は多重定義
+    される。これは、当該パターンの型に依存する。もし、比較が発散すれば、
+    照合は発散する。</p>
+   <p>リテラル <i>k</i> の解釈は整数のリテラルのみが許されることを除けば、
+    数値リテラルの解釈と同じである。</p></li> 
+   <!--
+   <li> Matching an as-pattern <i>var</i><tt>@</tt><i>apat</i> against a
+    value <i>v</i> is the result of matching <i>apat</i> against <i>v</i>,
+    augmented with the binding of <i>var</i> to <i>v</i>. If the match of
+    <i>apat</i> against <i>v</i> fails or diverges, then so does the
+    overall match.</li>
+   -->
+   <li><p>アズパターン <i>var</i> <tt>@</tt> <i>apat</i> の値 <i>v</i>
+    への照合は、<i>var</i> の <i>v</i> への束縛をともなった上で、
+    <i>apat</i> の <i>v</i> への照合の結果となる。<i>apat</i> の
+    <i>v</i> への照合が失敗または発散した場合、全体のマッチングも同様に
+    失敗または発散する。</p></li>
+  </ol>
+  <!--
+  <p> Aside from the obvious static type constraints (for example, it is a
+   static error to match a character against a boolean), the following
+   static class constraints hold:</p>
+  -->
+  <p>自明な静的型制約(たとえば、文字の真理値への照合はエラーになるなど)
+   以外に、次のような静的なクラス制約が保存される。</p>
+  <ul>
+   <!--
+   <li>An integer literal pattern can only be matched against a value in
+    the class <tt>Num</tt>.</li>
+   -->
+   <li>整数リテラルのパターンは、<tt>Num</tt> クラスの値にだけ照合可能で
+   ある。</li>
+   <!--
+   <li>A floating literal pattern can only be matched against a value in
+    the class <tt>Fractional</tt>.</li>
+   -->
+   <li>小数リテラルのパターンは、<tt>Fractional</tt> クラスの値にだけ照
+   合可能である。</li>
+   <!--
+   <li>An <i>n</i><tt>+</tt><i>k</i> pattern can only be matched against a
+    value in the class <tt>Integral</tt>.</li>
+   -->
+   <li><I>n</I><tt>+</tt><I>k</I> パターンは、<tt>Integral</tt> クラスの
+   値にだけ照合可能である。</li>
+  </ul>
+  <!--
+  <p> Many people feel that <i>n</i><tt>+</tt><i>k</i> patterns should not
+   be used. These patterns may be removed or changed in future versions of
+   Haskell .</p>
+  -->
+  <p>
+   多くのひとが <I>n</I><tt>+</tt><I>k</I> パターンは使うべきではないと
+   感じている。これらのパターンは Haskell の将来のバージョンでは変更され
+   るか取り除かれる可能性がある。</p> 
+  <!--
+  <p> It is sometimes helpful to distinguish two kinds of patterns.
+   Matching an <i>irrefutable pattern </i>is non-strict: the pattern
+   matches even if the value to be matched is <i>_|_</i>. Matching a
+   <i>refutable</i> pattern is strict: if the value to be matched is
+   <i>_|_</i> the match diverges. The irrefutable patterns are as follows:
+   a variable, a wildcard, <i>N apat</i> where <i>N</i> is a constructor
+   defined by <tt>newtype</tt> and <i>apat</i> is irrefutable (see Section
+   <a href="decls.html#datatype-renaming">4.2.3</a>),
+   <i>var</i><tt>@</tt><i>apat</i> where <i>apat</i> is irrefutable, or of
+   the form <tt>~</tt><i>apat</i> (whether or not <i>apat</i> is
+   irrefutable). All other patterns are <i>refutable</i>.</p>
+  -->
+  <p>
+   ２種類のパターンを分けたほうよいばあいある。<em>反駁不可能パターン
+   </em> の照合は非正格である。当該パターンは、対象となる値が
+   <i>_|_</i> であっても照合する。<em>反駁可能パターン</em> の照合は
+   正格である。対象になる値が <i>_|_</i> である場合には、その照合は発散
+   する。反駁不可能パターンは次のようなものである。変数、ワイルドカード、
+   <i>N</i> が <tt>newtype</tt> で定義された構成子であり、<i>apat</i> が
+   反駁不可能(<a href="decls.html#datatype-renaming">4.2.3</a> 節をみよ)
+   である場合の <i>N pat</i>、<i>apat</i> が反駁不可能であるか
+   または(<i>apat</i> が反駁不可能であるかどうかにかかわらず)
+   <tt>~</tt><i>apat</i> という形式をもつもの。
+  </p>
+  <!--<p> Here are some examples:</p>-->
+  <p>いくつか例をあげよう</p>
+
+  <ol>
+   <!--
+   <li>If the pattern <tt>['a','b']</tt> is matched against
+    <tt>['x',</tt><i>_|_</i><tt>]</tt>, then <tt>'a' </tt><i>fails</i> to
+    match against <tt>'x'</tt>, and the result is a failed match. But if
+    <tt>['a','b']</tt> is matched against
+    <tt>[</tt><i>_|_</i><tt>,'x']</tt>, then attempting to match
+    <tt>'a'</tt> against <i>_|_</i> causes the match to <i>diverge</i>.
+    <p></p>
+   </li>-->
+   <li><p>パターン <tt>['a','b']</tt> を
+    <tt>['x',</tt><i>_|_</i><tt>]</tt> に照合しようとすれば、<tt>'a'</tt> は
+    <tt>'x'</tt> への照合に<em>失敗</em>し、結果は失敗照合となる。しかし、
+    パターン <tt>['a','b']</tt> を <tt>[</tt><i>_|_</i><tt>,'x']</tt> に
+    照合しようとすれば、<tt>'a'</tt> の <i>_|_</i> への照合が、全体の照合
+    を<em>発散</em>させる。</p></li>
+   <!--
+   <li>These examples demonstrate refutable vs. irrefutable matching:
+   -->
+   <li>以下の例は、反駁可能照合 vs. 反駁不可能照合の例示である。
+    <tt><br />
+    <br />
+    (\&nbsp;~(x,y)&nbsp;-&gt;&nbsp;0)&nbsp;</tt><i>_|_</i><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><i>=&gt;</i><tt>&nbsp;&nbsp;&nbsp;&nbsp;0<br />
+    (\&nbsp;&nbsp;(x,y)&nbsp;-&gt;&nbsp;0)&nbsp;</tt><i>_|_</i><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><i>=&gt;</i><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><i>_|_</i><tt><br />
+    <br />
+    <br />
+    <br />
+    (\&nbsp;~[x]&nbsp;-&gt;&nbsp;0)&nbsp;[]&nbsp;&nbsp;&nbsp;&nbsp;</tt><i>=&gt;</i><tt>&nbsp;&nbsp;&nbsp;&nbsp;0<br />
+    (\&nbsp;~[x]&nbsp;-&gt;&nbsp;x)&nbsp;[]&nbsp;&nbsp;&nbsp;&nbsp;</tt><i>=&gt;</i><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><i>_|_</i><tt><br />
+    <br />
+    <br />
+    <br />
+    (\&nbsp;~[x,~(a,b)]&nbsp;-&gt;&nbsp;x)&nbsp;[(0,1),</tt><i>_|_</i><tt>]&nbsp;&nbsp;&nbsp;&nbsp;</tt><i>=&gt;</i><tt>&nbsp;&nbsp;&nbsp;&nbsp;(0,1)<br />
+    (\&nbsp;~[x,&nbsp;(a,b)]&nbsp;-&gt;&nbsp;x)&nbsp;[(0,1),</tt><i>_|_</i><tt>]&nbsp;&nbsp;&nbsp;&nbsp;</tt><i>=&gt;</i><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><i>_|_</i><tt><br />
+    <br />
+    <br />
+    <br />
+    (\&nbsp;&nbsp;(x:xs)&nbsp;-&gt;&nbsp;x:x:xs)&nbsp;</tt><i>_|_</i><tt>&nbsp;&nbsp;&nbsp;</tt><i>=&gt;</i><tt>&nbsp;&nbsp;&nbsp;</tt><i>_|_</i><tt><br />
+    (\&nbsp;~(x:xs)&nbsp;-&gt;&nbsp;x:x:xs)&nbsp;</tt><i>_|_</i><tt>&nbsp;&nbsp;&nbsp;</tt><i>=&gt;</i><tt>&nbsp;&nbsp;&nbsp;</tt><i>_|_</i><tt>:</tt><i>_|_</i><tt>:</tt><i>_|_</i><tt><br />
+    </tt>
+    <p></p>
+   </li>
+   <!--<li> Consider the following declarations: -->
+   <li> 以下のような宣言を考える。
+   <tt><br />
+    <br />
+    &nbsp;&nbsp;newtype&nbsp;N&nbsp;=&nbsp;N&nbsp;Bool<br />
+    &nbsp;&nbsp;data&nbsp;&nbsp;&nbsp;&nbsp;D&nbsp;=&nbsp;D&nbsp;!Bool<br />
+    <br />
+    </tt>
+    <!--These examples illustrate the difference in pattern matching
+    between types defined by <tt>data</tt> and <tt>newtype</tt>: 
+    -->
+    次の例は、<tt>data</tt> と <tt>newtype</tt> の型宣言によるパターン照
+    合の違いを示したものである。
+    <tt><br />
+    <br />
+    (\&nbsp;&nbsp;(N&nbsp;True)&nbsp;-&gt;&nbsp;True)&nbsp;</tt><i>_|_</i><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt><i>=&gt;</i><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><i>_|_</i><tt><br />
+    (\&nbsp;&nbsp;(D&nbsp;True)&nbsp;-&gt;&nbsp;True)&nbsp;</tt><i>_|_</i><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt><i>=&gt;</i><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><i>_|_</i><tt><br />
+    (\&nbsp;~(D&nbsp;True)&nbsp;-&gt;&nbsp;True)&nbsp;</tt><i>_|_</i><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt><i>=&gt;</i><tt>&nbsp;&nbsp;&nbsp;&nbsp;True<br />
+    <br />
+    </tt>
+    <!--
+    Additional examples may be found in Section <a
+    href="decls.html#datatype-renaming">4.2.3</a>.-->
+    その他の例は <a href="decls.html#datatype-renamimg">4.2.3</a> 節にある。
+    <p></p>
+   </li>
+  </ol>
+  <!--
+  <p> Top level patterns in case expressions and the set of top level
+   patterns in function or pattern bindings may have zero or more
+   associated <i>guards</i>. A guard is a boolean expression that is
+   evaluated only after all of the arguments have been successfully
+   matched, and it must be true for the overall pattern match to succeed.
+   The environment of the guard is the same as the right-hand-side of the
+   case-expression alternative, function definition, or pattern binding to
+   which it is attached.</p>
+  -->
+  <p>case 式のトップレベルでのパターンと、関数あるはパターン束縛でのトッ
+   プレベルパターンは 0 ないしそれ以上の対応する<em>ガード部</em>を持つ
+   ことができる。ガード部は、すべての引数のパターン照合が成功したあとに
+   のみ評価される真理値式であり、パターン照合全体が成功したときには必ず
+   真となる。ガード部の環境は、case 式選択肢、関数定義、あるいはそれがむ
+   すびつけているパターン束縛と同じ環境である。</p> 
+  <!--
+  <p> The guard semantics have an obvious influence on the strictness
+   characteristics of a function or case expression. In particular, an
+   otherwise irrefutable pattern may be evaluated because of a guard. For
+   example, in 
+  -->
+  <p>ガード部のセマンティクスは明らかに関数あるいは case 式の正格性とい
+   うような性質に影響をあたえる。特に反駁不可能パターン以外ではガード部
+   があれば評価される。たとえば、
+   <tt><br />
+   <br />
+   f&nbsp;::&nbsp;(Int,Int,Int)&nbsp;-&gt;&nbsp;[Int]&nbsp;-&gt;&nbsp;Int<br />
+   f&nbsp;~(x,y,z)&nbsp;[a]&nbsp;|&nbsp;(a&nbsp;==&nbsp;y)&nbsp;=&nbsp;1<br />
+   <br />
+   </tt>
+  <!--
+   both <tt>a</tt> and <tt>y</tt> will be evaluated by <tt>==</tt> in
+   the guard.</p>
+  -->
+   では <tt>a</tt> と <tt>y</tt> の両方がガード部の <tt>==</tt> に
+   よって評価される。</p>
+
+  <p><a name="case-semantics"></a></p>
+  <p><a name="sect3.17.3"></a></p>
+
+  <!--<h4>3.17.3<tt>&nbsp;&nbsp;</tt>Formal Semantics of Pattern Matching</h4>-->
+  <h4>3.17.3<tt>&nbsp;&nbsp;</tt>パターン照合の形式的セマンティクス</h4>
+  <!--
+  <p> The semantics of all pattern matching constructs other than <tt>case
+   </tt>expressions are defined by giving identities that relate those
+   constructs to <tt>case</tt> expressions. The semantics of <tt>case</tt>
+   expressions themselves are in turn given as a series of identities, in
+   Figures <a href="exps.html#simple-case-expr-1">3.1</a>--<a
+   href="exps.html#simple-case-expr-2">3.2</a>. Any implementation should
+   behave so that these identities hold; it is not expected that it will
+   use them directly, since that would generate rather inefficient code.</p>
+  -->
+  <p><tt>case</tt> 式以外のすべてのパターン照合構成のセマンティクスは、
+   それら構成に <tt>case</tt> 式を関連づける同等性を与えることで定義する。
+   <tt>case</tt> 式そのもののセマンティクスは、図<a
+   href="exps.html#simple-case-expr-1">3</a>--<a
+   href="exps.html#simple-case-expr-2">4</a> 中の一連の同等性を与えるこ
+   とにより定義される。どの実装もこの同等性を保持するようにしなければな
+   らない。効率のよくないコード生成につながるので、この同等性は直接用い
+   ることが期待されているわけではない。</p>
+
+  <table border="2" cellpadding="3">
+   <tr>
+    <td>
+     <div align="center">
+      <table border="2" cellpadding="3">
+       <tr>
+        <td>
+         <table>
+          <tr>
+           <td align="center">(a)</td>
+           <td><tt>case&nbsp;</tt>e<tt>&nbsp;of&nbsp;{&nbsp;</tt>alts<tt>&nbsp;}&nbsp;</tt>=<tt>&nbsp;(\</tt>v<tt>&nbsp;-&gt;&nbsp;case&nbsp;</tt>v<tt>&nbsp;of&nbsp;{&nbsp;</tt>alts<tt>&nbsp;})&nbsp;</tt><i>e</i></td>
+          </tr>
+          <tr>
+           <td align="center"></td>
+           <!--<td>where v is a new variable</td>-->
+	   <td>v は新しい変数</td>
+          </tr>
+          <tr>
+           <td align="center">(b)</td>
+           <td><tt>case&nbsp;</tt>v<tt>&nbsp;of&nbsp;{&nbsp;</tt>p<sub>1</sub>
+            match<sub>1</sub><tt>;&nbsp;&nbsp;</tt>...<tt>&nbsp;;&nbsp;</tt>p<sub>n</sub>
+            match<sub>n</sub><tt>&nbsp;}</tt></td>
+          </tr>
+          <tr>
+           <td align="center"></td>
+           <td>=<tt>&nbsp;&nbsp;case&nbsp;</tt>v<tt>&nbsp;of&nbsp;{&nbsp;</tt>p<sub>1</sub>
+            match<sub>1</sub><tt>&nbsp;;</tt></td>
+          </tr>
+          <tr>
+           <td align="center"></td>
+           <td><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_&nbsp;&nbsp;-&gt;&nbsp;</tt>...<tt>&nbsp;case&nbsp;</tt>v<tt>&nbsp;of&nbsp;{</tt></td>
+          </tr>
+          <tr>
+           <td align="center"></td>
+           <td><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt>p<sub>n</sub>
+            match<sub>n</sub> <tt>;</tt></td>
+          </tr>
+          <tr>
+           <td align="center"></td>
+           <td><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_&nbsp;&nbsp;-&gt;&nbsp;error&nbsp;"No&nbsp;match"&nbsp;}</tt>...<tt>}</tt></td>
+          </tr>
+          <tr>
+           <td align="center"></td>
+           <td><tt>&nbsp;</tt>
+	    <!--where each match<sub>i</sub> has the form:-->
+	    各 match<sub>i</sub> は以下の形式をもつ。
+	   </td>
+          </tr>
+          <tr>
+           <td align="center"></td>
+           <td><tt>&nbsp;&nbsp;|&nbsp;</tt>g<sub>i,1</sub>
+            <tt>&nbsp;-&gt;&nbsp;</tt>e<sub>i,1</sub><tt>&nbsp;;&nbsp;</tt>...<tt>&nbsp;;&nbsp;|&nbsp;</tt>g<sub>i,m<sub>i</sub></sub><tt>&nbsp;-&gt;&nbsp;</tt>e<sub>i,m<sub>i</sub></sub><tt>&nbsp;where&nbsp;{&nbsp;</tt>decls<sub>i</sub><tt>&nbsp;}</tt></td>
+          </tr>
+          <tr>
+           <td align="center"> (c)</td>
+           <td><tt>case&nbsp;</tt>v<tt>&nbsp;of&nbsp;{&nbsp;</tt>p<tt>&nbsp;|&nbsp;</tt>g<sub>1</sub><tt>&nbsp;-&gt;&nbsp;</tt>e<sub>1</sub><tt>&nbsp;;&nbsp;</tt>...</td>
+          </tr>
+
+          <tr>
+           <td align="center"></td>
+
+           <td><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;</tt>g<sub>n</sub><tt>&nbsp;-&gt;&nbsp;</tt>e<sub>n</sub><tt>&nbsp;where&nbsp;{&nbsp;</tt>decls<tt>&nbsp;}</tt></td>
+          </tr>
+
+          <tr>
+           <td align="center"></td>
+
+           <td><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;</tt>e'<tt>&nbsp;}</tt></td>
+          </tr>
+
+          <tr>
+           <td align="center"></td>
+
+           <td>=<tt>&nbsp;case&nbsp;</tt>e'<tt>&nbsp;of</tt></td>
+          </tr>
+
+          <tr>
+           <td align="center"></td>
+
+           <td> <tt>&nbsp;&nbsp;{</tt>y<tt>&nbsp;-&gt;&nbsp;</tt>
+            <!--(where <i>y</i> is a new variable)-->
+            (<i>y</i> は新しい変数)</td>
+          </tr>
+          <tr>
+           <td align="center"></td>
+           <td><tt>&nbsp;&nbsp;&nbsp;case&nbsp;</tt>v<tt>&nbsp;of&nbsp;{</tt></td>
+          </tr>
+          <tr>
+           <td align="center"></td>
+           <td><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt>p<tt>&nbsp;-&gt;&nbsp;let&nbsp;{&nbsp;</tt>decls<tt>&nbsp;}&nbsp;in</tt></td>
+          </tr>
+          <tr>
+           <td align="center"></td>
+           <td><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;</tt>g<sub>1</sub><tt>&nbsp;then&nbsp;</tt>e<sub>1</sub><tt>&nbsp;</tt>...<tt>&nbsp;else&nbsp;if&nbsp;</tt>g<sub>n</sub><tt>&nbsp;then&nbsp;</tt>e<sub>n</sub><tt>&nbsp;else&nbsp;</tt>y
+            <tt>;</tt></td>
+          </tr>
+          <tr>
+           <td align="center"></td>
+           <td><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_&nbsp;-&gt;&nbsp;</tt>y<tt>&nbsp;}}</tt></td>
+          </tr>
+          <tr>
+           <td align="center"> (d)</td>
+           <td><tt>case&nbsp;</tt>v<tt>&nbsp;of&nbsp;{&nbsp;~</tt>p<tt>&nbsp;-&gt;&nbsp;</tt>e<tt>;&nbsp;_&nbsp;-&gt;&nbsp;</tt>e'<tt>&nbsp;}</tt></td>
+          </tr>
+          <tr>
+           <td align="center"></td>
+           <td>=<tt>&nbsp;(\</tt>x<sub>1</sub> ... x<sub>n</sub>
+            <tt>-&gt;</tt> e
+            <tt>)&nbsp;(case&nbsp;</tt>v<tt>&nbsp;of&nbsp;{&nbsp;</tt>p<tt>-&gt;</tt>
+            x<sub>1</sub><tt>&nbsp;})</tt> ...
+            <tt>(case&nbsp;</tt>v<tt>&nbsp;of&nbsp;{&nbsp;</tt>p<tt>&nbsp;-&gt;&nbsp;</tt>x<sub>n</sub><tt>})</tt></td>
+          </tr>
+          <tr>
+           <td align="center"></td>
+           <td>
+            <!--where x<sub>1</sub>, ..., x<sub>n</sub> are all the
+            variables in p-->
+            x<sub>1</sub>, ..., x<sub>n</sub> はすべて p 内の変数
+            </td>
+          </tr>
+          <tr>
+           <td align="center"> (e)</td>
+           <td><tt>case&nbsp;</tt>v<tt>&nbsp;of&nbsp;{&nbsp;</tt>x<tt>@</tt>p<tt>&nbsp;-&gt;&nbsp;</tt>e<tt>;&nbsp;_&nbsp;-&gt;&nbsp;</tt>e'<tt>&nbsp;}</tt></td>
+          </tr>
+          <tr>
+           <td align="center"></td>
+           <td>=<tt>&nbsp;&nbsp;case&nbsp;</tt>v<tt>&nbsp;of&nbsp;{&nbsp;</tt>p<tt>&nbsp;-&gt;&nbsp;(&nbsp;\&nbsp;</tt>x<tt>&nbsp;-&gt;&nbsp;</tt>e<tt>&nbsp;)&nbsp;</tt>v<tt>&nbsp;;&nbsp;_&nbsp;-&gt;&nbsp;</tt>e'<tt>&nbsp;}</tt></td>
+          </tr>
+          <tr>
+           <td align="center"> (f)</td>
+           <td><tt>case&nbsp;</tt>v<tt>&nbsp;of&nbsp;{&nbsp;_&nbsp;-&gt;&nbsp;</tt>e<tt>;&nbsp;_&nbsp;-&gt;&nbsp;</tt>e'<tt>&nbsp;}&nbsp;</tt>=<tt>&nbsp;</tt>e</td>
+          </tr>
+          <tr>
+           <td align="center"></td>
+          </tr>
+         </table>
+        </td>
+       </tr>
+      </table>
+     </div>
+     <div align="center">
+      <!--<h4>Figure 3</h4>-->
+      <h4>図 3</h4>
+     </div>
+     <div align="center">
+      <!--<h3>Semantics of Case Expressions, Part 1</h3>-->
+      <h3>case 式のセマンティクス(その１)</h3>
+     </div>
+     <a name="simple-case-expr-1"></a></td>
+   </tr>
+  </table>
+  <p></p>
+  <table border="2" cellpadding="3">
+   <tr>
+    <td>
+     <div align="center">
+      <table border="2" cellpadding="3">
+       <tr>
+        <td>
+         <table>
+          <tr>
+           <td align="center">(g)</td>
+           <td><tt>case&nbsp;</tt>v<tt>&nbsp;of&nbsp;{&nbsp;</tt>K
+            p<sub>1</sub>
+            ...p<sub>n</sub><tt>&nbsp;-&gt;&nbsp;</tt>e<tt>;&nbsp;_&nbsp;-&gt;&nbsp;</tt>e'<tt>&nbsp;}</tt></td>
+          </tr>
+          <tr>
+           <td align="center"></td>
+           <td>=<tt>&nbsp;case&nbsp;</tt>v<tt>&nbsp;of&nbsp;{</tt></td>
+          </tr>
+	  <tr>
+           <td align="center"></td>
+           <td><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt>K x<sub>1</sub>
+            ...x<sub>n</sub><tt>&nbsp;-&gt;&nbsp;case&nbsp;</tt>x<sub>1</sub><tt>&nbsp;of&nbsp;{</tt></td>
+          </tr>
+          <tr>
+           <td align="center"></td>
+           <td><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt>p<sub>1</sub><tt>&nbsp;-&gt;&nbsp;</tt>...<tt>&nbsp;case&nbsp;</tt>x<sub>n</sub><tt>&nbsp;of&nbsp;{&nbsp;</tt>p<sub>n</sub><tt>&nbsp;-&gt;&nbsp;</tt>e<tt>&nbsp;;&nbsp;_&nbsp;-&gt;&nbsp;</tt>e'<tt>&nbsp;}&nbsp;</tt>...</td>
+          </tr>
+          <tr>
+           <td align="center"></td>
+           <td><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_&nbsp;&nbsp;-&gt;&nbsp;</tt>e'<tt>&nbsp;}</tt></td>
+          </tr>
+          <tr>
+           <td align="center"></td>
+           <td><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_&nbsp;-&gt;&nbsp;</tt>e'<tt>&nbsp;}</tt></td>
+          </tr>
+          <tr>
+           <td align="center"></td>
+           <td>
+	    <!--at least one of p<sub>1</sub>, ..., p<sub>n</sub> is not a
+            variable; x<sub>1</sub>, ..., x<sub>n</sub> are new
+            variables-->
+	    p<sub>1</sub>, ..., p<sub>n</sub> のうち、少くともひとつは変
+            数ではなく、x<sub>1</sub>, ..., x<sub>n</sub> は新しい変数
+	   </td>
+          </tr>
+          <tr>
+           <td align="center"> (h)</td>
+           <td><tt>case&nbsp;</tt>v<tt>&nbsp;of&nbsp;{&nbsp;</tt>k<tt>&nbsp;-&gt;&nbsp;</tt>e<tt>;&nbsp;_&nbsp;-&gt;&nbsp;</tt>e'<tt>&nbsp;}&nbsp;</tt>=<tt>&nbsp;if&nbsp;(</tt>v<tt>==</tt>k<tt>)&nbsp;then&nbsp;</tt>e<tt>&nbsp;else&nbsp;</tt>e'
+            </td>
+          </tr>
+          <tr>
+           <td align="center"></td>
+           <td>
+	    <!--where k is a numeric, character, or string literal.-->
+	    k は数値リテラル、文字リテラル、あるいは、文字列リテラル
+	   </td>
+          </tr>
+          <tr>
+           <td align="center"> (i)</td>
+           <td><tt>case&nbsp;</tt>v<tt>&nbsp;of&nbsp;{&nbsp;</tt>x<tt>&nbsp;-&gt;&nbsp;</tt>e<tt>;&nbsp;_&nbsp;-&gt;&nbsp;</tt>e'<tt>&nbsp;}&nbsp;</tt>=<tt>&nbsp;case&nbsp;</tt>v<tt>&nbsp;of&nbsp;{&nbsp;</tt>x<tt>&nbsp;-&gt;&nbsp;</tt>e<tt>&nbsp;}</tt></td>
+          </tr>
+          <tr>
+           <td align="center"> (j)</td>
+           <td><tt>case&nbsp;</tt>v<tt>&nbsp;of&nbsp;{&nbsp;</tt>x<tt>&nbsp;-&gt;&nbsp;</tt>e<tt>&nbsp;}&nbsp;</tt>=<tt>&nbsp;(&nbsp;\&nbsp;</tt>x<tt>&nbsp;-&gt;&nbsp;</tt>e<tt>&nbsp;)&nbsp;</tt>v</td>
+          </tr>
+          <tr>
+           <td align="center"> (k)</td>
+           <td><tt>case&nbsp;</tt>N
+            v<tt>&nbsp;of&nbsp;{&nbsp;</tt>N<tt>&nbsp;</tt>p<tt>&nbsp;-&gt;&nbsp;</tt>e<tt>;&nbsp;_&nbsp;-&gt;&nbsp;</tt>e'<tt>&nbsp;}</tt></td>
+          </tr>
+          <tr>
+           <td align="center"></td>
+           <td>=<tt>&nbsp;case&nbsp;</tt>v<tt>&nbsp;of&nbsp;{&nbsp;</tt>p<tt>&nbsp;-&gt;&nbsp;</tt>e<tt>;&nbsp;_&nbsp;-&gt;&nbsp;</tt>e'<tt>&nbsp;}</tt></td>
+          </tr>
+          <tr>
+           <td align="center"></td>
+           <td>
+	    <!--where N is a <tt>newtype</tt> constructor-->
+	    N は <tt>newtype</tt> の構成子
+	   </td>
+          </tr>
+          <tr>
+           <td align="center"> (l)</td>
+           <td><tt>case&nbsp;</tt>_|_<tt>&nbsp;of&nbsp;{&nbsp;</tt>N<tt>&nbsp;</tt>p<tt>&nbsp;-&gt;&nbsp;</tt>e<tt>;&nbsp;_&nbsp;-&gt;&nbsp;</tt>e'<tt>&nbsp;}&nbsp;</tt>=<tt>&nbsp;case&nbsp;</tt>_|_<tt>&nbsp;of&nbsp;{&nbsp;</tt>p<tt>&nbsp;-&gt;&nbsp;</tt>e<tt>&nbsp;}</tt></td>
+          </tr>
+          <tr>
+           <td align="center"></td>
+           <td>
+	    <!--where N is a <tt>newtype</tt> constructor-->
+	    N は <tt>newtype</tt> の構成子
+	   </td>
+          </tr>
+          <tr>
+           <td align="center"> (m)</td>
+           <td> <tt>case&nbsp;</tt> v <tt>&nbsp;of&nbsp;{&nbsp;</tt> K
+            <tt>&nbsp;{</tt> f<sub>1</sub> <tt>&nbsp;=&nbsp;</tt>
+            p<sub>1</sub> <tt>&nbsp;,&nbsp;</tt> f<sub>2</sub>
+            <tt>&nbsp;=&nbsp; </tt>p<sub>2</sub> <tt>&nbsp;,&nbsp;</tt> ...
+            <tt>}&nbsp;-&gt;&nbsp;</tt> e
+            <tt>;&nbsp;_&nbsp;-&gt;&nbsp;</tt> e' <tt>&nbsp;}</tt></td>
+          </tr>
+          <tr>
+           <td align="center"></td>
+           <td>= <tt>&nbsp;case&nbsp;</tt>e'<tt>&nbsp;of&nbsp;{</tt></td>
+          </tr>
+          <tr>
+           <td align="center"></td>
+           <td><tt>&nbsp;&nbsp;&nbsp;</tt>y<tt>&nbsp;-&gt;</tt></td>
+          </tr>
+          <tr>
+           <td align="center"></td>
+           <td><tt>&nbsp;&nbsp;&nbsp;&nbsp;case&nbsp;</tt> v
+            <tt>&nbsp;of&nbsp;{&nbsp;</tt></td>
+          </tr>
+          <tr>
+           <td align="center"></td>
+           <td><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt> K
+            <tt>&nbsp;{&nbsp;</tt> f<sub>1</sub> <tt>&nbsp;=&nbsp;</tt>
+            p<sub>1</sub> <tt>&nbsp;}&nbsp;-&gt;</tt></td>
+          </tr>
+          <tr>
+           <td align="center"></td>
+           <td><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case&nbsp;</tt>
+            v <tt>&nbsp;of&nbsp;{</tt> K <tt>&nbsp;{</tt> f<sub>2</sub>
+            <tt>&nbsp;=&nbsp;</tt> p<sub>2</sub> <tt>&nbsp;,&nbsp; </tt>...
+            <tt>&nbsp;}&nbsp;-&gt;&nbsp;</tt> e
+            <tt>;&nbsp;_&nbsp;-&gt;&nbsp;</tt> y <tt>&nbsp;};</tt></td>
+          </tr>
+          <tr>
+           <td align="center"></td>
+	   <td><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_&nbsp;-&gt;&nbsp;</tt>
+	   y <tt>&nbsp;}}</tt></td>
+          </tr>
+          <tr>
+           <td align="center"></td>
+	   <td>
+	    <!--where f<sub>1</sub>, f<sub>2</sub>, ... are fields of
+	    constructor K; y is a new variable-->
+	    f<sub>1</sub>, f<sub>2</sub>, ... は構成子 K のフィールド。
+	    y は新しい変数
+	   </td>
+          </tr>
+          <tr>
+           <td align="center"> (n)</td>
+           <td><tt>case&nbsp;</tt> v <tt>&nbsp;of&nbsp;{&nbsp;</tt> K
+            <tt>&nbsp;{</tt> f <tt>&nbsp;=&nbsp;</tt> p
+            <tt>}&nbsp;-&gt;&nbsp;</tt> e <tt>;&nbsp;_&nbsp;-&gt;&nbsp;
+            </tt>e' <tt>&nbsp;}</tt></td>
+          </tr>
+          <tr>
+           <td align="center"></td>
+           <td>=<tt>&nbsp;case&nbsp;</tt> v <tt>&nbsp;of&nbsp;{</tt></td>
+          </tr>
+          <tr>
+           <td align="center"></td>
+           <td> <tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt> K p<sub>1</sub> ...
+            p<sub>n</sub> <tt>&nbsp;-&gt;&nbsp;</tt> e
+            <tt>;&nbsp;_&nbsp;-&gt;&nbsp;</tt> e' <tt>&nbsp;}</tt></td>
+          </tr>
+          <tr>
+           <td align="center"></td>
+           <td>
+	    <!--where p<sub>i</sub> is p if f labels the ith component of K,
+            <tt>_</tt> otherwise-->
+	    p<sub>i</sub> は、もし、K の i 番目の構成要素のラベルが f で
+	    あるならば、p、そうでなければ、<tt>_</tt></td>
+          </tr>
+          <tr>
+           <td align="center">(o)</td>
+           <td><tt>case&nbsp;</tt> v <tt>&nbsp;of&nbsp;{&nbsp;</tt> K
+            <tt>&nbsp;{}&nbsp;-&gt;&nbsp;</tt> e
+            <tt>;&nbsp;_&nbsp;-&gt;&nbsp; </tt>e' <tt>&nbsp;}</tt></td>
+          </tr>
+          <tr>
+           <td align="center"></td>
+           <td>=<tt>&nbsp;case&nbsp;</tt> v <tt>&nbsp;of&nbsp;{</tt></td>
+          </tr>
+          <tr>
+           <td align="center"></td>
+           <td> <tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt> K <tt>_</tt> ...
+            <tt>_&nbsp;-&gt;&nbsp;</tt> e
+            <tt>;&nbsp;_&nbsp;-&gt;&nbsp;</tt> e' <tt>&nbsp;}</tt></td>
+          </tr>
+          <tr>
+           <td align="center">(p)</td>
+           <td><tt>case&nbsp;(</tt>K'<tt>&nbsp;</tt>e<sub>1</sub><tt>&nbsp;</tt>...<tt>&nbsp;</tt>e<sub>m</sub><tt>)&nbsp;of&nbsp;{&nbsp;</tt>K<tt>&nbsp;</tt>x<sub>1</sub><tt>&nbsp;</tt>...<tt>&nbsp;</tt>x<sub>n</sub><tt>&nbsp;-&gt;&nbsp;</tt>e<tt>;&nbsp;_&nbsp;-&gt;&nbsp;</tt>e'<tt>&nbsp;}&nbsp;</tt>=<tt>&nbsp;</tt>e'</td>
+          </tr>
+          <tr>
+           <td align="center"></td>
+           <td>
+	    <!-- where K and K' are distinct <tt>data</tt> constructors of
+            arity n and m, respectively -->
+	    K と K' はそれぞれ n 引数と m 引数の別の <tt>data</tt> 構成子
+	   </td>
+          </tr>
+
+          <tr>
+           <td align="center"> (q)</td>
+           <td><tt>case&nbsp;(</tt>K<tt>&nbsp;</tt>e<sub>1</sub><tt>&nbsp;</tt>...<tt>&nbsp;</tt>e<sub>n</sub><tt>)&nbsp;of&nbsp;{&nbsp;</tt>K<tt>&nbsp;</tt>x<sub>1</sub><tt>&nbsp;</tt>...<tt>&nbsp;</tt>x<sub>n</sub><tt>&nbsp;-&gt;&nbsp;</tt>e<tt>;&nbsp;_&nbsp;-&gt;&nbsp;</tt>e'<tt>&nbsp;}</tt></td>
+          </tr>
+          <tr>
+           <td align="center"></td>
+           <td>=<tt>&nbsp;(\</tt>x<sub>1</sub> ...
+            x<sub>n</sub><tt>&nbsp;-&gt;&nbsp;</tt>e<tt>)&nbsp;</tt>e<sub>1</sub>
+	    ... e<sub>n</sub></td>
+          </tr>
+          <tr>
+           <td align="center"></td>
+	   <td>
+	    <!--where K is a <tt>data</tt> constructor of arity n-->
+	    K は n 引数の <tt>data</tt> 構成子
+	   </td>
+          </tr>
+          <tr>
+           <td align="center">
+            <p> (r)</p>
+           </td>
+           <td><tt>case</tt> _|_
+            <tt>of&nbsp;{&nbsp;</tt>K<tt>&nbsp;</tt>x<sub>1</sub><tt>&nbsp;</tt>...<tt>&nbsp;</tt>x<sub>n</sub><tt>&nbsp;-&gt;&nbsp;</tt>e<tt>;&nbsp;_&nbsp;-&gt;&nbsp;</tt>e'<tt>&nbsp;}</tt>
+            = _|_</td>
+          </tr>
+          <tr>
+           <td align="center"></td>
+           <td>
+	    <!-- where K is a <tt>data</tt> constructor of arity n -->
+	   K は n 引数の <tt>data</tt> 構成子</td>
+          </tr>
+          <tr>
+           <td align="center">
+            <p> (s)</p>
+           </td>
+           <td><tt>case&nbsp;</tt>v<tt>&nbsp;of&nbsp;{&nbsp;</tt>x<tt>+</tt>k<tt>&nbsp;-&gt;&nbsp;</tt>e<tt>;&nbsp;_&nbsp;-&gt;&nbsp;</tt>e'<tt>&nbsp;}</tt></td>
+          </tr>
+          <tr>
+           <td align="center"></td>
+           <td>=<tt>&nbsp;if&nbsp;</tt>v<tt>&nbsp;&gt;=&nbsp;</tt>k<tt>&nbsp;then&nbsp;(\</tt>x<tt>&nbsp;-&gt;&nbsp;</tt>e<tt>)&nbsp;(</tt>v<tt>-</tt>k<tt>)&nbsp;else&nbsp;</tt>e'</td>
+          </tr>
+          <tr>
+           <td align="center"></td>
+           <td>
+	    <!--where k is a numeric literal-->
+	    k は数値リテラル
+	   </td>
+          </tr>
+         </table>
+        </td>
+       </tr>
+      </table>
+     </div>
+     <div align="center">
+      <!--<h4>Figure 4</h4>-->
+      <h4>図 4</h4>
+     </div>
+     <div align="center">
+      <!--<h3>Semantics of Case Expressions, Part 2</h3>-->
+      <h3>case 式のセマンティクス(その２)</h3>
+     </div>
+     <a name="simple-case-expr-2"></a></td>
+   </tr>
+  </table>
+  <!--
+  <p> In Figures <a href="exps.html#simple-case-expr-1">3.1</a>-<a
+   href="exps.html#simple-case-expr-2">3.2</a>: <i>e</i>, <i>e'</i> and
+   <i>e</i><sub><i>i</i></sub> are expressions; <i>g</i> and
+   <i>g</i><sub><i>i</i></sub> are boolean-valued expressions; <i>p</i> and
+   <i>p</i><sub><i>i</i></sub> are patterns; <i>v</i>, <i>x</i>, and
+   <i>x</i><sub><i>i</i></sub> are variables; <i>K</i> and <i>K'</i> are
+   algebraic datatype (<tt>data</tt>) constructors (including tuple
+   constructors); and <i>N</i> is a <tt>newtype</tt> constructor.</p>
+  -->
+  <p>図 <a href="exps.html#simple-case-expr-1">3.1</a>--    
+   <a href="exps.html#simple-case-expr-2">3.2</a> では
+   <i>e</i>、<i>e'</i> および <i>e</i><sub><i>i</i></sub> は式、 
+   <i>g</i> および <i>g</i><sub><i>i</i></sub> は真理値式、 
+   <i>p</i> および <i>p</i><sub><i>i</i></sub> はパターン 
+   <i>v</i>、<i>x</i> および <i>x</i><sub><i>i</i></sub> は変数、 
+   <i>K</i> および <i>K'</i> は代数的データ型 (<tt>data</tt>) 構成子(タプル
+   コンストラクタを含む)、<i>N</i> は <tt>newtype</tt> 構成子、<i>k</i> は
+   文字、文字列、あるいは数値のリテラルである。
+  </p>
+  <!--
+  <p> Rule (b) matches a general source-language <tt>case</tt> expression,
+   regardless of whether it actually includes guards---if no guards are
+   written, then <tt>True</tt> is substituted for the guards
+   <i>g</i><sub><i>i,j</i></sub> in the <i>match</i><sub><i>i</i></sub>
+   forms. Subsequent identities manipulate the resulting <tt>case</tt>
+   expression into simpler and simpler forms.</p>
+  -->
+  <p>規則 (b) は、ガード部を実際に含むかどうかにかかわらず、一般のソース
+   言語の <tt>case</tt> 式に対応する。もしガード部が書かれていなければ、
+   <tt>True</tt> に <I>match</I><sub><I>i</I></sub> 形式のガード部
+   <I>g</I><sub><I>i,j</I></sub> を置き換える。そのあとに続く、同等性は、
+   <tt>case</tt> 式の結果をより単純な、簡単な形式にするものである。
+  </p>
+  <!--
+  <p> Rule (h) in Figure <a href="exps.html#simple-case-expr-2">3.2</a>
+   involves the overloaded operator <tt>==</tt>; it is this rule that
+   defines the meaning of pattern matching against overloaded constants.</p>
+  -->
+  <p>図 <a href="exps.html#simple-case-expr-2">4</a> の規則 (h) は多重定
+   義された <tt>==</tt> を含む。多重定義された定数に対するパターン照合の
+   意味を定義するのはこの規則である。</p>
+  <!--
+  <p> These identities all preserve the static semantics. Rules (d), (e),
+   (j), (q), and (s) use a lambda rather than a <tt>let</tt>; this
+   indicates that variables bound by <tt>case</tt> are monomorphically
+   typed (Section <a href="decls.html#type-semantics">4.1.4</a>).</p>
+  -->
+  <p>これらの同等性すべて静的セマンティクスを保存するものである。規則
+   (d)、(e)、(j)、(q) そして (s) は <tt>let</tt> ではなくλを用いている。
+  このことは、<tt>case</tt> によって束縛される変数は、単相的に型付けされ
+  ることを示している(<a href="decls.html#type-semantics">4.1.4</a> 節を
+  見よ)</p>
+  
+  <hr />
+
+  <p><i>The Haskell 98 Report</i><br />
+   <a href="index.html">top</a> | <a href="lexemes.html">back</a> | <a
+   href="decls.html">next</a> | <a href="index98.html">contents</a> | <a
+   href="prelude-index.html">function index</a> <br />
+   <font size="2">December 2002</font></p>
+
+  <p></p>
+ </body>
+</html>

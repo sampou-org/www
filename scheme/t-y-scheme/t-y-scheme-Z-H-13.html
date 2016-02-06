@@ -1,0 +1,139 @@
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--
+
+Generated from t-y-scheme.tex by tex2page, v 20060531
+(running on Gauche 0.8.7, unix), 
+(c) Dorai Sitaram, 
+http://www.ccs.neu.edu/~dorai/tex2page/tex2page-doc.html
+
+-->
+<head>
+<title>
+独習 Scheme 三週間 Teach Yourself Scheme in Fixnum Days
+</title>
+<link rel="stylesheet" type="text/css" href="t-y-scheme-Z-S.css" title=default>
+<meta name=robots content="noindex,follow">
+<meta name=description content="A practical
+introduction to the programming language Scheme">
+
+<meta name=author content="Dorai Sitaram">
+
+<link rev=made href="mailto:ds26@gte.com">
+</head>
+<body>
+<div id=slidecontent>
+<div align=right class=navigation>[Go to <span><a href="t-y-scheme.html">first</a>, <a href="t-y-scheme-Z-H-12.html">previous</a></span><span>, <a href="t-y-scheme-Z-H-14.html">next</a></span> page<span>; &nbsp;&nbsp;</span><span><a href="t-y-scheme-Z-H-1.html#node_toc_start">contents</a></span><span><span>; &nbsp;&nbsp;</span><a href="t-y-scheme-Z-H-25.html#node_index_start">index</a></span>]</div>
+<p></p>
+<a name="node_chap_11"></a>
+<h1 class=chapter>
+<div class=chapterheading><a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_11">Chapter 11</a></div><br>
+<a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_11">システムインタフェース</a></h1>
+<p></p>
+<p>
+</p>
+<p>
+役に立つ Scheme のプログラムは基盤となるオペレーティングシステムとの
+しばしば対話を必要とします。</p>
+<p>
+</p>
+<p>
+</p>
+<a name="node_sec_11.1"></a>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_11.1">11.1&nbsp;&nbsp;ファイルの確認と削除</a></h2>
+<p><a name="node_idx_424"></a><a name="node_idx_426"></a><a name="node_idx_428"></a><a name="node_idx_430"></a></p>
+<p>
+<code class=scheme><span class=variable>file-exists?</span></code> は引数の文字列の名前のファイルが存在するかどうかを
+チェックします。<code class=scheme><span class=variable>delete-file</span></code> は引数のファイルを削除します。
+これらの手続きは Scheme の標準にはありませんが、ほとんどの実装で
+利用可能になっています。これらの手続きはディレクトリではないファイルに
+対してのみ、確実に動作します(これらのディレクトリに対する挙動は、その
+実装依存です)。</p>
+<p>
+<a name="node_idx_432"></a><a name="node_idx_434"></a></p>
+<p>
+</p>
+<p>
+<code class=scheme><span class=variable>file-or-directory-modify-seconds</span></code> は引数のファイルあるいは
+ディレクトリの最終更新時刻を返します。この時刻は1970年1月1日0時からの
+秒数です。たとえば、</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>file-or-directory-modify-seconds</span> <span class=selfeval>&quot;hello.scm&quot;</span>)
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>893189629</span>
+</pre><p></p>
+<p>
+</p>
+<p>
+なら、ファイル <code class=verbatim>hello.scm</code> は1998年4月21日にさわられたことになります。</p>
+<p>
+</p>
+<a name="node_sec_11.2"></a>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_11.2">11.2&nbsp;&nbsp;オペレーティングシステムコマンドの呼び出し</a></h2>
+<p><a name="node_idx_436"></a></p>
+<p>
+<code class=scheme><span class=variable>system</span></code> 手続きは引数の文字列をオペレーティングシステムの
+コマンドとして実行します。<a name="node_call_footnote_Temp_6"></a><sup><small><a href="#node_footnote_Temp_6">1</a></small></sup> これはコマンドが
+終了ステータス 0 を返し成功したら、真を返し、実行に失敗あるいは
+0 以外の終了ステータスであった場合には、偽を返します。<a name="node_call_footnote_Temp_7"></a><sup><small><a href="#node_footnote_Temp_7">2</a></small></sup> コマンドの実行によって生成される
+出力はすべて標準出力に出ます。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>system</span> <span class=selfeval>&quot;ls&quot;</span>) 
+<span class=comment>;現在のディレクトリの内容表示</span>
+
+(<span class=keyword>define</span> <span class=variable>fname</span> <span class=selfeval>&quot;spot&quot;</span>)
+
+(<span class=variable>system</span> (<span class=variable>string-append</span> <span class=selfeval>&quot;test -f &quot;</span> <span class=variable>fname</span>)) 
+<span class=comment>;spot というファイルがあるかどうかチェック</span>
+
+(<span class=variable>system</span> (<span class=variable>string-append</span> <span class=selfeval>&quot;rm -f &quot;</span> <span class=variable>fname</span>)) 
+<span class=comment>;spot を強制削除</span>
+</pre><p></p>
+<p>
+最後の2つのフォームは以下と同じです。<a name="node_call_footnote_Temp_8"></a><sup><small><a href="#node_footnote_Temp_8">3</a></small></sup></p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>file-exists?</span> <span class=variable>fname</span>)
+
+(<span class=variable>delete-file</span> <span class=variable>fname</span>)
+</pre><p></p>
+<p>
+</p>
+<a name="node_sec_11.3"></a>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_11.3">11.3&nbsp;&nbsp;環境変数</a></h2>
+<p><a name="node_idx_438"></a></p>
+<p>
+<code class=scheme><span class=variable>getenv</span></code> 手続きはオペレーティングシステムの環境変数の設定を返します。
+<a name="node_call_footnote_Temp_9"></a><sup><small><a href="#node_footnote_Temp_9">4</a></small></sup></p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>getenv</span> <span class=selfeval>&quot;HOME&quot;</span>)
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>&quot;/home/dorai&quot;</span>
+
+(<span class=variable>getenv</span> <span class=selfeval>&quot;SHELL&quot;</span>)
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>&quot;/bin/bash&quot;</span>
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+<div class=footnoterule><hr></div><p></p>
+<div class=footnote><p><a name="node_footnote_Temp_6"></a><sup><small><a href="#node_call_footnote_Temp_6">1</a></small></sup> MzScheme は <code class=scheme><span class=variable>system</span></code> 手続きを <code class=scheme><span class=variable>process</span></code>
+ライブラリ経由で提供しています。このライブラリをロードするには
+<code class=scheme>(<span class=variable>require</span> (<span class=variable>lib</span> <span class=selfeval>&quot;process.ss&quot;</span>))</code>を使用してください。</p>
+<p><a name="node_footnote_Temp_7"></a><sup><small><a href="#node_call_footnote_Temp_7">2</a></small></sup> (訳注) Gauche
+では <code class=scheme><span class=variable>sys-system</span></code> を使います。<code class=scheme><span class=variable>sys-system</span></code> の返り値は、POSIX の
+<code class=scheme><span class=variable>system</span>()</code> の返り値の整数です。</p>
+<p><a name="node_footnote_Temp_8"></a><sup><small><a href="#node_call_footnote_Temp_8">3</a></small></sup> (訳注) Gauche では、
+<code class=scheme><span class=variable>delete-file</span></code> ではなく <code class=scheme><span class=variable>sys-remove</span></code> を使います。</p>
+<p><a name="node_footnote_Temp_9"></a><sup><small><a href="#node_call_footnote_Temp_9">4</a></small></sup> (訳注) Gauche では <code class=scheme><span class=variable>sys-getenv</span></code> を使います。</p>
+</div>
+<div class=smallskip></div>
+<p style="margin-top: 0pt; margin-bottom: 0pt">
+<div align=right class=navigation>[Go to <span><a href="t-y-scheme.html">first</a>, <a href="t-y-scheme-Z-H-12.html">previous</a></span><span>, <a href="t-y-scheme-Z-H-14.html">next</a></span> page<span>; &nbsp;&nbsp;</span><span><a href="t-y-scheme-Z-H-1.html#node_toc_start">contents</a></span><span><span>; &nbsp;&nbsp;</span><a href="t-y-scheme-Z-H-25.html#node_index_start">index</a></span>]</div>
+</p>
+<p></p>
+</div>
+</body>
+</html>

@@ -1,0 +1,489 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>A Gentle Introduction to Haskell: IO</title>
+</head>
+<body bgcolor="#ffffff">
+<p>
+<i>やさしい Haskell 入門 ( バージョン 98 )</i><br>
+<a href="moretypes.html">back</a>
+<a href="stdclasses.html">next</a>
+<a href="index.html">top</a>
+</p>
+<hr>
+<p>
+<a name="tut-io"></a>
+<a name="sect7"></a>
+<h2>7<tt>&nbsp;&nbsp;</tt>入出力</h2>
+</p>
+<p>
+Haskell の I/O システムは純粋に関数的で、なおかつ、伝統的なプログラミン
+グ言語がもつ表現力をすべて兼備えています。命令型の言語では、プログラムは
+世界の現在の状態を確認し変更する<em>アクション</em>を通じて進行します。
+典型的なアクションには、グローバル変数を読むこと、設定すること、ファイル
+への書き込み、入力の読み込み、ウィンドウのオープンなどが含まれています。
+このようなアクションは Haskell の一部ですが、言語のコアの部分からは、すっ
+きりと切離されています。
+</p>
+<p>
+Haskell の I/O システムはちょっとひるんでしまうような数学の基盤、<em>モ
+ナド</em> ( <i>monad</i> ) を基礎として築かれています。しかし、I/O システム
+を使う上で底流にあるモナドの理論を理解する必要はありません。むしろ、モナ
+ドの理論は、I/O にたまたま適合した概念上の構造です。単純な算術演算を実行
+するのに群論を理解する必要がないのと同じで、Haskell の I/O を実行するの
+にモナド理論を理解する必要ないということです。モナドに関する詳細な説明は、
+<a href="monads.html#tut-monads">9</a> 節を参照してください。
+</p>
+<p>
+I/O システムを構築している、モナド演算子は別の目的にも使用されます。モナ
+ドのよりつっこんだ観察はのちほどおこないます。ここでは、モナドという用語
+を使うのは避けて、I/O システムの使い方に集中しましょう。I/O モナドを単に
+抽象データ型だと考えておくのがいいでしょう。
+</p>
+<p>
+アクションは式言語のHaskellでは呼出すのではなく定義するものです。アクショ
+ンの定義を評価することでは、実際のアクションは起こりません。むしろ、アク
+ションは、ここまで考えてきた式の評価というものの外側で起こることです。
+</p>
+<p>
+アクションはシステムプリミティブとして定義されるようにアトミックなもので
+もあり、また、一連のアクションの合成でもあります。I/O モナドは複合アクショ
+ンを構成するためのプリミティブをふくみ、他の言語では <tt>;</tt> を使って、
+文を一列にならべるのと同じように構成します。このモナドの機構はプログラム
+のなかのアクションをくっつける糊のような役目をします。
+</p>
+<p>
+<a name="sect7.1"></a>
+<h3>7.1<tt>&nbsp;&nbsp;</tt>I/O の基本演算</h3>
+</p>
+<p>
+各 I/O のアクションはそれぞれ値を返します。型システムにおいては、返り値
+は、<tt>IO</tt> という「タグ」がつけられています。これはアクションを他の
+値と区別するためです。たとえば、関数 <tt>getChar</tt> の型は、
+<tt><br>
+<br>
+getChar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;&nbsp;&nbsp;IO&nbsp;Char<br>
+<br>
+</tt>
+です。この <tt>IO&nbsp;Char</tt> は <tt>getChar</tt> が呼出されたときに、
+文字を返すなんらかの動作をする、ということを示しています。意味のある値を
+返さないアクションにたいしてはユニット型 <tt>()</tt> を用います。たとえ
+ば、関数 <tt>putChar</tt> の型は、
+<tt><br>
+<br>
+putChar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;&nbsp;&nbsp;&nbsp;Char&nbsp;-&gt;&nbsp;IO&nbsp;()<br>
+<br>
+</tt>
+で、この関数は引数として文字をとりますが、特に意味のある値は返しません。
+</p>
+<p>
+アクションは、すこし謎めいた名前の演算子 <tt>&gt;&gt;=</tt> (あるいは 
+<tt>`bind'</tt> )を使って、順序付けをします。この演算子を直接使わず、
+<tt>do</tt> 記法という糖衣構文を使うこともできます。この記法では、順序制
+御の演算子は構文の後に隠れますので、伝統的な言語に近くなります。
+<tt>do</tt> 記法はレポートの <a
+href="../report-j/exps.html#do-expressions">&sect;3.14</a> にあるように簡
+単に <tt>&gt;&gt;=</tt> に展開することができます。
+</p>
+<p>
+キーワード <tt>do</tt> により順に実行される文のならびというのが導入され
+ます。文はアクションであるとともに、<tt>&lt;-</tt> を使ってアクションの
+結果に束縛されたパターンであり、<tt>let</tt> を使った局所的な定義の集合
+でもあります。<tt>do</tt> 記法は <tt>let</tt> や <tt>where</tt> と同じく、
+レイアウトを使います。ですので、適正なインデントをつかえば、波括弧とセミ
+コロンを省略することができます。次のは一文字よみこみそれを印字する簡単は
+プログラムです。
+<tt><br>
+<br>
+main&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;IO&nbsp;()<br>
+main&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;do&nbsp;c&nbsp;&lt;-&nbsp;getChar<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;putChar&nbsp;c<br>
+<br>
+</tt>
+<tt>main</tt> の使い方は重要です。<tt>main</tt> は (C の <tt>main</tt> 
+関数と同様に) Haskell のプログラムのエントリポイントとして定義されていま
+す。<tt>main</tt> は <tt>IO</tt> 型でなければなりません。ふつうは 
+<tt>IO&nbsp;()</tt> です。<tt>main</tt> は <tt>Main</tt> モジュールのな
+かだけで特別な意味をもちます。モジュールに関しては後ほど詳しくふれます。) 
+上のプログラムは順に 2 つのアクションを実行します。最初に、一文字に読み
+込み、その結果を変数 <tt>c</tt> へ束縛します。それからその文字を印字しま
+す。変数のスコープが定義全体にわたる <tt>let</tt> 式とはちがい、
+<tt>&lt;-</tt> で定義した変数は、そのあとに続く文のなかでのみ有効です。
+</p>
+<p>
+まだ、説明していないポイントがあります。<tt>to</tt> を用いて、アクション
+を起動し、その結果を知ることができますが、一連のアクションから結果を返す
+のはどうすればいいのでしょうか。たとえば、一文字読み込んでその文字が 
+<tt>'y'</tt> であれば、<tt>True</tt> を返す <tt>ready</tt> という関数を
+考えてみましょう。
+<tt><br>
+<br>
+ready&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;IO&nbsp;Bool<br>
+ready&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;do&nbsp;c&nbsp;&lt;-&nbsp;getChar<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c&nbsp;==&nbsp;'y'&nbsp;&nbsp;--&nbsp;ダメ!!!
+<br>
+<br>
+</tt>
+この関数は、<tt>do</tt> のなかの 2 つめの文が、アクションではなく、単な
+る真理値ですので、動作しません。この真理値をとって、なにもしないが、結果
+としてこの真理値を返すアクションを生成しなければなりません。
+<tt>return</tt> 関数はまさにこれを行います。
+<tt><br>
+<br>
+return&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;&nbsp;&nbsp;a&nbsp;-&gt;&nbsp;IO&nbsp;a<br>
+<br>
+</tt>
+この <tt>return</tt> 関数はプリミティブの順序実行を完成させます。
+<tt>ready</tt> の最後の行は、<tt>return&nbsp;(c&nbsp;==&nbsp;'y')</tt> 
+でなくてはなりません。
+</p>
+<p>
+では、もっと複雑な I/O 関数を見てみましょう。まず、<tt>getLine</tt> 関数
+です。
+<tt><br>
+<br>
+getLine&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;IO&nbsp;String<br>
+getLine&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;do&nbsp;c&nbsp;&lt;-&nbsp;getChar<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;c&nbsp;==&nbsp;'\n'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;then&nbsp;return&nbsp;""<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else&nbsp;do&nbsp;l&nbsp;&lt;-&nbsp;getLine<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;(c:l)<br>
+<br>
+</tt>
+else 節にある、ふたつめの <tt>do</tt> に注目してください。それぞれの 
+<tt>do</tt> は一本の文の列を構成しています。<tt>if</tt> のように介入的な
+言語要素はその先のアクション列を導入するのに新たな <tt>do</tt> を使う必
+要があります。
+</p>
+<p>
+<tt>return</tt> 関数は真理値などの一般の値を I/O アクションの領域に入れ
+ます。その逆はどうでしょう。いくつかの I/O アクションをふつうの式のなか
+で起動できるでしょうか。たとえば、<tt>x&nbsp;+&nbsp;print&nbsp;y</tt> を
+式のなかに入れて、<tt></tt> がその式の評価の結果として印字されるようにす
+ることはできるでしょうか。答は、「できない」です。純粋関数型のコードのな
+かで、こっそりと命令型の世界にしのび込むことはできません。命令型の世界に
+「影響される」値にはそれとわかるタグがついている必要があります。次のよう
+な関数
+<tt><br>
+<br>
+f&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;&nbsp;Int&nbsp;-&gt;&nbsp;Int&nbsp;-&gt;&nbsp;Int<br>
+<br>
+</tt>
+は絶対に I/O を行うことはできません。それは <tt>IO</tt> が返り値にあらわ
+れていないからです。このことは、デバッグのときに文字通りコード全体にわたっ
+て print 文を埋めこむことの多いプログラマにとっては悩みの種でしょう。実
+際のところは、この問題に対処するために、いくつかの安全ではない関数が用意
+されています。しかし、これらは、上級プログラマにとっておいた方がよいも
+のです。デバッグ用のパッケージ ( <tt>Trace</tt> など ) は往々にして、完
+全に安全な手法では「禁じ手」となっている関数を気前よく使っています。
+</p>
+<p>
+<a name="sect7.2"></a>
+<h3>7.2<tt>&nbsp;&nbsp;</tt>アクションをつかったプログラミング</h3>
+</p>
+<p>
+I/O アクションはふつうの Haskell の値です。関数にわたされることもあるで
+しょうし、構造のなかに入れることも、Haskell のほかの値とおなじようにでき
+ます。次にアクションのリストを考えてみましょう。
+<tt><br>
+<br>
+todoList&nbsp;::&nbsp;[IO&nbsp;()]<br>
+<br>
+todoList&nbsp;=&nbsp;[putChar&nbsp;'a',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;do&nbsp;putChar&nbsp;'b'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;putChar&nbsp;'c',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;do&nbsp;c&nbsp;&lt;-&nbsp;getChar<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;putChar&nbsp;c]<br>
+<br>
+</tt>
+このリストは実際にはアクションを起動することはありません。アクションを保
+持しているだけです。これらのアクションを一つのアクションにまとめるのは、
+<tt>sequence_</tt> のような関数が必要です。
+<tt><br>
+<br>
+sequence_&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;[IO&nbsp;()]&nbsp;-&gt;&nbsp;IO&nbsp;()<br>
+sequence_&nbsp;[]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;return&nbsp;()<br>
+sequence_&nbsp;(a:as)&nbsp;=&nbsp;&nbsp;do&nbsp;a<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sequence&nbsp;as<br>
+<br>
+</tt>
+この関数は、なにもせずに、<tt>do&nbsp;x;y</tt> を 
+<tt>x&nbsp;&gt;&gt;&nbsp;y</tt> へ展開します。( <a
+href="monads.html#tut-monadic-classes">9.1</a> 節を参照のこと。)
+このパターンの再帰は、<tt>foldr</tt> 関数でとらえることができます。
+(<tt>foldr</tt>) の定義はプレリュードを参照のこと。) さらによい 
+<tt>sequence_</tt> の定義は以下のようなものです。
+<tt><br>
+<br>
+sequence_&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;[IO&nbsp;()]&nbsp;-&gt;&nbsp;IO&nbsp;()<br>
+sequence_&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;foldr&nbsp;(&gt;&gt;)&nbsp;(return&nbsp;())<br>
+<br>
+</tt>
+この <tt>do</tt> 記法は便利なツールですが、この場合には、その底流にある
+モナド演算子 <tt>&gt;&gt;</tt> を使うほうが適当です。<tt>do</tt> の構築
+の基になる演算子を理解することは、Haskell プログラマにとって役にたつこと
+です。
+</p>
+<p>
+<tt>sequence_</tt> 関数は、<tt>putStr</tt> を <tt>putChar</tt> をつかっ
+て構築するときにも使えます。 
+<tt><br>
+<br>
+putStr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;String&nbsp;-&gt;&nbsp;IO&nbsp;()<br>
+putStr&nbsp;s&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;sequence_&nbsp;(map&nbsp;putChar&nbsp;s)<br>
+<br>
+</tt>
+Haskell と伝統的な命令型の言語との違いのひとつがこの <tt>putStr</tt> に
+みてとれます。命令型の言語では、命令型の <tt>putChar</tt> を文字列上でマッ
+ピングするだけで印字が可能です。しかし、Haskell では <tt>map</tt> 関数は
+アクションを実行しません。そのかわり、それぞれ、文字列の一文字に対応する
+アクションのリストを生成します。<tt>sequence_</tt> のなかの畳み込み演算は
+<tt>&gt;&gt;</tt> 関数をつかって、それぞれの個別の演算をひとつの演算にま
+とめます。ここでも <tt>return&nbsp;()</tt> は必要です。<tt>foldr</tt> は
+一連のアクションの最後になにもしないアクションを必要とします。(とくに文
+字列が空の場合。)
+</p>
+<p>
+プレリュードやライブラリには I/O アクションの順序付けに便利な関数がたく
+さんあります。これらの関数はだいたいのものが、任意のモナド用に汎用化され
+ています。<tt>Monad&nbsp;m&nbsp;=&gt;</tt> という文脈を含む関数はどれも
+<tt>IO</tt> 型で使えます。
+</p>
+<p>
+<a name="sect7.3"></a>
+<h3>7.3<tt>&nbsp;&nbsp;</tt>例外処理</h3>
+</p>
+<p>
+ここまでは、I/O 演算中の例外の問題を避けてきました。もし、
+<tt>getChar</tt> がファイルの最後にあたったら、どうなるでしょう。
+( <I>_|_</I> に対しては <tt>error</tt> という用語をつかいます。これは、
+停止しない、あるいは、パターンマッチが失敗した、というような回復不可能な
+条件の場合につかいます。一方、例外は、I/O モナド内で捕捉可能および処理可
+能なものです。) I/O モナド中での、「file not found」などの例外的状況をあ
+つかうには、standard ML の入出力にある機能にあるような、ハンドリング機構
+を使います。特別な構文や意味論を用いることはありません。例外処理は、I/O
+の順序付け演算子の定義の一部になっています。
+</p>
+<p>
+エラーは特別なデータ型 <tt>IOError</tt> としてコード化されています。この
+型は I/O モナド中でおこりうるすべての例外を表わしています。これは一種の
+抽象型で、ユーザが利用可能な <tt>IOError</tt> の構築子はありません。述語
+がいくつか <tt>IOError</tt> 型の値にたいして使うことができます。たとえば、
+<tt><br>
+<br>
+isEOFError&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;IOError&nbsp;-&gt;&nbsp;Bool<br>
+<br>
+</tt>
+という関数はエラーが、ファイル終端条件でひきおこされたものかどうかを判定
+します。<tt>IOError</tt> を抽象型とすることで、明示的なデータ型の変更な
+しで、新しい種類のエラーをシステムに導入することができます。この 
+<tt>isEOFError</tt> 関数はプレリュードとは別の <tt>IO</tt> ライブラリの
+なかで定義されています、それゆえ、プログラム中に明示的にインポートする必
+要があります。
+</p>
+<p>
+<em>例外ハンドラ</em> は <tt>IOError&nbsp;-&gt;&nbsp;IO&nbsp;a</tt> とい
+う型になります。<tt>catch</tt> 関数は例外ハンドラをアクションあるいはア
+クションの集まりと関連づけます。
+<tt><br>
+<br>
+catch&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;IO&nbsp;a&nbsp;-&gt;&nbsp;(IOError&nbsp;-&gt;&nbsp;IO&nbsp;a)&nbsp;-&gt;&nbsp;IO&nbsp;a<br>
+<br>
+</tt>
+<tt>catch</tt> の引数はアクションとハンドラです。アクションが成功すれば、
+ハンドラを起動せずにその結果だけを返します。エラーが起これば、
+<tt>IOError</tt> 型の値をハンドラにわたし、そのハンドラに関連づけられて
+いるアクションを起動します。例として、エラーにであうと改行を返す 
+<tt>getChar</tt> をあげておきましょう。
+<tt><br>
+<br>
+getChar'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;IO&nbsp;Char<br>
+getChar'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;getChar&nbsp;`catch`&nbsp;(\e&nbsp;-&gt;&nbsp;return&nbsp;'\n')<br>
+<br>
+</tt>
+これは、すべてのエラーについて同じ処理をしていますので、あまり洗練された
+実装ではありません。もし、ファイル終端になった場合だけをわけたい場合には、
+エラーの種類を確かめなければなりません。
+<tt><br>
+<br>
+getChar'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;IO&nbsp;Char<br>
+getChar'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;getChar&nbsp;`catch`&nbsp;eofHandler&nbsp;where<br>
+&nbsp;&nbsp;&nbsp;&nbsp;eofHandler&nbsp;e&nbsp;=&nbsp;if&nbsp;isEofError&nbsp;e&nbsp;then&nbsp;return&nbsp;'\n'&nbsp;else&nbsp;ioError&nbsp;e<br>
+<br>
+</tt>
+ここで使われている <tt>ioError</tt> 関数は次の例外ハンドラに例外を投げま
+す。<tt>ioError</tt> の型は、
+<tt><br>
+<br>
+ioError&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;IOError&nbsp;-&gt;&nbsp;IO&nbsp;a<br>
+<br>
+</tt>
+です。これは、つぎの I/O アクションを実行するかわりに、制御を例外ハンド
+ラに移すという点をのぞけば、<tt>return</tt> と類似しています。
+<tt>catch</tt> の入れ子になった呼び出しも可能です。入れ子になった 
+<tt>catch</tt> の呼び出しは、入れ子になった例外ハンドラを生成します。こ
+の例を、<tt>getChar'</tt> を使って <tt>getLine</tt> を再定義することで示
+しましょう。
+<tt><br>
+<br>
+getLine'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;IO&nbsp;String<br>
+getLine'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;catch&nbsp;getLine''&nbsp;(\err&nbsp;-&gt;&nbsp;return&nbsp;("Error:&nbsp;"&nbsp;++&nbsp;show&nbsp;err))<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;getLine''&nbsp;=&nbsp;do&nbsp;c&nbsp;&lt;-&nbsp;getChar'<br>
+&nbsp;	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;c&nbsp;==&nbsp;'\n'&nbsp;then&nbsp;return&nbsp;""<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else&nbsp;do&nbsp;l&nbsp;&lt;-&nbsp;getLine'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;(c:l)<br>
+<br>
+</tt>
+</p>
+<p>
+入れ子になったエラーハンドラは <tt>getChar'</tt> がファイル終端を捕捉す
+ることを可能にしています。一方で、ほかのエラーがおこると 
+<tt>"Error:&nbsp;"</tt> ではじまる文字列が、<tt>getLine'</tt> からもどり
+ます。
+</p>
+<p>
+Haskell では利便性確保のために、プログラムの最上位レベルにプログラムを停
+止し、例外を印字する例外ハンドラが用意されています。
+</p>
+<p>
+<a name="sect7.4"></a>
+<h3>7.4<tt>&nbsp;&nbsp;</tt>ファイル、チャネル、ハンドル</h3>
+</p>
+<p>
+I/O モナドや例外処理機構が提供するもののほか、Haskell の I/O は、他の言
+語にあるものとほとんど同じ機構が備わっています。これらの関数の多くは、プ
+レリュードではなくて、<tt>IO</tt> ライブラリにあります。それゆえ、スコー
+プのなかへ明示的にインポートする必要があります。(モジュールとインポート
+にいついては <a href="modules.html#tut-modules">11</a> 節で議論します。)
+さらに、これらの関数の多くはメインのレポートではなく、ライブラリレポート
+の方で議論されています。
+</p>
+<p>
+ファイルをオープンすると<em>ハンドル</em> (型は <tt>Handle</tt> ) が生成
+されて、これを使って I/O のやりとりをします。このハンドルをクローズする
+と、それに関連付けられているファイルがクローズします。
+<tt><br>
+<br>
+type&nbsp;FilePath&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;String&nbsp;&nbsp;--&nbsp;path&nbsp;names&nbsp;in&nbsp;the&nbsp;file&nbsp;system<br>
+openFile&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;FilePath&nbsp;-&gt;&nbsp;IOMode&nbsp;-&gt;&nbsp;IO&nbsp;Handle<br>
+hClose&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;Handle&nbsp;-&gt;&nbsp;IO&nbsp;()&nbsp;<br>
+data&nbsp;IOMode&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;ReadMode&nbsp;|&nbsp;WriteMode&nbsp;|&nbsp;AppendMode&nbsp;|&nbsp;ReadWriteMode<br>
+<br>
+</tt>
+</p>
+<p>
+ハンドルは<em>チャネル</em>にも関連付けられます。チャネルはファイルとは
+直接結びつかないコミュニケーションポートです。いくつかのチャネルハンドル
+は定義済になっています。たとえば、<tt>stdin</tt> (標準入力)、
+<tt>stdout</tt> (標準出力)、<tt>stderr</tt> (標準エラー) です。
+<tt>hGetChar</tt> や <tt>hPutChar</tt> の文字単位の I/O 演算は、引数のひ
+とつとして、ハンドルをとります。さきほどの <tt>getChar</tt> 関数は次のよ
+うに定義されています。
+<tt><br>
+<br>
+getChar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;hGetChar&nbsp;stdin<br>
+<br>
+</tt>
+</p>
+<p>
+Haskell では内容全体をひとつの文字列として返すファイルやチャネルが使えま
+す。
+<tt><br>
+<br>
+getContents&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;Handle&nbsp;-&gt;&nbsp;IO&nbsp;String<br>
+<br>
+</tt>
+実行上、<tt>getContents</tt> はチャネルやファイルの全内容を一度にすべて
+読みこまなければならず、メモリや実行時間が足りなくなるということが起こり
+そうに見えます。しかし、それは違います。鍵となる要点は、
+<tt>getContents</tt> は文字の「遅延」(すなわち非正格)リストを返すという
+ことです。(Haskell では文字列は単なる文字のリストであるということを思い
+出してください。) このリストの要素は、他のリストと同様に、「必要になって
+はじめて」読み込まれるのです。この要求駆動の振舞いの実装は、計算側からの
+要求があるたびに、一度に一文字づつファイルから読みこむことで実現すること
+が期待されています。
+</p>
+<p>
+次の例はファイルをコピーする Haskell のプログラムです。
+<tt><br>
+<br>
+main&nbsp;=&nbsp;do&nbsp;fromHandle&nbsp;&lt;-&nbsp;getAndOpenFile&nbsp;"Copy&nbsp;from:&nbsp;"&nbsp;ReadMode<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;toHandle&nbsp;&nbsp;&nbsp;&lt;-&nbsp;getAndOpenFile&nbsp;"Copy&nbsp;to:&nbsp;"&nbsp;WriteMode&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;contents&nbsp;&nbsp;&nbsp;&lt;-&nbsp;hGetContents&nbsp;fromHandle<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hPutStr&nbsp;toHandle&nbsp;contents<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hClose&nbsp;toHandle<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;putStr&nbsp;"Done."<br>
+<br>
+getAndOpenFile&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;String&nbsp;-&gt;&nbsp;IOMode&nbsp;-&gt;&nbsp;IO&nbsp;Handle<br>
+<br>
+getAndOpenFile&nbsp;prompt&nbsp;mode&nbsp;=<br>
+&nbsp;&nbsp;&nbsp;&nbsp;do&nbsp;putStr&nbsp;prompt<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name&nbsp;&lt;-&nbsp;getLine<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;catch&nbsp;(openFile&nbsp;name&nbsp;mode)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(\_&nbsp;-&gt;&nbsp;do&nbsp;putStrLn&nbsp;("Cannot&nbsp;open&nbsp;"++&nbsp;name&nbsp;++&nbsp;"\n")<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;getAndOpenFile&nbsp;prompt&nbsp;mode)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+<br>
+</tt>
+遅延性のある <tt>getContents</tt> 関数を使うと、ファイルの内容全部を
+一度にメモリへ読み込む必要がなくなります。 もし、<tt>hPutStr</tt> がバッ
+ファとして固定長の文字列を採用するなら、一度にメモリへ読み込むには、入力
+ファイル 1 ブロック分だけが必要です。入力ファイルは最後の文字が読み出さ
+れれば、暗黙のうちにクローズされます。
+</p>
+<p>
+<a name="sect7.5"></a>
+<h3>7.5<tt>&nbsp;&nbsp;</tt>Haskell と命令型プログラミング</h3>
+</p>
+<p>
+最後に、I/O プログラミングは重大な問題を表面化したことについて考えましょ
+う。このスタイルは従来の命令型のプログラミングとさしてかわらないではない
+かということです。たとえば、<tt>getLine</tt> 関数ですが、
+<tt><br>
+<br>
+getLine&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;do&nbsp;c&nbsp;&lt;-&nbsp;getChar<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;c&nbsp;==&nbsp;'\n'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;then&nbsp;return&nbsp;""<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else&nbsp;do&nbsp;l&nbsp;&lt;-&nbsp;getLine<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;(c:l)<br>
+<br>
+</tt>
+これは、つぎの命令型のコード(実際の言語のコードではありません)と酷似して
+います。
+<tt><br>
+<br>
+<br>
+function&nbsp;getLine()&nbsp;{<br>
+&nbsp;&nbsp;c&nbsp;:=&nbsp;getChar();<br>
+&nbsp;&nbsp;if&nbsp;c&nbsp;==&nbsp;`\n`&nbsp;then&nbsp;return&nbsp;""<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else&nbsp;{l&nbsp;:=&nbsp;getLine();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;c:l}}<br>
+<br>
+</tt>
+ということは、結局、Haskell は単に命令型の車輪を再発明しただけなのでしょ
+うか。
+</p>
+<p>
+あるいみでは、そのとおりです。I/O モナドは Haskell のなかに小さな命令型
+のサブ言語を構成しています。それゆえ、プログラムの I/O の構成要素は従来
+の命令型のコードにそっくりになるのです。しかし、ひとつ大きな違いがありま
+す。これを扱うのに特別な意味論を必要としないということです。特に、
+Haskell における等式論証の仕組はなんら損われていません。プログラム中のモ
+ナドのコードの命令型のフィーリングは Haskell の関数的な側面をそこなうも
+のではありません。経験を積んだ関数プログラマはプログラム中の命令型の構成
+要素を最小限にし、トップレベルで順序付けを最小にし、それについてだけ、
+I/O モナドを使用することができるにちがいありません。モナドはプログラムの
+関数的な構成要素と命令的な構成要素を綺麗にわけます。一方で、関数的な
+サブセットをもつ命令型の言語では純粋に関数的な世界と命令的な世界をへだて
+るものがハッキリとは定義されていません。
+</p>
+<hr>
+<p>
+<i>A Gentle Introduction to Haskell, Version 98</i><br>
+<a href="moretypes.html">back</a>
+<a href="stdclasses.html">next</a>
+<a href="index.html">top</a>
+</p>
+</body>
+</html>

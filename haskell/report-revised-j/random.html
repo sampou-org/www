@@ -1,0 +1,665 @@
+<html>
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
+  <title>The Haskell 98 Library Report: Random Numbers</title>
+ </head>
+
+ <body bgcolor="#ffffff">
+  <p><i>The Haskell 98 Report</i><br />
+   <a href="index.html">top</a> | <a href="cputime.html">back</a> | <a
+   href="haskell.html">next</a> | <a href="index98.html">contents</a> | <a
+   href="prelude-index.html">function index</a> <br />
+  </p>
+  <hr />
+  <p><a name="random numbers"></a><a name="sect27"></a></p>
+  <!--<h2>27<tt>&nbsp;&nbsp;</tt>Random Numbers</h2>-->
+  <h2>27<tt>&nbsp;&nbsp;</tt>乱数</h2>
+
+  <p>
+  <table border="2" cellpadding="3">
+   <tr>
+    <td> <tt><br />
+     module&nbsp;Random&nbsp;(<br />
+     RandomGen(next,&nbsp;split,&nbsp;genRange),<br />
+     StdGen,&nbsp;mkStdGen,<br />
+     Random(&nbsp;random,&nbsp;&nbsp;&nbsp;randomR,&nbsp;<br />
+     randoms,&nbsp;&nbsp;randomRs,<br />
+     randomIO,&nbsp;randomRIO&nbsp;),<br />
+     getStdRandom,&nbsp;getStdGen,&nbsp;setStdGen,&nbsp;newStdGen<br />
+     &nbsp;&nbsp;)&nbsp;where<br />
+     <br />
+     ----------------&nbsp;The&nbsp;RandomGen&nbsp;class&nbsp;------------------------<br />
+     <br />
+     class&nbsp;RandomGen&nbsp;g&nbsp;where<br />
+     &nbsp;&nbsp;genRange&nbsp;::&nbsp;g&nbsp;-&gt;&nbsp;(Int,&nbsp;Int)<br />
+     &nbsp;&nbsp;next&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;g&nbsp;-&gt;&nbsp;(Int,&nbsp;g)<br />
+     &nbsp;&nbsp;split&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;g&nbsp;-&gt;&nbsp;(g,&nbsp;g)<br />
+     <br />
+     ----------------&nbsp;A&nbsp;standard&nbsp;instance&nbsp;of&nbsp;RandomGen&nbsp;-----------<br />
+     data&nbsp;StdGen&nbsp;=&nbsp;... --&nbsp;Abstract<br />
+     <br />
+     instance&nbsp;RandomGen&nbsp;StdGen&nbsp;where&nbsp;...<br />
+     instance&nbsp;Read&nbsp;
+     &nbsp;&nbsp;&nbsp;StdGen&nbsp;where&nbsp;...<br />
+     instance&nbsp;Show&nbsp;
+     &nbsp;&nbsp;&nbsp;StdGen&nbsp;where&nbsp;...<br />
+     <br />
+     mkStdGen&nbsp;::&nbsp;Int&nbsp;-&gt;&nbsp;StdGen<br />
+     <br />
+     ----------------&nbsp;The&nbsp;Random&nbsp;class&nbsp;---------------------------<br />
+     class&nbsp;Random&nbsp;a&nbsp;where<br />
+     &nbsp;&nbsp;&nbsp;randomR&nbsp;::&nbsp;RandomGen&nbsp;g&nbsp;=&gt;&nbsp;(a,&nbsp;a)&nbsp;-&gt;&nbsp;g&nbsp;-&gt;&nbsp;(a,&nbsp;g)<br />
+     &nbsp;&nbsp;&nbsp;random&nbsp;&nbsp;::&nbsp;RandomGen&nbsp;g&nbsp;=&gt;&nbsp;g&nbsp;-&gt;&nbsp;(a,&nbsp;g)<br />
+     <br />
+     &nbsp;&nbsp;&nbsp;randomRs&nbsp;::&nbsp;RandomGen&nbsp;g&nbsp;=&gt;&nbsp;(a,&nbsp;a)&nbsp;-&gt;&nbsp;g&nbsp;-&gt;&nbsp;[a]<br />
+     &nbsp;&nbsp;&nbsp;randoms&nbsp;&nbsp;::&nbsp;RandomGen&nbsp;g&nbsp;=&gt;&nbsp;g&nbsp;-&gt;&nbsp;[a]<br />
+     <br />
+     &nbsp;&nbsp;&nbsp;randomRIO&nbsp;::&nbsp;(a,a)&nbsp;-&gt;&nbsp;IO&nbsp;a<br />
+     &nbsp;&nbsp;&nbsp;randomIO&nbsp;&nbsp;::&nbsp;IO&nbsp;a<br />
+     <br />
+     instance&nbsp;Random&nbsp;Int&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;...<br />
+     instance&nbsp;Random&nbsp;Integer&nbsp;where&nbsp;...<br />
+     instance&nbsp;Random&nbsp;Float&nbsp;&nbsp;&nbsp;where&nbsp;...<br />
+     instance&nbsp;Random&nbsp;Double&nbsp;&nbsp;where&nbsp;...<br />
+     instance&nbsp;Random&nbsp;Bool&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;...<br />
+     instance&nbsp;Random&nbsp;Char&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;...<br />
+     <br />
+     ----------------&nbsp;The&nbsp;global&nbsp;random&nbsp;generator&nbsp;----------------<br />
+     newStdGen&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;IO&nbsp;StdGen<br />
+     setStdGen&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;StdGen&nbsp;-&gt;&nbsp;IO&nbsp;()<br />
+     getStdGen&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;IO&nbsp;StdGen <br />
+     getStdRandom&nbsp;::&nbsp;(StdGen&nbsp;-&gt;&nbsp;(a,&nbsp;StdGen))&nbsp;-&gt;&nbsp;IO&nbsp;a<br />
+     <br />
+     <br />
+     </tt></td>
+   </tr>
+  </table>
+  </p>
+  
+  <!--
+  <p> The <tt>Random</tt> library deals with the common task of
+   pseudo-random number generation. The library makes it possible to
+   generate repeatable results, by starting with a specified initial random
+   number generator; or to get different results on each run by using the
+   system-initialised generator, or by supplying a seed from some other
+   source.</p>
+  -->
+  <p>
+   <tt>Random</tt> ライブラリは擬似乱数生成を扱う。このライブラリはでは、
+   繰り返し同じ結果を得られるよになっている。これは指定の初期乱数生成器
+   を使う。動作ごとに違う結果がほしいときにはシステム初期化生成器を使う
+   か、外部からシードを与えればよい。
+  </p>
+  <!--<p> The library is split into two layers:</p>-->
+  <p>このライブラリは2層に分れている。</p>
+  <!--
+  <ul>
+   <li>A core <i>random number generator</i> provides a supply of bits. The
+    class <tt>RandomGen</tt> provides a common interface to such
+    generators.
+    <p></p>
+   </li>
+
+   <li>The class <tt>Random</tt> provides a way to extract particular
+    values from a random number generator. For example, the <tt>Float</tt>
+    instance of <tt>Random</tt> allows one to generate random values of
+    type <tt>Float</tt>.</li>
+  </ul>
+  -->
+  <p>
+  <ul>
+   <li>
+    <p>核となる<em>乱数生成器</em>はビット列を供給する。<tt>RandomGen</tt> 
+    クラスはこの類の生成器への共通インターフェイスを供給する。</p></li>
+   <li>
+    <p><tt>Random</tt> クラスは乱数生成器から特定の型の値を取り出す手段を
+     提供する。たとえば、<tt>Rondom</tt> の <tt>Fload</tt> インスタンス
+     は <tt>Float</tt> 型の値となることができる。</p></li>
+  </ul>
+  </p>
+
+  <p> <a name="sect27.1"></a></p>
+  <!--<h3>27.1<tt>&nbsp;&nbsp;</tt>The <tt>RandomGen</tt> class, and the
+   <tt>StdGen</tt> generator</h3>-->
+  <h3>27.1<tt>&nbsp;&nbsp;</tt><tt>RandomGen</tt> クラスと
+   <tt>StdGen</tt> 生成器</h3>
+  <!--
+  <p> The class <tt>RandomGen</tt> provides a common interface to random
+   number generators. <tt><br />
+   <br />
+   &nbsp;&nbsp;class&nbsp;RandomGen&nbsp;g&nbsp;where<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;genRange&nbsp;::&nbsp;g&nbsp;-&gt;&nbsp;(Int,Int)<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;next&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;g&nbsp;&nbsp;-&gt;&nbsp;(Int,&nbsp;g)<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;split&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;g&nbsp;-&gt;&nbsp;(g,&nbsp;g)<br />
+   &nbsp;&nbsp;<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;Default&nbsp;method<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;genRange&nbsp;g&nbsp;=&nbsp;(minBound,maxBound)<br />
+   <br />
+   </tt></p>
+  -->
+  <p>
+   <tt>RandomGen</tt> クラスは乱数生成器への共通インタフェースを供給する。
+   <tt><br />
+   <br />
+   &nbsp;&nbsp;class&nbsp;RandomGen&nbsp;g&nbsp;where<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;genRange&nbsp;::&nbsp;g&nbsp;-&gt;&nbsp;(Int,Int)<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;next&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;g&nbsp;&nbsp;-&gt;&nbsp;(Int,&nbsp;g)<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;split&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;g&nbsp;-&gt;&nbsp;(g,&nbsp;g)<br />
+   &nbsp;&nbsp;<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;Default&nbsp;method<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;genRange&nbsp;g&nbsp;=&nbsp;(minBound,maxBound)<br />
+   <br />
+   </tt>
+  </p>
+  <!--
+  <ul>
+   <li>The <tt>genRange</tt> operation yields the range of values returned
+    by the generator.
+    <p> It is required that:</p>
+
+    <ul>
+     <li>If (a,b) = <tt>genRange</tt> g, then a &lt; b.</li>
+
+     <li><tt>genRange</tt> _|_ /= _|_.</li>
+    </ul>
+    The second condition ensures that <tt>genRange</tt> cannot examine its
+    argument, and hence the value it returns can be determined only by the
+    instance of <tt>RandomGen</tt>. That in turn allows an implementation
+    to make a single call to <tt>genRange</tt> to establish a generator's
+    range, without being concerned that the generator returned by (say)
+    <tt>next</tt> might have a different range to the generator passed to
+    <tt>next</tt>.
+    <p></p>
+   </li>
+
+   <li>The <tt>next</tt> operation returns an <tt>Int</tt> that is
+    uniformly distributed in the range returned by <tt>genRange</tt>
+    (including both end points), and a new generator.
+    <p></p>
+   </li>
+
+   <li>The <tt>split</tt> operation allows one to obtain two independent
+    random number generators. This is very useful in functional programs
+    (for example, when passing a random number generator down to recursive
+    calls), but very little work has been done on statistically robust
+    implementations of <tt>split </tt>([1,4] are the only examples we know
+    of).</li>
+  </ul>
+  -->
+  <p>
+   <ul>
+    <li>
+     <p><tt>genRange</tt> 演算は生成器の返す値の範囲になる。</p>
+     <p>
+      <ul>
+       <li>もし、(a,b) = <tt>genRange</tt> g ならば a &lt; b </li>
+       <li><tt>genRange</tt> _|_ /= _|_.</li>
+      </ul>
+     </p>
+     <p>でなければならない。</p>
+     <p>
+      二つめの条件は <tt>getRange</tt> が引数をチェックできず、それゆえ
+      それが返す値は、<tt>RandomGen</tt> のインスタンスによってのみ
+      決定されうるということを確実にするためのものである。
+      同様に<tt>genRange</tt> を一度だけ読んで生成器の範囲を確定するよう
+      な実装も可能にする。このとき、たとえば <tt>next</tt> が返した
+      生成器が <tt>next</tt> に渡された生成器と違う範囲をもつかもしれ
+      ないという心配はない。
+     </p> 
+    </li>
+    <li>
+     <p>
+      <tt>next</tt> 操作は <tt>genRange</tt>が返した範囲(両端を含む)で一
+      様に分布する<tt>Int</tt> と新しい生成器を返す。</p></li>
+    <li>
+     <p>
+      <tt>split</tt> 操作では 2 つの別の乱数生成器を得ることができる。
+      これは関数プログラムでは大変有用である(たとえば、乱数生成器を再帰
+      的呼び出しへ渡すような場合である)。しかしながら、<tt>split</tt> の
+      統計的にロバストな実装については殆どなにもなされていない。(文献
+      [1,4]が我々が知りえた例である)<p></p></li> 
+   </ul>
+  </p>
+  <!--
+  <p> The <tt>Random</tt> library provides one instance of
+   <tt>RandomGen</tt>, the abstract data type <tt>StdGen</tt>: <tt><br />
+   <br />
+   &nbsp;&nbsp;data&nbsp;StdGen&nbsp;=&nbsp;... --&nbsp;Abstract<br />
+   &nbsp;&nbsp;<br />
+   &nbsp;&nbsp;instance&nbsp;RandomGen&nbsp;StdGen&nbsp;where&nbsp;...<br />
+   &nbsp;&nbsp;instance&nbsp;Read&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;StdGen&nbsp;where&nbsp;...<br />
+   &nbsp;&nbsp;instance&nbsp;Show&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;StdGen&nbsp;where&nbsp;...<br />
+   &nbsp;&nbsp;<br />
+   &nbsp;&nbsp;mkStdGen&nbsp;::&nbsp;Int&nbsp;-&gt;&nbsp;StdGen<br />
+   <br />
+   </tt>The <tt>StgGen</tt> instance of <tt>RandomGen</tt> has a
+   <tt>genRange</tt> of at least 30 bits.</p>
+  -->
+  <p>
+   <tt>Random</tt> ライブラリは、<tt>RandomGen</tt> クラスのインスタンス、
+   抽象データタイプ <tt>StdGen</tt> を提供する。
+   <tt><br />
+   <br />
+   &nbsp;&nbsp;data&nbsp;StdGen&nbsp;=&nbsp;... --&nbsp;Abstract<br />
+   &nbsp;&nbsp;<br />
+   &nbsp;&nbsp;instance&nbsp;RandomGen&nbsp;StdGen&nbsp;where&nbsp;...<br />
+   &nbsp;&nbsp;instance&nbsp;Read&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;StdGen&nbsp;where&nbsp;...<br />
+   &nbsp;&nbsp;instance&nbsp;Show&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;StdGen&nbsp;where&nbsp;...<br />
+   &nbsp;&nbsp;<br />
+   &nbsp;&nbsp;mkStdGen&nbsp;::&nbsp;Int&nbsp;-&gt;&nbsp;StdGen<br />
+   <br />
+   </tt>
+   <tt>RandomGen</tt> クラスのインスタンス <tt>StdGen</tt> は少なくとも
+   30ビットの <tt>genRange</tt>
+  </p>
+  <!--
+  <p> The result of repeatedly using <tt>next</tt> should be at least as
+   statistically robust as the "Minimal Standard Random Number Generator"
+   described by [2,3]. Until more is known about implementations of
+   <tt>split</tt>, all we require is that <tt>split</tt> deliver generators
+   that are (a) not identical and (b) independently robust in the sense
+   just given.</p>
+  -->
+  <p>
+   <tt>next</tt> を繰り返し使用した結果は少なくとも、[2,3] の
+   "Minimal Standard Random Number Generator" にある統計的頑健性を有して
+   いなければならない。<tt>split</tt> の実装について詳細に知らない場合に
+   するべきことは、<tt>split</tt> が (a) 同一ではない (b) 上記の意
+   味で独立にロバストな生成器を届けるようにすることである。
+  </p>
+  <!--
+  <p> The <tt>Show</tt>/<tt>Read</tt> instances of <tt>StdGen</tt> provide
+   a primitive way to save the state of a random number generator. It is
+   required that <tt>read&nbsp;(show&nbsp;g)&nbsp;==&nbsp;g</tt>.</p>
+  -->
+  <p>
+   <tt>StdGen</tt>の <tt>Show</tt>/<tt>Read</tt> インスタンスにより乱数
+   生成器の状態を保持する方法が提供されている。
+   <tt>read&nbsp;(show&nbsp;g)&nbsp;==&nbsp;g</tt> でなければならない。
+  </p>
+  <!--
+  <p> In addition, <tt>read</tt> may be used to map an arbitrary string
+   (not necessarily one produced by <tt>show</tt>) onto a value of type
+   <tt>StdGen</tt>. In general, the <tt>read</tt> instance of
+   <tt>StdGen</tt> has the following properties:</p>
+  <ul>
+   <li>It guarantees to succeed on any string.</li>
+
+   <li>It guarantees to consume only a finite portion of the string.</li>
+
+   <li>Different argument strings are likely to result in different
+    results.</li>
+  </ul>
+  </p>
+  -->
+  <p>
+   さらに <tt>read</tt> は任意の文字列(<tt>show</tt> により生成されたも
+   のである必要はない)を <tt>StdGen</tt> 型の値へ写像するのに使える。一
+   般的に <tt>StdGen</tt> の <tt>Read</tt> インスタンスは以下の性質をも
+   つ。
+  <ul>
+   <li>いかなる文字列に対しても成功することを保証する</li>
+   <li>文字列の有限部分のみを使うことを保証する</li>
+   <li>引数も文字列が異れば結果も違うように見える</li>
+  </ul>
+  </p>
+  <!--
+  <p> The function <tt>mkStdGen</tt> provides an alternative way of
+   producing an initial generator, by mapping an <tt>Int</tt> into a
+   generator. Again, distinct arguments should be likely to produce
+   distinct generators.</p>
+  -->
+  <p>
+   関数 <tt>mkStdGen</tt> は、<tt>Int</tt> から生成器への写像により、初
+   期生成器をつくるもうひとつの方法を提供している。ここでも、変数が異れ
+   ば異った生成器がつくられるように見える。 
+  </p>
+  <!--
+  <p> Programmers may, of course, supply their own instances of
+   <tt>RandomGen</tt>.</p>
+  -->
+  <p>
+   もちろん、プログラマは独自の <tt>RandomGen</tt> のインスタンスを提供
+   することができる。 
+  </p>
+  <!--
+  <p> <i>Implementation warning.</i> A superficially attractive
+   implementation of <tt>split</tt> is <tt><br />
+   <br />
+   &nbsp;&nbsp;instance&nbsp;RandomGen&nbsp;MyGen&nbsp;where<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;...<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;split&nbsp;g&nbsp;=&nbsp;(g,&nbsp;variantOf&nbsp;g)<br />
+   <br />
+   </tt>Here, <tt>split</tt> returns <tt>g</tt> itself and a new generator
+   derived from <tt>g</tt>. But now consider these two
+   apparently-independent generators: <tt><br />
+   <br />
+   &nbsp;&nbsp;g1&nbsp;=&nbsp;snd&nbsp;(split&nbsp;g)<br />
+   &nbsp;&nbsp;g2&nbsp;=&nbsp;snd&nbsp;(split&nbsp;(fst&nbsp;(split&nbsp;g)))<br />
+   <br />
+   </tt>If <tt>split</tt> genuinely delivers independent generators (as
+   specified), then <tt>g1</tt> and <tt>g2</tt> should be independent, but
+   in fact they are both equal to <tt>variantOf&nbsp;g</tt>.
+   Implementations of the above form do not meet the specification.</p>
+  -->
+  <p>
+   <em>実装上の警告</em>。一見魅力的な <tt>split</tt> の実装は、
+   <tt><br />
+   <br />
+   &nbsp;&nbsp;instance&nbsp;RandomGen&nbsp;MyGen&nbsp;where<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;...<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;split&nbsp;g&nbsp;=&nbsp;(g,&nbsp;variantOf&nbsp;g)<br />
+   <br />
+   </tt>
+   である。ここでは、<tt>split</tt> は <tt></tt> 自身を返し、新たな
+   生成器を <tt>g</tt> から導出する。しかし、この二つは外見上独立した
+   生成器をと考えられる。
+   <tt><br />
+   <br />
+   &nbsp;&nbsp;g1&nbsp;=&nbsp;snd&nbsp;(split&nbsp;g)<br />
+   &nbsp;&nbsp;g2&nbsp;=&nbsp;snd&nbsp;(split&nbsp;(fst&nbsp;(split&nbsp;g)))<br />
+   <br />
+   </tt>
+   もし、split が真に独立した生成器を(指定どおり)配分すると、<tt>g1</tt>
+   と <tt>g2</tt> は独立でなければならない。しかし、実際にはこのふたつは
+   <tt>variantOf g</tt> に等しい。上記のような実装は仕様には合わない。
+  </p>
+
+  <p> <a name="sect27.2"></a></p>
+  <!--<h3>27.2<tt>&nbsp;&nbsp;</tt>The <tt>Random</tt> class</h3>-->
+  <h3>27.2<tt>&nbsp;&nbsp;</tt><tt>Random</tt> クラス</h3>
+  <!--
+  <p> With a source of random number supply in hand, the <tt>Random</tt>
+   class allows the programmer to extract random values of a variety of
+   types: <tt><br />
+   <br />
+   class&nbsp;Random&nbsp;a&nbsp;where<br />
+   &nbsp;&nbsp;&nbsp;randomR&nbsp;::&nbsp;RandomGen&nbsp;g&nbsp;=&gt;&nbsp;(a,&nbsp;a)&nbsp;-&gt;&nbsp;g&nbsp;-&gt;&nbsp;(a,&nbsp;g)<br />
+   &nbsp;&nbsp;&nbsp;random&nbsp;&nbsp;::&nbsp;RandomGen&nbsp;g&nbsp;=&gt;&nbsp;g&nbsp;-&gt;&nbsp;(a,&nbsp;g)<br />
+   <br />
+   &nbsp;&nbsp;&nbsp;randomRs&nbsp;::&nbsp;RandomGen&nbsp;g&nbsp;=&gt;&nbsp;(a,&nbsp;a)&nbsp;-&gt;&nbsp;g&nbsp;-&gt;&nbsp;[a]<br />
+   &nbsp;&nbsp;&nbsp;randoms&nbsp;&nbsp;::&nbsp;RandomGen&nbsp;g&nbsp;=&gt;&nbsp;g&nbsp;-&gt;&nbsp;[a]<br />
+   <br />
+   &nbsp;&nbsp;&nbsp;randomRIO&nbsp;::&nbsp;(a,a)&nbsp;-&gt;&nbsp;IO&nbsp;a<br />
+   &nbsp;&nbsp;&nbsp;randomIO&nbsp;::&nbsp;IO&nbsp;a<br />
+   <br />
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;Default&nbsp;methods<br />
+   &nbsp;&nbsp;&nbsp;randoms&nbsp;g&nbsp;=&nbsp;x&nbsp;:&nbsp;randoms&nbsp;g'&nbsp;<br />
+   &nbsp;&nbsp;&nbsp;where&nbsp;<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(x,g')&nbsp;=&nbsp;random&nbsp;g<br />
+   &nbsp;&nbsp;&nbsp;randomRs&nbsp;=&nbsp;...similar...<br />
+   <br />
+   &nbsp;&nbsp;&nbsp;randomIO&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;getStdRandom&nbsp;random<br />
+   &nbsp;&nbsp;&nbsp;randomRIO&nbsp;range&nbsp;=&nbsp;getStdRandom&nbsp;(randomR&nbsp;range)<br />
+   <br />
+   <br />
+   instance&nbsp;Random&nbsp;Int&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;...<br />
+   instance&nbsp;Random&nbsp;Integer&nbsp;where&nbsp;...<br />
+   instance&nbsp;Random&nbsp;Float&nbsp;&nbsp;&nbsp;where&nbsp;...<br />
+   instance&nbsp;Random&nbsp;Double&nbsp;&nbsp;where&nbsp;...<br />
+   instance&nbsp;Random&nbsp;Bool&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;...<br />
+   instance&nbsp;Random&nbsp;Char&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;...<br />
+   <br />
+   </tt></p>
+  -->
+  <p>
+   手で乱数を提供するソースがあるので、プログラマは色々な型の乱数の値を
+   <tt>Random</tt> クラスからとりだすことができる。
+   <tt><br />
+   <br />
+   class&nbsp;Random&nbsp;a&nbsp;where<br />
+   &nbsp;&nbsp;&nbsp;randomR&nbsp;::&nbsp;RandomGen&nbsp;g&nbsp;=&gt;&nbsp;(a,&nbsp;a)&nbsp;-&gt;&nbsp;g&nbsp;-&gt;&nbsp;(a,&nbsp;g)<br />
+   &nbsp;&nbsp;&nbsp;random&nbsp;&nbsp;::&nbsp;RandomGen&nbsp;g&nbsp;=&gt;&nbsp;g&nbsp;-&gt;&nbsp;(a,&nbsp;g)<br />
+   <br />
+   &nbsp;&nbsp;&nbsp;randomRs&nbsp;::&nbsp;RandomGen&nbsp;g&nbsp;=&gt;&nbsp;(a,&nbsp;a)&nbsp;-&gt;&nbsp;g&nbsp;-&gt;&nbsp;[a]<br />
+   &nbsp;&nbsp;&nbsp;randoms&nbsp;&nbsp;::&nbsp;RandomGen&nbsp;g&nbsp;=&gt;&nbsp;g&nbsp;-&gt;&nbsp;[a]<br />
+   <br />
+   &nbsp;&nbsp;&nbsp;randomRIO&nbsp;::&nbsp;(a,a)&nbsp;-&gt;&nbsp;IO&nbsp;a<br />
+   &nbsp;&nbsp;&nbsp;randomIO&nbsp;::&nbsp;IO&nbsp;a<br />
+   <br />
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;Default&nbsp;methods<br />
+   &nbsp;&nbsp;&nbsp;randoms&nbsp;g&nbsp;=&nbsp;x&nbsp;:&nbsp;randoms&nbsp;g'&nbsp;<br />
+   &nbsp;&nbsp;&nbsp;where&nbsp;<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(x,g')&nbsp;=&nbsp;random&nbsp;g<br />
+   &nbsp;&nbsp;&nbsp;randomRs&nbsp;=&nbsp;...similar...<br />
+   <br />
+   &nbsp;&nbsp;&nbsp;randomIO&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;getStdRandom&nbsp;random<br />
+   &nbsp;&nbsp;&nbsp;randomRIO&nbsp;range&nbsp;=&nbsp;getStdRandom&nbsp;(randomR&nbsp;range)<br />
+   <br />
+   <br />
+   instance&nbsp;Random&nbsp;Int&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;...<br />
+   instance&nbsp;Random&nbsp;Integer&nbsp;where&nbsp;...<br />
+   instance&nbsp;Random&nbsp;Float&nbsp;&nbsp;&nbsp;where&nbsp;...<br />
+   instance&nbsp;Random&nbsp;Double&nbsp;&nbsp;where&nbsp;...<br />
+   instance&nbsp;Random&nbsp;Bool&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;...<br />
+   instance&nbsp;Random&nbsp;Char&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;...<br />
+   <br />
+   </tt>
+  </p>
+  <!--
+  <ul>
+   <li><tt>randomR</tt> takes a range <i>(lo,hi)</i> and a random number
+    generator <i>g</i>, and returns a random value uniformly distributed in
+    the closed interval <i>[lo,hi]</i>, together with a new generator. It
+    is unspecified what happens if <i>lo&gt;hi</i>. For continuous types
+    there is no requirement that the values <i>lo</i> and <i>hi</i> are
+    ever produced, but they may be, depending on the implementation and the
+    interval.
+    <p></p>
+   </li>
+
+   <li><tt>random</tt> does the same as <tt>randomR</tt>, but does not take
+    a range.
+    <ul>
+     <li>For bounded types (instances of <tt>Bounded</tt>, such as
+      <tt>Char</tt>), the range is normally the whole type.</li>
+
+     <li>For fractional types, the range is normally the semi-closed
+      interval <i>[0,1)</i>.</li>
+
+     <li>For <tt>Integer</tt>, the range is (arbitrarily) the range of
+      <tt>Int</tt>.</li>
+    </ul>
+
+    <p></p>
+   </li>
+
+   <li>The plural versions, <tt>randomRs</tt> and <tt>randoms</tt>, produce
+    an infinite list of random values, and do not return a new generator.
+    <p></p>
+   </li>
+
+   <li>The <tt>IO</tt> versions, <tt>randomRIO</tt> and <tt>randomIO</tt>,
+    use the global random number generator (see Section <a
+    href="random.html#global-rng">27.3</a>).</li>
+  </ul>
+  -->
+  <p>
+   <ul>
+    <li>
+     <p>
+      <tt>randomR</tt> は範囲 <i>(lo,hi)</i> と乱数生成器 <i>g</i> をと
+      り、閉区間 <i>[lo,hi]</i> での一様分布乱数値と次の新な生成器とを返
+      す。<i>lo&gt;hi</i> であった場合なにがおこるかは規定しない。連続型
+      に対しては <i>lo</i> および <i>hi</i> が生成されることを要求されは
+      しないが、これは実装と区間に依存することが認められている。
+     </p>
+    </li>
+    <li>
+     <p>
+      <tt>random</tt> の振舞いは範囲をとらないことをのぞけば
+      <tt>randomR</tt> と同じである。
+     <ul>
+      <li>(<tt>Char</tt> のような <tt>Bounded</tt> クラスのインスタンス
+	  であるような)限られた範囲をもつ型にたいしては、範囲は通常整数
+	  型になる。 </li>
+      <li>小数型に対しては、範囲は通常、半閉区間 <i>[0,1)</i> である。
+	  </li>
+      <li><tt>Integer</tt> に対しては範囲は任意の <tt>Int</tt> の範囲と
+	  なる</li>
+     </ul>
+     </p>
+    </li>
+    <li>
+     <p>
+      複数形版の <tt>randomRs</tt> および <tt>randoms</tt> は乱数の無限
+      リストを生成し、新しい生成器は返さない。
+     </p>
+    </li>
+    <li>
+     <p>
+      <tt>IO</tt> 版の <tt>randomRIO</tt> および <tt>randomIO</tt> はグロー
+     バル乱数生成器を使う。(<a href="random.html#global-rng">27.3</a>
+     を見よ。)
+     </p>
+    </li>
+   </ul>
+  </p>
+
+  <p><a name="global-rng"></a></p>
+  <p> <a name="sect27.3"></a></p>
+
+  <!--<h3>27.3<tt>&nbsp;&nbsp;</tt>The global random number generator</h3>-->
+  <h3>27.3<tt>&nbsp;&nbsp;</tt>グローバル乱数生成器</h3>
+  <!--
+  <p> There is a single, implicit, global random number generator of type
+   <tt>StdGen</tt>, held in some global variable maintained by the
+   <tt>IO</tt> monad. It is initialised automatically in some
+   system-dependent fashion, for example, by using the time of day, or
+   Linux's kernel random number generator. To get deterministic behaviour,
+   use <tt>setStdGen</tt>. <tt><br />
+   <br />
+   &nbsp;&nbsp;setStdGen&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;StdGen&nbsp;-&gt;&nbsp;IO&nbsp;()
+   <br />
+   &nbsp;&nbsp;getStdGen&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;IO&nbsp;StdGen
+   <br />
+   &nbsp;&nbsp;newStdGen&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;IO&nbsp;StdGen<br />
+   &nbsp;&nbsp;getStdRandom&nbsp;::&nbsp;(StdGen&nbsp;-&gt;&nbsp;(a,&nbsp;StdGen))&nbsp;-&gt;&nbsp;IO&nbsp;a<br />
+   <br />
+   </tt></p>
+  -->
+  <p>
+   <tt>StdGen</tt> 型の暗黙のグローバル乱数生成器というものが一つだけあっ
+   て、<tt>IO</tt> モナドにより或る種のグローバル変数に保持されている。
+   これはシステム依存のなんらかの方法により時刻と日付あるいは Linux カー
+   ネルの乱数生成器により、自動的に初期化される。決定論的動作をのぞむな
+   ら<tt>setStdGen</tt> を使用すること。 
+   <tt><br />
+   <br />
+   &nbsp;&nbsp;setStdGen&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;StdGen&nbsp;-&gt;&nbsp;IO&nbsp;()
+   <br />
+   &nbsp;&nbsp;getStdGen&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;IO&nbsp;StdGen
+   <br />
+   &nbsp;&nbsp;newStdGen&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;IO&nbsp;StdGen<br />
+   &nbsp;&nbsp;getStdRandom&nbsp;::&nbsp;(StdGen&nbsp;-&gt;&nbsp;(a,&nbsp;StdGen))&nbsp;-&gt;&nbsp;IO&nbsp;a<br />
+   <br />
+   </tt>
+  </p>
+  <!--
+  <ul>
+   <li><tt>getStdGen</tt> and <tt>setStdGen</tt> get and set the global
+    random number generator, respectively.
+    <p></p>
+   </li>
+
+   <li><tt>newStdGen</tt> applies <tt>split</tt> to the current global
+    random generator, updates it with one of the results, and returns the
+    other.
+    <p></p>
+   </li>
+
+   <li><tt>getStdRandom</tt> uses the supplied function to get a value from
+    the current global random generator, and updates the global generator
+    with the new generator returned by the function. For example,
+    <tt>rollDice</tt> gets a random integer between 1 and 6: <tt><br />
+    <br />
+    &nbsp;&nbsp;rollDice&nbsp;::&nbsp;IO&nbsp;Int<br />
+    &nbsp;&nbsp;rollDice&nbsp;=&nbsp;getStdRandom&nbsp;(randomR&nbsp;(1,6))<br />
+    <br />
+    </tt></li>
+  </ul>
+  -->
+  <p>
+   <ul>
+    <li>
+     <p>
+      <tt>getStdGen</tt> および <tt>setStdGen</tt> はそれぞれグローバル乱
+      数生成器のを取得／設定する。
+     </p>
+    </li>
+    <li>
+     <p>
+      <tt>newStdGen</tt> は <tt>split</tt> を現在のグローバル乱数生成器に
+      適用して、その結果の一つでそれを更新し、もう一つを返す。
+     </p>
+    </li>
+    <li>
+     <p>
+      <tt>getStdRandom</tt> は供給された関数を使い現在のグローバル乱数生
+      成器から値を取得し、この生成器を供給した関数が返した新しい生成器で
+      更新する。たとえば、<tt>rollDice</tt> は 1 から 6 までの乱数を発生
+      する。
+      <tt><br />
+      <br />
+    &nbsp;&nbsp;rollDice&nbsp;::&nbsp;IO&nbsp;Int<br />
+    &nbsp;&nbsp;rollDice&nbsp;=&nbsp;getStdRandom&nbsp;(randomR&nbsp;(1,6))<br />
+      <br />
+      </tt>
+     </p>
+    </li>
+   </ul>
+  </p>
+
+  <!--<h3>References</h3>-->
+  <h3>参考文献</h3>
+
+  <dl>
+   <dt> [1]</dt>
+  </dl>
+
+  <p> FW Burton and RL Page, "Distributed random number generation",
+   Journal of Functional Programming, 2(2):203-212, April 1992.</p>
+
+  <p></p>
+
+  <dl>
+   <dt> [2]</dt>
+  </dl>
+
+  <p> SK Park, and KW Miller, "Random number generators - good ones are
+   hard to find", Comm ACM 31(10), Oct 1988, pp1192-1201.</p>
+
+  <p></p>
+
+  <dl>
+   <dt> [3]</dt>
+  </dl>
+
+  <p> DG Carta, "Two fast implementations of the minimal standard random
+   number generator", Comm ACM, 33(1), Jan 1990, pp87-88.</p>
+
+  <p></p>
+
+  <dl>
+   <dt> [4]</dt>
+  </dl>
+
+  <p> P Hellekalek, "Don't trust parallel Monte Carlo", ACM SIGSIM
+   Simulation Digest 28(1), pp82-89, July 1998.</p>
+
+  <p> The Web site <tt>http://random.mat.sbg.ac.at/</tt> is a great source
+   of information.</p>
+
+  <p></p>
+
+  <hr />
+
+  <p><i>The Haskell 98 Report</i><br />
+   <a href="index.html">top</a> | <a href="cputime.html">back</a> | next |
+   <a href="index98.html">contents</a> | <a
+   href="prelude-index.html">function index</a> <br />
+   <font size="2">December 2002</font></p>
+
+  <p></p>
+ </body>
+</html>

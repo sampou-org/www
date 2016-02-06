@@ -1,0 +1,338 @@
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--
+
+Generated from t-y-scheme.tex by tex2page, v 20060531
+(running on Gauche 0.8.7, unix), 
+(c) Dorai Sitaram, 
+http://www.ccs.neu.edu/~dorai/tex2page/tex2page-doc.html
+
+-->
+<head>
+<title>
+独習 Scheme 三週間 Teach Yourself Scheme in Fixnum Days
+</title>
+<link rel="stylesheet" type="text/css" href="t-y-scheme-Z-S.css" title=default>
+<meta name=robots content="noindex,follow">
+<meta name=description content="A practical
+introduction to the programming language Scheme">
+
+<meta name=author content="Dorai Sitaram">
+
+<link rev=made href="mailto:ds26@gte.com">
+</head>
+<body>
+<div id=slidecontent>
+<div align=right class=navigation>[Go to <span><a href="t-y-scheme.html">first</a>, <a href="t-y-scheme-Z-H-17.html">previous</a></span><span>, <a href="t-y-scheme-Z-H-19.html">next</a></span> page<span>; &nbsp;&nbsp;</span><span><a href="t-y-scheme-Z-H-1.html#node_toc_start">contents</a></span><span><span>; &nbsp;&nbsp;</span><a href="t-y-scheme-Z-H-25.html#node_index_start">index</a></span>]</div>
+<p></p>
+<a name="node_chap_16"></a>
+<h1 class=chapter>
+<div class=chapterheading><a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_16">Chapter 16</a></div><br>
+<a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_16">シェルスクリプト</a></h1>
+<p></p>
+<p>
+</p>
+<p>
+<a name="node_idx_494"></a>したいことをファイルあるいは<em>スクリプト</em>に単純に書くだけで
+そのスクリプトが他のＯＳのシェルコマンドのように実行できれば、
+便利なことはままあります。重厚なプログラムへのインタフェースは
+スクリプトの形式で用意されることが多く、利用者は独自のスクリプトを
+作ったり、既存のものを自分の必要にあわせてカスタマイズすることが
+よくあります。スクリプトプログラミングはおそらく間違いなく最もよく
+行なわれるプログラミングでしょう。多くのユーザにとってはそれが
+唯一のプログラミングでしょう。</p>
+<p>
+</p>
+<p>
+Unix や DOS (Windows のコマンドラインインタフェース) のような
+オペレーティングシステムはこうしたスクリプトプログラミングの
+メカニズムを用意しています。しかし、どちらの場合にもスクリプト
+プログラミング言語は原始的なものです。多くのスクリプトは、
+シェルプロンプトで打込むコマンドの並びあるいはバッチコマンドに
+すぎません。これのおかげでユーザが同じあるいは似たようなコマンドの
+並びを実行する場合、毎回一々シェルのコマンドを全部打ち込むような
+ことをしなくてすみます。スクリプト言語には条件文やループといった
+形式にちょっとしたプログラムの可能性を盛り込んでいるものもありますが
+それだけであったりします。もちろん、ちょっとしたことをするだけなら
+これで十分です。しかし、スクリプトも、それに対する要求もどんどん
+多きくなりますし、スクリプトも常にそれができるように見え、より完全
+なプログラミング言語が必要だと感じることがよくあります。
+適切なＯＳインタフェースをもつ Scheme はスクリプトプログラミングを
+やさしくし、保守しやすいものにします。</p>
+<p>
+</p>
+<p>
+この節では Scheme でのスクリプトプログラムの書かかたを解説します。
+Scheme の方言はいろいろあり方法には多くのバリエーションがありますので、
+ここでは、MzScheme で具体例をあげることにします。付録の<a href="t-y-scheme-Z-H-20.html#node_chap_A">A</a>に
+他の方言用の変更点について書いておきます。また、ここでは、UNIX を前提と
+します。付録<a href="t-y-scheme-Z-H-21.html#node_chap_B">B</a>には DOS での扱いについて書いておきます。</p>
+<p>
+</p>
+<a name="node_sec_16.1"></a>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_16.1">16.1&nbsp;&nbsp;Hello, World! ふたたび</a></h2>
+<p></p>
+<p>
+世界に向けてこんにちはを言うスクリプトを書きましょう。こんにちはを
+言うというのはもちろん、伝統的なスクリプトプログラミングができなかった
+ことではありません。しかし、これを Scheme で記述することはもっと
+野心的なスクリプトプログラミングに着手する手始めになります。まず、
+Unix の hello スクリプトはファイルで以下のような中身になります。</p>
+<p>
+</p>
+<pre class=verbatim>echo Hello, World!&nbsp;
+</pre><p></p>
+<p>
+</p>
+<p>
+これは、シェルのコマンド <code class=scheme><span class=variable>echo</span></code> を使っています。
+スクリプトには <code class=scheme><span class=variable>hello</span></code> という名前をつけることができて、</p>
+<p>
+</p>
+<pre class=verbatim>chmod +x hello&nbsp;
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>とすると、実行可能になり、環境変数 <code class=verbatim>PATH</code> にあるディレクトリに
+置きます。そうすると、そのあと、だれでも</p>
+<p>
+</p>
+<pre class=verbatim>hello&nbsp;
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>とシェルプロンプトから打ち込むとすぐにそっけない挨拶がでます。</p>
+<p>
+</p>
+<p>
+Scheme の hello スクリプトは同じ出力を Scheme
+(<a href="t-y-scheme-Z-H-3.html#node_chap_1">1</a> 節のプログラム)を使って出しますが、
+オペレーティングシステムにファイルの中のコマンドをデフォルトの
+シェルスクリプトではなく、Scheme として解釈するように教えるための
+何かが必要です。Scheme のスクリプトファイルも、<code class=verbatim>hello</code> という
+名前にし、その中身は、以下のようになります。</p>
+<p>
+</p>
+<pre class=verbatim>&quot;:&quot;; exec mzscheme -r $0 &quot;$@&quot;&nbsp;
+(begin&nbsp;
+  (display &quot;Hello, World!&quot;)&nbsp;
+  (newline))&nbsp;
+</pre><p></p>
+<p>
+</p>
+<p>
+最初の行の後はそのまま Scheme です。しかし、最初の行は
+これをスクリプトにするための魔法です。ユーザが Unix のプロンプト
+から <code class=verbatim>hello</code> と入力すると、Unix はこのファイルを通常の
+スクリプトとして読みます。最初の <code class=verbatim>&quot;:&quot;</code> はシェルの no-op
+です。<code class=verbatim>;</code> はシェルのコマンドセパレータです。つぎにくるのは
+シェルコマンドの <code class=verbatim>exec</code> になります。<code class=verbatim>exec</code> は Unix に
+現在のスクリプトを捨てて <code class=verbatim>mzscheme -r $0 &quot;$@&quot;</code> を代りに
+実行するように指示します。ここで、パラメータ <code class=verbatim>$0</code> はこの
+スクリプトの名前で置き換えられます。そして、パラメータ <code class=verbatim>&quot;$@&quot;</code>
+はユーザがこのスクリプトに与えた引数のリストで置き換えられます。
+(この場合にはそのような引数はありません。)</p>
+<p>
+</p>
+<p>
+結局、<code class=verbatim>hello</code> というシェルコマンドが別のシェルコマンド</p>
+<p>
+</p>
+<pre class=verbatim>mzscheme -r /whereveritis/hello&nbsp;
+</pre><p></p>
+<p>
+</p>
+
+<p class=noindent>に置き換わったということです。ここで <code class=verbatim>/whereveritis/hello</code>
+は <code class=verbatim>hello</code> のパス名です。</p>
+<p>
+</p>
+<p>
+<code class=verbatim>mzscheme</code> は MzScheme の実行ファイルを呼びます。<code class=verbatim>-r</code> オプションは
+直後の引数を Scheme ファイルとして、その後につづく引数を
+<code class=scheme><span class=variable>argv</span></code> というベクタに集めてから、ロードします。(ここの例では、
+<code class=scheme><span class=variable>argv</span></code> はナルベクタになります。)</p>
+<p>
+</p>
+<p>
+したがって、この Scheme スクリプトは Scheme ファイルとして
+走り、ファイル中の Scheme のフォームはこのスクリプトの元々の
+引数にベクタ <code class=scheme><span class=variable>argv</span></code> を通じてアクセスします。</p>
+<p>
+</p>
+<p>
+こんどは、Scheme がこのスクリプトの最初の行にとりかからなければ
+なりません。この行は既にみたように、れっきとした <em>伝統的</em>
+シェルスクリプトです。<code class=scheme><span class=selfeval>&quot;:&quot;</span></code> は Scheme では自己評価的文字列です。
+ので、害はありません。</p>
+<p>
+</p>
+<p>
+&#8216;<code class=verbatim>;</code>&#8217; は Scheme のコメントマークですので、<code class=verbatim>exec ...</code> は無視されます。
+ファイルの残りの部分はもちろん Scheme です。そこにある式は順に評価され
+ます。これらを全部評価したのち Scheme は終了します。</p>
+<p>
+</p>
+<p>
+要するに、<code class=verbatim>hello</code> とシェルプロンプトから入力すると</p>
+<p>
+</p>
+<pre class=verbatim>Hello, World!&nbsp;
+</pre><p></p>
+<p>
+が表示され、またシェルプロンプトに戻ります。</p>
+<p>
+</p>
+<a name="node_sec_16.2"></a>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_16.2">16.2&nbsp;&nbsp;引数をもつスクリプト</a></h2>
+<p></p>
+<p>
+Scheme スクリプトは変数 <code class=scheme><span class=variable>argv</span></code> を使って、引数を参照します。
+たとえば、以下のスクリプトはすべての引数を一行づつ表示します。</p>
+<p>
+</p>
+<p>
+</p>
+<pre class=scheme><span class=selfeval>&quot;:&quot;</span><span class=comment>; exec mzscheme -r $0 &quot;$@&quot;</span>
+
+<span class=comment>;argv-count に与えられた引数の数をいれる</span>
+
+(<span class=keyword>define</span> <span class=variable>argv-count</span> (<span class=variable>vector-length</span> <span class=variable>argv</span>))
+
+(<span class=keyword>let</span> <span class=variable>loop</span> ((<span class=variable>i</span> <span class=selfeval>0</span>))
+  (<span class=keyword>unless</span> (<span class=variable>&gt;=</span> <span class=variable>i</span> <span class=variable>argv-count</span>)
+    (<span class=variable>display</span> (<span class=variable>vector-ref</span> <span class=variable>argv</span> <span class=variable>i</span>))
+    (<span class=variable>newline</span>)
+    (<span class=variable>loop</span> (<span class=variable>+</span> <span class=variable>i</span> <span class=selfeval>1</span>))))
+</pre><p></p>
+<p>
+</p>
+<p>
+このスクリプト <code class=verbatim>echoall</code> を呼んでみましょう。
+<code class=verbatim>echoall 1 2 3</code> と呼ぶと以下のように表示されます。</p>
+<p>
+</p>
+<pre class=verbatim>1&nbsp;
+2&nbsp;
+3&nbsp;
+</pre><p></p>
+<p>
+</p>
+<p>
+このスクリプトの名前(<code class=scheme><span class=selfeval>&quot;echoall&quot;</span></code>)は引数ベクタには含まれ<em>ない</em>
+ことに注意してください。</p>
+<p>
+</p>
+<a name="node_sec_16.3"></a>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_16.3">16.3&nbsp;&nbsp;例</a></h2>
+<p></p>
+<p>
+もっと実質的な問題に取り組みましょう。ファイルを一台のコンピュータから
+別のコンピュータに転送する必要があり、運搬媒体としては 3.5インチの
+フロッピィディスクしかないとしましょう。そこで、1.44M Byte より大きい
+ファイルをフロッピィのサイズの塊に分割するスクリプト <code class=verbatim>split4floppy</code> が
+必要になります。スクリプトファイル <code class=verbatim>split4floppy</code> は次のようになります。</p>
+<p>
+</p>
+<p>
+</p>
+<pre class=scheme><span class=selfeval>&quot;:&quot;</span><span class=comment>;exec mzscheme -r $0 &quot;$@&quot;</span>
+
+<span class=comment>;floppy-size = 3.5インチフロッピィにおさまるバイト数</span>
+
+(<span class=keyword>define</span> <span class=variable>floppy-size</span> <span class=selfeval>1440000</span>)
+
+<span class=comment>;split は大きなファイル f をフロッピィの容量サイズの小さいサブファイルに</span>
+<span class=comment>;subfile-prefix.1、subfile-prefix.2 などに分割する。</span>
+
+(<span class=keyword>define</span> <span class=variable>split</span>
+  (<span class=keyword>lambda</span> (<span class=variable>f</span> <span class=variable>subfile-prefix</span>)
+    (<span class=variable>call-with-input-file</span> <span class=variable>f</span>
+      (<span class=keyword>lambda</span> (<span class=variable>i</span>)
+        (<span class=keyword>let</span> <span class=variable>loop</span> ((<span class=variable>n</span> <span class=selfeval>1</span>))
+          (<span class=keyword>if</span> (<span class=variable>copy-to-floppy-sized-subfile</span> <span class=variable>i</span> <span class=variable>subfile-prefix</span> <span class=variable>n</span>)
+              (<span class=variable>loop</span> (<span class=variable>+</span> <span class=variable>n</span> <span class=selfeval>1</span>))))))))
+
+<span class=comment>;copy-to-floppy-sized-subfile は次の 1.44M Byte (のこりがこれよりも</span>
+<span class=comment>;少ければ、全部)をその大きいファイルから n 番目のサブファイルに</span>
+<span class=comment>;コピーする。まだ、残っていれば真を返し、さもなければ、偽を返す。</span>
+
+(<span class=keyword>define</span> <span class=variable>copy-to-floppy-sized-subfile</span>
+  (<span class=keyword>lambda</span> (<span class=variable>i</span> <span class=variable>subfile-prefix</span> <span class=variable>n</span>)
+    (<span class=keyword>let</span> ((<span class=variable>nth-subfile</span> (<span class=variable>string-append</span> <span class=variable>subfile-prefix</span> <span class=selfeval>&quot;.&quot;</span>
+                                      (<span class=variable>number-&gt;string</span> <span class=variable>n</span>))))
+      (<span class=keyword>if</span> (<span class=variable>file-exists?</span> <span class=variable>nth-subfile</span>) (<span class=variable>delete-file</span> <span class=variable>nth-subfile</span>))
+      (<span class=variable>call-with-output-file</span> <span class=variable>nth-subfile</span>
+        (<span class=keyword>lambda</span> (<span class=variable>o</span>)
+          (<span class=keyword>let</span> <span class=variable>loop</span> ((<span class=variable>k</span> <span class=selfeval>1</span>))
+            (<span class=keyword>let</span> ((<span class=variable>c</span> (<span class=variable>read-char</span> <span class=variable>i</span>)))
+              (<span class=keyword>cond</span> ((<span class=variable>eof-object?</span> <span class=variable>c</span>) <span class=selfeval>#f</span>)
+                    (<span class=keyword>else</span>
+                     (<span class=variable>write-char</span> <span class=variable>c</span> <span class=variable>o</span>)
+                     (<span class=keyword>if</span> (<span class=variable>&lt;</span> <span class=variable>k</span> <span class=variable>floppy-size</span>)
+                         (<span class=variable>loop</span> (<span class=variable>+</span> <span class=variable>k</span> <span class=selfeval>1</span>))
+                         <span class=selfeval>#t</span>))))))))))
+
+<span class=comment>;bigfile = スクリプトの第一引数</span>
+<span class=comment>;        = 分割する必要のあるファイル</span>
+
+(<span class=keyword>define</span> <span class=variable>bigfile</span> (<span class=variable>vector-ref</span> <span class=variable>argv</span> <span class=selfeval>0</span>))
+
+<span class=comment>;subfile-prefix = スクリプトの第二引数</span>
+<span class=comment>;               = サブファイルのベース名</span>
+
+(<span class=keyword>define</span> <span class=variable>subfile-prefix</span> (<span class=variable>vector-ref</span> <span class=variable>argv</span> <span class=selfeval>1</span>))
+
+<span class=comment>;split を呼び、subfile-prefix.{1,2,3,...} を bigfile から生成する。</span>
+
+(<span class=variable>split</span> <span class=variable>bigfile</span> <span class=variable>subfile-prefix</span>)
+</pre><p></p>
+<p>
+スクリプト <code class=verbatim>split4floppy</code> は以下のように呼びます。</p>
+<p>
+</p>
+<pre class=verbatim>split4floppy largefile chunk&nbsp;
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>これは <code class=verbatim>largefile</code> をサブファイル <code class=verbatim>chunk.1</code>、<code class=verbatim>chunk.2</code>、...
+に分割し、それぞれが、一枚のフロッピィに入るようにします。</p>
+<p>
+</p>
+<p>
+<code class=verbatim>chunk.i</code> を相手先のコンピュータに持っていってから、<code class=verbatim>chunk.i</code> を
+一つづきにして <code class=verbatim>largefile</code> を復元できます。Unix なら</p>
+<p>
+</p>
+<pre class=verbatim>cat chunk.1 chunk.2 ... &gt; largefile&nbsp;
+</pre><p></p>
+<p>
+</p>
+
+<p class=noindent>DOS なら</p>
+<p>
+</p>
+<pre class=verbatim>copy /b chunk.1+chunk.2+... largefile&nbsp;
+</pre><p></p>
+<p>
+とします。
+</p>
+<p>
+</p>
+<div class=smallskip></div>
+<p style="margin-top: 0pt; margin-bottom: 0pt">
+<div align=right class=navigation>[Go to <span><a href="t-y-scheme.html">first</a>, <a href="t-y-scheme-Z-H-17.html">previous</a></span><span>, <a href="t-y-scheme-Z-H-19.html">next</a></span> page<span>; &nbsp;&nbsp;</span><span><a href="t-y-scheme-Z-H-1.html#node_toc_start">contents</a></span><span><span>; &nbsp;&nbsp;</span><a href="t-y-scheme-Z-H-25.html#node_index_start">index</a></span>]</div>
+</p>
+<p></p>
+</div>
+</body>
+</html>

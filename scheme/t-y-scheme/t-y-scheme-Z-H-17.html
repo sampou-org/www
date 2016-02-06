@@ -1,0 +1,438 @@
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--
+
+Generated from t-y-scheme.tex by tex2page, v 20060531
+(running on Gauche 0.8.7, unix), 
+(c) Dorai Sitaram, 
+http://www.ccs.neu.edu/~dorai/tex2page/tex2page-doc.html
+
+-->
+<head>
+<title>
+独習 Scheme 三週間 Teach Yourself Scheme in Fixnum Days
+</title>
+<link rel="stylesheet" type="text/css" href="t-y-scheme-Z-S.css" title=default>
+<meta name=robots content="noindex,follow">
+<meta name=description content="A practical
+introduction to the programming language Scheme">
+
+<meta name=author content="Dorai Sitaram">
+
+<link rev=made href="mailto:ds26@gte.com">
+</head>
+<body>
+<div id=slidecontent>
+<div align=right class=navigation>[Go to <span><a href="t-y-scheme.html">first</a>, <a href="t-y-scheme-Z-H-16.html">previous</a></span><span>, <a href="t-y-scheme-Z-H-18.html">next</a></span> page<span>; &nbsp;&nbsp;</span><span><a href="t-y-scheme-Z-H-1.html#node_toc_start">contents</a></span><span><span>; &nbsp;&nbsp;</span><a href="t-y-scheme-Z-H-25.html#node_index_start">index</a></span>]</div>
+<p></p>
+<a name="node_chap_15"></a>
+<h1 class=chapter>
+<div class=chapterheading><a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_15">Chapter 15</a></div><br>
+<a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_15">エンジン</a></h1>
+<p></p>
+<p>
+<a name="node_idx_484"></a>エンジン[<a href="t-y-scheme.hlog">cite{engine}</a>]は時分割プリエンプションに従う計算を
+表現するものです。別の言葉でいうと、エンジンを構成する計算
+は時分割プリエンプションが可能なプロセスとして走る通常の
+サンクです。</p>
+<p>
+</p>
+<p>
+エンジンは次の 3 つの引数とともに呼ばれます。(1) 時分割の単位数あるいは
+<em>クロック数</em>、(2) <em>成功</em>手続き、(3) <em>失敗</em>手続き。
+エンジンの計算が割り当てられた<em>クロック数</em> 以内で終了すれば、
+<em>成功</em>手続きが、計算結果と残りのクロック数に適用されます。
+エンジンの計算が割り当てられた<em>クロック数</em>以内に終了しなかった
+場合には、<em>失敗</em>手続きが、エンジンの計算の未終了部分を表現
+する新しいエンジンに適用されます。</p>
+<p>
+</p>
+<p>
+例として、一連の非負の整数を印字するループの計算を構成するエンジン
+を考えてみましょう。あとですぐに定義する <code class=scheme><span class=variable>make-engine</span></code> 手続きを使って
+次のように作ります。<code class=scheme><span class=variable>make-engine</span></code> は構成する計算を表現するサンク引数
+とともに呼び出され、対応するエンジンを返します。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=variable>printn-engine</span>
+  (<span class=variable>make-engine</span>
+    (<span class=keyword>lambda</span> ()
+      (<span class=keyword>let</span> <span class=variable>loop</span> ((<span class=variable>i</span> <span class=selfeval>0</span>))
+        (<span class=variable>display</span> <span class=variable>i</span>)
+        (<span class=variable>display</span> <span class=selfeval>&quot; &quot;</span>)
+        (<span class=variable>loop</span> (<span class=variable>+</span> <span class=variable>i</span> <span class=selfeval>1</span>))))))
+</pre><p></p>
+<p>
+</p>
+
+<p class=noindent>これが <code class=scheme><span class=variable>printn-engine</span></code> の呼び出しです。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=global>*more*</span> <span class=selfeval>#f</span>)
+(<span class=variable>printn-engine</span> <span class=selfeval>50</span> <span class=variable>list</span> (<span class=keyword>lambda</span> (<span class=variable>ne</span>) (<span class=keyword>set!</span> <span class=global>*more*</span> <span class=variable>ne</span>)))
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>0</span> <span class=selfeval>1</span> <span class=selfeval>2</span> <span class=selfeval>3</span> <span class=selfeval>4</span> <span class=selfeval>5</span> <span class=selfeval>6</span> <span class=selfeval>7</span> <span class=selfeval>8</span> <span class=selfeval>9</span>
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>つまり、ループは印字を始めていくつか(ここでは <code class=scheme><span class=selfeval>9</span></code>)まで
+印字してから、クロック割り込みにより失敗します。
+しかし、<em>失敗</em>手続きは <code class=scheme><span class=global>*more*</span></code> というグローバル変数に
+失敗したエンジンをセットして、ひとつ前のエンジンが
+中断したところから、このループを復帰できるようにします。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=global>*more*</span> <span class=selfeval>50</span> <span class=variable>list</span> (<span class=keyword>lambda</span> (<span class=variable>ne</span>) (<span class=keyword>set!</span> <span class=global>*more*</span> <span class=variable>ne</span>)))
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>10</span> <span class=selfeval>11</span> <span class=selfeval>12</span> <span class=selfeval>13</span> <span class=selfeval>14</span> <span class=selfeval>15</span> <span class=selfeval>16</span> <span class=selfeval>17</span> <span class=selfeval>18</span> <span class=selfeval>19</span>
+</pre><p></p>
+<p>
+<a name="node_idx_486"></a></p>
+<p>
+</p>
+<p>
+ここでは、<code class=scheme><span class=variable>call/cc</span></code> を使って、失敗するエンジンの未終了計算を
+捕捉することでエンジンを構築しましょう。まず、<em>フラットな</em>
+エンジン、あるいは、その計算が他のエンジンを走らせることが
+ないようなエンジンを作ります。そのあとで、このコードを
+一般化して、もっと一般的に<em>入れ子可能な</em>エンジン、あるいは、
+<em>ネスタ</em>を作ります。これは他のエンジンを呼ぶことができるものです。
+しかし、いずれの場合にもタイマ機構あるいは<em>クロック</em>というものが
+必要です。</p>
+<p>
+</p>
+<p>
+<a name="node_idx_488"></a></p>
+<a name="node_sec_15.1"></a>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_15.1">15.1&nbsp;&nbsp;クロック</a></h2>
+<p></p>
+<p>
+</p>
+<p>
+ここでのエンジンは、プログラム実行の時刻経過を刻む、グローバルクロック
+あるいは割り込み可能なタイマがあることを仮定しています。ここでは、以下
+のようなクロックインタフェースがあることを仮定しましょう。
+もし、お使いの Scheme が何らかのアラーム機構を提供していれば、
+以下のようなタイプのクロックを間に合わせにつくるのは容易いことです。
+(付録 <a href="t-y-scheme-Z-H-23.html#node_chap_D">D</a> では Scheme の Guile [<a href="t-y-scheme.hlog">cite{guile}</a>] 方言用のクロックを
+定義しています。)</p>
+<p>
+</p>
+<p>
+ここでの <code class=scheme><span class=variable>clock</span></code> 手続きの初期状態はふたつの項目から構成されます。</p>
+<p>
+</p>
+<p>
+(1) 残りのクロック数</p>
+<p>
+</p>
+<p>
+(2) クロック数を使い果したときに呼び出される割り込みハンドラ</p>
+<p>
+<code class=scheme><span class=variable>clock</span></code> は以下のオペレーションを可能にします。</p>
+<p>
+</p>
+<p>
+(1) <code class=scheme>(<span class=variable>clock</span> <span class=keyword>'</span><span class=variable>set-handler</span> <span class=variable>h</span>)</code> は割り込みハンドラを <code class=scheme><span class=variable>h</span></code> に設定する。</p>
+<p>
+</p>
+<p>
+(2) <code class=scheme>(<span class=variable>clock</span> <span class=keyword>'</span><span class=variable>set</span> <span class=variable>n</span>)</code> はクロックに残りのクロック数を <code class=scheme><span class=variable>n</span></code> に設定し、
+以前の値を返す。</p>
+<p>
+</p>
+<p>
+クロック数のとりうる範囲は非負整数と <code class=scheme><span class=global>*infinity*</span></code> とよばれるアトム
+です。<code class=scheme><span class=global>*infinity*</span></code>クロック数をもつクロックはクロック数を使い果す
+ことはなく割り込みハンドラをセットすることはありません。このような
+クロックは<em>静止</em>あるいは「すでに止っている」といいます。
+クロックを止めるには、そのクロック数を <code class=scheme><span class=global>*infinity*</span></code> にセットします。</p>
+<p>
+</p>
+<p>
+クロックハンドラはサンクにセットされています。たとえば、</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>clock</span> <span class=keyword>'</span><span class=variable>set-handler</span>
+  (<span class=keyword>lambda</span> ()
+    (<span class=variable>error</span> <span class=selfeval>&quot;Say goodnight, cat!&quot;</span>)))
+
+(<span class=variable>clock</span> <span class=keyword>'</span><span class=variable>set</span> <span class=selfeval>9</span>)
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>これは 9 クロック経過後エラーシグナルをあげます。そして
+そのシグナルにより、「Say goodnight, cat!」というメッセージが
+表示されます。</p>
+<p>
+</p>
+<p>
+<a name="node_idx_490"></a></p>
+<a name="node_sec_15.2"></a>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_15.2">15.2&nbsp;&nbsp;フラットなエンジン</a></h2>
+<p></p>
+<p>
+まず最初にクロックに割り込みハンドラをセットします。
+このハンドラは、非静止クロックがクロック数を使い果したときにのみ
+呼び出されることに注意してください。割り込みハンドラの呼び出しは
+エンジンの計算が失敗する直前で、クロック数が設定された
+エンジンに対してのみにしか起りません。</p>
+<p>
+</p>
+<p>
+このハンドラは、現在の継続を捕捉します。つまり、現時点で
+エンジンを失敗させる残りの計算です。この継続はグローバル
+変数 <code class=scheme><span class=global>*engine-escape*</span></code> に格納されている別の継続に送られます。
+<code class=scheme><span class=global>*engine-escape*</span></code> 変数は、現在のエンジンの脱出継続を格納しています。
+したがって、このクロックハンドラは失敗エンジンの残りを捕捉し、
+それをそのエンジンのコードの脱出ポイントに送ります。そうすると
+必須の失敗アクションに到達できます。</p>
+<p>
+</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=global>*engine-escape*</span> <span class=selfeval>#f</span>)
+(<span class=keyword>define</span> <span class=global>*engine-entrance*</span> <span class=selfeval>#f</span>)
+
+(<span class=variable>clock</span> <span class=keyword>'</span><span class=variable>set-handler</span>
+  (<span class=keyword>lambda</span> ()
+    (<span class=variable>call/cc</span> <span class=global>*engine-escape*</span>)))
+</pre><p>        </p>
+<p>
+</p>
+<p>
+さて、いよいよ、エンジンのコードの内部に踏み込んでみていきましょう。
+以前言いましたように、<code class=scheme><span class=variable>make-engine</span></code> はサンクをとり、それから
+エンジンを構築します。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=variable>make-engine</span>
+  (<span class=keyword>lambda</span> (<span class=variable>th</span>)
+    (<span class=keyword>lambda</span> (<span class=variable>ticks</span> <span class=variable>success</span> <span class=variable>failure</span>)
+      (<span class=keyword>let*</span> ((<span class=variable>ticks-left</span> <span class=selfeval>0</span>)
+             (<span class=variable>engine-succeeded?</span> <span class=selfeval>#f</span>)
+             (<span class=variable>result</span>
+              (<span class=variable>call/cc</span>
+               (<span class=keyword>lambda</span> (<span class=variable>k</span>)
+                 (<span class=keyword>set!</span> <span class=global>*engine-escape*</span> <span class=variable>k</span>)
+                 (<span class=keyword>let</span> ((<span class=variable>result</span>
+                        (<span class=variable>call/cc</span>
+                         (<span class=keyword>lambda</span> (<span class=variable>k</span>)
+                           (<span class=keyword>set!</span> <span class=global>*engine-entrance*</span> <span class=variable>k</span>)
+                           (<span class=variable>clock</span> <span class=keyword>'</span><span class=variable>set</span> <span class=variable>ticks</span>)
+                           (<span class=keyword>let</span> ((<span class=variable>v</span> (<span class=variable>th</span>)))
+                             (<span class=global>*engine-entrance*</span> <span class=variable>v</span>))))))
+                   (<span class=keyword>set!</span> <span class=variable>ticks-left</span> (<span class=variable>clock</span> <span class=keyword>'</span><span class=variable>set</span> <span class=global>*infinity*</span>))
+                   (<span class=keyword>set!</span> <span class=variable>engine-succeeded?</span> <span class=selfeval>#t</span>)
+                   <span class=variable>result</span>)))))
+        (<span class=keyword>if</span> <span class=variable>engine-succeeded?</span>
+            (<span class=variable>success</span> <span class=variable>result</span> <span class=variable>ticks-left</span>)
+            (<span class=variable>failure</span> 
+             (<span class=variable>make-engine</span> 
+              (<span class=keyword>lambda</span> () 
+                (<span class=variable>result</span> <span class=keyword>'</span><span class=variable>resume</span>)))))))))
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>まず、<code class=scheme><span class=variable>ticks-left</span></code> 変数と <code class=scheme><span class=variable>engine-succeeded?</span></code> を導入します。
+最初の方は、使い残しクロック数を保持し、そのエンジンのサンクを
+ちょうどに終了させるはずです。ふたつめの方は、エンジンが成功した
+場合シグナルをあげるエンジンのコード中で使われるフラグです。</p>
+<p>
+</p>
+<p>
+この後で、エンジンのサンクをふたつの入れ子になった <code class=scheme><span class=variable>call/cc</span></code> の
+呼び出しの中で走らせます。最初の <code class=scheme><span class=variable>call/cc</span></code> は失敗エンジンがその
+エンジンの計算を放棄するために使われます。この継続はグローバル変数
+<code class=scheme><span class=global>*engine-escape*</span></code> に格納されます。ふたつめの <code class=scheme><span class=variable>call/cc</span></code> は
+内側の継続で、実行が完了したときにサンク <code class=scheme><span class=variable>th</span></code> の返り値によって
+使われるものです。この継続はグローバル変数 <code class=scheme><span class=global>*engine-entrance*</span></code> に
+格納されます。</p>
+<p>
+</p>
+<p>
+このコードを実行していくと、継続を <code class=scheme><span class=global>*engine-escape*</span></code> と
+<code class=scheme><span class=global>*engine-entrance*</span></code> に捕捉したあとで、クロックのクロック数を
+このエンジンに割り当てた時間分にセットして、サンク <code class=scheme><span class=variable>th</span></code> を
+走らせます。<code class=scheme><span class=variable>th</span></code> が成功すれば、その値 <code class=scheme><span class=variable>v</span></code> が継続
+<code class=scheme><span class=global>*engine-entrance*</span></code> に送られ、クロックが停止したのち、
+残りのクロック数を確認し、フラグ <code class=scheme><span class=variable>eingine-succeeded?</span></code> を
+真にセットします。ここで、渡された<code class=scheme><span class=global>*engine-escape*</span></code> 継続に
+行きます。そして、コード中の最終のディスパッチャを走らせます。
+すでに、エンジンが成功しているのが判っているので、
+<code class=scheme><span class=variable>success</span></code> 手続きを結果に適用し、クロック数を残します。</p>
+<p>
+</p>
+<p>
+サンク <code class=scheme><span class=variable>th</span></code> が時間どおり終了<em>しなかった</em>としても、
+割り込みを受けます。この割り込みはクロック割り込みハンドラを
+起動し、これが動作中で今失敗したサンクの現在の継続を捕捉し、
+それを、継続 <code class=scheme><span class=global>*engine-escape*</span></code> に送ります。これにより、
+失敗したサンク継続が、外側の変数 <code class=scheme><span class=variable>result</span></code> に置かれます。
+そうすると、このとき、コード中の最終ディスパッチャの中に
+いることになります。<code class=scheme><span class=variable>engine-succeeded?</span></code> はまだ偽ですから、
+<code class=scheme><span class=variable>failure</span></code> 手続きを <code class=scheme><span class=variable>result</span></code> から作られた新しいエンジンに
+適用します。</p>
+<p>
+</p>
+<p>
+失敗したエンジンが取り除かれるときに、元のエンジンの最初の
+駆動によって引かれた制御パスを辿るということに注意してください。
+それにもかかわらず、グローバル変数 <code class=scheme><span class=global>*engine-entrance*</span></code> および
+<code class=scheme><span class=global>*engine-escape*</span></code> に格納された継続を明示的に使用し、
+エンジン継続を実行するまえに常にそれらを新しく設定しているので、
+ジャンプはつねに現在実行中のコードにもどると仮定しています。</p>
+<p>
+<a name="node_idx_492"></a></p>
+<a name="node_sec_15.3"></a>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_15.3">15.3&nbsp;&nbsp;入れ子可能なエンジン</a></h2>
+<p></p>
+<p>
+上のコードを一般化して入れ子可能なエンジンにするには、
+入れ子で動作している、すべてのエンジンに正しい数の
+クロック数を割り当てる<em>クロック数管理</em>を組み込む
+必要があります。</p>
+<p>
+</p>
+<p>
+新しいエンジン(子エンジン)を走らせるには現時点でのエンジン
+(親エンジン)を停止させる必要があります。そして、適切な数の
+クロック数を子エンジンに割り振る必要があります。これは
+プログラムの教科書にはるようなクロック数の割り当てとは
+同じにはなりません。それは、親エンジンが残しているクロック数
+よりも多いクロック数を消費する子エンジンに対しては、
+<em>不平等</em>になるからです。子エンジンが完了したあと、
+親エンジンのクロック数を更新しなければなりません。子エンジンが
+時間内に終了したら、残りのクロック数は親に戻されます。
+親エンジンに余裕がなく、子エンジンにクロック数を渡せない場合には
+子エンジンは失敗し、親エンジンも失敗します。しかし、親エンジンが
+再スタートしたときには、約束のクロック数を持って子エンジンを
+再スタートすることを覚えていなければなりません。</p>
+<p>
+</p>
+<p>
+また、グローバル変数 <code class=scheme><span class=global>*engine-escape*</span></code> と <code class=scheme><span class=global>*engine-entrance*</span></code> 
+に <code class=scheme><span class=keyword>fluid-let</span></code> を使う必要があります。それは入れ子になったそれぞれの
+エンジンはそれぞれの番兵継続の対を持っていなければならないからです。
+エンジンが存在する場合(それが、成功エンジンであろうと、失敗エンジンで
+あろうと)、<code class=scheme><span class=keyword>fluid-let</span></code> は必ず、次の取り囲むエンジンの番兵が引き継げ
+るようにします。</p>
+<p>
+</p>
+<p>
+これらを全部組み合わせると、入れ子可能なエンジンのコードは
+以下のようになります。</p>
+<p>
+</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=variable>make-engine</span>
+  (<span class=keyword>lambda</span> (<span class=variable>th</span>)
+    (<span class=keyword>lambda</span> (<span class=variable>ticks</span> <span class=variable>s</span> <span class=variable>f</span>)
+      (<span class=keyword>let*</span> ((<span class=variable>parent-ticks</span> 
+              (<span class=variable>clock</span> <span class=keyword>'</span><span class=variable>set</span> <span class=global>*infinity*</span>))
+
+	     <span class=comment>;子エンジンは親エンジンの残りのクロック数を超える</span>
+	     <span class=comment>;クロック数をもつことはできない</span>
+             (<span class=variable>child-available-ticks</span> 
+              (<span class=variable>clock-min</span> <span class=variable>parent-ticks</span> <span class=variable>ticks</span>))
+
+	     <span class=comment>;子エンジンのクロック数カウントは親エンジンについても</span>
+	     <span class=comment>;カウントされる</span>
+             (<span class=variable>parent-ticks-left</span>
+              (<span class=variable>clock-minus</span> <span class=variable>parent-ticks</span> <span class=variable>child-available-ticks</span>))
+
+	     <span class=comment>;子エンジンへの割り当て予定のクロック数が親エンジンの</span>
+	     <span class=variable>残りクロック数より大きいときには、足りない数を記憶する</span>
+             (<span class=variable>child-ticks-left</span> 
+              (<span class=variable>clock-minus</span> <span class=variable>ticks</span> <span class=variable>child-available-ticks</span>))
+
+	     <span class=comment>;子エンジンが時間内で完了したら、以下をつかってクロックに</span>
+	     <span class=comment>;その残りのクロック数を格納する</span>
+             (<span class=variable>ticks-left</span> <span class=selfeval>0</span>)
+
+             (<span class=variable>engine-succeeded?</span> <span class=selfeval>#f</span>)
+
+             (<span class=variable>result</span>
+              (<span class=keyword>fluid-let</span> ((<span class=global>*engine-escape*</span> <span class=selfeval>#f</span>)
+                          (<span class=global>*engine-entrance*</span> <span class=selfeval>#f</span>))
+                (<span class=variable>call/cc</span>
+                 (<span class=keyword>lambda</span> (<span class=variable>k</span>)
+                   (<span class=keyword>set!</span> <span class=global>*engine-escape*</span> <span class=variable>k</span>)
+                   (<span class=keyword>let</span> ((<span class=variable>result</span>
+                          (<span class=variable>call/cc</span>
+                           (<span class=keyword>lambda</span> (<span class=variable>k</span>)
+                             (<span class=keyword>set!</span> <span class=global>*engine-entrance*</span> <span class=variable>k</span>)
+                             (<span class=variable>clock</span> <span class=keyword>'</span><span class=variable>set</span> <span class=variable>child-available-ticks</span>)
+
+                             (<span class=keyword>let</span> ((<span class=variable>v</span> (<span class=variable>th</span>)))
+
+                               (<span class=global>*engine-entrance*</span> <span class=variable>v</span>))))))
+                     (<span class=keyword>set!</span> <span class=variable>ticks-left</span>
+                       (<span class=keyword>let</span> ((<span class=variable>n</span> (<span class=variable>clock</span> <span class=keyword>'</span><span class=variable>set</span> <span class=global>*infinity*</span>)))
+                         (<span class=keyword>if</span> (<span class=variable>eqv?</span> <span class=variable>n</span> <span class=global>*infinity*</span>) <span class=selfeval>0</span> <span class=variable>n</span>)))
+                     (<span class=keyword>set!</span> <span class=variable>engine-succeeded?</span> <span class=selfeval>#t</span>)
+                     <span class=variable>result</span>))))))
+
+        <span class=comment>;親エンジンは子エンジンで必要なかったクロック数の返還要求ができる</span>
+        (<span class=keyword>set!</span> <span class=variable>parent-ticks-left</span>
+          (<span class=variable>clock-plus</span> <span class=variable>parent-ticks-left</span> <span class=variable>ticks-left</span>))
+
+        <span class=comment>;これは、子エンジンが残した本当のクロック数で</span>
+        <span class=comment>;これは short-changed の分も勘定にいれてある</span>
+        (<span class=keyword>set!</span> <span class=variable>ticks-left</span> 
+          (<span class=variable>clock-plus</span> <span class=variable>child-ticks-left</span> <span class=variable>ticks-left</span>))
+
+        <span class=comment>;のこりのクロック数をもって、親エンジンを再スタートする</span>
+        (<span class=variable>clock</span> <span class=keyword>'</span><span class=variable>set</span> <span class=variable>parent-ticks-left</span>)
+        <span class=comment>;この時点でのこりは、親エンジンの計算である</span>
+
+        (<span class=keyword>cond</span>
+         <span class=comment>;子エンジンが時間内に終了した -- 成功したお祝いをする</span>
+         (<span class=variable>engine-succeeded?</span> (<span class=variable>s</span> <span class=variable>result</span> <span class=variable>ticks-left</span>))
+
+         <span class=comment>;子エンジンが割り当て予定の時間を使い果し失敗した --</span>
+         <span class=comment>;失敗手続きを呼ぶ</span>
+         ((<span class=variable>=</span> <span class=variable>ticks-left</span> <span class=selfeval>0</span>)
+          (<span class=variable>f</span> (<span class=variable>make-engine</span> (<span class=keyword>lambda</span> () (<span class=variable>result</span> <span class=keyword>'</span><span class=variable>resume</span>)))))
+
+         <span class=comment>;親エンジンが十分な時間を持っていなかったために子エンジンが失敗</span>
+	 <span class=comment>;それで、親エンジンも失敗した</span>
+         <span class=comment>;そうなら、親エンジンが再起動したとき最初にすべきことは</span>
+	 <span class=comment>;子エンジンを同じクロック数で再起動すること</span>
+         (<span class=keyword>else</span>
+          ((<span class=variable>make-engine</span> (<span class=keyword>lambda</span> () (<span class=variable>result</span> <span class=keyword>'</span><span class=variable>resume</span>)))
+           <span class=variable>ticks-left</span> <span class=variable>s</span> <span class=variable>f</span>)))))))
+</pre><p></p>
+<p>
+</p>
+<p>
+算術演算子として <code class=scheme><span class=variable>min</span></code>、<code class=scheme><span class=variable>-</span></code>、<code class=scheme><span class=variable>+</span></code> の代りに qclock-min、
+<code class=scheme><span class=variable>clock-minus</span></code>、<code class=scheme><span class=variable>clock-plus</span></code> を使っていることに注意してください。
+これは、クロック数演算で使われている値には、整数以外に、
+<code class=scheme><span class=global>*infinity*</span></code> が含まれているからです。いくつかの Scheme 方言
+算術演算に <code class=scheme><span class=global>*infinity*</span></code> が含まれています<a name="node_call_footnote_Temp_15"></a><sup><small><a href="#node_footnote_Temp_15">1</a></small></sup>。その場合は
+通常の算術演算子を使うことができます。さもなければ、拡張演算子を
+定義することは簡単な練習問題としておきます。
+</p>
+<p>
+</p>
+<div class=footnoterule><hr></div><p></p>
+<div class=footnote><p><a name="node_footnote_Temp_15"></a><sup><small><a href="#node_call_footnote_Temp_15">1</a></small></sup> たとえば、Guile では
+<code class=scheme>(<span class=keyword>define</span> <span class=global>*infinity*</span> (<span class=variable>/</span> <span class=selfeval>1</span> <span class=selfeval>0</span>))</code> とすることができます</p>
+</div>
+<div class=smallskip></div>
+<p style="margin-top: 0pt; margin-bottom: 0pt">
+<div align=right class=navigation>[Go to <span><a href="t-y-scheme.html">first</a>, <a href="t-y-scheme-Z-H-16.html">previous</a></span><span>, <a href="t-y-scheme-Z-H-18.html">next</a></span> page<span>; &nbsp;&nbsp;</span><span><a href="t-y-scheme-Z-H-1.html#node_toc_start">contents</a></span><span><span>; &nbsp;&nbsp;</span><a href="t-y-scheme-Z-H-25.html#node_index_start">index</a></span>]</div>
+</p>
+<p></p>
+</div>
+</body>
+</html>

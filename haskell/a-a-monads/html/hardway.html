@@ -1,0 +1,432 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<!--<title lang="en">Combining monads the hard way</title>-->
+<title lang="ja">モナドの合成は難しい</title>
+</head>
+<body>
+<!--
+<table lang="en" width="100%">
+ <tr>
+  <td align="left" width="33%">Prev:
+   <a href="introIII.html">Part III - Introduction</a></td>
+  <td align="center" width="33%">TOC:
+   <a href="index.html">Contents</a></td>
+  <td align="right" width="33%">Next:
+   <a href="transformers.html">Monad transformers</a></td>
+ </tr>
+</table>
+-->
+<table lang="ja" width="100%">
+ <tr>
+  <td align="left" width="33%">Prev:
+   <a href="introIII.html">Part III - イントロダクション</a></td>
+  <td align="center" width="33%">TOC:
+   <a href="index.html">目次</a></td>
+  <td align="right" width="33%">Next:
+   <a href="transformers.html">モナド変換子</a></td>
+ </tr>
+</table>
+
+<!--<h1 lang="en">Combining monads the hard way</h1>-->
+<h1 lang="ja">モナドの合成は難しい</h1>
+<!--
+<ul lang="en">
+ <li><a href="#nested">Nested Monads</a></li>
+ <li><a href="#combined">Combined Monads</a></li>
+</ul>
+-->
+<ul lang="ja">
+ <li><a href="#nested">入れ子になったモナド</a></li>
+ <li><a href="#combined">合成されたモナド</a></li>
+</ul>
+  
+<hr align="center" size="1" width="80%">
+<!--
+<p lang="en">
+Before we investigate the use of monad transformers, we will see how monads
+can be combined without using transformers.  This is a useful excercise to
+develop insights into the issues that arise when combining monads and
+provides a baseline from which the advantages of the transformer approach
+can be measured.  We use the code from
+<a href="contmonad.html#example">example 18</a> (the Continuation monad) to
+illustrate these issues, so you may want to review it before continuing.
+</p>
+-->
+<p lang="ja">
+モナド変換子の使い方を詳細に調べる前に、モナド変換子を使わずにモナドを
+合成する方法について見ておきましょう。モナドを合成する際の問題について
+洞察を展開するのに、これは良い練習問題になります。そして、変換子を使う
+アプローチを計るベースラインを提供することになります。
+<a href="contmonad.html#example">example 18</a> (Continuation モナド)
+のコードを使って問題点を説明しますので、先へ行くまえに復習しましょう。
+</p>
+
+<a name="nested">
+<!--<h2 lang="en">Nested monads</h2>-->
+<h2 lang="ja">入れ子になったモナド</h2>
+</a>
+<!--
+<p lang="en">
+Some computations have a simple enough structure that the monadic computations
+can be nested, avoiding the need for a combined monad altogether.
+In Haskell, all computations occur in the IO monad at the top level, so
+the monad examples we have seen so far all actually use the technique of
+nested monadic computations.  To do this, the computations 
+perform all of their input at the beginning &mdash; usually by reading
+arguments from the command line &mdash; then pass the values
+on to the monadic computations to produce results, and finally perform their
+output at the end.  This structure avoids the issues of combining monads but
+makes the examples seem contrived at times.
+</p>
+-->
+<p lang="ja">
+いくつかの計算は単純な構造なので、モナドを合成する必要を回避
+しつつ、そのモナド計算を入れ子にすることができます。
+Haskell においては、すべての計算は、トップレベルの IO モナド中で
+起こります。それゆえ、これまで見てきたモナドの例はすべて、実際には
+入れ子になったモナド計算の技法が使われているわけです。これを行う
+ために、計算は、開始部分において、そのすべての入力を行うことになります。
+&mdash; 通常コマンドラインからの引数を読むことで行われます &mdash; 
+そうしておいて、その値をモナド計算に渡し、結果を得ます。最後には、
+計算の終端で出力を実行します。この構造は、モナド合成における問題は
+回避していますが、これのおかげで例がときおり不自然なものに見えます。
+</p>
+<!--
+<p lang="en">
+The code introduced in example 18 followed the
+nesting pattern: reading a number from the command line in the IO monad,
+passing that number to a computation in the Continuation monad to produce
+a string, and then writing the string back in the IO monad.  The computations
+in the IO monad aren't restricted to reading from the command line and
+writing strings; they can be arbitrarily complex.  Likewise, the
+inner computation can be arbitrarily complex as well.  As long as the
+inner computation does not depend on the functionality of the outer monad,
+it can be safely nested within the
+outer monad, as illustrated in this variation on example 18 which reads
+the value from stdin instead of using a command line argument:
+</p>
+-->
+<p lang="ja">
+例 18 で紹介されたコードはこの入れ子パターンでした。IO モナドのコマンド
+ラインから数字を読み、その数を Continuation モナド中の計算に渡して、文字
+列を生成し、その後、その文字列を再び IO モナドに書き出しています。この 
+IO モナド中の計算は、コマンドラインからの読み込みや文字列の書き出しに限
+られているわけではなく、どこまでも複雑になりえます。さらに、内側の計算は
+どこまでも複雑になりえます。内側の計算が外側の機能に依存しないかぎりは
+それは外側のモナドの内部で安全に入れ子にすることができます。これは、
+その値をコマンドライン引数のかわりに、標準入力からその値を読みこむという
+例 18 のこのバリエーションで説明されています。
+</p>
+
+<a name="example1"></a>
+
+<!--
+<table lang="en" bgcolor="#bbaa55" width="100%">
+<tr bgcolor="#aabb55">
+<th align="left">Code available in <a href="../examples/example19.hs">example19.hs</a></th>
+</tr>
+<tr><td><pre>
+fun :: IO String
+fun = do n <- (readLn::IO Int)         -- this is an IO monad block
+         return $ (`runCont` id) $ do  -- this is a Cont monad block
+           str <- callCC $ \exit1 -> do
+             when (n < 10) (exit1 (show n))
+             let ns = map digitToInt (show (n `div` 2))
+             n' <- callCC $ \exit2 -> do
+               when ((length ns) < 3) (exit2 (length ns))
+               when ((length ns) < 5) (exit2 n)
+               when ((length ns) < 7) $ do let ns' = map intToDigit (reverse ns)
+                                           exit1 (dropWhile (=='0') ns')
+               return $ sum ns
+             return $ "(ns = " ++ (show ns) ++ ") " ++ (show n')
+           return $ "Answer: " ++ str
+</pre></td></tr></table>
+-->
+<table lang="ja" bgcolor="#bbaa55" width="100%">
+<tr bgcolor="#aabb55">
+<th align="left"><a href="../examples/example19.hs">example19.hs</a>
+で使えるコード</th>
+</tr>
+<tr><td><pre>
+fun :: IO String
+fun = do n <- (readLn::IO Int)         -- これは IO モナドブロック
+         return $ (`runCont` id) $ do  -- これは Cont モナドブロック
+           str <- callCC $ \exit1 -> do
+             when (n < 10) (exit1 (show n))
+             let ns = map digitToInt (show (n `div` 2))
+             n' <- callCC $ \exit2 -> do
+               when ((length ns) < 3) (exit2 (length ns))
+               when ((length ns) < 5) (exit2 n)
+               when ((length ns) < 7) $ do let ns' = map intToDigit (reverse ns)
+                                           exit1 (dropWhile (=='0') ns')
+               return $ sum ns
+             return $ "(ns = " ++ (show ns) ++ ") " ++ (show n')
+           return $ "Answer: " ++ str
+</pre></td></tr></table>
+
+<a name="combined">
+<!--<h2 lang="en">Combined Monads</h2>-->
+<h2 lang="ja">合成されたモナド</h2>
+</a>
+<!--
+<p lang="en">
+What about computations with more complicated structure?  If the nesting
+pattern cannot be used, we need a way to combine the attributes of two
+or more monads in a single computation.  This is accomplished by doing
+computations within a monad in which the values are themselves monadic
+values in another monad.  For example, we might perform computations
+in the Continuation monad of type <code>Cont (IO String) a</code>
+if we need to perform I/O within the computation in the Continuation monad.
+We could use a monad of type <code>State (Either Err a) a</code> to
+combine the features of the State and Error monads in a single computation. 
+</p>
+-->
+<p lang="ja">
+もっと複雑な構造の計算についてはどうでしょう。もし入れ子になったパターン
+が使えないとすると、一つの計算のなかで2つ以上のモナドの属性を合成する
+方法が必要です。そうするには、その値自身がもうひとつのモナド中のモナド値
+であるようなモナド内の計算を実行します。たとえば、もし、Continuation
+モナドの計算内部で入出力を実行する必要がある場合、
+型 <code>Cont (IO String) a</code> の Continuation モナド内の計算を実行
+することになるでしょう。型 <code>State (Either Err a) a</code> のモナド
+を使って、単一の計算中で State モナドと Error モナドの機能を合成すること
+ができます。
+</p>
+
+<a name="example2"></a>
+
+<!--
+<p lang="en">
+Consider a slight modification to our example in which we perform the
+same I/O at the beginning, but we may require additional input in the
+middle of the computation in the Continuation monad.  In this case, we
+will allow the user to specify part of the output value when the input
+value is within a certain range.  Because the I/O depends on part of
+the computation in the Continuation monad and part of the computation
+in the Continuation monad depends on the result of the I/O, we
+cannot use the nested monad pattern.
+</p>
+-->
+<p lang="ja">
+始めの部分で同じ入出力を実行する例をすこし変更することを考えましょう。
+ただし、Continuation モナドの計算の最中に追加の入力が必要になるでしょう。
+この場合、入力値がある特定の範囲にあるときに出力部分をユーザに指定させる
+ことができるようにします。入出力は Continuation モナドの計算部分に依存
+し、Continuation モナドの計算はその入出力の結果に依存しますので、
+入れ子になったモナドのパターンが使えません。
+</p>
+<!--
+<p lang="en">
+Instead, we make the computation
+in the Continuation monad use values from the IO monad.  What used to
+be <code>Int</code> and <code>String</code> values are now of type
+<code>IO Int</code> and <code>IO String</code>.  We can't extract values
+from the IO monad &mdash; it's a one-way monad &mdash; so we may need
+to nest little do-blocks of the IO monad within the Continuation monad
+to manipulate the values.  We use a helper function <code>toIO</code>
+to make it clearer when we are creating values in the IO monad nested
+within the Continuation monad.
+</p>
+-->
+<p lang="ja">
+その代りに Continuation モナドの計算に IO モナドからの値を使わせます。
+従来、<code>Int</code> および <code>String</code> の値であったものが
+今度は、<code>IO Int</code> および <code>IO String</code> となります。
+IO モナドからは &mdash; 一方向モナドなので &mdash; 直接、値をとりだせ
+ませんので、Continuation モナド内部で IO モナドの do ブロックをネスト
+させて、値を操作する必要はほとんどありません。補助関数 <code>toIO</code>
+をつかって、Continuation モナド内部で入れ子になった IO モナドの値を生成
+をハッキリさせます。
+</p>
+<!--
+<table lang="en" bgcolor="#bbaa55" width="100%">
+<tr bgcolor="#aabb55">
+<th align="left">Code available in <a href="../examples/example20.hs">example20.hs</a></th>
+</tr>
+<tr><td><pre>
+toIO :: a -> IO a
+toIO x = return x
+
+fun :: IO String
+fun = do n <- (readLn::IO Int)         -- this is an IO monad block
+         convert n
+	 
+convert :: Int -> IO String
+convert n = (`runCont` id) $ do        -- this is a Cont monad block
+              str <- callCC $ \exit1 -> do    -- str has type IO String
+                when (n < 10) (exit1 $ toIO (show n))
+                let ns = map digitToInt (show (n `div` 2))
+                n' <- callCC $ \exit2 -> do   -- n' has type IO Int
+                  when ((length ns) < 3) (exit2 (toIO (length ns)))
+                  when ((length ns) < 5) (exit2 $ do putStrLn "Enter a number:"
+                                                     x <- (readLn::IO Int)
+                                                     return x)
+                  when ((length ns) < 7) $ do let ns' = map intToDigit (reverse ns)
+                                              exit1 $ toIO (dropWhile (=='0') ns')
+                  return (toIO (sum ns))
+                return $ do num <- n'  -- this is an IO monad block
+                            return $ "(ns = " ++ (show ns) ++ ") " ++ (show num)
+              return $ do s <- str -- this is an IO monad block
+                          return $ "Answer: " ++ s
+</pre></td></tr></table>
+-->
+<table lang="ja" bgcolor="#bbaa55" width="100%">
+<tr bgcolor="#aabb55">
+<th align="left"><a href="../examples/example20.hs">example20.hs</a>
+で使えるコード</th>
+</tr>
+<tr><td><pre>
+toIO :: a -> IO a
+toIO x = return x
+
+fun :: IO String
+fun = do n <- (readLn::IO Int)         -- これは IO モナドブロック
+         convert n
+	 
+convert :: Int -> IO String
+convert n = (`runCont` id) $ do        -- これは Cont モナドブロック
+              str <- callCC $ \exit1 -> do    -- str の型は IO String
+                when (n < 10) (exit1 $ toIO (show n))
+                let ns = map digitToInt (show (n `div` 2))
+                n' <- callCC $ \exit2 -> do   -- n' has type IO Int
+                  when ((length ns) < 3) (exit2 (toIO (length ns)))
+                  when ((length ns) < 5) (exit2 $ do putStrLn "Enter a number:"
+                                                     x <- (readLn::IO Int)
+                                                     return x)
+                  when ((length ns) < 7) $ do let ns' = map intToDigit (reverse ns)
+                                              exit1 $ toIO (dropWhile (=='0') ns')
+                  return (toIO (sum ns))
+                return $ do num <- n'  -- これは IO モナドブロック
+                            return $ "(ns = " ++ (show ns) ++ ") " ++ (show num)
+              return $ do s <- str -- これは IO モナドブロック
+                          return $ "Answer: " ++ s
+</pre></td></tr></table>
+<!--
+<p lang="en">
+Even this trivial example has gotten confusing and ugly when we tried to
+combine different monads in the same computation.  It works, but it isn't pretty.
+Comparing the code side-by-side shows the degree to which the manual monad
+combination strategy pollutes the code. 
+</p>
+-->
+<p lang="ja">
+これほで自明な例でさえも、異るモナドを同じ計算のなかで合成しようとすると
+わかりにくく醜いことになります。たしかに動きはしますが、美しくありません。
+このコードをひとつひとつ比べると、手でモナドを合成するようなやり方では
+コードがどれほど汚くなるかが分ります。
+</p>
+
+<a name="comparison"></a>
+
+<!--
+<table lang="en" bgcolor="#bbaa55" width="100%" border="1">
+<tr bgcolor="#aabb55">
+<th align="center">Nested monads from example 19</th>
+<th align="center">Manually combined monads from example 20</th>
+</tr>
+<tr><td><font size="-1"><pre>
+fun = do n <- (readLn::IO Int)
+         return $ (`runCont` id) $ do
+           str <- callCC $ \exit1 -> do
+             when (n < 10) (exit1 (show n))
+             let ns = map digitToInt (show (n `div` 2))
+             n' <- callCC $ \exit2 -> do
+               when ((length ns) < 3) (exit2 (length ns))
+               when ((length ns) < 5) (exit2 <font color="green"><b>n</b></font>)
+               when ((length ns) < 7) $ do
+                 let ns' = map intToDigit (reverse ns)
+                 exit1 (dropWhile (=='0') ns')
+               return $ sum ns
+             return $ "(ns = " ++ (show ns) ++ ") " ++ (show n')
+           return $ "Answer: " ++ str
+</pre></font></td>
+<td><font size="-1"><pre>
+convert n = (`runCont` id) $ do
+              str <- callCC $ \exit1 -> do
+                when (n < 10) (exit1 $ <font color="red"><b>toIO</b></font> (show n))
+                let ns = map digitToInt (show (n `div` 2))
+                n' <- callCC $ \exit2 -> do
+                  when ((length ns) < 3) (exit2 (<font color="red"><b>toIO</b></font> (length ns)))
+                  when ((length ns) < 5) (exit2 $ <font color="red"><b>do
+                    putStrLn "Enter a number:"
+                    x <- (readLn::IO Int)
+                    return x</b></font>)
+                  when ((length ns) < 7) $ do
+                    let ns' = map intToDigit (reverse ns)
+                    exit1 $ <font color="red"><b>toIO</b></font> (dropWhile (=='0') ns')
+                  return (<font color="red"><b>toIO</b></font> (sum ns))
+                return $ <font color="red"><b>do num <- n'
+                            return $</b></font> "(ns = " ++ (show ns) ++ ") " ++ (show num)
+              return $ <font color="red"><b>do s <- str
+                          return $</b></font> "Answer: " ++ s
+</font></pre></td></tr></table>
+-->
+<table lang="ja" bgcolor="#bbaa55" width="100%" border="1">
+<tr bgcolor="#aabb55">
+<th align="center">例 19 からとった入れ子になったモナド</th>
+<th align="center">例 20 からとった手で合成したモナド</th>
+</tr>
+<tr><td><font size="-1"><pre>
+fun = do n <- (readLn::IO Int)
+         return $ (`runCont` id) $ do
+           str <- callCC $ \exit1 -> do
+             when (n < 10) (exit1 (show n))
+             let ns = map digitToInt (show (n `div` 2))
+             n' <- callCC $ \exit2 -> do
+               when ((length ns) < 3) (exit2 (length ns))
+               when ((length ns) < 5) (exit2 <font color="green"><b>n</b></font>)
+               when ((length ns) < 7) $ do
+                 let ns' = map intToDigit (reverse ns)
+                 exit1 (dropWhile (=='0') ns')
+               return $ sum ns
+             return $ "(ns = " ++ (show ns) ++ ") " ++ (show n')
+           return $ "Answer: " ++ str
+</pre></font></td>
+<td><font size="-1"><pre>
+convert n = (`runCont` id) $ do
+              str <- callCC $ \exit1 -> do
+                when (n < 10) (exit1 $ <font color="red"><b>toIO</b></font> (show n))
+                let ns = map digitToInt (show (n `div` 2))
+                n' <- callCC $ \exit2 -> do
+                  when ((length ns) < 3) (exit2 (<font color="red"><b>toIO</b></font> (length ns)))
+                  when ((length ns) < 5) (exit2 $ <font color="red"><b>do
+                    putStrLn "Enter a number:"
+                    x <- (readLn::IO Int)
+                    return x</b></font>)
+                  when ((length ns) < 7) $ do
+                    let ns' = map intToDigit (reverse ns)
+                    exit1 $ <font color="red"><b>toIO</b></font> (dropWhile (=='0') ns')
+                  return (<font color="red"><b>toIO</b></font> (sum ns))
+                return $ <font color="red"><b>do num <- n'
+                            return $</b></font> "(ns = " ++ (show ns) ++ ") " ++ (show num)
+              return $ <font color="red"><b>do s <- str
+                          return $</b></font> "Answer: " ++ s
+</font></pre></td></tr></table>
+
+<hr align="center" size="1" width="80%">
+
+<!--
+<table lang="en" width="100%">
+ <tr>
+  <td align="left" width="33%">Prev:
+   <a href="introIII.html">Part III - Introduction</a></td>
+  <td align="center" width="33%">TOC:
+   <a href="index.html">Contents</a></td>
+  <td align="right" width="33%">Next:
+   <a href="transformers.html">Monad transformers</a></td>
+ </tr>
+</table>
+-->
+<table lang="ja" width="100%">
+ <tr>
+  <td align="left" width="33%">Prev:
+   <a href="introIII.html">Part III - イントロダクション</a></td>
+  <td align="center" width="33%">TOC:
+   <a href="index.html">目次</a></td>
+  <td align="right" width="33%">Next:
+   <a href="transformers.html">モナド変換子</a></td>
+ </tr>
+</table>
+</body>
+</html>

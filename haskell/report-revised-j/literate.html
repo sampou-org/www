@@ -1,0 +1,175 @@
+<html>
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
+  <!-- <title>The Haskell 98 Report: Literate Comments</title> -->
+  <title>The Haskell 98 Report: 文藝的コメント</title>
+ </head>
+
+ <body bgcolor="#ffffff">
+  <p><i>The Haskell 98 Report</i><br />
+   <a href="index.html">top</a> | <a href="syntax-iso.html">back</a> | <a
+   href="derived.html">next</a> | <a href="index98.html">contents</a> | <a
+   href="prelude-index.html">function index</a> <br />
+  </p>
+  <hr />
+  <p><a name="literate"></a><a name="sect9.6"></a></p>
+  <!-- <h3>9.6<tt>&nbsp;&nbsp;</tt>Literate comments</h3> -->
+  <h3>9.6<tt>&nbsp;&nbsp;</tt>文藝的コメント</h3>
+  <!--
+  <p> The "literate comment" convention, first developed by Richard Bird
+   and Philip Wadler for Orwell, and inspired in turn by Donald Knuth's
+   "literate programming", is an alternative style for encoding Haskell
+   source code. The literate style encourages comments by making them the
+   default. A line in which "<tt>&gt;</tt>" is the first character is
+   treated as part of the program; all other lines are comment.</p>
+  -->
+  <p> 「文藝的コメント」という仕様は，最初 Richard Bird と Philip Wadler
+   が Orwell のために開発した．これもやはり Donald Knuth の「文藝的プロ
+   グラミング」に触発されたものであり，Haskell のソースコードの別の書き
+   方である．「文藝スタイル」はコメントをデフォルトにすることでこれを強
+   調するものだ．行頭の文字が "<tt>&gt;</tt>" である行はプログラムの部分
+   として処理され，それ以外の行はすべてコメントとなる．</p>
+  <!--
+  <p> The program text is recovered by taking only those lines beginning
+   with "<tt>&gt;</tt>", and replacing the leading "<tt>&gt;</tt>" with a
+   space. Layout and comments apply exactly as described in Appendix <a
+   href="syntax-iso.html#syntax">9</a> in the resulting text.</p>
+  -->
+  <p> プログラム本体は "<tt>&gt;</tt>" ではじまる行のみから復元され，行
+   頭の "<tt>&gt;</tt>" は空白に置き換る．結果のテキストに
+   <a href="syntax-iso.html#syntax">9</a> で述べたレイアウトとコメントの
+   ルールが適用される．</p>
+  <!--
+  <p> To capture some cases where one omits an "<tt>&gt;</tt>" by mistake,
+   it is an error for a program line to appear adjacent to a non-blank
+   comment line, where a line is taken as blank if it consists only of
+   whitespace.</p>
+  -->
+  <p> あやまって，"<tt>&gt;</tt>" を付けわすれたのかどうかを捕捉するため
+   に，空行ではないコメントラインに隣接するプログラム行はエラーとなる．
+   この場合，白空白のみからなる行は空行と見なす．</p>
+  <!--
+  <p> By convention, the style of comment is indicated by the file
+   extension, with "<tt>.hs</tt>" indicating a usual Haskell file and
+   "<tt>.lhs</tt>" indicating a literate Haskell file. Using this style, a
+   simple factorial program would be: <tt><br />
+   <br />
+   &nbsp;&nbsp;&nbsp;This&nbsp;literate&nbsp;program&nbsp;prompts&nbsp;the&nbsp;user&nbsp;for&nbsp;a&nbsp;number<br />
+   &nbsp;&nbsp;&nbsp;and&nbsp;prints&nbsp;the&nbsp;factorial&nbsp;of&nbsp;that&nbsp;number:<br />
+   <br />
+   &gt;&nbsp;main&nbsp;::&nbsp;IO&nbsp;()<br />
+   <br />
+   &gt;&nbsp;main&nbsp;=&nbsp;do&nbsp;putStr&nbsp;"Enter&nbsp;a&nbsp;number:&nbsp;"<br />
+   &gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l&nbsp;&lt;-&nbsp;readLine<br />
+   &gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;putStr&nbsp;"n!=&nbsp;"<br />
+   &gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;(fact&nbsp;(read&nbsp;l))<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+   &nbsp;&nbsp;This&nbsp;is&nbsp;the&nbsp;factorial&nbsp;function.<br />
+   <br />
+   &gt;&nbsp;fact&nbsp;::&nbsp;Integer&nbsp;-&gt;&nbsp;Integer<br />
+   &gt;&nbsp;fact&nbsp;0&nbsp;=&nbsp;1<br />
+   &gt;&nbsp;fact&nbsp;n&nbsp;=&nbsp;n&nbsp;*&nbsp;fact&nbsp;(n-1)<br />
+   <br />
+   </tt></p>
+  -->
+  <p> 仕様としてはこのコメントのスタイルであることはファイルの拡張子で示
+   す．拡張子が "<tt>.hs</tt>" である場合には通常の Haskell ファイルであ
+   り，"<tt>.lhs</tt>" である場合には文藝的 Haskell ファイルである．この
+   スタイルを用いると単純な階乗を計算するプログラムは以下のようになる．
+   <tt><br />
+   <br />
+   &nbsp;&nbsp;&nbsp;This&nbsp;literate&nbsp;program&nbsp;prompts&nbsp;the&nbsp;user&nbsp;for&nbsp;a&nbsp;number<br />
+   &nbsp;&nbsp;&nbsp;and&nbsp;prints&nbsp;the&nbsp;factorial&nbsp;of&nbsp;that&nbsp;number:<br />
+   <br />
+   &gt;&nbsp;main&nbsp;::&nbsp;IO&nbsp;()<br />
+   <br />
+   &gt;&nbsp;main&nbsp;=&nbsp;do&nbsp;putStr&nbsp;"Enter&nbsp;a&nbsp;number:&nbsp;"<br />
+   &gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l&nbsp;&lt;-&nbsp;readLine<br />
+   &gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;putStr&nbsp;"n!=&nbsp;"<br />
+   &gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;(fact&nbsp;(read&nbsp;l))<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+   &nbsp;&nbsp;This&nbsp;is&nbsp;the&nbsp;factorial&nbsp;function.<br />
+   <br />
+   &gt;&nbsp;fact&nbsp;::&nbsp;Integer&nbsp;-&gt;&nbsp;Integer<br />
+   &gt;&nbsp;fact&nbsp;0&nbsp;=&nbsp;1<br />
+   &gt;&nbsp;fact&nbsp;n&nbsp;=&nbsp;n&nbsp;*&nbsp;fact&nbsp;(n-1)<br />
+   <br />
+   </tt></p>
+  <!--
+  <p> An alternative style of literate programming is particularly suitable
+   for use with the LaTeX text processing system. In this convention, only
+   those parts of the literate program that are entirely enclosed between
+   <tt>\begin{code}</tt>...<tt>\end{code}</tt> delimiters are treated as
+   program text; all other lines are comment. More precisely:</p>
+  -->
+  <p>文藝的プログラミングのもう1つのスタイルは，LaTeX組版システムを使う
+   のに特に適している．この仕様では，<tt>\begin{code}</tt> と 
+   <tt>\end{code}</tt> という区切り子に囲まれた部分だけをプログラム本文
+   として扱い，それ以外はコメントとなる．より正確には，</p>
+  <!--
+  <ul>
+   <li>Program code begins on the first line following a line that begins
+    <tt>\begin{code}</tt>.</li>
+
+   <li>Program code ends just before a subsequent line that begins
+    <tt>\end{code}</tt> (ignoring string literals, of course).</li>
+  </ul>
+  -->
+  <ul>
+   <li>プログラムコードは <tt>\begin{code}</tt> で始まる行の直後の行から
+	開始される．</li>
+   <li>プログラムコードは <tt>\end{code}</tt> (もちろん文字列リテラルな
+	ら無視する)で始まる行の直前の行で終了する．</li>
+  </ul>
+  <!--
+  <p>It is not necessary to insert additional blank lines before or after
+   these delimiters, though it may be stylistically desirable. For example,
+   <tt><br />
+   <br />
+   \documentstyle{article}<br />
+   <br />
+   \begin{document}<br />
+   <br />
+   \section{Introduction}<br />
+   <br />
+   This&nbsp;is&nbsp;a&nbsp;trivial&nbsp;program&nbsp;that&nbsp;prints&nbsp;the&nbsp;first&nbsp;20&nbsp;factorials.<br />
+   <br />
+   \begin{code}<br />
+   main&nbsp;::&nbsp;IO&nbsp;()<br />
+   main&nbsp;=&nbsp;&nbsp;print&nbsp;[&nbsp;(n,&nbsp;product&nbsp;[1..n])&nbsp;|&nbsp;n&nbsp;&lt;-&nbsp;[1..20]]<br />
+   \end{code}<br />
+   <br />
+   \end{document}<br />
+   <br />
+   </tt>This style uses the same file extension. It is not advisable to mix
+   these two styles in the same file.</p>
+  -->
+   <p>これらの区切り子の前後に空白行を挿入する必要はない．それでもスタイ
+   ルとしては望ましいものである．例としては次のようになる．
+   <tt><br />
+   <br />
+   \documentstyle{article}<br />
+   <br />
+   \begin{document}<br />
+   <br />
+   \section{Introduction}<br />
+   <br />
+   This&nbsp;is&nbsp;a&nbsp;trivial&nbsp;program&nbsp;that&nbsp;prints&nbsp;the&nbsp;first&nbsp;20&nbsp;factorials.<br />
+   <br />
+   \begin{code}<br />
+   main&nbsp;::&nbsp;IO&nbsp;()<br />
+   main&nbsp;=&nbsp;&nbsp;print&nbsp;[&nbsp;(n,&nbsp;product&nbsp;[1..n])&nbsp;|&nbsp;n&nbsp;&lt;-&nbsp;[1..20]]<br />
+   \end{code}<br />
+   <br />
+   \end{document}<br />
+   <br />
+   </tt>このスタイルでも同じファイル拡張子を使う．2つのスタイルを1つのファ
+   イルの中で混在させることは推奨しない．</p>
+  <hr />
+  <p><i>The Haskell 98 Report</i><br />
+   <a href="index.html">top</a> | <a href="syntax-iso.html">back</a> | <a
+   href="derived.html">next</a> | <a href="index98.html">contents</a> | <a
+   href="prelude-index.html">function index</a> <br />
+   <font size="2">December 2002</font></p>
+ </body>
+</html>

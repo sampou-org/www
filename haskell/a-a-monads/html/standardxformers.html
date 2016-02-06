@@ -1,0 +1,244 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<!--<title lang="en">Standard monad transformers</title>-->
+<title lang="ja">標準モナド変換子</title>
+</head>
+<body>
+<!--
+<table lang="en" width="100%">
+ <tr>
+  <td align="left" width="33%">Prev:
+   <a href="transformers.html">Monad transformers</a></td>
+  <td align="center" width="33%">TOC:
+   <a href="index.html">Contents</a></td>
+  <td align="right" width="33%">Next:
+   <a href="xformeranatomy.html">Anatomy of a monad transformer</a></td>
+ </tr>
+</table>	
+-->
+<table lang="ja" width="100%">
+ <tr>
+  <td align="left" width="33%">Prev:
+   <a href="transformers.html">モナド変換子</a></td>
+  <td align="center" width="33%">TOC:
+   <a href="index.html">目次</a></td>
+  <td align="right" width="33%">Next:
+   <a href="xformeranatomy.html">モナド変換子の解剖</a></td>
+ </tr>
+</table>	
+
+<!--<h1 lang="en">Standard monad transformers</h1>-->
+<h1 lang="ja">標準モナド変換子</h1>
+<!--
+<ul lang="en">
+  <li><a href="#classes">The MonadTrans and MonadIO classes</a></li>
+  <li><a href="#library">Transformer versions of standard monads</a></li>
+</ul>
+-->
+<ul lang="ja">
+  <li><a href="#classes">MonadTrans クラスおよび MonadIO クラス</a></li>
+  <li><a href="#library">標準モナドの変換子バージョン</a></li>
+</ul>
+  
+<hr align="center" size="1" width="80%">
+<!--
+<p lang="en">
+Haskell's base libraries provide support for monad transformers in the form of
+classes which represent monad transformers and special transformer versions of
+standard monads.
+</p>
+-->
+<p lang="ja">
+Haskell の base ライブラリは、モナド変換子を表わすクラスと標準モナドの
+特定の変換子版を表わすクラスという形式でモナド変換子をサポートしています。
+</p>
+
+<a name="classes">
+<!--<h2 lang="en">The MonadTrans and MonadIO classes</h2>-->
+<h2 lang="ja">MonadTrans クラスおよび MonadIO クラス</h2>
+</a>
+<!--
+<p lang="en">
+The <code>MonadTrans</code> class is defined in
+<a href="http://www.haskell.org/ghc/docs/latest/html/base/Control.Monad.Trans.html">Control.Monad.Trans</a>
+and provides the single function <code>lift</code>.  The <code>lift</code> function
+lifts a monadic computation in the inner monad into the combined monad. 
+</p>
+-->
+<p lang="ja">
+<code>MonadTrans</code> クラスは
+<a href="http://www.haskell.org/ghc/docs/latest/html/base/Control.Monad.Trans.html">Control.Monad.Trans</a> 
+で定義されており、関数 <code>lift</code> のみを提供しています。
+<code>lift</code> 関数は、内部モナドにあるモナド計算を合成モナドへ
+もちあげます。
+</p>
+
+<table bgcolor="#bbaa55" width="100%">
+<tr><td><pre>
+class MonadTrans t where
+    lift :: (Monad m) => m a -> t m a
+</pre></tr></td></table>
+<!--
+<p lang="en">
+Monads which provide optimized support for lifting IO operations
+are defined as members of the <code>MonadIO</code> class, which defines
+the <code>liftIO</code> function.
+</p>
+-->
+<p lang="ja">
+入出力演算をもちあげるのに最適化をサポートするモナドは
+<code>MonadIO</code> クラスのメンバとして定義されており、
+<code>liftIO</code> 関数を定義しています。
+</p>
+
+<table bgcolor="#bbaa55" width="100%">
+<tr><td><pre>
+class (Monad m) => MonadIO m where
+    liftIO :: IO a -> m a
+</pre></tr></td></table>
+
+<a name="library">
+<!--<h2 lang="en">Transformer versions of standard monads</h2>-->
+<h2 lang="ja">標準モナドの変換子バージョン</h2>
+</a>
+<!--
+<p lang="en">
+The standard monads of the monad template library all have transformer versions
+which are defined consistently with their non-transformer versions.
+However, it is not the case the all monad transformers apply the same
+transformation.  We have seen that the <code>ContT</code> transformer
+turns continuations of the form <code>(a->r)->r</code> into continuations
+of the form <code>(a->m&nbsp;r)->m&nbsp;r</code>.  The <code>StateT</code>
+transformer is different.  It turns state transformer functions of
+the form <code>s->(a,s)</code> into state transformer functions of the
+form <code>s->m&nbsp;(a,s)</code>.  In general, there is no magic formula
+to create a transformer version of a monad &mdash; the form of each transformer
+depends on what makes sense in the context of its non-transformer type.
+</p>
+-->
+<p lang="ja">
+モナドテンプレートライブラリの標準モナドは、すべて、その非変換子
+バージョンと一貫性のある方法で定義された変換子バージョンを持ちます。
+しかしながら、すべてのモナド変換子が同じ変換に適用できるというのは
+真実ではありません。すでに、<code>ContT</code> 変換子が
+<code>(a->r)->r</code> という形式の継続を
+<code>(a->m&nbsp;r)->m&nbsp;r</code> という形式の継続に変換されるのを
+見ました。<code>StateT</code> 変換子はそれとは違います。
+それは、<code>s->(a,s)</code> という形式の状態変換関数を
+<code>s->m&nbsp;(a,s)</code> という形式の状態変換関数に変換します。
+一般的には、あるモナドの変換子バージョンを生成するための万能の公式という
+ものは存在しません。&mdash; おのおのの変換子の形式はその非変換子版の
+型のコンテキストにおいて筋の通るのは何かということに依存しています。
+</p>
+<!--
+<table lang="en" align="center" border="1" cellpadding="3">
+ <tr bgcolor="#cc9999">
+  <th>Standard Monad</th>
+  <th>Transformer Version</th>
+  <th>Original Type</th>
+  <th>Combined Type</th></tr>
+ <tr>
+  <td><a href="errormonad.html">Error</a></td>
+  <td><a href="http://www.haskell.org/ghc/docs/latest/html/base/Control.Monad.Error.html#ErrorT">ErrorT</a></td>
+  <td><code>Either e a</code></td>
+  <td><code>m (Either e a)</code></td></tr>
+ <tr><td><a href="statemonad.html">State</a></td>
+  <td><a href="http://www.haskell.org/ghc/docs/latest/html/base/Control.Monad.State.html#StateT">StateT</a></td>
+  <td><code>s -> (a,s)</code></td>
+  <td><code>s -> m (a,s)</code></td></tr>
+ <tr><td><a href="readermonad.html">Reader</a></td>
+  <td><a href="http://www.haskell.org/ghc/docs/latest/html/base/Control.Monad.Reader.html#ReaderT">ReaderT</a></td>
+  <td><code>r -> a</code></td>
+  <td><code>r -> m a</code></td></tr>
+ <tr><td><a href="writermonad.html">Writer</a></td>
+  <td><a href="http://www.haskell.org/ghc/docs/latest/html/base/Control.Monad.Writer.html#WriterT">WriterT</a></td>
+  <td><code>(a,w)</code></td>
+  <td><code>m (a,w)</code></td></tr>
+ <tr><td><a href="contmonad.html">Cont</a></td>
+  <td><a href="http://www.haskell.org/ghc/docs/latest/html/base/Control.Monad.Cont.html#ContT">ContT</a></td>
+  <td><code>(a -> r) -> r</code></td>
+  <td><code>(a -> m r) -> m r</code></td></tr>       
+</table>
+-->
+<table lang="ja" align="center" border="1" cellpadding="3">
+ <tr bgcolor="#cc9999">
+  <th>標準モナド</th>
+  <th>変換子バージョン</th>
+  <th>元の型</th>
+  <th>合成された型</th></tr>
+ <tr>
+  <td><a href="errormonad.html">Error</a></td>
+  <td><a href="http://www.haskell.org/ghc/docs/latest/html/base/Control.Monad.Error.html#ErrorT">ErrorT</a></td>
+  <td><code>Either e a</code></td>
+  <td><code>m (Either e a)</code></td></tr>
+ <tr><td><a href="statemonad.html">State</a></td>
+  <td><a href="http://www.haskell.org/ghc/docs/latest/html/base/Control.Monad.State.html#StateT">StateT</a></td>
+  <td><code>s -> (a,s)</code></td>
+  <td><code>s -> m (a,s)</code></td></tr>
+ <tr><td><a href="readermonad.html">Reader</a></td>
+  <td><a href="http://www.haskell.org/ghc/docs/latest/html/base/Control.Monad.Reader.html#ReaderT">ReaderT</a></td>
+  <td><code>r -> a</code></td>
+  <td><code>r -> m a</code></td></tr>
+ <tr><td><a href="writermonad.html">Writer</a></td>
+  <td><a href="http://www.haskell.org/ghc/docs/latest/html/base/Control.Monad.Writer.html#WriterT">WriterT</a></td>
+  <td><code>(a,w)</code></td>
+  <td><code>m (a,w)</code></td></tr>
+ <tr><td><a href="contmonad.html">Cont</a></td>
+  <td><a href="http://www.haskell.org/ghc/docs/latest/html/base/Control.Monad.Cont.html#ContT">ContT</a></td>
+  <td><code>(a -> r) -> r</code></td>
+  <td><code>(a -> m r) -> m r</code></td></tr>       
+</table>
+
+<!--
+<p lang="en"><img src="info.png" align="left"></img>
+Order is important when combining monads.  
+<code>StateT&nbsp;s&nbsp;(Error&nbsp;e)</code> is different than
+<code>ErrorT&nbsp;e&nbsp;(State&nbsp;s)</code>.  The first produces a combined
+type of <code>s&nbsp;->&nbsp;Error&nbsp;e&nbsp;(a,s)</code>, in which the
+computation can either return a new state or generate an error.
+The second combination produces a combined type of
+<code>s&nbsp;->&nbsp;(Error&nbsp;e&nbsp;a,s)</code>, in which the computation
+always returns a new state, and the value can be an error or a normal value.<br clear="all">
+</p>
+-->
+<p lang="ja"><img src="info.png" align="left"></img>
+モナドを合成するとき、その順番は重要です。
+<code>StateT&nbsp;s&nbsp;(Error&nbsp;e)</code> と
+<code>ErrorT&nbsp;e&nbsp;(State&nbsp;s)</code> は別物です。
+最初のものが合成するのは
+<code>s&nbsp;->&nbsp;Error&nbsp;e&nbsp;(a,s)</code>
+という型で、その計算は、新しい状態を返すか、エラーを発生させるかです。
+二つ目のものが合成するのは、
+<code>s&nbsp;->&nbsp;(Error&nbsp;e&nbsp;a,s)</code> という型で、
+その計算は常に新しい状態を返し、かつ、値はエラーあるいは通常の値の
+どちらかになります。<br clear="all">
+</p>
+
+<hr align="center" size="1" width="80%">
+
+<!--
+<table lang="en" width="100%">
+ <tr>
+  <td align="left" width="33%">Prev:
+   <a href="transformers.html">Monad transformers</a></td>
+  <td align="center" width="33%">TOC:
+   <a href="index.html">Contents</a></td>
+  <td align="right" width="33%">Next:
+   <a href="xformeranatomy.html">Anatomy of a monad transformer</a></td>
+ </tr>
+</table>	
+-->
+<table lang="ja" width="100%">
+ <tr>
+  <td align="left" width="33%">Prev:
+   <a href="transformers.html">モナド変換子</a></td>
+  <td align="center" width="33%">TOC:
+   <a href="index.html">目次</a></td>
+  <td align="right" width="33%">Next:
+   <a href="xformeranatomy.html">モナド変換子の解剖</a></td>
+ </tr>
+</table>	
+
+</body>
+</html>

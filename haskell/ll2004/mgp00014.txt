@@ -1,0 +1,15 @@
+
+Haskell 関連Webサイト
+
+The Hasekll Home Page
+http://www.haskell.org/
+Programming in Haskell
+http://www.sampou.org/haskell.cgi
+「なぜ関数プログラミングは重要か」
+「やさしいHaskell入門」
+「モナドのすべて」
+そのほか
+Haskell 専門のページは多くはないが、Haskellをたのしんでいるページはそれなりにあります
+
+   Happy Hacking with Haskell !!
+

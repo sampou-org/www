@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd-->
+<html xmlns="http://www.w3.org/1999/xhtml"
+>
+<head><title>緒言</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)" />
+<meta name="originator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)" />
+<!-- 2,html,xhtml -->
+<meta name="src" content="haskell.tex" />
+<meta name="date" content="2010-07-15 09:50:00" />
+<link rel="stylesheet" type="text/css" href="haskell.css" />
+</head><body
+>
+<!--l. 4--><div class="crosslinks"><p class="noindent">[<a
+href="haskellch1.html" >next</a>] [<a
+href="haskellli1.html" >prev</a>] [<a
+href="haskellli1.html#tailhaskellli1.html" >prev-tail</a>] [<a
+href="#tailhaskellli2.html">tail</a>] [<a
+href="haskell.html#haskellli2.html" >up</a>] </p></div>
+<h2 class="likechapterHead"><a
+ id="x3-2000"></a>緒言</h2>
+     <div class="quote">
+     <p class="noindent">「<span
+class="ptmri7t-">片手ではたりない数の人々が結合論理について技術的な著述をなしたが，我々も含め，
+    その大半は間違ったことを書いて出版してしまった．こうした誤ちをおかした我々の仲間のいく人かは、
+    現在この分野では最も注意深い、気鋭の論理学者として名をはせている．このことからして，この主題が
+    手強いものであることは明かである．したがって、なにもかもを開示することは、正確を期すために
+    必要なことである．通常はエッセンスに濃密化したほうが効率がよいのであるが，過度の濃密化は
+    この分野においては非効率なのである．</span>」
+                                                                              <div class="flushright"
+>
+ <p class="noindent">
+ Haskell B.&#x00A0;Curry and Robert Feys<br />
+<span
+class="ptmri7t-">Combinatory Logic </span><span class="cite">[<a
+href="haskellli3.html#Xcurry&feys:book">3</a>]</span>の緒言より． 1956年 5月31日</div>
+     </div>
+<p class="noindent">1987年9月にオレゴン州ポートランドで「関数プログラミング言語と計算機アーキテクチャ」
+   会議(FPCA&#x00A0;&#8217;87)が催された．そこでは関数プログラミングのコミュニティでの不幸な状況について
+   議論された。そのとき既に両手では足りない数の非正格純粋関数型言語が提案されていた．どれも，
+   表現力と意味論の基盤という点では類似するものだったのだ．この時の会合ではこのクラスの関数型言語<a
+   id="dx3-2001"></a>が提案されていた．どれも，表現力と意味論の基盤という点では類似するものだったのだ．
+   この時の会合ではこのクラスの関数型言語が広く使われるようにならないのは共通の汎用言語がないからだ
+   ということで意見が一致したのである．そこで，共通の言語を設計するために，新しいアイディアを
+   素早く交換し，実際に使えるアプリケーション開発のための確固たる基礎と，他の人々にも関数型の言語は
+   使える言語だということを知らしめるために，委員会の発足が決議された．このドキュメントは
+   この委員会の努力の成果である Haskell <a id="dx3-2002"></a>という純粋関数プログラミング言語に
+   ついて記述したものである．この言語の名は今日我々がよりどころとしている論理学的基礎の大部分を築く
+   仕事をした論理学者 Haskell B.&#x00A0;Curry<a id="dx3-2003"></a> に因むものである．
+<h3 class="likesectionHead"><a
+ id="x3-3000"></a>目標</h3>
+<p class="noindent">この委員会の主要な目標は以下の制約を満す言語を設計することにあった．
+     <ol  class="enumerate1" >
+     <li
+  class="enumerate" id="x3-3002x1">教えること，研究すること，大規模なシステムを構築することを含む応用に適するものであること．
+     </li>
+     <li
+  class="enumerate" id="x3-3004x2">形式的な構文と意味論の公開をもって完全に記述されたものであること．
+     </li>
+     <li
+  class="enumerate" id="x3-3006x3">自由に利用できるものであり，誰でもこれを実装することを許可され，誰にでも配布することが許可されているものであること．
+     </li>
+     <li
+  class="enumerate" id="x3-3008x4">広く認められたアイディアに基づいているものであること．
+     </li>
+     <li
+  class="enumerate" id="x3-3010x5">関数型プログラミング言語における不必要な多様性を軽減するものであること．</li></ol>
+<p class="noindent">
+<h3 class="likesectionHead"><a
+ id="x3-4000"></a>Haskell 2010: 言語とライブラリ</h3>
+<p class="noindent">委員会の望みは Haskell が言語設計の分野の将来の研究のための基礎を提供できることである．実験的な機能を取り入れた，この言語の拡張や変形の出現はのぞむところである．
+ <p class="noindent">Haskell は最初の公開以来ずっと進化しつづけている．
+ 1997 年の半ばまでに，この言語には 5 つのバージョンがあった（Haskell 1.0 から 1.4 である)．
+ 1997 年にアムステルダムで開催された Haskell ワークショップにおいて、Haskellの安定した バージョンが必要であると決議された。
+ この安定したバージョンというのが「Haskell 98」となり，1999年に公開された．
+ これにあった小さなバグのいくつがが修正され<span class="ptmri7t-">改訂 </span>Haskell 98 報告書となったのが，2002年のことである．
+ <p class="noindent"> 2005年の Haskell ワークショップにおいて，公式言語に対して多数の拡張があり（複数の言語実装でサポートされ），広く使われているとの共通認識がなされた上で，この言語標準の次の改訂を決め，現状を成文化（正当化）すべきときだというコンセンサスが形成された．
+ <p class="noindent"> その結果，Haskellプライムの取り組みは Haskell 98 へのどちらかといえば保守的拡張と考えられ，新しい機能については十分に理解され広く同意の得られたものに限定することとされた．また，Haskellプライムは「安定した」言語を目指すものとするものの，最近の言語設計研究の大きな進展を反映するとされた．
+ <p class="noindent"> 設計分野における数年の探求ののち，この言語をモノリシックな改訂版とするのはあまりに大変な仕事であり，小さなステップに分けて進化させるという方法が最良であり，それぞれの改訂で少数の良く理解の得られた拡張や変更を取り入れることとなった．Haskell 2010 はこうしたプロセスを経て作成された最初の改訂版である．今後は毎年新しい改訂がなされることになっている．
+<p class="noindent">
+<h3 class="likesectionHead"><a
+ id="x3-5000"></a>Haskell 98 への拡張</h3>
+<p class="noindent"> Haskell 2010 の Haskell 98 からのもっとも大きな変化を以下に列挙する．
+ <p class="noindent"> 新しい言語機能：
+     <ul class="itemize1">
+     <li class="itemize">外部関数インターフェイス (FFI).
+     </li>
+     <li class="itemize">階層化モジュール名（例 <span class="pcrr7t-">Data.Bool</span>）</li>
+     <li class="itemize">パターンガード</li></ul>
+ <p class="noindent">削除された言語機能：
+     <ul class="itemize1">
+     <li class="itemize"><span
+class="cmr-10">(</span><span
+class="cmmi-10">n </span><span
+class="cmr-10">+ </span><span
+class="cmmi-10">k</span><span
+class="cmr-10">) </span>パターン構文</li></ul>
+<p class="noindent">
+<h3 class="likesectionHead"><a
+ id="x3-6000"></a>Haskell の情報源</h3>
+<a
+ id="x3-6000doc"></a>
+<p class="noindent">Haskell のウェブサイト <a
+href="http://haskell.org" class="url" ><span
+class="pcrr7t-">http://haskell.org</span></a>では以下の情報を含む多数の有用な情報源へのアクセスを提供している．
+     <ul class="itemize1">
+     <li class="itemize">オンライン版の言語とライブラリの定義書．
+     </li>
+     <li class="itemize">Haskellに関するチュートリアル．
+     </li>
+     <li class="itemize">Haskell メイリングリストの詳細．
+     </li>
+     <li class="itemize">Haskell の実装．
+     </li>
+     <li class="itemize">貢献による Haskell のツールやライブラリ．
+     </li>
+     <li class="itemize">Haskell のアプリケーション．
+     </li>
+     <li class="itemize">ユーザが貢献する wiki ページ．
+     </li>
+     <li class="itemize">Haskell コミュニティのニュースおよびイベント．</li></ul>
+<p class="noindent">Haskell メイリングリストあるいは Haskell wiki を通じて，Haskell 言語あるいはこのレポートの表現に関する改良案，批判はこれを歓迎する．
+<p class="noindent">
+<h3 class="likesectionHead"><a
+ id="x3-7000"></a>言語の構築</h3>
+<p class="noindent">Haskell は研究者とアプリケーションプログラマの活発なコミュニティにより作られ，継続的に維持されている．この言語とライブラリの委員会に参加した人々，とりわけ，この言語に多大な時間とエネルギーを貢献してくれた人々を当時の所属とともにここに掲げる．
+<div class="center"
+>
+ <p class="noindent">
+ <p class="noindent"> Arvind (MIT)<br />
+Lennart Augustsson (Chalmers University)<br />
+Dave Barton (Mitre Corp)<br />
+Brian Boutel (Victoria University of Wellington)<br />
+Warren Burton (Simon Fraser University)<br />
+Manuel M T Chakravarty (University of New South Wales)<br />
+Duncan Coutts (Well-Typed LLP)<br />
+Jon Fairbairn (University of Cambridge)<br />
+Joseph Fasel (Los Alamos National Laboratory)<br />
+John Goerzen<br />
+Andy Gordon (University of Cambridge)<br />
+Maria Guzman (Yale University)<br />
+Kevin Hammond [editor] (University of Glasgow)<br />
+Bastiaan Heeren (Utrecht University)<br />
+Ralf Hinze (University of Bonn)<br />
+Paul Hudak [editor] (Yale University)<br />
+John Hughes [editor] (University of Glasgow; Chalmers University)<br />
+Thomas Johnsson (Chalmers University)<br />
+Isaac Jones (Galois, inc.)<br />
+Mark Jones (Yale University, University of Nottingham, Oregon Graduate Institute)<br />
+Dick Kieburtz (Oregon Graduate Institute)<br />
+John Launchbury (University of Glasgow; Oregon Graduate Institute; Galois, inc.)<br />
+Andres Löh (Utrecht University)<br />
+Ian Lynagh (Well-Typed LLP)<br />
+Simon Marlow [editor] (Microsoft Research)<br />
+John Meacham<br />
+Erik Meijer (Utrecht University)<br />
+Ravi Nanavati (Bluespec, inc.)<br />
+Rishiyur Nikhil (MIT)<br />
+Henrik Nilsson (University of Nottingham)<br />
+Ross Paterson (City University, London)<br />
+John Peterson [editor] (Yale University)<br />
+Simon Peyton Jones [editor] (University of Glasgow; Microsoft Research Ltd)<br />
+Mike Reeve (Imperial College)<br />
+Alastair Reid (University of Glasgow)<br />
+Colin Runciman (University of York)<br />
+Don Stewart (Galois, inc.)<br />
+Martin Sulzmann (Informatik Consulting Systems AG)<br />
+Audrey Tang<br />
+Simon Thompson (University of Kent)<br />
+Philip Wadler [editor] (University of Glasgow)<br />
+Malcolm Wallace (University of York)<br />
+Stephanie Weirich (University of Pennsylvania)<br />
+David Wise (Indiana University)<br />
+Jonathan Young (Yale University)</div>
+ <p class="noindent">[editor] のマークはこの言語の一つ以上の改訂版の監修者であることを示している．
+ <p class="noindent">加えて，何十人もの人々が有用な貢献をしてくれた．いくつかは小さなものであるったけれど，重要なものであった．こうした人々を以下に掲げて おく．Hans Aberg, Kris Aerts, Sten Anderson, Richard Bird, Tom Blenko, Stephen Blott, Duke Briscoe, Paul Callaghan, Magnus Carlsson, Mark Carroll, Franklin Chen, Olaf Chitil, Chris Clack, Guy Cousineau, Tony Davie, Craig Dickson, Chris Dornan, Laura Dutton, Chris Fasel, Pat Fasel, Sigbjorn Finne, Michael Fryers, Peter Gammie, Andy Gill, Mike Gunter, Cordy Hall, Mark Hall, Thomas Hallgren, Matt Harden, Klemens Hemm, Fergus Henderson, Dean Herington, Bob Hiromoto, Nic Holt, Ian Holyer, Randy Hudson, Alexander Jacobson, Patrik Jansson, Robert Jeschofnik, Orjan Johansen, Simon B.&#x00A0;Jones, Stef Joosten, Mike Joy, Wolfram Kahl, Stefan Kahrs, Antti-Juhani Kaijanaho, Jerzy Karczmarczuk, Kent Karlsson, Martin D. Kealey, Richard Kelsey, Siau-Cheng Khoo, Amir Kishon, Feliks Kluzniak, Jan Kort, Marcin Kowalczyk, Jose Labra, Jeff Lewis, Mark Lillibridge, Bjorn Lisper, Sandra Loosemore, Pablo Lopez, Olaf Lubeck, Christian Maeder, Ketil Malde, Michael Marte, Jim Mattson, John Meacham, Sergey Mechveliani, Gary Memovich, Randy Michelsen, Rick Mohr, Andy Moran, Graeme Moss, Arthur Norman, Nick North, Chris Okasaki, Bjarte M. Østvold, Paul Otto, Sven Panne, Dave Parrott, Larne Pekowsky, Rinus Plasmeijer, Ian Poole, Stephen Price, John Robson, Andreas Rossberg, George Russell, Patrick Sansom, Michael Schneider, Felix Schroeter, Julian Seward, Nimish Shah, Christian Sievers, Libor Skarvada, Jan Skibinski, Lauren Smith, Raman Sundaresh, Josef Svenningsson, Ken Takusagawa, Wolfgang Thaller, Satish Thatte, Tom Thomson, Tommy Thorn, Dylan Thurston, Mike Thyer, Mark Tullsen, David Tweed, Pradeep Varma, Keith Wansbrough, Tony Warnock, Michael Webber, Carl Witty, Stuart Wray, Bonnie Yantis.
+ <p class="noindent">最後に、なにはさておき，ラムダ算法についての Church，Rosser，Curry とその他の人々が準備した重要な基礎的な仕事のほかに，長年にわたり開発されてきた多くの見るべきプログラミング言語の影響力にも感謝したいと思う．多くのアイディアの源泉をいちいち正確にあげることは難しいが，とくに Lisp（とその現代的具現である Common Lisp と Scheme)，Landin の ISWIM，APL，Backusの FP
+<span class="cite">[<a
+href="haskellli3.html#Xback78">1</a>]</span>，ML と Standard ML，Hope と Hope<sup><span
+class="cmr-7">+</span></sup>，Clean，Id，Gofer，Sisal それに Miranda<span class="footnote-mark"><a
+href="haskell4.html#fn1x0"><sup class="textsuperscript">1</sup></a></span><a
+ id="x3-7001f1"></a>で頂点に逹っした Turner による一連の言語から受けた影響に感謝したい．
+これらの先駆者がいなければ Haskell は誕生しなかったであろう．
+ <p class="noindent"> Simon Marlow <br
+class="newline" />Cambridge, April 2010
+<!--l. 444--><div class="crosslinks"><p class="noindent">[<a
+href="haskellch1.html" >next</a>] [<a
+href="haskellli1.html" >prev</a>] [<a
+href="haskellli1.html#tailhaskellli1.html" >prev-tail</a>] [<a
+href="haskellli2.html" >front</a>] [<a
+href="haskell.html#haskellli2.html" >up</a>] </p></div>
+ <p class="noindent"> <a
+ id="tailhaskellli2.html"></a>
+</body></html>

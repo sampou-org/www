@@ -1,0 +1,226 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<title>Introduction</title>
+</head>
+<body>
+<!--
+<p lang="en">
+<table width="100%">
+ <tr>
+  <td align="left" width="33%">Prev: <a href="index.html">Table of Contents</a></td>
+  <td align="center" width="33%">TOC: <a href="index.html">Contents</a></td>
+  <td align="right" width="33%">Next: <a href="meet.html">Meet the Monads</a></td>
+ </tr>
+</table>
+</p>
+-->
+<p lang="ja">
+<table width="100%">
+ <tr>
+  <td align="left" width="33%">Prev:
+   <a href="index.html">目次</a></td>
+  <td align="center" width="33%">TOC:
+    <a href="index.html">目次</a></td>
+  <td align="right" width="33%">Next: <a href="meet.html">モナドに触れる</a></td>
+ </tr>
+</table>
+</p>
+<!--
+<p lang="en">
+<h1>Introduction</h1>
+<ul>
+<li><a href="#what">What is a monad?</a></li>
+<li><a href="#why">Why should I make the effort to understand monads?</a></li>
+</ul>
+</p>
+-->
+<p lang="ja">
+<h1>イントロダクション</h1>
+<ul>
+<li><a href="#what">モナドとは何か</a></li>
+<li><a href="#why">なぜモナドを理解しようとするのか</a></li>
+</ul>
+</p>
+
+<hr align="center" size="1" width="80%">
+<!--
+<a name="what"><h2>What is a monad?</h2></a>
+-->
+<a name="what"><h2>モナドとは何か</h2></a>
+<!--
+<p lang="en">
+A monad is a way to structure computations in terms of values and sequences
+of computations using those values.  Monads allow
+the programmer to build up computations using sequential building blocks,
+which can themselves be sequences of computations.  The monad determines how
+combined computations form a new computation and frees the programmer from
+having to code the combination manually each time it is required.
+</p>
+-->
+<p lang="ja">
+モナドは値およびその値を使う計算の並びという観点からいえば、計算を構造化
+する方法です。モナドを使うと、プログラマはひとならびのブロックを使って計
+算を構築することができます。このブロックはそれ自身計算の並びです。モナド
+はどのように合成された計算が新しい計算を形成するかを決定します。これによ
+り、要求があるたびに組み合わせを手でコーディングしなければならないプログ
+ラマを解放してくれます。
+</p>
+<!--
+<p lang="en">
+<em>It is useful to think of a monad as a strategy for combining computations
+into more complex computations.</em>  For example, you should be familiar with
+the <code>Maybe</code> type in Haskell:
+<pre>
+data Maybe a = Nothing | Just a
+</pre>
+which represents the type of computations which may fail to return a result.
+The <code>Maybe</code> type suggests a strategy for combining computations
+which return <code>Maybe</code> values: if a combined computation consists
+of one computation <code>B</code> that depends on the result of another
+computation <code>A</code>, then the combined computation should yield
+<code>Nothing</code> whenever either <code>A</code> or <code>B</code> yield
+<code>Nothing</code> and the combined computation should yield the result
+of <code>B</code> applied to the result of <code>A</code> when both
+computations succeed.
+</p>
+-->
+<p lang="ja">
+<em>モナドを、計算を合成して、より複雑な計算にする戦略と考えると
+いいでしょう。</em>たとえば、Haskell の <code>Maybe</code> 型については
+よく馴染んでいると思いますが、
+<pre>
+data Maybe a = Nothing | Just a
+</pre>
+これは結果を返しそこなうかもしれない計算の型を表現しています。
+<code>Maybe</code> 型が示唆するものは、<code>Maybe</code> 型の値を返す計
+算の合成に関する戦略です。合成された計算が、ひとつの計算 <code>B</code> 
+で構成され、この計算が別の計算 <code>A</code> の結果に依存している場合、
+合成された計算は、<code>A</code> または <code>B</code> が
+<code>Nothing</code> になれば必ず <code>Nothing</code> にならなくてはな
+りません。また、合成された計算は両方の計算が成功する場合には
+<code>A</code> の結果に <code>B</code> の結果を適用したものにならなくて
+はならない。
+</p>
+<!--
+<p lang="en">
+Other monads exist for building computations that perform I/O, have state,
+may return multiple results, etc.  There are as many different type of monads
+as there are strategies for combining computations, but there are certain
+monads that are especially useful and are common enough that they are part of
+the standard <a href="http://www.haskell.org/onlinelibrary/">Haskell 98 libraries</a>.
+These monads are each described in <a href="introII.html">Part II</a>.
+</p>
+-->
+<p lang="ja">
+入出力を実行した計算、状態を持つ計算、複数の結果を返す計算などを構築する
+ための別のモナドが存在します。計算を合成する戦略がたくさんあるように、い
+ろいろなタイプのモナドがたくさんありますが、特別に役に立つものや
+<a href="http://www.haskell.org/onlinelibrary/">Haskell 98 libraries</a>
+の一部とするに足る共通のモナドというのがいくつかあります。これらのモナド
+は<a href="introII.html">第 II 部</a>で解説します。
+</p>
+<!--
+<a name="why"><h2>Why should I make the effort to understand monads?</h2></a>
+-->
+<a name="why"><h2>なぜモナドを理解しようとするのか</h2></a>
+<!--
+<p lang="en">
+The sheer number of different <a href="http://haskell.cs.yale.edu/bookshelf/#monads">
+monad tutorials</a> on the internet is a good
+indication of the difficulty many people have understanding the concept.
+This is due to the abstract nature of monads and to the fact that they
+are used in several different capacities, which can confuse the picture
+of exactly what a monad is and what it is good for.
+</p>
+-->
+<p lang="ja">
+インターネット上にはいくつものそれぞれ別の
+<a href="http://haskell.cs.yale.edu/bookshelf/#monads">
+モナドチュートリアル</a>が存在しますが、このことはモナドの概念を理解する
+ことが多くの人にとって難しいことを示しています。これは、モナドの抽象的性質
+によるものであり、それらがいくつかの異る制限のなかで用いられるという事実
+によるものです。このことが、モナドとは何か、何に役立つのかを具体的に描く
+ことを混乱させているのです。
+</p>
+<!--
+<p lang="en">
+In Haskell, monads play a central role in the I/O system.  It is not
+essential to understand monads to do I/O in Haskell, but understanding
+the I/O monad will improve your code and extend your capabilities.
+</p>
+-->
+<p lang="ja">
+Haskell ではモナドは入出力システムで中心的な役割りをしています。Haskell で
+入出力を行うのにモナドを理解することは必須ではありませんが、入出力モナド
+を理解していることはコードと能力の向上をもたらすことでしょう。
+</p>
+<!--
+<p lang="en">
+For the programmer, monads are useful tools for structuring functional programs.
+They have three properties that make them especially useful:
+<ol>
+ <li>Modularity - They allow computations to be composed from simpler
+      computations and separate the combination strategy from the
+      actual computations being performed.
+      </li>
+ <li>Flexibility - They allow functional programs to be much more adaptable
+      than equivalent programs written without monads.  This is because the
+      monad distills the computational strategy into a single place instead
+      of requiring it be distributed throughout the entire program. 
+      </li>
+ <li>Isolation - They can be used to create imperative-style computational
+      structures which remain safely isolated from the main body of the functional
+      program.  This is useful for incorporating side-effects (such as I/O) and
+      state (which violates referential transparency) into a pure functional
+      language like Haskell.
+      </li>
+</ol>
+Each of these features will be revisited later in the tutorial in the context
+of specific monads.
+</p>
+-->
+<p lang="ja">
+プログラマにとってモナドは関数プログラムの構造化に有用なツールです。
+モナドには、それを特に有用なものとしている 3 つの性質があります。
+<ol>
+ <li>モジュラリティ - より単純な計算から計算を合成することができ、実際に
+      実行される計算と合成戦略を切離すことができます。
+      </li>
+ <li>柔軟性 - 関数プログラムをモナドなしで書いた同等のプログラムよりも
+      はるかに柔軟なものとすることができます。これはモナドが、計算戦略を
+      プログラム全体にばら撒くことをせずに、一箇所に引出すからである。
+      </li>
+ <li>分離性 - 関数プログラムの本体から安全に分離したままで、命令スタイル
+      の計算構造を生成するのに利用できます。これは、Haskell のような純粋
+      な関数型言語と入出力のような(参照透明性を破壊するような)副作用と組
+      み合わせるのに役立ちます。
+      </li>
+</ol>
+これらの特徴のそれぞれは、このあとのチュートリアルで特定のモナドの文脈で
+再検討します。
+</p>
+
+<hr align="center" size="1" width="80%">
+<!--
+<p lang="en">
+<table width="100%">
+ <tr>
+  <td align="left" width="33%">Prev: <a href="index.html">Table of Contents</a></td>
+  <td align="center" width="33%">TOC: <a href="index.html">Contents</a></td>
+  <td align="right" width="33%">Next: <a href="meet.html">Meet the Monads</a></td>
+ </tr>
+</table>
+</p>
+-->
+<p lang="ja">
+<table width="100%">
+<tr>
+ <td align="left" width="33%">Prev: <a href="index.html">目次</a></td>
+ <td align="center" width="33%">TOC: <a href="index.html">目次</a></td>
+ <td align="right" width="33%">Next: <a href="meet.html">モナドに触れる</a></td>
+</tr>
+</table>
+</p>
+</body>
+</html>

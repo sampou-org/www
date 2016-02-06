@@ -1,0 +1,10 @@
+
+Haskell の教科書
+
+ The Haskell School of Expression              
+          ISBN 0521644089
+ Haskell:The Craft of Functional Programming
+          ISBN 0201342758
+ The Fun of Programming
+          ISBN 0333992857
+

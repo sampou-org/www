@@ -1,0 +1,519 @@
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--
+
+Generated from t-y-scheme.tex by tex2page, v 20060531
+(running on Gauche 0.8.7, unix), 
+(c) Dorai Sitaram, 
+http://www.ccs.neu.edu/~dorai/tex2page/tex2page-doc.html
+
+-->
+<head>
+<title>
+独習 Scheme 三週間 Teach Yourself Scheme in Fixnum Days
+</title>
+<link rel="stylesheet" type="text/css" href="t-y-scheme-Z-S.css" title=default>
+<meta name=robots content="noindex,follow">
+<meta name=description content="A practical
+introduction to the programming language Scheme">
+
+<meta name=author content="Dorai Sitaram">
+
+<link rev=made href="mailto:ds26@gte.com">
+</head>
+<body>
+<div id=slidecontent>
+<div align=right class=navigation>[Go to <span><a href="t-y-scheme.html">first</a>, <a href="t-y-scheme-Z-H-9.html">previous</a></span><span>, <a href="t-y-scheme-Z-H-11.html">next</a></span> page<span>; &nbsp;&nbsp;</span><span><a href="t-y-scheme-Z-H-1.html#node_toc_start">contents</a></span><span><span>; &nbsp;&nbsp;</span><a href="t-y-scheme-Z-H-25.html#node_index_start">index</a></span>]</div>
+<p></p>
+<a name="node_chap_8"></a>
+<h1 class=chapter>
+<div class=chapterheading><a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_8">Chapter 8</a></div><br>
+<a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_8">マクロ</a></h1>
+<p></p>
+<p>
+<a name="node_idx_384"></a></p>
+<p>
+<em>マクロ</em>を使うと、自分用のスペシャルフォームをつくることができます。
+マクロは変換子手続きに結びついたシンボルのことです。Scheme はマクロ式
+(つまり、先頭がマクロであるフォーム)にであうと、マクロ変換子をマクロ式の
+サブフォームに適用し変形の結果を評価します。</p>
+<p>
+</p>
+<p>
+概念としては、マクロは、あるコードのテキストを別のコードのテキスト
+に変形する純粋にテキストの変形を指定するものです。
+この種の変形は、複雑で頻繁にあらわれるテキスト上のパターンを
+略記するのに便利です。</p>
+<p>
+</p>
+<p>
+<a name="node_idx_386"></a><a name="node_idx_388"></a></p>
+<p>
+</p>
+<p>
+マクロはスペシャルフォーム <code class=scheme><span class=keyword>define-macro</span></code> を使って<em>定義</em>します
+(が、<a href="t-y-scheme-Z-H-20.html#node_sec_A.3">A.3</a>節も参照してください)。<a name="node_call_footnote_Temp_5"></a><sup><small><a href="#node_footnote_Temp_5">1</a></small></sup>
+たとえば、おつかいになっている Scheme に条件のスペシャルフォーム
+<code class=scheme><span class=keyword>when</span></code> がない場合には、<code class=scheme><span class=keyword>when</span></code> を以下のようにマクロで定義することが
+できます。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define-macro</span> <span class=keyword>when</span>
+  (<span class=keyword>lambda</span> (<span class=variable>test</span> . <span class=variable>branch</span>)
+    (<span class=variable>list</span> <span class=keyword>'</span><span class=keyword>if</span> <span class=variable>test</span>
+      (<span class=variable>cons</span> <span class=keyword>'</span><span class=keyword>begin</span> <span class=variable>branch</span>))))
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>これは、<code class=scheme><span class=keyword>when</span></code>式を同等の<code class=scheme><span class=keyword>if</span></code>式に変換する<code class=scheme><span class=keyword>when</span></code>変換子を定義して
+います。ここで定義したこのマクロを使えば、<code class=scheme><span class=keyword>when</span></code>式</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>when</span> (<span class=variable>&lt;</span> (<span class=variable>pressure</span> <span class=variable>tube</span>) <span class=selfeval>60</span>)
+   (<span class=variable>open-valve</span> <span class=variable>tube</span>)
+   (<span class=variable>attach</span> <span class=variable>floor-pump</span> <span class=variable>tube</span>)
+   (<span class=variable>depress</span> <span class=variable>floor-pump</span> <span class=selfeval>5</span>)
+   (<span class=variable>detach</span> <span class=variable>floor-pump</span> <span class=variable>tube</span>)
+   (<span class=variable>close-valve</span> <span class=variable>tube</span>))
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>は別の式に変換されます。<code class=scheme><span class=keyword>when</span></code>変換子を<code class=scheme><span class=keyword>when</span></code>式のサブフォームに
+適用した結果は以下のようになります。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>apply</span>
+  (<span class=keyword>lambda</span> (<span class=variable>test</span> . <span class=variable>branch</span>)
+    (<span class=variable>list</span> <span class=keyword>'</span><span class=keyword>if</span> <span class=variable>test</span>
+      (<span class=variable>cons</span> <span class=keyword>'</span><span class=keyword>begin</span> <span class=variable>branch</span>)))
+  <span class=keyword>'</span>((<span class=variable>&lt;</span> (<span class=variable>pressure</span> <span class=variable>tube</span>) <span class=selfeval>60</span>)
+      (<span class=variable>open-valve</span> <span class=variable>tube</span>)
+      (<span class=variable>attach</span> <span class=variable>floor-pump</span> <span class=variable>tube</span>)
+      (<span class=variable>depress</span> <span class=variable>floor-pump</span> <span class=selfeval>5</span>)
+      (<span class=variable>detach</span> <span class=variable>floor-pump</span> <span class=variable>tube</span>)
+      (<span class=variable>close-valve</span> <span class=variable>tube</span>)))
+</pre><p></p>
+<p>
+</p>
+
+<p class=noindent>変形は以下のようになります。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>if</span> (<span class=variable>&lt;</span> (<span class=variable>pressure</span> <span class=variable>tube</span>) <span class=selfeval>60</span>)
+    (<span class=keyword>begin</span>
+      (<span class=variable>open-valve</span> <span class=variable>tube</span>)
+      (<span class=variable>attach</span> <span class=variable>floor-pump</span> <span class=variable>tube</span>)
+      (<span class=variable>depress</span> <span class=variable>floor-pump</span> <span class=selfeval>5</span>)
+      (<span class=variable>detach</span> <span class=variable>floor-pump</span> <span class=variable>tube</span>)
+      (<span class=variable>close-valve</span> <span class=variable>tube</span>)))
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>こうしてから、Scheme はこの式をほかのものと同じように評価します。</p>
+<p>
+<a name="node_idx_390"></a></p>
+<p>
+</p>
+<p>
+別の例、<code class=scheme><span class=keyword>when</span></code> の対の <code class=scheme><span class=keyword>unless</span></code> マクロ定義はこんな風になります。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define-macro</span> <span class=keyword>unless</span>
+  (<span class=keyword>lambda</span> (<span class=variable>test</span> . <span class=variable>branch</span>)
+    (<span class=variable>list</span> <span class=keyword>'</span><span class=keyword>if</span>
+          (<span class=variable>list</span> <span class=keyword>'</span><span class=variable>not</span> <span class=variable>test</span>)
+          (<span class=variable>cons</span> <span class=keyword>'</span><span class=keyword>begin</span> <span class=variable>branch</span>))))
+</pre><p></p>
+<p>
+</p>
+<p>
+もうひとつの方法としては、<code class=scheme><span class=keyword>when</span></code> を <code class=scheme><span class=keyword>unless</span></code> の定義内で呼ぶことがで
+きます。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define-macro</span> <span class=keyword>unless</span>
+  (<span class=keyword>lambda</span> (<span class=variable>test</span> . <span class=variable>branch</span>)
+    (<span class=variable>cons</span> <span class=keyword>'</span><span class=keyword>when</span>
+          (<span class=variable>cons</span> (<span class=variable>list</span> <span class=keyword>'</span><span class=variable>not</span> <span class=variable>test</span>) <span class=variable>branch</span>))))
+</pre><p></p>
+<p>
+</p>
+
+<p class=noindent>マクロ展開は別のマクロを参照することができます。</p>
+<p>
+</p>
+<a name="node_sec_8.1"></a>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_8.1">8.1&nbsp;&nbsp;テンプレートとしての展開指定</a></h2>
+<p></p>
+<p>
+マクロ変換子はいくつかのS式をとり、フォームとして使える
+ひとつのS式を作りだします。典型的な出力はリストです。
+<code class=scheme><span class=keyword>when</span></code>の例では、出力のリストは</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>list</span> <span class=keyword>'</span><span class=keyword>if</span> <span class=variable>test</span>
+  (<span class=variable>cons</span> <span class=keyword>'</span><span class=keyword>begin</span> <span class=variable>branch</span>))
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>を使ってつくります。ここで、<code class=scheme><span class=variable>test</span></code>はマクロの最初のサブフォーム
+に束縛されています。つまり、</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>&lt;</span> (<span class=variable>pressure</span> <span class=variable>tube</span>) <span class=selfeval>60</span>)
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>です。また、<code class=scheme><span class=variable>branch</span></code> はマクロののこりのサブフォームに束縛
+されています。</p>
+<p>
+</p>
+<pre class=scheme>((<span class=variable>open-valve</span> <span class=variable>tube</span>)
+ (<span class=variable>attach</span> <span class=variable>floor-pump</span> <span class=variable>tube</span>)
+ (<span class=variable>depress</span> <span class=variable>floor-pump</span> <span class=selfeval>5</span>)
+ (<span class=variable>detach</span> <span class=variable>floor-pump</span> <span class=variable>tube</span>)
+ (<span class=variable>close-valve</span> <span class=variable>tube</span>))
+</pre><p></p>
+<p>
+<a name="node_idx_392"></a><a name="node_idx_394"></a><a name="node_idx_396"></a></p>
+<p>
+</p>
+
+<p class=noindent></p>
+<p>
+出力されたリストはずいぶん複雑なものです。<code class=scheme><span class=keyword>when</span></code>より
+もっと野心的なマクロでは、出力リストをつくるのに、非常に
+凝った構築プロセスを踏まなければならにことは、容易に想像が
+つきます。このような場合には、マクロの出力フォームを
+<em>テンプレート</em>として指定できると便利です。マクロの
+それぞれの用途ごとに、マクロの引数を適切な場所に挿入して
+テンプレートを埋めます。したがって、</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>list</span> <span class=keyword>'</span><span class=keyword>IF</span> <span class=variable>test</span>
+  (<span class=variable>cons</span> <span class=keyword>'</span><span class=keyword>BEGIN</span> <span class=variable>branch</span>))
+</pre><p></p>
+<p>
+</p>
+
+<p class=noindent>は次のものをより便利に書いたものです。</p>
+<p>
+</p>
+<pre class=scheme><span class=keyword>`</span>(<span class=keyword>IF</span> <span class=keyword>,</span><span class=variable>test</span>
+  (<span class=keyword>BEGIN</span> <span class=keyword>,@</span><span class=variable>branch</span>))
+</pre><p></p>
+<p>
+<code class=scheme><span class=keyword>when</span></code> のマクロ定義を次のように改造することができます。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define-macro</span> <span class=keyword>when</span>
+  (<span class=keyword>lambda</span> (<span class=variable>test</span> . <span class=variable>branch</span>)
+    <span class=keyword>`</span>(<span class=keyword>IF</span> <span class=keyword>,</span><span class=variable>test</span>
+         (<span class=keyword>BEGIN</span> <span class=keyword>,@</span><span class=variable>branch</span>))))
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>テンプレートのフォーマットは前述のリスト構築とは
+ちがって、出力リストの形を直接的に見えるように表示します。
+バッククウォート(<code class=scheme><span class=keyword>`</span></code>)はリストのテンプレートを導入します。
+テンプレートの要素は、結果のリストに、<em>そのとおりに</em>あらわれ
+ます。<em>例外</em>は、接頭辞として、<em>コンマ</em>(&#8216;<code class=scheme><span class=keyword>,</span></code>&#8217;)あるいは
+<em>コンマスプライス</em>(&#8216;<code class=scheme><span class=keyword>,@</span></code>&#8217;)がついている場合です。
+(説明のために、テンプレートの中で、そのとおりにあらわれる要素を
+大文字で書いてあります。)</p>
+<p>
+</p>
+<p>
+コンマとコンマスプライスはマクロ引数をテンプレートのなかに
+入れるために使います。コンマは、続く式の評価結果を挿入します。
+コンマスプライスは続く式の評価結果を継ぎあわせたあとに挿入します。
+すなわち、一番そとがわの括弧をとりのぞきます。(ということは、
+コンマスプライスによって導入される式はリスト<em>でなければならない</em>
+ということです。)</p>
+<p>
+</p>
+<p>
+例では、<code class=scheme><span class=variable>test</span></code> と <code class=scheme><span class=variable>branch</span></code> に束縛された値を与えると、
+テンプレートが次のように、要求どおり展開されていることが分ります。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>IF</span> (<span class=variable>&lt;</span> (<span class=variable>pressure</span> <span class=variable>tube</span>) <span class=selfeval>60</span>)
+    (<span class=keyword>BEGIN</span>
+      (<span class=variable>open-valve</span> <span class=variable>tube</span>)
+      (<span class=variable>attach</span> <span class=variable>floor-pump</span> <span class=variable>tube</span>)
+      (<span class=variable>depress</span> <span class=variable>floor-pump</span> <span class=selfeval>5</span>)
+      (<span class=variable>detach</span> <span class=variable>floor-pump</span> <span class=variable>tube</span>)
+      (<span class=variable>close-valve</span> <span class=variable>tube</span>)))
+</pre><p></p>
+<p>
+</p>
+<a name="node_sec_8.2"></a>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_8.2">8.2&nbsp;&nbsp;マクロの内側での変数捕捉の回避</a></h2>
+<p><a name="node_idx_398"></a></p>
+<p>
+二つの引数の選言フォーム<code class=scheme><span class=keyword>my-or</span></code>は次のように定義できそうである。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define-macro</span> <span class=keyword>my-or</span>
+  (<span class=keyword>lambda</span> (<span class=variable>x</span> <span class=variable>y</span>)
+    <span class=keyword>`</span>(<span class=keyword>if</span> <span class=keyword>,</span><span class=variable>x</span> <span class=keyword>,</span><span class=variable>x</span> <span class=keyword>,</span><span class=variable>y</span>)))
+</pre><p></p>
+<p>
+</p>
+
+<p class=noindent></p>
+<p>
+<code class=scheme><span class=keyword>my-or</span></code>はふたつの引数をとり、最初に真(非<code class=scheme><span class=selfeval>#f</span></code>)になった値を
+返します。特に、二番目の引数は最初の引数が偽になったときにのみ
+評価されます。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>my-or</span> <span class=selfeval>1</span> <span class=selfeval>2</span>)
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>1</span>
+
+(<span class=keyword>my-or</span> <span class=selfeval>#f</span> <span class=selfeval>2</span>)
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>2</span>
+</pre><p></p>
+<p>
+</p>
+<p>
+ここに書いた<code class=scheme><span class=keyword>my-or</span></code>マクロには問題がひとつあります。
+最初の引数は、それが真の場合、2度評価されます。
+一度目は<code class=scheme><span class=keyword>if</span></code>テストでそして、もう一度は、「then」の枝でです。
+これは、最初の引数が副作用をもつ場合、望ましくない振舞いを
+発生します。たとえば、</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>my-or</span>
+  (<span class=keyword>begin</span> 
+    (<span class=variable>display</span> <span class=selfeval>&quot;doing first argument&quot;</span>)
+     (<span class=variable>newline</span>)
+     <span class=selfeval>#t</span>)
+  <span class=selfeval>2</span>)
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>は<code class=scheme><span class=selfeval>&quot;doing first argument&quot;</span></code>を二度表示します。</p>
+<p>
+</p>
+<p>
+これは、<code class=scheme><span class=keyword>if</span></code>テストの結果をローカル変数に保存することで回避できます。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define-macro</span> <span class=keyword>my-or</span>
+  (<span class=keyword>lambda</span> (<span class=variable>x</span> <span class=variable>y</span>)
+    <span class=keyword>`</span>(<span class=keyword>let</span> ((<span class=variable>temp</span> <span class=keyword>,</span><span class=variable>x</span>))
+       (<span class=keyword>if</span> <span class=variable>temp</span> <span class=variable>temp</span> <span class=keyword>,</span><span class=variable>y</span>))))
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>これでほとんど OK なのですが、二番目の引数がたまたま
+マクロ定義で使っているのと同じ<code class=scheme><span class=variable>temp</span></code>という識別子を含んでいると
+こまったことになります。たとえば、</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=variable>temp</span> <span class=selfeval>3</span>)
+
+(<span class=keyword>my-or</span> <span class=selfeval>#f</span> <span class=variable>temp</span>)
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#f</span>
+</pre><p></p>
+<p>
+</p>
+<p>
+ほんとは 3 になるべきなのに。このチョンボは最初の引数の値
+(<code class=scheme><span class=selfeval>#f</span></code>)を保存するのにローカル変数<code class=scheme><span class=variable>temp</span></code>を使ったために、
+第二引数の変数<code class=scheme><span class=variable>temp</span></code>が、このマクロで導入した<code class=scheme><span class=variable>temp</span></code>に
+よって捕捉されてしまったからです。</p>
+<p>
+</p>
+<p>
+これを回避するには、マクロ定義中でつかうローカル変数を
+注意深く選択する必要があります。こうした変数に突飛ななまえ
+を選択し、だれもこの名前を使わないように強くねがうという
+こともありかもしれません。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define-macro</span> <span class=keyword>my-or</span>
+  (<span class=keyword>lambda</span> (<span class=variable>x</span> <span class=variable>y</span>)
+    <span class=keyword>`</span>(<span class=keyword>let</span> ((<span class=variable>+temp</span> <span class=keyword>,</span><span class=variable>x</span>))
+       (<span class=keyword>if</span> <span class=variable>+temp</span> <span class=variable>+temp</span> <span class=keyword>,</span><span class=variable>y</span>))))
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>これは<code class=scheme><span class=variable>+temp</span></code>をマクロの外側のコードでは使わないという
+暗黙の合意がなりたっていればうまく動くでしょう。
+もちろん、こんな合意はいつかは破綻します。</p>
+<p>
+<a name="node_idx_400"></a><a name="node_idx_402"></a></p>
+<p>
+</p>
+<p>
+冗長でよければ、もっと、あてになるのは、
+他の手段で得られないことが保証されている<em>作られたシンボル</em>
+を使うことです。手続き<code class=scheme><span class=variable>gensym</span></code>は呼ばれるたびにユニークな
+シンボルを生成する手続きです。これが、<code class=scheme><span class=variable>gensym</span></code>をつかった
+安全な<code class=scheme><span class=keyword>my-or</span></code>の定義です。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define-macro</span> <span class=keyword>my-or</span>
+  (<span class=keyword>lambda</span> (<span class=variable>x</span> <span class=variable>y</span>)
+    (<span class=keyword>let</span> ((<span class=variable>temp</span> (<span class=variable>gensym</span>)))
+      <span class=keyword>`</span>(<span class=keyword>let</span> ((<span class=keyword>,</span><span class=variable>temp</span> <span class=keyword>,</span><span class=variable>x</span>))
+         (<span class=keyword>if</span> <span class=keyword>,</span><span class=variable>temp</span> <span class=keyword>,</span><span class=variable>temp</span> <span class=keyword>,</span><span class=variable>y</span>)))))
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>この文書中で定義されたマクロの中には、簡潔にするために、<code class=scheme><span class=variable>gensym</span></code>
+を使う方法はとりません。変数捕捉の点については、既にみたように、
+あまり、とりちらからない<code class=scheme><span class=variable>+</span></code>接頭辞を使う方法を利用することにします。
+このような<code class=scheme><span class=variable>+</span></code>接頭辞識別子を上で概要を示した方法で gensym におきかえ
+るのを忘れないようにするのは賢明な読者のかたにおまかせすることにします。</p>
+<p>
+<a name="node_idx_404"></a></p>
+<p>
+</p>
+<a name="node_sec_8.3"></a>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_8.3">8.3&nbsp;&nbsp;<code class=scheme><span class=keyword>fluid-let</span></code></a></h2>
+<p></p>
+<p>
+</p>
+<p>
+もうすこし、複雑なマクロ<code class=scheme><span class=keyword>fluid-let</span></code> (&nbsp;<a href="t-y-scheme-Z-H-7.html#node_sec_5.2">5.2</a>節)
+の定義をみましょう。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>fluid-let</span> ((<span class=variable>x</span> <span class=selfeval>9</span>) (<span class=variable>y</span> (<span class=variable>+</span> <span class=variable>y</span> <span class=selfeval>1</span>)))
+  (<span class=variable>+</span> <span class=variable>x</span> <span class=variable>y</span>))
+</pre><p></p>
+<p>
+</p>
+
+<p class=noindent>これを次のように展開したいとしましょう。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>let</span> ((<span class=variable>OLD-X</span> <span class=variable>x</span>) (<span class=variable>OLD-Y</span> <span class=variable>y</span>))
+  (<span class=keyword>set!</span> <span class=variable>x</span> <span class=selfeval>9</span>)
+  (<span class=keyword>set!</span> <span class=variable>y</span> (<span class=variable>+</span> <span class=variable>y</span> <span class=selfeval>1</span>))
+  (<span class=keyword>let</span> ((<span class=variable>RESULT</span> (<span class=keyword>begin</span> (<span class=variable>+</span> <span class=variable>x</span> <span class=variable>y</span>))))
+    (<span class=keyword>set!</span> <span class=variable>x</span> <span class=variable>OLD-X</span>)
+    (<span class=keyword>set!</span> <span class=variable>y</span> <span class=variable>OLD-Y</span>)
+    <span class=variable>RESULT</span>))
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>ここで、識別子<code class=scheme><span class=variable>OLD-X</span></code>、<code class=scheme><span class=variable>OLD-Y</span></code>、および<code class=scheme><span class=variable>RESULT</span></code>を
+<code class=scheme><span class=keyword>fluid-let</span></code>フォームの式の中で捕捉されないようなシンボルに
+したいわけです。</p>
+<p>
+</p>
+<p>
+ここで、欲しいもの実現する<code class=scheme><span class=keyword>fluid-let</span></code>マクロを構築するのに専念します。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define-macro</span> <span class=keyword>fluid-let</span>
+  (<span class=keyword>lambda</span> (<span class=variable>xexe</span> . <span class=variable>body</span>)
+    (<span class=keyword>let</span> ((<span class=variable>xx</span> (<span class=variable>map</span> <span class=variable>car</span> <span class=variable>xexe</span>))
+          (<span class=variable>ee</span> (<span class=variable>map</span> <span class=variable>cadr</span> <span class=variable>xexe</span>))
+          (<span class=variable>old-xx</span> (<span class=variable>map</span> (<span class=keyword>lambda</span> (<span class=variable>ig</span>) (<span class=variable>gensym</span>)) <span class=variable>xexe</span>))
+          (<span class=variable>result</span> (<span class=variable>gensym</span>)))
+      <span class=keyword>`</span>(<span class=keyword>let</span> <span class=keyword>,</span>(<span class=variable>map</span> (<span class=keyword>lambda</span> (<span class=variable>old-x</span> <span class=variable>x</span>) <span class=keyword>`</span>(<span class=keyword>,</span><span class=variable>old-x</span> <span class=keyword>,</span><span class=variable>x</span>)) 
+                  <span class=variable>old-xx</span> <span class=variable>xx</span>)
+         <span class=keyword>,@</span>(<span class=variable>map</span> (<span class=keyword>lambda</span> (<span class=variable>x</span> <span class=variable>e</span>)
+                  <span class=keyword>`</span>(<span class=keyword>set!</span> <span class=keyword>,</span><span class=variable>x</span> <span class=keyword>,</span><span class=variable>e</span>)) 
+                <span class=variable>xx</span> <span class=variable>ee</span>)
+         (<span class=keyword>let</span> ((<span class=keyword>,</span><span class=variable>result</span> (<span class=keyword>begin</span> <span class=keyword>,@</span><span class=variable>body</span>)))
+           <span class=keyword>,@</span>(<span class=variable>map</span> (<span class=keyword>lambda</span> (<span class=variable>x</span> <span class=variable>old-x</span>)
+                    <span class=keyword>`</span>(<span class=keyword>set!</span> <span class=keyword>,</span><span class=variable>x</span> <span class=keyword>,</span><span class=variable>old-x</span>)) 
+                  <span class=variable>xx</span> <span class=variable>old-xx</span>)
+           <span class=keyword>,</span><span class=variable>result</span>)))))
+</pre><p></p>
+<p>
+</p>
+<p>
+このマクロの引数 <code class=scheme><span class=variable>xexe</span></code> は <code class=scheme><span class=keyword>fluid-let</span></code> により導入される
+変数/式の対のリスト、qbody は <code class=scheme><span class=keyword>fluid-let</span></code> の本体の式のリストです。
+この例では、<code class=scheme>((<span class=variable>x</span> <span class=selfeval>9</span>) (<span class=variable>y</span> (<span class=variable>+</span> <span class=variable>y</span> <span class=selfeval>1</span>)))</code> と <code class=scheme>((<span class=variable>+</span> <span class=variable>x</span> <span class=variable>y</span>))</code> がそれぞれ、
+<code class=scheme><span class=variable>xexe</span></code> と <code class=scheme><span class=variable>body</span></code> になります。</p>
+<p>
+</p>
+<p>
+マクロ本体はローカル変数の束を導入します。<code class=scheme><span class=variable>xx</span></code> は変数/式の対から
+取り出した、変数のリストです。<code class=scheme><span class=variable>ee</span></code> は対応する式のリストです。
+<code class=scheme><span class=variable>old-xx</span></code> は新しい識別子のリストで、それぞれが、<code class=scheme><span class=variable>xx</span></code> の変数
+ひとつひとつに対応しています。これらは、<code class=scheme><span class=variable>xx</span></code> の値として
+<em>はいってきた</em>値を保存しておくのに使います。これで、<code class=scheme><span class=keyword>fluid-let</span></code>
+の本体の評価が終了したあとに <code class=scheme><span class=variable>xx</span></code> お元にもどすことができます。
+<code class=scheme><span class=variable>result</span></code>は別の新しい識別子で、<code class=scheme><span class=keyword>fluid-let</span></code>本体の値を保存するのに
+つかいます。この例では <code class=scheme><span class=variable>xx</span></code> は <code class=scheme>(<span class=variable>x</span> <span class=variable>y</span>)</code>、qee は <code class=scheme>(<span class=selfeval>9</span> (<span class=variable>+</span> <span class=variable>y</span> <span class=selfeval>1</span>))</code>
+です。おつかいのシステムの <code class=scheme><span class=variable>gensym</span></code> の実装によりますが、
+<code class=scheme><span class=variable>old-xx</span></code> は例えば、<code class=scheme>(<span class=variable>GEN-63</span> <span class=variable>GEN-64</span>)</code>というリスト、qresult は
+<code class=scheme><span class=variable>GEN-65</span></code> になります。</p>
+<p>
+</p>
+<p>
+この例では、このマクロによって生成された出力リストは、次のような
+ものでしょう。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>let</span> ((<span class=variable>GEN-63</span> <span class=variable>x</span>) (<span class=variable>GEN-64</span> <span class=variable>y</span>))
+  (<span class=keyword>set!</span> <span class=variable>x</span> <span class=selfeval>9</span>)
+  (<span class=keyword>set!</span> <span class=variable>y</span> (<span class=variable>+</span> <span class=variable>y</span> <span class=selfeval>1</span>))
+  (<span class=keyword>let</span> ((<span class=variable>GEN-65</span> (<span class=keyword>begin</span> (<span class=variable>+</span> <span class=variable>x</span> <span class=variable>y</span>))))
+    (<span class=keyword>set!</span> <span class=variable>x</span> <span class=variable>GEN-63</span>)
+    (<span class=keyword>set!</span> <span class=variable>y</span> <span class=variable>GEN-64</span>)
+    <span class=variable>GEN-65</span>))
+</pre><p></p>
+<p>
+</p>
+
+<p class=noindent>これは、求めていたものにマッチしています。
+</p>
+<p>
+</p>
+<div class=footnoterule><hr></div><p></p>
+<div class=footnote><p><a name="node_footnote_Temp_5"></a><sup><small><a href="#node_call_footnote_Temp_5">1</a></small></sup> MzScheme では
+<code class=scheme><span class=keyword>define-macro</span></code> は<code class=verbatim>defmacro</code> ライブラリを通して提供されています。
+<code class=scheme>(<span class=variable>require</span> (<span class=variable>lib</span> <span class=selfeval>&quot;defmacro.ss&quot;</span>))</code> を使ってこのライブラリをロード
+してください。</p>
+</div>
+<div class=smallskip></div>
+<p style="margin-top: 0pt; margin-bottom: 0pt">
+<div align=right class=navigation>[Go to <span><a href="t-y-scheme.html">first</a>, <a href="t-y-scheme-Z-H-9.html">previous</a></span><span>, <a href="t-y-scheme-Z-H-11.html">next</a></span> page<span>; &nbsp;&nbsp;</span><span><a href="t-y-scheme-Z-H-1.html#node_toc_start">contents</a></span><span><span>; &nbsp;&nbsp;</span><a href="t-y-scheme-Z-H-25.html#node_index_start">index</a></span>]</div>
+</p>
+<p></p>
+</div>
+</body>
+</html>

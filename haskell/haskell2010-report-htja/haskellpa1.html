@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd-->
+<html xmlns="http://www.w3.org/1999/xhtml"
+>
+<head><title>I Haskell 2010 言語</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)" />
+<meta name="originator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)" />
+<!-- 2,html,xhtml -->
+<meta name="src" content="haskell.tex" />
+<meta name="date" content="2010-07-15 09:50:00" />
+<link rel="stylesheet" type="text/css" href="haskell.css" />
+</head><body
+>
+<!--l. 444--><div class="crosslinks"><p class="noindent">[<a
+href="haskellpa2.html" >next</a>] [<a
+href="haskellli2.html" >prev</a>] [<a
+href="haskellli2.html#tailhaskellli2.html" >prev-tail</a>] [<a
+href="#tailhaskellpa1.html">tail</a>] [<a
+href="haskell.html" >up</a>] </p></div>
+<h1 class="partHead"><span class="titlemark">Part&#x00A0;I<br /></span><a
+ id="x5-8000I"></a>Haskell 2010 言語</h1>
+ <p class="noindent">
+<div class="chapterTOCS">
+<span class="chapterToc" >1 <a
+href="haskellch1.html#x6-90001">イントロダクション</a></span>
+<br />&#x00A0;<span class="sectionToc" >1.1 <a
+href="haskellch1.html#x6-100001.1">プログラムの構造</a></span>
+<br />&#x00A0;<span class="sectionToc" >1.2 <a
+href="haskellch1.html#x6-110001.2">Haskell カーネル</a></span>
+<br />&#x00A0;<span class="sectionToc" >1.3 <a
+href="haskellch1.html#x6-120001.3">値および型</a></span>
+<br />&#x00A0;<span class="sectionToc" >1.4 <a
+href="haskellch1.html#x6-130001.4">名前空間</a></span>
+<br /><span class="chapterToc" >2 <a
+href="haskellch2.html#x7-140002">字句構造</a></span>
+<br />&#x00A0;<span class="sectionToc" >2.1 <a
+href="haskellch2.html#x7-150002.1">表記規約</a></span>
+<br />&#x00A0;<span class="sectionToc" >2.2 <a
+href="haskellch2.html#x7-160002.2">プログラムの字句構造</a></span>
+<br />&#x00A0;<span class="sectionToc" >2.3 <a
+href="haskellch2.html#x7-170002.3">コメント</a></span>
+<br />&#x00A0;<span class="sectionToc" >2.4 <a
+href="haskellch2.html#x7-180002.4">識別子および演算子</a></span>
+<br />&#x00A0;<span class="sectionToc" >2.5 <a
+href="haskellch2.html#x7-190002.5">数値リテラル</a></span>
+<br />&#x00A0;<span class="sectionToc" >2.6 <a
+href="haskellch2.html#x7-200002.6">文字リテラルおよび文字列リテラル</a></span>
+<br />&#x00A0;<span class="sectionToc" >2.7 <a
+href="haskellch2.html#x7-210002.7">レイアウト</a></span>
+<br /><span class="chapterToc" >3 <a
+href="haskellch3.html#x8-220003">式</a></span>
+<br />&#x00A0;<span class="sectionToc" >3.1 <a
+href="haskellch3.html#x8-230003.1">エラー</a></span>
+<br />&#x00A0;<span class="sectionToc" >3.2 <a
+href="haskellch3.html#x8-240003.2">変数，構成子，演算子，リテラル</a></span>
+<br />&#x00A0;<span class="sectionToc" >3.3 <a
+href="haskellch3.html#x8-260003.3">カリー化された適用およびλ抽象</a></span>
+<br />&#x00A0;<span class="sectionToc" >3.4 <a
+href="haskellch3.html#x8-280003.4">演算子の適用</a></span>
+<br />&#x00A0;<span class="sectionToc" >3.5 <a
+href="haskellch3.html#x8-300003.5">セクション</a></span>
+<br />&#x00A0;<span class="sectionToc" >3.6 <a
+href="haskellch3.html#x8-320003.6">条件式</a></span>
+<br />&#x00A0;<span class="sectionToc" >3.7 <a
+href="haskellch3.html#x8-340003.7">リスト</a></span>
+<br />&#x00A0;<span class="sectionToc" >3.8 <a
+href="haskellch3.html#x8-360003.8">タプル</a></span>
+<br />&#x00A0;<span class="sectionToc" >3.9 <a
+href="haskellch3.html#x8-380003.9">ユニット式および括弧に囲まれた式</a></span>
+<br />&#x00A0;<span class="sectionToc" >3.10 <a
+href="haskellch3.html#x8-400003.10">等差数列</a></span>
+<br />&#x00A0;<span class="sectionToc" >3.11 <a
+href="haskellch3.html#x8-420003.11">リスト内包表記</a></span>
+<br />&#x00A0;<span class="sectionToc" >3.12 <a
+href="haskellch3.html#x8-440003.12">let 式</a></span>
+<br />&#x00A0;<span class="sectionToc" >3.13 <a
+href="haskellch3.html#x8-460003.13">case 式</a></span>
+<br />&#x00A0;<span class="sectionToc" >3.14 <a
+href="haskellch3.html#x8-470003.14">do 式</a></span>
+<br />&#x00A0;<span class="sectionToc" >3.15 <a
+href="haskellch3.html#x8-490003.15">フィールドラベル付きデータ型</a></span>
+<br />&#x00A0;<span class="sectionToc" >3.16 <a
+href="haskellch3.html#x8-560003.16">式の型シグネチャ</a></span>
+<br />&#x00A0;<span class="sectionToc" >3.17 <a
+href="haskellch3.html#x8-580003.17">パターン照合</a></span>
+<br /><span class="chapterToc" >4 <a
+href="haskellch4.html#x10-620004">宣言と束縛</a></span>
+<br />&#x00A0;<span class="sectionToc" >4.1 <a
+href="haskellch4.html#x10-630004.1">型およびクラスの概要</a></span>
+<br />&#x00A0;<span class="sectionToc" >4.2 <a
+href="haskellch4.html#x10-680004.2">ユーザ定義のデータ型</a></span>
+<br />&#x00A0;<span class="sectionToc" >4.3 <a
+href="haskellch4.html#x10-750004.3">型クラスおよび多重定義</a></span>
+<br />&#x00A0;<span class="sectionToc" >4.4 <a
+href="haskellch4.html#x10-800004.4">入れ子になった宣言</a></span>
+<br />&#x00A0;<span class="sectionToc" >4.5 <a
+href="haskellch4.html#x10-880004.5">関数束縛およびパターン束縛の静的意味論</a></span>
+<br />&#x00A0;<span class="sectionToc" >4.6 <a
+href="haskellch4.html#x10-970004.6">カインド推論</a></span>
+<br /><span class="chapterToc" >5 <a
+href="haskellch5.html#x11-980005">モジュール</a></span>
+<br />&#x00A0;<span class="sectionToc" >5.1 <a
+href="haskellch5.html#x11-990005.1">モジュールの構造</a></span>
+<br />&#x00A0;<span class="sectionToc" >5.2 <a
+href="haskellch5.html#x11-1000005.2">エクスポートリスト</a></span>
+<br />&#x00A0;<span class="sectionToc" >5.3 <a
+href="haskellch5.html#x11-1010005.3">インポート宣言</a></span>
+<br />&#x00A0;<span class="sectionToc" >5.4 <a
+href="haskellch5.html#x11-1060005.4">インスタンス宣言のインポートおよびエクスポート</a></span>
+<br />&#x00A0;<span class="sectionToc" >5.5 <a
+href="haskellch5.html#x11-1070005.5">名前衝突および閉包性</a></span>
+<br />&#x00A0;<span class="sectionToc" >5.6 <a
+href="haskellch5.html#x11-1110005.6">標準プレリュード</a></span>
+<br />&#x00A0;<span class="sectionToc" >5.7 <a
+href="haskellch5.html#x11-1140005.7">分割コンパイル</a></span>
+<br />&#x00A0;<span class="sectionToc" >5.8 <a
+href="haskellch5.html#x11-1150005.8">抽象データ型</a></span>
+<br /><span class="chapterToc" >6 <a
+href="haskellch6.html#x13-1160006">定義済みの型およびクラス</a></span>
+<br />&#x00A0;<span class="sectionToc" >6.1 <a
+href="haskellch6.html#x13-1170006.1">Haskell の標準型</a></span>
+<br />&#x00A0;<span class="sectionToc" >6.2 <a
+href="haskellch6.html#x13-1260006.2">正格評価</a></span>
+<br />&#x00A0;<span class="sectionToc" >6.3 <a
+href="haskellch6.html#x13-1270006.3">Haskell の標準クラス</a></span>
+<br />&#x00A0;<span class="sectionToc" >6.4 <a
+href="haskellch6.html#x13-1350006.4">数値</a></span>
+<br /><span class="chapterToc" >7 <a
+href="haskellch7.html#x14-1420007">基本入出力</a></span>
+<br />&#x00A0;<span class="sectionToc" >7.1 <a
+href="haskellch7.html#x14-1430007.1">標準 I/O 関数</a></span>
+<br />&#x00A0;<span class="sectionToc" >7.2 <a
+href="haskellch7.html#x14-1470007.2">I/O 操作の直列化</a></span>
+<br />&#x00A0;<span class="sectionToc" >7.3 <a
+href="haskellch7.html#x14-1480007.3">I/O モナドにおける例外処理</a></span>
+<br /><span class="chapterToc" >8 <a
+href="haskellch8.html#x15-1490008">外部関数インターフェイス</a></span>
+<br />&#x00A0;<span class="sectionToc" >8.1 <a
+href="haskellch8.html#x15-1500008.1">外部言語</a></span>
+<br />&#x00A0;<span class="sectionToc" >8.2 <a
+href="haskellch8.html#x15-1510008.2">コンテキスト</a></span>
+<br />&#x00A0;<span class="sectionToc" >8.3 <a
+href="haskellch8.html#x15-1530008.3">字句構造</a></span>
+<br />&#x00A0;<span class="sectionToc" >8.4 <a
+href="haskellch8.html#x15-1540008.4">外部宣言</a></span>
+<br />&#x00A0;<span class="sectionToc" >8.5 <a
+href="haskellch8.html#x15-1610008.5">外部実体の仕様</a></span>
+<br />&#x00A0;<span class="sectionToc" >8.6 <a
+href="haskellch8.html#x15-1690008.6"> マーシャリング</a></span>
+<br />&#x00A0;<span class="sectionToc" >8.7 <a
+href="haskellch8.html#x15-1700008.7">外部Ｃインターフェイス</a></span>
+<br /><span class="chapterToc" >9 <a
+href="haskellch9.html#x16-1710009">標準プレリュード</a></span>
+<br />&#x00A0;<span class="sectionToc" >9.1 <a
+href="haskellch9.html#x16-1720009.1">プレリュード <span
+class="pcrr7t-">PreludeList</span></a></span>
+<br />&#x00A0;<span class="sectionToc" >9.2 <a
+href="haskellch9.html#x16-1730009.2">プレリュード <span
+class="pcrr7t-">PreludeText</span></a></span>
+<br />&#x00A0;<span class="sectionToc" >9.3 <a
+href="haskellch9.html#x16-1740009.3">プレリュード <span
+class="pcrr7t-">PreludeIO</span></a></span>
+<br /><span class="chapterToc" >10 <a
+href="haskellch10.html#x17-17500010">構文リファレンス</a></span>
+<br />&#x00A0;<span class="sectionToc" >10.1 <a
+href="haskellch10.html#x17-17600010.1">表記規約</a></span>
+<br />&#x00A0;<span class="sectionToc" >10.2 <a
+href="haskellch10.html#x17-17700010.2">字句構文</a></span>
+<br />&#x00A0;<span class="sectionToc" >10.3 <a
+href="haskellch10.html#x17-17800010.3">レイアウト</a></span>
+<br />&#x00A0;<span class="sectionToc" >10.4 <a
+href="haskellch10.html#x17-17900010.4">文藝的コメント</a></span>
+<br />&#x00A0;<span class="sectionToc" >10.5 <a
+href="haskellch10.html#x17-18000010.5">文脈自由構文</a></span>
+<br />&#x00A0;<span class="sectionToc" >10.6 <a
+href="haskellch10.html#x17-18100010.6">結合性の解決</a></span>
+<br /><span class="chapterToc" >11 <a
+href="haskellch11.html#x18-18200011">導出されるインスタンスの仕様</a></span>
+<br />&#x00A0;<span class="sectionToc" >11.1 <a
+href="haskellch11.html#x18-18300011.1"><span
+class="pcrr7t-">Eq</span> および <span
+class="pcrr7t-">Ord</span> クラスの導出インスタンス</a></span>
+<br />&#x00A0;<span class="sectionToc" >11.2 <a
+href="haskellch11.html#x18-18400011.2"><span
+class="pcrr7t-">Enum</span> クラスの導出インスタンス</a></span>
+<br />&#x00A0;<span class="sectionToc" >11.3 <a
+href="haskellch11.html#x18-18500011.3"><span
+class="pcrr7t-">Bounded</span> クラスの導出インスタンス</a></span>
+<br />&#x00A0;<span class="sectionToc" >11.4 <a
+href="haskellch11.html#x18-18600011.4"><span
+class="pcrr7t-">Read</span> および <span
+class="pcrr7t-">Show</span> クラスの導出インスタンス</a></span>
+<br />&#x00A0;<span class="sectionToc" >11.5 <a
+href="haskellch11.html#x18-18700011.5">一例</a></span>
+<br /><span class="chapterToc" >12 <a
+href="haskellch12.html#x19-18800012">コンパイラプラグマ</a></span>
+<br />&#x00A0;<span class="sectionToc" >12.1 <a
+href="haskellch12.html#x19-18900012.1">インライン展開</a></span>
+<br />&#x00A0;<span class="sectionToc" >12.2 <a
+href="haskellch12.html#x19-19000012.2">特殊化</a></span>
+<br />&#x00A0;<span class="sectionToc" >12.3 <a
+href="haskellch12.html#x19-19100012.3">言語拡張</a></span>
+</div>
+<!--l. 465--><div class="crosslinks"><p class="noindent">[<a
+href="haskellpa2.html" >next</a>] [<a
+href="haskellli2.html" >prev</a>] [<a
+href="haskellli2.html#tailhaskellli2.html" >prev-tail</a>] [<a
+href="haskellpa1.html" >front</a>] [<a
+href="haskell.html" >up</a>] </p></div>
+ <p class="noindent"> <a
+ id="tailhaskellpa1.html"></a>
+</body></html>

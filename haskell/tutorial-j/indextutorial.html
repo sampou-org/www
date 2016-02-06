@@ -1,0 +1,207 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Haskell 98 Index</title>
+</head>
+<hr>
+<body bgcolor="#ffffff">
+<h3>Gentle Intro: Index</h3>
+<hr>
+<ul>
+ <li><a href="intro.html#sect1">
+     1<tt>&nbsp;&nbsp;</tt>イントロダクション
+     </a></li> 
+ <li><a href="goodies.html#sect2">
+     2<tt>&nbsp;&nbsp;</tt>値、型、その他の有用な概念
+     </a></li>
+ <li><a href="goodies.html#sect2.1">
+     2.1<tt>&nbsp;&nbsp;</tt>多相型
+     </a></li>
+ <li><a href="goodies.html#sect2.2">
+     2.2<tt>&nbsp;&nbsp;</tt>ユーザ定義の型
+     </a></li>
+<li><a href="goodies.html#sect2.2.1">
+     2.2.1<tt>&nbsp;&nbsp;</tt>再帰型
+     </a></li>
+ <li><a href="goodies.html#sect2.3">
+     2.3<tt>&nbsp;&nbsp;</tt>型の同義名
+     </a></li>
+ <li><a href="goodies.html#sect2.4">
+     2.4<tt>&nbsp;&nbsp;</tt>組み込みの型は特別な型ではない
+     </a></li>
+ <li><a href="goodies.html#sect2.4.1">
+     2.4.1<tt>&nbsp;&nbsp;</tt>リストの内包表記と数列表記
+     </a></li>
+ <li><a href="goodies.html#sect2.4.2">
+     2.4.2<tt>&nbsp;&nbsp;</tt>文字列
+     </a></li>
+ <li><a href="functions.html#sect3">
+     3<tt>&nbsp;&nbsp;</tt>関数
+     </a></li>
+ <li><a href="functions.html#sect3.1">
+     3.1<tt>&nbsp;&nbsp;</tt>ラムダ抽象
+     </a></li>
+ <li><a href="functions.html#sect3.2">
+     3.2<tt>&nbsp;&nbsp;</tt>中置演算子
+     </a></li>
+ <li><a href="functions.html#sect3.2.1">
+     3.2.1<tt>&nbsp;&nbsp;</tt>セクション
+     </a></li>
+ <li><a href="functions.html#sect3.2.2">
+     3.2.2<tt>&nbsp;&nbsp;</tt>結合性宣言
+     </a></li>
+ <li><a href="functions.html#sect3.3">
+     3.3<tt>&nbsp;&nbsp;</tt>関数は非正格</a></li>
+ <li><a href="functions.html#sect3.4">
+     3.4<tt>&nbsp;&nbsp;</tt>「無限の」データ構造
+     </a></li>
+ <li><a href="functions.html#sect3.5">
+     3.5<tt>&nbsp;&nbsp;</tt>エラー関数
+     </a></li>
+ <li><a href="patterns.html#sect4">
+     4<tt>&nbsp;&nbsp;</tt>Case 式とパターン照合
+     </a></li>
+ <li><a href="patterns.html#sect4.1">
+     4.1<tt>&nbsp;&nbsp;</tt>パターン照合の意味論
+     </a></li>
+ <li><a href="patterns.html#sect4.2">
+     4.2<tt>&nbsp;&nbsp;</tt>例
+     </a></li>
+ <li><a href="patterns.html#sect4.3">
+     4.3<tt>&nbsp;&nbsp;</tt>Case 式
+     </a></li>
+ <li><a href="patterns.html#sect4.4">
+     4.4<tt>&nbsp;&nbsp;</tt>遅延パターン
+     </a></li>
+ <li><a href="patterns.html#sect4.5">
+     4.5<tt>&nbsp;&nbsp;</tt>字句の有効範囲と入れ子形式
+     </a></li>
+ <li><a href="patterns.html#sect4.6">
+     4.6<tt>&nbsp;&nbsp;</tt>レイアウト
+     </a></li>
+ <li><a href="classes.html#sect5">
+     5<tt>&nbsp;&nbsp;</tt>型クラスと多重定義
+     </a></li>
+ <li><a href="moretypes.html#sect6">
+     6<tt>&nbsp;&nbsp;</tt>再び、型について
+     </a></li>
+ <li><a href="moretypes.html#sect6.1">
+     6.1<tt>&nbsp;&nbsp;</tt>Newtype 宣言
+     </a></li>
+ <li><a href="moretypes.html#sect6.2">
+     6.2<tt>&nbsp;&nbsp;</tt>フィールドラベル
+     </a></li>
+ <li><a href="moretypes.html#sect6.3">
+     6.3<tt>&nbsp;&nbsp;</tt>正格データ構築子
+     </a></li>
+ <li><a href="io.html#sect7">
+     7<tt>&nbsp;&nbsp;</tt>入出力
+     </a></li>
+ <li><a href="io.html#sect7.1">
+     7.1<tt>&nbsp;&nbsp;</tt>I/O の基本演算
+     </a></li>
+ <li><a href="io.html#sect7.2">
+     7.2<tt>&nbsp;&nbsp;</tt>アクションをつかったプログラミング
+     </a></li>
+ <li><a href="io.html#sect7.3">
+     7.3<tt>&nbsp;&nbsp;</tt>例外処理
+     </a></li>
+ <li><a href="io.html#sect7.4">
+     7.4<tt>&nbsp;&nbsp;</tt>ファイル、チャネル、ハンドル
+     </a></li>
+ <li><a href="io.html#sect7.5">
+     7.5<tt>&nbsp;&nbsp;</tt>Haskell と命令型プログラミング
+     </a></li>
+ <li><a href="stdclasses.html#sect8">
+     8<tt>&nbsp;&nbsp;</tt>Haskell の標準クラス
+     </a></li>
+ <li><a href="stdclasses.html#sect8.1">
+     8.1<tt>&nbsp;&nbsp;</tt>同値クラスと順序クラス
+     </a></li>
+ <li><a href="stdclasses.html#sect8.2">
+     8.2<tt>&nbsp;&nbsp;</tt>列挙クラス
+     </a></li>
+ <li><a href="stdclasses.html#sect8.3">
+     8.3<tt>&nbsp;&nbsp;</tt>Read クラスと Show クラス
+     </a></li>
+ <li><a href="stdclasses.html#sect8.4">
+     8.4<tt>&nbsp;&nbsp;</tt>導出されたインスタンス
+     </a></li>
+ <li><a href="monads.html#sect9">
+     9<tt>&nbsp;&nbsp;</tt>モナドについて
+     </a></li>
+ <li><a href="monads.html#sect9.1">
+     9.1<tt>&nbsp;&nbsp;</tt>モナドのクラス
+     </a></li>
+ <li><a href="monads.html#sect9.2">
+     9.2<tt>&nbsp;&nbsp;</tt>組み込みモナド
+     </a></li>
+ <li><a href="monads.html#sect9.3">
+     9.3<tt>&nbsp;&nbsp;</tt>モナドを使う
+     </a></li>
+ <li><a href="numbers.html#sect10">
+     10<tt>&nbsp;&nbsp;</tt>数
+     </a></li>
+ <li><a href="numbers.html#sect10.1">
+     10.1<tt>&nbsp;&nbsp;</tt>数値クラスの構造
+     </a></li>
+ <li><a href="numbers.html#sect10.2">
+     10.2<tt>&nbsp;&nbsp;</tt>構造のある数値型
+     </a></li>
+ <li><a href="numbers.html#sect10.3">
+     10.3<tt>&nbsp;&nbsp;</tt>数値型変換と多重定義されたリテラル
+     </a></li>
+ <li><a href="numbers.html#sect10.4">
+     10.4<tt>&nbsp;&nbsp;</tt>デフォルトの数値型
+     </a></li>
+ <li><a href="modules.html#sect11">
+     11<tt>&nbsp;&nbsp;</tt>モジュール
+     </a></li>
+ <li><a href="modules.html#sect11.1">
+     11.1<tt>&nbsp;&nbsp;</tt>修飾された名前
+     </a></li>
+ <li><a href="modules.html#sect11.2">
+     11.2<tt>&nbsp;&nbsp;</tt>抽象データ型
+     </a></li>
+ <li><a href="modules.html#sect11.3">
+     11.3<tt>&nbsp;&nbsp;</tt>そのほかの特徴
+     </a></li>
+ <li><a href="pitfalls.html#sect12">
+     12<tt>&nbsp;&nbsp;</tt>型付けの落し穴
+     </a></li>
+ <li><a href="pitfalls.html#sect12.1">
+     12.1<tt>&nbsp;&nbsp;</tt>let 束縛の多相性
+     </a></li>
+ <li><a href="pitfalls.html#sect12.2">
+     12.2<tt>&nbsp;&nbsp;</tt>数値の多重定義
+     </a></li>
+ <li><a href="pitfalls.html#sect12.3">
+     12.3<tt>&nbsp;&nbsp;</tt>単相性限定
+     </a></li>
+ <li><a href="arrays.html#sect13">
+     13<tt>&nbsp;&nbsp;</tt>配列
+     </a></li>
+ <li><a href="arrays.html#sect13.1">
+     13.1<tt>&nbsp;&nbsp;</tt>インデックス型
+     </a></li>
+ <li><a href="arrays.html#sect13.2">
+     13.2<tt>&nbsp;&nbsp;</tt>配列生成
+     </a></li>
+ <li><a href="arrays.html#sect13.3">
+     13.3<tt>&nbsp;&nbsp;</tt>累積
+     </a></li>
+ <li><a href="arrays.html#sect13.4">
+     13.4<tt>&nbsp;&nbsp;</tt>漸進更新
+     </a></li>
+ <li><a href="arrays.html#sect13.5">
+     13.5<tt>&nbsp;&nbsp;</tt>例：行列の積
+     </a></li>
+ <li><a href="end.html#sect14">
+     14<tt>&nbsp;&nbsp;</tt>次の段階
+     </a></li>
+ <li><a	href="end.html#sect15">
+     15<tt>&nbsp;&nbsp;</tt>謝辞
+     </a></li>
+</ul>
+</body>
+</html>

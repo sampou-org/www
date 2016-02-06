@@ -1,0 +1,291 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>A Gentle Introduction to Haskell: Types, Again</title>
+</head>
+<body bgcolor="#ffffff">
+<p>
+<i>やさしい Haskell 入門 (バージョン 98 )</i><br>
+<a href="classes.html">back</a>
+<a href="io.html">next</a>
+<a href="index.html">top</a>
+</p>
+<hr>
+<p>
+<a name="sect6"></a>
+<h2>6<tt>&nbsp;&nbsp;</tt>再び、型について</h2>
+</p>
+<p>
+ここでは、型宣言のより進んだ側面のいくつかを詳しくみていくことにします。
+</p>
+<p>
+<a name="sect6.1"></a>
+<h3>6.1<tt>&nbsp;&nbsp;</tt>Newtype 宣言</h3>
+</p>
+<p>
+プログラミングの際によくやるのが，表現が既存の型と同一だが，型システムの
+中では別の型として識別されるような型を定義することです。Haskell では 
+<tt>newtype</tt> 宣言が既存の型から新しい型をつくりだします。たとえば、
+<tt>Integer</tt> 型を次のような宣言で用いて、自然数を表現することができ
+ます。
+<tt><br>
+<br>
+newtype&nbsp;Natural&nbsp;=&nbsp;MakeNatural&nbsp;Integer<br>
+<br>
+</tt>
+この宣言は、完全に新しい型 <tt>Natural</tt> を生成し、その構築子はひとつ
+の <tt>Integer</tt> だけを引数にとります。この構築子 
+<tt>MakeNatural</tt> は <tt>Natural</tt> と <tt>Integer</tt> との間の変
+換をおこないます。
+<tt><br>
+<br>
+toNatural&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;Integer&nbsp;-&gt;&nbsp;Natural<br>
+toNatural&nbsp;x&nbsp;|&nbsp;x&nbsp;&lt;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;error&nbsp;"Can't&nbsp;create&nbsp;negative&nbsp;naturals!"&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;otherwise&nbsp;=&nbsp;MakeNatural&nbsp;x<br>
+<br>
+fromNatural&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;Natural&nbsp;-&gt;&nbsp;Integer<br>
+fromNatural&nbsp;(MakeNatural&nbsp;i)&nbsp;=&nbsp;i<br>
+<br>
+</tt>
+次のインスタンス宣言は <tt>Natural</tt> を <tt>Num</tt> クラスに所属させ
+るものです。
+<tt><br>
+<br>
+instance&nbsp;Num&nbsp;Natural&nbsp;where<br>
+&nbsp;&nbsp;&nbsp;&nbsp;fromInteger&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;toNatural<br>
+&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;+&nbsp;y&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;toNatural&nbsp;(fromNatural&nbsp;x&nbsp;+&nbsp;fromNatural&nbsp;y)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;-&nbsp;y&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;let&nbsp;r&nbsp;=&nbsp;fromNatural&nbsp;x&nbsp;-&nbsp;fromNatural&nbsp;y&nbsp;in<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;r&nbsp;&lt;&nbsp;0&nbsp;then&nbsp;error&nbsp;"Unnatural&nbsp;subtraction"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else&nbsp;toNatural&nbsp;r<br>
+&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;*&nbsp;y&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;toNatural&nbsp;(fromNatural&nbsp;x&nbsp;*&nbsp;fromNatural&nbsp;y)<br>
+<br>
+</tt>
+この宣言なしでは、<tt>Natural</tt> は <tt>Num</tt> には属することができ
+ません。元の型に対するインスタンス宣言内容が、新しい型に持ち越されることはあ
+りません。実際、この型の目的は、別の <tt>Num</tt> のインスタンスを導入す
+ることなのです。もし、<tt>Natural</tt> が <tt>Integer</tt> の型シノニム
+として宣言されていれば、これはできません。
+</p>
+<p>
+これらはすべて、<tt>newtype</tt> 宣言ではなく <tt>data</tt> 宣言を用いて
+も機能します。しかし、<tt>data</tt> 宣言では、<tt>Natural</tt> の値の表
+現にオーバヘッドが生じます。<tt>newtype</tt> を用いることで 
+<tt>data</tt> 宣言によって間接参照のレベルが深くなる(これは遅延性の故に
+生じる)のを避けることができます。<tt>newtype</tt>、<tt>data</tt> および 
+<tt>type</tt> 宣言の間の関係についてのさらに詳しい議論は、レポートの <a
+href="../report-j/decls.html#datatype-renaming">4.2.3</a> 節を参照してくだ
+さい。
+</p>
+<p>
+[キーワードをのぞけば、<tt>newtype</tt> 宣言は、単一フィールドをもつ単一
+構築子の <tt>data</tt> 宣言と同じ構文を用います。<tt>newtype</tt> を用い
+て定義された型は通常の <tt>data</tt> 宣言で生成された型とほとんど同一な
+のですから、これは当然でしょう。]
+</p>
+<p>
+<a name="sect6.2"></a>
+<h3>6.2<tt>&nbsp;&nbsp;</tt>フィールドラベル</h3>
+</p>
+<p>
+Haskell のデータ型内のフィールドは、位置を手がかりにアクセスすることも、
+<em>フィールドラベル</em>を用いて名前でアクセスすることもできます。2 次
+元の点に対する型について考察しましょう。
+<tt><br>
+<br>
+data&nbsp;Point&nbsp;=&nbsp;Pt&nbsp;Float&nbsp;Float<br>
+<br>
+</tt>
+<tt>Point</tt> の構成要素は、構築子 <tt>Pt</tt> の第一引数と第二引数です。
+次のような関数
+<tt><br>
+<br>
+pointx&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;Point&nbsp;-&gt;&nbsp;Float<br>
+pointx&nbsp;(Pt&nbsp;x&nbsp;_)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;x<br>
+<br>
+</tt>
+は、第一の構成要素をいくぶん説明的に参照するのに使われていますが、もっと、
+大きな構造に対して、このような関数を手でつくるのは面倒です。
+</p>
+<p>
+<tt>data</tt> 宣言における構築子は、<em>フィールド名</em>(波括弧でくくら
+れて)付で宣言されることもあります。フィールド名は構築子の構成要素を位置
+によってではなく、名前で同定します。以下はもうひとつの <tt>Point</tt> の
+定義です。
+<tt><br>
+<br>
+data&nbsp;Point&nbsp;=&nbsp;Pt&nbsp;{pointx,&nbsp;pointy&nbsp;::&nbsp;Float}<br>
+<br>
+</tt>
+このデータ型はその前で定義した <tt>Point</tt> と同一のものです。構築子 
+<tt>Pt</tt> は両方でおなじです。しかし、この宣言ではふたつのフィールド名、
+<tt>pointx</tt> と <tt>pointy</tt> とが定義されています。これらのフィー
+ルド名は構造の中から構成要素を取り出すための<em>選択関数</em>
+( <i>selector function</i> ) としても使うことができます。この例では
+選択関数は、
+<tt><br>
+<br>
+pointx&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;&nbsp;&nbsp;Point&nbsp;-&gt;&nbsp;Float&nbsp;<br>
+pointy&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;&nbsp;&nbsp;Point&nbsp;-&gt;&nbsp;Float&nbsp;<br>
+<br>
+</tt>
+です。つぎは、これらの選択関数をつかった関数定義です。
+<tt><br>
+<br>
+absPoint&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;Point&nbsp;-&gt;&nbsp;Float<br>
+absPoint&nbsp;p&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;sqrt&nbsp;(pointx&nbsp;p&nbsp;*&nbsp;pointx&nbsp;p&nbsp;+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pointy&nbsp;p&nbsp;*&nbsp;pointy&nbsp;p)<br>
+<br>
+</tt>
+</p>
+<p>
+フィールドラベルは新しい値を構築するときにも使えます。式 
+<tt>Pt&nbsp;{pointx=1,&nbsp;pointy=2}</tt> は式 
+<tt>Pt&nbsp;1&nbsp;2</tt> と同一です。このデータ構築子の宣言でのフィール
+ド名の使い方は、位置をよりどころとしたフィールドへのアクセスを排除するも
+のではありません。<tt>Pt&nbsp;{pointx=1,&nbsp;pointy=2}</tt> と 
+<tt>Pt&nbsp;1&nbsp;2</tt> とはともに可能です。フィールド名を使って値を構
+築する場合、フィールドをいくつか省略することができます。
+</p>
+<p>
+省略されたフィールドは定義されません。
+</p>
+<p>
+フィールド名を使ったパターンマッチングは構築子 <tt>Pt</tt> のときと同じ
+ような構文で使います。
+<tt><br>
+<br>
+absPoint&nbsp;(Pt&nbsp;{pointx&nbsp;=&nbsp;x,&nbsp;pointy&nbsp;=&nbsp;y})&nbsp;=&nbsp;sqrt&nbsp;(x*x&nbsp;+&nbsp;y*y)&nbsp;<br>
+<br>
+</tt>
+</p>
+<p>
+更新関数は、既存の構造中のフィールド値を使って、新しい構造の構成要素を埋
+めます。もし、<tt>p</tt> が <tt>Point</tt> ならば、
+<tt>p&nbsp;{pointx=2}</tt> は <tt>p</tt> と同じ <tt>pointy</tt> をもちま
+すが、<tt>pointx</tt> は <tt>2</tt> に置き換ります。これは、破壊的更新で
+はありません。この更新関数は、指定されたフィールドを新しい値で埋めること
+で、オブジェクトの新しいコピーを生成しているにすぎません。
+</p>
+<p>
+[フィールドラベルと併せて使用した波括弧はいくぶん特殊な使い方です。
+Haskell の構文では、<em>レイアウトルール</em>を無視するのに波括
+弧を使うのが普通です。(レイアウトルールについては <a
+href="patterns.html#tut-layout">4.6</a> 節であつかっています。) しかし、
+フィールド名とむすびついた波括弧は明示的に書かなければなりません。]
+</p>
+<p>
+フィールド名は単一構築子の型(レコード型とよばれることが多い)に限るも
+のではありません。複数の構築子をもつ型では、フィールド名を用いての選択や
+更新の操作は実行時エラーを引き起こす可能性があります。これは、空リストに 
+<tt>head</tt> を適用したときと似ています。
+</p>
+<p>
+フィールドラベルは一般の変数やクラスメソッドとトップレベルの名前空間を共
+有します。スコープのなかで同じ名前のフィールド一つ以上のデータ型で使うこ
+とはできません。しかし、一つのデータ型の中でなら、型付けが同じあるかぎり、
+一つ以上の構築子のなかで、使うことができます。たとえば、次のようなデータ
+型のなかで、
+<tt><br>
+<br>
+data&nbsp;T&nbsp;=&nbsp;C1&nbsp;{f&nbsp;::&nbsp;Int,&nbsp;g&nbsp;::&nbsp;Float}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;C2&nbsp;{f&nbsp;::&nbsp;Int,&nbsp;h&nbsp;::&nbsp;Bool}<br>
+<br>
+</tt>
+フィールド名 <tt>f</tt> は型 <tt>T</tt> の両方の構築子に適用されています。
+つまり、もし、<tt>x</tt> の型が <tt>T</tt> ならば、<tt>x&nbsp;{f=5}</tt> 
+は <tt>T</tt> 内のどちらの構築子が生成した値に対しても機能します。
+</p>
+<p>
+フィールド名が代数的データ型の基本性質を変えることはありません。フィール
+ド名は、データ構造の構成要素にアクセスするのに位置を手がかりにするより、
+名前を手がかりにするために用意された、便宜的な構文にすぎません。この構文
+のおかげで、多くの構成要素をもつ構築子の扱いが簡単になります。それは、フィー
+ルドは構築子へのそれぞれの参照を変更することなく追加したり削除したりする
+ことができるからです。フィールドラベルの詳細とその意味論についてはレポー
+トの <a href="../report-j/decls.html#field-labels">&sect;4.2.1</a> を参照
+してください。
+</p>
+<p>
+<a name="tut-strict-flag"></a>
+<a name="sect6.3"></a>
+<h3>6.3<tt>&nbsp;&nbsp;</tt>正格データ構築子</h3>
+</p>
+<p>
+Haskell ではデータ構造は一般的に<em>遅延性</em>をもちます。構成要素は必
+要になるまで評価されません。この性質のおかげで、データ構造はもし評価され
+るとエラーあるいは停止できないような要素を含むことができます。遅延データ
+構造は Haskell の表現力を強化し、Haskell のプログラミングスタイルの要に
+なります。
+</p>
+<p>
+内部的には、遅延データオブジェクトの各フィールドは<em>サンク</em>
+( <i>thunk</i> ) とよくいわれる構造に包みこまれています。サンクはフィー
+ルド値を定義した計算をカプセル化したものです。値が必要にならないかぎり、
+サンクの中へ入ることはありません。エラー ( <i>_|_</i> ) を含むサンクが
+あってもデータ構造の他の要素には影響しません。たとえば、タプル
+<tt>('a',</tt><I>_|_</I><tt>)</tt> は完全に正しい Haskell の値です。
+この <tt>'a'</tt> はこのタプルのもう一方の要素にかまうことなく、使うことが
+できます。ほとんどのプログラミング言語は遅延性ではなく正格性をもっていま
+す。すなわち、データ構造のすべての要素はそのデータ構造に入れる前に値にま
+で簡約されます。
+</p>
+<p>
+サンクにはいろいろなオーバヘッドがついてまわります。サンクを構成するにも、
+それを評価するにも時間がかかります。ヒープの領域をとりますし、そのサンク
+の評価のために必要な別の構造を確保するため、ガーベッジコレクタを起動する
+こともあります。こうしたオーバヘッドを回避するために、
+<em>正格性フラグ</em>を <tt>data</tt> 宣言で使います。こうして、選択的に
+遅延性を抑制することで、指定した構築子のフィールドをただちに評価します。 
+<tt>data</tt> 宣言の中で、<tt>!</tt> でマークされたフィールドは、サンク
+に入れて遅延するのではなく、構造が生成される際に、直ちに評価されます。こ
+の正格性フラグを用いるほうがよい状況はいくつかあります。
+<ul>
+ <li>プログラム実行中に必ず評価されることが確定している構成要素</li>
+ <li>簡単に評価できて絶対にエラーを起こさないことが確定している構成要素</li>
+ <li>部分的に未定義の値であると意味のない型</li>
+</ul>
+たとえば、複素数のライブラリが定義している <tt>Complex</tt> 型はこんなふ
+うになっています。
+<tt><br>
+<br>
+data&nbsp;RealFloat&nbsp;a&nbsp;=&gt;&nbsp;Complex&nbsp;a&nbsp;=&nbsp;!a&nbsp;:+&nbsp;!a<br>
+<br>
+</tt>
+[構築子 <tt>:+</tt> の中置定義に注意してください。] この定義では、ふたつ
+の構成要素にマークがついています。複素数の実数部と虚数部は正格性をもつよ
+うにマークされています。これは、複素数のよりコンパクトな表現ですが、たと
+えば、<tt>1&nbsp;:+&nbsp;</tt> <I>_|_</I> のように未定義の構成要素があっ
+た場合、全体が未定義 (<I>_|_</I>) になってしまうという代償をはらったうえ
+でのことです。しかし、部分的にしか定義されていない複素数が必要になること
+は実際にはありませんから、効率のよい表現を達成するために正格性フラグを使
+用するのは意味のあることです。
+</p>
+<p>
+正格性フラグはメモリリーク(もはや使うことはないのにガーベッジコレクタに
+回収されない構造)を解決するために使うこともできます。
+</p>
+<p>
+正格性フラグ <tt>!</tt> は <tt>data</tt> 宣言のなかでのみ使われます。そ
+のほかの型シグネチャーや型定義では使えません。関数の引数に対して正格性を
+もつようにマークをつける方法はありません。しかし、 <tt>seq</tt> あるいは 
+<tt>!$</tt> という関数を使用することで同じ効果が得られます。詳細について
+はレポート <a
+href="../report-j/decls.html#strictness-flags">&sect;4.2.1</a> を参照して
+ください。
+</p>
+<p>
+正格性フラグの使い方の正確なガイドラインを示すのは難しいことです。注意し
+て使用しなければなりません。遅延性は Haskell の基本的な特徴のひとつであっ
+て、そこへ正格性フラグをつけ加えることは無限ループの発見を困難なものにし、
+ほかの予期せぬ結果をまねきかねないということです。
+</p>
+<hr>
+<p>
+<i>A Gentle Introduction to Haskell, Version 98</i><br>
+<a href="classes.html">back</a>
+<a href="io.html">next</a>
+<a href="index.html">top</a>
+</p>
+</body>
+</html>
+

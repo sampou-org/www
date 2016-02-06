@@ -1,0 +1,693 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<!--<title lang="en">Managing the transformer stack</title>-->
+<title>変換子スタックの管理</title>
+</head>
+<body>
+<!--
+<table lang="en" width="100%">
+ <tr>
+  <td align="left" width="33%">Prev:
+   <a href="xformerexamples.html">More examples with monad transformers</a></td>
+  <td align="center" width="33%">TOC:
+   <a href="index.html">Contents</a></td>
+  <td align="right" width="33%">Next:
+   <a href="beyond.html">Continuing Exploration</a></td>
+ </tr>
+</table>	
+-->
+<table lang="ja" width="100%">
+ <tr>
+  <td align="left" width="33%">Prev:
+   <a href="xformerexamples.html">さらにモナド変換子の例</a></td>
+  <td align="center" width="33%">TOC:
+   <a href="index.html">目次</a></td>
+  <td align="right" width="33%">Next:
+   <a href="beyond.html">さらなる探究</a></td>
+ </tr>
+</table>	
+
+<!--<h1 lang="en">Managing the transformer stack</h1>-->
+<h1 lang="ja">変換子スタックの管理</h1>
+<!--
+<ul lang="en">
+  <li><a href="#order">Selecting the correct order</a></li>
+  <li><a href="#example">An example with multiple transformers</a></li>
+  <li><a href="#lifting">Heavy lifting</a></li>
+</ul>
+-->
+<ul lang="ja">
+  <li><a href="#order">正しい順序の選択</a></li>
+  <li><a href="#example">複数の変換子を使う例</a></li>
+  <li><a href="#lifting">多段もちあげ</a></li>
+</ul>
+
+<hr align="center" size="1" width="80%">
+
+<!--
+<p lang="en">
+As the number of monads combined together increases, it becomes increasingly
+important to manage the stack of monad transformers well.
+</p>
+-->
+<p lang="ja">
+合成するモナドの数が増えると、モナド変換子のスタックを上手く管理すること
+がますます重要になります。
+</p>
+
+<a name="order">
+<!--<h2 lang="en">Selecting the correct order</h2>-->
+<h2 lang="ja">正しい順序の選択</h2>
+</a>
+<!--
+<p lang="en">
+Once you have decided on the monad features you need, you must choose
+the correct order in which to apply the monad transformers to achieve
+the results you want. For instance you may know that you want a combined
+monad that is an instance of MonadError and MonadState, but should you
+apply StateT to the Error monad or ErrorT to the State monad? 
+</p>
+-->
+<p lang="ja">
+いったん、必要となるモナドの機能を決めたら、正しい順序でモナド変換子を
+適用して、望む結果を得るようにしなければなりません。たとえば、
+<code>MonadError</code> のインスタンスであるモナドと、
+<code>MonadState</code> のインスタンスであるモナドを合成したいということ
+は判っていても、<code>StateT</code> を <code>Error</code> モナドに適用
+すべきでしょうか、<code>ErrorT</code> を <code>State</code> を適用
+すべきなのでしょうか。
+</p>
+<!--
+<p lang="en">
+The decision depends on the exact semantics you want for your
+combined monad.  Applying <code>StateT</code> to the <code>Error</code>
+monad gives a state transformer function of type
+<code>s&nbsp;->&nbsp;Error&nbsp;e&nbsp;(a,s)</code>.  Applying
+<code>ErrorT</code> to the <code>State</code> monad gives a state transformer
+function of type <code>s&nbsp;->&nbsp;(Error&nbsp;e&nbsp;a,s)</code>.
+Which order to choose depends on the role of errors in your computation.
+If an error means no state could be produced, you would apply <code>StateT</code>
+to <code>Error</code>.  If an error means no value could be produced, but the
+state remains valid, then you would apply <code>ErrorT</code> to <code>State</code>.
+</p>
+-->
+<p lang="ja">
+この決定は、合成したモナドにいったいどのようなセマンティクスを求めている
+のかに依存します。<code>StateT</code> を <code>Error</code> モナドに適用
+すれば、<code>s&nbsp;->&nbsp;Error&nbsp;e&nbsp;(a,s)</code> という型の
+状態変換子関数が得られます。<code>ErrorT</code> を <code>State</code> 
+モナドに適用すれば、<code>s&nbsp;->&nbsp;(Error&nbsp;e&nbsp;a,s)</code>
+という型の状態変換子関数が得られます。どちらの順を選ぶかは、計算中の
+エラーの役割によります。エラーが状態が作れないことを表すのなら、
+<code>StateT</code> を <code>Error</code> に適用することになるでしょう。
+エラーが値が作れないことを表し、状態はちゃんと作れるということを表す
+というなら、<code>ErrorT</code> を <code>State</code> に適用することに
+なるでしょう。
+</p>
+<!--
+<p lang="en">
+Choosing the correct order requires understanding the transformation carried
+out by each monad transformer, and how that transformation affects the
+semantics of the combined monad.
+</p>
+-->
+<p lang="ja">
+正しい順番を選択するには、それぞれのモナド変換子によってもたらされる変換
+を理解していなければなりません。また、その変換が合成されたモナドの
+セマンティクスにどのように影響するかを理解している必要があります。
+</p>
+
+<a name="example">
+<!--<h2 lang="en">An example with multiple transformers</h2>-->
+<h2 lang="ja">複数の変換子を使う例</h2>
+</a>
+<!--
+<p lang="en">
+The following example demonstrates the use of multiple monad transformers.
+The code uses the <code>StateT</code> monad transformer along with the List monad to
+produce a combined monad for doing stateful nondeterministic computations.
+In this case, however, we have added the <code>WriterT</code> monad transformer
+to perform logging during the computation.  The problem we will apply this monad
+to is the famous N-queens problem: to place N queens on a chess board so that
+no queen can attack another.
+</p>
+-->
+<p lang="ja">
+以下の例は複数のモナド変換子を使う例です。このコードでは、
+<code>StateT</code> モナド変換子を List モナドと共に用い、
+状態のある非決定性計算を行うための合成モナドを生成します。
+しかしながら、ここでは、<code>WriterT</code> モナド変換子を追加して
+計算中にログ取りを実行します。このモナドを適用する問題は、
+有名な N-queen 問題です。これは、N 個のクィーンをチェス盤に互いに
+きき筋にないように置くというものです。
+</p>
+<!--
+<p lang="en">
+The first decision is in what order to apply the monad transformers.
+<code>StateT&nbsp;s&nbsp;(WriterT&nbsp;w&nbsp;[])</code> yields a type
+like: <code>s&nbsp;->&nbsp;[((a,s),w)]</code>.
+<code>WriterT&nbsp;w&nbsp;(StateT&nbsp;s&nbsp;[])</code> yields a type
+like: <code>s&nbsp;->&nbsp;[((a,w),s)]</code>.  In this case, there is
+little difference between the two orders, so we will choose the second
+arbitrarily.
+</p>
+-->
+<p lang="ja">
+最初に決めることは、どのような順でモナド変換子を適用するかということです。
+<code>StateT&nbsp;s&nbsp;(WriterT&nbsp;w&nbsp;[])</code> は
+<code>s&nbsp;->&nbsp;[((a,s),w)]</code> のような型をもたらします。
+<code>WriterT&nbsp;w&nbsp;(StateT&nbsp;s&nbsp;[])</code> は
+<code>s&nbsp;->&nbsp;[((a,w),s)]</code> のような型をもたらします。
+このふたつの場合では順序による違いはほとんどありません。それで、
+ここでは独断で、2つめの順序を選ぶことにします。
+</p>
+<!--
+<p lang="en">
+Our combined monad is an instance of both <code>MonadState</code> and
+<code>MonadWriter</code>, so we can freely mix use of <code>get</code>,
+<code>put</code>, and <code>tell</code> in our monadic computations.
+</p>
+-->
+<p lang="ja">
+ここで合成するモナドは <code>MonadState</code> および
+<code>MonadWriter</code> の両方のインスタンスです。それゆえ、
+ここでのモナド計算中に、<code>get</code>、<code>put</code> 
+それに <code>tell</code> をまぜて使えます。
+</p>
+<!--
+<table lang="en" bgcolor="#bbaa55" width="100%">
+<tr bgcolor="#aabb55">
+<th align="left">Code available in <a href="../examples/example25.hs">example25.hs</a></th>
+</tr>
+<tr><td><pre>
+-- this is the type of our problem description
+data NQueensProblem = NQP {board::Board,
+                           ranks::[Rank],   files::[File],
+                           asc::[Diagonal], desc::[Diagonal]}
+
+-- initial state = empty board, all ranks, files, and diagonals free
+initialState = let fileA = map (\r->Pos A r) [1..8]
+                   rank8 = map (\f->Pos f 8) [A .. H]
+                   rank1 = map (\f->Pos f 1) [A .. H]
+                   asc   = map Ascending (nub (fileA ++ rank1))
+                   desc  = map Descending (nub (fileA ++ rank8))
+               in NQP (Board []) [1..8] [A .. H] asc desc
+
+-- this is our combined monad type for this problem
+type NDS a = WriterT [String] (StateT NQueensProblem []) a
+
+-- Get the first solution to the problem, by evaluating the solver computation with
+-- an initial problem state and then returning the first solution in the result list,
+-- or Nothing if there was no solution.
+getSolution :: NDS a -> NQueensProblem -> Maybe (a,[String])
+getSolution c i = listToMaybe (evalStateT (runWriterT c) i)
+
+-- add a Queen to the board in a specific position
+addQueen :: Position -> NDS ()
+addQueen p = do (Board b) <- gets board
+                rs <- gets ranks
+                fs <- gets files
+                as <- gets asc
+                ds <- gets desc
+                let b'  = (Piece Black Queen, p):b
+                    rs' = delete (rank p) rs
+                    fs' = delete (file p) fs
+                    (a,d) = getDiags p
+                    as' = delete a as
+                    ds' = delete d ds
+                tell ["Added Queen at " ++ (show p)]
+                put (NQP (Board b') rs' fs' as' ds')
+
+-- test if a position is in the set of allowed diagonals
+inDiags :: Position -> NDS Bool
+inDiags p = do let (a,d) = getDiags p
+               as <- gets asc
+               ds <- gets desc
+               return $ (elem a as) &amp;&amp; (elem d ds)
+	       
+-- add a Queen to the board in all allowed positions
+addQueens :: NDS ()
+addQueens = do rs <- gets ranks
+               fs <- gets files
+               allowed <- filterM inDiags [Pos f r | f <- fs, r <- rs]
+               tell [show (length allowed) ++ " possible choices"]
+               msum (map addQueen allowed)
+
+-- Start with an empty chess board and add the requested number of queens,
+-- then get the board and print the solution along with the log
+main :: IO ()
+main = do args <- getArgs
+          let n    = read (args!!0)
+              cmds = replicate n addQueens
+              sol  = (`getSolution` initialState) $ do sequence_ cmds
+                                                       gets board
+          case sol of
+            Just (b,l) -> do putStr $ show b    -- show the solution
+                             putStr $ unlines l -- show the log
+            Nothing    -> putStrLn "No solution"
+</pre></td></tr></table>
+-->
+<table lang="ja" bgcolor="#bbaa55" width="100%">
+<tr bgcolor="#aabb55">
+<th align="left"><a href="../examples/example25.hs">example25.hs</a>
+で使えるコード</th>
+</tr>
+<tr><td><pre>
+-- 問題を記述している型
+data NQueensProblem = NQP {board::Board,
+                           ranks::[Rank],   files::[File],
+                           asc::[Diagonal], desc::[Diagonal]}
+
+-- 初期状態は空の盤。すべての横筋、縦筋、斜め筋が空
+initialState = let fileA = map (\r->Pos A r) [1..8]
+                   rank8 = map (\f->Pos f 8) [A .. H]
+                   rank1 = map (\f->Pos f 1) [A .. H]
+                   asc   = map Ascending (nub (fileA ++ rank1))
+                   desc  = map Descending (nub (fileA ++ rank8))
+               in NQP (Board []) [1..8] [A .. H] asc desc
+
+-- この問題用の合成モナドの型
+type NDS a = WriterT [String] (StateT NQueensProblem []) a
+
+-- 最初の解を得る。初期問題状態でソルバ計算を評価して、
+-- 結果のリストから最初の解、あるいは、解がなければ Nothing を返す
+getSolution :: NDS a -> NQueensProblem -> Maybe (a,[String])
+getSolution c i = listToMaybe (evalStateT (runWriterT c) i)
+
+-- 盤の指定された位置にクィーンを置く
+addQueen :: Position -> NDS ()
+addQueen p = do (Board b) <- gets board
+                rs <- gets ranks
+                fs <- gets files
+                as <- gets asc
+                ds <- gets desc
+                let b'  = (Piece Black Queen, p):b
+                    rs' = delete (rank p) rs
+                    fs' = delete (file p) fs
+                    (a,d) = getDiags p
+                    as' = delete a as
+                    ds' = delete d ds
+                tell ["Added Queen at " ++ (show p)]
+                put (NQP (Board b') rs' fs' as' ds')
+
+-- ある位置が許された筋にあるかどうかをテスト
+inDiags :: Position -> NDS Bool
+inDiags p = do let (a,d) = getDiags p
+               as <- gets asc
+               ds <- gets desc
+               return $ (elem a as) &amp;&amp; (elem d ds)
+	       
+-- 許された全ての位置にクィーンを置く
+addQueens :: NDS ()
+addQueens = do rs <- gets ranks
+               fs <- gets files
+               allowed <- filterM inDiags [Pos f r | f <- fs, r <- rs]
+               tell [show (length allowed) ++ " possible choices"]
+               msum (map addQueen allowed)
+
+-- 空のチェス盤からはじめて、要求された数のクィーンを置く
+-- その後、盤を取得し、ログに従って解を印字する
+main :: IO ()
+main = do args <- getArgs
+          let n    = read (args!!0)
+              cmds = replicate n addQueens
+              sol  = (`getSolution` initialState) $ do sequence_ cmds
+                                                       gets board
+          case sol of
+            Just (b,l) -> do putStr $ show b    -- show the solution
+                             putStr $ unlines l -- show the log
+            Nothing    -> putStrLn "No solution"
+</pre></td></tr></table>
+<!--
+<p lang="en">
+The program operates in a similar manner to the previous example, which solved
+the kalotan puzzle.  In this example, however, we do not test for consistency
+using the <code>guard</code> function.  Instead, we only create branches
+that correspond to allowed queen positions.  We use the added logging facility
+to log the number of possible choices at each step and the position in which
+the queen was placed.
+</p>
+-->
+<p lang="ja">
+このプログラムは前のカロタンパズルを解く例と似た方法をつかっています。
+しかし、この例では、<code>guard</code> 関数を使って一貫性を検証していま
+せん。代りに、許されるクィーンの位置に対応するブランチを生成するだけです。
+ここでは、ログ機能を使って、各ステップ毎に、可能性のある選択の数と
+クィーンを置いた場所を記録します。
+</p>
+
+<a name="lifting">
+<!--<h2 lang="en">Heavy lifting</h2>-->
+<h2 lang="ja">多段もちあげ</h2>
+</a>
+<!--
+<p lang="en">
+There is one subtle problem remaining with our use of multiple monad transformers.
+Did you notice that all of the computations in the previous example are done
+in the combined monad, even if they only used features of one monad?  The code
+for these functions in tied unneccessarily to the definition of the combined
+monad, which decreases their reusability.
+</p>
+-->
+<p lang="ja">
+複数のモナド変換子を使う上でまだ微妙な問題が残っています。前の例では
+全ての計算が合成されたモナドで行われていたのに気付きましたか。
+それらはひとつのモナドの機能しか使っていないにもかかわらずです。
+合成されたモナドの定義に不必要に結びつけられたこれらの関数のコードは
+再利用性を著しく低下させます。
+</p>
+<!--
+<p lang="en">
+This is where the <code>lift</code> function from the <code>MonadTrans</code> class
+comes into its own.  The <code>lift</code> function gives us the ability to write
+our code in a clear, modular, reusable manner and then lift the computations
+into the combined monad as needed.
+</p>
+-->
+<p lang="ja">
+ここが、<code>MonadTrans</code> クラスの <code>lift</code> 関数が
+使える場所です。<code>lift</code> 関数によって、わかりやすいく、
+モジュラリティ、再利用性のある方法でコードを書くことができます。
+必要に応じて計算を合成されたモナドにもちあげましょう。
+</p>
+<!--
+<p lang="en">
+Instead of writing brittle code like:
+</p>
+-->
+<p lang="ja">
+次のような脆いコードを書くかわりに、
+</p>
+
+<table bgcolor="#bbaa55" width="100%">
+<tr><td><pre>
+logString :: String -> StateT MyState (WriterT [String] []) Int
+logString s = ...
+</pre></td></tr></table>
+<!--
+<p lang="en">
+we can write clearer, more flexible code like:
+</p>
+-->
+<p lang="ja">
+次のようなもっとわかりやすく、柔軟性のあるコードを書いて、
+</p>
+
+<table bgcolor="#bbaa55" width="100%">
+<tr><td><pre>
+logString :: (MonadWriter [String] m) => String -> m Int
+logString s = ...
+</pre></td></tr></table>
+<!--
+<p lang="en">
+and then lift the <code>logString</code> computation into the combined monad
+when we use it.
+</p>
+-->
+<p lang="ja">
+<code>logString</code> 計算を利用時に合成モナドへもちあげます。
+</p>
+
+<!--
+<p lang="en"><img src="info.png" align="left">
+You may need to use the compiler flags <code>-fglasgow-exts</code> with GHC or
+the equivalent flags with your Haskell compiler to use this technique.  The issue
+is that <code>m</code> in the constraint above is a type constructor, not a type,
+and this is not supported in standard Haskell 98.
+<br clear="all"></p>
+-->
+<p lang="ja"><img src="info.png" align="left">
+この技法を使うためには GHC のコンパイルフラグ
+<code>-fglasgow-exts</code> あるいは、それに相当するコンパイルフラグが
+必要になるでしょう。問題は上の制約中の <code>m</code> が型ではなく、
+型構築子であり、これが標準の Haskell 98 ではサポートされていないというこ
+とです。
+<br clear="all"></p>
+<!--
+<p lang="en">
+When using lifting with complex transformer stacks, you may find yourself
+composing multiple lifts, like
+<code>lift&nbsp;.&nbsp;lift&nbsp;.&nbsp;lift&nbsp;$&nbsp;f&nbsp;x</code>.
+This can become hard to follow, and if the transformer stack changes
+(perhaps you add <code>ErrorT</code> into the mix) the lifting may need
+to be changed all over the code.  A good practice to prevent this is
+to declare helper functions with informative names to do the lifting:
+</p>
+-->
+<p lang="ja">
+複雑な変換子スタックでもちあげを使うときには、複数の lift を
+合成することに気付くでしょう。こんなふうにです
+<code>lift&nbsp;.&nbsp;lift&nbsp;.&nbsp;lift&nbsp;$&nbsp;f&nbsp;x</code>
+。
+これを追いかけるのは難しくなります。変換子スタックが
+(<code>ErrorT</code> を混合しようとする場合など)変化する場合、もちあげ
+は全コードにわたって変更する必要があります。これを防ぐコツは、
+もちあげを行う補助関数を分りやすい名前で宣言することです。
+</p>
+
+<table bgcolor="#bbaa55" width="100%">
+<tr><td><pre>
+liftListToState = lift . lift . lift
+</pre></td></tr></table>
+<!--
+<p lang="en">
+Then, the code is more informative and if the transformer stack changes,
+the impact on the lifting code is confined to a small number of these
+helper functions. 
+</p>
+-->
+<p lang="ja">
+こうすると、コードが分りやすこなり、変換子スタックが変化しても、
+もちあげコードに対する衝撃が、この少数のこれらの補助関数に限定されます。
+</p>
+<!--
+<p lang="en">
+The hardest part about lifting is understanding the semantics of lifting
+computations, since this depends on the details of the inner monad and the
+transformers in the stack.  As a final task, try to understand the different
+roles that lifting plays in the following example code.  Can you predict
+what the output of the program will be?
+</p>
+-->
+<p lang="ja">
+もちあげの最も難しいところは、もちあげ計算のセマンティクスを理解する
+ところです。なぜかというと、もちあげのセマンティクスは、内部モナドと
+スタックされた変換子の詳細に依存するからです。最後に、次のような例の
+コードで、もちあげが果す役割り違いについて理解しましょう。このプログラム
+は何を出力するか予想できますか。
+</p>
+<!--
+<table lang="en" bgcolor="#bbaa55" width="100%">
+<tr bgcolor="#aabb55">
+<th align="left">Code available in <a href="../examples/example26.hs">example26.hs</a></th>
+</tr>
+<tr><td><pre>
+-- this is our combined monad type for this problem
+type NDS a = StateT Int (WriterT [String] []) a
+
+{- Here is a computation on lists -}
+
+-- return the digits of a number as a list
+getDigits :: Int -> [Int]
+getDigits n = let s = (show n)
+              in map digitToInt s
+
+{- Here are some computations in MonadWriter -}
+
+-- write a value to a log and return that value
+logVal :: (MonadWriter [String] m) => Int -> m Int
+logVal n = do tell ["logVal: " ++ (show n)]
+              return n
+
+-- do a logging computation and return the length of the log it wrote
+getLogLength :: (MonadWriter [[a]] m) => m b -> m Int
+getLogLength c = do (_,l) <- listen $ c
+                    return (length (concat l))
+
+-- log a string value and return 0
+logString :: (MonadWriter [String] m) => String -> m Int
+logString s = do tell ["logString: " ++ s]
+                 return 0
+
+{- Here is a computation that requires a WriterT [String] [] -}
+
+-- "Fork" the computation and log each list item in a different branch.
+logEach :: (Show a) => [a] -> WriterT [String] [] a
+logEach xs = do x <- lift xs
+                tell ["logEach: " ++ (show x)]
+                return x
+		
+{- Here is a computation in MonadState -}
+
+-- increment the state by a specified value
+addVal :: (MonadState Int m) => Int -> m ()
+addVal n = do x <- get
+              put (x+n)
+
+{- Here are some computations in the combined monad -}
+
+-- set the state to a given value, and log that value
+setVal :: Int -> NDS ()
+setVal n = do x <- lift $ logVal n
+              put x
+
+-- "Fork" the computation, adding a different digit to the state in each branch.
+-- Because setVal is used, the new values are logged as well.
+addDigits :: Int -> NDS ()
+addDigits n = do x  <- get
+                 y <- lift . lift $ getDigits n
+                 setVal (x+y)
+
+{- an equivalent construction is:
+addDigits :: Int -> NDS ()
+addDigits n = do x <- get
+                 msum (map (\i->setVal (x+i)) (getDigits n))
+-}
+
+{- This is an example of a helper function that can be used to put all of the lifting logic
+   in one location and provide more informative names.  This has the advantage that if the
+   transformer stack changes in the future (say, to add ErrorT) the changes to the existing
+   lifting logic are confined to a small number of functions.
+-}
+liftListToNDS :: [a] -> NDS a
+liftListToNDS = lift . lift
+
+-- perform a series of computations in the combined monad, lifting computations from other
+-- monads as necessary.
+main :: IO ()
+main = do mapM_ print $ runWriterT $ (`evalStateT` 0) $ do x <- lift $ getLogLength $ logString "hello"
+                                                           addDigits x
+                                                           x <- lift $ logEach [1,3,5]
+                                                           lift $ logVal x
+                                                           liftListToNDS $ getDigits 287
+
+</pre></td></tr></table>
+-->
+<table lang="ja" bgcolor="#bbaa55" width="100%">
+<tr bgcolor="#aabb55">
+<th align="left"><a href="../examples/example26.hs">example26.hs</a>
+で使えるコード</th>
+</tr>
+<tr><td><pre>
+-- この問題用の合成モナドの型
+type NDS a = StateT Int (WriterT [String] []) a
+
+{- リスト上の計算 -}
+
+-- 数の各桁をリストとして返す
+getDigits :: Int -> [Int]
+getDigits n = let s = (show n)
+              in map digitToInt s
+
+{- MonadWriter の計算 -}
+
+-- 値をログに書き込み、その値を返す
+logVal :: (MonadWriter [String] m) => Int -> m Int
+logVal n = do tell ["logVal: " ++ (show n)]
+              return n
+
+-- ログを記録する計算を実行し、記録したログの長さを返す
+getLogLength :: (MonadWriter [[a]] m) => m b -> m Int
+getLogLength c = do (_,l) <- listen $ c
+                    return (length (concat l))
+
+-- 文字列値を記録し、0 を返す
+logString :: (MonadWriter [String] m) => String -> m Int
+logString s = do tell ["logString: " ++ s]
+                 return 0
+
+{- WriterT [String] [] を必要とする計算 -}
+
+-- "Fork" the computation and log each list item in a different branch.
+logEach :: (Show a) => [a] -> WriterT [String] [] a
+logEach xs = do x <- lift xs
+                tell ["logEach: " ++ (show x)]
+                return x
+		
+{- MonadState の計算 -}
+
+-- 状態を指定した値だけ増加する
+addVal :: (MonadState Int m) => Int -> m ()
+addVal n = do x <- get
+              put (x+n)
+
+{- 合成モナドの計算 -}
+
+-- 状態を与えられた値に設定し、その値を記録する
+setVal :: Int -> NDS ()
+setVal n = do x <- lift $ logVal n
+              put x
+
+-- 計算を「フォーク」する。各ブランチの状態に異る数字を付加する
+-- setVal が使われているので、新しい値は同じように記録される
+addDigits :: Int -> NDS ()
+addDigits n = do x  <- get
+                 y <- lift . lift $ getDigits n
+                 setVal (x+y)
+
+{- 同等の構成は以下のとおり
+addDigits :: Int -> NDS ()
+addDigits n = do x <- get
+                 msum (map (\i->setVal (x+i)) (getDigits n))
+-}
+
+{- これは、すべてのもちあげロジックを一箇所にまとめ、わかりやすい名前を
+   持たせるのに使える補助関数の例です。これには、変換子スタックが将来
+   変化(たとえば、ErrorTを追加)しても既存のもちあげロジックへの変更は
+   少数の関数の範囲にとどまるという利点があります。
+-}
+liftListToNDS :: [a] -> NDS a
+liftListToNDS = lift . lift
+
+-- 合成モナドの一連の計算を実行する。計算を必要に応じて他のモナドから
+-- もちあげる
+main :: IO ()
+main = do mapM_ print $ runWriterT $ (`evalStateT` 0) $ do x <- lift $ getLogLength $ logString "hello"
+                                                           addDigits x
+                                                           x <- lift $ logEach [1,3,5]
+                                                           lift $ logVal x
+                                                           liftListToNDS $ getDigits 287
+
+</pre></td></tr></table>
+<!--
+<p lang="en">
+Once you fully understand how the various lifts in the example work and how lifting
+promotes code reuse, you are ready for real-world monadic programming.  All that
+is left to do is to hone your skills writing real software.  Happy hacking!
+</p>
+-->
+<p lang="ja">
+この例で、様々なもちあげがどのように働くか、再利用性を促進するかを理解
+してしまえば、実世界向きのモナドプログラミングができるようになります。
+あとはやるべきことは、ほんもののソフトウェアを書く技術を磨くだけです。
+Happy Hacking!
+</p>
+
+<hr align="center" size="1" width="80%">
+
+<!--
+<table lang="en" width="100%">
+ <tr>
+  <td align="left" width="33%">Prev:
+   <a href="xformerexamples.html">More examples with monad transformers</a></td>
+  <td align="center" width="33%">TOC:
+   <a href="index.html">Contents</a></td>
+  <td align="right" width="33%">Next:
+   <a href="beyond.html">Continuing Exploration</a></td>
+ </tr>
+</table>	
+-->
+<table lang="ja" width="100%">
+ <tr>
+  <td align="left" width="33%">Prev:
+   <a href="xformerexamples.html">さらにモナド変換子の例</a></td>
+  <td align="center" width="33%">TOC:
+   <a href="index.html">目次</a></td>
+  <td align="right" width="33%">Next:
+   <a href="beyond.html">さらなる探究</a></td>
+ </tr>
+</table>	
+
+</body>
+</html>

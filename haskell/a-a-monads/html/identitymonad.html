@@ -1,0 +1,215 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<!--<title lang="en">The Identity monad</title>-->
+<title lang="ja">恒等モナド</title>
+</head>
+<body>
+<!--
+<table lang="en" width="100%">
+<tr>
+ <td align="left" width="33%">Prev:
+  <a href="introII.html">Part II - Introduction</a></td>
+ <td align="center" width="33%">TOC:
+  <a href="index.html">Contents</a></td>
+ <td align="right" width="33%">Next:
+  <a href="maybemonad.html">The Maybe monad</a></td>
+</tr>
+</table>	
+-->
+<table lang="ja" width="100%">
+<tr>
+ <td align="left" width="33%">Prev:
+  <a href="introII.html">Part II - イントロダクション</a></td>
+ <td align="center" width="33%">TOC:
+  <a href="index.html">目次</a></td>
+ <td align="right" width="33%">Next:
+  <a href="maybemonad.html">Maybe モナド</a></td>
+</tr>
+</table>	
+
+<!--<h1 lang="en">The Identity monad</h1>-->
+<h1 lang="ja">The Identity monad</h1>
+<!--
+<ul lang="en">
+  <li><a href="#overview">Overview</a></li>
+  <li><a href="#motivation">Motivation</a></li>
+  <li><a href="#definition">Definition</a></li>
+  <li><a href="#example">Example</a></li>
+</ul>
+-->
+<ul lang="ja">
+  <li><a href="#overview">概観</a></li>
+  <li><a href="#motivation">動機</a></li>
+  <li><a href="#definition">定義</a></li>
+  <li><a href="#example">例</a></li>
+</ul>
+
+<hr align="center" size="1" width="80%">
+
+<a name="overview">
+<!--<h2 lang="en">Overview</h2>-->
+<h2 lang="ja">概観</h2></a>
+
+<!--
+<table lang="en" width="100%" cellpadding="3">
+  <tr>
+    <th align="left">Computation type:</th>
+    <td>Simple function application</td>
+  </tr>
+  <tr>
+    <th align="left">Binding strategy:</th>
+    <td>The bound function is applied to the input value.
+    <code>Identity x >>= f == Identity (f x)</code>
+    </td>
+  </tr>
+  <tr>
+    <th align="left">Useful for:</th>
+    <td>Monads can be derived from monad transformers applied to the Identity monad.</td>
+  </tr>
+  <tr>
+    <th align="left">Zero and plus:</th>
+    <td>None.</td>
+  </tr>
+  <tr>
+    <th align="left">Example type:</th>
+    <td><a href="http://www.haskell.org/ghc/docs/latest/html/base/Control.Monad.Identity.html">
+        Identity a</a></td>
+  </tr>
+</table>
+-->
+<table lang="ja" width="100%" cellpadding="3">
+  <tr>
+    <th align="left">計算のタイプ:</th>
+    <td>単純な関数適用</td>
+  </tr>
+  <tr>
+    <th align="left">束縛戦略:</th>
+    <td>束縛関数が入力に適用される
+    <code>Identity x >>= f == Identity (f x)</code>
+    </td>
+  </tr>
+  <tr>
+    <th align="left">利用場面:</th>
+    <td>恒等モナドに適用されたモナド変換子からモナドを導出できる</td>
+  </tr>
+  <tr>
+    <th align="left">ゼロおよびプラス:</th>
+    <td>なし</td>
+  </tr>
+  <tr>
+    <th align="left">型の例:</th>
+    <td><a href="http://www.haskell.org/ghc/docs/latest/html/base/Control.Monad.Identity.html">
+        Identity a</a></td>
+  </tr>
+</table>
+
+<a name="motivation">
+<!--<h2 lang="en">Motivation</h2>-->
+<h2>動機</h2>
+</a>
+<!--
+<p lang="en">
+The Identity monad is a monad that does not embody any computational strategy.
+It simply applies the bound function to its input without any modification.
+Computationally, there is no reason to use the Identity monad instead of
+the much simpler act of simply applying functions to their arguments.  The
+purpose of the Identity monad is its fundamental role in the theory of
+monad transformers (covered in Part III).  Any monad transformer applied to
+the Identity monad yields a non-transformer version of that monad.
+</p>
+-->
+<p lang="ja">
+恒等モナドは計算戦略を内包しないモナドです。
+計算としては、単純に関数をその引数に適用するというはるかに単純な操作の
+代りに恒等モナドを使う理由はなにもありません。恒等モナドの目的は、
+(Part III でカバーする)モナド変換子の理論における基本的役割にあります。
+恒等モナドに適用されるどんなモナド変換子もそのモナドの非変換子版と同じ
+になります。
+</p>
+
+<a name="definition">
+<!-- <h2 lang="en">Definition</h2>-->
+<h2 lang="ja">定義</h2>
+</a>
+
+<table bgcolor="#bbaa55" width="100%"><tr><td><pre>
+newtype Identity a = Identity { runIdentity :: a } 
+ 
+instance Monad Identity where
+    return a           = Identity a   -- i.e. return = id 
+    (Identity x) >>= f = f x          -- i.e. x >>= f = f x 
+</pre></td></tr></table>
+
+<!--
+<p lang="en">
+The <code>runIdentity</code> label is used in the type definition because
+it follows a style of monad definition that explicitly represents monad
+values as computations.
+In this style, a monadic computation is built up using the monadic operators
+and then the value of the computation is extracted using the
+<code>run******</code> function.  Because the Identity monad does not do
+any computation, its definition is trivial.  For a better example
+of this style of monad, see the <a href="statemonad.html">State</a> monad.
+</p>
+-->
+<p lang="ja">
+型定義でラベル <code>runIdentity</code> が使われているのは、モナド値を
+計算として明示的に表現するモナド定義のスタイルにしたがったためです。
+このスタイルでは、モナド計算はモナド演算子をつかって構築され、計算の値は
+<code>run******</code> 関数使って取り出されます。恒等モナドはなんの計算
+もしませんので、その定義は自明です。このモナドのスタイルの、よりよい例に
+ついては <a href="statemonad.html">State</a> モナドを参照してください。
+</p>
+
+<a name="example">
+<!--<h2 lang="en">Example</h2>-->
+<h2 lang="">Example</h2></a>
+</a>
+<!--
+<p lang="en">
+A typical use of the Identity monad is to derive a monad from a monad transformer.
+</p>
+-->
+<p lang="ja">
+恒等モナドの典型的な使い方はモナド変換子からモナドを導出する
+というものです。
+</p>
+<!--
+<table lang="en" bgcolor="#bbaa55" width="100%"><tr><td><pre>
+-- derive the State monad using the StateT monad transformer
+type State s a = StateT s Identity a
+</pre></td></tr></table>
+-->
+
+<table lang="ja" bgcolor="#bbaa55" width="100%"><tr><td><pre>
+-- モナド変換子 StateT を使って State モナドを導出する
+type State s a = StateT s Identity a
+</pre></td></tr></table>
+
+<hr align="center" size="1" width="80%">
+
+<!--
+<table lang="en" width="100%">
+<tr>
+ <td align="left" width="33%">Prev:
+  <a href="introII.html">Part II - Introduction</a></td>
+ <td align="center" width="33%">TOC:
+  <a href="index.html">Contents</a></td>
+ <td align="right" width="33%">Next:
+  <a href="maybemonad.html">The Maybe monad</a></td>
+</tr>
+</table>	
+-->
+<table lang="ja" width="100%">
+<tr>
+ <td align="left" width="33%">Prev:
+  <a href="introII.html">Part II - イントロダクション</a></td>
+ <td align="center" width="33%">TOC:
+  <a href="index.html">目次</a></td>
+ <td align="right" width="33%">Next:
+  <a href="maybemonad.html">Maybe モナド</a></td>
+</tr>
+</table>	
+
+</body>

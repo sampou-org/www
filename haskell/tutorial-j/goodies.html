@@ -1,0 +1,652 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>A Gentle Introduction to Haskell: Values and Types</title>
+</head>
+<body bgcolor="#ffffff">
+<em>やさしい Haskell 入門 (バージョン 98 )</em><br>
+<a href="intro.html">back</a> 
+<a href="functions.html">next</a> 
+<a href="index.html">top</a>
+<hr>
+<a name="tut-values-etc"></a>
+<a name="sect2"></a>
+<h2>2<tt>&nbsp;&nbsp;</tt>値、型、そのほかの有用な概念</h2>
+<p>
+Haskell は純関数型言語ですので、計算はすべて、<em>式
+(<i>expression</i>)</em>(構文上の用語)を<em>値(<i>value</i>)</em>(計算の
+答とみなす抽象的実体)にすることで行われます。すべての値は<em>型
+(<i>type</i>)</em>をもちます。(直観的には型は値の集合と考えることができ
+ます。) 式の例には整数の <tt>5</tt> や文字の <tt>'a'</tt> あるいは関数
+<tt>\x&nbsp;-&gt;&nbsp;x+1 </tt>といったアトミックな値が含まれます。また、
+リスト <tt>[1,2,3]</tt> や組 <tt>('b',4)</tt> もあります。
+</p>
+<p>
+式が値を表しているのと同様に、<em>型の表現式</em>( <i>type
+expression</i> )は型値(あるいは単に<em>型</em>( <i>type</i> ))を表す構文
+上の用語です。型の表現式の例には、<tt>Integer</tt> (多倍長整数型)、
+<tt>Char</tt> (文字型)、<tt>Integer -&gt;Integer</tt> ( <tt>Integer</tt> 
+から <tt>Integer</tt> への関数)といったアトミックな型と、
+<tt>[Integer]</tt> ( <tt>Integer</tt> の同型リスト)、
+<tt>(Char,Integer)</tt> (文字型と多倍長整数型の組)というような構造を持つ
+型が含まれます。
+</p>
+<p>
+Haskell の値はすべて「第一級の対象」です。すなわち、関数の引数、関数の返
+り値、になり得ます。また、データ構造などのなかに入れることもできます。一
+方、Haskell の型は「第一級の対象」ではありません。型はある意味では、値に
+ついて記述する役割のものです。このように値とその型を結びつけることを<em>
+型付け</em>( <i>typing</i> )といいます。上であげた値と型の例では型付けは
+以下のようになります。
+
+<tt><br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5&nbsp;&nbsp;::&nbsp;Integer<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'a'&nbsp;::&nbsp;Char<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inc&nbsp;::&nbsp;Integer&nbsp;-&gt;&nbsp;Integer<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[1,2,3]&nbsp;::&nbsp;[Integer]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;('b',4)&nbsp;::&nbsp;(Char,Integer)<br><br></tt>
+
+<tt>::</tt> は「の型は」と読むことができます。
+</p>
+<p>
+Haskell の関数はふつう一連の<em>等式</em>( <i>equation</i> )によって定義さ
+れます。例えば、関数 <tt>inc</tt> はひとつの等式
+
+<tt><br><br>
+inc&nbsp;n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;n+1<br><br></tt>
+
+で定義することができます。
+</p>
+<p>
+等式は<em>宣言</em>( <i>declaration</i> )の一例です。もうひとつ別の種類の
+宣言に<em>型シグネチャ宣言</em>( <i>type signature declaration</i> (<a
+href="../report-j/decls.html#type-signatures">&sect;4.4.1</a> ))があります。
+これを用いて <tt>inc</tt> の明示的な型付けを宣言することができます。
+
+<tt><br><br>
+inc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;Integer&nbsp;-&gt;&nbsp;Integer
+<br><br></tt>
+
+関数の定義については<a href="functions.html#tut-functions">3節</a>でさら
+に詳しく述べます。
+</p>
+<p>
+学術的な目的で式<i>e</i><sub>1</sub>が評価されて、あるいは「簡約」されて
+別の式あるいは値<i>e</i><sub>2</sub>になることを示したいときには、
+</p>
+<p>
+e<sub>1</sub>    =&gt;    e<sub>2</sub> 
+</p>
+<p>
+という表記を用います。たとえば、
+</p>
+<p>
+<tt>inc&nbsp;(inc&nbsp;3)</tt>    =&gt;    <tt>5</tt>
+</p>
+<p>
+Haskell の静的な型システムは、型と値とのあいだの形式的関係を定義します。
+(<a href="../report-j/decls.html#type-semantics">&sect;4.1.3</a>) この静的
+な型システムは Haskell のプログラムが<em>型安全(<i>type
+safe</i>)</em>であることを保証するものです。すなわち、プログラマが整合性
+のとれていない型を使っていないことを保証します。例えば、一般にふたつの文
+字を足し合わせることはできません。つまり、<tt>'a' + 'b'</tt> は適切に型
+付けできないということです。このような静的型付けをおこなう言語のおもな利
+点はよく知られているとおり、すべての型エラーはコンパイル時に検出されると
+いうことです。すべてのエラーがこの型システムで検出されるわけではありませ
+ん。たとえば、<tt> 1/0 </tt>という式は型付け可能ですが、評価すると実行時
+エラーとなります。しかしながら、この型システムはコンパイル時におおくのプ
+ログラムエラーを見つけ、ユーザがプログラムの正しさを確認するのに役立つう
+えに、コンパイラがより効率のよいコード(たとえば、実行時の型タグや型テス
+トの省略)を生成することができます。
+</p>
+<p>
+この型システムはユーザがあたえた型シグネチャが正しいことを確認します。本当
+のところ Haskell の型システムは強力なので、ユーザは型シグネチャをまった
+く書かなくてもいいくらいです。この場合には型システムが正しい<em>型推論
+(<i>type infer</i>)</em>をおこなってくれます。しかし、チェックのために、
+<tt>inc</tt>の例でやったように、型シグネチャをおいておくことは、よい考え
+です。その理由は型シグネチャは最も効率的なドキュメンテーションであり、プ
+ログラミング上のエラーを光あるなかにひきだすのに役に立つからです。
+</p>
+<p>
+[読者のみなさんは気づいたでしょうか、特定の型を表わす識別子は大文字では
+じまっています。たとえば、<tt>Integer</tt> や <tt>Char</tt> です。また、
+<tt>inc</tt> のような値を表わす識別子は小文字ではじまっています。これは単
+なる習慣ではありません。Haskell の構文規則でそうすることになっているので
+す。また、先頭の文字だけではなく、そのほかの文字も、大文字か小文字かとい
+うことは重要で、<tt>foo</tt> と <tt>fOo</tt> と <tt>fOO</tt> はすべて違
+う識別子として区別されます。]
+</p>
+<a name="tut-polymorphism"></a>
+<a name="sect2.1"></a>
+<h3>2.1<tt>&nbsp;&nbsp;</tt>多相型</h3>
+<p>
+Haskell では<em>多相型(<i>polymorphic type</i>)</em>をとりあつかうことが
+できます。これはすべての型の上で全称修飾された型を表します。多相型の表現
+式は本質的には、型の族をあらわすものです。たとえば、
+(∀<tt>a</tt>)<tt>[a]</tt> はすべての型<tt>a</tt>に対して、<tt>a</tt>の
+リストの型からなる型の族をあらわしています。整数のリスト(たとえば、
+<tt>[1,2,3])</tt>や文字のリスト (<tt>['a','b','c']</tt>)、あるいは整数の
+リストのリストもみなこの族のメンバーです。(しかし、<tt>[2,'a']</tt>は正
+しくない例であることに注意してください。その理由は、<tt>2</tt>と
+<tt>'a'</tt>の両方を含む単一の型は存在しないからです。)
+</p>
+<p>
+[上の<tt>a</tt>のような識別子を<em>型変数(<i>type variable</i>)</em>とよ
+びます。型変数は大文字にはせず、<tt>Int</tt>のような特定の型と区別します。
+さらに、Haskell には全称修飾された型しか限量子修飾された型はありませんの
+で、全称限量子をあらわすシンボルを明示的に書く必要がありません。それゆえ、
+上の例は単に<tt>[a]</tt>と書きます。いいかえれば、型変数は暗黙に全称修飾
+されています。]
+</p>
+<p>
+リストは関数型言語ではよく使われるデータ構造で、多相性の概念の説明に丁度
+いいデータ構造です。Haskellでは<tt>[1,2,3]</tt>というリストは、
+<tt>1:2:3:[]</tt>というリストの簡略表記です。ここで、<tt>[]</tt>は空リス
+ト、<tt>:</tt>は中置演算子で最初の引数を2つめの引数(リスト)の前に加えま
+す。<tt>:</tt>は右結合性をもちますので、このリストを<tt>1:2:3:[]</tt>と
+書くことができます。
+</p>
+<p>
+リスト上のユーザ定義の関数の例で、リストの要素の数をかぞえる問題を考えて
+みましょう。
+
+<tt><br><br>
+length&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;[a]&nbsp;-&gt;&nbsp;Integer<br>
+length&nbsp;[]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;0<br>
+length&nbsp;(x:xs)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;1&nbsp;+&nbsp;length&nbsp;xs
+<br><br></tt>
+
+この定義は、これだけで十分説明になります。この等式をこんなふうに読むこと
+ができます。「空リストの長さは 0 、最初の要素が<tt>x</tt>で残りが
+<tt>xs</tt>であるようなリストの長さは 1 に<tt>xs</tt>の長さを加えたもの
+である。」(ここでは命名の習慣がつかわれていることに注意してください。
+<tt>xs</tt>は<tt>x</tt>の複数形で、読むときもそのように読みます。)
+</p>
+<p>
+直観的にわかりますが、この例では Haskell の重要な側面が浮き彫りになって
+います。これはまだ説明していませんが、<em>パターンマッチング
+</em>(<i>pattern matching</i>)です。定義の等式の左辺には<tt>[]</tt>や
+<tt>x:xs</tt>というパターンが含まれています。関数適用の際に、これらのパ
+ターンは直観でわかるとおりに実引数にマッチします(<tt>[]</tt>は空リストに
+のみマッチし、<tt>x:xs</tt>は少なくとも1つ以上の要素をもつリストにマッチ
+します。このとき、<tt>x</tt>は最初の要素に束縛され、<tt>xs</tt>はリスト
+ののこりの部分に束縛されます)。マッチングが成功すると、右辺が評価され、
+それが関数適用の結果として返されます。もし、マッチングが失敗すれば、次の
+等式が試されます。すべての等式でパターンマッチが失敗すれば、エラーとなり
+ます。
+</p>
+<p>
+パターンマッチを使って関数を定義するのは Haskell では常套手段です。ユー
+ザは Haskell で許されている種々のパターンについて慣れておく必要がありま
+す。パターンマッチについては
+<a href="patterns.html#tut-pattern-matching">4節</a>でもう一度とりあげます。
+</p>
+<p>
+関数<tt>length</tt>は多相関数の1例でもあります。この関数はあらゆる型の要
+素をもつリストに適用することができます。たとえば、<tt>[Integer]</tt>、
+<tt>[Char]</tt>あるいは<tt>[[Integer]]</tt>です。
+</p>
+<p>
+<table >
+ <tr>
+  <td><tt>length&nbsp;[1,2,3]</tt></td>
+  <td align=center>=&gt;</td>
+  <td>3</td>
+ </tr>
+ <tr>
+  <td><tt>length&nbsp;['a','b','c']</tt></td>
+  <td align=center>=&gt;</td>
+  <td>3</td>
+ </tr>
+ <tr>
+  <td><tt>length&nbsp;[[1],[2],[3]]</tt></td>
+  <td align=center>=&gt;</td>
+  <td>3</td>
+ </tr>
+</table>
+</p>
+<p>
+もう2つ別のよく使うリスト上の多相関数をあげておきましょう。関数
+<tt>head</tt>はリストの最初の要素を返し、関数<tt>tail</tt>は最初の要素を
+のぞく残りの部分を返します。
+
+<tt><br><br>
+head&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;[a]&nbsp;-&gt;&nbsp;a<br>
+head&nbsp;(x:xs)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;x<br><br>
+tail&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;[a]&nbsp;-&gt;&nbsp;[a]<br>
+tail&nbsp;(x:xs)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;xs
+<br><br></tt>
+
+関数<tt>length</tt>とは違い、これらの関数はその引数のすべての値に対して
+定義されているわけではありません。これらの関数が空リストにたいして適用さ
+れた場合には実行時エラーが起こります。
+</p>
+<p>
+多相型を使うと、或る種の型が厳密には別の型よりも一般的な(定義されている値
+の集合がより大きい)ことに気付きます。たとえば、型<tt>[a]</tt>は型
+<tt>[Char]</tt>よりも一般的であるということです。いいかえれば、後者の型
+は、適切な置換をほどこせば、前者の型から後者の型を導出できるということで
+す。この一般性の順序付けに関していえば、Haskell の型システムは2つの重要
+な特性を発揮します。ひとつめは、正しく型付けされた式はいづれも唯一の主型
+(これについては下で説明します)を持つことが保証されるということです。ふた
+つめはこの主型は自動的に推論できるものであるということです(<a
+href="../report-j/decls.html#type-semantics">&sect;4.1.3</a>)。Cのように単
+態型を用いる言語と比較すると、多相性のある言語では表現力がアップしている
+のがわかると思います。型推論機構は、プログラマが型の問題で頭を悩ますこと
+を軽減してくれます。
+</p>
+<p>
+式あるいは関数の主型は直観的には「その式のすべてインスタンスを含む」最も
+一般性のない型ということができます。たとえば<tt>head</tt>の主型は
+<tt>[a]-&gt;a</tt>で、<tt>[b]-&gt;a</tt>や<tt>a-&gt;a</tt>あるいは
+<tt>a</tt>では一般的すぎます。かといって、<tt>[Integer]-&gt;Integer</tt>
+というのでは限定的すぎます。唯一の主型が存在するというのは、
+<em>Hindley-Milner型システム</em>のhallmarkな特徴です。この 
+Hindley-Milner型システムは、Haskell や ML そして Miranda (Miranda は 
+Research Software Ltd.の登録商標)あるいはその他の言語(ほとんどは関数型言
+語)の型システムの基盤となっています。
+</p>
+<p>
+<a name="tut-user-types"></a>
+<a name="sect2.2"></a>
+<h3>2.2<tt>&nbsp;&nbsp;</tt>ユーザ定義の型</h3>
+</p>
+<p>
+Haskellでは<tt>data</tt>宣言を使って、ユーザ自身が型を定義することができ
+ます。例をあげていきましょう(<a href="../report-j/decls.html#datatype-decls">&sect;4.2.1</a>)。
+</p>
+<p>
+Haskellの定義済の型でもっとも重要な型は、真理値の型です。
+
+<tt><br><br>
+data&nbsp;Bool&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;False&nbsp;|&nbsp;True
+<br><br></tt>
+
+ここで定義した型は<tt>Bool</tt>型です。この型はちょうど2つの値
+<tt>True</tt>と<tt>False</tt>を持っています。型<tt>Bool</tt>は(無引数)
+<em>型構築子</em>(<i>type constructor</i>)の例です。また、<tt>True</tt>
+や<tt>False</tt>は(これも無引数)<em>データ構築子</em>(<i>data
+constructor</i>)(単に構築子ともいう)の例です。
+</p>
+<p>
+同じようにして、色の型を定義しましょう。
+
+<tt><br><br>
+data&nbsp;Color&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;Red&nbsp;|&nbsp;Green&nbsp;|&nbsp;Blue&nbsp;|&nbsp;Indigo&nbsp;|&nbsp;Violet
+<br><br></tt>
+
+<tt>Bool</tt>型と<tt>Color</tt>型はともに列挙型の例です。それは、どちら
+も有限個の無引数データ構築子から構成されているからです。
+</p>
+<p>
+つぎにあげるのは、ひとつのデータ構築子のみからなる型の例です。
+<tt><br>
+<br>
+data&nbsp;Point&nbsp;a&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;Pt&nbsp;a&nbsp;a<br>
+<br>
+</tt>
+単一の構築子から構成されているので、<tt>Point</tt>のような型はしばしば<em>タ
+プル型</em>(<i>tuple type</i>)と呼ばれます。これは、本質的にはべつの型の
+直積(この場合は2引数)だからです。(タプル型は別の言語ではレコード型と呼ば
+れているものに類似しています。) 一方、<tt>Bool</tt>や<tt>Color</tt>のよ
+うな複数の構築子をもつ型は<em>直和型</em>(<i>(disjoint) union</i> or
+<i>sum type</i>)と呼ばれます。
+</p>
+<p>
+しかし、重要なことは<tt>Point</tt>は多相型の例だということです。すべての
+型 t に対して、これは t を座標の型とする点を定義するものです。
+<tt>Point</tt>型はあきらかに1引数の型構築子です。それは、型 t から新しい
+型<tt>Point&nbsp;</tt>t が生みだされているからです。(同様に先にでてきたリスト
+の例でいうと<tt>[]</tt>も型構築子です。与えられたすべての型にたいして、
+<tt>[]</tt>を「適用」することができて、それが新しい型 
+<tt>[</tt>t<tt>]</tt>となります。Haskell の構文では<tt>[</tt>t<tt>]</tt>
+を<tt>[]&nbsp;</tt>t と書くことも許されています。同じように 
+<tt>-&gt;</tt> は型構築子です。与えられた 2 つの型 t と u に対して、
+t<tt>-&gt;</tt>u は型 t の要素から型 u の要素への写像をおこなう関数の型
+です。)
+</p>
+<p>
+2引数データ構築子<tt>Pt</tt>の型は
+<tt>a&nbsp;-&gt;&nbsp;a&nbsp;-&gt;&nbsp;Point&nbsp;a</tt>であることに注
+意してください。つまり次のは正しい型付けです。
+<tt><br>
+<br>
+Pt&nbsp;&nbsp;2.0&nbsp;&nbsp;3.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;Point&nbsp;Float<br>
+Pt&nbsp;&nbsp;'a'&nbsp;&nbsp;'b'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;Point&nbsp;Char<br>
+Pt&nbsp;True&nbsp;False&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;Point&nbsp;Bool<br>
+<br></tt>
+一方、<tt>Pt&nbsp;'a'&nbsp;1</tt>のような式は正しく型付けできません。そ
+れは、<tt>'a'</tt>と<tt>1</tt>は別の型だからです。
+</p>
+<p>
+<em>データ構築子</em>を適用して<em>値</em>を得ることと、<em>型構築子</em>
+を適用して<em>型</em>を得ることを区別することが重要です。前者は、実行時
+に起こりHaskellのなかでどのように計算するかということであり、後者はコン
+パイル時に起こり、型安全を確かめる型システムのプロセスの一部です。
+</p>
+<p>
+[<tt>Point</tt>のような型構築子と<tt>Pt</tt>のようなデータ構築子は別の名
+前空間にあります。つまり、つぎのように、型構築子とデータ構築子に同じ名前
+を使うことができるということです。
+<tt><br>
+<br>
+data&nbsp;Point&nbsp;a&nbsp;=&nbsp;Point&nbsp;a&nbsp;a<br>
+<br>
+</tt>
+最初はちょっとややこしく見えるかもしれないですが、これで型とデータ構築子
+の関連が明らかなものになります。]
+</p>
+<p>
+<a name="tut-recursive-types"></a>
+<a name="sect2.2.1"></a>
+<h4>2.2.1<tt>&nbsp;&nbsp;</tt>再帰型</h4>
+</p>
+<p>
+型は再帰的に構成することもできます。たとえば、二分木の型を考えてみましょ
+う。
+<tt><br>
+<br>
+data&nbsp;Tree&nbsp;a&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;Leaf&nbsp;a&nbsp;|&nbsp;Branch&nbsp;(Tree&nbsp;a)&nbsp;(Tree&nbsp;a)&nbsp;<br>
+<br>
+</tt>
+ここでは多相型の二分木を定義しました。その要素は<tt>a</tt>型の値を含む「葉」
+のノードかあるいは(再帰的に)ふたつのサブツリーを含む「枝」のノードです。
+</p>
+<p>
+このようなデータ宣言をよむ場合には、<tt>Tree</tt>は型構築子であり、
+<tt>Branch</tt> や <tt>Leaf</tt> はデータ構築子であることを思いだしてく
+ださい。これらの構築子間の関係を理解したら、上の宣言は本質的には以下のよ
+うな<tt>Branch</tt>の型や<tt>Leaf</tt>の型の定義であることがわかるでしょ
+う。
+<tt><br>
+<br>
+Branch&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;Tree&nbsp;a&nbsp;-&gt;&nbsp;Tree&nbsp;a&nbsp;-&gt;&nbsp;Tree&nbsp;a<br>
+Leaf&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;a&nbsp;-&gt;&nbsp;Tree&nbsp;a<br>
+<br>
+</tt>
+</p>
+<p>
+この例で表現力の豊かな型を定義したので、いくつかの興味深い(再帰)関数を定
+義することができます。たとえば、<tt>fringe</tt>という、木を左から右へ
+たどって「葉」にある要素のリストを返す関数を定義したいとしよう。このよう
+な場合、最初に新しい関数の型を最初に書きおろしておくとあとで役にたつこと
+が多いです。この場合関数の型は<tt>Tree&nbsp;a&nbsp;-&gt;&nbsp;[a]</tt>で
+なければならないことがわかります。すなわち<tt>fringe</tt>は多相関数で、
+全て型 <tt>a</tt>について、<tt>a</tt>の木を<tt>a</tt>のリストへ写像しま
+す。その定義は次のようになります。
+<tt><br>
+<br>
+fringe&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;Tree&nbsp;a&nbsp;-&gt;&nbsp;[a]<br>
+fringe&nbsp;(Leaf&nbsp;x)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;[x]<br>
+fringe&nbsp;(Branch&nbsp;left&nbsp;right)&nbsp;=&nbsp;&nbsp;fringe&nbsp;left&nbsp;++&nbsp;fringe&nbsp;right<br>
+<br>
+</tt>
+ここで、<tt>++</tt>は中置演算子で、2つのリストを連結します。(この演算子
+の完全な定義は<a href="monads.html#tut-monadic-classes">9.1 節</a>で与え
+ます。).  まえにあげた <tt>length</tt> の例と同じように、<tt>fringe</tt>
+関数は、パターンマッチを使って定義します。ちがいは、ここではユーザ定義の
+構築子 <tt>Leaf</tt> と <tt>Branch</tt> があることです。[仮引数は小文字
+ではじまっているので、すぐにわかることに注目してください。]
+</p>
+<p>
+<a name="tut-type-synonyms"></a>
+<a name="sect2.3"></a>
+<h3>2.3<tt>&nbsp;&nbsp;</tt>型の同義名</h3>
+</p>
+<p>
+利便性をため、Haskellでは、<em>型の同義名</em>(<i>type
+synonym</i>)を定義する方法があります。すなわち、よく使う型に名前をつける
+というものです。型の同義名は型宣言によって作り出します(<a href="../report-j/decls.html#type-synonym-decls">&sect;4.2.2</a>)。例をあげましょう。
+<tt><br>
+<br>
+type&nbsp;String&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;[Char]<br>
+type&nbsp;Person&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;(Name,Address)<br>
+type&nbsp;Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;String<br>
+data&nbsp;Address&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;None&nbsp;|&nbsp;Addr&nbsp;String
+<br>
+<br>
+</tt>
+</p>
+<p>
+型の同義名は新しい型を定義するわけではなく、単に、既存の型に新しい名前を
+与えるものです。たとえば、<tt>Person&nbsp;-&gt;&nbsp;Name</tt> という型
+は <tt>(String,Address)&nbsp;-&gt;&nbsp;String</tt> と全くおなじものです。 
+型の同義名の新しい名前は、ふつう元の型より短いものになりますが、短い名前
+をつけることだけが型の同義名の目的ではありません。型の同義名をニーモニッ
+クとするこで、プログラムの可読性が改善されます。上はまさにその例です。多
+相型にも新しい名前を付けることができます。
+<tt><br>
+<br>
+type&nbsp;AssocList&nbsp;a&nbsp;b&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;[(a,b)]<br>
+<br>
+</tt>
+これは、型<tt>a</tt>の値と型<tt>b</tt>の値を結びつける「連想リスト
+(association list)」という型です。
+</p>
+<p>
+<a name="tut-built-ins"></a>
+<a name="sect2.4"></a>
+<h3>2.4<tt>&nbsp;&nbsp;</tt>組み込みの型は特別な型ではない</h3>
+</p>
+<p>
+これまで、リスト、タプル、整数、文字など、いくつかの「組み込み」型を紹介
+しました。また、あたらしいユーザ定義の型の定義の方法も示しました。構文が
+特別である以外に、組み込みの型は、ユーザ定義の型にくらべて特別なことはあ
+るのでしょうか？答えは<em>ノー</em>です。特別な構文は利便性と歴史的な慣
+習のためのもので、意味としてはなにも違いがありません。
+</p>
+<p>
+この点をさらに強調するために、組み込みの型の宣言がどのようなものになりう
+るかを考えてみましょう。もし、型の宣言の構文を組み込みの型に使えるとした
+ら、たとえば、<tt>Char</tt>型はこんな風に書けるでしょう。
+<tt><br>
+<br>
+data&nbsp;Char&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'a'&nbsp;|&nbsp;'b'&nbsp;|&nbsp;'c'&nbsp;|&nbsp;...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;This&nbsp;is&nbsp;not&nbsp;valid<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;'A'&nbsp;|&nbsp;'B'&nbsp;|&nbsp;'C'&nbsp;|&nbsp;...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;Haskell&nbsp;code!<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;'1'&nbsp;|&nbsp;'2'&nbsp;|&nbsp;'3'&nbsp;|&nbsp;...<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...<br>
+<br>
+</tt>
+これらの構築子名は実際には正しいものではありません。この点は次のようにし
+なければならないでしょう。
+<tt><br>
+<br>
+data&nbsp;Char&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;Ca&nbsp;|&nbsp;Cb&nbsp;|&nbsp;Cc&nbsp;|&nbsp;...<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;CA&nbsp;|&nbsp;CB&nbsp;|&nbsp;CC&nbsp;|&nbsp;...<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;C1&nbsp;|&nbsp;C2&nbsp;|&nbsp;C3&nbsp;|&nbsp;...<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...<br>
+<br>
+</tt>
+これらの構築子は簡単なものですが、文字を表わすにはかなり不便なものです。
+</p>
+<p>
+いずれにせよ、このような「擬似Haskell」のコードを書くことで、特別な構文
+の見通しがつけやすくなります。これで、<tt>Char</tt>型が数多くの無引数構
+築子から構成されている列挙型であることがわかります。
+<tt>Char</tt> についてこのように考えていくと、たとえば、なぜ関数の定義の
+なかで文字に対してパターンマッチを使うことが可能なのかが理解できると思い
+ます。つまり、あらゆる型の(データ)構築子にたいしてパターンマッチを使えそ
+うだということがわかります。
+</p>
+<p>
+[この例では、Haskell における<em>コメント</em>の使いかたも示しています。
+<tt>--</tt>とそれに続く行末までのすべての文字は無視されます。Haskellでは
+さらに<em>入れ子になった</em>コメントも可能です。それは、
+<tt>{-</tt>...<tt>-}</tt> という形式のものでコード中のどこにでも置くこと
+ができます(<a href="../report-j/lexemes.html#lexemes">&sect;2.2</a>)。]
+</p>
+<p>
+同様に考えれば、<tt>Int</tt> (固定精度の整数)や<tt>Integer</tt>の定義は 
+<tt><br>
+<br>
+data&nbsp;Int&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;-65532&nbsp;|&nbsp;...&nbsp;|&nbsp;-1&nbsp;|&nbsp;0&nbsp;|&nbsp;1&nbsp;|&nbsp;...&nbsp;|&nbsp;65532&nbsp;&nbsp;--&nbsp;more&nbsp;pseudo-code<br>
+data&nbsp;Integer&nbsp;=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...&nbsp;-2&nbsp;|&nbsp;-1&nbsp;|&nbsp;0&nbsp;|&nbsp;1&nbsp;|&nbsp;2&nbsp;...<br>
+<br>
+</tt>
+のように考えることができます。ここで、<tt>-65532</tt>と<tt>65532</tt>は、
+いわば、与えられた処理系における固定精度整数の最小値と最大値です。
+<tt>Int</tt>は<tt>Char</tt>に比べればはるかに大きな列挙型ですが、それで
+も、有限の列挙型です。一方、<tt>Integer</tt>に対する擬似コードでは<em>無
+限</em>の列挙型を表現しようとしています。
+</p>
+<p>
+タプルもこのやりかたで簡単に定義できます。
+<tt><br>
+<br>
+data&nbsp;(a,b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;(a,b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;more&nbsp;pseudo-code<br>
+data&nbsp;(a,b,c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;(a,b,c)<br>
+data&nbsp;(a,b,c,d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;(a,b,c,d)<br>
+&nbsp;.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br>
+&nbsp;.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br>
+&nbsp;.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br>
+<br>
+</tt>
+上の各宣言はそれぞれ、特定の長さの一つのタプルを定義しています。
+<tt>(...)</tt>は(データ構築子として)式の構文中と(型構築子として)型の表現式の構
+文中にあらわれます。最後の宣言の後の縦につづく点はこのような宣言の無限の
+列をあらわしています。これは、Haskellではあらゆる長さのタプルが許されて
+いることを反映しています。
+</p>
+<p>
+リストも同様に簡単に定義できます。リストの場合は再帰的になっているのが面
+白いですね。
+<tt><br>
+<br>
+&nbsp;data&nbsp;[a]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;[]&nbsp;|&nbsp;a&nbsp;:&nbsp;[a]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;more&nbsp;pseudo-code<br>
+<br>
+</tt>
+以前にリストについて述べたことが、これで明解になります。<tt>[]</tt>は空
+リストであり、<tt>:</tt>はリストの中置構築子です。つまり、
+<tt>[1,2,3]</tt>は<tt>1:2:3:[]</tt>と同等であるはずです。(<tt>:</tt>は右
+結合性をもちます。) <tt>[]</tt> の型は<tt> [a] </tt>で、<tt> : </tt>の型
+は<tt> a-&gt;[a]-&gt;[a] </tt>です。
+</p>
+<p>
+[ここでの「<tt>:</tt>」の定義方法は構文的に正しい方法です。中置構築子を
+<tt>data</tt>宣言中で使用することが許されています。また、中置構築子と中
+置演算子は区別されます。(中置構築子はパターンマッチの処理で使用します。) 
+中置演算子の定義では、「:」が先頭にこなければならないことからも、中置構
+築子と中置演算子が区別されていることがわかります。]
+</p>
+<p>
+ここでは、タプルとリストの違いを注意深くみておく必要があります。上の定義
+でその違いがハッキリわかります。注目すべき点は、リストの型は同じ型の要素
+上の任意の長さの再帰的構造を持ち、一方、(特定の)タプルの型は別の型の要素
+上の固定の長さの非再帰構造であることです。タプルとリストの型付けルールは
+もう明かでしょう。
+</p>
+<p>
+<tt>(</tt>e<sub>1</sub><tt>,</tt>e<sub>2</sub><tt>,</tt>...<tt>,</tt>e<sub>n</sub><tt>)</tt>,
+n&gt;=2  に対して、もし、 t<sub>i</sub> が e<sub>i</sub> の型であるとす
+るならば、タプルの型は 
+<tt>(</tt>t<sub>1</sub><tt>,</tt>t<sub>2</sub><tt>,</tt>...<tt>,</tt>t<sub>n</sub><tt>)</tt>
+です。
+<tt>[</tt>e<sub>1</sub><tt>,</tt>e<sub>2</sub><tt>,</tt>...<tt>,</tt>e<sub>n</sub><tt>]</tt>,
+n&gt;=0 に対して各 e<sub>i</sub> が必ず同じ型 t であるなら、そのリストの
+型は <tt>[</tt>t<tt>]</tt> です。
+</p>
+<p>
+<a name="tut-list-comps"></a>
+<a name="sect2.4.1"></a>
+<h4>2.4.1<tt>&nbsp;&nbsp;</tt>リストの内包表記と数列表記</h4>
+</p>
+<p>
+Lisp 系の言語でもそうであるように、リストというのは Haskell でもややこし
+いものです。それで、他の関数型言語と同様に、Haskell にはリストを生成する
+ための糖衣構文があります。いま議論したばかりのリストの構築子の他に、
+Haskell では<em>リストの内包表記</em>(<i>list comprehension</i>)として知
+られる表現が使えるようになっています。次の例がよい解説になります。
+<tt><br>
+<br>
+[&nbsp;f&nbsp;x&nbsp;|&nbsp;x&nbsp;&lt;-&nbsp;xs&nbsp;]<br>
+<br>
+</tt>
+この式は直観的に、「<tt>xs</tt> から順に引き出してきた <tt>x</tt> について 
+<tt>f&nbsp;x</tt> をすべて集めたリスト」("the list of all <tt>f&nbsp;x</tt> 
+such that <tt>x</tt> is drawn from <tt>xs</tt>")と読むことができます。
+集合のときの表記との類似性は偶然ではありません。
+<tt>x&nbsp;&lt;-&nbsp;xs</tt> の部分は<em>生成部</em>(<i>generator</i>)
+とよばれています。生成部を複数持つこともできます。
+<tt><br>
+<br>
+[&nbsp;(x,y)&nbsp;|&nbsp;x&nbsp;&lt;-&nbsp;xs,&nbsp;y&nbsp;&lt;-&nbsp;ys&nbsp;]<br>
+<br>
+</tt>
+このリスト内包表記は、<tt>xs</tt> と <tt>ys</tt> の2つのリストの直積とな
+ります。要素は生成部が左から右へ「入れ子」になっているかのように選ばれて
+いきます。(もっとも右にある生成部がもっとも速く変化します。) ですから、
+<tt>xs</tt> を <tt>[1,2]</tt> とし、<tt>ys</tt> を <tt>[3,4]</tt> とすれ
+ば、その結果は <tt>[(1,3),(1,4),(2,3),(2,4)]</tt>となります。
+</p>
+<p>
+生成部のほかに、<em>ガード</em>(<i>guard</i>)とよばれているブール式を書
+くことができます。ガードは生成される要素に制約を与えます。例として、みな
+さんお馴染のソーティングアルゴリズムの定義をあげておきます。
+<tt><br>
+<br>
+quicksort&nbsp;&nbsp;[]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;[]<br>
+quicksort&nbsp;(x:xs)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;quicksort&nbsp;[y&nbsp;|&nbsp;y&nbsp;&lt;-&nbsp;xs,&nbsp;y&lt;x&nbsp;]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;++&nbsp;[x]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;++&nbsp;quicksort&nbsp;[y&nbsp;|&nbsp;y&nbsp;&lt;-&nbsp;xs,&nbsp;y&gt;=x]<br>
+<br>
+</tt>
+</p>
+<p>
+さらに Haskell はリストの<em>数列表記</em>という構文もサポートしています。
+これも例でみていくのがいいでしょう。
+</p>
+<p>
+<table >
+ <tr>
+  <td><tt>[1..10]</tt></td>
+  <td align=center>=&gt;</td>
+  <td><tt>[1,2,3,4,5,6,7,8,9,10]</tt></td>
+ </tr>
+ <tr>
+  <td><tt>[1,3..10]</tt></td>
+  <td align=center>=&gt;</td>
+  <td><tt>[1,3,5,7,9]</tt></td>
+ </tr>
+ <tr>
+  <td><tt>[1,3..]</tt></td>
+  <td align=center>=&gt;</td>
+  <td><tt>[1,3,5,7,9,&nbsp;...</tt>(infinite sequence)</td>
+ </tr>
+</table>
+</p>
+<p>
+数列表記について詳しくは <a
+href="stdclasses.html#tut-enum-classes">8.2</a> 節で、「無限リスト」につ
+いては <a href="functions.html#tut-infinite">3.4</a> 節で解説します。
+</p>
+<p>
+<a name="tut-strings"></a>
+<a name="sect2.4.2"></a>
+<h4>2.4.2<tt>&nbsp;&nbsp;</tt>文字列</h4>
+</p>
+<p>
+組み込みの型の糖衣構文をもうひとつあげておきましょう。文字列リテラルの 
+<tt>"hello"</tt> は実際には文字のリスト <tt>['h','e','l','l','o']</tt> 
+の簡略表記です。実際、<tt>"hello"</tt> の型は <tt>String</tt> で、これは
+定義の型の同義名になっています。
+<tt><br>
+<br>
+type&nbsp;String&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;[Char]<br>
+<br>
+</tt>
+ということは、定義済のリスト上の多相関数は文字列に対しても適用できるとい
+うことです。たとえば、
+</p>
+<p>
+<tt>"hello"&nbsp;++&nbsp;"&nbsp;world"&nbsp;=&gt;&nbsp;"hello&nbsp;world"</tt>
+</p>
+<hr></hr>
+<p>
+<i>A Gentle Introduction to Haskell, Version 98</i><br>
+<a href="intro.html">back</a> 
+<a href="functions.html">next</a>
+<a href="index.html">top</a>
+</p>
+</body>
+</html>

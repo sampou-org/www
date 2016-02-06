@@ -1,0 +1,325 @@
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--
+
+Generated from t-y-scheme.tex by tex2page, v 20060531
+(running on Gauche 0.8.7, unix), 
+(c) Dorai Sitaram, 
+http://www.ccs.neu.edu/~dorai/tex2page/tex2page-doc.html
+
+-->
+<head>
+<title>
+独習 Scheme 三週間 Teach Yourself Scheme in Fixnum Days
+</title>
+<link rel="stylesheet" type="text/css" href="t-y-scheme-Z-S.css" title=default>
+<meta name=robots content="noindex,follow">
+<meta name=description content="A practical
+introduction to the programming language Scheme">
+
+<meta name=author content="Dorai Sitaram">
+
+<link rev=made href="mailto:ds26@gte.com">
+</head>
+<body>
+<div id=slidecontent>
+<div align=right class=navigation>[Go to <span><a href="t-y-scheme.html">first</a>, <a href="t-y-scheme-Z-H-7.html">previous</a></span><span>, <a href="t-y-scheme-Z-H-9.html">next</a></span> page<span>; &nbsp;&nbsp;</span><span><a href="t-y-scheme-Z-H-1.html#node_toc_start">contents</a></span><span><span>; &nbsp;&nbsp;</span><a href="t-y-scheme-Z-H-25.html#node_index_start">index</a></span>]</div>
+<p></p>
+<a name="node_chap_6"></a>
+<h1 class=chapter>
+<div class=chapterheading><a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_6">Chapter 6</a></div><br>
+<a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_6">再帰</a></h1>
+<p></p>
+<p>
+<a name="node_idx_286"></a><a name="node_idx_288"></a>手続き本体は他の手続きへの呼び出しを含むことができます。
+特別な場合には自分自身への呼び出しになります。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=variable>factorial</span>
+  (<span class=keyword>lambda</span> (<span class=variable>n</span>)
+    (<span class=keyword>if</span> (<span class=variable>=</span> <span class=variable>n</span> <span class=selfeval>0</span>) <span class=selfeval>1</span>
+        (<span class=variable>*</span> <span class=variable>n</span> (<span class=variable>factorial</span> (<span class=variable>-</span> <span class=variable>n</span> <span class=selfeval>1</span>))))))
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>この<em>再帰的</em>手続きは、ある数の<em>階乗</em>を計算するものです。
+与えられた数が<code class=scheme><span class=selfeval>0</span></code>なら、答は<code class=scheme><span class=selfeval>1</span></code>です。それ以外の<code class=scheme><span class=variable>n</span></code>であれば、
+この手続きは、<code class=scheme><span class=variable>n</span> <span class=variable>-</span> <span class=selfeval>1</span></code> の階乗を自分自身をつかって計算し、その
+途中の答と<code class=scheme><span class=variable>n</span></code>をかけて、その積を結果として返します。</p>
+<p>
+</p>
+<p>
+相互に再帰する手続きを定義することも可能です。以下の奇遇性を
+チェックする述語は互いに再帰しています。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=variable>is-even?</span>
+  (<span class=keyword>lambda</span> (<span class=variable>n</span>)
+    (<span class=keyword>if</span> (<span class=variable>=</span> <span class=variable>n</span> <span class=selfeval>0</span>) <span class=selfeval>#t</span>
+        (<span class=variable>is-odd?</span> (<span class=variable>-</span> <span class=variable>n</span> <span class=selfeval>1</span>)))))
+
+(<span class=keyword>define</span> <span class=variable>is-odd?</span>
+  (<span class=keyword>lambda</span> (<span class=variable>n</span>)
+    (<span class=keyword>if</span> (<span class=variable>=</span> <span class=variable>n</span> <span class=selfeval>0</span>) <span class=selfeval>#f</span>
+        (<span class=variable>is-even?</span> (<span class=variable>-</span> <span class=variable>n</span> <span class=selfeval>1</span>)))))
+</pre><p></p>
+<p>
+<a name="node_idx_290"></a><a name="node_idx_292"></a></p>
+<p>
+</p>
+<p>
+ここにあげたのは極く単純な相互再帰の説明のためだけのものです。
+Schemeでは<code class=scheme><span class=variable>even?</span></code>と<code class=scheme><span class=variable>odd?</span></code>はプリミティブ述語として既に用意されて
+います。</p>
+<p>
+<a name="node_idx_294"></a><a name="node_idx_296"></a></p>
+<p>
+</p>
+<a name="node_sec_6.1"></a>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_6.1">6.1&nbsp;&nbsp;<code class=scheme><span class=keyword>letrec</span></code></a></h2>
+<p></p>
+<p>
+上の手続きをローカル変数として手に入れたくなったら、
+<code class=scheme><span class=keyword>let</span></code>フォームを使って、</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>let</span> ((<span class=variable>local-even?</span> (<span class=keyword>lambda</span> (<span class=variable>n</span>)
+                     (<span class=keyword>if</span> (<span class=variable>=</span> <span class=variable>n</span> <span class=selfeval>0</span>) <span class=selfeval>#t</span>
+                         (<span class=variable>local-odd?</span> (<span class=variable>-</span> <span class=variable>n</span> <span class=selfeval>1</span>)))))
+      (<span class=variable>local-odd?</span> (<span class=keyword>lambda</span> (<span class=variable>n</span>)
+                    (<span class=keyword>if</span> (<span class=variable>=</span> <span class=variable>n</span> <span class=selfeval>0</span>) <span class=selfeval>#f</span>
+                        (<span class=variable>local-even?</span> (<span class=variable>-</span> <span class=variable>n</span> <span class=selfeval>1</span>))))))
+  (<span class=variable>list</span> (<span class=variable>local-even?</span> <span class=selfeval>23</span>) (<span class=variable>local-odd?</span> <span class=selfeval>23</span>)))
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>とすることが可能かもしれません。しかし、これはうまく動きません。
+初期化部の<code class=scheme><span class=variable>local-even?</span></code>と<code class=scheme><span class=variable>local-odd?</span></code>の出現はそれぞれのレキシカル
+変数自身を参照しないからです。<code class=scheme><span class=keyword>let</span></code>を<code class=scheme><span class=keyword>let*</span></code>に変更しても、やはり、
+うまく動きません。<code class=scheme><span class=variable>local-odd?</span></code>本体の中の<code class=scheme><span class=variable>local-even?</span></code>は正しい値を
+参照していますが、<code class=scheme><span class=variable>local-even?</span></code>中の<code class=scheme><span class=variable>local-odd?</span></code>はあいかわらず、
+どこか他を指しているのです。</p>
+<p>
+</p>
+<p>
+問題を解決するにはこんなふうに、Schemeの提供するフォーム
+<code class=scheme><span class=keyword>letrec</span></code>を利用します。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>letrec</span> ((<span class=variable>local-even?</span> (<span class=keyword>lambda</span> (<span class=variable>n</span>)
+                        (<span class=keyword>if</span> (<span class=variable>=</span> <span class=variable>n</span> <span class=selfeval>0</span>) <span class=selfeval>#t</span>
+                            (<span class=variable>local-odd?</span> (<span class=variable>-</span> <span class=variable>n</span> <span class=selfeval>1</span>)))))
+         (<span class=variable>local-odd?</span> (<span class=keyword>lambda</span> (<span class=variable>n</span>)
+                       (<span class=keyword>if</span> (<span class=variable>=</span> <span class=variable>n</span> <span class=selfeval>0</span>) <span class=selfeval>#f</span>
+                           (<span class=variable>local-even?</span> (<span class=variable>-</span> <span class=variable>n</span> <span class=selfeval>1</span>))))))
+  (<span class=variable>list</span> (<span class=variable>local-even?</span> <span class=selfeval>23</span>) (<span class=variable>local-odd?</span> <span class=selfeval>23</span>)))
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent><code class=scheme><span class=keyword>letrec</span></code>によって導入されたレキシカル変数は、<code class=scheme><span class=keyword>letrec</span></code>本体から
+だけではなく、すべての初期化部からも見えています。というわけで、
+<code class=scheme><span class=keyword>letrec</span></code>は再帰的および相互再帰的ローカル手続きの定義にはもってこいです。</p>
+<p>
+<a name="node_idx_298"></a><a name="node_idx_300"></a></p>
+<p>
+</p>
+<a name="node_sec_6.2"></a>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_6.2">6.2&nbsp;&nbsp;名前つき <code class=scheme><span class=keyword>let</span></code></a></h2>
+<p></p>
+<p>
+<code class=scheme><span class=keyword>letrec</span></code>を用いて定義された再帰的手続きでループを表現することがきます。
+たとえば、<code class=scheme><span class=selfeval>10</span></code>からのカウントダウンを表示したいとしましょう。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>letrec</span> ((<span class=variable>countdown</span> (<span class=keyword>lambda</span> (<span class=variable>i</span>)
+                      (<span class=keyword>if</span> (<span class=variable>=</span> <span class=variable>i</span> <span class=selfeval>0</span>) <span class=keyword>'</span><span class=variable>liftoff</span>
+                          (<span class=keyword>begin</span>
+                            (<span class=variable>display</span> <span class=variable>i</span>)
+                            (<span class=variable>newline</span>)
+                            (<span class=variable>countdown</span> (<span class=variable>-</span> <span class=variable>i</span> <span class=selfeval>1</span>)))))))
+  (<span class=variable>countdown</span> <span class=selfeval>10</span>))
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>これはコンソールに<code class=scheme><span class=selfeval>10</span></code>から<code class=scheme><span class=selfeval>1</span></code>までの数字を出力し結果として
+<code class=scheme><span class=variable>liftoff</span></code>を返します。</p>
+<p>
+</p>
+<p>
+Schemeで<em>名前つき</em><code class=scheme><span class=keyword>let</span></code>というのがあって、よりコンパクトに
+このてのループを書くことができます。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>let</span> <span class=variable>countdown</span> ((<span class=variable>i</span> <span class=selfeval>10</span>))
+  (<span class=keyword>if</span> (<span class=variable>=</span> <span class=variable>i</span> <span class=selfeval>0</span>) <span class=keyword>'</span><span class=variable>liftoff</span>
+      (<span class=keyword>begin</span>
+        (<span class=variable>display</span> <span class=variable>i</span>)
+        (<span class=variable>newline</span>)
+        (<span class=variable>countdown</span> (<span class=variable>-</span> <span class=variable>i</span> <span class=selfeval>1</span>)))))
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent><code class=scheme><span class=keyword>let</span></code>の直後にあるループを識別する変数の存在に注意してください。
+このプログラムは<code class=scheme><span class=keyword>letrec</span></code>で書いたものと同等です。名前つき<code class=scheme><span class=keyword>let</span></code>は
+<code class=scheme><span class=keyword>letrec</span></code>フォームに展開されるマクロ(<a href="t-y-scheme-Z-H-10.html#node_chap_8">8</a>章参照)のひとつである
+と考えてさしつかえありません。</p>
+<p>
+</p>
+<p>
+<a name="node_idx_302"></a><a name="node_idx_304"></a><a name="node_idx_306"></a><a name="node_idx_308"></a><a name="node_idx_310"></a><a name="node_idx_312"></a><a name="node_idx_314"></a><a name="node_idx_316"></a></p>
+<p>
+</p>
+<a name="node_sec_6.3"></a>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_6.3">6.3&nbsp;&nbsp;反復</a></h2>
+<p></p>
+<p>
+上で定義した<code class=scheme><span class=variable>countdown</span></code>は実際には再帰的手続きです。
+Schemeではループは再帰を通じてのみ定義することができます。
+ループや反復をあつかう特別な構成はありません。</p>
+<p>
+</p>
+<p>
+とは言っても、上で定義したようなループは<em>真性</em>のループです。
+まちがいなく、ほかの言語での勘定と同じになっています。
+どういうことかというと、Schemeは上のようなタイプの再帰には
+特別に注意していて、手続きの呼び出し/復帰のオーバヘッドが
+発生しないようにしています。</p>
+<p>
+</p>
+<p>
+Schemeではこれを<em>末尾呼び出しの除去</em>と呼ばれている処理に
+よって行います。<code class=scheme><span class=variable>countdown</span></code>手続きをよく見ると、<code class=scheme><span class=variable>countdown</span></code>本体中の
+再帰的呼び出しがおこるときには、それが<em>末尾呼び出し</em>になっている
+あるいは、まさに終るところとなっていることに気づくでしょう。
+<code class=scheme><span class=variable>countdown</span></code>のおのおのの呼び出しが、自分自身を呼び出さないか、あるいは
+呼び出すときには最後のアクションとして呼び出すかのどちらかです。
+Schemeの実装にとってはこれは反復と区別がつかない再帰です。
+というわけで、ループを再帰で書きましょう。安全です。</p>
+<p>
+</p>
+<p>
+有用な末尾再帰的手続きのもうひとつの例です。</p>
+<p>
+<a name="node_idx_318"></a></p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=variable>list-position</span>
+  (<span class=keyword>lambda</span> (<span class=variable>o</span> <span class=variable>l</span>)
+    (<span class=keyword>let</span> <span class=variable>loop</span> ((<span class=variable>i</span> <span class=selfeval>0</span>) (<span class=variable>l</span> <span class=variable>l</span>))
+      (<span class=keyword>if</span> (<span class=variable>null?</span> <span class=variable>l</span>) <span class=selfeval>#f</span>
+          (<span class=keyword>if</span> (<span class=variable>eqv?</span> (<span class=variable>car</span> <span class=variable>l</span>) <span class=variable>o</span>) <span class=variable>i</span>
+              (<span class=variable>loop</span> (<span class=variable>+</span> <span class=variable>i</span> <span class=selfeval>1</span>) (<span class=variable>cdr</span> <span class=variable>l</span>)))))))
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent><code class=scheme><span class=variable>list-position</span></code>はリスト<code class=scheme><span class=variable>l</span></code>の中のオブジェクト<code class=scheme><span class=variable>o</span></code>が最初に出現する
+インデックスを見つけます。見つからなければ、この手続きは<code class=scheme><span class=selfeval>#f</span></code>を返します。</p>
+<p>
+</p>
+<p>
+さらにもうひとつ末尾再帰的手続きの例です。引数のリストの反転を「その場で」
+やる手続きです。つまり、あらたに場所を確保せず、既存のリストの中身を
+変更するということです。</p>
+<p>
+<a name="node_idx_320"></a></p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=variable>reverse!</span>
+  (<span class=keyword>lambda</span> (<span class=variable>s</span>)
+    (<span class=keyword>let</span> <span class=variable>loop</span> ((<span class=variable>s</span> <span class=variable>s</span>) (<span class=variable>r</span> <span class=keyword>'</span>()))
+      (<span class=keyword>if</span> (<span class=variable>null?</span> <span class=variable>s</span>) <span class=variable>r</span>
+	  (<span class=keyword>let</span> ((<span class=variable>d</span> (<span class=variable>cdr</span> <span class=variable>s</span>)))
+            (<span class=variable>set-cdr!</span> <span class=variable>s</span> <span class=variable>r</span>)
+	    (<span class=variable>loop</span> <span class=variable>d</span> <span class=variable>s</span>))))))
+</pre><p></p>
+<p>
+</p>
+
+<p class=noindent></p>
+<p>
+(<code class=scheme><span class=variable>reverse!</span></code>はよくつかう手続きなので多くのScheme方言では、
+プリミティブ手続きとして提供されています。MzScheme や Guile (や Gauche)
+などです。)</p>
+<p>
+</p>
+<p>
+数値計算での再帰(反復を含む)の例については付録&nbsp;<a href="t-y-scheme-Z-H-22.html#node_chap_C">C</a>を参照
+してください。</p>
+<p>
+<a name="node_idx_322"></a><a name="node_idx_324"></a></p>
+<p>
+</p>
+<a name="node_sec_6.4"></a>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_6.4">6.4&nbsp;&nbsp;手続きのリスト上への写像</a></h2>
+<p></p>
+<p>
+特別な反復はリストの各エレメントに対して同じアクションを繰り返すというの
+があります。Scheme ではこうした状況用にふたつの手続きを用意しています。
+<code class=scheme><span class=variable>map</span></code>と<code class=scheme><span class=variable>for-each</span></code>です。</p>
+<p>
+</p>
+<p>
+<code class=scheme><span class=variable>map</span></code>手続きは与えられた手続きを与えられたリストの各要素に
+適用して、結果のリストを返します。たとえば、</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>map</span> <span class=variable>add2</span> <span class=keyword>'</span>(<span class=selfeval>1</span> <span class=selfeval>2</span> <span class=selfeval>3</span>))
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  (<span class=selfeval>3</span> <span class=selfeval>4</span> <span class=selfeval>5</span>)
+</pre><p></p>
+<p>
+</p>
+<p>
+<code class=scheme><span class=variable>for-each</span></code>手続きも同様にリストの各要素に手続きを適用しますが、
+なにも返しません。この手続き適用は純粋に副作用だけのためにあります。
+たとえば、</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>for-each</span> <span class=variable>display</span>
+  (<span class=variable>list</span> <span class=selfeval>&quot;one &quot;</span> <span class=selfeval>&quot;two &quot;</span> <span class=selfeval>&quot;buckle my shoe&quot;</span>))
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>はコンソールに文字列を(でてきた順に)表示する副作用があります。</p>
+<p>
+</p>
+<p>
+<code class=scheme><span class=variable>map</span></code>および<code class=scheme><span class=variable>for-each</span></code>が適用する手続きは一引数の手続きである必要は
+ありません。たとえば、<code class=scheme><span class=variable>n</span></code>引数の手続きがあたえられた場合には<code class=scheme><span class=variable>map</span></code>は
+<code class=scheme><span class=variable>n</span></code>本のリストをとり、その手続きをそれぞれのリストから選ばれた
+<code class=scheme><span class=variable>n</span></code>個の引数に適用します。たとえば、</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>map</span> <span class=variable>cons</span> <span class=keyword>'</span>(<span class=selfeval>1</span> <span class=selfeval>2</span> <span class=selfeval>3</span>) <span class=keyword>'</span>(<span class=selfeval>10</span> <span class=selfeval>20</span> <span class=selfeval>30</span>))
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  ((<span class=selfeval>1</span> . <span class=selfeval>10</span>) (<span class=selfeval>2</span> . <span class=selfeval>20</span>) (<span class=selfeval>3</span> . <span class=selfeval>30</span>))
+
+(<span class=variable>map</span> <span class=variable>+</span> <span class=keyword>'</span>(<span class=selfeval>1</span> <span class=selfeval>2</span> <span class=selfeval>3</span>) <span class=keyword>'</span>(<span class=selfeval>10</span> <span class=selfeval>20</span> <span class=selfeval>30</span>))
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  (<span class=selfeval>11</span> <span class=selfeval>22</span> <span class=selfeval>33</span>)
+</pre><p>
+</p>
+<p>
+</p>
+<div class=smallskip></div>
+<p style="margin-top: 0pt; margin-bottom: 0pt">
+<div align=right class=navigation>[Go to <span><a href="t-y-scheme.html">first</a>, <a href="t-y-scheme-Z-H-7.html">previous</a></span><span>, <a href="t-y-scheme-Z-H-9.html">next</a></span> page<span>; &nbsp;&nbsp;</span><span><a href="t-y-scheme-Z-H-1.html#node_toc_start">contents</a></span><span><span>; &nbsp;&nbsp;</span><a href="t-y-scheme-Z-H-25.html#node_index_start">index</a></span>]</div>
+</p>
+<p></p>
+</div>
+</body>
+</html>

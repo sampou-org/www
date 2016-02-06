@@ -1,0 +1,527 @@
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--
+
+Generated from t-y-scheme.tex by tex2page, v 20060531
+(running on Gauche 0.8.7, unix), 
+(c) Dorai Sitaram, 
+http://www.ccs.neu.edu/~dorai/tex2page/tex2page-doc.html
+
+-->
+<head>
+<title>
+独習 Scheme 三週間 Teach Yourself Scheme in Fixnum Days
+</title>
+<link rel="stylesheet" type="text/css" href="t-y-scheme-Z-S.css" title=default>
+<meta name=robots content="noindex,follow">
+<meta name=description content="A practical
+introduction to the programming language Scheme">
+
+<meta name=author content="Dorai Sitaram">
+
+<link rev=made href="mailto:ds26@gte.com">
+</head>
+<body>
+<div id=slidecontent>
+<div align=right class=navigation>[Go to <span><a href="t-y-scheme.html">first</a>, <a href="t-y-scheme-Z-H-21.html">previous</a></span><span>, <a href="t-y-scheme-Z-H-23.html">next</a></span> page<span>; &nbsp;&nbsp;</span><span><a href="t-y-scheme-Z-H-1.html#node_toc_start">contents</a></span><span><span>; &nbsp;&nbsp;</span><a href="t-y-scheme-Z-H-25.html#node_index_start">index</a></span>]</div>
+<p></p>
+<a name="node_chap_C"></a>
+<h1 class=chapter>
+<div class=chapterheading><a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_C">Appendix C</a></div><br>
+<a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_C">数値計算のテクニック</a></h1>
+<p></p>
+<p>
+</p>
+<p>
+<a name="node_idx_536"></a><a name="node_idx_538"></a>(反復を含む)再帰は、Scheme の数学プリミティブ手続きを上手く組み合せて
+さまさまな数値計算のテクニックを実装できます。たとえば、
+シンプソン法を実装してみましょう。実装するのは定積分の近似値を見つける
+手続きです。</p>
+<p>
+</p>
+<a name="node_sec_C.1"></a>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_C.1">C.1&nbsp;&nbsp;シンプソン法</a></h2>
+<p></p>
+<p>
+関数 <em>f</em>(<em>x</em>) の区間 [<em>a</em>,<em>b</em>] における定積分
+は、下限 <em>x</em>  =  <em>a</em> から上限 <em>x</em>  =  <em>b</em> までの区間の <em>f</em>(<em>x</em>) であらわされる
+<em>曲線の下の面積</em> とみなすことができます。いいかえれば、
+<em>f</em>(<em>x</em>) の <em>x</em>,<em>y</em>-平面上の曲線のグラフを考えて、この曲線と、
+<em>x</em>-軸と、<em>縦座標</em> <em>x</em>  =  <em>a</em> と、<em>x</em>  =  <em>b</em> とに囲まれた部分の
+面積を求めます。</p>
+<p>
+
+</p>
+<div align=center>&nbsp;<img src="t-y-scheme-Z-G-1.gif" border="0" alt="[t-y-scheme-Z-G-1.gif]">&nbsp;</div>
+<p>
+</p>
+<p>
+シンプソン法にしたがって、積分区間 [<em>a</em>,<em>b</em>] を <em>n</em> 個の等間隔の
+区間に分割します。ここでは、<em>n</em> は偶数です。(<em>n</em> が大きいほど
+良い近似が得られます。) 
+区間境界は <em>x</em>-軸上に <em>n</em> + 1 個の点を構成する。これを
+<em>x</em><sub>0</sub>, <em>x</em><sub>1</sub>, <tt>...</tt>, <em>x</em><sub><em>i</em></sub>, <em>x</em><sub><em>i</em>+1</sub>, <tt>...</tt>, <em>x</em><sub><em>n</em></sub> とします。
+ここで、<em>x</em><sub>0</sub>  =  <em>a</em> かつ <em>x</em><sub><em>n</em></sub>  =  <em>b</em> です。
+各区間の長さは <em>h</em>  =  (<em>b</em>  <tt>-</tt>  <em>a</em>)/<em>n</em> なので、<em>x</em><sub><em>i</em></sub>  =  <em>a</em> + <em>i</em><em>h</em> となります。
+区間境界上の <em>f</em>(<em>x</em>) の高さ、すなわち、<em>y</em><sub>0</sub>, <tt>...</tt>, <em>y</em><sub><em>i</em></sub>, <tt>...</tt>, <em>y</em><sub><em>n</em></sub>
+です。ここで <em>y</em><sub><em>i</em></sub>  =  <em>f</em>(<em>x</em><sub><em>i</em></sub>)  =  <em>f</em>(<em>a</em> + <em>i</em><em>h</em>) です。
+シンプソン法は <em>a</em> と <em>b</em> との間の <em>f</em>(<em>x</em>) の定積分を以下の値で近似します。
+<a name="node_call_footnote_Temp_17"></a><sup><small><a href="#node_footnote_Temp_17">1</a></small></sup></p>
+<p>
+</p>
+<div align=center><img src="t-y-scheme-Z-G-2.gif" border="0" alt="
+{h\over 3} \left[ (y_0 + y_n) 
++ 4(y_1 + y_3 + \cdots + y_{n-1}) 
++ 2(y_2 + y_4 + \cdots + y_{n-2}) \right]
+"></div>
+<p class=noindent>
+</p>
+<p>
+4 つの引数、被積分関数手 <code class=scheme><span class=variable>f</span></code>、<em>x</em> の値の上限下限 <code class=scheme><span class=variable>a</span></code> と <code class=scheme><span class=variable>b</span></code>、
+区間の数 <code class=scheme><span class=variable>n</span></code> を引数としてとる手続き <code class=scheme><span class=variable>integrate-simpson</span></code> を定義します。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=variable>integrate-simpson</span>
+  (<span class=keyword>lambda</span> (<span class=variable>f</span> <span class=variable>a</span> <span class=variable>b</span> <span class=variable>n</span>)
+    <span class=comment>;...</span>
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent><code class=scheme><span class=variable>integrate-simpson</span></code> の本体部で最初にすることは、
+<code class=scheme><span class=variable>n</span></code> が偶数かどうかのチェックです。&#8212; もし偶数でなければ、その値を
+1 増します。  </p>
+<p>
+</p>
+<pre class=scheme>    <span class=comment>;...</span>
+    (<span class=keyword>unless</span> (<span class=variable>even?</span> <span class=variable>n</span>) (<span class=keyword>set!</span> <span class=variable>n</span> (<span class=variable>+</span> <span class=variable>n</span> <span class=selfeval>1</span>)))
+    <span class=comment>;...</span>
+</pre><p></p>
+<p>
+</p>
+<p>
+つぎに、ローカル変数 <code class=scheme><span class=variable>h</span></code> に区間の長さを入れます。さらに 2つの
+ローカル変数 <code class=scheme><span class=variable>h*2</span></code> と <code class=scheme><span class=variable>n/2</span></code> を導入して <code class=scheme><span class=variable>h</span></code> の 2倍の値と
+半分の値をそれぞれ格納します。これは、あとの計算で頻繁にこれらの
+値を使うことが予想されているからです。</p>
+<p>
+</p>
+<pre class=scheme>    <span class=comment>;...</span>
+    (<span class=keyword>let*</span> ((<span class=variable>h</span> (<span class=variable>/</span> (<span class=variable>-</span> <span class=variable>b</span> <span class=variable>a</span>) <span class=variable>n</span>))
+           (<span class=variable>h*2</span> (<span class=variable>*</span> <span class=variable>h</span> <span class=selfeval>2</span>))
+           (<span class=variable>n/2</span> (<span class=variable>/</span> <span class=variable>n</span> <span class=selfeval>2</span>))
+           <span class=comment>;...</span>
+</pre><p></p>
+<p>
+</p>
+<p>
+和 <em>y</em><sub>1</sub>  +  <em>y</em><sub>3</sub>  +  <tt>&middot;&middot;&middot;</tt>  +  <em>y</em><sub><em>n</em><tt>-</tt>1</sub> と <em>y</em><sub>2</sub>  +  <em>y</em><sub>4</sub>  +  <tt>&middot;&middot;&middot;</tt>  +  <em>y</em><sub><em>n</em><tt>-</tt>2</sub>
+はともに別の高さの加算を含んでいることに注意します。ローカル手続き
+<code class=scheme><span class=variable>sum-every-other-ordinate-starting-from</span></code> を定義してこの共通の
+反復を捕捉します。この反復をひとつの手続きに抽象化することで、
+コードの字面での繰り返しを回避します。これは乱雑さを軽減するだけではなく、
+誤りの機会も減らします。反復の出現が一箇所なので、デバッグする場所も
+一箇所になるからです。</p>
+<p>
+<code class=scheme><span class=variable>sum-every-other-ordinate-starting-from</span></code> は 2 つの引数を取ります。
+開始の高さと総和をとる高さの数です。</p>
+<p>
+</p>
+<pre class=scheme>           <span class=comment>;...</span>
+           (<span class=variable>sum-every-other-ordinate-starting-from</span>
+             (<span class=keyword>lambda</span> (<span class=variable>x0</span> <span class=variable>num-ordinates</span>)
+               (<span class=keyword>let</span> <span class=variable>loop</span> ((<span class=variable>x</span> <span class=variable>x0</span>) (<span class=variable>i</span> <span class=selfeval>0</span>) (<span class=variable>r</span> <span class=selfeval>0</span>))
+                 (<span class=keyword>if</span> (<span class=variable>&gt;=</span> <span class=variable>i</span> <span class=variable>num-ordinates</span>) <span class=variable>r</span>
+                     (<span class=variable>loop</span> (<span class=variable>+</span> <span class=variable>x</span> <span class=variable>h*2</span>)
+                           (<span class=variable>+</span> <span class=variable>i</span> <span class=selfeval>1</span>)
+                           (<span class=variable>+</span> <span class=variable>r</span> (<span class=variable>f</span> <span class=variable>x</span>)))))))
+           <span class=comment>;...</span>
+</pre><p>         </p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>3 つの縦高さの和を計算できます。これを組み合せて最終的な
+答をつくります。<em>y</em><sub>1</sub>  +  <em>y</em><sub>3</sub>  +  <tt>&middot;&middot;&middot;</tt>  +  <em>y</em><sub><em>n</em><tt>-</tt>1</sub> と (<em>n</em>/2)  <tt>-</tt>  1 の
+中に <em>n</em>/2 という項が、<em>y</em><sub>2</sub>  +  <em>y</em><sub>4</sub>  +  <tt>&middot;&middot;&middot;</tt>  +  <em>y</em><sub><em>n</em><tt>-</tt>2</sub> と
+<em>y</em><sub><em>n</em><tt>-</tt>2</sub> の中に (<em>n</em>/2)  <tt>-</tt>  1 の項が含まれていることに注意してください。</p>
+<p>
+</p>
+<pre class=scheme>           <span class=comment>;...</span>
+           (<span class=variable>y0+yn</span> (<span class=variable>+</span> (<span class=variable>f</span> <span class=variable>a</span>) (<span class=variable>f</span> <span class=variable>b</span>)))
+           (<span class=variable>y1+y3+...+y.n-1</span>
+             (<span class=variable>sum-every-other-ordinate-starting-from</span> 
+               (<span class=variable>+</span> <span class=variable>a</span> <span class=variable>h</span>) <span class=variable>n/2</span>))
+           (<span class=variable>y2+y4+...+y.n-2</span>
+             (<span class=variable>sum-every-other-ordinate-starting-from</span> 
+               (<span class=variable>+</span> <span class=variable>a</span> <span class=variable>h*2</span>) (<span class=variable>-</span> <span class=variable>n/2</span> <span class=selfeval>1</span>))))
+      (<span class=variable>*</span> <span class=selfeval>1/3</span> <span class=variable>h</span>
+         (<span class=variable>+</span> <span class=variable>y0+yn</span>
+            (<span class=variable>*</span> <span class=selfeval>4.0</span> <span class=variable>y1+y3+...+y.n-1</span>)
+            (<span class=variable>*</span> <span class=selfeval>2.0</span> <span class=variable>y2+y4+...+y.n-2</span>))))))
+</pre><p></p>
+<p>
+</p>
+<p>
+では、以下の関数の定積分を <code class=scheme><span class=variable>integrate-simpson</span></code> を使って求めて
+みましょう。</p>
+<p>
+</p>
+<div align=center><img src="t-y-scheme-Z-G-3.gif" border="0" alt="
+\phi(x) = {1\over \sqrt{2\pi}} e^{-x^2/2}
+"></div>
+<p class=noindent></p>
+<p>
+</p>
+<p>
+まず最初に Scheme の前置記法をつかって、<img src="t-y-scheme-Z-G-D-1.gif" border="0" alt="[t-y-scheme-Z-G-D-1.gif]"> を定義します。
+<a name="node_call_footnote_Temp_18"></a><sup><small><a href="#node_footnote_Temp_18">2</a></small></sup></p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=global>*pi*</span> (<span class=variable>*</span> <span class=selfeval>4</span> (<span class=variable>atan</span> <span class=selfeval>1</span>)))
+
+(<span class=keyword>define</span> <span class=variable>phi</span>
+  (<span class=keyword>lambda</span> (<span class=variable>x</span>)
+    (<span class=variable>*</span> (<span class=variable>/</span> <span class=selfeval>1</span> (<span class=variable>sqrt</span> (<span class=variable>*</span> <span class=selfeval>2</span> <span class=global>*pi*</span>)))
+       (<span class=variable>exp</span> (<span class=variable>-</span> (<span class=variable>*</span> <span class=selfeval>1/2</span> (<span class=variable>*</span> <span class=variable>x</span> <span class=variable>x</span>)))))))
+</pre><p></p>
+<p>
+</p>
+<p>
+<code class=scheme><span class=global>*pi*</span></code> を定義するのに tan<sup><tt>-</tt>1</sup> 1  =  <img src="t-y-scheme-Z-G-D-3.gif" border="0" alt="[t-y-scheme-Z-G-D-3.gif]">/4 という事実を
+利用していということに注意してください。<a name="node_call_footnote_Temp_19"></a><sup><small><a href="#node_footnote_Temp_19">3</a></small></sup></p>
+<p>
+</p>
+<p>
+以下はそれぞれ <code class=scheme><span class=variable>phi</span></code> の 0 ら 1 あるいは 2 あるいは 3 までの定積分です。
+どれもみな 10 個の区間を使っています。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>integrate-simpson</span> <span class=variable>phi</span> <span class=selfeval>0</span> <span class=selfeval>1</span> <span class=selfeval>10</span>)
+(<span class=variable>integrate-simpson</span> <span class=variable>phi</span> <span class=selfeval>0</span> <span class=selfeval>2</span> <span class=selfeval>10</span>)
+(<span class=variable>integrate-simpson</span> <span class=variable>phi</span> <span class=selfeval>0</span> <span class=selfeval>3</span> <span class=selfeval>10</span>)
+</pre><p></p>
+<p>
+</p>
+<p>
+小数点 4 桁までだとこれらの値はそれぞれ 0.341、0.4772、0.4987 に
+なります。[<a href="t-y-scheme.hlog">cite{hmf}</a>,&nbsp;Table 26.1]、ここでのシンプソン法の実装が
+たしかにまともな値を出していることをチェックしてみましょう。
+<a name="node_call_footnote_Temp_20"></a><sup><small><a href="#node_footnote_Temp_20">4</a></small></sup></p>
+<p>
+</p>
+<a name="node_sec_C.2"></a>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_C.2">C.2&nbsp;&nbsp;適用可能な区間長</a></h2>
+<p></p>
+<p>
+区間の数 <code class=scheme><span class=variable>n</span></code> を指定するのが常に便利というわけではありません。
+ある被積分関数について十分に良い数というのが別の関数ではひどく
+不適切なものになりえます。このような場合には、<i>許容誤差</i><code class=scheme><span class=variable>e</span></code>
+を指定して、最終結果を保証するのにやぶさかではありません。
+プログラムにどのくらいの区間が必要かを見積もらせましょう。
+これを達成する典型的な方法は、プログラムが徐々に <code class=scheme><span class=variable>n</span></code> を
+増加させて、だんだん良い応えをになるよう試して、連続して
+求められた和の差が <code class=scheme><span class=variable>e</span></code> 以内におさまればそこで停止するというものです。
+そうすると以下のようになります。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=variable>integrate-adaptive-simpson-first-try</span>
+  (<span class=keyword>lambda</span> (<span class=variable>f</span> <span class=variable>a</span> <span class=variable>b</span> <span class=variable>e</span>)
+    (<span class=keyword>let</span> <span class=variable>loop</span> ((<span class=variable>n</span> <span class=selfeval>4</span>) 
+               (<span class=variable>iprev</span> (<span class=variable>integrate-simpson</span> <span class=variable>f</span> <span class=variable>a</span> <span class=variable>b</span> <span class=selfeval>2</span>))) 
+      (<span class=keyword>let</span> ((<span class=variable>icurr</span> (<span class=variable>integrate-simpson</span> <span class=variable>f</span> <span class=variable>a</span> <span class=variable>b</span> <span class=variable>n</span>)))
+        (<span class=keyword>if</span> (<span class=variable>&lt;=</span> (<span class=variable>abs</span> (<span class=variable>-</span> <span class=variable>icurr</span> <span class=variable>iprev</span>)) <span class=variable>e</span>)
+            <span class=variable>icurr</span>
+            (<span class=variable>loop</span> (<span class=variable>+</span> <span class=variable>n</span> <span class=selfeval>2</span>)))))))
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>ここで、(もともとの手続き <code class=scheme><span class=variable>integrate-simpson</span></code> を使って)
+シンプソン積分を連続して、<code class=scheme><span class=variable>n</span></code> = 2, 4, <tt>...</tt>について計算します
+(<code class=scheme><span class=variable>n</span></code> は偶数でなければならないことを思いだしてください)。
+現在の <code class=scheme><span class=variable>n</span></code> に対する積分 <code class=scheme><span class=variable>icurr</span></code> と、直ぐ前の <code class=scheme><span class=variable>n</span></code> に対する
+積分 <code class=scheme><span class=variable>iprev</span></code> との違いが <code class=scheme><span class=variable>e</span></code> 以内であれば、<code class=scheme><span class=variable>icurr</span></code> を返します。</p>
+<p>
+</p>
+<p>
+このアプローチのもつ問題のひとつは、区間の加算によって恩恵を
+受けるのが関数の<em>断片一部</em>に過ぎないということを考慮に
+いれていないことである。他の断片については区間の加算は
+全体の答えを良くすることに貢献しないのに単に計算量を増やすだけ
+になっています。適応を改良するには、積分を隣接した断片に分割して
+それぞれの断片で別々に改良することができます。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=variable>integrate-adaptive-simpson-second-try</span>
+  (<span class=keyword>lambda</span> (<span class=variable>f</span> <span class=variable>a</span> <span class=variable>b</span> <span class=variable>e</span>)
+    (<span class=keyword>let</span> <span class=variable>integrate-segment</span> ((<span class=variable>a</span> <span class=variable>a</span>) (<span class=variable>b</span> <span class=variable>b</span>) (<span class=variable>e</span> <span class=variable>e</span>))
+      (<span class=keyword>let</span> ((<span class=variable>i2</span> (<span class=variable>integrate-simpson</span> <span class=variable>f</span> <span class=variable>a</span> <span class=variable>b</span> <span class=selfeval>2</span>))
+            (<span class=variable>i4</span> (<span class=variable>integrate-simpson</span> <span class=variable>f</span> <span class=variable>a</span> <span class=variable>b</span> <span class=selfeval>4</span>)))
+        (<span class=keyword>if</span> (<span class=variable>&lt;=</span> (<span class=variable>abs</span> (<span class=variable>-</span> <span class=variable>i2</span> <span class=variable>i4</span>)) <span class=variable>e</span>)
+            <span class=variable>i4</span>
+            (<span class=keyword>let</span> ((<span class=variable>c</span> (<span class=variable>/</span> (<span class=variable>+</span> <span class=variable>a</span> <span class=variable>b</span>) <span class=selfeval>2</span>))
+                  (<span class=variable>e</span> (<span class=variable>/</span> <span class=variable>e</span> <span class=selfeval>2</span>)))
+              (<span class=variable>+</span> (<span class=variable>integrate-segment</span> <span class=variable>a</span> <span class=variable>c</span> <span class=variable>e</span>)
+                 (<span class=variable>integrate-segment</span> <span class=variable>c</span> <span class=variable>b</span> <span class=variable>e</span>))))))))
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>最初の断片は <code class=scheme><span class=variable>a</span></code> から <code class=scheme><span class=variable>b</span></code> までです。一つの断片の
+積分を求めるのに、シンプソン積分 <code class=scheme><span class=variable>i2</span></code> と <code class=scheme><span class=variable>i4</span></code> を
+2 つのもっとも小さい分割数 2 と 4 で求めます。この 2つの差が
+<code class=scheme><span class=variable>e</span></code> 以内に収まっていれば、<code class=scheme><span class=variable>i4</span></code> を返します。そうでなければ、
+区間を半分に分割します。それぞれの断片の積分を別々に計算して
+加えます。一般に、同じレベルの別々の断片はそれぞれのペースで
+収束します。半分の断片を統合した時に、許容誤差も半分にするよう
+にし、最終的な和の精度が腐らないようにしなければなりません。</p>
+<p>
+</p>
+<p>
+この手続きにもいくつか効率の悪い部分がのこっています。
+<code class=scheme><span class=variable>i4</span></code> の積分は <code class=scheme><span class=variable>i2</span></code> で既に決定している 3 つの高さについて
+再計算をしています。また、それぞれの半分の断片の計算は、<code class=scheme><span class=variable>i2</span></code> と
+<code class=scheme><span class=variable>i4</span></code> で既に決定している 3つの高さについて再計算しています。
+これらの非効率部分を <code class=scheme><span class=variable>i2</span></code> および <code class=scheme><span class=variable>i4</span></code> のために使う和を
+明示的に作り、名前付き-<code class=scheme><span class=keyword>let</span></code> 内で余分に <code class=scheme><span class=variable>integrate-segment</span></code> 
+というパラメータで受渡すことで回避します。こうすることで
+<code class=scheme><span class=variable>integrate-segment</span></code> の本体と連続した <code class=scheme><span class=variable>integrate-segment</span></code> の
+呼び出しの間との両方で共有が進みます。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=variable>integrate-adaptive-simpson</span>
+  (<span class=keyword>lambda</span> (<span class=variable>f</span> <span class=variable>a</span> <span class=variable>b</span> <span class=variable>e</span>)
+    (<span class=keyword>let*</span> ((<span class=variable>h</span> (<span class=variable>/</span> (<span class=variable>-</span> <span class=variable>b</span> <span class=variable>a</span>) <span class=selfeval>4</span>))
+           (<span class=variable>mid.a.b</span> (<span class=variable>+</span> <span class=variable>a</span> (<span class=variable>*</span> <span class=selfeval>2</span> <span class=variable>h</span>))))
+      (<span class=keyword>let</span> <span class=variable>integrate-segment</span> ((<span class=variable>x0</span> <span class=variable>a</span>)
+                              (<span class=variable>x2</span> <span class=variable>mid.a.b</span>)
+                              (<span class=variable>x4</span> <span class=variable>b</span>)
+                              (<span class=variable>y0</span> (<span class=variable>f</span> <span class=variable>a</span>))
+                              (<span class=variable>y2</span> (<span class=variable>f</span> <span class=variable>mid.a.b</span>))
+                              (<span class=variable>y4</span> (<span class=variable>f</span> <span class=variable>b</span>))
+                              (<span class=variable>h</span> <span class=variable>h</span>)
+                              (<span class=variable>e</span> <span class=variable>e</span>))
+        (<span class=keyword>let*</span> ((<span class=variable>x1</span> (<span class=variable>+</span> <span class=variable>x0</span> <span class=variable>h</span>))
+               (<span class=variable>x3</span> (<span class=variable>+</span> <span class=variable>x2</span> <span class=variable>h</span>))
+               (<span class=variable>y1</span> (<span class=variable>f</span> <span class=variable>x1</span>))
+               (<span class=variable>y3</span> (<span class=variable>f</span> <span class=variable>x3</span>))
+               (<span class=variable>i2</span> (<span class=variable>*</span> <span class=selfeval>2/3</span> <span class=variable>h</span> (<span class=variable>+</span> <span class=variable>y0</span> <span class=variable>y4</span> (<span class=variable>*</span> <span class=selfeval>4.0</span> <span class=variable>y2</span>))))
+               (<span class=variable>i4</span> (<span class=variable>*</span> <span class=selfeval>1/3</span> <span class=variable>h</span> (<span class=variable>+</span> <span class=variable>y0</span> <span class=variable>y4</span> (<span class=variable>*</span> <span class=selfeval>4.0</span> (<span class=variable>+</span> <span class=variable>y1</span> <span class=variable>y3</span>)) 
+                               (<span class=variable>*</span> <span class=selfeval>2.0</span> <span class=variable>y2</span>)))))
+          (<span class=keyword>if</span> (<span class=variable>&lt;=</span> (<span class=variable>abs</span> (<span class=variable>-</span> <span class=variable>i2</span> <span class=variable>i4</span>)) <span class=variable>e</span>)
+              <span class=variable>i4</span>
+              (<span class=keyword>let</span> ((<span class=variable>h</span> (<span class=variable>/</span> <span class=variable>h</span> <span class=selfeval>2</span>)) (<span class=variable>e</span> (<span class=variable>/</span> <span class=variable>e</span> <span class=selfeval>2</span>)))
+                (<span class=variable>+</span> (<span class=variable>integrate-segment</span>
+                     <span class=variable>x0</span> <span class=variable>x1</span> <span class=variable>x2</span> <span class=variable>y0</span> <span class=variable>y1</span> <span class=variable>y2</span> <span class=variable>h</span> <span class=variable>e</span>)
+                   (<span class=variable>integrate-segment</span>
+                     <span class=variable>x2</span> <span class=variable>x3</span> <span class=variable>x4</span> <span class=variable>y2</span> <span class=variable>y3</span> <span class=variable>y4</span> <span class=variable>h</span> <span class=variable>e</span>)))))))))
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent><code class=scheme><span class=variable>integrate-segment</span></code> はここでは、明示的に幅 <code class=scheme><span class=variable>h</span></code> の 4 つの区間
+をセットし、5 つの高さ <code class=scheme><span class=variable>y0</span></code>、<code class=scheme><span class=variable>y1</span></code>、<code class=scheme><span class=variable>y2</span></code>、<code class=scheme><span class=variable>y3</span></code>、<code class=scheme><span class=variable>y4</span></code> を
+与えます。<code class=scheme><span class=variable>i4</span></code> の積分はこれらの高さをすべて使います。一方、
+<code class=scheme><span class=variable>i2</span></code> は <code class=scheme><span class=variable>y0</span></code>、<code class=scheme><span class=variable>y2</span></code>、<code class=scheme><span class=variable>y4</span></code> だけを使います。このとき
+区間の幅は <code class=scheme><span class=variable>h</span></code> の 2倍です。<code class=scheme><span class=variable>i2</span></code> と <code class=scheme><span class=variable>i4</span></code> のために
+使われる明示的な和がシンプソン和に相当することは容易に確かめられます。</p>
+<p>
+</p>
+<p>
+以下の <img src="t-y-scheme-Z-G-D-2.gif" border="0" alt="[t-y-scheme-Z-G-D-2.gif]"><sub>0</sub><sup>20</sup> <em>e</em><sup><em>x</em></sup> <em>d</em><em>x</em> の近似を比べましょう。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>integrate-simpson</span>          <span class=variable>exp</span> <span class=selfeval>0</span> <span class=selfeval>20</span> <span class=selfeval>10</span>)
+(<span class=variable>integrate-simpson</span>          <span class=variable>exp</span> <span class=selfeval>0</span> <span class=selfeval>20</span> <span class=selfeval>20</span>)
+(<span class=variable>integrate-simpson</span>          <span class=variable>exp</span> <span class=selfeval>0</span> <span class=selfeval>20</span> <span class=selfeval>40</span>)
+(<span class=variable>integrate-adaptive-simpson</span> <span class=variable>exp</span> <span class=selfeval>0</span> <span class=selfeval>20</span> <span class=selfeval>.001</span>)
+(<span class=variable>-</span> (<span class=variable>exp</span> <span class=selfeval>20</span>) <span class=selfeval>1</span>)
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>最後のものは、解析的に正しい答えです。
+<code class=scheme>(<span class=variable>integrate-simpson</span> <span class=variable>exp</span> <span class=selfeval>0</span> <span class=selfeval>20</span> <span class=variable>n</span>)</code> が
+<code class=scheme><span class=variable>integrate-adaptive-simpson</span></code> が返すものに匹敵する結果を
+返すようなもっとも小さい <code class=scheme><span class=variable>n</span></code> (やりすぎは高くつきます) を
+見付けられるかどうか見てください。</p>
+<p>
+</p>
+<a name="node_sec_C.3"></a>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_C.3">C.3&nbsp;&nbsp;異常積分</a></h2>
+<p></p>
+<p>
+シンプソン法を直接<em>異常積分</em>(積分される関数の値が積分の区間の
+どこかで有界ではないか、積分区間そのものが有界ではないような積分)
+に適用することはできません。しかし、その積分のいち<em>部分</em>については
+適用可能です。のこりの部分は別の方法で近似します。たとえば、
+<img src="t-y-scheme-Z-G-D-4.gif" border="0" alt="[t-y-scheme-Z-G-D-4.gif]"> 関数を考えてみましょう。<em>n</em> &gt; 0で、<img src="t-y-scheme-Z-G-D-4.gif" border="0" alt="[t-y-scheme-Z-G-D-4.gif]">(<em>n</em>) は以下のような
+定義されています。上方無限の積分として定義されています。</p>
+<p>
+</p>
+<div align=center><img src="t-y-scheme-Z-G-4.gif" border="0" alt=" \Gamma(n) = \int_0^{\infty} x^{n-1}e^{-x} dx "></div>
+<p class=noindent>
+</p>
+<p>
+これより、以下がいえます。(a) <img src="t-y-scheme-Z-G-D-4.gif" border="0" alt="[t-y-scheme-Z-G-D-4.gif]">(1)  =  1 かつ、(b) <em>n</em> &gt; 0 において、
+<img src="t-y-scheme-Z-G-D-4.gif" border="0" alt="[t-y-scheme-Z-G-D-4.gif]">(<em>n</em> + 1)  =  <em>n</em><img src="t-y-scheme-Z-G-D-4.gif" border="0" alt="[t-y-scheme-Z-G-D-4.gif]">(<em>n</em>) です。このことは、(1, 2) の区間における
+<img src="t-y-scheme-Z-G-D-4.gif" border="0" alt="[t-y-scheme-Z-G-D-4.gif]"> の値がわかれば、<em>n</em> &gt; 0 の任意の実数について <img src="t-y-scheme-Z-G-D-4.gif" border="0" alt="[t-y-scheme-Z-G-D-4.gif]">(<em>n</em>) の値を
+知ることができるということを示しています。実際、<em>n</em> &gt; 0 という条件を緩め
+れば、<em>n</em> &le; 0 の整数について、この関数が発散するという知識を利用して、
+(b) の結果を用いて、<img src="t-y-scheme-Z-G-D-4.gif" border="0" alt="[t-y-scheme-Z-G-D-4.gif]">(<em>n</em>) の定義域を <em>n</em> &le; 0 を含むように拡張す
+ることができます。<a name="node_call_footnote_Temp_21"></a><sup><small><a href="#node_footnote_Temp_21">5</a></small></sup></p>
+<p>
+</p>
+<p>
+まず、引数が区間 (1, 2) になければならないような、Scheme の手続き
+<code class=scheme><span class=variable>gamma-1-to-2</span></code> を定義します。<code class=scheme><span class=variable>gamma-1-to-2</span></code> は二つめの引数として、
+許容誤差 <code class=scheme><span class=variable>e</span></code> を取るものとします。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=variable>gamma-1-to-2</span>
+  (<span class=keyword>lambda</span> (<span class=variable>n</span> <span class=variable>e</span>)
+    (<span class=keyword>unless</span> (<span class=variable>&lt;</span> <span class=selfeval>1</span> <span class=variable>n</span> <span class=selfeval>2</span>)
+      (<span class=variable>error</span> <span class=keyword>'</span><span class=variable>gamma-1-to-2</span> <span class=selfeval>&quot;argument outside (1, 2)&quot;</span>))
+    <span class=comment>;...</span>
+</pre><p></p>
+<p>
+</p>
+
+<p class=noindent>ローカル変数 <code class=scheme><span class=variable>gamma-integrand</span></code> を導入し、
+<img src="t-y-scheme-Z-G-D-4.gif" border="0" alt="[t-y-scheme-Z-G-D-4.gif]">-積分 <em>g</em>(<em>x</em>)  =  <em>x</em><sup><em>n</em><tt>-</tt>1</sup><em>e</em><sup><em>x</em></sup> を保持させます。</p>
+<p>
+</p>
+<pre class=scheme>    <span class=comment>;...</span>
+    (<span class=keyword>let</span> ((<span class=variable>gamma-integrand</span>
+            (<span class=keyword>let</span> ((<span class=variable>n-1</span> (<span class=variable>-</span> <span class=variable>n</span> <span class=selfeval>1</span>)))
+              (<span class=keyword>lambda</span> (<span class=variable>x</span>)
+                (<span class=variable>*</span> (<span class=variable>expt</span> <span class=variable>x</span> <span class=variable>n-1</span>)
+                   (<span class=variable>exp</span> (<span class=variable>-</span> <span class=variable>x</span>))))))
+          <span class=comment>;...</span>
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>ここで、<em>g</em>(<em>x</em>) を 0 から <img src="t-y-scheme-Z-G-D-5.gif" border="0" alt="[t-y-scheme-Z-G-D-5.gif]"> まで積分する必要があります。
+無限個の区間を扱うことができないことは明かです。それゆえ、シンプソン法
+を [0, <img src="t-y-scheme-Z-G-D-5.gif" border="0" alt="[t-y-scheme-Z-G-D-5.gif]">) の一部だけ、たとえば、[0, <em>x</em><sub><em>c</em></sub>] (<em>c</em> は「切断
+(cut-off)」をあらわす)だけに使用します。残りの部分、「末尾(tail)」
+すなわち、区間 [<em>x</em><sub><em>c</em></sub>, <img src="t-y-scheme-Z-G-D-5.gif" border="0" alt="[t-y-scheme-Z-G-D-5.gif]">) については、<em>g</em>(<em>x</em>) を良く近似する
+末尾被積分関数 <em>t</em>(<em>x</em>) を利用しますが、解析的な解のほうがより使いやすい
+ことをしっています。実際、十分に大きい <em>x</em><sub><em>c</em></sub> については <em>g</em>(<em>x</em>) を
+指数的減衰関数 <em>t</em>(<em>x</em>)  =  <em>y</em><sub><em>c</em></sub> <em>e</em><sup><tt>-</tt>(<em>x</em> <tt>-</tt> <em>x</em><sub><em>c</em></sub> )</sup> で置き換えることが可能で
+あるということを理解するのはやさしいことです。ここで、
+<em>y</em><sub><em>c</em></sub>  =  <em>g</em>(<em>x</em><sub><em>c</em></sub>) です。したがって、以下とします。</p>
+<p>
+</p>
+<div align=center><img src="t-y-scheme-Z-G-5.gif" border="0" alt="
+\int_0^{\infty} g(x) dx \approx 
+\int_0^{x_c} g(x) dx +
+\int_{x_c}^{\infty} t(x) dx 
+"></div>
+<p class=noindent>
+</p>
+<p>
+最初の積分はシンプソン法を用いて解くことができます。
+二番目は <em>y</em><sub><em>c</em></sub> です。<em>x</em><sub><em>c</em></sub> を求めるのに、低めの値(たとえば 4) から
+始め、これを 2 倍することを 2<em>x</em><sub><em>c</em></sub> の短冊(すなわち、<em>g</em>(2<em>c</em><sub><em>x</em></sub>))が
+末尾被積分関数(つまり、<em>t</em>(2<em>x</em><sub><em>c</em></sub>))と、ある許容誤差内におさまるまで、
+つづけます。シンプソン積分と末尾被積分関数を求めるには、許容誤差
+<code class=scheme><span class=variable>e/100</span></code> が必要で、これは与えられた許容誤差 <code class=scheme><span class=variable>e</span></code> より二桁小さい
+値です。したがって全体の許容誤差は、他に影響を与えません。</p>
+<p>
+</p>
+<pre class=scheme>          <span class=comment>;...</span>
+          (<span class=variable>e/100</span> (<span class=variable>/</span> <span class=variable>e</span> <span class=selfeval>100</span>)))
+       (<span class=keyword>let</span> <span class=variable>loop</span> ((<span class=variable>xc</span> <span class=selfeval>4</span>) (<span class=variable>yc</span> (<span class=variable>gamma-integrand</span> <span class=selfeval>4</span>)))
+         (<span class=keyword>let*</span> ((<span class=variable>tail-integrand</span>
+                  (<span class=keyword>lambda</span> (<span class=variable>x</span>)
+                    (<span class=variable>*</span> <span class=variable>yc</span> (<span class=variable>exp</span> (<span class=variable>-</span> (<span class=variable>-</span> <span class=variable>x</span> <span class=variable>xc</span>))))))
+                (<span class=variable>x1</span> (<span class=variable>*</span> <span class=selfeval>2</span> <span class=variable>xc</span>))
+                (<span class=variable>y1</span> (<span class=variable>gamma-integrand</span> <span class=variable>x1</span>))
+                (<span class=variable>y1-estimated</span> (<span class=variable>tail-integrand</span> <span class=variable>x1</span>)))
+           (<span class=keyword>if</span> (<span class=variable>&lt;=</span> (<span class=variable>abs</span> (<span class=variable>-</span> <span class=variable>y1</span> <span class=variable>y1-estimated</span>)) <span class=variable>e/100</span>)
+               (<span class=variable>+</span> (<span class=variable>integrate-adaptive-simpson</span> 
+                    <span class=variable>gamma-integrand</span>
+                    <span class=selfeval>0</span> <span class=variable>xc</span> <span class=variable>e/100</span>)
+                  <span class=variable>yc</span>)
+               (<span class=variable>loop</span> <span class=variable>x1</span> <span class=variable>y1</span>)))))))
+</pre><p></p>
+<p>
+</p>
+
+<p class=noindent>これで、より一般的な、任意の実数 <em>n</em> に対する <img src="t-y-scheme-Z-G-D-4.gif" border="0" alt="[t-y-scheme-Z-G-D-4.gif]">(<em>n</em>) を返す
+手続き <code class=scheme><span class=variable>gamma</span></code> を以下のように書くことができます。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=variable>gamma</span>
+  (<span class=keyword>lambda</span> (<span class=variable>n</span> <span class=variable>e</span>)
+    (<span class=keyword>cond</span> ((<span class=variable>&lt;</span> <span class=variable>n</span> <span class=selfeval>1</span>) (<span class=variable>/</span> (<span class=variable>gamma</span> (<span class=variable>+</span> <span class=variable>n</span> <span class=selfeval>1</span>) <span class=variable>e</span>) <span class=variable>n</span>))
+          ((<span class=variable>=</span> <span class=variable>n</span> <span class=selfeval>1</span>) <span class=selfeval>1</span>)
+          ((<span class=variable>&lt;</span> <span class=selfeval>1</span> <span class=variable>n</span> <span class=selfeval>2</span>) (<span class=variable>gamma-1-to-2</span> <span class=variable>n</span> <span class=variable>e</span>))
+          (<span class=keyword>else</span> (<span class=keyword>let</span> ((<span class=variable>n-1</span> (<span class=variable>-</span> <span class=variable>n</span> <span class=selfeval>1</span>)))
+                  (<span class=variable>*</span> <span class=variable>n-1</span> (<span class=variable>gamma</span> <span class=variable>n-1</span> <span class=variable>e</span>)))))))
+</pre><p></p>
+<p>
+</p>
+
+<p class=noindent>では、<img src="t-y-scheme-Z-G-D-4.gif" border="0" alt="[t-y-scheme-Z-G-D-4.gif]">(3/2) を計算してみましょう。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>gamma</span> <span class=selfeval>3/2</span> <span class=selfeval>.001</span>)
+(<span class=variable>*</span> <span class=selfeval>1/2</span> (<span class=variable>sqrt</span> <span class=global>*pi*</span>))
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>二番目のあたいは解析的に正しい答です。
+(<img src="t-y-scheme-Z-G-D-4.gif" border="0" alt="[t-y-scheme-Z-G-D-4.gif]">(3/2)  =  (1/2)<img src="t-y-scheme-Z-G-D-4.gif" border="0" alt="[t-y-scheme-Z-G-D-4.gif]">(1/2) でかつ <img src="t-y-scheme-Z-G-D-4.gif" border="0" alt="[t-y-scheme-Z-G-D-4.gif]">(1/2) は
+<img src="t-y-scheme-Z-G-D-3.gif" border="0" alt="[t-y-scheme-Z-G-D-3.gif]"><sup>1/2</sup>であることが知られています。)
+<code class=scheme><span class=variable>gamma</span></code> の二つ目の引数(許容誤差)を変更して、近似値を望むだけ
+近いものにすることができます。
+</p>
+<p>
+</p>
+<div class=footnoterule><hr></div><p></p>
+<div class=footnote><p><a name="node_footnote_Temp_17"></a><sup><small><a href="#node_call_footnote_Temp_17">1</a></small></sup> この近似がなぜ妥当かの説明は、微積分に関する初等の教科書にあたって下
+さい。</p>
+<p><a name="node_footnote_Temp_18"></a><sup><small><a href="#node_call_footnote_Temp_18">2</a></small></sup>  <img src="t-y-scheme-Z-G-D-1.gif" border="0" alt="[t-y-scheme-Z-G-D-1.gif]"> は 平均 = 0 標準偏差 = 1 の<em>正規</em>あるいは
+<em>ガウス</em>分布に従う、ランダム変数の確率密度のことです。
+定積分 <img src="t-y-scheme-Z-G-D-2.gif" border="0" alt="[t-y-scheme-Z-G-D-2.gif]"><sub>0</sub><sup><em>z</em></sup> <img src="t-y-scheme-Z-G-D-1.gif" border="0" alt="[t-y-scheme-Z-G-D-1.gif]">(<em>x</em>) <em>d</em><em>x</em> は 0 と <em>z</em> の間にランダム変数の
+が入る確率です。しかし、この例を理解するのにこのことを全部
+知っている必要はありません。</p>
+<p><a name="node_footnote_Temp_19"></a><sup><small><a href="#node_call_footnote_Temp_19">3</a></small></sup> Scheme が
+<code class=scheme><span class=variable>atan</span></code> 手続きを持っていなかったら、
+<img src="t-y-scheme-Z-G-D-2.gif" border="0" alt="[t-y-scheme-Z-G-D-2.gif]"><sub>0</sub><sup>1</sup> (1  +  <em>x</em><sup>2</sup>)<sup><tt>-</tt>1</sup> <em>d</em><em>x</em>、つまり <img src="t-y-scheme-Z-G-D-3.gif" border="0" alt="[t-y-scheme-Z-G-D-3.gif]">/4 の近似値を求めるのに
+数値積分手続きを使うことができたでしょう。</p>
+<p><a name="node_footnote_Temp_20"></a><sup><small><a href="#node_call_footnote_Temp_20">4</a></small></sup>  <code class=scheme><span class=variable>phi</span></code> から <code class=scheme>(<span class=selfeval>/1</span> (<span class=variable>sqrt</span> (<span class=variable>*</span> <span class=selfeval>2</span> <span class=global>*pi*</span>)))</code> のような定数因子を
+積分の外に出すことで <code class=scheme><span class=variable>integrate-simpson</span></code> ないの縦高さの計算を
+高速化できます。</p>
+<p><a name="node_footnote_Temp_21"></a><sup><small><a href="#node_call_footnote_Temp_21">5</a></small></sup> <em>n</em> &gt; 0 の実数に対する <img src="t-y-scheme-Z-G-D-4.gif" border="0" alt="[t-y-scheme-Z-G-D-4.gif]">(<em>n</em>) はそれ自身、
+<em>整数</em> <em>n</em> &gt; 0 を (<em>n</em> <tt>-</tt> 1)! に写像する、「1 引いて階乗」する関数の
+拡張です。</p>
+</div>
+<div class=smallskip></div>
+<p style="margin-top: 0pt; margin-bottom: 0pt">
+<div align=right class=navigation>[Go to <span><a href="t-y-scheme.html">first</a>, <a href="t-y-scheme-Z-H-21.html">previous</a></span><span>, <a href="t-y-scheme-Z-H-23.html">next</a></span> page<span>; &nbsp;&nbsp;</span><span><a href="t-y-scheme-Z-H-1.html#node_toc_start">contents</a></span><span><span>; &nbsp;&nbsp;</span><a href="t-y-scheme-Z-H-25.html#node_index_start">index</a></span>]</div>
+</p>
+<p></p>
+</div>
+</body>
+</html>

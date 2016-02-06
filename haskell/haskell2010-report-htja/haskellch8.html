@@ -1,0 +1,1773 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd-->
+<html xmlns="http://www.w3.org/1999/xhtml"
+>
+<head><title>8 外部関数インターフェイス</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)" />
+<meta name="originator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)" />
+<!-- 2,html,xhtml -->
+<meta name="src" content="haskell.tex" />
+<meta name="date" content="2010-07-15 09:50:00" />
+<link rel="stylesheet" type="text/css" href="haskell.css" />
+</head><body
+>
+<!--l. 153--><div class="crosslinks"><p class="noindent">[<a
+href="haskellch12.html" >next</a>] [<a
+href="haskellch7.html" >prev</a>] [<a
+href="haskellch7.html#tailhaskellch7.html" >prev-tail</a>] [<a
+href="#tailhaskellch8.html">tail</a>] [<a
+href="haskellch1.html#haskellch11.html" >up</a>] </p></div>
+<h2 class="chapterHead"><span class="titlemark">Chapter&#x00A0;8</span><br /><a
+ id="x15-1490008"></a>外部関数インターフェイス</h2>
+<p class="noindent">外部関数インターフェイス(FFI)には以下の2つ目的がある．
+(1)他言語の機能へのインターフェイスをHaskellで記述できるようにする．
+(2)他言語のコードからHaskellのルーチンを利用できるようにする．
+より一般的に言うならば，FFIはプログラムをHaskellと他言語を混ぜて記述できるようにすることを目指している．これによりアーキテクチャやOSとは独立であるばかりではなく，Haskellと非Haskellシステムの実装をまたぐソースコードの可搬性をサポートする．
+</p>
+<h3 class="sectionHead"><span class="titlemark">8.1</span> <a
+ id="x15-1500008.1"></a>外部言語</h3>
+<p class="noindent">
+HaskellのFFIはいまのところHaskellコードとC呼び出し規約に従う他言語コードとの相互作用についてのみ規定している．
+しかしながら，FFIは，現在のモジュール定義を拡張してC++やJavaのようなC以外の呼び出し規約を持つ言語を含められるような設計になっている．
+どのような言語をサポートサポートするかの正確な定義は今後のHaskellのバージョンに含まれると期待する．
+その次に大きな欠落としては，他言語とのマルチスレッドインタフェースだが，特にスレッドローカル状態については，現在のところ実装が定義であるということになる．
+</p>
+<p class="noindent">
+現在，仕様の核心部分はHaskellと組み合わせられる外部言語には依存しない．
+しかしながら，以下の2つの部分は外部言語に固有の仕様になる．
+(1)外部名の仕様．(2)他言語の基本型のマーシャリング．
+前者の例としては，C<span class="cite">[<a href="haskellli3.html#XC">9</a>]</span>
+ではオブジェクトを識別するために単純な識別子で十分であるが，Javaにおいては，一般には，オーバーロード解決のために修飾された名前が必要になることを考えてもらいたい．
+後者については，多くの言語では表現が厳密に規定されていない基本型があるということを考えてもらいたい．
+たとえば，Cでは<span class="pcrr7t-">int</span>は16，32，64ビットのいずれであってもよい．
+同様に，Haskellでも<span class="pcrr7t-">Int</span>は少くとも<span
+class="cmr-10">[</span><span
+class="cmsy-10">-</span><span
+class="cmr-10">2</span><sup><span
+class="cmr-7">29</span></sup><span
+class="cmmi-10">,</span><span
+class="cmr-10">2</span><sup><span
+class="cmr-7">29</span></sup> <span
+class="cmsy-10">- </span><span
+class="cmr-10">1] </span>
+の範囲をカバーしていればよいとしか規定されていない(<a
+href="haskellch6.html#x13-1350006.4">6.4<!--tex4ht:ref: numbers --></a>節)．
+結果として，Cの<span
+class="pcrr7t-">int</span>をHaskellで確実に表現するためには，
+<span class="pcrr7t-">CInt</span>という<span class="pcrr7t-">int</span>
+の表現に一致することを保証する新しい型を導入しなければならない．
+</p>
+ <p class="noindent">呼び出し規約に依存する外部名の仕様については
+<a href="#x15-1610008.5">8.5<!--tex4ht:ref: sec:extent --></a>節で説明する．
+また，外部言語に依存する基本型のマーシャリングについては
+<a href="#x15-1690008.6">8.6<!--tex4ht:ref: sec:marshalling --></a>節で説明する．
+</p>
+<p class="noindent">
+<h3 class="sectionHead"><span class="titlemark">8.2    </span> <a
+ id="x15-1510008.2"></a>コンテキスト</h3>
+<p class="noindent">
+与えられたHaskellシステムの<span class="ptmri7t-">Haskellコンテキスト</span>とは，そのHaskellシステムの基盤となる抽象マシンの実行コンテキストのことだと定義する．
+Haskellコンテキストには抽象マシンとこれに対応づけられた具体的なアーキテクチャにおけるヒープ，スタック，レジスタが含まれる．
+これ以外の実行コンテキストを<span
+class="ptmri7t-">外部コンテキスト</span>と呼ぶ．
+一般に，Haskellコンテキストと外部コンテキストとの間にはデータフォーマットや呼び出し規約の互換性はない．
+ただし，Haskell側でなにか特定のデータフォーマットを規定している場合は別である．
+</p>
+<p class="noindent">
+一般に，Haskellコンテキストと外部コンテキストとの間にはデータフォーマットや呼び出し規約の互換性はない．ただし，Haskell側でなにか特定のデータフォーマットを規定している場合は別である．
+外部関数インターフェイスの主な目的は，Haskellコンテキストと外部コンテキストのプログラミング操作可能なインターフェイスを提供することである．
+結果として，Haskellのスレッドは外部コンテキストにあるデータにアクセスし，外部コンテキストで実行される関数を呼び出すことも、その逆も可能になる．
+この後の部分では，通常，外部コンテキストと呼び出し規約とを同一視する．
+</p>
+<p class="noindent">
+<h4 class="subsectionHead"><span class="titlemark">8.2.1    </span> <a
+ id="x15-1520008.2.1"></a>言語をまたぐ型の整合性</h4>
+<p class="noindent">
+多くの外部言語が静的な型をサポートしていることを考えると，Haskellの型と外部言語の型との整合性が外部関数についても維持できるのではという疑問が湧く．
+残念ながら，Haskellシステムの実装側が相当の投資をしなければ，これは一般には不可能である（つまり，専用の型検査器を作らねばいけないということである）．
+たとえば，C呼び出し規約の場合，別のアプローチとして考えられるのはHaskellの型からCのプロトタイプを生成して，インポートされる関数のヘッダファイルで指定されているプロトタイプとの照合はCコンパイラに任せるという方法ぐらいであろう．
+しかしながら，Haskellの型にはこの方針で進めるために必要な情報が欠けている．
+特に，Haskellの型はいつ <span class="pcrr7t-">const</span> 修飾子を使うべきかについての情報を含んでいない．
+</p>
+<p class="noindent">
+このようなことから，この定義では外部型との整合性をHaskellシステムがチェックするようには要求していないのである．
+このような事情はあるものの，Haskellシステムが言語をまたがる（合理的な努力で実装できそうな）整合性検査を提供することは推奨されている．
+</p>
+<p class="noindent">
+<h3 class="sectionHead"><span class="titlemark">8.3    </span> <a
+ id="x15-1530008.3"></a>字句構造</h3>
+</p>
+<p class="noindent">
+FFIのために<span class="pcrr7t-">foreign</span>というキーワードと一群の特殊識別子が予約されている．
+後者は外部宣言の中でのみ意味を持ち，それ以外の箇所では通常の識別子として使っても構わない．
+</p>
+<p class="noindent">特殊識別子 <span
+class="pcrr7t-">ccall</span>, <span
+class="pcrr7t-">cplusplus</span>, <span
+class="pcrr7t-">dotnet</span>, <span
+class="pcrr7t-">jvm</span>, and <span
+class="pcrr7t-">stdcall</span> 
+は呼び出し規約を表示するために定義されている．
+しかしながら，具体的なFFIの実装は，ここに明示された以外のシステム固有の呼び出し規約を追加でサポートして構わない．
+</p>
+<p class="noindent">
+外部のCコンテキストのオブジェクトを参照するために次のような字句を導入する：
+</p>
+<div class="flushleft">
+ <p class="noindent">
+<!--tex4ht:inline--><div class="tabular"> <table id="TBL-92" class="tabular"
+cellspacing="0" cellpadding="0"
+><colgroup id="TBL-92-1g"><col
+id="TBL-92-1" /><col
+id="TBL-92-2" /><col
+id="TBL-92-3" /><col
+id="TBL-92-4" /></colgroup><tr
+ style="vertical-align:baseline;" id="TBL-92-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-92-1-1"
+class="td11"> <span
+class="cmmi-10">chname  </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-92-1-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-92-1-3"
+class="td11"> <span
+class="cmsy-10">{</span><span
+class="cmmi-10">chchar</span><span
+class="cmsy-10">}</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">.</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">h</span>          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-92-1-4"
+class="td11"> <span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="cmr-10">(</span>C&#x00A0;ヘッダーファイル名<span
+class="cmr-10">)  </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-92-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-92-2-1"
+class="td11"> <span
+class="cmmi-10">cid        </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-92-2-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-92-2-3"
+class="td11"> <span
+class="cmmi-10">letter</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">{</span><span
+class="cmmi-10">letter</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;ascDigit</span><span
+class="cmsy-10">} </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-92-2-4"
+class="td11"> <span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="cmr-10">(</span>C&#x00A0;識別子<span
+class="cmr-10">)           </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-92-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-92-3-1"
+class="td11"> <span
+class="cmmi-10">chchar   </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-92-3-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-92-3-3"
+class="td11"> <span
+class="cmmi-10">letter</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;ascSymbol</span><sub><span
+class="cmsy-7">&#x27E8;</span><span
+class="pcrr7t-">&amp;</span><span
+class="cmsy-7">&#x27E9;</span></sub>    </td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-92-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-92-4-1"
+class="td11"> <span
+class="cmmi-10">letter     </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-92-4-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-92-4-3"
+class="td11"> <span
+class="cmmi-10">ascSmall</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;ascLarge</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">_</span> </td>
+</tr></table></div></div>
+<p class="noindent"> 
+<span class="cmmi-10">chname</span>として許容される許容される字句の範囲はCの
+<span class="pcrr7t-">#include</span> ディレクティブで許容される範囲の部分集合となる．
+特にファイル名 <span
+class="cmmi-10">chname</span> は拡張子 <span
+class="pcrr7t-">.h</span> で終わらなければならない．
+<span class="cmmi-10">cid</span> が生成する字句は<span class="cite">[<a
+href="haskellli3.html#XC">9</a>]</span>で規定されているCの識別子と一致する．
+</p>
+<p class="noindent">
+<h3 class="sectionHead"><span class="titlemark">8.4    </span> <a
+ id="x15-1540008.4"></a>外部宣言</h3>
+<p class="noindent">外部宣言の構文は以下のとおりである：
+<div class="flushleft"
+>
+ <p class="noindent">
+<!--tex4ht:inline--><div class="tabular"> <table id="TBL-93" class="tabular"
+cellspacing="0" cellpadding="0"
+><colgroup id="TBL-93-1g"><col
+id="TBL-93-1" /><col
+id="TBL-93-2" /><col
+id="TBL-93-3" /><col
+id="TBL-93-4" /></colgroup><tr
+ style="vertical-align:baseline;" id="TBL-93-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-93-1-1"
+class="td11"> <span
+class="cmmi-10">topdecl  </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-93-1-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-93-1-3"
+class="td11"> <span
+class="pcrr7t-">foreign</span><span
+class="cmmi-10">&#x00A0;fdecl                                         </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-93-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-93-2-1"
+class="td11"> <span
+class="cmmi-10">fdecl     </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-93-2-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-93-2-3"
+class="td11"> <span
+class="pcrr7t-">import</span><span
+class="cmmi-10">&#x00A0;callconv</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmr-10">[</span><span
+class="cmmi-10">safety</span><span
+class="cmr-10">]</span><span
+class="cmmi-10">&#x00A0;impent</span><span
+class="cmmi-10">&#x00A0;var</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">::</span><span
+class="cmmi-10">&#x00A0;ftype  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-93-2-4"
+class="td11"> <span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="cmr-10">(</span>変数定義<span
+class="cmr-10">)      </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-93-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-93-3-1"
+class="td11">        </td><td  style="white-space:nowrap; text-align:center;" id="TBL-93-3-2"
+class="td11">    <span
+class="cmsy-10">|</span>   </td><td  style="white-space:nowrap; text-align:left;" id="TBL-93-3-3"
+class="td11"> <span
+class="pcrr7t-">export</span><span
+class="cmmi-10">&#x00A0;callconv</span><span
+class="cmmi-10">&#x00A0;expent</span><span
+class="cmmi-10">&#x00A0;var</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">::</span><span
+class="cmmi-10">&#x00A0;ftype            </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-93-3-4"
+class="td11"> <span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="cmr-10">(</span>変数のエクスポート<span
+class="cmr-10">)     </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-93-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-93-4-1"
+class="td11"> <span
+class="cmmi-10">callconv  </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-93-4-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-93-4-3"
+class="td11"> <span
+class="pcrr7t-">ccall</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">stdcall</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">cplusplus</span>             </td><td  style="white-space:nowrap; text-align:left;" id="TBL-93-4-4"
+class="td11"> <span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="cmr-10">(</span>呼び出し規約<span
+class="cmr-10">)  </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-93-5-"><td  style="white-space:nowrap; text-align:left;" id="TBL-93-5-1"
+class="td11">        </td><td  style="white-space:nowrap; text-align:center;" id="TBL-93-5-2"
+class="td11">    <span
+class="cmsy-10">|</span>   </td><td  style="white-space:nowrap; text-align:left;" id="TBL-93-5-3"
+class="td11"> <span
+class="pcrr7t-">jvm</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">dotnet</span>                           </td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-93-6-"><td  style="white-space:nowrap; text-align:left;" id="TBL-93-6-1"
+class="td11">        </td><td  style="white-space:nowrap; text-align:center;" id="TBL-93-6-2"
+class="td11">    <span
+class="cmsy-10">|</span>   </td><td  style="white-space:nowrap; text-align:left;" id="TBL-93-6-3"
+class="td11"> <span
+class="ptmb7t-">&#x00A0;システム依存呼び出し規約</span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-93-7-"><td  style="white-space:nowrap; text-align:left;" id="TBL-93-7-1"
+class="td11"> <span
+class="cmmi-10">impent   </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-93-7-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-93-7-3"
+class="td11"> <span
+class="cmr-10">[</span><span
+class="cmmi-10">string</span><span
+class="cmr-10">]                                                           </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-93-8-"><td  style="white-space:nowrap; text-align:left;" id="TBL-93-8-1"
+class="td11"> <span
+class="cmmi-10">expent   </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-93-8-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-93-8-3"
+class="td11"> <span
+class="cmr-10">[</span><span
+class="cmmi-10">string</span><span
+class="cmr-10">]                                                           </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-93-9-"><td  style="white-space:nowrap; text-align:left;" id="TBL-93-9-1"
+class="td11"> <span
+class="cmmi-10">safety   </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-93-9-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-93-9-3"
+class="td11"> <span
+class="pcrr7t-">unsafe</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmsy-10">|</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">safe</span>                          </td>
+</tr></table></div></div>
+<p class="noindent">
+外部宣言にはインポート宣言およびエクスポート宣言の2種類がある．
+インポート宣言というのは，<span
+class="ptmri7t-">外部実体</span>を作るものである．
+つまり，外部コンテキストで作成された関数やメモリ位置を，Haskellのコンテキストから使えるようにする．
+逆に，エクスポート宣言というのは，Haskellの関数を外部コンテキストにおける外部実体として定義するものである．
+したがって，この2つの宣言は，インポート宣言が新しい変数を定義するのに対し，エクスポート宣言はすでにHaskellモジュールに存在する変数を用いるという点で異なる．
+</p>
+<p class="noindent">
+外部実体を含む外部コンテキストは外部宣言で与えられる呼び出し規約によって決定される．
+したがって，外部実体の仕様の正確な形式は，呼び出し規約と，インポート宣言された実体(<span class="cmmi-10">impent</span>)かエクスポート宣言された(<span class="cmmi-10">expent</span>)実体かということとの両方に依存する．
+異種の呼び出し規約存在下で一貫した構文を提供するために，外部実体の記述は，字句的にはHaskellの文字列字句で記述されることが保証されている．
+唯一の例外は，この文字列が空文字列（つまり <span class="pcrr7t-">""</span>) であり，この場合はこの文字列を省略して構わない．
+</p>
+<p class="noindent">
+<h4 class="subsectionHead"><span class="titlemark">8.4.1    </span> <a
+ id="x15-1550008.4.1"></a>呼び出し規約</h4>
+<p class="noindent">
+与えられたアーキテクチャ上の外部実体へのバイナリインタフェースは呼び出し規約によって決定される．
+呼び出し規約が，その外部実体を実装したプログラミング言語に依存することもよくあるが，大抵の場合はその外部実体がコンパイルされた際のターゲットシステムにより依存している．
+</p>
+<p class="noindent">
+呼び出し規約が，プログラミング言語よりもシステムで決定されることの例として，Java仮想マシン<span class="cite">[<a href="haskellli3.html#Xlindholm-etal:JVM">11</a>]</span>のバイトコードとしてコンパイルされた実体はJVMのルールで呼び出される必要があり，その実体を実装するのに使われたソース言語とは関連が薄いことを考えてもらいたい（この実体は例えばOberonで実装されていても構わないわけである）．
+</p>
+<p class="noindent">
+HaskellのFFIのいかなる実装も，少なくともC呼び出し規約（<span class="pcrr7t-">ccall</span>で表す）を実装しなければならない．
+他の呼び出し規約はすべてオプションである．
+一般には，呼び出し規約の種類に制約はない．つまり，個々の実装はその他の呼び出し規約をサポートすることにして構わない．<span class="pcrr7t-">ccall</span> に加えて，表<a
+href="#x15-1550011">8.1<!--tex4ht:ref: tab:callconv --></a>では良く使われる呼び出し規約に対する識別子を列挙しておく．
+</p>
+<div class="table">
+ <p class="noindent"> <a
+ id="x15-1550011"></a><hr class="float" /><div class="float"
+>
+<div class="center"
+>
+ <p class="noindent">
+<div class="tabular"> <table id="TBL-94" class="tabular"
+cellspacing="0" cellpadding="0" rules="groups"
+><colgroup id="TBL-94-1g"><col
+id="TBL-94-1" /></colgroup><colgroup id="TBL-94-2g"><col
+id="TBL-94-2" /></colgroup><tr
+class="hline"><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-94-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-94-1-1"
+class="td11">識別子</td><td  style="white-space:nowrap; text-align:left;" id="TBL-94-1-2"
+class="td11">呼び出し規約</td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td></tr><tr
+class="hline"><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-94-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-94-2-1"
+class="td11"> <span
+class="pcrr7t-">ccall</span>     </td><td  style="white-space:nowrap; text-align:left;" id="TBL-94-2-2"
+class="td11"> 標準 C コンパイラ</td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-94-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-94-3-1"
+class="td11"> <span
+class="pcrr7t-">cplusplus</span> </td><td  style="white-space:nowrap; text-align:left;" id="TBL-94-3-2"
+class="td11"> 標準 C++ コンパイラ</td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-94-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-94-4-1"
+class="td11"> <span
+class="pcrr7t-">dotnet</span>    </td><td  style="white-space:nowrap; text-align:left;" id="TBL-94-4-2"
+class="td11"><span
+class="ptmrc7t-">.<span
+class="small-caps">n</span><span
+class="small-caps">e</span><span
+class="small-caps">t</span> </span>プラットフォーム</td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-94-5-"><td  style="white-space:nowrap; text-align:left;" id="TBL-94-5-1"
+class="td11"> <span
+class="pcrr7t-">jvm</span>       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-94-5-2"
+class="td11">Java仮想マシン</td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-94-6-"><td  style="white-space:nowrap; text-align:left;" id="TBL-94-6-1"
+class="td11"> <span
+class="pcrr7t-">stdcall</span>   </td><td  style="white-space:nowrap; text-align:left;" id="TBL-94-6-2"
+class="td11">Win32 API (Pascalの呼び出し規約と同じ)  </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-94-7-"><td  style="white-space:nowrap; text-align:left;" id="TBL-94-7-1"
+class="td11">           </td></tr></table></div>
+<br /><div class="caption"
+><span class="id">表&#x00A0;8.1: </span><span
+class="content">呼び出し規約</span></div><!--tex4ht:label?: x15-1550011 -->
+</div>
+</div><hr class="endfloat" />
+</div>
+<p class="noindent">
+HaskellのFFI実装はこれらの全ての呼び出し規約を実装する必要はないが，もし実装する場合にはここで列挙された名称を使わねばならない．
+その他の呼び出し規約については実装ごとに適当な名前を自由に付けてよい．
+</p>
+<p class="noindent">
+ここでは <span class="pcrr7t-">ccall</span> および <span class="pcrr7t-">stdcall</span> の呼び出し規約についてのみ定義する．
+将来のHaskellのバージョンでもっと多くの呼び出し規約が追加される可能性がある．
+</p>
+<p class="noindent">
+特定の呼び出し規約を実装するためにHaskellシステムで生成されるコードは，システムのターゲットコードによって，全く異なることに注意すべきてある．
+たとえば，<span class="pcrr7t-">jvm</span> の呼び出し規約はJavaコードを生成するHaskellコンパイラにとっては自明である一方で，Cコードを生成するHaskellのコンパイラなら，ターゲットはJavaネイティブインタフェース(JNI)を<span class="cite">[<a href="haskellli3.html#Xliang:JNI">10</a>]</span>ターゲットにする必要がある．
+</p>
+<h4 class="subsectionHead"><span class="titlemark">8.4.2    </span> <a
+ id="x15-1560008.4.2"></a>外部型</h4>
+<p class="noindent">以下に列挙する型が<span
+class="ptmri7t-">基本外部型</span>の集合を構成する：
+     <ul class="itemize1">
+     <li class="itemize"><span
+class="pcrr7t-">Char</span>，<span
+class="pcrr7t-">Int</span>，<span
+class="pcrr7t-">Double</span>，<span
+class="pcrr7t-">Float</span>，<span
+class="pcrr7t-">Bool</span>はHaskellの<span
+class="pcrr7t-">Prelude</span>からエクスポートされ，
+     </li>
+     <li class="itemize"><span
+class="pcrr7t-">Int8</span>， <span
+class="pcrr7t-">Int16</span>， <span
+class="pcrr7t-">Int32</span>， <span
+class="pcrr7t-">Int64</span>， <span
+class="pcrr7t-">Word8</span>， <span
+class="pcrr7t-">Word16</span>， <span
+class="pcrr7t-">Word32</span>， <span
+class="pcrr7t-">Word64</span>， <span
+class="pcrr7t-">Ptr</span><span
+class="pcrr7t-">&#x00A0;a</span>， <span
+class="pcrr7t-">FunPtr</span><span
+class="pcrr7t-">&#x00A0;a</span>，<span
+class="pcrr7t-">StablePtr</span><span
+class="pcrr7t-">&#x00A0;a</span>（<span
+class="pcrr7t-">a</span>は任意の型）は <span
+class="pcrr7t-">Foreign</span> モジュール(<a href="haskellch24.html#x32-26200024">24<!--tex4ht:ref: module:Foreign --></a>章)からエクスポートされる．</li></ul>
+</p>
+<p class="noindent">
+FFIを実装するHaskellシステムは，これらの型をHaskellコンテキストと外部コンテキストの間で関数の引数や結果として相互に受け渡し出来なければならない．
+</p>
+<p class="noindent">
+外部型は以下の文法にしたがって生成される：
+</p>
+<div class="flushleft"
+>
+ <p class="noindent">
+<!--tex4ht:inline--><div class="tabular"> <table id="TBL-95" class="tabular"
+cellspacing="0" cellpadding="0"
+><colgroup id="TBL-95-1g"><col
+id="TBL-95-1" /><col
+id="TBL-95-2" /><col
+id="TBL-95-3" /><col
+id="TBL-95-4" /></colgroup><tr
+ style="vertical-align:baseline;" id="TBL-95-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-95-1-1"
+class="td11"> <span
+class="cmmi-10">ftype  </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-95-1-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-95-1-3"
+class="td11"> <span
+class="cmmi-10">frtype                      </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-95-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-95-2-1"
+class="td11">       </td><td  style="white-space:nowrap; text-align:center;" id="TBL-95-2-2"
+class="td11">    <span
+class="cmsy-10">|</span>   </td><td  style="white-space:nowrap; text-align:left;" id="TBL-95-2-3"
+class="td11"> <span
+class="cmmi-10">fatype</span><span
+class="cmmi-10">&#x00A0; </span><span
+class="cmsy-10">&#x2192;</span> <span
+class="cmmi-10">&#x00A0;ftype         </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-95-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-95-3-1"
+class="td11"> <span
+class="cmmi-10">frtype  </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-95-3-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-95-3-3"
+class="td11"> <span
+class="cmmi-10">fatype                      </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-95-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-95-4-1"
+class="td11">       </td><td  style="white-space:nowrap; text-align:center;" id="TBL-95-4-2"
+class="td11">    <span
+class="cmsy-10">|</span>   </td><td  style="white-space:nowrap; text-align:left;" id="TBL-95-4-3"
+class="td11"> <span
+class="pcrr7t-">()</span>                 </td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-95-5-"><td  style="white-space:nowrap; text-align:left;" id="TBL-95-5-1"
+class="td11"> <span
+class="cmmi-10">fatype  </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-95-5-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-95-5-3"
+class="td11"> <span
+class="cmmi-10">qtycon</span><span
+class="cmmi-10">&#x00A0;atype</span><sub><span
+class="cmr-7">1</span></sub><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmmi-10">&#x2026;</span><span
+class="cmmi-10">&#x00A0;atype</span><sub><span
+class="cmmi-7">k</span></sub>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-95-5-4"
+class="td11"> <span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="cmr-10">(</span><span
+class="cmmi-10">k</span><span
+class="cmmi-10">&#x00A0; </span><span
+class="cmsy-10">&#x2265;</span> <span
+class="cmmi-10">&#x00A0;</span><span
+class="cmr-10">0)  </span></td>
+</tr></table></div></div>
+<p class="noindent">
+外部型は，外部実体のHaskellの型である．
+Haskellの型の特定の部分集合だけが外部型として許容されているが，これは標準化された方法でHakellコンテキストと外部コンテキストで相互に変換できる型は限定されているからである．
+外部型は <span class="ptmri7t-">at</span><sub><span
+class="cmr-7">1</span></sub><span
+class="pcrr7t-">&#x00A0;-&#x003E;</span><span
+class="pcrr7t-">&#x00A0;</span><img
+src="haskell3x.png" alt="&#x22C5;&#x22C5;&#x22C5;"  class="cdots"  /><span
+class="pcrr7t-">&#x00A0;-&#x003E;</span><span
+class="pcrr7t-">&#x00A0;</span><span
+class="ptmri7t-">at</span><sub><span
+class="cmmi-7">n</span></sub><span
+class="pcrr7t-">&#x00A0;-&#x003E;</span><span
+class="pcrr7t-">&#x00A0;</span><span
+class="ptmri7t-">rt</span>
+（<span
+class="cmmi-10">n </span><span
+class="cmsy-10">&#x2265; </span><span
+class="cmr-10">0</span>）のような形式を持つ．
+これの外部実体は
+<span class="cmmi-10">n</span>
+引数の関数であることがわかる．
+</p>
+<p class="noindent"> 外部関数はすべての引数について正格である．
+</p>
+<p class="noindent"> <span class="paragraphHead"><a
+ id="x15-1570008.4.2"></a><span
+class="ptmb7t-">マーシャリング可能な外部型</span></span>&nbsp;
+<span class="cmmi-10">fatype</span>規則で生成される引数の型<span class="ptmri7t-">at</span><sub><span class="cmmi-7">i</span></sub> は<span class="ptmri7t-">マーシャリング可能な外部型</span>でなけれならない．すなわち，以下のどれかである．
+     <ul class="itemize1">
+     <li class="itemize">基本外部型
+     </li>
+     <li class="itemize">マーシャリング可能な外部型の型シノニム
+     </li>
+     <li class="itemize"><span
+class="cmmi-10">T</span><span
+class="cmmi-10">&#x00A0;t</span><span
+class="cmsy-10">&#x2032;</span><sub><span
+class="cmr-7">1</span></sub><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmmi-10">&#x2026;</span><span
+class="cmmi-10">&#x00A0;t</span><span
+class="cmsy-10">&#x2032;</span><sub><span
+class="cmmi-7">n</span></sub>&nbsp;形式の型．ただし，<span
+class="cmmi-10">T</span>は
+     <p class="noindent">
+         <div class="quote">
+         <p class="noindent"> <span
+class="pcrr7t-">newtype</span><span
+class="pcrr7t-">&#x00A0;</span><span
+class="cmmi-10">T</span><span
+class="cmmi-10">&#x00A0;a</span><sub><span
+class="cmr-7">1</span></sub><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmmi-10">&#x2026;</span><span
+class="cmmi-10">&#x00A0;a</span><sub><span
+class="cmmi-7">n</span></sub><span
+class="pcrr7t-">&#x00A0;=</span><span
+class="pcrr7t-">&#x00A0;</span><span
+class="cmmi-10">N</span><span
+class="cmmi-10">&#x00A0;t</span></div>
+     <p class="noindent">という<span class="pcrr7t-">newtype</span>宣言で定義されたもの．かつ，
+         <ul class="itemize2">
+         <li class="itemize">構成子 <span
+class="cmmi-10">N</span> が <span
+class="cmmi-10">T</span> を使うところから可視．
+         </li>
+         <li class="itemize"><span
+class="cmmi-10">t</span><span
+class="cmr-10">[</span><span
+class="cmmi-10">t</span><span
+class="cmsy-10">&#x2032;</span><sub><span
+class="cmr-7">1</span></sub><span
+class="cmmi-10">&#x2215;a</span><sub><span
+class="cmr-7">1</span></sub><span
+class="cmmi-10">..t</span><span
+class="cmsy-10">&#x2032;</span><sub><span
+class="cmmi-7">n</span></sub><span
+class="cmmi-10">&#x2215;a</span><sub><span
+class="cmmi-7">n</span></sub><span
+class="cmr-10">]</span>がマーシャリング可能な外部型．</li></ul>
+     </li></ul>
+<p class="noindent">
+したがって，あるモジュールで<span class="pcrr7t-">newtype</span>により定義された型を，そのモジュールの外から外部宣言で使えるようにするためには，その型を抽象的にエクスポートしなければならない．Cの型と同等のHaskellの型を定義したモジュール Foreign.C.Types もこの規約に従っている（<a href="haskellch28.html#x36-27400028">28<!--tex4ht:ref: module:Foreign.C.Types --></a>章を見よ）． 
+</p>
+<p class="noindent"> <span class="paragraphHead"><a
+ id="x15-1580008.4.2"></a><span
+class="ptmb7t-">マーシャリング可能な外部の結果型</span></span>&nbsp;
+<span class="cmmi-10">frtype</span> 規則で生成される結果の型 <span class="ptmri7t-">rt </span> は <span class="ptmri7t-">マーシャリング可能な外部の結果型</span>でなければならない．すなわち，以下のどれかである．
+     <ul class="itemize1">
+     <li class="itemize"><span
+class="pcrr7t-">()</span> 型．
+     </li>
+     <li class="itemize">マーシャリング可能な基本外部型．
+     </li>
+     <li class="itemize"><span
+class="pcrr7t-">Prelude.IO</span><span
+class="pcrr7t-">&#x00A0;</span><span
+class="cmmi-10">t</span> &nbsp;形式の型．ただし，
+<span class="cmmi-10"> t </span> はマーシャリング可能な外部型，もしくは，<span class="pcrr7t-">()</span> 型．
+     </li>
+     <li class="itemize">マーシャリング可能な外部結果型の型シノニム
+     </li>
+     <li class="itemize"><span
+class="cmmi-10">T</span><span
+class="cmmi-10">&#x00A0;t</span><span
+class="cmsy-10">&#x2032;</span><sub><span
+class="cmr-7">1</span></sub><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmmi-10">&#x2026;</span><span
+class="cmmi-10">&#x00A0;t</span><span
+class="cmsy-10">&#x2032;</span><sub><span
+class="cmmi-7">n</span></sub>という形式の型．ただし，<span class="cmmi-10">T</span>は，
+     <p class="noindent">
+         <div class="quote">
+         <p class="noindent"> <span
+class="pcrr7t-">newtype</span><span
+class="pcrr7t-">&#x00A0;</span><span
+class="cmmi-10">T</span><span
+class="cmmi-10">&#x00A0;a</span><sub><span
+class="cmr-7">1</span></sub><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmmi-10">&#x2026;</span><span
+class="cmmi-10">&#x00A0;a</span><sub><span
+class="cmmi-7">n</span></sub><span
+class="pcrr7t-">&#x00A0;=</span><span
+class="pcrr7t-">&#x00A0;</span><span
+class="cmmi-10">N</span><span
+class="cmmi-10">&#x00A0;t</span></div>
+     <p class="noindent"> という<span class="pcrr7t-">newtype</span> 宣言で定義されたもの．かつ，
+         <ul class="itemize2">
+         <li class="itemize">構成子 <span
+class="cmmi-10">N</span> が <span
+class="cmmi-10">T</span> を使うところから可視．
+         </li>
+         <li class="itemize"><span
+class="cmmi-10">t</span><span
+class="cmr-10">[</span><span
+class="cmmi-10">t</span><span
+class="cmsy-10">&#x2032;</span><sub><span
+class="cmr-7">1</span></sub><span
+class="cmmi-10">&#x2215;a</span><sub><span
+class="cmr-7">1</span></sub><span
+class="cmmi-10">..t</span><span
+class="cmsy-10">&#x2032;</span><sub><span
+class="cmmi-7">n</span></sub><span
+class="cmmi-10">&#x2215;a</span><sub><span
+class="cmmi-7">n</span></sub><span
+class="cmr-10">]</span> がマーシャリング可能な外部の結果型．</li></ul>
+     </li></ul>
+<p class="noindent">
+<h4 class="subsectionHead"><span class="titlemark">8.4.3    </span> <a
+ id="x15-1590008.4.3"></a>インポート宣言</h4>
+</p>
+<p class="noindent"> 一般にインポート宣言は，
+                            <span
+class="pcrr7t-">foreign</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">import</span><span
+class="cmmi-10">&#x00A0;c</span><span
+class="cmmi-10">&#x00A0;e</span><span
+class="cmmi-10">&#x00A0;v</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">::</span><span
+class="cmmi-10">&#x00A0;t</span>
+ という形式だが，これは型 <span class="cmmi-10">t </span>の値を表す変数<span class="cmmi-10">v </span> が外部定義されていると宣言するものである．
+さらに，この宣言では，文字列 <span class="cmmi-10">e </span> で識別される外部実体を呼び出し規約<span class="cmmi-10">c </span> を使って実行することで評価すると規定するものである．
+<span class="cmmi-10">e</span> の正確な形式は呼び出し規約に依存し，これについては<a href="#x15-1610008.5">8.5<!--tex4ht:ref: sec:extent --></a>節で詳述する．
+変数 <span class="cmmi-10">v </span> がインポート宣言で定義される場合，それと同じモジュールではこれ以外の <span class="cmmi-10">v </span>のトップレベル宣言をしてはならない．
+たとえば，宣言
+     <div class="quote">
+     <div class="verbatim" id="verbatim-147">
+foreign&#x00A0;import&#x00A0;ccall&#x00A0;"string.h&#x00A0;strlen"
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;cstrlen&#x00A0;::&#x00A0;Ptr&#x00A0;CChar&#x00A0;-&#x003E;&#x00A0;IO&#x00A0;CSize
+</div>
+     <p class="noindent"></div>
+<p class="noindent">
+は関数 <span class="pcrr7t-">cstrlen</span> を導入し，これは外部関数 <span class="pcrr7t-">strlen</span> を標準のCの呼び出し規約で呼び出す．
+外部実体を純粋関数としてインポートできる場合もある．
+たとえば，
+     <div class="quote">
+     <div class="verbatim" id="verbatim-148">
+foreign&#x00A0;import&#x00A0;ccall&#x00A0;"math.h&#x00A0;sin"
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;sin&#x00A0;::&#x00A0;CDouble&#x00A0;-&#x003E;&#x00A0;CDouble.
+</div>
+     <p class="noindent"></div>
+<p class="noindent">
+この宣言は外部実体が真の関数であることを，つまり同じ引数に対して常に同じ値を返すことを，意味する．
+</p>
+<p class="noindent">
+特定の形式の外部実体がインポート可能なHaskellの型の制限に収まるかどうかは
+<a href="#x15-1610008.5">8.5<!--tex4ht:ref: sec:extent --></a> 節で明確に述べられる．
+外部実体の形式によっては，許容されるHaskell型が制限されるが，一般にはインポート宣言で与えられるHaskell型と外部実体の引数と戻り値の型の整合性がこのシステムでは保証されているわけではない．
+この整合性を保証するのはプログラマの責任である．
+</p>
+<p class="noindent">
+必要ならば，インポート宣言において，呼び出し規約の後に，外部実体を呼び出す際のセーフティレベルを指定できる．
+<span class="pcrr7t-">safe</span>呼び出しは効率が悪いが，Haskellシステムが外部からのコールバックを受け取れる状態にあることを保証する．
+対照的に，<span class="pcrr7t-">unsafe</span> 呼び出しでは，オーバーヘッドが少ないが，Haskellシステムへのコールバックをトリガしてはならない．
+もしトリガした場合の動作は未定義である．
+デフォルトでは <span class="pcrr7t-">safe</span> 呼び出しが使われる．
+
+Haskellシステムへのコールバックによって，外部実体が呼ばれた後で，この呼び出しが返る前にガベージコレクションがトリガーされ得ることに注意しよう．
+したがって，安定ポインタ(cf.&#x00A0;<a href="haskellch36.html#x44-31000036">36<!--tex4ht:ref: module:Foreign.StablePtr --></a>章)以外のオブジェクトはストレージマネージャーによって移動したり，ガベージコレクタにに回収される可能性がある．
+</p>
+<p class="noindent">
+<h4 class="subsectionHead"><span class="titlemark">8.4.4    </span> <a
+ id="x15-1600008.4.4"></a>エクスポート宣言</h4>
+</p>
+<p class="noindent"> エクスポート宣言の一般的形式は，
+                            <span
+class="pcrr7t-">foreign</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">export</span><span
+class="cmmi-10">&#x00A0;c</span><span
+class="cmmi-10">&#x00A0;e</span><span
+class="cmmi-10">&#x00A0;v</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">::</span><span
+class="cmmi-10">&#x00A0;t</span>
+である．
+このような宣言により <span class="cmmi-10">v</span> への外部からのアクセスが可能になる．
+ここで，<span class="cmmi-10">v</span> は値か，フィールド名か，クラスメソッドで，そのモジュールあるいはインポートされたモジュールのトップレベルで宣言されているものである．
+さらに，Haskell システムは文字列 <span class="cmmi-10">e</span> で記述された外部実体（呼び出し規約<span class="cmmi-10">c</span> で外部コードから利用される）を定義する．
+この外部実体 <span class="cmmi-10">e </span> の外部コードでの呼び出しは，<span class="cmmi-10">v </span>の評価へ翻訳される．型 <span class="cmmi-10">t </span> は <span class="cmmi-10">v </span> の型に該当するものでなければならない．
+例としては以下のとおりである．
+     <div class="quote">
+     <div class="verbatim" id="verbatim-149">
+foreign&#x00A0;export&#x00A0;ccall&#x00A0;"addInt"&#x00A0;&#x00A0;&#x00A0;(+)&#x00A0;::&#x00A0;Int&#x00A0;&#x00A0;&#x00A0;-&#x003E;&#x00A0;Int&#x00A0;&#x00A0;&#x00A0;-&#x003E;&#x00A0;Int
+&#x00A0;<br />foreign&#x00A0;export&#x00A0;ccall&#x00A0;"addFloat"&#x00A0;(+)&#x00A0;::&#x00A0;Float&#x00A0;-&#x003E;&#x00A0;Float&#x00A0;-&#x003E;&#x00A0;Float
+</div>
+</p>
+</div>
+<p class="noindent">
+エクスポートされたHaskellの値の外部からの呼び出しによってトリガされた評価が例外を返した場合、システムの動作は未定義である．
+したがって，Haskellの例外はHaskell内で捕捉し，明示的に外部コードに伝達しなければならない．
+</p>
+<p class="noindent">
+<h3 class="sectionHead"><span class="titlemark">8.5    </span> <a
+ id="x15-1610008.5"></a>外部実体の仕様</h3>
+</p>
+<p class="noindent">
+外部宣言においては，その宣言によってアクセスまたは提供される外部実体を指定する必要がある．
+外部実体を一意的に決定するのに必要な記法の構文と意味は，外部実体へのアクセスの際の呼び出し規約に強く依存する．
+たとえば，<span class="pcrr7t-">ccall</span> 呼び出し規約においては，大域ラベルで充分である．しかし，<span class="pcrr7t-">jvm</span> 呼び出し規約においてメソッドを一意的に決めるためには，型情報が不可欠である．
+後者については，Javaソースレベル構文を使うか，JNIの要求に合った構文を使うか&#8212;という選択肢がある．
+しかし，明らかに，外部実体の仕様の構文は呼び出し規約に完全に依存しており，それは自明なわけではない．
+</p>
+<p class="noindent">
+したがって，FFIは外部実体を表す汎用の構文を決めておらず，インポートされる実体(<span class="cmmi-10">impent</span>) とエクスポートされる実体 (<span class="cmmi-10">impent</span>) がどちらもHakellの文字列リテラルになっていることだけ要求する．
+これらの文字列から値を生成するためルールは呼び出し規約に依存しており，Haskellシステムの実装はこれらの文字列を呼び出し規約に応じて構文解析する必要がある．
+</p>
+<p class="noindent">
+<span class="cmmi-10">impent</span> および <span class="cmmi-10">expent</span> を
+文字列形式で定義するということは，Haskellプログラムの静的解析に必要な全ての情報と，外部言語とのやりとりを行うコードを生成するために必要な情報とは別のものであるということになる．
+これは，特にHaskellのソースコードを処理するツールにとっては有用である．
+<span class="cmmi-10">impent</span> あるいは <span class="cmmi-10">expent</span> によって提供される実体の情報を無視した場合でも，識別子定義と型情報を含んだ使い方の情報は外部インポート宣言や外部エクスポート宣言から推論できる．
+</p>
+<p class="noindent">
+より複雑な呼び出し規約の場合には，実体の指定のためのユーザレベル文法を使う（たとえばJavaやC++)方法と，システムレベル文法（例えばJNIの型構文やマングル済みのC++）を使う方法のどちらかを使う．
+どちらを選んでもよい場合は，ユーザレベル文法を使う方が望ましい．
+わかりやすいからというだけでなく，システムレベル文法というものはその外部言語の特定の実装と密着したものになる場合があるからである．
+</p>
+<p class="noindent"> 
+以下で，外部実体を特定するための構文と呼び出し規約 <span class="pcrr7t-">ccall</span> および <span class="pcrr7t-">stdcall</span> の意味論を定義する．
+表 <a href="#x15-1550011">8.1<!--tex4ht:ref: tab:callconv --></a> にある他の呼び出し規約については将来のHaskellにおいて定義されるだろう．
+</p>
+<p class="noindent">
+<h4 class="subsectionHead"><span class="titlemark">8.5.1    </span> <a
+ id="x15-1620008.5.1"></a>標準の C 呼び出し</h4>
+</p>
+<p class="noindent"> 
+以下では呼び出し規約 <span class="pcrr7t-">ccall</span> のもとでの外部宣言についての外部実体の構造を定義する．
+インポート宣言とエクスポート宣言は別々に扱う．
+その後，外部関数の型についての付加的な制約を定義する．
+</p>
+<p class="noindent">
+このFFIではC関数と大域変数へのアクセスだけをカバーしている．
+他のCプログラムの実体に触れるメカニズムは存在しない．
+特に，Haskellから <span class="pcrr7t-">#define</span> で定義された定数を含むプリプロセッサシンボルへのアクセスはサポートしていない．
+このような実体にHaskellからアクセスすることはその言語専用のツールの領分である．
+そのようなツールはここに定義した単純なFFIに便利な機能を追加するものである．
+</p>
+<p class="noindent"> <span class="paragraphHead"><a
+ id="x15-1630008.5.1"></a><span
+class="ptmb7t-">インポート宣言</span></span>
+インポート宣言については，呼び出し規約 <span class="pcrr7t-">ccall</span> のもとで，外部実体特定の構文は次のようになる：
+</p>
+<div class="flushleft">
+<p class="noindent">
+<!--tex4ht:inline--><div class="tabular"> <table id="TBL-96" class="tabular"
+cellspacing="0" cellpadding="0"
+><colgroup id="TBL-96-1g"><col
+id="TBL-96-1" /><col
+id="TBL-96-2" /><col
+id="TBL-96-3" /><col
+id="TBL-96-4" /></colgroup><tr
+ style="vertical-align:baseline;" id="TBL-96-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-96-1-1"
+class="td11"> <span
+class="cmmi-10">impent  </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-96-1-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-96-1-3"
+class="td11"> <span
+class="pcrr7t-">"</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmr-10">[</span><span
+class="pcrr7t-">static</span><span
+class="cmr-10">]</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmr-10">[</span><span
+class="cmmi-10">chname</span><span
+class="cmr-10">]</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmr-10">[</span><span
+class="pcrr7t-">&amp;</span><span
+class="cmr-10">]</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmr-10">[</span><span
+class="cmmi-10">cid</span><span
+class="cmr-10">]</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">"</span> </td><td  style="white-space:nowrap; text-align:left;" id="TBL-96-1-4"
+class="td11"> <span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="cmr-10">(</span>静的関数もしくはアドレス<span
+class="cmr-10">)           </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-96-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-96-2-1"
+class="td11">        </td><td  style="white-space:nowrap; text-align:center;" id="TBL-96-2-2"
+class="td11">    <span
+class="cmsy-10">|</span>   </td><td  style="white-space:nowrap; text-align:left;" id="TBL-96-2-3"
+class="td11"> <span
+class="pcrr7t-">"</span><span
+class="cmmi-10">&#x00A0;dynamic</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">"</span>                </td><td  style="white-space:nowrap; text-align:left;" id="TBL-96-2-4"
+class="td11"> <span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="cmr-10">(</span>アドレスをインポートするスタブファクトリ<span
+class="cmr-10">)  </span></td>
+</tr><tr
+ style="vertical-align:baseline;" id="TBL-96-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-96-3-1"
+class="td11">        </td><td  style="white-space:nowrap; text-align:center;" id="TBL-96-3-2"
+class="td11">    <span
+class="cmsy-10">|</span>   </td><td  style="white-space:nowrap; text-align:left;" id="TBL-96-3-3"
+class="td11"> <span
+class="pcrr7t-">"</span><span
+class="cmmi-10">&#x00A0;wrapper</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">"</span>                </td><td  style="white-space:nowrap; text-align:left;" id="TBL-96-3-4"
+class="td11"> <span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="ptmri7t-">&#x00A0;</span><span
+class="cmr-10">(</span>サンクをエクスポートするスタブファクトリ<span
+class="cmr-10">)      </span></td>
+</tr></table></div></div>
+<p class="noindent"> 1つめは静的関数 <span class="cmmi-10">cid</span> をインポートする．もしくは <span class="cmmi-10">cid</span> の前に <span class="pcrr7t-">&amp;</span> がついたばあいには静的アドレスをインポートする．
+<span class="cmmi-10">cid</span> が省略された場合には，インポートされたHaskellの変数名が使われる．
+オプションのファイル名 <span class="cmmi-10">chname</span> では C のヘッダファイルを指定する．
+これは当該ヘッダファイルで <span class="cmmi-10">cid</span> で表される C の実体が宣言されていることを想定している．
+具体的には Haskell の処理系が Haskell のコードを C のコードにコンパイルする場合，生成された C のコードにおいては，
+     <div class="quote">
+     <p class="noindent"> <span
+class="pcrr7t-">#include</span><span
+class="pcrr7t-">&#x00A0;"</span><span
+class="cmmi-10">chname</span><span
+class="pcrr7t-">"</span></div>
+<p class="noindent"> というディレクティブが，その実体を参照する前に書かれている必要がある．
+</p>
+<p class="noindent"><span class="pcrr7t-">dynamic</span> および <span class="pcrr7t-">wrapper</span> というキーワードでそれぞれ指定できる2つめと3つめは Haskell の処理系が生成しなければならない関数のスタブをインポートする．
+<span class="pcrr7t-">dynamic</span> の場合には当該スタブは C の関数ポインタを Haskell の関数に変換する．
+逆に <span class="pcrr7t-">wrapper</span> の場合にはスタブ関数はHaskellのサンクをCの関数ポインタに変換する．
+<span class="pcrr7t-">static</span>，<span class="pcrr7t-">dynamic</span>，<span class="pcrr7t-">wrapper</span> のどれも指定されなかった場合，<span class="pcrr7t-">static</span> が指定されたものとみなす．
+とはいうものの，指定子 <span class="pcrr7t-">static</span> は <span class="pcrr7t-">dynamic</span> または <span class="pcrr7t-">wrapper</span> で指定された C のルーチンをインポートするときには明示する必要がある．
+</p>
+<p class="noindent">
+アドレスをインポートしない（すなわち，外部実体を指定するのに <span class="pcrr7t-">&amp;</span> を使わない）静的外部宣言では常に C の関数を参照する．
+これは対応する Haskell の型が関数の型ではない場合でもあてはまることに注意してもらいたい．
+たとえば，
+     <div class="quote">
+     <div class="verbatim" id="verbatim-150">
+foreign&#x00A0;import&#x00A0;ccall&#x00A0;foo&#x00A0;::&#x00A0;CInt
+</div>
+     <p class="noindent"></div>
+<p class="noindent">
+は無引数の整数値を返す純粋なCの関数 <span class="pcrr7t-">foo</span> を指す．
+同様に，その型が <span class="pcrr7t-">IO &#x00A0;CInt</span> の場合は，無引数の純粋ではない関数を指す．
+Haskellのプログラムから整数型の C の変数 <span class="pcrr7t-">bar</span> にアクセスする必要がある場合は，
+     <div class="quote">
+     <div class="verbatim" id="verbatim-151">
+foreign&#x00A0;import&#x00A0;ccall&#x00A0;"&amp;"&#x00A0;bar&#x00A0;::&#x00A0;Ptr&#x00A0;CInt
+</div>
+     <p class="noindent"></div>
+<p class="noindent">
+を使って当該変数を参照するポインタを取得しなければならない．
+この変数は <span class="pcrr7t-">Foreign.Storable</span> モジュール (<a href="haskellch37.html#x45-31300037">37<!--tex4ht:ref: module:Foreign.Storable --></a>節参照)で提供されるルーチンを使えば読むことも更新することもできる．
+</p>
+<p class="noindent"> <span class="paragraphHead"><a
+ id="x15-1640008.5.1"></a><span
+class="ptmb7t-">エクスポート宣言</span></span>
+<span class="cmmi-10">ccall</span> のエクスポート宣言において外部実体は以下の形式になる．
+<div class="flushleft">
+ <p class="noindent">
+<!--tex4ht:inline--><div class="tabular"> <table id="TBL-97" class="tabular"
+cellspacing="0" cellpadding="0"
+><colgroup id="TBL-97-1g"><col
+id="TBL-97-1" /><col
+id="TBL-97-2" /><col
+id="TBL-97-3" /><col
+id="TBL-97-4" /></colgroup><tr
+ style="vertical-align:baseline;" id="TBL-97-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-97-1-1"
+class="td11"> <span
+class="cmmi-10">expent  </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-97-1-2"
+class="td11">   <span
+class="cmsy-10">&#x2192;</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-97-1-3"
+class="td11"> <span
+class="pcrr7t-">"</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="cmr-10">[</span><span
+class="cmmi-10">cid</span><span
+class="cmr-10">]</span><span
+class="cmmi-10">&#x00A0;</span><span
+class="pcrr7t-">"</span> </td>
+</tr></table>
+</div></div>
+<p class="noindent">
+C の識別子 <span class="cmmi-10">cid</span> はオプションで，エクスポートされたHaskell の変数を C からアクセスするときの外部名を定義する．
+これを省略したばあいはエクスポートされたHaskellの変数名が外部名として使われる．
+</p>
+<p class="noindent"> <span class="paragraphHead"><a
+ id="x15-1650008.5.1"></a><span
+class="ptmb7t-">関数の型に対する制約</span></span>
+インポート宣言の場合，その種類に応じて，インポートによって定義される変数が持てる Haskell 型に制約がある．
+この制約は以下のように定められている．
+     <dl class="description"><dt class="description">
+<span
+class="ptmb7t-">静的関数</span> </dt><dd
+class="description">
+静的関数はいからなる外部型も持てる．
+すなわち，結果の型は IO モナドであっても，なくてもよい．
+純粋ではない関数が IO モナドでインポートされていなければ，システムの振舞いは未定義である．
+一般には，インポートされたラベルの C の型との整合性はチェックされない．
+     <p class="noindent">たとえば，
+         <div class="quote">
+         <div class="verbatim" id="verbatim-152">
+foreign&#x00A0;import&#x00A0;ccall&#x00A0;"static&#x00A0;stdlib.h"
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;system&#x00A0;::&#x00A0;Ptr&#x00A0;CChar&#x00A0;-&#x003E;&#x00A0;IO&#x00A0;CInt
+</div>
+         <p class="noindent"></div>
+     <p class="noindent"> 
+この宣言は，<span class="pcrr7t-">stdlib.h</span> でプロトタイプ宣言されている <span class="pcrr7t-">system()</span> 関数をインポートしている．
+     </dd><dt class="description">
+<span class="ptmb7t-">静的アドレス</span> </dt><dd class="description">
+インポートされるアドレスの型は <span class="pcrr7t-">Ptr</span><span class="pcrr7t-">&#x00A0;</span><span class="ptmri7t-">a </span> 型，あるいは <span class="pcrr7t-">FunPtr</span><span class="pcrr7t-">&#x00A0;</span><span class="ptmri7t-">a</span> 型に制限される．
+ここで，<span class="ptmri7t-">a</span> は任意の型である．
+     <p class="noindent"> たとえば，
+         <div class="quote">
+         <div class="verbatim" id="verbatim-153">
+foreign&#x00A0;import&#x00A0;ccall&#x00A0;"errno.h&#x00A0;&amp;errno"&#x00A0;errno&#x00A0;::&#x00A0;Ptr&#x00A0;CInt
+</div>
+         <p class="noindent"></div>
+     <p class="noindent"> これは C での <span class="pcrr7t-">int</span> 型の変数 <span class="pcrr7t-">errno</span> のアドレスをインポートしている．
+     </dd><dt class="description">
+<span class="ptmb7t-">動的インポート</span> </dt><dd
+class="description">動的(dynamic)スタブの型は<span class="pcrr7t-">(FunPtr</span><span class="pcrr7t-">&#x00A0;</span><span class="ptmri7t-">ft</span><span class="pcrr7t-">)</span><span class="pcrr7t-">&#x00A0;-&#x003E;</span><span class="pcrr7t-">&#x00A0;</span><span class="ptmri7t-">ft</span> という形式でなければならない．
+ここで，<span class="ptmri7t-">ft </span> は任意の外部型である．
+     <p class="noindent"> たとえば，
+         <div class="quote">
+         <div class="verbatim" id="verbatim-154">
+foreign&#x00A0;import&#x00A0;ccall&#x00A0;"dynamic"
+&#x00A0;<br />&#x00A0;&#x00A0;mkFun&#x00A0;::&#x00A0;FunPtr&#x00A0;(CInt&#x00A0;-&#x003E;&#x00A0;IO&#x00A0;())&#x00A0;-&#x003E;&#x00A0;(CInt&#x00A0;-&#x003E;&#x00A0;IO&#x00A0;())
+</div>
+         <p class="noindent"></div>
+     <p class="noindent"> このスタブファクトリ <span class="pcrr7t-">mkFun</span> は整数の値をひとつだけとり値を返さない関数への任意のポインタを対応する Haskell の関数に変換する．
+     </dd><dt class="description">
+<span
+class="ptmb7t-">動的ラッパー</span> </dt><dd
+class="description">ラッパースタブの型は <span class="ptmri7t-">ft</span><span class="pcrr7t-">&#x00A0;-&#x003E;</span><span class="pcrr7t-">&#x00A0;IO</span><span class="pcrr7t-">&#x00A0;(FunPtr</span><span class="pcrr7t-">&#x00A0;</span><span class="ptmri7t-">ft</span>) という形式でなければならない．
+ここで，<span class="ptmri7t-">ft </span> は任意の外部型である．
+     <p class="noindent"> たとえば，
+         <div class="quote">
+         <div class="verbatim" id="verbatim-155">
+foreign&#x00A0;import&#x00A0;ccall&#x00A0;"wrapper"
+&#x00A0;<br />&#x00A0;&#x00A0;mkCallback&#x00A0;::&#x00A0;IO&#x00A0;()&#x00A0;-&#x003E;&#x00A0;IO&#x00A0;(FunPtr&#x00A0;(IO&#x00A0;()))
+</div>
+         <p class="noindent"></div>
+     <p class="noindent">このスタブファクトリ <span class="pcrr7t-">mkCallback</span> は <span class="pcrr7t-">IO</span><span class="pcrr7t-">&#x00A0;()</span> 型をもつ任意の Haskell の計算を C の関数ポインタに変換し，Haskell の文脈へのコールバックルーチンとして C のルーチンに渡せるようにする．</dd></dl>
+<p class="noindent"> <span class="paragraphHead"><a
+ id="x15-1660008.5.1"></a><span
+class="ptmb7t-">ヘッダファイルの仕様</span></span>
+インポート宣言で指定された C ヘッダは常に <span class="pcrr7t-">#include</span><span class="pcrr7t-">&#x00A0;"</span><span class="cmmi-10">chname</span><span class="pcrr7t-">"</span>でインクルードされる．
+<span class="pcrr7t-">#include</span><span class="pcrr7t-">&#x00A0;&#x003C;</span><span class="cmmi-10">chname</span><span class="pcrr7t-">&#x003E;</span>という形式でのインクルードがサポートされているとは限らない．
+ISO C99&#x00A0;<span class="cite">[<a href="haskellli3.html#XC99">7</a>]</span> 標準では<span class="pcrr7t-">#include</span><span class="pcrr7t-">&#x00A0;&#x003C;</span><span class="cmmi-10">chname</span><span class="pcrr7t-">&#x003E;</span> に対する検索パスは <span class="pcrr7t-">#include</span><span class="pcrr7t-">&#x00A0;"</span><span class="cmmi-10">chname</span><span class="pcrr7t-">"</span> にも適用だれる．
+そして，これらのパスは <span class="pcrr7t-">#include</span><span class="pcrr7t-">&#x00A0;"</span><span class="cmmi-10">chname</span><span class="pcrr7t-">"</span>に一致するすべてのパスを検索した後に検索されることも保証されている．
+さらに，外部実体指定の構文解析が曖昧にならないように <span class="cmmi-10">chname</span> は <span class="pcrr7t-">.h</span> で終わることを要請する．
+<p class="noindent"> インクルードするファイルの仕様は目的のための最小限に抑えられている．
+多数のインクルードディレクティブが必要なライブラリは多く，中にはシステム依存なものもある．
+すべての可能な構成をカバーしようとすれば非常に複雑なものにならるをえない．
+何より，現状のデザインの範囲でも，カスタムインクルードファイルを用意すれば，その中でCプリプロセッサを使うことで多くの関連するヘッダを指定できるはずである．
+ <p class="noindent">
+ヘッダファイルは外部呼び出しの意味論に影響せず，指定されたヘッダファイルを使うかどうかも実装に任されている．
+しかしながら，実装によってはコード生成のために外部関数の正確なプロトタイプを提供するヘッダファイルを要求するので，FFIコードをポータボルにしたいならば適切なヘッダファイルを含めるべきである．
+<p class="noindent"> <span class="paragraphHead"><a
+ id="x15-1670008.5.1"></a><span
+class="ptmb7t-">C 引数の昇格</span></span>
+C の引数呼び出し規約は呼び出された関数のプロトタイプが呼び出した側の有効範囲にあるかどうかで違う．
+たとえば，プロトタイプが有向範囲にない場合，デフォルトでは引数昇格は整数および浮動小数点数に適用される．
+一般に，Haskellシステムの側からは，与えられた C の関数が有効範囲にプロトタイプを置いてコンパイルされたものかどうかが分るとは考えられない．
+したがって，可搬性を考えて，呼び出された関数の関数プロトタイプが有効範囲内にあるかのように，Haskellの関数に対する C のスタブだけではなく，C の関数の呼び出しも実装するよう，Haskellシステムに要請する．
+<p class="noindent">
+したがって，C と Haskell のコードを一致させるのは FFI ユーザーの責任である．
+特に，プロトタイプを含まずコンパイルされた C の関数を Haskell 側から呼ぶ場合は，対応する<span class="pcrr7t-">foreign</span><span class="pcrr7t-">&#x00A0;import</span> 宣言における Haskell の型シグネチャは引数昇格後の型になっていなければならない．
+たとえば，プロトタイプを欠く C の関数
+     <div class="quote">
+     <div class="verbatim" id="verbatim-156">
+void&#x00A0;foo&#x00A0;(a)
+&#x00A0;<br />float&#x00A0;a;
+&#x00A0;<br />{
+&#x00A0;<br />&#x00A0;&#x00A0;...
+&#x00A0;<br />}
+</div>
+     <p class="noindent"></div>
+<p class="noindent"> の場合，プロトタイプが無いので，C コンパイラはデフォルトで引数 <span class="pcrr7t-">a</span> を昇格する．
+したがって，<span class="pcrr7t-">foo</span> は <span class="pcrr7t-">float</span> 型ではなく，<span class="pcrr7t-">double</span> 型の値を受けとると考えられる．
+それゆえ，正しい <span class="pcrr7t-">foreign</span><span class="pcrr7t-">&#x00A0;import</span> 宣言は，
+     <div class="quote">
+     <div class="verbatim" id="verbatim-157">
+foreign&#x00A0;import&#x00A0;ccall&#x00A0;foo&#x00A0;::&#x00A0;Double&#x00A0;-&#x003E;&#x00A0;IO&#x00A0;()
+</div>
+     <p class="noindent"></div>
+<p class="noindent"> となる．
+対照的に，
+     <div class="quote">
+     <div class="verbatim" id="verbatim-158">
+void&#x00A0;foo&#x00A0;(float&#x00A0;a);
+</div>
+     <p class="noindent"></div>
+<p class="noindent"> というプロトタイプ付きでコンパイルされた C 関数に対しては，
+     <div class="quote">
+     <div class="verbatim" id="verbatim-159">
+foreign&#x00A0;import&#x00A0;ccall&#x00A0;foo&#x00A0;::&#x00A0;Float&#x00A0;-&#x003E;&#x00A0;IO&#x00A0;()
+</div>
+     <p class="noindent"></div>
+<p class="noindent"> という宣言でなければならない．
+似たような状況は C のデフォルトの引数昇格で変更されそうな型を用いる <span class="pcrr7t-">foreign</span><span class="pcrr7t-">&#x00A0;export</span> 宣言にも当てはまる．
+そのような Haskell 関数を C から呼び出す場合，<span class="pcrr7t-">foreign</span><span class="pcrr7t-">&#x00A0;export</span> 宣言から得られる型シグネチャと一致する関数プロトタイプが有効範囲になければならない．
+さもなければ，その C コンパイラはすべての関数引数を誤って昇格してしまうことになる．
+</p>
+<p class="noindent">
+可変個の引数を受け取れる C 関数の場合，明示的に型指定された引数以外はすべて昇格の対象になることに注意してもらいたい．
+しかしながら，C ではこのような関数に対する呼び出し規約に違いがあってもよいことになっているために，一般には Haskell システムは可変引数の関数を使えない．
+したがって，可搬性のあるコードを書くのなら，これらの関数をつかうことは非推奨である．
+</p>
+<p class="noindent">
+<h4 class="subsectionHead"><span class="titlemark">8.5.2    </span> <a
+ id="x15-1680008.5.2"></a>Win 32 API の呼び出し</h4>
+<p class="noindent">
+<span class="pcrr7t-">stdcall</span> 呼び出し規約での外部実体の仕様は標準 C 呼び出し規約でのもの全く同じである．
+2つの呼び出し規約で違うのは生成されるコードである．
+<p class="noindent">
+<h3 class="sectionHead"><span class="titlemark">8.6    </span> <a
+ id="x15-1690008.6"></a> マーシャリング</h3>
+<p class="noindent">
+いままでに説明してきた言語拡張に加えて，FFI は外部関数や複雑な構造のマーシャリングの使用をポータブルにするための標準ライブラリを含んでいる．
+一般には，Haskellのデータ構造を外部表現にマーシャリングしたり，その逆を行うことはHaskellでやっても外部言語でやってもよい．
+少なくとも外部言語が（Cのように）非常に低レベルである場合は，マーシャリングをHaskell でやるのがよい．
+     <ul class="itemize1">
+     <li class="itemize">Haskellは遅延評価戦略の言語なので，Haskell のデータ構造にアクセスする外部コードは，アクセスに先立って，これらのデータ構造の評価を強制しなければならない．これは外部言語では複雑なコードになるが，マーシャリングを Haskell では余計なことを考える必要はない．
+     </li>
+     <li class="itemize"> HaskellのマーシャリングコードはHaskell構文で書かれた C のように一見えるが，強力な型システムのおかげで，Haskell で書かなければデバッグ困難なランタイムエラーになるような誤りの多くを捕捉できる．
+     </li>
+     <li class="itemize"> C のような言語から直接 Haskell のヒープ構造にアクセスすると&#8212;殊に C から Haskell へのマーシャリングを行う場合，すなわち，Haskell のデータ構造が生成される場合&#8212;ヒープを壊す虞れがある．これは大抵の場合デバッグが非常に難しい誤りになる．</li></ul>
+<p class="noindent">
+したがって，Haskell FFI においてはHaskell側からのマーシャリングを強く推奨する．
+ <p class="noindent"> 
+マーシャリングライブラリのインタフェースは<span class="pcrr7t-">Foreign</span> (Chapter&#x00A0;<a href="haskellch24.html#x32-26200024">24<!--tex4ht:ref: module:Foreign --></a>)とサポートする言語ごとにそれぞれの言語に依存したモジュールで提供されている．
+特に，Haskell標準では，外部 C コードとのインタフェース作成を容易にする <span class="pcrr7t-">Foreign.C</span> (Chapter&#x00A0;<a href="haskellch25.html#x33-26300025">25<!--tex4ht:ref: module:Foreign.C --></a>) モジュールを提供することを要求している．
+<span class="pcrr7t-">Foreign.C</span> のように言語に依存したモジュールでは，一般には，現在のアーキテクチャでデフォルトである外部言語実装での外部型と互換の表現を使って，その外部言語の基本的な型を表すHaskellの型を提供する．
+これは，言語標準では基本型のいくつかの詳細が確定していない言語にとって特に重要である．
+たとえば，C 言語では，色々な整数型のサイズが確定していない．
+したがって，Haskell において C インタフェースを忠実に表現するためには，C における型一つごとに，それと同じサイズを持つことが保証されている Haskell の整数型が必要になる．
+<p class="noindent">
+<h3 class="sectionHead"><span class="titlemark">8.7    </span> <a
+ id="x15-1700008.7"></a>外部Ｃインターフェイス</h3>
+<div class="table">
+ <p class="noindent"> <a
+ id="x15-1700012"></a><hr class="float" /><div class="float"
+>
+<div class="center"
+>
+ <p class="noindent">
+<div class="tabular"> <table id="TBL-98" class="tabular"
+cellspacing="0" cellpadding="0" rules="groups"
+><colgroup id="TBL-98-1g"><col
+id="TBL-98-1" /></colgroup><colgroup id="TBL-98-2g"><col
+id="TBL-98-2" /></colgroup><colgroup id="TBL-98-3g"><col
+id="TBL-98-3" /></colgroup><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-98-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-98-1-1"
+class="td11"> C symbol            </td><td  style="white-space:nowrap; text-align:left;" id="TBL-98-1-2"
+class="td11"> Haskell symbol    </td><td  style="white-space:nowrap; text-align:left;" id="TBL-98-1-3"
+class="td11"> Constraint on concrete C type                                         </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-98-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-98-2-1"
+class="td11"> <span
+class="pcrr7t-">HsChar</span>      </td><td  style="white-space:nowrap; text-align:left;" id="TBL-98-2-2"
+class="td11"> <span
+class="pcrr7t-">Char</span>        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-98-2-3"
+class="td11"> integral type                                                                     </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-98-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-98-3-1"
+class="td11"> <span
+class="pcrr7t-">HsInt</span>       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-98-3-2"
+class="td11"> <span
+class="pcrr7t-">Int</span>         </td><td  style="white-space:nowrap; text-align:left;" id="TBL-98-3-3"
+class="td11"> signed integral type, <span
+class="cmsy-10">&#x2265; </span><span
+class="cmr-10">30 </span>bit                                          </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-98-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-98-4-1"
+class="td11"> <span
+class="pcrr7t-">HsInt8</span>      </td><td  style="white-space:nowrap; text-align:left;" id="TBL-98-4-2"
+class="td11"> <span
+class="pcrr7t-">Int8</span>        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-98-4-3"
+class="td11"> signed integral type, 8 bit; <span
+class="pcrr7t-">int8_t</span> if available             </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-98-5-"><td  style="white-space:nowrap; text-align:left;" id="TBL-98-5-1"
+class="td11"> <span
+class="pcrr7t-">HsInt16</span>     </td><td  style="white-space:nowrap; text-align:left;" id="TBL-98-5-2"
+class="td11"> <span
+class="pcrr7t-">Int16</span>       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-98-5-3"
+class="td11"> signed integral type, 16 bit; <span
+class="pcrr7t-">int16_t</span> if available         </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-98-6-"><td  style="white-space:nowrap; text-align:left;" id="TBL-98-6-1"
+class="td11"> <span
+class="pcrr7t-">HsInt32</span>     </td><td  style="white-space:nowrap; text-align:left;" id="TBL-98-6-2"
+class="td11"> <span
+class="pcrr7t-">Int32</span>       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-98-6-3"
+class="td11"> signed integral type, 32 bit; <span
+class="pcrr7t-">int32_t</span> if available         </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-98-7-"><td  style="white-space:nowrap; text-align:left;" id="TBL-98-7-1"
+class="td11"> <span
+class="pcrr7t-">HsInt64</span>     </td><td  style="white-space:nowrap; text-align:left;" id="TBL-98-7-2"
+class="td11"> <span
+class="pcrr7t-">Int64</span>       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-98-7-3"
+class="td11"> signed integral type, 64 bit; <span
+class="pcrr7t-">int64_t</span> if available         </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-98-8-"><td  style="white-space:nowrap; text-align:left;" id="TBL-98-8-1"
+class="td11"> <span
+class="pcrr7t-">HsWord8</span>     </td><td  style="white-space:nowrap; text-align:left;" id="TBL-98-8-2"
+class="td11"> <span
+class="pcrr7t-">Word8</span>       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-98-8-3"
+class="td11"> unsigned integral type, 8 bit; <span
+class="pcrr7t-">uint8_t</span> if available       </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-98-9-"><td  style="white-space:nowrap; text-align:left;" id="TBL-98-9-1"
+class="td11"> <span
+class="pcrr7t-">HsWord16</span>    </td><td  style="white-space:nowrap; text-align:left;" id="TBL-98-9-2"
+class="td11"> <span
+class="pcrr7t-">Word16</span>      </td><td  style="white-space:nowrap; text-align:left;" id="TBL-98-9-3"
+class="td11"> unsigned integral type, 16 bit; <span
+class="pcrr7t-">uint16_t</span> if available  </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-98-10-"><td  style="white-space:nowrap; text-align:left;" id="TBL-98-10-1"
+class="td11"> <span
+class="pcrr7t-">HsWord32</span>    </td><td  style="white-space:nowrap; text-align:left;" id="TBL-98-10-2"
+class="td11"> <span
+class="pcrr7t-">Word32</span>      </td><td  style="white-space:nowrap; text-align:left;" id="TBL-98-10-3"
+class="td11"> unsigned integral type, 32 bit; <span
+class="pcrr7t-">uint32_t</span> if available  </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-98-11-"><td  style="white-space:nowrap; text-align:left;" id="TBL-98-11-1"
+class="td11"> <span
+class="pcrr7t-">HsWord64</span>    </td><td  style="white-space:nowrap; text-align:left;" id="TBL-98-11-2"
+class="td11"> <span
+class="pcrr7t-">Word64</span>      </td><td  style="white-space:nowrap; text-align:left;" id="TBL-98-11-3"
+class="td11"> unsigned integral type, 64 bit; <span
+class="pcrr7t-">uint64_t</span> if available  </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-98-12-"><td  style="white-space:nowrap; text-align:left;" id="TBL-98-12-1"
+class="td11"> <span
+class="pcrr7t-">HsFloat</span>     </td><td  style="white-space:nowrap; text-align:left;" id="TBL-98-12-2"
+class="td11"> <span
+class="pcrr7t-">Float</span>       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-98-12-3"
+class="td11"> floating point type                                                            </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-98-13-"><td  style="white-space:nowrap; text-align:left;" id="TBL-98-13-1"
+class="td11"> <span
+class="pcrr7t-">HsDouble</span>    </td><td  style="white-space:nowrap; text-align:left;" id="TBL-98-13-2"
+class="td11"> <span
+class="pcrr7t-">Double</span>      </td><td  style="white-space:nowrap; text-align:left;" id="TBL-98-13-3"
+class="td11"> floating point type                                                            </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-98-14-"><td  style="white-space:nowrap; text-align:left;" id="TBL-98-14-1"
+class="td11"> <span
+class="pcrr7t-">HsBool</span>      </td><td  style="white-space:nowrap; text-align:left;" id="TBL-98-14-2"
+class="td11"> <span
+class="pcrr7t-">Bool</span>        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-98-14-3"
+class="td11"> <span
+class="pcrr7t-">int</span>                                  </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-98-15-"><td  style="white-space:nowrap; text-align:left;" id="TBL-98-15-1"
+class="td11"> <span
+class="pcrr7t-">HsPtr</span>       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-98-15-2"
+class="td11"> <span
+class="pcrr7t-">Ptr</span><span
+class="pcrr7t-">&#x00A0;a</span>       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-98-15-3"
+class="td11"> <span
+class="pcrr7t-">(void</span><span
+class="pcrr7t-">&#x00A0;&#x22C6;)</span>                             </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-98-16-"><td  style="white-space:nowrap; text-align:left;" id="TBL-98-16-1"
+class="td11"> <span
+class="pcrr7t-">HsFunPtr</span>    </td><td  style="white-space:nowrap; text-align:left;" id="TBL-98-16-2"
+class="td11"> <span
+class="pcrr7t-">FunPtr</span><span
+class="pcrr7t-">&#x00A0;a</span>    </td><td  style="white-space:nowrap; text-align:left;" id="TBL-98-16-3"
+class="td11"> <span
+class="pcrr7t-">(void</span><span
+class="pcrr7t-">&#x00A0;(&#x22C6;)(void))</span>                     </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-98-17-"><td  style="white-space:nowrap; text-align:left;" id="TBL-98-17-1"
+class="td11"> <span
+class="pcrr7t-">HsStablePtr</span> </td><td  style="white-space:nowrap; text-align:left;" id="TBL-98-17-2"
+class="td11"> <span
+class="pcrr7t-">StablePtr</span><span
+class="pcrr7t-">&#x00A0;a</span> </td><td  style="white-space:nowrap; text-align:left;" id="TBL-98-17-3"
+class="td11"> <span
+class="pcrr7t-">(void</span><span
+class="pcrr7t-">&#x00A0;&#x22C6;)</span>                             </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-98-18-"><td  style="white-space:nowrap; text-align:left;" id="TBL-98-18-1"
+class="td11">             </td></tr></table></div>
+<br /><div class="caption"
+><span class="id">Table&#x00A0;8.2: </span><span
+class="content">C Interface to Basic Haskell Types</span></div><!--tex4ht:label?: x15-1700012 -->
+</div>
+</div><hr class="endfloat" />
+</div>
+<div class="table">
+ <p class="noindent"> <a
+ id="x15-1700023"></a><hr class="float" /><div class="float"
+>
+<div class="center"
+>
+ <p class="noindent">
+<div class="tabular"> <table id="TBL-99" class="tabular"
+cellspacing="0" cellpadding="0" rules="groups"
+><colgroup id="TBL-99-1g"><col
+id="TBL-99-1" /></colgroup><colgroup id="TBL-99-2g"><col
+id="TBL-99-2" /></colgroup><colgroup id="TBL-99-3g"><col
+id="TBL-99-3" /></colgroup><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-99-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-99-1-1"
+class="td11"> CPP symbol                              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-99-1-2"
+class="td11"> Haskell value                                           </td><td  style="white-space:wrap; text-align:left;" id="TBL-99-1-3"
+class="td11"> <p class="noindent"> Description                                    </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-99-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-99-2-1"
+class="td11"> <span
+class="pcrr7t-">HS_CHAR_MIN</span>          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-99-2-2"
+class="td11"> <span
+class="pcrr7t-">minBound</span><span
+class="pcrr7t-">&#x00A0;::</span><span
+class="pcrr7t-">&#x00A0;Char</span>           </td><td  style="white-space:wrap; text-align:left;" id="TBL-99-2-3"
+class="td11"> <p class="noindent">                       </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-99-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-99-3-1"
+class="td11"> <span
+class="pcrr7t-">HS_CHAR_MAX</span>          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-99-3-2"
+class="td11"> <span
+class="pcrr7t-">maxBound</span><span
+class="pcrr7t-">&#x00A0;::</span><span
+class="pcrr7t-">&#x00A0;Char</span>           </td><td  style="white-space:wrap; text-align:left;" id="TBL-99-3-3"
+class="td11"> <p class="noindent">                       </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-99-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-99-4-1"
+class="td11"> <span
+class="pcrr7t-">HS_INT_MIN</span>           </td><td  style="white-space:nowrap; text-align:left;" id="TBL-99-4-2"
+class="td11"> <span
+class="pcrr7t-">minBound</span><span
+class="pcrr7t-">&#x00A0;::</span><span
+class="pcrr7t-">&#x00A0;Int</span>            </td><td  style="white-space:wrap; text-align:left;" id="TBL-99-4-3"
+class="td11"> <p class="noindent">                       </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-99-5-"><td  style="white-space:nowrap; text-align:left;" id="TBL-99-5-1"
+class="td11"> <span
+class="pcrr7t-">HS_INT_MAX</span>           </td><td  style="white-space:nowrap; text-align:left;" id="TBL-99-5-2"
+class="td11"> <span
+class="pcrr7t-">maxBound</span><span
+class="pcrr7t-">&#x00A0;::</span><span
+class="pcrr7t-">&#x00A0;Int</span>            </td><td  style="white-space:wrap; text-align:left;" id="TBL-99-5-3"
+class="td11"> <p class="noindent">                       </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-99-6-"><td  style="white-space:nowrap; text-align:left;" id="TBL-99-6-1"
+class="td11"> <span
+class="pcrr7t-">HS_INT8_MIN</span>          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-99-6-2"
+class="td11"> <span
+class="pcrr7t-">minBound</span><span
+class="pcrr7t-">&#x00A0;::</span><span
+class="pcrr7t-">&#x00A0;Int8</span>           </td><td  style="white-space:wrap; text-align:left;" id="TBL-99-6-3"
+class="td11"> <p class="noindent">                       </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-99-7-"><td  style="white-space:nowrap; text-align:left;" id="TBL-99-7-1"
+class="td11"> <span
+class="pcrr7t-">HS_INT8_MAX</span>          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-99-7-2"
+class="td11"> <span
+class="pcrr7t-">maxBound</span><span
+class="pcrr7t-">&#x00A0;::</span><span
+class="pcrr7t-">&#x00A0;Int8</span>           </td><td  style="white-space:wrap; text-align:left;" id="TBL-99-7-3"
+class="td11"> <p class="noindent">                       </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-99-8-"><td  style="white-space:nowrap; text-align:left;" id="TBL-99-8-1"
+class="td11"> <span
+class="pcrr7t-">HS_INT16_MIN</span>         </td><td  style="white-space:nowrap; text-align:left;" id="TBL-99-8-2"
+class="td11"> <span
+class="pcrr7t-">minBound</span><span
+class="pcrr7t-">&#x00A0;::</span><span
+class="pcrr7t-">&#x00A0;Int16</span>          </td><td  style="white-space:wrap; text-align:left;" id="TBL-99-8-3"
+class="td11"> <p class="noindent">                       </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-99-9-"><td  style="white-space:nowrap; text-align:left;" id="TBL-99-9-1"
+class="td11"> <span
+class="pcrr7t-">HS_INT16_MAX</span>         </td><td  style="white-space:nowrap; text-align:left;" id="TBL-99-9-2"
+class="td11"> <span
+class="pcrr7t-">maxBound</span><span
+class="pcrr7t-">&#x00A0;::</span><span
+class="pcrr7t-">&#x00A0;Int16</span>          </td><td  style="white-space:wrap; text-align:left;" id="TBL-99-9-3"
+class="td11"> <p class="noindent">                       </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-99-10-"><td  style="white-space:nowrap; text-align:left;" id="TBL-99-10-1"
+class="td11"> <span
+class="pcrr7t-">HS_INT32_MIN</span>         </td><td  style="white-space:nowrap; text-align:left;" id="TBL-99-10-2"
+class="td11"> <span
+class="pcrr7t-">minBound</span><span
+class="pcrr7t-">&#x00A0;::</span><span
+class="pcrr7t-">&#x00A0;Int32</span>          </td><td  style="white-space:wrap; text-align:left;" id="TBL-99-10-3"
+class="td11"> <p class="noindent">                       </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-99-11-"><td  style="white-space:nowrap; text-align:left;" id="TBL-99-11-1"
+class="td11"> <span
+class="pcrr7t-">HS_INT32_MAX</span>         </td><td  style="white-space:nowrap; text-align:left;" id="TBL-99-11-2"
+class="td11"> <span
+class="pcrr7t-">maxBound</span><span
+class="pcrr7t-">&#x00A0;::</span><span
+class="pcrr7t-">&#x00A0;Int32</span>          </td><td  style="white-space:wrap; text-align:left;" id="TBL-99-11-3"
+class="td11"> <p class="noindent">                       </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-99-12-"><td  style="white-space:nowrap; text-align:left;" id="TBL-99-12-1"
+class="td11"> <span
+class="pcrr7t-">HS_INT64_MIN</span>         </td><td  style="white-space:nowrap; text-align:left;" id="TBL-99-12-2"
+class="td11"> <span
+class="pcrr7t-">minBound</span><span
+class="pcrr7t-">&#x00A0;::</span><span
+class="pcrr7t-">&#x00A0;Int64</span>          </td><td  style="white-space:wrap; text-align:left;" id="TBL-99-12-3"
+class="td11"> <p class="noindent">                       </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-99-13-"><td  style="white-space:nowrap; text-align:left;" id="TBL-99-13-1"
+class="td11"> <span
+class="pcrr7t-">HS_INT64_MAX</span>         </td><td  style="white-space:nowrap; text-align:left;" id="TBL-99-13-2"
+class="td11"> <span
+class="pcrr7t-">maxBound</span><span
+class="pcrr7t-">&#x00A0;::</span><span
+class="pcrr7t-">&#x00A0;Int64</span>          </td><td  style="white-space:wrap; text-align:left;" id="TBL-99-13-3"
+class="td11"> <p class="noindent">                       </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-99-14-"><td  style="white-space:nowrap; text-align:left;" id="TBL-99-14-1"
+class="td11"> <span
+class="pcrr7t-">HS_WORD8_MAX</span>         </td><td  style="white-space:nowrap; text-align:left;" id="TBL-99-14-2"
+class="td11"> <span
+class="pcrr7t-">maxBound</span><span
+class="pcrr7t-">&#x00A0;::</span><span
+class="pcrr7t-">&#x00A0;Word8</span>          </td><td  style="white-space:wrap; text-align:left;" id="TBL-99-14-3"
+class="td11"> <p class="noindent">                       </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-99-15-"><td  style="white-space:nowrap; text-align:left;" id="TBL-99-15-1"
+class="td11"> <span
+class="pcrr7t-">HS_WORD16_MAX</span>        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-99-15-2"
+class="td11"> <span
+class="pcrr7t-">maxBound</span><span
+class="pcrr7t-">&#x00A0;::</span><span
+class="pcrr7t-">&#x00A0;Word16</span>         </td><td  style="white-space:wrap; text-align:left;" id="TBL-99-15-3"
+class="td11"> <p class="noindent">                       </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-99-16-"><td  style="white-space:nowrap; text-align:left;" id="TBL-99-16-1"
+class="td11"> <span
+class="pcrr7t-">HS_WORD32_MAX</span>        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-99-16-2"
+class="td11"> <span
+class="pcrr7t-">maxBound</span><span
+class="pcrr7t-">&#x00A0;::</span><span
+class="pcrr7t-">&#x00A0;Word32</span>         </td><td  style="white-space:wrap; text-align:left;" id="TBL-99-16-3"
+class="td11"> <p class="noindent">                       </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-99-17-"><td  style="white-space:nowrap; text-align:left;" id="TBL-99-17-1"
+class="td11"> <span
+class="pcrr7t-">HS_WORD64_MAX</span>        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-99-17-2"
+class="td11"> <span
+class="pcrr7t-">maxBound</span><span
+class="pcrr7t-">&#x00A0;::</span><span
+class="pcrr7t-">&#x00A0;Word64</span>         </td><td  style="white-space:wrap; text-align:left;" id="TBL-99-17-3"
+class="td11"> <p class="noindent">                       </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-99-18-"><td  style="white-space:nowrap; text-align:left;" id="TBL-99-18-1"
+class="td11"> <span
+class="pcrr7t-">HS_FLOAT_RADIX</span>       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-99-18-2"
+class="td11"> <span
+class="pcrr7t-">floatRadix</span><span
+class="pcrr7t-">&#x00A0;::</span><span
+class="pcrr7t-">&#x00A0;Float</span>        </td><td  style="white-space:wrap; text-align:left;" id="TBL-99-18-3"
+class="td11"> <p class="noindent">                       </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-99-19-"><td  style="white-space:nowrap; text-align:left;" id="TBL-99-19-1"
+class="td11"> <span
+class="pcrr7t-">HS_FLOAT_ROUND</span>       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-99-19-2"
+class="td11"> n/a                                                            </td><td  style="white-space:wrap; text-align:left;" id="TBL-99-19-3"
+class="td11"> <p class="noindent"> rounding style as per&#x00A0;<span class="cite">[<a
+href="haskellli3.html#XC99">7</a>]</span>              </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-99-20-"><td  style="white-space:nowrap; text-align:left;" id="TBL-99-20-1"
+class="td11"> <span
+class="pcrr7t-">HS_FLOAT_EPSILON</span>     </td><td  style="white-space:nowrap; text-align:left;" id="TBL-99-20-2"
+class="td11"> n/a                                                            </td><td  style="white-space:wrap; text-align:left;" id="TBL-99-20-3"
+class="td11">  <p class="noindent"> difference  between  1  and  the
+  least   value   greater   than   1   as
+  per&#x00A0;<span class="cite">[<a
+href="haskellli3.html#XC99">7</a>]</span>                                             </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-99-21-"><td  style="white-space:nowrap; text-align:left;" id="TBL-99-21-1"
+class="td11"> <span
+class="pcrr7t-">HS_DOUBLE_EPSILON</span>    </td><td  style="white-space:nowrap; text-align:left;" id="TBL-99-21-2"
+class="td11"> n/a                                                            </td><td  style="white-space:wrap; text-align:left;" id="TBL-99-21-3"
+class="td11"> <p class="noindent"> (as above)                                      </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-99-22-"><td  style="white-space:nowrap; text-align:left;" id="TBL-99-22-1"
+class="td11"> <span
+class="pcrr7t-">HS_FLOAT_DIG</span>         </td><td  style="white-space:nowrap; text-align:left;" id="TBL-99-22-2"
+class="td11"> n/a                                                            </td><td  style="white-space:wrap; text-align:left;" id="TBL-99-22-3"
+class="td11">  <p class="noindent"> number  of  decimal  digits  as
+  per&#x00A0;<span class="cite">[<a
+href="haskellli3.html#XC99">7</a>]</span>                                             </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-99-23-"><td  style="white-space:nowrap; text-align:left;" id="TBL-99-23-1"
+class="td11"> <span
+class="pcrr7t-">HS_DOUBLE_DIG</span>        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-99-23-2"
+class="td11"> n/a                                                            </td><td  style="white-space:wrap; text-align:left;" id="TBL-99-23-3"
+class="td11"> <p class="noindent"> (as above)                                      </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-99-24-"><td  style="white-space:nowrap; text-align:left;" id="TBL-99-24-1"
+class="td11"> <span
+class="pcrr7t-">HS_FLOAT_MANT_DIG</span>    </td><td  style="white-space:nowrap; text-align:left;" id="TBL-99-24-2"
+class="td11"> <span
+class="pcrr7t-">floatDigits</span><span
+class="pcrr7t-">&#x00A0;::</span><span
+class="pcrr7t-">&#x00A0;Float</span>       </td><td  style="white-space:wrap; text-align:left;" id="TBL-99-24-3"
+class="td11"> <p class="noindent">                       </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-99-25-"><td  style="white-space:nowrap; text-align:left;" id="TBL-99-25-1"
+class="td11"> <span
+class="pcrr7t-">HS_DOUBLE_MANT_DIG</span>   </td><td  style="white-space:nowrap; text-align:left;" id="TBL-99-25-2"
+class="td11"> <span
+class="pcrr7t-">floatDigits</span><span
+class="pcrr7t-">&#x00A0;::</span><span
+class="pcrr7t-">&#x00A0;Double</span>      </td><td  style="white-space:wrap; text-align:left;" id="TBL-99-25-3"
+class="td11"> <p class="noindent">                       </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-99-26-"><td  style="white-space:nowrap; text-align:left;" id="TBL-99-26-1"
+class="td11"> <span
+class="pcrr7t-">HS_FLOAT_MIN</span>         </td><td  style="white-space:nowrap; text-align:left;" id="TBL-99-26-2"
+class="td11"> n/a                                                            </td><td  style="white-space:wrap; text-align:left;" id="TBL-99-26-3"
+class="td11"> <p class="noindent"> minimum floating point number
+  as per&#x00A0;<span class="cite">[<a
+href="haskellli3.html#XC99">7</a>]</span>                                        </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-99-27-"><td  style="white-space:nowrap; text-align:left;" id="TBL-99-27-1"
+class="td11"> <span
+class="pcrr7t-">HS_DOUBLE_MIN</span>        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-99-27-2"
+class="td11"> n/a                                                            </td><td  style="white-space:wrap; text-align:left;" id="TBL-99-27-3"
+class="td11"> <p class="noindent"> (as above)                                      </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-99-28-"><td  style="white-space:nowrap; text-align:left;" id="TBL-99-28-1"
+class="td11"> <span
+class="pcrr7t-">HS_FLOAT_MIN_EXP</span>     </td><td  style="white-space:nowrap; text-align:left;" id="TBL-99-28-2"
+class="td11"> <span
+class="pcrr7t-">fst</span><span
+class="pcrr7t-">&#x00A0;.</span><span
+class="pcrr7t-">&#x00A0;floatRange</span><span
+class="pcrr7t-">&#x00A0;::</span><span
+class="pcrr7t-">&#x00A0;Float</span>  </td><td  style="white-space:wrap; text-align:left;" id="TBL-99-28-3"
+class="td11"> <p class="noindent">                       </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-99-29-"><td  style="white-space:nowrap; text-align:left;" id="TBL-99-29-1"
+class="td11"> <span
+class="pcrr7t-">HS_DOUBLE_MIN_EXP</span>    </td><td  style="white-space:nowrap; text-align:left;" id="TBL-99-29-2"
+class="td11"> <span
+class="pcrr7t-">fst</span><span
+class="pcrr7t-">&#x00A0;.</span><span
+class="pcrr7t-">&#x00A0;floatRange</span><span
+class="pcrr7t-">&#x00A0;::</span><span
+class="pcrr7t-">&#x00A0;Double</span> </td><td  style="white-space:wrap; text-align:left;" id="TBL-99-29-3"
+class="td11"> <p class="noindent">                       </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-99-30-"><td  style="white-space:nowrap; text-align:left;" id="TBL-99-30-1"
+class="td11"> <span
+class="pcrr7t-">HS_FLOAT_MIN_10_EXP</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-99-30-2"
+class="td11"> n/a                                                            </td><td  style="white-space:wrap; text-align:left;" id="TBL-99-30-3"
+class="td11">  <p class="noindent"> minimum  decimal  exponent  as
+  per&#x00A0;<span class="cite">[<a
+href="haskellli3.html#XC99">7</a>]</span>                                             </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-99-31-"><td  style="white-space:nowrap; text-align:left;" id="TBL-99-31-1"
+class="td11"> <span
+class="pcrr7t-">HS_DOUBLE_MIN_10_EXP</span> </td><td  style="white-space:nowrap; text-align:left;" id="TBL-99-31-2"
+class="td11"> n/a                                                            </td><td  style="white-space:wrap; text-align:left;" id="TBL-99-31-3"
+class="td11"> <p class="noindent"> (as above)                                      </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-99-32-"><td  style="white-space:nowrap; text-align:left;" id="TBL-99-32-1"
+class="td11"> <span
+class="pcrr7t-">HS_FLOAT_MAX</span>         </td><td  style="white-space:nowrap; text-align:left;" id="TBL-99-32-2"
+class="td11"> n/a                                                            </td><td  style="white-space:wrap; text-align:left;" id="TBL-99-32-3"
+class="td11"> <p class="noindent"> maximum floating point number
+  as per&#x00A0;<span class="cite">[<a
+href="haskellli3.html#XC99">7</a>]</span>                                        </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-99-33-"><td  style="white-space:nowrap; text-align:left;" id="TBL-99-33-1"
+class="td11"> <span
+class="pcrr7t-">HS_DOUBLE_MAX</span>        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-99-33-2"
+class="td11"> n/a                                                            </td><td  style="white-space:wrap; text-align:left;" id="TBL-99-33-3"
+class="td11"> <p class="noindent"> (as above)                                      </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-99-34-"><td  style="white-space:nowrap; text-align:left;" id="TBL-99-34-1"
+class="td11"> <span
+class="pcrr7t-">HS_FLOAT_MAX_EXP</span>     </td><td  style="white-space:nowrap; text-align:left;" id="TBL-99-34-2"
+class="td11"> <span
+class="pcrr7t-">snd</span><span
+class="pcrr7t-">&#x00A0;.</span><span
+class="pcrr7t-">&#x00A0;floatRange</span><span
+class="pcrr7t-">&#x00A0;::</span><span
+class="pcrr7t-">&#x00A0;Float</span>  </td><td  style="white-space:wrap; text-align:left;" id="TBL-99-34-3"
+class="td11"> <p class="noindent">                       </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-99-35-"><td  style="white-space:nowrap; text-align:left;" id="TBL-99-35-1"
+class="td11"> <span
+class="pcrr7t-">HS_DOUBLE_MAX_EXP</span>    </td><td  style="white-space:nowrap; text-align:left;" id="TBL-99-35-2"
+class="td11"> <span
+class="pcrr7t-">snd</span><span
+class="pcrr7t-">&#x00A0;.</span><span
+class="pcrr7t-">&#x00A0;floatRange</span><span
+class="pcrr7t-">&#x00A0;::</span><span
+class="pcrr7t-">&#x00A0;Double</span> </td><td  style="white-space:wrap; text-align:left;" id="TBL-99-35-3"
+class="td11"> <p class="noindent">                       </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-99-36-"><td  style="white-space:nowrap; text-align:left;" id="TBL-99-36-1"
+class="td11"> <span
+class="pcrr7t-">HS_FLOAT_MAX_10_EXP</span>  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-99-36-2"
+class="td11"> n/a                                                            </td><td  style="white-space:wrap; text-align:left;" id="TBL-99-36-3"
+class="td11">  <p class="noindent"> maximum decimal exponent as
+  per&#x00A0;<span class="cite">[<a
+href="haskellli3.html#XC99">7</a>]</span>                                             </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-99-37-"><td  style="white-space:nowrap; text-align:left;" id="TBL-99-37-1"
+class="td11"> <span
+class="pcrr7t-">HS_DOUBLE_MAX_10_EXP</span> </td><td  style="white-space:nowrap; text-align:left;" id="TBL-99-37-2"
+class="td11"> n/a                                                            </td><td  style="white-space:wrap; text-align:left;" id="TBL-99-37-3"
+class="td11"> <p class="noindent"> (as above)                                      </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-99-38-"><td  style="white-space:nowrap; text-align:left;" id="TBL-99-38-1"
+class="td11"> <span
+class="pcrr7t-">HS_BOOL_FALSE</span>        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-99-38-2"
+class="td11"> False                                                        </td><td  style="white-space:wrap; text-align:left;" id="TBL-99-38-3"
+class="td11"> <p class="noindent">                       </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-99-39-"><td  style="white-space:nowrap; text-align:left;" id="TBL-99-39-1"
+class="td11"> <span
+class="pcrr7t-">HS_BOOL_TRUE</span>         </td><td  style="white-space:nowrap; text-align:left;" id="TBL-99-39-2"
+class="td11"> True                                                         </td><td  style="white-space:wrap; text-align:left;" id="TBL-99-39-3"
+class="td11"> <p class="noindent">                       </td>
+</tr><tr
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
+ style="vertical-align:baseline;" id="TBL-99-40-"><td  style="white-space:nowrap; text-align:left;" id="TBL-99-40-1"
+class="td11">                      </td></tr></table></div>
+<br /><div class="caption"
+><span class="id">Table&#x00A0;8.3: </span><span
+class="content">C Interface to Range and Precision of Basic Types</span></div><!--tex4ht:label?: x15-1700023 -->
+</div>
+</div><hr class="endfloat" />
+</div>
+ <p class="noindent"> FFI を実装する Haskell システムは，表<a href="#x15-1700012">8.2<!--tex4ht:ref: tab:c-haskell-types --></a> および 表<a href="#x15-1700023">8.3<!--tex4ht:ref: tab:c-haskell-values --></a> に列挙された C のシンボルを定義した C ヘッダファイル <span class="pcrr7t-">HsFFI.h</span> を提供しなければならない．
+表 <a href="#x15-1700012">8.2<!--tex4ht:ref: tab:c-haskell-types --></a> は型を表すシンボルとそのシンボルが表すHaskellの型を列挙し，具体的な C の型への制約がある場合にはそれも一緒に提示している．
+C の型 <span class="pcrr7t-">HsT</span> が Haskell の型 <span class="pcrr7t-">T</span> を表すとき，外部関数宣言における <span class="pcrr7t-">T</span> の出現は対応する C 関数プロトタイプの <span class="pcrr7t-">HsT</span> と一致していなければならない．
+Haskellシステムが Haskell を外部インポートされたCルーチンを呼び出すような C のコードに変換するときには，このようなプロトタイプは外部 C 関数に対応する外部実体文字列で指定されたヘッダを介して提供される必要がある（<a href="#x15-1620008.5.1">8.5.1<!--tex4ht:ref: sec:ccall --></a> 節参照）．もしそうなっていない場合Haskellシステムの動作は未定義となる．
+Haskell の値 <span class="pcrr7t-">nullPtr</span> は C の <span class="pcrr7t-">(HsPtr)</span><span class="pcrr7t-">&#x00A0;NULL</span> に移され，<span class="pcrr7t-">nullFunPtr</span> は <span class="pcrr7t-">(HsFunPtr)</span><span class="pcrr7t-">&#x00A0;NULL</span> に移されること，および，その逆も保証されている．
+</p>
+<p class="noindent"> 
+表 <a href="#x15-1700023">8.3<!--tex4ht:ref: tab:c-haskell-values --></a> には表 <a
+href="#x15-1700012">8.2<!--tex4ht:ref: tab:c-haskell-types --></a> で示した型の範囲と精度を特徴づけるシンボルを含めてある．
+対応する Haskell の値がある場合にはそれも載せてある．
+C のシンボルは <span class="pcrr7t-">HS_FLOAT_ROUND</span> を除けばすべて定数であり， <span class="pcrr7t-">#if</span> というプリプロセッサディレクティブで利用できるようになっている．
+浮動小数点数の丸め方法（<span class="pcrr7t-">HS_FLOAT_ROUND</span>）と基数（<span class="pcrr7t-">HS_FLOAT_RADIX</span>）はそれぞれ1つずつであり，これは ISO C <span class="cite">[<a href="haskellli3.html#XC99">7</a>]</span> でサポートされているのがこれだけだからであることに注意してもらいたい．
+</p>
+<p class="noindent">
+さらに，C 側で64ビット整数をサポートしていない実装だった場合は <span class="pcrr7t-">HsInt64</span> と <span class="pcrr7t-">HsWord64</span> を C の構造体として実装する必要がある．
+この場合，境界値 <span class="pcrr7t-">HS_INT64_MIN</span>，<span class="pcrr7t-">HS_INT64_MAX</span>，<span class="pcrr7t-">HS_WORD64_MAX</span> は未定義である．
+</p>
+<p class="noindent"> 
+表 <a href="#x15-1700012">8.2<!--tex4ht:ref: tab:c-haskell-types --></a> および表 <a href="#x15-1700023">8.3<!--tex4ht:ref: tab:c-haskell-values --></a> 以外に，ヘッダファイル <span class="pcrr7t-">HsFFI.h</span> には以下のプロトタイプが宣言されていなければならない．
+     <div class="quote">
+     <div class="verbatim" id="verbatim-160">
+void&#x00A0;hs_init&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;(int&#x00A0;&#x22C6;argc,&#x00A0;char&#x00A0;&#x22C6;&#x22C6;argv[]);
+&#x00A0;<br />void&#x00A0;hs_exit&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;(void);
+&#x00A0;<br />void&#x00A0;hs_set_argv&#x00A0;(int&#x00A0;argc,&#x00A0;char&#x00A0;&#x22C6;argv[]);
+&#x00A0;<br />
+&#x00A0;<br />void&#x00A0;hs_perform_gc&#x00A0;(void);
+&#x00A0;<br />
+&#x00A0;<br />void&#x00A0;hs_free_stable_ptr&#x00A0;(HsStablePtr&#x00A0;sp);
+&#x00A0;<br />void&#x00A0;hs_free_fun_ptr&#x00A0;&#x00A0;&#x00A0;&#x00A0;(HsFunPtr&#x00A0;fp);
+</div>
+     <p class="noindent"></div>
+<p class="noindent">
+これらのルーチンは，アプリケーションの主要部分が外部言語で実装されており，そこからHaskell のルーチンにアクセスするような言語混合のプログラムに役立つ．
+関数 <span class="pcrr7t-">hs_init()</span> は Haskell システムを初期化し，それにコマンドライン引数を渡す．
+この関数から復帰するときには，Haskellシステム専用の引数は単に削除される（すなわち，<span class="pcrr7t-">argc</span> および <span class="pcrr7t-">argv</span> が指す値は変更される可能性がある）．
+この関数は，プログラム開始時，Haskell 関数のどれよりも前に呼ばれなければならない．
+そうでないときのシステムの挙動は未定義である．
+他方，Haskellシステムの終了処理は <span class="pcrr7t-">hs_exit()</span> を呼んで行う．
+同じ回数だけ <span class="pcrr7t-">hs_exit()</span> を呼び，最初の <span class="pcrr7t-">hs_exit()</span> 呼び出しが最後の <span class="pcrr7t-">hs_init()</span>の後であるなら，<span class="pcrr7t-">hs_init()</span> を複数回呼ぶことは許可されている．
+ネストした <span class="pcrr7t-">hs_init()</span> への呼び出し以外にも，Haskell システムを <span class="pcrr7t-">hs_exit()</span> で終了処理したあとで <span class="pcrr7t-">hs_init()</span> で再初期化をすることもできる．
+これにより，複数のHaskellで実装したライブラリに起因する初期化の反復を確実にカバーできる．
+</p>
+<p class="noindent">
+Haskell システムは2つめ以降の <span class="pcrr7t-">hs_init()</span> の呼び出しに渡されたコマンドライン引数は無視する．
+さらに，<span class="pcrr7t-">hs_init()</span> の呼び出しのとき <span class="pcrr7t-">argc</span> および <span class="pcrr7t-">argv</span> がともに <span class="pcrr7t-">NULL</span> である可能性があり，このときは，コマンドライン引数が無いことを示すシグナルがあがる．
+ <p class="noindent">
+関数 <span class="pcrr7t-">hs_set_argv()</span> は <span class="pcrr7t-">System.Environment</span>（<a href="haskellch39.html#x47-31800039">39<!--tex4ht:ref: module:System.Environment --></a>節参照）モジュールの関数 <span class="pcrr7t-">getProgName</span> および <span class="pcrr7t-">getArgs</span> の返り値を設定する．
+この関数は <span class="pcrr7t-">hs_init()</span> の後でのみ呼び出せる．
+さらに，<span class="pcrr7t-">hs_set_argv()</span> を呼ぶときは必ず最初の <span class="pcrr7t-">getProgName</span> および <span class="pcrr7t-">getArgs</span> の呼び出しより前でなければならない．
+初期化の間に使われたコマンドライン引数を追加で他のライブラリで処理するような場合には <span class="pcrr7t-">hs_init()</span> と <span class="pcrr7t-">hs_set_argv()</span> を分けて使うのは必須である．
+</p>
+<p class="noindent"> 関数 <span class="pcrr7t-">hs_perform_gc()</span> は Haskell のストレージマネージャにガーベッジコレクションを促す．
+そうすると，ストレージマネージャは到達不可オブジェクトを解放するように働く．
+この関数は，Haskellコードに <span class="pcrr7t-">unsafe</span> 指定でインポートした C の関数から呼んではいけない．
+また，ファイナライザから使ってもいけない．
+ <p class="noindent"> 最後に <span class="pcrr7t-">hs_free_stable_ptr()</span> および <span class="pcrr7t-">hs_free_fun_ptr()</span> は Haskell の <span class="pcrr7t-">freeStablePtr</span> および <span class="pcrr7t-">freeHaskellFunPtr</span> に対応する C の関数である．
+<!--l. 7--><div class="crosslinks"><p class="noindent">[<a
+href="haskellch12.html" >next</a>] [<a
+href="haskellch7.html" >prev</a>] [<a
+href="haskellch7.html#tailhaskellch7.html" >prev-tail</a>] [<a
+href="haskellch8.html" >front</a>] [<a
+href="haskellch1.html#haskellch11.html" >up</a>] </p></div>
+ <p class="noindent"> <a
+ id="tailhaskellch8.html"></a>
+</body></html>

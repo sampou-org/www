@@ -1,0 +1,990 @@
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--
+
+Generated from t-y-scheme.tex by tex2page, v 20060531
+(running on Gauche 0.8.7, unix), 
+(c) Dorai Sitaram, 
+http://www.ccs.neu.edu/~dorai/tex2page/tex2page-doc.html
+
+-->
+<head>
+<title>
+独習 Scheme 三週間 Teach Yourself Scheme in Fixnum Days
+</title>
+<link rel="stylesheet" type="text/css" href="t-y-scheme-Z-S.css" title=default>
+<meta name=robots content="noindex,follow">
+<meta name=description content="A practical
+introduction to the programming language Scheme">
+
+<meta name=author content="Dorai Sitaram">
+
+<link rev=made href="mailto:ds26@gte.com">
+</head>
+<body>
+<div id=slidecontent>
+<div align=right class=navigation>[Go to <span><a href="t-y-scheme.html">first</a>, <a href="t-y-scheme-Z-H-3.html">previous</a></span><span>, <a href="t-y-scheme-Z-H-5.html">next</a></span> page<span>; &nbsp;&nbsp;</span><span><a href="t-y-scheme-Z-H-1.html#node_toc_start">contents</a></span><span><span>; &nbsp;&nbsp;</span><a href="t-y-scheme-Z-H-25.html#node_index_start">index</a></span>]</div>
+<p></p>
+<a name="node_chap_2"></a>
+<h1 class=chapter>
+<div class=chapterheading><a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_2">Chapter 2</a></div><br>
+<a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_2">データ型</a></h1>
+<p></p>
+<p>
+<a name="node_idx_40"></a><em>データ型</em>は関連する値の集まりです。この集まりは、互いに素である
+必要はなく、多くの場合には階層構造になります。Schemeには豊富なデータ型
+があり、いくつかのものは、単純(分割不可能)なもので、それ以外は他のデータ型
+を組み合せて合成したデータ型です。</p>
+<p>
+</p>
+<p>
+<a name="node_idx_42"></a></p>
+<p>
+</p>
+<a name="node_sec_2.1"></a>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_2.1">2.1&nbsp;&nbsp;単純データ型</a></h2>
+<p></p>
+<p>
+Schemeの単純データ型には、真理値、数値、文字、シンボルがあります。</p>
+<p>
+</p>
+<p>
+<a name="node_idx_44"></a></p>
+<p>
+</p>
+<a name="node_sec_2.1.1"></a>
+<h3 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_2.1.1">2.1.1&nbsp;&nbsp;真理値</a></h3>
+<p></p>
+<p>
+</p>
+<p>
+<a name="node_idx_46"></a><a name="node_idx_48"></a><a name="node_idx_50"></a><a name="node_idx_52"></a><a name="node_idx_54"></a>Schemeの真理値は、真は<code class=scheme><span class=selfeval>#t</span></code>、偽は<code class=scheme><span class=selfeval>#f</span></code>です。
+Schemeには引数が真理値であるかどうかを判定する<code class=scheme><span class=variable>boolean?</span></code>という
+述語手続きがあります。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>boolean?</span> <span class=selfeval>#t</span>)              <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#t</span>
+(<span class=variable>boolean?</span> <span class=selfeval>&quot;Hello, World!&quot;</span>) <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#f</span>
+</pre><p></p>
+<p>
+<a name="node_idx_56"></a></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>手続き<code class=scheme><span class=variable>not</span></code>は引数を真理値だと考えてこれを否定します。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>not</span> <span class=selfeval>#f</span>)              <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#t</span>
+(<span class=variable>not</span> <span class=selfeval>#t</span>)              <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#f</span>
+(<span class=variable>not</span> <span class=selfeval>&quot;Hello, World!&quot;</span>) <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#f</span>
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>最後の式はSchemeの便利なところで、真理値が必要な文脈では、
+Schemeは<code class=scheme><span class=selfeval>#f</span></code>ではない値はすべて真の値として扱います。</p>
+<p>
+</p>
+<p>
+<a name="node_idx_58"></a></p>
+<p>
+</p>
+<a name="node_sec_2.1.2"></a>
+<h3 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_2.1.2">2.1.2&nbsp;&nbsp;数値</a></h3>
+<p></p>
+<p>
+Schemeの数値は、整数(たとえば、<code class=scheme><span class=selfeval>42</span></code>)、有理数(<code class=scheme><span class=selfeval>22/7</span></code>)、
+実数(<code class=scheme><span class=selfeval>3.1416</span></code>)、複素数(<code class=scheme><span class=selfeval>2+3i</span></code>)になりえます。
+整数は有理数の一部であり、有理数は実数の一部であり、
+実数は複素数の一部です。いろいろな数の種類について
+テストする述語が存在します。</p>
+<p>
+<a name="node_idx_60"></a><a name="node_idx_62"></a><a name="node_idx_64"></a><a name="node_idx_66"></a><a name="node_idx_68"></a></p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>number?</span> <span class=selfeval>42</span>)       <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#t</span>
+(<span class=variable>number?</span> <span class=selfeval>#t</span>)       <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#f</span>
+(<span class=variable>complex?</span> <span class=selfeval>2+3i</span>)    <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#t</span>
+(<span class=variable>real?</span> <span class=selfeval>2+3i</span>)       <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#f</span>
+(<span class=variable>real?</span> <span class=selfeval>3.1416</span>)     <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#t</span>
+(<span class=variable>real?</span> <span class=selfeval>22/7</span>)       <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#t</span>
+(<span class=variable>real?</span> <span class=selfeval>42</span>)         <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#t</span>
+(<span class=variable>rational?</span> <span class=selfeval>2+3i</span>)   <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#f</span>
+(<span class=variable>rational?</span> <span class=selfeval>3.1416</span>) <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#t</span>
+(<span class=variable>rational?</span> <span class=selfeval>22/7</span>)   <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#t</span>
+(<span class=variable>integer?</span> <span class=selfeval>22/7</span>)    <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#f</span>
+(<span class=variable>integer?</span> <span class=selfeval>42</span>)      <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#t</span>
+</pre><p></p>
+<p>
+<a name="node_idx_70"></a><a name="node_idx_72"></a><a name="node_idx_74"></a><a name="node_idx_76"></a></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>Schemeの整数は10進表示でなければならないわけではありません。
+<code class=scheme><span class=selfeval>#b</span></code>を接頭辞としてもちいれば、2進数表示であることを指定できます。
+したがって、<code class=scheme><span class=selfeval>#b1100</span></code>は十二のことです。8進表示の接頭辞は<code class=scheme><span class=selfeval>#o</span></code>、
+16進表示の接頭辞は<code class=scheme><span class=selfeval>#x</span></code>です。(10進表示であることを明示的にしめすには
+接頭辞<code class=scheme><span class=selfeval>#d</span></code>をつかいます。)</p>
+<p>
+<a name="node_idx_78"></a></p>
+<p>
+</p>
+<p>
+数値の同値性のチェックには汎用同値性述語<code class=scheme><span class=variable>eqv?</span></code>を使うことができます。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>eqv?</span> <span class=selfeval>42</span> <span class=selfeval>42</span>)   <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#t</span>
+(<span class=variable>eqv?</span> <span class=selfeval>42</span> <span class=selfeval>#f</span>)   <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#f</span>
+(<span class=variable>eqv?</span> <span class=selfeval>42</span> <span class=selfeval>42.0</span>) <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#f</span>
+</pre><p></p>
+<p>
+<a name="node_idx_80"></a></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>しかし、もし比較すべき引数が数値だとわかっているなら、数値専用同値性
+述語<code class=scheme><span class=variable>=</span></code>を使うのがよりふさわしいです。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>=</span> <span class=selfeval>42</span> <span class=selfeval>42</span>)   <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#t</span>
+(<span class=variable>=</span> <span class=selfeval>42</span> <span class=selfeval>#f</span>)   <span style="color: red"><tt><strong><i>--&gt;ERROR!!!</i></strong></tt></span>
+(<span class=variable>=</span> <span class=selfeval>42</span> <span class=selfeval>42.0</span>) <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#t</span>
+</pre><p></p>
+<p>
+<a name="node_idx_82"></a><a name="node_idx_84"></a><a name="node_idx_86"></a><a name="node_idx_88"></a></p>
+<p>
+</p>
+
+<p class=noindent>そのほかにも、
+<code class=scheme><span class=variable>&lt;</span></code>、<code class=scheme><span class=variable>&lt;=</span></code>、<code class=scheme><span class=variable>&gt;</span></code>、<code class=scheme><span class=variable>&gt;=</span></code>の比較をすることができます。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>&lt;</span> <span class=selfeval>3</span> <span class=selfeval>2</span>)    <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#f</span>
+(<span class=variable>&gt;=</span> <span class=selfeval>4.5</span> <span class=selfeval>3</span>) <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#t</span>
+</pre><p></p>
+<p>
+<a name="node_idx_90"></a><a name="node_idx_92"></a><a name="node_idx_94"></a><a name="node_idx_96"></a><a name="node_idx_98"></a></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>算術手続き、<code class=scheme><span class=variable>+</span></code>、<code class=scheme><span class=variable>-</span></code>、<code class=scheme><span class=variable>*</span></code>、<code class=scheme><span class=variable>/</span></code>、<code class=scheme><span class=variable>expt</span></code>の振舞いは以下の
+とおりです。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>+</span> <span class=selfeval>1</span> <span class=selfeval>2</span> <span class=selfeval>3</span>)    <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>6</span>
+(<span class=variable>-</span> <span class=selfeval>5.3</span> <span class=selfeval>2</span>)    <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>3.3</span>
+(<span class=variable>-</span> <span class=selfeval>5</span> <span class=selfeval>2</span> <span class=selfeval>1</span>)    <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>2</span>
+(<span class=variable>*</span> <span class=selfeval>1</span> <span class=selfeval>2</span> <span class=selfeval>3</span>)    <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>6</span>
+(<span class=variable>/</span> <span class=selfeval>6</span> <span class=selfeval>3</span>)      <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>2</span>
+(<span class=variable>/</span> <span class=selfeval>22</span> <span class=selfeval>7</span>)     <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>22/7</span>
+(<span class=variable>expt</span> <span class=selfeval>2</span> <span class=selfeval>3</span>)   <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>8</span>
+(<span class=variable>expt</span> <span class=selfeval>4</span> <span class=selfeval>1/2</span>) <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>2.0</span>
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent><code class=scheme><span class=variable>-</span></code>および<code class=scheme><span class=variable>/</span></code>は、引数が一つの場合には、それぞれ、符号反転、
+逆数を返します。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>-</span> <span class=selfeval>4</span>) <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>-4</span>
+(<span class=variable>/</span> <span class=selfeval>4</span>) <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>1/4</span>
+</pre><p></p>
+<p>
+<a name="node_idx_100"></a><a name="node_idx_102"></a></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>手続き<code class=scheme><span class=variable>max</span></code>および<code class=scheme><span class=variable>min</span></code>はそれぞれ、引数として与えられた数値の
+最大、最小を返します。引数の数はいくつでもかまいません。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>max</span> <span class=selfeval>1</span> <span class=selfeval>3</span> <span class=selfeval>4</span> <span class=selfeval>2</span> <span class=selfeval>3</span>) <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>4</span>
+(<span class=variable>min</span> <span class=selfeval>1</span> <span class=selfeval>3</span> <span class=selfeval>4</span> <span class=selfeval>2</span> <span class=selfeval>3</span>) <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>1</span>
+</pre><p></p>
+<p>
+<a name="node_idx_104"></a></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>手続き<code class=scheme><span class=variable>abs</span></code>は引数であたえられた数値の絶対値を返します。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>abs</span>  <span class=selfeval>3</span>) <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>3</span>
+(<span class=variable>abs</span> <span class=selfeval>-4</span>) <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>4</span>
+</pre><p></p>
+<p>
+<a name="node_idx_106"></a><a name="node_idx_108"></a><a name="node_idx_110"></a></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>これは氷山の一角にすぎません。Schemeは
+算術演算や三角関数の大規模で包括的な一式を提供します。
+たとえば、<code class=scheme><span class=variable>atan</span></code>、<code class=scheme><span class=variable>exp</span></code>および<code class=scheme><span class=variable>sqrt</span></code>は、それぞれ、
+その引数の逆正接、自然逆対数および平方根を返します。
+詳細はR5RS[<a href="t-y-scheme.hlog">cite{r5rs}</a>]を参照してください。</p>
+<p>
+<a name="node_idx_112"></a></p>
+<a name="node_sec_2.1.3"></a>
+<h3 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_2.1.3">2.1.3&nbsp;&nbsp;文字</a></h3>
+<p><a name="node_idx_114"></a></p>
+<p>
+<a name="node_idx_116"></a>Schemeの文字データは接頭辞<code class=verbatim>#\</code>を使って表わします。したがって、
+<code class=scheme><span class=selfeval>#\c</span></code>は文字<code class=verbatim>c</code>のことです。いくつかの非表示文字にはより
+説明的な名前がついています。たとえば、<code class=scheme><span class=selfeval>#\newline</span></code>、<code class=scheme><span class=selfeval>#\tab</span></code>などです。
+空白文字は<code class=scheme><span class=selfeval>#\ </span></code>&nbsp;、あるいはより読みやすく<code class=scheme><span class=selfeval>#\space</span></code>と
+書くことができます。</p>
+<p>
+<a name="node_idx_118"></a></p>
+<p>
+文字述語は<code class=scheme><span class=variable>char?</span></code>です。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>char?</span> <span class=selfeval>#\c</span>) <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#t</span>
+(<span class=variable>char?</span> <span class=selfeval>1</span>)   <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#f</span>
+(<span class=variable>char?</span> <span class=selfeval>#\;</span>) <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#t</span>
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>セミコロン文字はコメントの契機にはならないことに注意してください。</p>
+<p>
+<a name="node_idx_120"></a><a name="node_idx_122"></a><a name="node_idx_124"></a><a name="node_idx_126"></a><a name="node_idx_128"></a></p>
+<p>
+</p>
+<p>
+文字データ型には次の比較述語一式があります。
+<code class=scheme><span class=variable>char=?</span></code>、<code class=scheme><span class=variable>char&lt;?</span></code>、<code class=scheme><span class=variable>char&lt;=?</span></code>、<code class=scheme><span class=variable>char&gt;?</span></code>、<code class=scheme><span class=variable>char&gt;=?</span></code>です。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>char=?</span> <span class=selfeval>#\a</span> <span class=selfeval>#\a</span>)  <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#t</span>
+(<span class=variable>char&lt;?</span> <span class=selfeval>#\a</span> <span class=selfeval>#\b</span>)  <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#t</span>
+(<span class=variable>char&gt;=?</span> <span class=selfeval>#\a</span> <span class=selfeval>#\b</span>) <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#f</span>
+</pre><p></p>
+<p>
+<a name="node_idx_130"></a><a name="node_idx_132"></a><a name="node_idx_134"></a><a name="node_idx_136"></a><a name="node_idx_138"></a></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>大文字、小文字の違いを無視した比較を行うには、手続き名に
+<code class=scheme><span class=variable>char</span></code>ではなく<code class=scheme><span class=variable>char-ci</span></code>のついた述語を使います。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>char-ci=?</span> <span class=selfeval>#\a</span> <span class=selfeval>#\A</span>) <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#t</span>
+(<span class=variable>char-ci&lt;?</span> <span class=selfeval>#\a</span> <span class=selfeval>#\B</span>) <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#t</span>
+</pre><p></p>
+<p>
+<a name="node_idx_140"></a><a name="node_idx_142"></a></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>大文字、小文字の変換を行う手続きは、<code class=scheme><span class=variable>char-downcase</span></code>および
+</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>char-downcase</span> <span class=selfeval>#\A</span>) <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#\a</span>
+(<span class=variable>char-upcase</span> <span class=selfeval>#\a</span>)   <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#\A</span>
+</pre><p></p>
+<p>
+<a name="node_idx_144"></a></p>
+<p>
+</p>
+<a name="node_sec_2.1.4"></a>
+<h3 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_2.1.4">2.1.4&nbsp;&nbsp;シンボル</a></h3>
+<p></p>
+<p>
+<a name="node_idx_146"></a>上でみた単純データ型はどれも<em>自己評価的</em>です。すなわち、
+これらのデータ型のうちどのオブジェクトをリスナーに入力しても
+リスナーによって返される評価結果は、入力したものと同じになるでしょう。</p>
+<p>
+</p>
+<pre class=scheme><span class=selfeval>#t</span>  <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#t</span>
+<span class=selfeval>42</span>  <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>42</span>
+<span class=selfeval>#\c</span> <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#\c</span>
+</pre><p></p>
+<p>
+</p>
+<p>
+<a name="node_idx_148"></a><a name="node_idx_150"></a></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>シンボルの振舞いは同じではありません。シンボルは
+Schemeのプログラムでは<em>変数</em>の<em>識別子</em>として使われる
+ので、評価されて、その変数がもつ値になるからです。それでもなお、
+シンボルは単純データ型です。シンボルは正当な値で、文字や数値
+その他の値と変換可能なものです。</p>
+<p>
+<a name="node_idx_152"></a></p>
+<p>
+Schemeによって変数と解釈されないシンボルを指定するには
+シンボルを<em>クウォート</em>しなければなりません。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>quote</span> <span class=variable>xyz</span>)
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=variable>xyz</span>
+</pre><p></p>
+<p>
+<a name="node_idx_154"></a></p>
+<p>
+</p>
+<p>
+このタイプのクウォートはSchemeでは良くつかうので、簡略記法が
+用意されています。式</p>
+<p>
+</p>
+<pre class=scheme><span class=keyword>'</span><span class=variable>E</span>
+</pre><p></p>
+<p>
+</p>
+
+<p class=noindent>はSchemeでは以下と同じです。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>quote</span> <span class=variable>E</span>)
+</pre><p></p>
+<p>
+<a name="node_idx_156"></a></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>Schemeのシンボルは文字列により名前がついています。
+シンボル名の唯一の制限は他のデータ(つまり、文字、真理値)と取り違えるよう
+なものではいけないということです。それゆえ、<code class=scheme><span class=variable>this-is-a-symbol</span></code>、
+<code class=scheme><span class=variable>i18n</span></code>、<code class=scheme><span class=variable>&lt;=&gt;</span></code>、<code class=scheme><span class=variable>$!#*</span></code>はすべてシンボルで、<code class=scheme><span class=selfeval>16</span></code>、<code class=scheme><span class=selfeval>-i</span></code> (複素数!)
+<code class=scheme><span class=selfeval>#t</span></code>、<code class=scheme><span class=selfeval>&quot;this-is-a-string&quot;</span></code>、<code class=scheme>(<span class=variable>barf</span>)</code>(リスト)はシンボルではありません。
+シンボルかどうかをチェックするには述語<code class=scheme><span class=variable>symbol?</span></code>を使います。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>symbol?</span> <span class=keyword>'</span><span class=variable>xyz</span>) <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#t</span>
+(<span class=variable>symbol?</span> <span class=selfeval>42</span>)   <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#f</span>
+</pre><p></p>
+<p>
+<a name="node_idx_158"></a></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>Scheme のシンボルは通常、大文字と小文字を区別しません。
+したがって、<code class=scheme><span class=variable>Calorie</span></code>と<code class=scheme><span class=variable>calorie</span></code>は等しいシンボルです。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>eqv?</span> <span class=keyword>'</span><span class=variable>Calorie</span> <span class=keyword>'</span><span class=variable>calorie</span>)
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#t</span>
+</pre><p></p>
+<p>
+</p>
+<p>
+<a name="node_idx_160"></a><a name="node_idx_162"></a></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>シンボル<code class=scheme><span class=variable>xyz</span></code>をフォーム<code class=scheme><span class=keyword>define</span></code>をつかってグローバル変数として
+利用することができます。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=variable>xyz</span> <span class=selfeval>9</span>)
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>これは、変数<code class=scheme><span class=variable>xyz</span></code>が値<code class=scheme><span class=selfeval>9</span></code>を保持するといっています。<code class=scheme><span class=variable>xyz</span></code>を
+リスナーに食わせると結果は<code class=scheme><span class=variable>xyz</span></code>の保持するその値になります。</p>
+<p>
+</p>
+<pre class=scheme><span class=variable>xyz</span>
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>9</span>
+</pre><p></p>
+<p>
+<a name="node_idx_164"></a></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>変数が保持している値を<em>変更</em>するには、フォーム<code class=scheme><span class=keyword>set!</span></code>が使えます。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>set!</span> <span class=variable>xyz</span> <span class=selfeval>#\c</span>)
+</pre><p></p>
+<p>
+</p>
+
+<p class=noindent>とすると</p>
+<p>
+</p>
+<pre class=scheme><span class=variable>xyz</span>
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#\c</span>
+</pre><p></p>
+<p>
+<a name="node_idx_166"></a></p>
+<p>
+</p>
+<a name="node_sec_2.2"></a>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_2.2">2.2&nbsp;&nbsp;合成データ型</a></h2>
+<p></p>
+<p>
+合成データ型は構造化された方法で他のデータ型から値を合成することによって
+構築されます。</p>
+<p>
+<a name="node_idx_168"></a></p>
+<p>
+</p>
+<a name="node_sec_2.2.1"></a>
+<h3 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_2.2.1">2.2.1&nbsp;&nbsp;文字列</a></h3>
+<p></p>
+<p>
+文字列は文字の並び(名前として文字のならびをもつ単純データ、シンボル
+と混同してはいけません)です。一連の文字の並びを二重引用符で囲むことで
+文字列を指定できます。文字列は評価すると、その文字列自身になります。</p>
+<p>
+</p>
+<pre class=scheme><span class=selfeval>&quot;Hello, World!&quot;</span>
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>&quot;Hello, World!&quot;</span>
+</pre><p></p>
+<p>
+<a name="node_idx_170"></a></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>手続き<code class=scheme><span class=variable>string</span></code>は一団の文字のをとり、その文字からなる文字列を
+返します。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>string</span> <span class=selfeval>#\H</span> <span class=selfeval>#\e</span> <span class=selfeval>#\l</span> <span class=selfeval>#\l</span> <span class=selfeval>#\o</span>)
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>&quot;Hello&quot;</span>
+</pre><p></p>
+<p>
+</p>
+
+<p class=noindent>ではグローバル変数<code class=scheme><span class=variable>greeting</span></code>を定義してみよう。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=variable>greeting</span> <span class=selfeval>&quot;Hello; Hello!&quot;</span>)
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>文字列データ内のセミコロンはコメントの引き金にはならないことに
+注意してください。</p>
+<p>
+<a name="node_idx_172"></a></p>
+<p>
+</p>
+<p>
+与えられた文字列中の文字は個別にアクセスしたり変更したりすることが
+できます。手続き<code class=scheme><span class=variable>string-ref</span></code>は一つの文字列と(0基準の)インデックス
+をとり、そのインデックスの文字を返します。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>string-ref</span> <span class=variable>greeting</span> <span class=selfeval>0</span>)
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#\H</span>
+</pre><p></p>
+<p>
+<a name="node_idx_174"></a></p>
+<p>
+</p>
+
+<p class=noindent>新しい文字列は別の文字列を連結することで作ることができます。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>string-append</span> <span class=selfeval>&quot;E &quot;</span>
+               <span class=selfeval>&quot;Pluribus &quot;</span>
+               <span class=selfeval>&quot;Unum&quot;</span>)
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>&quot;E Pluribus Unum&quot;</span>
+</pre><p></p>
+<p>
+<a name="node_idx_176"></a></p>
+<p>
+</p>
+<p>
+長さを指定して文字列を作ることができます。あとから、好きな文字を
+埋めることができます。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=variable>a-3-char-long-string</span> (<span class=variable>make-string</span> <span class=selfeval>3</span>))
+</pre><p></p>
+<p>
+<a name="node_idx_178"></a></p>
+<p>
+文字列かどうかをチェックする述語は<code class=scheme><span class=variable>string?</span></code>です。</p>
+<p>
+<a name="node_idx_180"></a></p>
+<p>
+</p>
+<p>
+<code class=scheme><span class=variable>string</span></code>、<code class=scheme><span class=variable>make-string</span></code>、<code class=scheme><span class=variable>string-append</span></code>の結果として
+得られた文字列は可変です。手続き<code class=scheme><span class=variable>string-set!</span></code>は与えられた
+インデックスの文字を置き換えます。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=variable>hello</span> (<span class=variable>string</span> <span class=selfeval>#\H</span> <span class=selfeval>#\e</span> <span class=selfeval>#\l</span> <span class=selfeval>#\l</span> <span class=selfeval>#\o</span>)) 
+<span class=variable>hello</span>
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>&quot;Hello&quot;</span>
+
+(<span class=variable>string-set!</span> <span class=variable>hello</span> <span class=selfeval>1</span> <span class=selfeval>#\a</span>)
+<span class=variable>hello</span>
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>&quot;Hallo&quot;</span>
+</pre><p></p>
+<p>
+</p>
+<p>
+<a name="node_idx_182"></a></p>
+<a name="node_sec_2.2.2"></a>
+<h3 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_2.2.2">2.2.2&nbsp;&nbsp;ベクタ</a></h3>
+<p></p>
+<p>
+ベクタは文字列のような並べですが、その要素は文字以外のなにでも
+かまいません。ベクタ自身でもかまわないので、これは多次元ベクタを
+作るよい方法です。</p>
+<p>
+<a name="node_idx_184"></a></p>
+<p>
+Here&#8217;s a way to create a vector of the first five integers:
+最初の5つの整数からなるベクタをこのように作ります。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>vector</span> <span class=selfeval>0</span> <span class=selfeval>1</span> <span class=selfeval>2</span> <span class=selfeval>3</span> <span class=selfeval>4</span>)
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#</span>(<span class=selfeval>0</span> <span class=selfeval>1</span> <span class=selfeval>2</span> <span class=selfeval>3</span> <span class=selfeval>4</span>)
+</pre><p></p>
+<p>
+</p>
+<p>
+Schemeにおけるベクタの値の表現：要素を括弧でかこみ、<code class=verbatim>#</code>を頭につけます。</p>
+<p>
+<a name="node_idx_186"></a></p>
+<p>
+</p>
+<p>
+<code class=scheme><span class=variable>make-string</span></code>と同様に、プロシージャ手続き<code class=scheme><span class=variable>make-vector</span></code>は指定した
+長さのベクタを作ります。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=variable>v</span> (<span class=variable>make-vector</span> <span class=selfeval>5</span>))
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>手続き<code class=scheme><span class=variable>vector-ref</span></code>および<code class=scheme><span class=variable>vector-set!</span></code>はベクタの要素にアクセス
+あるいは変更します。
+ベクタかどうかをチェックする述語は<code class=scheme><span class=variable>vector?</span></code>です。</p>
+<p>
+</p>
+<p>
+<a name="node_idx_188"></a><a name="node_idx_190"></a><a name="node_idx_192"></a><a name="node_idx_194"></a><a name="node_idx_196"></a></p>
+<p>
+</p>
+<a name="node_sec_2.2.3"></a>
+<h3 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_2.2.3">2.2.3&nbsp;&nbsp;ドット対とリスト</a></h3>
+<p></p>
+<p>
+<em>ドット対</em>は二つの任意の値を組合せて順序対にすることで
+作りだされた合成値です。最初の要素は<em>car</em>、二番目の要素は
+<em>cdr</em>と呼ばれ、組合せの手続きは<code class=scheme><span class=variable>cons</span></code>です。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>cons</span> <span class=selfeval>1</span> <span class=selfeval>#t</span>)
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  (<span class=selfeval>1</span> . <span class=selfeval>#t</span>)
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>ドット対は自己評価的ではありません。そこで、データとして
+直接(すなわち<code class=scheme><span class=variable>cons</span></code>呼び出しによって作りだすことなく)指定するには
+明示的にクウォートしなければなりません。</p>
+<p>
+</p>
+<pre class=scheme><span class=keyword>'</span>(<span class=selfeval>1</span> . <span class=selfeval>#t</span>) <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  (<span class=selfeval>1</span> . <span class=selfeval>#t</span>)
+
+(<span class=selfeval>1</span> . <span class=selfeval>#t</span>)  <span style="color: red"><tt><strong><i>--&gt;ERROR!!!</i></strong></tt></span>
+</pre><p></p>
+<p>
+</p>
+
+<p class=noindent>アクセサ手続きは<code class=scheme><span class=variable>car</span></code>と<code class=scheme><span class=variable>cdr</span></code>です。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=variable>x</span> (<span class=variable>cons</span> <span class=selfeval>1</span> <span class=selfeval>#t</span>))
+
+(<span class=variable>car</span> <span class=variable>x</span>)
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>1</span>
+
+(<span class=variable>cdr</span> <span class=variable>x</span>)
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#t</span>
+</pre><p></p>
+<p>
+<a name="node_idx_198"></a><a name="node_idx_200"></a></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>ドット対の要素は変更子手続き<code class=scheme><span class=variable>set-car!</span></code>および<code class=scheme><span class=variable>set-cdr!</span></code>によって
+とりかえることができます。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>set-car!</span> <span class=variable>x</span> <span class=selfeval>2</span>)
+
+(<span class=variable>set-cdr!</span> <span class=variable>x</span> <span class=selfeval>#f</span>)
+
+<span class=variable>x</span>
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  (<span class=selfeval>2</span> . <span class=selfeval>#f</span>)
+</pre><p></p>
+<p>
+</p>
+
+<p class=noindent>ドット対に別のドット対を含めることができます。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=variable>y</span> (<span class=variable>cons</span> (<span class=variable>cons</span> <span class=selfeval>1</span> <span class=selfeval>2</span>) <span class=selfeval>3</span>))
+
+<span class=variable>y</span>
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  ((<span class=selfeval>1</span> . <span class=selfeval>2</span>) . <span class=selfeval>3</span>)
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>このリストの<code class=scheme><span class=variable>car</span></code>の<code class=scheme><span class=variable>car</span></code>は<code class=scheme><span class=selfeval>1</span></code>です。
+そして、<code class=scheme><span class=variable>car</span></code>の<code class=scheme><span class=variable>cdr</span></code>は<code class=scheme><span class=selfeval>2</span></code>です。すなわち、</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>car</span> (<span class=variable>car</span> <span class=variable>y</span>))
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>1</span>
+
+(<span class=variable>cdr</span> (<span class=variable>car</span> <span class=variable>y</span>))
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>2</span>
+</pre><p></p>
+<p>
+<a name="node_idx_202"></a></p>
+<p>
+</p>
+<p>
+Schemeは<code class=scheme><span class=variable>car</span></code>と<code class=scheme><span class=variable>cdr</span></code>手続きのカスケードした組み合わせに
+対応する省略形手続きを提供しています。つまり、<code class=scheme><span class=variable>caar</span></code>は
+<code class=scheme><span class=variable>car</span></code>の<code class=scheme><span class=variable>car</span></code>を、<code class=scheme><span class=variable>cdar</span></code>は<code class=scheme><span class=variable>car</span></code>の<code class=scheme><span class=variable>cdr</span></code>を表わします。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>caar</span> <span class=variable>y</span>)
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>1</span>
+
+(<span class=variable>cdar</span> <span class=variable>y</span>)
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>2</span>
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent><code class=scheme><span class=variable>c...r</span></code>スタイルの省略形は4段のカスケードまでは存在することが
+保証されています。つまり、<code class=scheme><span class=variable>cadr</span></code>、<code class=scheme><span class=variable>cdadr</span></code>、<code class=scheme><span class=variable>cdaddr</span></code>はいつでも
+使えます。<code class=scheme><span class=variable>cdadadr</span></code>は頑張ってるかもしれません。</p>
+<p>
+</p>
+<p>
+第二要素についてドットが入れ子になっているとき、その結果の式については
+Schemeは特別な表記を使います。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>cons</span> <span class=selfeval>1</span> (<span class=variable>cons</span> <span class=selfeval>2</span> (<span class=variable>cons</span> <span class=selfeval>3</span> (<span class=variable>cons</span> <span class=selfeval>4</span> <span class=selfeval>5</span>))))
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  (<span class=selfeval>1</span> <span class=selfeval>2</span> <span class=selfeval>3</span> <span class=selfeval>4</span> . <span class=selfeval>5</span>)
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>つまり、<code class=scheme>(<span class=selfeval>1</span> <span class=selfeval>2</span> <span class=selfeval>3</span> <span class=selfeval>4</span> . <span class=selfeval>5</span>)</code>は<code class=scheme>(<span class=selfeval>1</span> . (<span class=selfeval>2</span> . (<span class=selfeval>3</span> . (<span class=selfeval>4</span> . <span class=selfeval>5</span>)))</code>の
+省略形なのです。この式の最後のcdrは<code class=scheme><span class=selfeval>5</span></code>です。</p>
+<p>
+<a name="node_idx_204"></a></p>
+<p>
+</p>
+<p>
+Schemeは最後のcdrが<em>空リスト</em>と呼ばれる特別なオブジェクト
+(これは<code class=scheme>()</code>と表現される式)の場合の省略形を提供しています。
+空リストは自己評価的ではないと考えられています。なので、
+プログラム中で値として使うには、クウォートすべきです。</p>
+<p>
+</p>
+<pre class=scheme><span class=keyword>'</span>() <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  ()
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>ドット対フォーム<code class=scheme>(<span class=selfeval>1</span> . (<span class=selfeval>2</span> . (<span class=selfeval>3</span> . (<span class=selfeval>4</span> . ()))))</code>の省略形は</p>
+<p>
+</p>
+<pre class=scheme>(<span class=selfeval>1</span> <span class=selfeval>2</span> <span class=selfeval>3</span> <span class=selfeval>4</span>)
+</pre><p>
+</p>
+
+<p class=noindent>です。</p>
+<p>
+</p>
+<p>
+<a name="node_idx_206"></a>この入れ子になった特別な種類のドット対を<em>リスト</em>と呼びます。
+件のリストは4要素長であるといいます。これは、</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>cons</span> <span class=selfeval>1</span> (<span class=variable>cons</span> <span class=selfeval>2</span> (<span class=variable>cons</span> <span class=selfeval>3</span> (<span class=variable>cons</span> <span class=selfeval>4</span> <span class=keyword>'</span>()))))
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>として作ることもできますが、Schemeには<code class=scheme><span class=variable>list</span></code>と呼ばれる手続きがあり、
+もっと、便利にリストを作ることができます。<code class=scheme><span class=variable>list</span></code>は任意個の引数をとり、
+それを含むリストを返します。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>list</span> <span class=selfeval>1</span> <span class=selfeval>2</span> <span class=selfeval>3</span> <span class=selfeval>4</span>)
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  (<span class=selfeval>1</span> <span class=selfeval>2</span> <span class=selfeval>3</span> <span class=selfeval>4</span>)
+</pre><p></p>
+<p>
+</p>
+<p>
+どんな要素がリストにあるのかが全部わかっているなら、
+リストを指定するのにクウォートがつかえます。</p>
+<p>
+</p>
+<pre class=scheme><span class=keyword>'</span>(<span class=selfeval>1</span> <span class=selfeval>2</span> <span class=selfeval>3</span> <span class=selfeval>4</span>)
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  (<span class=selfeval>1</span> <span class=selfeval>2</span> <span class=selfeval>3</span> <span class=selfeval>4</span>)
+</pre><p></p>
+<p>
+</p>
+
+<p class=noindent><a name="node_idx_208"></a><a name="node_idx_210"></a>リストの要素はインデックスでアクセスすることができます。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=variable>y</span> (<span class=variable>list</span> <span class=selfeval>1</span> <span class=selfeval>2</span> <span class=selfeval>3</span> <span class=selfeval>4</span>))
+
+(<span class=variable>list-ref</span> <span class=variable>y</span> <span class=selfeval>0</span>) <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>1</span>
+(<span class=variable>list-ref</span> <span class=variable>y</span> <span class=selfeval>3</span>) <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>4</span>
+
+(<span class=variable>list-tail</span> <span class=variable>y</span> <span class=selfeval>1</span>) <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  (<span class=selfeval>2</span> <span class=selfeval>3</span> <span class=selfeval>4</span>)
+(<span class=variable>list-tail</span> <span class=variable>y</span> <span class=selfeval>3</span>) <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  (<span class=selfeval>4</span>)
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent><code class=scheme><span class=variable>list-tail</span></code>は与えられたインデックスから始まる後の
+部分のリストを返します。</p>
+<p>
+<a name="node_idx_212"></a><a name="node_idx_214"></a><a name="node_idx_216"></a></p>
+<p>
+</p>
+<p>
+述語<code class=scheme><span class=variable>pair?</span></code>、<code class=scheme><span class=variable>list?</span></code>、<code class=scheme><span class=variable>null?</span></code>はそれぞれ引数が、ドット対か、
+リストか、空リストかを判定します。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>pair?</span> <span class=keyword>'</span>(<span class=selfeval>1</span> . <span class=selfeval>2</span>)) <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#t</span>
+(<span class=variable>pair?</span> <span class=keyword>'</span>(<span class=selfeval>1</span> <span class=selfeval>2</span>))   <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#t</span>
+(<span class=variable>pair?</span> <span class=keyword>'</span>())      <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#f</span>
+(<span class=variable>list?</span> <span class=keyword>'</span>())      <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#t</span>
+(<span class=variable>null?</span> <span class=keyword>'</span>())      <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#t</span>
+(<span class=variable>list?</span> <span class=keyword>'</span>(<span class=selfeval>1</span> <span class=selfeval>2</span>))   <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#t</span>
+(<span class=variable>list?</span> <span class=keyword>'</span>(<span class=selfeval>1</span> . <span class=selfeval>2</span>)) <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#f</span>
+(<span class=variable>null?</span> <span class=keyword>'</span>(<span class=selfeval>1</span> <span class=selfeval>2</span>))   <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#f</span>
+(<span class=variable>null?</span> <span class=keyword>'</span>(<span class=selfeval>1</span> . <span class=selfeval>2</span>)) <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#f</span>
+</pre><p></p>
+<p>
+</p>
+<a name="node_sec_2.2.4"></a>
+<h3 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_2.2.4">2.2.4&nbsp;&nbsp;データ型間の変換</a></h3>
+<p><a name="node_idx_218"></a><a name="node_idx_220"></a><a name="node_idx_222"></a><a name="node_idx_224"></a><a name="node_idx_226"></a><a name="node_idx_228"></a><a name="node_idx_230"></a><a name="node_idx_232"></a><a name="node_idx_234"></a>Schemeではデータ型間の変換をおこなう手続きが多数提供されています。
+すでに、<code class=scheme><span class=variable>char-downcase</span></code>および<code class=scheme><span class=variable>char-upcase</span></code>をつかって、
+大文字小文字変換をする方法を知りました。文字は<code class=scheme><span class=variable>char-&gt;integer</span></code>
+を用いて整数に変換することができます。また整数は<code class=scheme><span class=variable>integer-&gt;char</span></code>を
+用いて文字に変換することができます(通常、文字に対応する整数というのは
+その文字のASCIIコードです)。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>char-&gt;integer</span> <span class=selfeval>#\d</span>) <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>100</span>
+(<span class=variable>integer-&gt;char</span> <span class=selfeval>50</span>)  <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#\2</span>
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>文字列は対応する文字のリストに変換することができます。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>string-&gt;list</span> <span class=selfeval>&quot;hello&quot;</span>) <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  (<span class=selfeval>#\h</span> <span class=selfeval>#\e</span> <span class=selfeval>#\l</span> <span class=selfeval>#\l</span> <span class=selfeval>#\o</span>)
+</pre><p></p>
+<p>
+</p>
+<p>
+おなじ流れで別の変換手続きがあります。
+<code class=scheme><span class=variable>list-&gt;string</span></code>、<code class=scheme><span class=variable>vector-&gt;list</span></code>および<code class=scheme><span class=variable>list-&gt;vector</span></code>です。</p>
+<p>
+数値は文字列に変換することができます。</p>
+<p>
+</p>
+
+<p class=noindent></p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>number-&gt;string</span> <span class=selfeval>16</span>) <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>&quot;16&quot;</span>
+</pre><p></p>
+<p>
+</p>
+<p>
+文字列は数値に変換することができます。もし対応する数字がない場合には
+<code class=scheme><span class=selfeval>#f</span></code>が返ります。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>string-&gt;number</span> <span class=selfeval>&quot;16&quot;</span>)
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>16</span>
+
+(<span class=variable>string-&gt;number</span> <span class=selfeval>&quot;Am I a hot number?&quot;</span>)
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#f</span>
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent><code class=scheme><span class=variable>string-&gt;number</span></code>の基数を示す二つ目のオプション引数をとります。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>string-&gt;number</span> <span class=selfeval>&quot;16&quot;</span> <span class=selfeval>8</span>) <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>14</span>
+</pre><p></p>
+<p>
+</p>
+
+<p class=noindent>8進数の<code class=scheme><span class=selfeval>16</span></code> は十四です。</p>
+<p>
+シンボルと文字列は互いに変換できます。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>symbol-&gt;string</span> <span class=keyword>'</span><span class=variable>symbol</span>)
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>&quot;symbol&quot;</span>
+
+(<span class=variable>string-&gt;symbol</span> <span class=selfeval>&quot;string&quot;</span>)
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=variable>string</span>
+</pre><p></p>
+<p>
+</p>
+<a name="node_sec_2.3"></a>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_2.3">2.3&nbsp;&nbsp;そのほかのデータ型</a></h2>
+<p><a name="node_idx_236"></a></p>
+<p>
+Schemeには、そのほかのデータ型がいくつかあります。
+ひとつは<em>手続き</em>です。すでにいろいろな手続きを見ました。
+たとえば、<code class=scheme><span class=variable>display</span></code>、<code class=scheme><span class=variable>+</span></code>、<code class=scheme><span class=variable>cons</span></code>です。実際、これらは
+手続き値をもつ変数です。値そのものは数値や文字のように、
+目に見えるものではありません。</p>
+<p>
+</p>
+<pre class=scheme><span class=variable>cons</span>
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=variable>&lt;procedure&gt;</span>
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>いままで見てきた手続きは<em>プリミティブ</em>手続きで、標準的な
+グローバル変数がこれを保持しています。
+ユーザは新しい手続き値を作ることができます。</p>
+<p>
+<a name="node_idx_238"></a></p>
+<p>
+</p>
+<p>
+さらにもうひとつのデータ型は<em>ポート</em>です。ポートは
+これを通じて入出力をおこなうコンジットです。
+ポートは通常ファイルやコンソールに結びつけられています。</p>
+<p>
+</p>
+<p>
+&#8220;Hello, World!&#8221; プログラムで、コンソールに文字列を
+書くのに手続き<code class=scheme><span class=variable>display</span></code>を使いました。<code class=scheme><span class=variable>display</span></code>は
+二つの引数をとることができて、ひとつは表示する文字列、
+もうひとつは表示すべき出力ポートです。</p>
+<p>
+</p>
+<p>
+さきほどのプログラムでは、<code class=scheme><span class=variable>display</span></code>の二つめの引数は
+暗黙のものです。デフォルトの出力ポートが使われていて、
+これは標準出力ポートです。現在の標準出力ポートは
+<code class=scheme>(<span class=variable>current-output-port</span>)</code>という手続き呼び出しで得ることができます。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>display</span> <span class=selfeval>&quot;Hello, World!&quot;</span> (<span class=variable>current-output-port</span>))
+</pre><p></p>
+<p>
+<a name="node_idx_240"></a><a name="node_idx_242"></a></p>
+<p>
+</p>
+<a name="node_sec_2.4"></a>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_2.4">2.4&nbsp;&nbsp;S式</a></h2>
+<p></p>
+<p>
+ここで議論している、すべてのデータ型は、あらゆるものを
+含む<em>S式</em>とよばれるデータ型にまとめられます
+(<em>S</em>)はシンボルを表しています)。つまり、
+<code class=scheme><span class=selfeval>42</span></code>、<code class=scheme><span class=selfeval>#\c</span></code>、<code class=scheme>(<span class=selfeval>1</span> . <span class=selfeval>2</span>)</code>、<code class=scheme><span class=selfeval>#</span>(<span class=variable>a</span> <span class=variable>b</span> <span class=variable>c</span>)</code>、<code class=scheme><span class=selfeval>&quot;Hello&quot;</span></code>、<code class=scheme>(<span class=keyword>quote</span> <span class=variable>xyz</span>)</code>、
+<code class=scheme>(<span class=variable>string-&gt;number</span> <span class=selfeval>&quot;16&quot;</span>)</code>、<code class=scheme>(<span class=keyword>begin</span> (<span class=variable>display</span> <span class=selfeval>&quot;Hello, World!&quot;</span>) (<span class=variable>newline</span>))</code>
+はすべてS式です。
+</p>
+<p>
+</p>
+<div class=smallskip></div>
+<p style="margin-top: 0pt; margin-bottom: 0pt">
+<div align=right class=navigation>[Go to <span><a href="t-y-scheme.html">first</a>, <a href="t-y-scheme-Z-H-3.html">previous</a></span><span>, <a href="t-y-scheme-Z-H-5.html">next</a></span> page<span>; &nbsp;&nbsp;</span><span><a href="t-y-scheme-Z-H-1.html#node_toc_start">contents</a></span><span><span>; &nbsp;&nbsp;</span><a href="t-y-scheme-Z-H-25.html#node_index_start">index</a></span>]</div>
+</p>
+<p></p>
+</div>
+</body>
+</html>

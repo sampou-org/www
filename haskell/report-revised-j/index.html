@@ -1,0 +1,176 @@
+<html>
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
+  <title>The Haskell 98 Language Report</title>
+ </head>
+
+ <body background="lambda.gif">
+  <hr />
+
+  <div align="center"> <img alt="Haskell 98" src="h98.gif" />
+   <!--<h1>Haskell 98 Language and Libraries</h1>-->
+   <h1>Haskell 98 言語とライブラリ</h1>
+   <!--<h1>The Revised Report</h1>-->
+   <h1>改訂レポート</h1>
+
+   <h3 align="center">December 2002</h3>
+  </div>
+
+  <hr />
+  <!--<h2>Brief Table of Contents</h2>-->
+
+  <h2>目次概要</h2>
+
+  <ul><!--<li><a href="index98.html">Full Table of Contents</a>-->
+
+   <li><a href="index98.html">詳細目次</a>
+    <!--<li><a href="preface-jfp.html">Preface</a>--></li>
+
+   <li><a href="preface-jfp.html">まえがき</a></li>
+  </ul>
+
+  <table border="0" cellpadding="0" width="100%">
+   <tr>
+    <td valign="top"> <!--<h3>Part I: Language</h3>-->
+     <h3>第 I 部: 言語</h3>
+
+     <ol>
+      <!--
+      <li><a href="intro.html">Introduction</a>
+      <li><a href="lexemes.html">Lexical Structure</a>
+      <li><a href="exps.html">Expressions</a>
+      <li><a href="decls.html">Declarations and Bindings</a>
+      <li><a href="modules.html">Modules</a>
+      <li><a href="basic.html">Predefined Types and Classes</a>
+      <li><a href="io-13.html">Basic Input/Output</a>
+      <li><a href="standard-prelude.html">Standard Prelude</a>
+      <li><a href="syntax-iso.html">Syntax Reference</a>
+      <li><a href="derived.html">Specification of Derived Instances</a>
+      <li><a href="pragmas.html">Compiler Pragmas</a>
+	  -->
+      <li><a href="intro.html">イントロダクション</a></li>
+      <li><a href="lexemes.html">字句構造</a></li>
+      <li><a href="exps.html">式</a></li>
+      <li><a href="decls.html">宣言と束縛</a></li>
+      <li><a href="modules.html">モジュール</a></li>
+      <li><a href="basic.html">定義済の型とクラス</a></li>
+      <li><a href="io-13.html">基本入出力</a></li>
+      <li><a href="standard-prelude.html">標準プレリュード</a></li>
+      <li><a href="syntax-iso.html">構文リファレンス</a></li>
+      <li><a href="derived.html">導出インスタンスの特化</a></li>
+      <li><a href="pragmas.html">コンパイラプラグマ</a></li>
+     </ol>
+    </td>
+
+    <td valign="top"> <!--<h3>Part II: Libraries</h3>-->
+     <h3>第 II 部: ライブラリ</h3>
+
+     <table border="0">
+      <tr>
+       <td>
+        <ol start="12">
+         <li><a href="ratio.html">Ratio</a></li>
+         <li><a href="complex.html">Complex</a></li>
+         <li><a href="numeric.html">Numeric</a></li>
+         <li><a href="ix.html">Ix</a></li>
+         <li><a href="array.html">Array</a></li>
+         <li><a href="list.html">List</a></li>
+         <li><a href="maybe.html">Maybe</a></li>
+         <li><a href="char.html">Char</a></li>
+        </ol>
+       </td>
+
+       <td>
+        <ol start="20">
+         <li><a href="monad.html">Monad</a></li>
+         <li><a href="io.html">IO</a></li>
+         <li><a href="directory.html">Directory</a></li>
+         <li><a href="system.html">System</a></li>
+         <li><a href="time.html">Time</a></li>
+         <li><a href="locale.html">Locale</a></li>
+         <li><a href="cputime.html">CPUTime</a></li>
+         <li><a href="random.html">Random</a></li>
+        </ol>
+       </td>
+      </tr>
+     </table>
+    </td>
+   </tr>
+  </table>
+
+  <ul>
+   <!--
+   <li><a href="haskell.html">Bibliography</a>
+   <li><a href="prelude-index.html">Index of Prelude Functions and Types</a>
+       -->
+   <li><a href="haskell.html">参考文献</a></li>
+   <li><a
+       href="prelude-index.html">プレリュードにある関数と型の索引</a></li>
+  </ul>
+
+  <hr />
+
+  <div align="center">
+   <a href="http://research.microsoft.com/Users/simonpj"> Simon Peyton
+   Jones</a> [editor], Microsoft Research, Cambridge <br />
+   <a href="http://www.cs.chalmers.se/~augustss"> Lennart Augustsson</a>,
+   Sandburst Corporation <br />
+   <a href="http://www.inmet.com/~dlb"> Dave Barton</a>, Intermetrics
+   <br />
+   <a href="http://www.comp.vuw.ac.nz/Staff/Brian-Boutel.html"> Brian
+   Boutel</a>, Victoria University of Wellington <br />
+    <a href="http://fas.sfu.ca/cs/people/Faculty/Burton/"> Warren
+   Burton</a>, Simon Fraser University <br />
+   <a href="http://coyote.lanl.gov/HOMES/jfasel.html"> Joseph Fasel</a>,
+   Los Alamos National Laboratory <br />
+   <a href="http://www.dcs.st-and.ac.uk/~kh/kh.html"> Kevin Hammond</a>,
+   University of St. Andrews <br />
+   <a href="http://titan.informatik.uni-bonn.de/~ralf"> Ralf Hinze</a>,
+   University of Bonn <br />
+   <a href="http://www.cs.yale.edu/homes/hudak-paul.html"> Paul Hudak</a>,
+   Yale University <br />
+   <a href="http://www.cs.chalmers.se/~rjmh"> John Hughes</a>, Chalmers
+   University of Technology <br />
+   <a href="http://www.cs.chalmers.se/~johnsson"> Thomas Johnsson</a>,
+   Chalmers University of Technology <br />
+   <a href="http://www.cse.ogi.edu/~mpj"> Mark Jones</a>, Oregon Graduate
+   Institute <br />
+   <a href="http://www.cse.ogi.edu/~jl"> John Launchbury</a>, Oregon
+   Graduate Institute <br />
+   <a href="http://research.microsoft.com/~emeijer"> Erik Meijer</a>,
+   Microsoft Corporation<br />
+   <a href="http://www.cs.yale.edu/homes/peterson-john.html"> John
+   Peterson</a>, Yale University <br />
+   <a href="http://www.cs.yale.edu/homes/reid-alastair.html"> Alastair
+   Reid</a>, University of Utah <br />
+   <a href="http://www.cs.york.ac.uk/~colin/home.html"> Colin Runciman</a>,
+   York University <br />
+   <a href="http://cm.bell-labs.com/cm/cs/who/wadler/"> Philip Wadler</a>,
+   Avaya Labs <br />
+  </div>
+
+  <p> Copyright (c) Simon Peyton Jones. <br />
+   <em> The authors intend this Report to belong to the entire Haskell
+   community, and so we grant permission to copy and distribute it for any
+   purpose, provided that it is reproduced in its entirety, including this
+   Notice. Modified versions of this Report may also be copied and
+   distributed for any purpose, provided that the modified version is
+   clearly presented as such, and that it does not claim to be a definition
+   of the language Haskell 98.</em></p>
+
+  <p> 
+   <!--
+   The master version of the Haskell Report is at
+   <a href="http://haskell.org/definition"> haskell.org</a>.
+   Any corrections or changes in the report are found there.
+   -->
+   この Haskell Report のマスター文書は
+   <a href="http://haskell.org/definition"> haskell.org</a>
+   にあります。このレポートの訂正や変更はすべてそこに反映さ
+   れるようになっています。</p>
+
+  <p>
+   翻訳最終修正日：2009-03-13
+  </p>
+ </body>
+</html>

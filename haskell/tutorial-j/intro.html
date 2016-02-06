@@ -1,0 +1,80 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>A Gentle Introduction to Haskell: Introduction</title>
+</head>
+<body bgcolor="#ffffff">
+<em>やさしい Haskell 入門 (バージョン 98)</em><br>
+<a href="goodies.html">next</a> 
+<a href="index.html">top</a><hr>
+<a name="tut-intro"></a><p>
+<a name="sect1"></a>
+<h2>1<tt>&nbsp;&nbsp;</tt>イントロダクション</h2>
+<p>
+このチュートリアルを書いた著者らの目的は、プログラミングを教えることでも
+なく、ましてや、関数プログラミングを教えることでもありません。むしろ、高
+度に技術的な解説書である Haskell Report [<a
+href="haskell-tutorial.html#$haskell-98">4</a>] のを補うことを意図してい
+ます。目指したのは、少くとも1つの他の言語(関数型の言語(たとえ ML や 
+Scheme のような「ほぼ関数型」の言語であっても)であることが望ましい)の経験
+のあるひとにやさしい Haskell の入門書を提供することです。
+関数プログラミングのスタイルについてもっと詳しく学びたいむきには、Bird 
+の教科書 <i>Introduction to Functional Programming using Haskell</i> [<a
+href="haskell-tutorial.html#$bird98">1</a>]あるいは、Davie の <i>An
+Introduction to Functional Programming Systems Using Haskell</i> [<a
+href="haskell-tutorial.html#$davie92">2</a>] を強く推奨します。
+関数型プログラミング言語の有用な調査と、Haskell で用いられている言語設計
+原理の一部を含む、テクニックについては文献 [<a
+href="haskell-tutorial.html#$huda89a">3</a>]を参照されたい。
+</p>
+<p>
+Haskell言語は、1987年に生れて以来、長足の進化をとげました。
+このチュートリアルでは <a href="http://haskell.org/report">Haskell
+98</a>を扱います。これ以前のバージョンはすでに時代遅れのものになっていま
+す。Haskell ユーザのみなさんには Haskell 98 を使用することをお勧めします。
+Haskell 98 のいろいろな実装にはさらに多くの拡張がほどこされています。これら
+の拡張はまだ、Haskell 仕様には正式に採用されていません。このチュートリア
+ルでは、こうした拡張については触れません。
+</p>
+<p>
+言語の特徴を紹介するための戦略はおよそ次のようなものです。概念の背景を説
+明し、用語を定義し、例をあげ、それから詳細については、<i>Haskell
+Report</i>の該当個所を示します。しかし、この「やさしい Haskell 入門」を
+読み終えるまでは、細いところは無視することを勧めます。ただ、Haskell の 
+Standard Prelude (<i>Haskell Report</i> の付録 A と<a
+href="http://haskell.org/library"><i>Library Report</i></a>[<a
+href="haskell-tutorial.html#$haskell-libs">5</a>]) には沢山の役に立つ 
+Haskell のコードがあるので、このチュートリアルがひととおり終ったら、全部
+を通しで読むことをお勧めします。
+Standard Prelude を読めば、実際の Haskell のコードがどのようなものである
+かが掴めるだけでなく、Haskell の定義済みの標準の関数や型に慣れ親しむことが
+できます。
+<p>
+</p>
+最後に <a href="http://haskell.org"><tt>http://haskell.org</tt></a>には 
+Haskell 言語とその実装に関する豊富な情報があります。
+<p>
+</p>
+[最初から言語の構文ルールを過剰に羅列することはしません。構文ルールは例
+のなかで必要になったときに、このような括弧でくくって、そのつど、出してい
+きます。これが、<i>Haskell Report</i> のやりかたと全く違う点です。ただし、
+<i>Haskell Report</i>は詳細部分の典拠です。(参照は、「レポート§2.1」の
+ようにします。)]
+<p>
+</p>
+Luca Cardelli の表現でいえば、Haskell は <em>強く型付けされた
+(<i>typeful</i>)</em> プログラミング言語であると言えます。型は誤用されや
+すいので、初心者は、最初から、複雑で強力な Haskell の型システムに十分注
+意を払うべきです。Perl、Tcl、Scheme のような「強い型付けのない
+(untypeful)」言語の経験しかない人にとっては慣れるのは少し骨が折れること
+かもしれません。Java、C、Modula あるいは ML に明るい人ならいくぶんやさし
+いことでしょう。しかし、その場合でも、自明のことではないでしょう。それは、
+Haskell の型システムは殆どの場合、他の言語とは違いがあり、より強力だから
+です。いずれにせよ、「強い型付けのあるプログラミング」は Haskell プログ
+ラミングの一部であって、避けては通れません。
+</p>
+<hr>
+<i>A Gentle Introduction to Haskell, Version 98</i><br>
+<a href="goodies.html">next</a> <a href="index.html">top</a>
+</body>
+</html>

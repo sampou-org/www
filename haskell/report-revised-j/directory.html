@@ -1,0 +1,398 @@
+<html>
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
+  <title>The Haskell 98 Library Report: Directory functions</title>
+ </head>
+
+ <body bgcolor="#ffffff">
+  <p><i>The Haskell 98 Report</i><br />
+   <a href="index.html">top</a> | <a href="io.html">back</a> | <a
+   href="system.html">next</a> | <a href="index98.html">contents</a> | <a
+   href="prelude-index.html">function index</a> <br />
+  </p>
+  <hr />
+  <p> <a name="sect22"></a></p>
+  <!--<h2>22<tt>&nbsp;&nbsp;</tt>Directory Functions</h2>-->
+  <h2>22<tt>&nbsp;&nbsp;</tt>ディレクトリ関数</h2>
+  <p>
+  <table border="2" cellpadding="3">
+   <tr>
+    <td> <tt><br />
+     module&nbsp;Directory&nbsp;(&nbsp;<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;Permissions(&nbsp;Permissions,&nbsp;readable,&nbsp;writable,&nbsp;executable,&nbsp;searchable&nbsp;),&nbsp;<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;createDirectory,&nbsp;removeDirectory,&nbsp;removeFile,&nbsp;<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;renameDirectory,&nbsp;renameFile,&nbsp;getDirectoryContents,<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;getCurrentDirectory,&nbsp;setCurrentDirectory,<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;doesFileExist,&nbsp;doesDirectoryExist,<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;getPermissions,&nbsp;setPermissions,<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;getModificationTime&nbsp;)&nbsp;where<br />
+     <br />
+     import&nbsp;Time&nbsp;(&nbsp;ClockTime&nbsp;)<br />
+     <br />
+     data&nbsp;Permissions&nbsp;=&nbsp;Permissions&nbsp;{<br />
+     readable,&nbsp;&nbsp;&nbsp;writable,<br />
+     executable,&nbsp;searchable&nbsp;::&nbsp;Bool<br />
+     &nbsp;&nbsp;&nbsp;}<br />
+     <br />
+     instance&nbsp;Eq&nbsp;&nbsp;&nbsp;Permissions&nbsp;where&nbsp;...<br />
+     instance&nbsp;Ord&nbsp;&nbsp;Permissions&nbsp;where&nbsp;...<br />
+     instance&nbsp;Read&nbsp;Permissions&nbsp;where&nbsp;...<br />
+     instance&nbsp;Show&nbsp;Permissions&nbsp;where&nbsp;...<br />
+     <br />
+     <br />
+     <br />
+     createDirectory&nbsp;
+     ::&nbsp;FilePath&nbsp;-&gt;&nbsp;IO&nbsp;()<br />
+     removeDirectory&nbsp;
+     ::&nbsp;FilePath&nbsp;-&gt;&nbsp;IO&nbsp;()<br />
+     removeFile&nbsp; ::&nbsp;FilePath&nbsp;-&gt;&nbsp;IO&nbsp;()<br />
+     renameDirectory&nbsp;
+     ::&nbsp;FilePath&nbsp;-&gt;&nbsp;FilePath&nbsp;-&gt;&nbsp;IO&nbsp;()<br />
+     renameFile&nbsp;
+     ::&nbsp;FilePath&nbsp;-&gt;&nbsp;FilePath&nbsp;-&gt;&nbsp;IO&nbsp;()<br />
+     <br />
+     getDirectoryContents&nbsp;
+     ::&nbsp;FilePath&nbsp;-&gt;&nbsp;IO&nbsp;[FilePath]<br />
+     getCurrentDirectory&nbsp; ::&nbsp;IO&nbsp;FilePath<br />
+     setCurrentDirectory&nbsp;
+     ::&nbsp;FilePath&nbsp;-&gt;&nbsp;IO&nbsp;()<br />
+     <br />
+     doesFileExist ::&nbsp;FilePath&nbsp;-&gt;&nbsp;IO&nbsp;Bool<br />
+     doesDirectoryExist ::&nbsp;FilePath&nbsp;-&gt;&nbsp;IO&nbsp;Bool<br />
+     <br />
+     getPermissions
+     ::&nbsp;FilePath&nbsp;-&gt;&nbsp;IO&nbsp;Permissions<br />
+     setPermissions
+     ::&nbsp;FilePath&nbsp;-&gt;&nbsp;Permissions&nbsp;-&gt;&nbsp;IO&nbsp;()<br />
+     <br />
+     getModificationTime
+     ::&nbsp;FilePath&nbsp;-&gt;&nbsp;IO&nbsp;ClockTime<br />
+     <br />
+     </tt></td>
+   </tr>
+  </table>
+  </p>
+  <!--
+  <p> These functions operate on directories in the file system.</p>
+  -->
+  <p> これらの関数はファイルシステム上のディレクトリを操作するものである。</p> 
+  <!--
+  <p> Any <tt>Directory</tt> operation could raise an
+   <tt>isIllegalOperation</tt>, as described in Section <a
+   href="io.html#IOError">21.1</a>; all other permissible errors are
+   described below. Note that, in particular, if an implementation does not
+   support an operation it should raise an <tt>isIllegalOperation</tt>. A
+   directory contains a series of entries, each of which is a named
+   reference to a file system object (file, directory etc.). Some entries
+   may be hidden, inaccessible, or have some administrative function (for
+   instance, "." or ".." under POSIX), but all such entries are considered
+   to form part of the directory contents. Entries in sub-directories are
+   not, however, considered to form part of the directory contents.
+   Although there may be file system objects other than files and
+   directories, this library does not distinguish between physical files
+   and other non-directory objects. All such objects should therefore be
+   treated as if they are files.</p>
+  -->
+  <p>
+   <tt>Directory</tt> 操作はどれも <a href="io.html#IOError">21.1</a> 節
+   で説明したように <tt>isIllegalOperationError</tt> を起こすことがある。
+   これ以外の許可属性エラーについては以下に説明する。もし、ある操作が実
+   装されない場合には <tt>isIllegalOperationError</tt> を起こさなければ
+   ならないことに特に注意すること。
+   ディレクトリには一連のエントリがあり、それぞれはファイルシステムオブ
+   ジェクト(ファイル、ディレクトリ、その他)への名前付参照になっている。
+   いくつかのエントリは隠されていたり、アクセス不可であったり、あるいは
+   管理上の機能を持つもの(たとえば、POSIX の"."や"..")であるが、これらの
+   エントリのすべてはディレクトリ内容の一部を形成するものと考える。しか
+   しながら、サブディレクトリ内のエントリは当該ディレクトリの一部を形成
+   するとは考えない。ファイルシステムオブジェクトにはファイルやディレク
+   トリ以外のものも存在するであろうが、このライブラリでは物理的ファイル
+   とディレクトリ以外のオブジェクトを区別しない。それゆえ、こうしたオブ
+   ジェクトはすべてファイルとして扱われるべきである。
+  </p>
+  <!--
+  <p> Each file system object is referenced by a <i>path</i>. There is
+   normally at least one absolute path to each file system object. In some
+   operating systems, it may also be possible to have paths which are
+   relative to the current directory.
+  </p>
+  -->
+  <p>
+   各ファイルシステムオブジェクトは<em>パス</em>によって参照される。各ファ
+   イルシステムオブジェクトには通常、最低でも 1 つ絶対パスが割り当てられ
+   ている。ファイルオブジェクトはカレントディレクトリからの相対パスをも
+   つというオペレーティングシステムもある。
+  </p>
+  <!--
+  <p> Computation <tt>createDirectory</tt> <i>dir</i> creates a new
+   directory <i>dir</i> which is initially empty, or as near to empty as
+   the operating system allows.</p>
+  -->
+  <p>
+   <tt>createDirectory</tt>  <i>dir</i> 計算は新しい空もしくはそのオペレー
+   ティングシステムが認めるほとんど空のディレクトリ <i>dir</i> を作る。
+  </p>
+  <!--
+  <p> <i>Error reporting</i>. The <tt>createDirectory</tt> computation may
+   fail with: <tt>isPermissionError</tt> if the user is not permitted to
+   create the directory; <tt>isAlreadyExistsError</tt> if the directory
+   already exists; or <tt>isDoesNotExistError</tt> if the new directory's
+   parent does not exist.</p>
+  -->
+  <p>
+   <em>エラーについて：</em> <tt>createDirectory</tt> 計算はユーザがディレク
+   トリを作成する権限を持たなければ、<tt>isPermissionError</tt> で失敗し、
+   ディレクトリが既に存在すれば、<tt>isAlreadyExistsError</tt> で失敗す
+   る。また、新しいディレクトリの親ディレクトリが存在しなければ、
+   <tt>isDoesNotExistError</tt>で失敗する。
+  </p>
+  <!--
+  <p> Computation <tt>removeDirectory</tt> <i>dir</i> removes an existing
+   directory <i>dir</i>. The implementation may specify additional
+   constraints which must be satisfied before a directory can be removed
+   (for instance, the directory has to be empty, or may not be in use by
+   other processes). It is not legal for an implementation to partially
+   remove a directory unless the entire directory is removed. A conformant
+   implementation need not support directory removal in all situations (for
+   instance, removal of the root directory).</p>
+  -->
+  <p>
+   <tt>removeDirectory</tt> <i>dir</i> 計算は既存のディレクトリ
+   <i>dir</i> を削除する。実装はディレクトリを削除する前に満さなければな
+   らない制限(たとえば、ディレクトリは空でなければならない、ディレクトリ
+   が他のプロセスで使用中であってはならないなど)を付加してもよい。実装が
+   ディレクトリを全体ではなく部分的に削除するということは認められていな
+   い。実装は、かならずしも、すべての場合でディレクトリの消去ができなけ
+   ればならない訳ではない(たとえば、ルートディレクトリの削除)。
+  </p>
+  <!--
+  <p> Computation <tt>removeFile</tt> <i>file</i> removes the directory
+   entry for an existing file <i>file</i>, where <i>file</i> is not itself
+   a directory. The implementation may specify additional constraints which
+   must be satisfied before a file can be removed (for instance, the file
+   may not be in use by other processes).</p>
+  -->
+  <p>
+   <tt>removeFile</tt> <i>file</i> 計算は既存のファイル <i>file</i> のディ
+   レクトリエントリを削除する。ここで、<i>file</i> はディレクトリではな
+   い。実装はファイルを削除する前に満すべき付加的制限を指定してもよい
+   (たとえば、当該のファイルは他のプロセスで使用されていないこと) 。
+  </p>
+  <!--
+  <p> <i>Error reporting</i>. The <tt>removeDirectory</tt> and
+   <tt>removeFile</tt> computations may fail with:
+   <tt>isPermissionError</tt> if the user is not permitted to remove the
+   file/directory; or <tt>isDoesNotExistError</tt> if the file/directory
+   does not exist.</p>
+  -->
+  <p>
+   <em>エラーについて：</em> <tt>removeDirectory</tt> および
+   <tt>removeFile</tt> 計算はユーザが当該のディレクトリやファイルを削除
+   する権限を持たなければ <tt>isPermissionError</tt> で失敗する。また、
+   ディレクトリやファイルが存在しなければ、
+   <tt>isDoesNot</tt>-<tt>ExistError</tt> で失敗する。
+  </p>
+  <!--
+  <p> Computation <tt>renameDirectory</tt> <i>old</i> <i>new</i> changes
+   the name of an existing directory from <i>old</i> to <i>new</i>. If the
+   <i>new</i> directory already exists, it is atomically replaced by the
+   <i>old</i> directory. If the <i>new</i> directory is neither the
+   <i>old</i> directory nor an alias of the <i>old</i> directory, it is
+   removed as if by <tt>removeDirectory</tt>. A conformant implementation
+   need not support renaming directories in all situations (for instance,
+   renaming to an existing directory, or across different physical
+   devices), but the constraints must be documented.</p>
+  -->
+  <p>
+   <tt>renameDirectory</tt> <i>old</i> <i>new</i> 計算は既存のディレクト
+   リの名前を <i>old</i> から <i>new</i> へ変更する。もし、<i>new</i> ディ
+   レクトリがすでに存在していれば、そのディレクトリは自動的に <i>old</i>
+   ディレクトリに置きかわる。もし、 <i>new</i> が <i>old</i> ディレクト
+   リではなく、かつ、<i>old</i> ディレクトリの別名でもなければ、これは、
+   <tt>removeDirectory</tt> を使ったときと同様に削除される。ディレクトリ
+   の名前の変更はかならずしもすべての状況でサポートされている必要はない。
+   (たとえば、異る物理デバイスをまたいだ既存のディレクトリの名前の変更)。
+   しかし、その制約についてはドキュメント化されていなければならない。 
+  </p>
+  <!--
+  <p> Computation <tt>renameFile</tt> <i>old</i> <i>new</i> changes the
+   name of an existing file system object from <i>old</i> to <i>new</i>. If
+   the <i>new</i> object already exists, it is atomically replaced by the
+   <i>old </i>object. Neither path may refer to an existing directory. A
+   conformant implementation need not support renaming files in all
+   situations (for instance, renaming across different physical devices),
+   but the constraints must be documented.</p>
+  -->
+  <p>
+   <tt>renameFile</tt> <i>old</i> <i>new</i> 計算は既存のファイルシステ
+   ムオブジェクトの名前を <i>old</i> から <i>new</i> へ変更する。もし
+   <i>new</i> オブジェクトが既に存在する場合、それは自動的に <i>old</i>
+   オブジェクトに置きかわる。いずれのパスも既存のディレクトリを参照する
+   ことはない。実装はすべての状況でファイルの名前の変更を実装しなければ
+   ならないわけではない。(たとえば、異る物理デバイスをまたいだ名前の変更)。
+   しかし、その制約についてはドキュメント化されていなければならない。
+  </p>
+  <!--
+  <p> <i>Error reporting</i>. The <tt>renameDirectory</tt> and
+   <tt>renameFile</tt> computations may fail with:
+   <tt>isPermissionError</tt> if the user is not permitted to rename the
+   file/directory, or if either argument to <tt>renameFile</tt> is a
+   directory; or <tt>isDoesNotExistError</tt> if the file/directory does
+   not exist.</p>
+  -->
+  <p>
+   <em>エラーについて：</em>
+   <tt>renameDirectory</tt> および <tt>renameFile</tt> 計算は、ユーザが
+   当該のファイルあるいディレクトリの名前を変更する権限をもたない場合あ
+   るいは、<tt>renameFile</tt> への引数がディレクトリであった場合には
+   <tt>isPermissionError</tt> で失敗する。また、当該のファイルあるいはディ
+   レクトリが存在しない場合には、<tt>isDoesNotExistError</tt> で失敗する。 
+  </p>
+  <!--
+  <p> Computation <tt>getDirectoryContents</tt> <i>dir</i> returns a list
+   of <i>all</i> entries in <i>dir</i>. Each entry in the returned list is
+   named relative to the directory <i>dir</i>, not as an absolute path.</p>
+  -->
+  <p>
+   <tt>getDirectoryContents</tt> <i>dir</i> 計算は <i>dir</i> 内の全てのエ
+   ントリのリストを返す。返されたリストの各エントリは、そのディレクトリ
+   <i>dir</i> からの相対で名前がつく、絶対パスではない。
+  </p>
+  <!--
+  <p> If the operating system has a notion of current directories,
+   <tt>getCurrentDirectory</tt> returns an absolute path to the current
+   directory of the calling process.</p>
+  -->
+  <p>
+   もし、オペレーティングシステムがカレントディレクトリの概念をもつなら、
+   <tt>getCurrentDirectory</tt> は呼び出したプロセスのカレントディレクト
+   リの絶対パスを返す。
+  </p>
+  <!--
+  <p> <i>Error reporting</i>. The <tt>getDirectoryContents</tt> and
+   <tt>getCurrentDirectory</tt> computations may fail with:
+   <tt>isPermissionError</tt> if the user is not permitted to access the
+   directory; or <tt>isDoesNotExistError</tt> if the directory does not
+   exist.</p>
+  -->
+  <p>
+   <em>エラーについて：</em>
+   <tt>getDirectoryContents</tt> および <tt>getCurrentDirectory</tt> 計
+   算は、ユーザに当該ディレクトリへのアクセス権限がなければ、
+   <tt>isPermissionError</tt> で失敗する。また、当該ディレクトリが存在し
+   なければ、<tt>isDoesNotExistError</tt> で失敗する。
+  </p>
+  <!--
+  <p> If the operating system has a notion of current directories,
+   <tt>setCurrentDirectory</tt> <i>dir</i> changes the current directory of
+   the calling process to <i>dir</i>.</p>
+  -->
+  <p>
+   もし、オペレーティングシステムがカレントディレクトリの概念をもつなら、
+   <tt>setCurrentDirectory</tt> <i>dir</i> は呼び出しプロセスのカレント
+   ディレクトリを <i>dir</i> に変更する。
+  </p>
+  <!--
+  <p> <i>Error reporting</i>. <tt>setCurrentDirectory</tt> may fail with:
+   <tt>isPermissionError</tt> if the user is not permitted to change
+   directory to that specified; or <tt>isDoesNotExistError</tt> if the
+   directory does not exist.</p>
+  -->
+  <p>
+   <em>エラーについて：</em>
+   <tt>setCurrentDirectory</tt> 計算は、ユーザが指定したディレクトリへ変
+   更する権限を持たなければ、<tt>isPermissionError</tt> で失敗
+   する。 もし、当該ディレクトリが存在しなければ、
+   <tt>isDoesNotExistError</tt> で失敗する。
+  </p>
+  <!--
+  <p> The <tt>Permissions</tt> type is used to record whether certain
+   operations are permissible on a file/directory. <tt>getPermissions</tt>
+   and <tt>setPermissions</tt> get and set these permissions, respectively.
+   Permissions apply both to files and directories. For directories, the
+   <tt>executable</tt> field will be <tt>False</tt>, and for files the
+   <tt>searchable</tt> field will be <tt>False</tt>. Note that directories
+   may be searchable without being readable, if permission has been given
+   to use them as part of a path, but not to examine the directory
+   contents.</p>
+  -->
+  <p>
+   <tt>Permissions</tt> 型はファイルあるいはディレクトリに対する特定の操
+   作を許可するかどうかを記録するために使用される。
+   <tt>getPermissions</tt> および <tt>setPermissions</tt> は許可属性を取
+   得あるいは設定する。許可属性はファイルとディレクトリの両方に適用され
+   る。ディレクトリに対しては、<tt>executable</tt> フィールドは
+   <tt>False</tt> であり、ファイルに対しては、<tt>searchable</tt> フィー
+   ルドは <tt>False</tt> である。ディレクトリはパス部分に許可属性があれ
+   ば読み取り可能でなくとも検索可能である。しかし、この場合はディレクト
+   リの内容を確かめることはできない。
+  </p>
+  <!--
+  <p> Note that to change some, but not all permissions, a construct on the
+   following lines must be used. <tt><br />
+   <br />
+   makeReadable&nbsp;f&nbsp;=&nbsp;do<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;p&nbsp;&lt;-&nbsp;getPermissions&nbsp;f<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;setPermissions&nbsp;f&nbsp;(p&nbsp;{readable&nbsp;=&nbsp;True})<br />
+   <br />
+   </tt>The operation <tt>doesDirectoryExist</tt> returns <tt>True</tt> if
+   the argument file exists and is a directory, and <tt>False</tt>
+   otherwise. The operation <tt>doesFileExist</tt> returns <tt>True </tt>if
+   the argument file exists and is not a directory, and <tt>False</tt>
+   otherwise.</p>
+  -->
+  <p>
+   パーミッションのいくつか(すべてではない)を変更には以下のような使い方
+   をしなければならない。
+   <tt><br />
+   <br />
+   makeReadable&nbsp;f&nbsp;=&nbsp;do<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;p&nbsp;&lt;-&nbsp;getPermissions&nbsp;f<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;setPermissions&nbsp;f&nbsp;(p&nbsp;{readable&nbsp;=&nbsp;True})<br />
+   <br />
+   </tt>
+   <tt>doesDirectoryExist</tt> 操作は、引数のファイルが存在しかつそれが
+   ディレクトリである場合に <tt>True</tt> を返し、それ以外の場合には
+   <tt>False</tt> を返す。<tt>doesFileExist</tt> 操作は、引数のファイル
+   が存在しそれがディレクトリでなければ <tt>True</tt> を替えし、そうでな
+   ければ、<tt>False</tt> を返す。
+  </p>
+  <!--
+  <p> The <tt>getModificationTime</tt> operation returns the clock time at
+   which the file/directory was last modified.</p>
+  -->
+  <p>
+   <tt>getModificationTime</tt> 操作はファイルあるいはディレクトリが最後
+   に変更された時刻を返す。
+  </p>
+  <!--
+  <p> <i>Error reporting</i>. <tt>get(set)Permissions</tt>,
+   <tt>doesFile(Directory)Exist</tt>, and <tt>getModificationTime </tt>may
+   fail with: <tt>isPermissionError</tt> if the user is not permitted to
+   access the appropriate information; or <tt>isDoesNotExistError</tt> if
+   the file/directory does not exist. The <tt>setPermissions
+   </tt>computation may also fail with: <tt>isPermissionError</tt> if the
+   user is not permitted to change the permission for the specified file or
+   directory; or <tt>isDoesNotExistError</tt> if the file/directory does
+   not exist.</p>
+  -->
+  <p>
+   <em>エラーについて：</em>
+   <tt>get(set)Permissions</tt>、<tt>doesFile(Directory)Exist</tt>、
+   および<tt>getModificationTime</tt> 計算は、ユーザが当該の情報
+   にアクセスづる権利を持たない場合には <tt>isPermissionError</tt> で失
+   敗する。また、当該ファイルおよびディレクトリが存在しない場合には
+   <tt>isDoesNotExistError</tt> で失敗する。 <tt>setPermissions</tt> 計
+   算も、ユーザが当該のファイルあるいはディレクトリのパーミッションを変
+   更する権限を持たない場合には、<tt>isPermissionError</tt> で失敗し、当
+   該ファイルあるいはディレクトリが存在しない場合には
+   <tt>isDoesNotExistError</tt> で失敗する。
+  </p>
+  <hr />
+  <p><i>The Haskell 98 Report</i><br />
+   <a href="index.html">top</a> | <a href="io.html">back</a> | <a
+   href="system.html">next</a> | <a href="index98.html">contents</a> | <a
+   href="prelude-index.html">function index</a> <br />
+   <font size="2">December 2002</font></p>
+</body>
+</html>

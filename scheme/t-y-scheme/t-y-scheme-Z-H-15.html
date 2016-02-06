@@ -1,0 +1,550 @@
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--
+
+Generated from t-y-scheme.tex by tex2page, v 20060531
+(running on Gauche 0.8.7, unix), 
+(c) Dorai Sitaram, 
+http://www.ccs.neu.edu/~dorai/tex2page/tex2page-doc.html
+
+-->
+<head>
+<title>
+独習 Scheme 三週間 Teach Yourself Scheme in Fixnum Days
+</title>
+<link rel="stylesheet" type="text/css" href="t-y-scheme-Z-S.css" title=default>
+<meta name=robots content="noindex,follow">
+<meta name=description content="A practical
+introduction to the programming language Scheme">
+
+<meta name=author content="Dorai Sitaram">
+
+<link rev=made href="mailto:ds26@gte.com">
+</head>
+<body>
+<div id=slidecontent>
+<div align=right class=navigation>[Go to <span><a href="t-y-scheme.html">first</a>, <a href="t-y-scheme-Z-H-14.html">previous</a></span><span>, <a href="t-y-scheme-Z-H-16.html">next</a></span> page<span>; &nbsp;&nbsp;</span><span><a href="t-y-scheme-Z-H-1.html#node_toc_start">contents</a></span><span><span>; &nbsp;&nbsp;</span><a href="t-y-scheme-Z-H-25.html#node_index_start">index</a></span>]</div>
+<p></p>
+<a name="node_chap_13"></a>
+<h1 class=chapter>
+<div class=chapterheading><a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_13">Chapter 13</a></div><br>
+<a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_13">ジャンプ</a></h1>
+<p><a name="node_idx_466"></a></p>
+<p>
+Scheme におけるシグナル機能のひとつはジャンプあるいは<em>非局所制御</em>
+のサポートです。具体的にいいますと、Scheme ではプログラム中の
+<em>任意の</em>場所へのジャンプをプログラムで制御することができる
+ということです。これは、条件節や手続き呼び出しによって可能な、
+ずっと限定されたプログラム制御フローの形式と好対照をなしています。
+Scheme の非局所制御オペレータは <code class=scheme><span class=variable>call-with-continuation</span></code> という名の
+手続きです。このオペレータをつかってどのように、ハッとさせるような
+制御イディオムの数々を作りあげるのかをみていきましょう。</p>
+<p>
+</p>
+<a name="node_sec_13.1"></a>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_13.1">13.1&nbsp;&nbsp;<code class=scheme><span class=variable>call-with-current-continuation</span></code></a></h2>
+<p><a name="node_idx_468"></a><a name="node_idx_470"></a></p>
+<p>
+オペレータ <code class=scheme><span class=variable>call-with-current-continuation</span></code> はその引数
+(これは一引数の手続きでなければなりません)を
+「<em>現在の継続(current continuation)</em>」とよばれる値と
+<em>ともに</em><em>呼び出し</em>ます。すくなくともこれが、名前の
+説明です。しかし、これは長い名前なので、<code class=scheme><span class=variable>call/cc</span></code> と略される
+ことがよくあります。<a name="node_call_footnote_Temp_11"></a><sup><small><a href="#node_footnote_Temp_11">1</a></small></sup></p>
+<p>
+</p>
+<p>
+プログラムの実行中のあらゆる点での現在の継続は
+<em>プログラムの残りの部分</em>の抽象です。
+したがって、次のプログラム</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>+</span> <span class=selfeval>1</span> (<span class=variable>call/cc</span>
+       (<span class=keyword>lambda</span> (<span class=variable>k</span>)
+         (<span class=variable>+</span> <span class=selfeval>2</span> (<span class=variable>k</span> <span class=selfeval>3</span>)))))
+</pre><p></p>
+<p>
+</p>
+
+<p class=noindent>で、プログラムの残りの部分というのは、<code class=scheme><span class=variable>call/cc</span></code> の適用の観点からは
+次の「プログラムの穴」の部分( <code class=scheme>[]</code> で穴を表現しています)です。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>+</span> <span class=selfeval>1</span> [])
+</pre><p></p>
+<p>
+</p>
+
+<p class=noindent>いいかえれば、この継続はその穴を埋めるものがなんであれ、
+それに <code class=scheme><span class=selfeval>1</span></code> を加えるというプログラムです。</p>
+<p>
+これは、<code class=scheme><span class=variable>call/cc</span></code> の引数と<em>とともに呼び出される</em>ものです。
+<code class=scheme><span class=variable>call/cc</span></code> の引数は手続きであることを思い出してください。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>lambda</span> (<span class=variable>k</span>)
+  (<span class=variable>+</span> <span class=selfeval>2</span> (<span class=variable>k</span> <span class=selfeval>3</span>)))
+</pre><p></p>
+<p>
+</p>
+
+<p class=noindent></p>
+<p>
+この手続きの本体はその継続(この場合、パラメータ <code class=scheme><span class=variable>k</span></code> に束縛されている)を
+引数 <code class=scheme><span class=selfeval>3</span></code> に適用します。継続の通常にはない局面が前面に
+でてくるのはここです。継続の呼び出しはあっさりと自分の計算を捨て、
+<code class=scheme><span class=variable>k</span></code> に格納されているプログラムの残りの部分と置き換えます。
+いいかえれば、<code class=scheme><span class=selfeval>2</span></code> を加えるところを含む手続きの部分は捨てられ、
+<code class=scheme><span class=variable>k</span></code> の引数 <code class=scheme><span class=selfeval>3</span></code> が「プログラムの穴」に直接、送りこまれます。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>+</span> <span class=selfeval>1</span> [])
+</pre><p></p>
+<p>
+</p>
+
+<p class=noindent>このプログラムは単純に</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>+</span> <span class=selfeval>1</span> <span class=selfeval>3</span>)
+</pre><p></p>
+<p>
+</p>
+
+<p class=noindent>となり、<code class=scheme><span class=selfeval>4</span></code> が返ります。つまり、</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>+</span> <span class=selfeval>1</span> (<span class=variable>call/cc</span>
+       (<span class=keyword>lambda</span> (<span class=variable>k</span>)
+         (<span class=variable>+</span> <span class=selfeval>2</span> (<span class=variable>k</span> <span class=selfeval>3</span>)))))
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>4</span>
+</pre><p>
+ということです。</p>
+<p>
+</p>
+
+<p class=noindent></p>
+<p>
+上では、<em>脱出</em>継続を説明しています。これは、ある計算
+(ここでは <code class=scheme>(<span class=variable>+</span> <span class=selfeval>2</span> [])</code> の計算)から脱出するために用いられるものです。
+これはたいへん使える性質をもちますが、Scheme の継続は以前に捨てた
+文脈に戻るのにも使えます。実際、これを複数回呼びだすこともできます。
+継続にまつられた「プログラムの残りの部分」は、いつでも、
+何回でも呼び出して使うことができます。このことが、すばらしさに
+貢献するとともにときには <code class=scheme><span class=variable>call/cc</span></code> の汎用性を分かりにくくしています。
+ちょっとした例として、以下のようにリスナーにタイプしてみましょう。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=variable>r</span> <span class=selfeval>#f</span>)
+
+(<span class=variable>+</span> <span class=selfeval>1</span> (<span class=variable>call/cc</span>
+       (<span class=keyword>lambda</span> (<span class=variable>k</span>)
+         (<span class=keyword>set!</span> <span class=variable>r</span> <span class=variable>k</span>)
+         (<span class=variable>+</span> <span class=selfeval>2</span> (<span class=variable>k</span> <span class=selfeval>3</span>)))))
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>4</span>
+</pre><p></p>
+<p>
+</p>
+
+<p class=noindent></p>
+<p>
+後の方の式は以前と同様に <code class=scheme><span class=selfeval>4</span></code> を返します。この 
+<code class=scheme><span class=variable>call/cc</span></code> の使い方とその前の例での使い方の差は
+ここでは、継続 <code class=scheme><span class=variable>k</span></code> をグローバル変数 <code class=scheme><span class=variable>r</span></code> に
+保存しているということです。</p>
+<p>
+</p>
+<p>
+いま、その継続の永続的な記録を <code class=scheme><span class=variable>r</span></code> のなかにとってあります。
+もし、それを数値に対して呼べば、その数値を <code class=scheme><span class=selfeval>1</span></code> 増加させた
+値が返ります。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>r</span> <span class=selfeval>5</span>)
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>6</span>
+</pre><p></p>
+<p>
+</p>
+
+<p class=noindent></p>
+<p>
+<code class=scheme><span class=variable>r</span></code> は自分自身の継続を捨ててしまうことに注意してください。
+もっとうまく説明するには、いくつかの文脈内に、<code class=scheme><span class=variable>r</span></code> への
+呼び出しをうめこんでみると分ります。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>+</span> <span class=selfeval>3</span> (<span class=variable>r</span> <span class=selfeval>5</span>))
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>6</span>
+</pre><p></p>
+<p>
+</p>
+
+<p class=noindent></p>
+<p>
+<code class=scheme><span class=variable>call/cc</span></code> で提供された継続はしたがって、実を結ばない継続です。</p>
+<p>
+</p>
+<a name="node_sec_13.2"></a>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_13.2">13.2&nbsp;&nbsp;脱出継続</a></h2>
+<p></p>
+<p>
+脱出継続は <code class=scheme><span class=variable>call/cc</span></code> の最もシンプルな使い方であり、
+プログラミング手続きあるいはループ脱出にはたいへん便利です。
+数値のリストをとりそれらを掛けあわせる手続き <code class=scheme><span class=variable>list-product</span></code>を
+考えてみましょう。<code class=scheme><span class=variable>list-product</span></code> の直截的な再帰的定義は、以下の
+とおりです。</p>
+<p>
+</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=variable>list-product</span>
+  (<span class=keyword>lambda</span> (<span class=variable>s</span>)
+    (<span class=keyword>let</span> <span class=variable>recur</span> ((<span class=variable>s</span> <span class=variable>s</span>))
+      (<span class=keyword>if</span> (<span class=variable>null?</span> <span class=variable>s</span>) <span class=selfeval>1</span>
+          (<span class=variable>*</span> (<span class=variable>car</span> <span class=variable>s</span>) (<span class=variable>recur</span> (<span class=variable>cdr</span> <span class=variable>s</span>)))))))
+</pre><p></p>
+<p>
+</p>
+
+<p class=noindent></p>
+<p>
+この解法には問題があります。リスト中の要素の一つが <code class=scheme><span class=selfeval>0</span></code> で、
+その <code class=scheme><span class=selfeval>0</span></code> のあとにいくつもの要素があるとすると、答えは先に
+わかってしまいます。しかし、このコードでは、答えを出すまでに
+<code class=scheme><span class=variable>recur</span></code> への実りのない再帰呼び出しがいくつもつづきます。
+こんなときに、脱出継続が便利です。<code class=scheme><span class=variable>call/cc</span></code> をつかうと
+この手続きは次のように書き換えることができます。</p>
+<p>
+</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=variable>list-product</span>
+  (<span class=keyword>lambda</span> (<span class=variable>s</span>)
+    (<span class=variable>call/cc</span>
+      (<span class=keyword>lambda</span> (<span class=variable>exit</span>)
+        (<span class=keyword>let</span> <span class=variable>recur</span> ((<span class=variable>s</span> <span class=variable>s</span>))
+          (<span class=keyword>if</span> (<span class=variable>null?</span> <span class=variable>s</span>) <span class=selfeval>1</span>
+              (<span class=keyword>if</span> (<span class=variable>=</span> (<span class=variable>car</span> <span class=variable>s</span>) <span class=selfeval>0</span>) (<span class=variable>exit</span> <span class=selfeval>0</span>)
+                  (<span class=variable>*</span> (<span class=variable>car</span> <span class=variable>s</span>) (<span class=variable>recur</span> (<span class=variable>cdr</span> <span class=variable>s</span>))))))))))
+</pre><p></p>
+<p>
+</p>
+
+<p class=noindent></p>
+<p>
+もし、<code class=scheme><span class=selfeval>0</span></code> 要素にであったら、継続 <code class=scheme><span class=variable>exit</span></code> が <code class=scheme><span class=selfeval>0</span></code> とともに呼ばれて、
+それ以上の <code class=scheme><span class=variable>recur</span></code> の呼び出しを回避します。</p>
+<p>
+</p>
+<a name="node_sec_13.3"></a>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_13.3">13.3&nbsp;&nbsp;ツリーマッチング</a></h2>
+<p></p>
+<p>
+もっとこみいった継続の使用例は、二つのツリー
+(任意の入れ子状になったドット対)が同じ<em>末端</em>を持つかどうかを
+決定する問題です。つまり、同じ要素(あるいは<em>葉</em>)を同じならびで
+もつかどうかを決定する問題です。たとえば、</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>same-fringe?</span> <span class=keyword>'</span>(<span class=selfeval>1</span> (<span class=selfeval>2</span> <span class=selfeval>3</span>)) <span class=keyword>'</span>((<span class=selfeval>1</span> <span class=selfeval>2</span>) <span class=selfeval>3</span>))
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#t</span>
+
+(<span class=variable>same-fringe?</span> <span class=keyword>'</span>(<span class=selfeval>1</span> <span class=selfeval>2</span> <span class=selfeval>3</span>) <span class=keyword>'</span>(<span class=selfeval>1</span> (<span class=selfeval>3</span> <span class=selfeval>2</span>)))
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#f</span>
+</pre><p></p>
+<p>
+</p>
+<p>
+純粋な関数的アプローチは両方のツリーを平坦にして結果がマッチするか
+どうかを調べるというものです。</p>
+<p>
+</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=variable>same-fringe?</span>
+  (<span class=keyword>lambda</span> (<span class=variable>tree1</span> <span class=variable>tree2</span>)
+    (<span class=keyword>let</span> <span class=variable>loop</span> ((<span class=variable>ftree1</span> (<span class=variable>flatten</span> <span class=variable>tree1</span>))
+               (<span class=variable>ftree2</span> (<span class=variable>flatten</span> <span class=variable>tree2</span>)))
+      (<span class=keyword>cond</span> ((<span class=keyword>and</span> (<span class=variable>null?</span> <span class=variable>ftree1</span>) (<span class=variable>null?</span> <span class=variable>ftree2</span>)) <span class=selfeval>#t</span>)
+            ((<span class=keyword>or</span> (<span class=variable>null?</span> <span class=variable>ftree1</span>) (<span class=variable>null?</span> <span class=variable>ftree2</span>)) <span class=selfeval>#f</span>)
+            ((<span class=variable>eqv?</span> (<span class=variable>car</span> <span class=variable>ftree1</span>) (<span class=variable>car</span> <span class=variable>ftree2</span>))
+             (<span class=variable>loop</span> (<span class=variable>cdr</span> <span class=variable>ftree1</span>) (<span class=variable>cdr</span> <span class=variable>ftree2</span>)))
+            (<span class=keyword>else</span> <span class=selfeval>#f</span>)))))
+
+(<span class=keyword>define</span> <span class=variable>flatten</span>
+  (<span class=keyword>lambda</span> (<span class=variable>tree</span>)
+    (<span class=keyword>cond</span> ((<span class=variable>null?</span> <span class=variable>tree</span>) <span class=keyword>'</span>())
+          ((<span class=variable>pair?</span> (<span class=variable>car</span> <span class=variable>tree</span>))
+           (<span class=variable>append</span> (<span class=variable>flatten</span> (<span class=variable>car</span> <span class=variable>tree</span>))
+                   (<span class=variable>flatten</span> (<span class=variable>cdr</span> <span class=variable>tree</span>))))
+          (<span class=keyword>else</span>
+           (<span class=variable>cons</span> (<span class=variable>car</span> <span class=variable>tree</span>)
+                 (<span class=variable>flatten</span> (<span class=variable>cdr</span> <span class=variable>tree</span>)))))))
+</pre><p></p>
+<p>
+</p>
+
+<p class=noindent></p>
+<p>
+しかしながら、ツリーを平坦にするためにツリーを完全にトラバースすること
+になり、また、マッチしない要素をがみつかるまで、また、トラバースします。
+さらに、最高によい平坦化アルゴリズムでも、全体の葉の数と等しい <code class=scheme><span class=variable>cons</span></code> が
+必要です。(破壊的に入力されたツリーを変更することはしません。)</p>
+<p>
+</p>
+<p>
+この問題を不必要なトラバースなし、<code class=scheme><span class=variable>cons</span></code> なしで解決するのに
+<code class=scheme><span class=variable>call/cc</span></code> を使うことができます。それぞれのツリーを<em>生成器</em>
+つまり、ツリーの葉をツリーで出現した順に、左から右へ生成する
+内部状態をともなう手続きにマップします。</p>
+<p>
+</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=variable>tree-&gt;generator</span>
+  (<span class=keyword>lambda</span> (<span class=variable>tree</span>)
+    (<span class=keyword>let</span> ((<span class=variable>caller</span> <span class=keyword>'</span><span class=variable>*</span>))
+      (<span class=keyword>letrec</span>
+          ((<span class=variable>generate-leaves</span>
+            (<span class=keyword>lambda</span> ()
+              (<span class=keyword>let</span> <span class=variable>loop</span> ((<span class=variable>tree</span> <span class=variable>tree</span>))
+                (<span class=keyword>cond</span> ((<span class=variable>null?</span> <span class=variable>tree</span>) <span class=keyword>'</span><span class=variable>skip</span>)
+                      ((<span class=variable>pair?</span> <span class=variable>tree</span>)
+                       (<span class=variable>loop</span> (<span class=variable>car</span> <span class=variable>tree</span>))
+                       (<span class=variable>loop</span> (<span class=variable>cdr</span> <span class=variable>tree</span>)))
+                      (<span class=keyword>else</span>
+                       (<span class=variable>call/cc</span>
+                        (<span class=keyword>lambda</span> (<span class=variable>rest-of-tree</span>)
+                          (<span class=keyword>set!</span> <span class=variable>generate-leaves</span>
+                            (<span class=keyword>lambda</span> ()
+                              (<span class=variable>rest-of-tree</span> <span class=keyword>'</span><span class=variable>resume</span>)))
+                          (<span class=variable>caller</span> <span class=variable>tree</span>))))))
+              (<span class=variable>caller</span> <span class=keyword>'</span>()))))
+        (<span class=keyword>lambda</span> ()
+          (<span class=variable>call/cc</span>
+           (<span class=keyword>lambda</span> (<span class=variable>k</span>)
+             (<span class=keyword>set!</span> <span class=variable>caller</span> <span class=variable>k</span>)
+             (<span class=variable>generate-leaves</span>))))))))
+</pre><p></p>
+<p>
+</p>
+
+<p class=noindent></p>
+<p>
+<code class=scheme><span class=variable>tree-&gt;generator</span></code> によってつくられる生成器が呼ばれると、その
+呼び出しの継続を <code class=scheme><span class=variable>caller</span></code> に格納します。そうすると、葉を見つけた
+時に誰にその葉を送ればよいか知ることが可能になります。
+それから <code class=scheme><span class=variable>generate-leaves</span></code> というツリーを左から右へたどる
+ループを回す内部手続きを呼びます。ループが葉にであったら、
+<code class=scheme><span class=variable>caller</span></code> をつかって、その葉を生成器の結果として返します。
+しかし、同時に <code class=scheme><span class=variable>generate-leaves</span></code> 変数に、ループの残り
+(<code class=scheme><span class=variable>call/cc</span></code> 継続として捕捉されている)を格納することを覚えています。
+次回にこの生成器が呼び出されたときには、このループは中断したところ
+から再開し次の葉を探すことができます。</p>
+<p>
+</p>
+<p>
+<code class=scheme><span class=variable>generate-leaves</span></code> が最後にやることは、空リストを <code class=scheme><span class=variable>caller</span></code> に
+返すことであることに注意してください。空リストは正しい葉の値ではないので
+これを、これ以上生成すべき葉がないことを知らせるのに使うことができます。</p>
+<p>
+</p>
+<p>
+手続き <code class=scheme><span class=variable>same-fringe?</span></code> はそれぞれのツリー引数を生成器にマップし、
+このふたつの生成器を交互に呼び出します。マッチしない葉が見つかった
+とたんにマッチングが失敗したことが報されます。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=variable>same-fringe?</span>
+  (<span class=keyword>lambda</span> (<span class=variable>tree1</span> <span class=variable>tree2</span>)
+    (<span class=keyword>let</span> ((<span class=variable>gen1</span> (<span class=variable>tree-&gt;generator</span> <span class=variable>tree1</span>))
+          (<span class=variable>gen2</span> (<span class=variable>tree-&gt;generator</span> <span class=variable>tree2</span>)))
+      (<span class=keyword>let</span> <span class=variable>loop</span> ()
+        (<span class=keyword>let</span> ((<span class=variable>leaf1</span> (<span class=variable>gen1</span>))
+              (<span class=variable>leaf2</span> (<span class=variable>gen2</span>)))
+          (<span class=keyword>if</span> (<span class=variable>eqv?</span> <span class=variable>leaf1</span> <span class=variable>leaf2</span>)
+              (<span class=keyword>if</span> (<span class=variable>null?</span> <span class=variable>leaf1</span>) <span class=selfeval>#t</span> (<span class=variable>loop</span>))
+              <span class=selfeval>#f</span>))))))
+</pre><p></p>
+<p>
+</p>
+
+<p class=noindent></p>
+<p>
+ツリーは高々一度しかトラバースされず、ミスマッチが起こるときには
+トラバースは一番左側のミスマッチのところまでであることは容易に
+理解できますね。<code class=scheme><span class=variable>cons</span></code> は使われていません。</p>
+<p>
+<a name="node_idx_472"></a><a name="node_idx_474"></a></p>
+<p>
+</p>
+<a name="node_sec_13.4"></a>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_13.4">13.4&nbsp;&nbsp;コルーチン</a></h2>
+<p></p>
+<p>
+上で使用した生成器は手続き概念の興味深い一般化です。
+生成器が呼び出されるたびに、その計算を再開し、呼び出し側に返すべき
+結果があるときにはそれを返します。しかし、それは内部変数に継続を
+した後だけにおこるので、生成器はまた再開することが可能です。
+この生成器を更に一般化することが可能です。
+結果をお互いのあいだで送り返し、送り出すことで生成器は相互に
+再開することが可能です。このような手続きのことを<em>コルーチン</em>
+&nbsp;[<a href="t-y-scheme.hlog">cite{coroutine}</a>] と呼びます。</p>
+<p>
+</p>
+<p>
+コルーチンをその本体に <code class=scheme><span class=variable>resume</span></code> の呼び出しを含めることが
+できるような一引数の手続きと看倣します。<code class=scheme><span class=variable>resume</span></code> は二引数手続きで
+コルーチンがもう一方のコルーチンを転送した値とともに再開するのに
+使います。マクロ <code class=scheme><span class=keyword>coroutine</span></code> は、コルーチンの初期引数の変数名と
+本体をあたえるような手続きを定義しています。</p>
+<p>
+</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define-macro</span> <span class=keyword>coroutine</span>
+  (<span class=keyword>lambda</span> (<span class=variable>x</span> . <span class=variable>body</span>)
+    <span class=keyword>`</span>(<span class=keyword>letrec</span> ((<span class=variable>+local-control-state</span>
+               (<span class=keyword>lambda</span> (<span class=keyword>,</span><span class=variable>x</span>) <span class=keyword>,@</span><span class=variable>body</span>))
+              (<span class=variable>resume</span>
+               (<span class=keyword>lambda</span> (<span class=variable>c</span> <span class=variable>v</span>)
+                 (<span class=variable>call/cc</span>
+                  (<span class=keyword>lambda</span> (<span class=variable>k</span>)
+                    (<span class=keyword>set!</span> <span class=variable>+local-control-state</span> <span class=variable>k</span>)
+                    (<span class=variable>c</span> <span class=variable>v</span>))))))
+       (<span class=keyword>lambda</span> (<span class=variable>v</span>)
+         (<span class=variable>+local-control-state</span> <span class=variable>v</span>)))))
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>このマクロの呼び出しで、コルーチン手続きがひとつ
+(これを <em>A</em> と呼びましょう)作成されます。これは、ひとつの
+引数とともに呼びだすことができます。<em>A</em> は <code class=scheme><span class=variable>+local-control-state</span></code>
+という初期変数をもちます。この変数は、あらゆるところで、
+このコルーチンの残りの計算を格納しておけるものです。最初は
+このコルーチンの計算全体です。<code class=scheme><span class=variable>resume</span></code> が呼び出されると 
+(つまり、もう一方のコルーチン <em>B</em> が呼び出されると) 現在のコルーチンは
+その <code class=scheme><span class=variable>+local-control-state</span></code> の値をのこりの計算へ更新し、そこで
+停止します。それから、<em>再開</em>したコルーチン <em>B</em> にジャンプします。
+コルーチン <em>A</em> 自身は、後のどこかのポイントで再開されると、計算は
+<code class=scheme><span class=variable>+local-control-state</span></code> に格納された継続から進行します。</p>
+<p>
+</p>
+<p>
+</p>
+<a name="node_sec_13.4.1"></a>
+<h3 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_13.4.1">13.4.1&nbsp;&nbsp;コルーチンを使ったツリーマッチング</a></h3>
+<p></p>
+<p>
+コルーチンを使うとツリーマッチングはずっとシンプルになります。
+マッチング処理は、それぞれのツリーの葉を供給するふたつの別のコルーチン
+に依存するコルーチンとしてコーディングされます。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=variable>make-matcher-coroutine</span>
+  (<span class=keyword>lambda</span> (<span class=variable>tree-cor-1</span> <span class=variable>tree-cor-2</span>)
+    (<span class=keyword>coroutine</span> <span class=variable>dont-need-an-init-arg</span>
+      (<span class=keyword>let</span> <span class=variable>loop</span> ()
+        (<span class=keyword>let</span> ((<span class=variable>leaf1</span> (<span class=variable>resume</span> <span class=variable>tree-cor-1</span> <span class=keyword>'</span><span class=variable>get-a-leaf</span>))
+              (<span class=variable>leaf2</span> (<span class=variable>resume</span> <span class=variable>tree-cor-2</span> <span class=keyword>'</span><span class=variable>get-a-leaf</span>)))
+          (<span class=keyword>if</span> (<span class=variable>eqv?</span> <span class=variable>leaf1</span> <span class=variable>leaf2</span>)
+              (<span class=keyword>if</span> (<span class=variable>null?</span> <span class=variable>leaf1</span>) <span class=selfeval>#t</span> (<span class=variable>loop</span>))
+              <span class=selfeval>#f</span>))))))
+</pre><p></p>
+<p>
+</p>
+
+<p class=noindent>葉の生成器コルーチンは、誰に葉を送ればよいかを記憶します。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=variable>make-leaf-gen-coroutine</span>
+  (<span class=keyword>lambda</span> (<span class=variable>tree</span> <span class=variable>matcher-cor</span>)
+    (<span class=keyword>coroutine</span> <span class=variable>dont-need-an-init-arg</span>
+      (<span class=keyword>let</span> <span class=variable>loop</span> ((<span class=variable>tree</span> <span class=variable>tree</span>))
+        (<span class=keyword>cond</span> ((<span class=variable>null?</span> <span class=variable>tree</span>) <span class=keyword>'</span><span class=variable>skip</span>)
+              ((<span class=variable>pair?</span> <span class=variable>tree</span>)
+               (<span class=variable>loop</span> (<span class=variable>car</span> <span class=variable>tree</span>))
+               (<span class=variable>loop</span> (<span class=variable>cdr</span> <span class=variable>tree</span>)))
+              (<span class=keyword>else</span>
+               (<span class=variable>resume</span> <span class=variable>matcher-cor</span> <span class=variable>tree</span>))))
+      (<span class=variable>resume</span> <span class=variable>matcher-cor</span> <span class=keyword>'</span>()))))
+</pre><p></p>
+<p>
+</p>
+
+<p class=noindent></p>
+<p>
+こうなれば、
+<code class=scheme><span class=variable>same-fringe?</span></code> 手続きは、<em>ほぼ</em>次のように書くことができます。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=variable>same-fringe?</span>
+  (<span class=keyword>lambda</span> (<span class=variable>tree1</span> <span class=variable>tree2</span>)
+    (<span class=keyword>letrec</span> ((<span class=variable>tree-cor-1</span>
+              (<span class=variable>make-leaf-gen-coroutine</span>
+               <span class=variable>tree1</span>
+               <span class=variable>matcher-cor</span>))
+             (<span class=variable>tree-cor-2</span>
+              (<span class=variable>make-leaf-gen-coroutine</span>
+               <span class=variable>tree2</span>
+               <span class=variable>matcher-cor</span>))
+             (<span class=variable>matcher-cor</span>
+              (<span class=variable>make-matcher-coroutine</span>
+               <span class=variable>tree-cor-1</span>
+               <span class=variable>tree-cor-2</span>)))
+      (<span class=variable>matcher-cor</span> <span class=keyword>'</span><span class=variable>start-ball-rolling</span>))))
+</pre><p></p>
+<p>
+</p>
+
+<p class=noindent></p>
+<p>
+残念ながら、Scheme の <code class=scheme><span class=keyword>letrec</span></code> がそれが導入したレキシカル変数間での
+相互再帰的参照を解決することができるのは、それらの変数参照が、<code class=scheme><span class=keyword>lambda</span></code>
+の内側にラップされた場合のみです。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=variable>same-fringe?</span>
+  (<span class=keyword>lambda</span> (<span class=variable>tree1</span> <span class=variable>tree2</span>)
+    (<span class=keyword>letrec</span> ((<span class=variable>tree-cor-1</span>
+              (<span class=variable>make-leaf-gen-coroutine</span>
+               <span class=variable>tree1</span>
+               (<span class=keyword>lambda</span> (<span class=variable>v</span>) (<span class=variable>matcher-cor</span> <span class=variable>v</span>))))
+             (<span class=variable>tree-cor-2</span>
+              (<span class=variable>make-leaf-gen-coroutine</span>
+               <span class=variable>tree2</span>
+               (<span class=keyword>lambda</span> (<span class=variable>v</span>) (<span class=variable>matcher-cor</span> <span class=variable>v</span>))))
+             (<span class=variable>matcher-cor</span>
+              (<span class=variable>make-matcher-coroutine</span>
+               (<span class=keyword>lambda</span> (<span class=variable>v</span>) (<span class=variable>tree-cor-1</span> <span class=variable>v</span>))
+               (<span class=keyword>lambda</span> (<span class=variable>v</span>) (<span class=variable>tree-cor-2</span> <span class=variable>v</span>)))))
+      (<span class=variable>matcher-cor</span> <span class=keyword>'</span><span class=variable>start-ball-rolling</span>))))
+</pre><p></p>
+<p>
+</p>
+
+<p class=noindent></p>
+<p>
+この <code class=scheme><span class=variable>same-fringe?</span></code> の書き換えでは、<code class=scheme><span class=variable>call/cc</span></code> は直接呼ばれることは
+全くないことに注意してください。すべての継続のとりあつかいは
+<code class=scheme><span class=keyword>coroutine</span></code> マクロで処理されています。
+</p>
+<p>
+</p>
+<div class=footnoterule><hr></div><p></p>
+<div class=footnote><p><a name="node_footnote_Temp_11"></a><sup><small><a href="#node_call_footnote_Temp_11">1</a></small></sup> もし、お使いの Scheme にこの略記が
+なければ、<code class=scheme>(<span class=keyword>define</span> <span class=variable>call/cc</span> <span class=variable>call-with-current-continuation</span>)</code> を
+初期化コードのなかに入れておきましょう。反復性のストレス障害から
+身をまもることができます。</p>
+</div>
+<div class=smallskip></div>
+<p style="margin-top: 0pt; margin-bottom: 0pt">
+<div align=right class=navigation>[Go to <span><a href="t-y-scheme.html">first</a>, <a href="t-y-scheme-Z-H-14.html">previous</a></span><span>, <a href="t-y-scheme-Z-H-16.html">next</a></span> page<span>; &nbsp;&nbsp;</span><span><a href="t-y-scheme-Z-H-1.html#node_toc_start">contents</a></span><span><span>; &nbsp;&nbsp;</span><a href="t-y-scheme-Z-H-25.html#node_index_start">index</a></span>]</div>
+</p>
+<p></p>
+</div>
+</body>
+</html>

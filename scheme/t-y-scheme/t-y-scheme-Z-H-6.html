@@ -1,0 +1,237 @@
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--
+
+Generated from t-y-scheme.tex by tex2page, v 20060531
+(running on Gauche 0.8.7, unix), 
+(c) Dorai Sitaram, 
+http://www.ccs.neu.edu/~dorai/tex2page/tex2page-doc.html
+
+-->
+<head>
+<title>
+独習 Scheme 三週間 Teach Yourself Scheme in Fixnum Days
+</title>
+<link rel="stylesheet" type="text/css" href="t-y-scheme-Z-S.css" title=default>
+<meta name=robots content="noindex,follow">
+<meta name=description content="A practical
+introduction to the programming language Scheme">
+
+<meta name=author content="Dorai Sitaram">
+
+<link rev=made href="mailto:ds26@gte.com">
+</head>
+<body>
+<div id=slidecontent>
+<div align=right class=navigation>[Go to <span><a href="t-y-scheme.html">first</a>, <a href="t-y-scheme-Z-H-5.html">previous</a></span><span>, <a href="t-y-scheme-Z-H-7.html">next</a></span> page<span>; &nbsp;&nbsp;</span><span><a href="t-y-scheme-Z-H-1.html#node_toc_start">contents</a></span><span><span>; &nbsp;&nbsp;</span><a href="t-y-scheme-Z-H-25.html#node_index_start">index</a></span>]</div>
+<p></p>
+<a name="node_chap_4"></a>
+<h1 class=chapter>
+<div class=chapterheading><a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_4">Chapter 4</a></div><br>
+<a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_4">条件式</a></h1>
+<p><a name="node_idx_256"></a><a name="node_idx_258"></a>すべての言語と同様に、Schemeには<em>条件式</em>があります。
+基本フォームは<code class=scheme><span class=keyword>if</span></code>です。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>if</span> <span class=variable>test-expression</span>
+    <span class=variable>then-branch</span>
+    <span class=variable>else-branch</span>)
+</pre><p></p>
+<p>
+</p>
+<p>
+<code class=scheme><span class=variable>test-expression</span></code>が評価されて真(すなわち、<code class=scheme><span class=selfeval>#f</span></code>以外の値)になれば、
+&#8220;then&#8221;の枝が評価されます。さもなければ、&#8220;else&#8221;の枝が評価されます。
+&#8220;else&#8221;の枝はなくてもかまいません。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>define</span> <span class=variable>p</span> <span class=selfeval>80</span>)
+
+(<span class=keyword>if</span> (<span class=variable>&gt;</span> <span class=variable>p</span> <span class=selfeval>70</span>) 
+    <span class=keyword>'</span><span class=variable>safe</span>
+    <span class=keyword>'</span><span class=variable>unsafe</span>)
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=variable>safe</span> 
+
+(<span class=keyword>if</span> (<span class=variable>&lt;</span> <span class=variable>p</span> <span class=selfeval>90</span>)
+    <span class=keyword>'</span><span class=variable>low-pressure</span>) <span class=comment>;no ``else'' branch</span>
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=variable>low-pressure</span> 
+</pre><p></p>
+<p>
+</p>
+<p>
+Schemeでは利便のために他にも条件式フォームが用意されています。
+これらはすべて、<code class=scheme><span class=keyword>if</span></code>式に展開されるマクロ(chap <a href="t-y-scheme-Z-H-10.html#node_chap_8">8</a>)として
+定義することができます。</p>
+<p>
+<a name="node_idx_260"></a><a name="node_idx_262"></a></p>
+<p>
+</p>
+<a name="node_sec_4.1"></a>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_4.1">4.1&nbsp;&nbsp;<code class=scheme><span class=keyword>when</span></code>と<code class=scheme><span class=keyword>unless</span></code></a></h2>
+<p></p>
+<p>
+<code class=scheme><span class=keyword>when</span></code>と<code class=scheme><span class=keyword>unless</span></code>はひとつの枝(&#8220;then&#8221;あるいは&#8220;else&#8221;の枝)しかない
+基本条件式が必要なときに便利です。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>when</span> (<span class=variable>&lt;</span> (<span class=variable>pressure</span> <span class=variable>tube</span>) <span class=selfeval>60</span>)
+   (<span class=variable>open-valve</span> <span class=variable>tube</span>)
+   (<span class=variable>attach</span> <span class=variable>floor-pump</span> <span class=variable>tube</span>)
+   (<span class=variable>depress</span> <span class=variable>floor-pump</span> <span class=selfeval>5</span>)
+   (<span class=variable>detach</span> <span class=variable>floor-pump</span> <span class=variable>tube</span>)
+   (<span class=variable>close-valve</span> <span class=variable>tube</span>))
+</pre><p></p>
+<p>
+</p>
+<p>
+<code class=scheme><span class=variable>tube</span></code>の<code class=scheme><span class=variable>pressure</span></code>が<code class=scheme><span class=selfeval>60</span></code>未満と仮定すると、この条件式は
+<code class=scheme><span class=variable>floor-pump</span></code>を<code class=scheme><span class=variable>tube</span></code>に取り付け、<code class=scheme><span class=selfeval>5</span></code>回押します
+(<code class=scheme><span class=variable>attach</span></code>と<code class=scheme><span class=variable>depress</span></code>はなにか適当な手続きです)。</p>
+<p>
+同じプログラムを<code class=scheme><span class=keyword>if</span></code>を使うと次のようになります。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>if</span> (<span class=variable>&lt;</span> (<span class=variable>pressure</span> <span class=variable>tube</span>) <span class=selfeval>60</span>)
+    (<span class=keyword>begin</span>
+      (<span class=variable>open-valve</span> <span class=variable>tube</span>)
+      (<span class=variable>attach</span> <span class=variable>floor-pump</span> <span class=variable>tube</span>)
+      (<span class=variable>depress</span> <span class=variable>floor-pump</span> <span class=selfeval>5</span>)
+      (<span class=variable>detach</span> <span class=variable>floor-pump</span> <span class=variable>tube</span>)
+      (<span class=variable>close-valve</span> <span class=variable>tube</span>)))
+</pre><p></p>
+<p>
+<a name="node_idx_264"></a></p>
+<p>
+</p>
+<p>
+<code class=scheme><span class=keyword>when</span></code>の枝は暗黙の<code class=scheme><span class=keyword>begin</span></code>であり、一方、<code class=scheme><span class=keyword>if</span></code>では
+どちらかのブランチに2つ以上フォームがあるときには
+明示的な<code class=scheme><span class=keyword>begin</span></code>が必要です。</p>
+<p>
+</p>
+<p>
+同じ振舞いを<code class=scheme><span class=keyword>unless</span></code>をつかって書けば以下のようになります。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>unless</span> (<span class=variable>&gt;=</span> (<span class=variable>pressure</span> <span class=variable>tube</span>) <span class=selfeval>60</span>)
+   (<span class=variable>open-valve</span> <span class=variable>tube</span>)
+   (<span class=variable>attach</span> <span class=variable>floor-pump</span> <span class=variable>tube</span>)
+   (<span class=variable>depress</span> <span class=variable>floor-pump</span> <span class=selfeval>5</span>)
+   (<span class=variable>detach</span> <span class=variable>floor-pump</span> <span class=variable>tube</span>)
+   (<span class=variable>close-valve</span> <span class=variable>tube</span>))
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>すべてのSchemeが<code class=scheme><span class=keyword>when</span></code>と<code class=scheme><span class=keyword>unless</span></code>を用意しているわけではありません。
+おつかいのSchemeになければ、マクロ(<a href="t-y-scheme-Z-H-10.html#node_chap_8">8</a>章参照)として定義できます。</p>
+<p>
+<a name="node_idx_266"></a></p>
+<a name="node_sec_4.2"></a>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_4.2">4.2&nbsp;&nbsp;<code class=scheme><span class=keyword>cond</span></code></a></h2>
+<p></p>
+<p>
+<code class=scheme><span class=keyword>cond</span></code>フォームは入れ子になった<code class=scheme><span class=keyword>if</span></code>式を表現するのに便利です。
+最後以外の&#8220;else&#8221;の枝には新しい<code class=scheme><span class=keyword>if</span></code>が導入されます。したがって、</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>if</span> (<span class=variable>char&lt;?</span> <span class=variable>c</span> <span class=selfeval>#\c</span>) <span class=selfeval>-1</span>
+    (<span class=keyword>if</span> (<span class=variable>char=?</span> <span class=variable>c</span> <span class=selfeval>#\c</span>) <span class=selfeval>0</span>
+        <span class=selfeval>1</span>))
+</pre><p></p>
+<p>
+は<code class=scheme><span class=keyword>cond</span></code>をつかって、次のように書けます。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>cond</span> ((<span class=variable>char&lt;?</span> <span class=variable>c</span> <span class=selfeval>#\c</span>) <span class=selfeval>-1</span>)
+      ((<span class=variable>char=?</span> <span class=variable>c</span> <span class=selfeval>#\c</span>) <span class=selfeval>0</span>)
+      (<span class=keyword>else</span> <span class=selfeval>1</span>))
+</pre><p></p>
+<p>
+</p>
+<p>
+このように、<code class=scheme><span class=keyword>cond</span></code>は<em>マルチブランチ</em>の条件式です。
+各節にはテストとそれに結びつくアクションがあります。
+最初に成功したテストがそれに結びついたアクションを起します。
+最後の<code class=scheme><span class=keyword>else</span></code>節はどのテストも成功しなかった場合に選択されます。</p>
+<p>
+<code class=scheme><span class=keyword>cond</span></code>のアクションは暗黙の<code class=scheme><span class=keyword>begin</span></code>です。</p>
+<p>
+<a name="node_idx_268"></a></p>
+<a name="node_sec_4.3"></a>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_4.3">4.3&nbsp;&nbsp;<code class=scheme><span class=keyword>case</span></code></a></h2>
+<p></p>
+<p>
+<code class=scheme><span class=keyword>cond</span></code>の特別な場合には<code class=scheme><span class=keyword>case</span></code>式で圧縮した表現にできます。
+これはすべてのテストが所属テストの場合です。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>case</span> <span class=variable>c</span>
+  ((<span class=selfeval>#\a</span>) <span class=selfeval>1</span>)
+  ((<span class=selfeval>#\b</span>) <span class=selfeval>2</span>)
+  ((<span class=selfeval>#\c</span>) <span class=selfeval>3</span>)
+  (<span class=keyword>else</span> <span class=selfeval>4</span>))
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>3</span>
+</pre><p></p>
+<p>
+<code class=scheme><span class=variable>c</span></code>の値を先頭にもつ節が選択されます。</p>
+<p>
+<a name="node_idx_270"></a><a name="node_idx_272"></a></p>
+<a name="node_sec_4.4"></a>
+<h2 class=section><a href="t-y-scheme-Z-H-1.html#node_toc_node_sec_4.4">4.4&nbsp;&nbsp;<code class=scheme><span class=keyword>and</span></code>と<code class=scheme><span class=keyword>or</span></code></a></h2>
+<p></p>
+<p>
+Schemeには論理積(&#8220;and&#8221;)と論理和(&#8220;or&#8221;)に対応するスペシャルフォームが
+用意されています(<a href="t-y-scheme-Z-H-4.html#node_sec_2.1.1">2.1.1</a>節で見た否定の<code class=scheme><span class=variable>not</span></code>は手続きです)。</p>
+<p>
+</p>
+<p>
+スペシャルフォーム<code class=scheme><span class=keyword>and</span></code>はすべてのサブフォームが真ならば真を返します。
+実際に返ってくる値は最後のサブフォームの値です。サブフォームのひとつでも
+偽であれば、<code class=scheme><span class=keyword>and</span></code>は<code class=scheme><span class=selfeval>#f</span></code>を返します。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>and</span> <span class=selfeval>1</span> <span class=selfeval>2</span>)  <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>2</span>
+(<span class=keyword>and</span> <span class=selfeval>#f</span> <span class=selfeval>1</span>) <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#f</span>
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>スペシャルフォーム<code class=scheme><span class=keyword>or</span></code>は最初に真になったサブフォームの値を返します。
+もし、すべてのサブフォームが偽ならば<code class=scheme><span class=keyword>or</span></code>は<code class=scheme><span class=selfeval>#f</span></code>を返します。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>or</span> <span class=selfeval>1</span> <span class=selfeval>2</span>)  <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>1</span>
+(<span class=keyword>or</span> <span class=selfeval>#f</span> <span class=selfeval>1</span>) <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>1</span>
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent><code class=scheme><span class=keyword>and</span></code>、<code class=scheme><span class=keyword>or</span></code>はともにサブフォームを左から右へ評価します。
+結果が決りしだい返すことができるので<code class=scheme><span class=keyword>and</span></code>と<code class=scheme><span class=keyword>or</span></code>はのこりの
+サブフォームを無視することがあります。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>and</span> <span class=selfeval>1</span> <span class=selfeval>#f</span> <span class=variable>expression-guaranteed-to-cause-error</span>)
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>#f</span>
+
+(<span class=keyword>or</span> <span class=selfeval>1</span> <span class=selfeval>#f</span> <span class=variable>expression-guaranteed-to-cause-error</span>)
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>1</span>
+</pre><p>
+</p>
+<p>
+</p>
+<div class=smallskip></div>
+<p style="margin-top: 0pt; margin-bottom: 0pt">
+<div align=right class=navigation>[Go to <span><a href="t-y-scheme.html">first</a>, <a href="t-y-scheme-Z-H-5.html">previous</a></span><span>, <a href="t-y-scheme-Z-H-7.html">next</a></span> page<span>; &nbsp;&nbsp;</span><span><a href="t-y-scheme-Z-H-1.html#node_toc_start">contents</a></span><span><span>; &nbsp;&nbsp;</span><a href="t-y-scheme-Z-H-25.html#node_index_start">index</a></span>]</div>
+</p>
+<p></p>
+</div>
+</body>
+</html>

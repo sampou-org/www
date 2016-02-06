@@ -1,0 +1,784 @@
+<html>
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
+  <title>The Haskell 98 Report: Derived Instances</title>
+ </head>
+
+ <body bgcolor="#ffffff">
+  <p><i>The Haskell 98 Report</i><br />
+   <a href="index.html">top</a> | <a href="literate.html">back</a> | <a
+   href="pragmas.html">next</a> | <a href="index98.html">contents</a> | <a
+   href="prelude-index.html">function index</a> <br />
+  </p>
+  <hr />
+  <p><a name="derived-appendix"></a></p>
+  <p><a name="sect10"></a></p>
+
+  <!--<h2>10<tt>&nbsp;&nbsp;</tt>Specification of Derived Instances</h2>-->
+  <h2>10<tt>&nbsp;&nbsp;</tt>導出インスタンスの特化</h2>
+  <!--
+  <p> A <i>derived instance</i> is an instance declaration that is
+   generated automatically in conjunction with a <tt>data</tt> or
+   <tt>newtype</tt> declaration. The body of a derived instance declaration
+   is derived syntactically from the definition of the associated type.
+   Derived instances are possible only for classes known to the compiler:
+   those defined in either the Prelude or a standard library. In this
+   chapter, we describe the derivation of classes defined by the Prelude.</p>
+  -->
+  <p>
+   <em>導出インスタンス</em> は <tt>data</tt> あるいは <tt>newtype</tt>
+   宣言に付随して、自動的に生成されたインスタンス宣言である。導出インス
+   タンス宣言の本体は、対応する型の定義より構文的に導出される。導出イン
+   スタンスはコンパイラが知っているクラスに関してのみ可能である。これら
+   のクラスはプレリュードおよび標準ライブラリで定義されているものである。
+   この章では、プレリュードによって定義されているクラスの導出について解
+   説する。
+  </p>
+  <!--<p> If <i>T</i> is an algebraic datatype declared by:</p>-->
+  <p>
+   もし <i>T</i> が次のように定義された代数的データ型であるなら
+  </p>
+  <p>
+  <table>
+   <tr>
+    <td> <tt>data&nbsp;</tt><i>cx</i><tt>&nbsp;=&gt;</tt><i> T
+     u</i><sub><i>1</i></sub><i> ... u</i><sub><i>k</i></sub></td>
+
+    <td align="center"><tt>=</tt></td>
+
+    <td><i>K</i><sub><i>1</i></sub><i> t</i><sub><i>11</i></sub><i> ...
+     t</i><sub><i>1k</i><sub><i>1</i></sub></sub><i> </i><tt>|</tt><i>
+     ...</i><tt>|</tt><i> K</i><sub><i>n</i></sub><i>
+     t</i><sub><i>n1</i></sub><i> ...
+     t</i><sub><i>nk</i><sub><i>n</i></sub></sub></td>
+   </tr>
+   <tr>
+    <td></td>
+    <td align="center"></td>
+    <td> <tt>deriving&nbsp;(</tt><i>C</i><sub><i>1</i></sub><tt>,</tt><i>
+     ...</i><tt>,</tt><i> C</i><sub><i>m</i></sub><tt>) </tt></td>
+   </tr>
+  </table>
+  </p>
+  <!--
+  <p> (where <i>m&gt;=0</i> and the parentheses may be omitted if
+   <i>m=1</i>) then a derived instance declaration is possible for a class
+   <i>C</i> if these conditions hold:</p>
+  -->
+  <p>
+   (ここで <i>m&gt;=0</i> および括弧は <i>m=1</i> の場合省略される)、
+   導出インスタンス宣言は、クラス <i>C</i> について、以下の条件が
+   なりたてば、可能となる。
+  </p>
+  <p>
+  <ol>
+   <!--
+   <li> <i>C</i> is one of <tt>Eq</tt>, <tt>Ord</tt>, <tt>Enum</tt>,
+    <tt>Bounded</tt>, <tt>Show</tt>, or <tt>Read</tt>.
+    <p></p>
+   </li>
+   -->
+   <li>
+    <p>
+    <i>C</i> が <tt>Eq</tt>、<tt>Ord</tt>、<tt>Enum</tt>、
+    <tt>Bounded</tt>、<tt>Show</tt> あるいは <tt>Read</tt> のうちの
+    どれか。
+    </p>
+   </li>
+   <!--
+   <li> There is a context <i>cx'</i> such that <i>cx' =&gt;C
+    t</i><sub><i>ij</i></sub> holds for each of the constituent types
+    <i>t</i><sub><i>ij</i></sub>.
+    <p></p>
+   </li>
+   -->
+   <li>
+    <p>
+    <i>cx' =&gt;C t</i><sub><i>ij</i></sub> が構成要素の型
+    <i>t</i><sub><i>ij</i></sub> のそれぞれについて保存されているような
+    文脈 <i>cx'</i> がある。
+    </p>
+   </li>
+   <!--
+   <li> If <i>C</i> is <tt>Bounded</tt>, the type must be either an
+    enumeration (all constructors must be nullary) or have only one
+    constructor.
+    <p></p>
+   </li>
+   -->
+   <li>
+    <p>
+    <i>C</i> が <tt>Bounded</tt> である場合。このとき、この型は列挙型
+    (すべての構成子が無引数)であるか、または構成子が一つしかないかの
+    どちらかでなければならない。
+    </p>
+   </li>
+   <!--
+   <li> If <i>C</i> is <tt>Enum</tt>, the type must be an enumeration.
+    <p></p>
+   </li>
+   -->
+   <li>
+    <p>
+    <i>C</i> が <tt>Enum</tt> である場合。このとき、この型は列挙型
+    でなければならない。
+    </p>
+   </li>
+   <!--
+   <li> There must be no explicit instance declaration elsewhere in the
+    program that makes <i>T u</i><sub><i>1</i></sub><i> ...
+    u</i><sub><i>k</i></sub> an instance of <i>C</i>.</li>
+   -->
+   <li>
+    <p>
+    <i>T u</i><sub><i>1</i></sub><i> ... u</i><sub><i>k</i></sub>を
+    <i>C</i> のインスタンスとしたプログラム内の別の個所で明示的な
+    インスタンス宣言があってはならない。
+    </p>
+   </li>
+  </ol>
+  </p>
+  <!--
+  <p>For the purposes of derived instances, a <tt>newtype</tt> declaration
+   is treated as a <tt>data</tt> declaration with a single constructor.</p>
+  -->
+  <p>
+   導出インスタンスという目的のために、<tt>newtype</tt> 宣言は
+   単一構成子の <tt>data</tt> 宣言として扱われる。
+  </p>
+  <!--
+  <p> If the <tt>deriving</tt> form is present, an instance declaration is
+   automatically generated for <i>T u</i><sub><i>1</i></sub><i> ...
+   u</i><sub><i>k</i></sub> over each class <i>C</i><sub><i>i</i></sub>. If
+   the derived instance declaration is impossible for any of the
+   <i>C</i><sub><i>i</i></sub> then a static error results. If no derived
+   instances are required, the <tt>deriving</tt> form may be omitted or the
+   form <tt>deriving&nbsp;()</tt> may be used.</p>
+  -->
+  <p>
+   もし、<tt>deriving</tt> 形式があれば、インスタンス宣言は自動的に
+   各 <i>C</i><sub><i>i</i></sub> 上で
+   <i>T u</i><sub><i>1</i></sub><i> ... u</i><sub><i>k</i></sub>
+   に対して生成される。もし、<i>C</i><sub><i>i</i></sub> のどれかに
+   対して、導出インスタンス宣言が不可能であれば、静的エラーとなる。
+   もし、導出インスタンスが必要とされていないのなら、
+   <tt>deriving</tt> 形式は省略するるか、あるいは、
+   <tt>deriving&nbsp;()</tt> を使うことができる。
+  </p>
+  <!--
+  <p> Each derived instance declaration will have the form:</p>
+  -->
+  <p>各導出インスタンス宣言は次の形式をとる。</p>
+  <p>
+   <tt>instance&nbsp;(</tt><i>cx</i><tt>,&nbsp;</tt><i>cx'</i><tt>)&nbsp;=&gt;</tt><i>
+   C</i><sub><i>i</i></sub><i> (T u</i><sub><i>1</i></sub><i> ...
+   u</i><sub><i>k</i></sub><i>) </i><tt>where</tt><i> </i><tt>{</tt><i> d
+   </i><tt>} </tt></p>
+  <!--
+  <p> where <i>d</i> is derived automatically depending on
+   <i>C</i><sub><i>i</i></sub> and the data type declaration for <i>T</i>
+   (as will be described in the remainder of this section).</p>
+  -->
+  <p>
+   ここで、<i>d</i> は <i>C</i><sub><i>i</i></sub> および <i>T</i>
+   のデータ型宣言に依存して(あとの節で解説するように)自動的に導出される。
+  </p>
+  <!--
+  <p> The context <i>cx'</i> is the smallest context satisfying point (2)
+   above. For mutually recusive data types, the compiler may need to
+   perform a fixpoint calculation to compute it.</p>
+  -->
+  <p>
+   文脈 <i>cx'</i> は上記(2)を満す最小文脈である。相互再帰的なデータ型に
+   ついてはコンパイラはこれを求めるためにある種の不動点計算が必要となる
+   であろう。
+  </p>
+  <!--
+  <p> The remaining details of the derived instances for each of the
+   derivable Prelude classes are now given. Free variables and constructors
+   used in these translations always refer to entities defined by the
+   <tt>Prelude</tt>.</p>
+  -->
+  <p>
+   導出可能な各プレリュードのクラスに対する導出インスタンスののこりの詳
+   細についてはここで与える。これらの変換で使われている自由変数と構成子
+   はつねに <tt>Prelude</tt> で定義されたエンティティを参照している。
+  </p>
+
+  <p> <a name="sect10.1"></a></p>
+  <!--<h3>10.1<tt>&nbsp;&nbsp;</tt>Derived instances of <tt>Eq</tt> and
+   <tt>Ord</tt></h3>-->
+  <h3>10.1<tt>&nbsp;&nbsp;</tt><tt>Eq</tt> および <tt>Ord</tt>
+   の導出インスタンス</h3>
+  <!--
+  <p>The class methods automatically introduced by derived instances of
+   <tt>Eq</tt> and <tt>Ord</tt> are <tt>(==)</tt>, <tt>(/=)</tt>,
+   <tt>compare</tt>, <tt>(&lt;)</tt>, <tt>(&lt;=)</tt>, <tt>(&gt;)</tt>,
+   <tt>(&gt;=)</tt>, <tt>max</tt>, and <tt>min</tt>. The latter seven
+   operators are defined so as to compare their arguments lexicographically
+   with respect to the constructor set given, with earlier constructors in
+   the datatype declaration counting as smaller than later ones. For
+   example, for the <tt>Bool</tt> datatype, we have that
+   <tt>(True&nbsp;&gt;&nbsp;False)&nbsp;==&nbsp;True</tt>.</p>
+  -->
+  <p>
+   <tt>Eq</tt> および <tt>Ord</tt> の導出インスタンスによって自動的に導
+   入されるクラスメソッドは <tt>(==)</tt>、<tt>(/=)</tt>、
+   <tt>compare</tt>、<tt>(&lt;)</tt>、<tt>(&lt;=)</tt>、<tt>(&gt;)</tt>、
+   <tt>(&gt;=)</tt>、<tt>max</tt> および <tt>min</tt> である。後の 7 つ
+   の演算子はその引数を与えられた構成子集合の字句順に比較するために定義
+   されている。データ型宣言の中で先にでてくる構成子があとにでてくる構築
+   子よりも小さいと看倣される。たとえば、<tt>Bool</tt> 型では 
+   <tt>(True&nbsp;&gt;&nbsp;False)&nbsp;==&nbsp;True</tt> である。
+  </p>
+  <!--
+  <p> Derived comparisons always traverse constructors from left to right.
+   These examples illustrate this property: <tt><br />
+   <br />
+   &nbsp;&nbsp;(1,undefined)&nbsp;==&nbsp;(2,undefined)&nbsp;</tt><i>=&gt;</i><tt>&nbsp;&nbsp;&nbsp;&nbsp;False<br />
+   &nbsp;&nbsp;(undefined,1)&nbsp;==&nbsp;(undefined,2)&nbsp;</tt><i>=&gt;</i><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><i>_|_</i><tt><br />
+   <br />
+   </tt>All derived operations of class <tt>Eq</tt> and <tt>Ord</tt> are
+   strict in both arguments. For example,
+   <tt>False&nbsp;&lt;&nbsp;</tt><i>_|_</i> is <i>_|_</i>, even though
+   <tt>False</tt> is the first constructor of the <tt>Bool</tt> type.</p>
+  -->
+  <p>
+   導出された比較は常に構成子を左から右へトラバースする。以下は
+   この性質を説明している。
+   <tt><br />
+   <br />
+   &nbsp;&nbsp;(1,undefined)&nbsp;==&nbsp;(2,undefined)&nbsp;</tt><i>=&gt;</i><tt>&nbsp;&nbsp;&nbsp;&nbsp;False<br />
+   &nbsp;&nbsp;(undefined,1)&nbsp;==&nbsp;(undefined,2)&nbsp;</tt><i>=&gt;</i><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><i>_|_</i><tt><br />
+   <br />
+   </tt>
+   <tt>Eq</tt> および <tt>Ord</tt> クラスの導出された演算はすべて二つの
+   引数に対して正格である。たとえば、
+   <tt>False&nbsp;&lt;&nbsp;</tt><i>_|_</i> は <i>_|_</i> である。
+   これは、<tt>False</tt> が <tt>Bool</tt> 型の最初の構成子であるにも
+   かかわらず、そうである。
+  </p>
+
+  <p> <a name="sect10.2"></a></p>
+  <!--<h3>10.2<tt>&nbsp;&nbsp;</tt>Derived instances of <tt>Enum</tt></h3>-->
+  <h3>10.2<tt>&nbsp;&nbsp;</tt><tt>Enum</tt> の導出インスタンス</h3>
+  <!--
+  <p>Derived instance declarations for the class <tt>Enum</tt> are only
+   possible for enumerations (data types with only nullary constructors).</p>
+  -->
+  <p>
+   <tt>Enum</tt> クラスに対する導出インスタンス宣言は列挙型(データ型が
+   無引数構成子のみを含む型)にのみ可能である。
+  </p>
+  <!--
+  <p> The nullary constructors are assumed to be numbered left-to-right
+   with the indices 0 through n-1. The <tt>succ</tt> and <tt>pred</tt>
+   operators give the successor and predecessor respectively of a value,
+   under this numbering scheme. It is an error to apply <tt>succ</tt> to
+   the maximum element, or <tt>pred</tt> to the minimum element.</p>
+  -->
+  <p>
+   無引数構成子は左から右へ 0 から n-1 の数字が振られているものと仮定す
+   る。<tt>succ</tt> および <tt>pred</tt> 演算子はこの付番図式のもとで、
+   それぞれ、次の値、前の値を与える。最大の要素への <tt>succ</tt> の適用
+   あるいは最小の要素への <tt>pred</tt> の適用はエラーである。
+  </p>
+  <!--
+  <p> The <tt>toEnum</tt> and <tt>fromEnum</tt> operators map enumerated
+   values to and from the <tt>Int</tt> type; <tt>toEnum</tt> raises a
+   runtime error if the <tt>Int</tt> argument is not the index of one of
+   the constructors.</p>
+  -->
+  <p>
+   <tt>toEnum</tt> および <tt>fromEnum</tt> 演算子は列挙された値と
+   <tt>Int</tt> 間の写像である。<tt>toEnum</tt> は <tt>Int</tt> の
+   引数が構成子のインデックスの一つでなければ、実行時エラーを起す。
+  </p>
+  <!--
+  <p> The definitions of the remaining methods are <tt><br />
+   <br />
+   &nbsp;&nbsp;enumFrom&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;enumFromTo&nbsp;x&nbsp;lastCon<br />
+   &nbsp;&nbsp;enumFromThen&nbsp;x&nbsp;y&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;enumFromThenTo&nbsp;x&nbsp;y&nbsp;bound<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bound&nbsp;|&nbsp;fromEnum&nbsp;y&nbsp;&gt;=&nbsp;fromEnum&nbsp;x&nbsp;=&nbsp;lastCon<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;otherwise&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;firstCon<br />
+   &nbsp;&nbsp;enumFromTo&nbsp;x&nbsp;y&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;map&nbsp;toEnum&nbsp;[fromEnum&nbsp;x&nbsp;..&nbsp;fromEnum&nbsp;y]<br />
+   &nbsp;&nbsp;enumFromThenTo&nbsp;x&nbsp;y&nbsp;z&nbsp;=&nbsp;map&nbsp;toEnum&nbsp;[fromEnum&nbsp;x,&nbsp;fromEnum&nbsp;y&nbsp;..&nbsp;fromEnum&nbsp;z]<br />
+   <br />
+   </tt>where <tt>firstCon</tt> and <tt>lastCon</tt> are respectively the
+   first and last constructors listed in the <tt>data</tt> declaration. For
+   example, given the datatype: <tt><br />
+   <br />
+   &nbsp;&nbsp;data&nbsp;&nbsp;Color&nbsp;=&nbsp;Red&nbsp;|&nbsp;Orange&nbsp;|&nbsp;Yellow&nbsp;|&nbsp;Green&nbsp;&nbsp;deriving&nbsp;(Enum)<br />
+   <br />
+   </tt>we would have: <tt><br />
+   <br />
+   &nbsp;&nbsp;[Orange&nbsp;..]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;==&nbsp;&nbsp;[Orange,&nbsp;Yellow,&nbsp;Green]<br />
+   &nbsp;&nbsp;fromEnum&nbsp;Yellow&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;==&nbsp;&nbsp;2<br />
+   <br />
+   </tt></p>
+  -->
+  <p>
+   のこりのメソッドの定義は、
+   <tt><br />
+   <br />
+   &nbsp;&nbsp;enumFrom&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;enumFromTo&nbsp;x&nbsp;lastCon<br />
+   &nbsp;&nbsp;enumFromThen&nbsp;x&nbsp;y&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;enumFromThenTo&nbsp;x&nbsp;y&nbsp;bound<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bound&nbsp;|&nbsp;fromEnum&nbsp;y&nbsp;&gt;=&nbsp;fromEnum&nbsp;x&nbsp;=&nbsp;lastCon<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;otherwise&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;firstCon<br />
+   &nbsp;&nbsp;enumFromTo&nbsp;x&nbsp;y&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;map&nbsp;toEnum&nbsp;[fromEnum&nbsp;x&nbsp;..&nbsp;fromEnum&nbsp;y]<br />
+   &nbsp;&nbsp;enumFromThenTo&nbsp;x&nbsp;y&nbsp;z&nbsp;=&nbsp;map&nbsp;toEnum&nbsp;[fromEnum&nbsp;x,&nbsp;fromEnum&nbsp;y&nbsp;..&nbsp;fromEnum&nbsp;z]<br />
+   <br />
+   </tt>
+   である。ここで、<tt>firstCon</tt> と <tt>lastCon</tt> はそれぞれ、
+   <tt>data</tt> 宣言中にあげられた構成子の最初のものと最後のものである。
+   例えば次のようなデータ型を考えると
+   <tt><br />
+   <br />
+   &nbsp;&nbsp;data&nbsp;&nbsp;Color&nbsp;=&nbsp;Red&nbsp;|&nbsp;Orange&nbsp;|&nbsp;Yellow&nbsp;|&nbsp;Green&nbsp;&nbsp;deriving&nbsp;(Enum)<br />
+   <br />
+   </tt>
+   こんなふうになる。
+   <tt><br />
+   <br />
+   &nbsp;&nbsp;[Orange&nbsp;..]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;==&nbsp;&nbsp;[Orange,&nbsp;Yellow,&nbsp;Green]<br />
+   &nbsp;&nbsp;fromEnum&nbsp;Yellow&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;==&nbsp;&nbsp;2<br />
+   <br />
+   </tt>
+  </p>
+
+  <p> <a name="sect10.3"></a></p>
+  <!--<h3>10.3<tt>&nbsp;&nbsp;</tt>Derived instances of <tt>Bounded</tt></h3>-->
+  <h3>10.3<tt>&nbsp;&nbsp;</tt><tt>Bounded</tt> の導出インスタンス</h3>
+  <!--
+  <p>The <tt>Bounded</tt> class introduces the class methods
+   <tt>minBound</tt> and <tt>maxBound</tt>, which define the minimal and
+   maximal elements of the type. For an enumeration, the first and last
+   constructors listed in the <tt>data</tt> declaration are the bounds. For
+   a type with a single constructor, the constructor is applied to the
+   bounds for the constituent types. For example, the following datatype:
+   <tt><br />
+   <br />
+   &nbsp;&nbsp;data&nbsp;&nbsp;Pair&nbsp;a&nbsp;b&nbsp;=&nbsp;Pair&nbsp;a&nbsp;b&nbsp;deriving&nbsp;Bounded<br />
+   <br />
+   </tt>would generate the following <tt>Bounded</tt> instance: <tt><br />
+   <br />
+   &nbsp;&nbsp;instance&nbsp;(Bounded&nbsp;a,Bounded&nbsp;b)&nbsp;=&gt;&nbsp;Bounded&nbsp;(Pair&nbsp;a&nbsp;b)&nbsp;where<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;minBound&nbsp;=&nbsp;Pair&nbsp;minBound&nbsp;minBound<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;maxBound&nbsp;=&nbsp;Pair&nbsp;maxBound&nbsp;maxBound<br />
+   <br />
+   </tt>
+  </p>
+  -->
+  <p>
+   <tt>Bounded</tt> クラスは、この型の最小要素および最大要素を定義する 
+   <tt>minBound</tt> および <tt>maxBound</tt> というクラスメソッドを
+   導入する。列挙については、<tt>data</tt> 宣言中にリストアップされた
+   最初および最後の構成子が、境界となる。単一構成子の型については、
+   その構成子が構成要素の境界として適用される。たとえば、次のデータ型
+   <tt><br />
+   <br />
+   &nbsp;&nbsp;data&nbsp;&nbsp;Pair&nbsp;a&nbsp;b&nbsp;=&nbsp;Pair&nbsp;a&nbsp;b&nbsp;deriving&nbsp;Bounded<br />
+   <br />
+   </tt>
+   は、以下のような <tt>Bounded</tt> のインスタンスを生成する。
+   <tt><br />
+   <br />
+   &nbsp;&nbsp;instance&nbsp;(Bounded&nbsp;a,Bounded&nbsp;b)&nbsp;=&gt;&nbsp;Bounded&nbsp;(Pair&nbsp;a&nbsp;b)&nbsp;where<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;minBound&nbsp;=&nbsp;Pair&nbsp;minBound&nbsp;minBound<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;maxBound&nbsp;=&nbsp;Pair&nbsp;maxBound&nbsp;maxBound<br />
+   <br />
+   </tt>
+  </p>
+  <p> <a name="derived-text"></a></p>
+  <p> <a name="sect10.4"></a></p>
+  <!--<h3>10.4<tt>&nbsp;&nbsp;</tt>Derived instances of <tt>Read</tt> and
+   <tt>Show</tt></h3>-->
+  <h3>10.4<tt>&nbsp;&nbsp;</tt><tt>Read</tt> および
+   <tt>Show</tt> の導出インスタンス</h3>
+  <!--
+  <p>The class methods automatically introduced by derived instances of
+   <tt>Read</tt> and <tt>Show</tt> are <tt>showsPrec</tt>,
+   <tt>readsPrec</tt>, <tt>showList</tt>, and <tt>readList</tt>. They are
+   used to coerce values into strings and parse strings into values.</p>
+  -->
+  <p>
+   <tt>Read</tt> および <tt>Show</tt> の導出インスタンスによって自動的に
+   導入されるクラスメソッドは <tt>showsPrec</tt>、<tt>readsPrec</tt>、
+   <tt>showList</tt> および <tt>readList</tt> である。これらは、
+   値から文字列へ変換と、パーズ文字列から値への変換のために用いられる。
+  </p>
+  <!--
+  <p> The function <tt>showsPrec&nbsp;d&nbsp;x&nbsp;r</tt> accepts a
+   precedence level <tt>d </tt>(a number from <tt>0</tt> to <tt>11</tt>), a
+   value <tt>x</tt>, and a string <tt>r</tt>. It returns a string
+   representing <tt>x</tt> concatenated to <tt>r</tt>. <tt>showsPrec</tt>
+   satisfies the law:</p>
+  -->
+  <p>
+   関数 <tt>showsPrec&nbsp;d&nbsp;x&nbsp;r</tt> は優先レベル <tt>d</tt> 
+   (<tt>0</tt> から <tt>11</tt> の数)、値 <tt>x</tt> および文字列
+   <tt>r</tt> を受けいれ、<tt>r</tt> に連接された <tt>x</tt> の表現を返す。
+   <tt>showsPrec</tt> 以下の規約を見たす。
+  </p>
+  <p>
+   <tt>showsPrec&nbsp;d&nbsp;x&nbsp;r&nbsp;++&nbsp;s&nbsp;&nbsp;==&nbsp;&nbsp;showsPrec&nbsp;d&nbsp;x&nbsp;(r&nbsp;++&nbsp;s)
+   </tt></p>
+  <!--
+  <p> The representation will be enclosed in parentheses if the precedence
+   of the top-level constructor in <tt>x</tt> is less than <tt>d</tt>.
+   Thus, if <tt>d</tt> is <tt>0</tt> then the result is never surrounded in
+   parentheses; if <tt>d</tt> is <tt>11</tt> it is always surrounded in
+   parentheses, unless it is an atomic expression (recall that function
+   application has precedence <tt>10</tt>). The extra parameter <tt>r</tt>
+   is essential if tree-like structures are to be printed in linear time
+   rather than time quadratic in the size of the tree.</p>
+  -->
+  <p>
+   <tt>x</tt> のトップレベル構築演算子の優先順位が <tt>d</tt> よりも
+   小さい場合、表現は括弧で囲まれる。したがって、もし、<tt>d</tt> が
+   <tt>0</tt>なら結果は括弧にくくられことはなく、<tt>d</tt> が 
+   <tt>11</tt> でアトミックな式(関数適用の優先度は 10 であることを
+   思いだすこと)でなければ、常に括弧にくくられる。追加のパラメータ
+   <tt>r</tt> は、もしツリーのような構造が、その木のサイズの二乗の
+   オーダではなく線形のオーダでプリントする場合には不可欠である。
+  </p>
+  <!--
+  <p> The function <tt>readsPrec&nbsp;d&nbsp;s</tt> accepts a precedence
+   level <tt>d</tt> (a number from <tt>0</tt> to <tt>10</tt>) and a string
+   <tt>s</tt>, and attempts to parse a value from the front of the string,
+   returning a list of (parsed value, remaining string) pairs. If there is
+   no successful parse, the returned list is empty. Parsing of an
+   un-parenthesised infix operator application succeeds only if the
+   precedence of the operator is greater than or equal to <tt>d</tt>.</p>
+  -->
+  <p>
+   関数 <tt>readsPrec&nbsp;d&nbsp;s</tt> は優先レベル <tt>d</tt>
+   (<tt>0</tt> から <tt>10</tt> の値) および文字列 <tt>s</tt> を受けいれ、
+   その文字列を先頭からパーズして、対(パーズされた値と残りの文字列)の
+   リストを返す。もし、成功したパーズがなれば、空のリストを返す。括弧の
+   ない中置演算子適用をパーズすると、その演算子の優先度が <tt>d</tt>
+   より大きいか等しい場合にかぎって成功する。
+  </p>
+  <!--<p> It should be the case that</p>-->
+  <p>この場合以下のようになっているはずである。</p>
+  <!--
+  <div align="center"><tt>(x,"")</tt> is an element of
+   <tt>(readsPrec&nbsp;d&nbsp;(showsPrec&nbsp;d&nbsp;x&nbsp;"")) </tt></div>
+  -->
+  <p>
+  <div align="center"><tt>(x,"")</tt> は
+   <tt>(readsPrec&nbsp;d&nbsp;(showsPrec&nbsp;d&nbsp;x&nbsp;""))</tt>
+   の要素である。</div>
+  </p>
+  <!--
+  <p>That is, <tt>readsPrec</tt> should be able to parse the string
+   produced by <tt>showsPrec</tt>, and should deliver the value that
+   <tt>showsPrec</tt> started with.</p>
+  -->
+  <p>
+   すなわち、<tt>readsPrec</tt> は <tt>showsPrec</tt> によって生成された
+   文字列をパーズできなければならない。また、<tt>showsPrec</tt> へ与えた
+   最初の値を生成できなければならない。
+  </p>
+  <!--
+  <p> <tt>showList</tt> and <tt>readList</tt> allow lists of objects to be
+   represented using non-standard denotations. This is especially useful
+   for strings (lists of <tt>Char</tt>).</p>
+  -->
+  <p>
+   <tt>showList</tt> および <tt>readList</tt> はオブジェクトのリストを非
+   標準の表記法で表現することを可能にする。これは特に文字列
+   (<tt>Char</tt> のリスト)の場合に有用である。
+  </p>
+  <!--
+  <p> <tt>readsPrec</tt> will parse any valid representation of the
+   standard types apart from strings, for which only quoted strings are
+   accepted, and other lists, for which only the bracketed form
+   <tt>[</tt>...<tt>]</tt> is accepted. See Chapter <a
+   href="standard-prelude.html#stdprelude">8</a> for full details.</p>
+  -->
+  <p>
+   <tt>readsPrec</tt> は文字列から標準の型の正しい表現をパーズする。
+   これは、引用部で囲まれた文字列のみ受理される。その他のリストについて
+   は、四角括弧形式 <tt>[</tt>...<tt>]</tt> のみ受けつける。完全な
+   詳細については <a href="standard-prelude.html#stdprelude">8</a> 章を
+   参照のこと。
+  </p>
+  <!--
+  <p> The result of <tt>show</tt> is a syntactically correct Haskell
+   expression containing only constants, given the fixity declarations in
+   force at the point where the type is declared. It contains only the
+   constructor names defined in the data type, parentheses, and spaces.
+   When labelled constructor fields are used, braces, commas, field names,
+   and equal signs are also used. Parentheses are only added where needed,
+   <i>ignoring associativity</i>. No line breaks are added. The result of
+   <tt>show</tt> is readable by <tt>read</tt> if all component types are
+   readable. (This is true for all instances defined in the Prelude but may
+   not be true for user-defined instances.)</p>
+  -->
+  <p>
+   <tt>show</tt> の結果は、構文的として正しい式で、その型が宣言されたと
+   ころで有効な配置宣言によって与えられた定数のみを含む。また、
+   データ型のなかで定義された構成子名、括弧、および空白のみを含む。
+   ラベル付構成子フィールドが用いられた場合には、ブレース、コンマ
+   フィールド名、イコール記号も用いられる。括弧は必要とされる個所に
+   のみ追加され、<em>結合性は無視する</em>。改行が追加されることはない。
+   <tt>show</tt> の結果は、すべての構成要素が読み込み可能であれば、
+   <tt>read</tt> で読み込みが可能である。(このことは、プレリュードで
+   定義されているすべてのインスタンスについて真であるが、ユーザ定義の
+   インスタンスについては、真ではないこともありうる。)
+  </p>
+  <!--
+  <p> Derived instances of <tt>Read</tt> make the following assumptions,
+   which derived instances of <tt>Show</tt> obey:</p>
+  -->
+  <p>
+   <tt>Read</tt> の導出インスタンスは以下の仮定をし、<tt>Show</tt> の
+   導出インスタンスがこれに従う。
+  </p>
+  <!--
+  <ul>
+   <li>If the constructor is defined to be an infix operator, then the
+    derived <tt>Read</tt> instance will parse only infix applications of
+    the constructor (not the prefix form).
+    <p></p>
+   </li>
+
+   <li>Associativity is not used to reduce the occurrence of parentheses,
+    although precedence may be. For example, given <tt><br />
+    <br />
+    &nbsp;&nbsp;infixr&nbsp;4&nbsp;:$<br />
+    &nbsp;&nbsp;data&nbsp;T&nbsp;=&nbsp;Int&nbsp;:$&nbsp;T&nbsp;&nbsp;|&nbsp;&nbsp;NT<br />
+    <br />
+    </tt>then:
+    <ul>
+     <li><tt>show&nbsp;(1&nbsp;:$&nbsp;2&nbsp;:$&nbsp;NT)</tt> produces the
+      string <tt>"1&nbsp;:$&nbsp;(2&nbsp;:$&nbsp;NT)"</tt>.</li>
+
+     <li><tt>read&nbsp;"1&nbsp;:$&nbsp;(2&nbsp;:$&nbsp;NT)"</tt> succeeds,
+      with the obvious result.</li>
+
+     <li><tt>read&nbsp;"1&nbsp;:$&nbsp;2&nbsp;:$&nbsp;NT"</tt> fails.</li>
+    </ul>
+    <p></p>
+    
+   </li>
+
+   <li> If the constructor is defined using record syntax, the derived
+    <tt>Read</tt> will parse only the record-syntax form, and furthermore,
+    the fields must be given in the same order as the original
+    declaration.
+   <p></p>
+   </li>
+
+   <li>The derived <tt>Read</tt> instance allows arbitrary Haskell
+    whitespace between tokens of the input string. Extra parentheses are
+    also allowed.</li>
+  </ul>
+  -->
+  <p>
+   <ul>
+    <li>
+     <p>
+      構成子が中置演算子として定義されていれば、導出された <tt>Read</tt> 
+      のインスタンスは、その構成子の(前置適用ではなく)中置適用としてのみ
+      パーズされる。
+     </p>
+    </li>
+    <li>
+     <p>
+      結合性を用いても括弧の出現を減らないが、優先度を使うと減ることも
+      ある。たとえば、
+      <tt><br />
+      <br />
+    &nbsp;&nbsp;infixr&nbsp;4&nbsp;:$<br />
+    &nbsp;&nbsp;data&nbsp;T&nbsp;=&nbsp;Int&nbsp;:$&nbsp;T&nbsp;&nbsp;|&nbsp;&nbsp;NT<br />
+      <br />
+      </tt>
+      だとすると、
+      <ul>
+       <li><tt>show&nbsp;(1&nbsp;:$&nbsp;2&nbsp;:$&nbsp;NT)</tt> は
+        文字列 <tt>"1&nbsp;:$&nbsp;(2&nbsp;:$&nbsp;NT)"</tt> となる。</li>
+       <li><tt>read&nbsp;"1&nbsp;:$&nbsp;(2&nbsp;:$&nbsp;NT)"</tt> は
+        は成功し、そのままの結果になる。</li>
+       <li><tt>read&nbsp;"1&nbsp;:$&nbsp;2&nbsp;:$&nbsp;NT"</tt> は
+        失敗する。</li>
+      </ul>
+     </p>
+    </li>
+    <li>
+     <p>
+      構成子がレコード構文をつかって定義されている場合、導出された、
+      <tt>Read</tt> はレコード構文の形式のみパーズする。さらに、
+      フィールドは元の宣言と同じ順番であたえられなければならない。
+     </p>
+    </li>
+    <li>
+     <p>
+      <tt>Read</tt> の導出インスタンスは任意の Haskell の白空白を
+      入力文字列のトークンの間に置くことを許す。追加の括弧も許される。
+     </p>
+    </li>
+   </ul>
+  </p>
+  <!--
+  <p> The derived <tt>Read</tt> and <tt>Show</tt> instances may be
+   unsuitable for some uses. Some problems include:</p>
+  -->
+  <p>
+   導出された <tt>Read</tt> および <tt>Show</tt> インスタンスは
+   いくつかの場合には適切ではないことがある。問題は、
+  </p>
+  <!--
+  <ul>
+   <li>Circular structures cannot be printed or read by these instances.</li>
+
+   <li>The printer loses shared substructure; the printed representation of
+    an object may be much larger than necessary.</li>
+
+   <li>The parsing techniques used by the reader are very inefficient;
+    reading a large structure may be quite slow.</li>
+
+   <li>There is no user control over the printing of types defined in the
+    Prelude. For example, there is no way to change the formatting of
+    floating point numbers.</li>
+  </ul>
+  -->
+  <p>
+  <ul>
+   <li>
+    循環構造は印字できない。またこれらのインスタンスによって
+    読むことができない。<
+   /li>
+   <li>
+    印字しようとするものは共有された下位構造を失う。すなわち、
+    あるオブジェクトの印字表現は必要をはるかに超えて大きくなることがある。
+   </li>
+   <li>
+    リーダーが使うパーズテクニックは非常に非効率なもので、
+    大きな構造を読むのは非常に遅くなる可能性がある。
+   </li>
+   <li>
+    プレリュードで定義された型の印字をユーザが制御することはできない。
+    たとえば、浮動小数点数のフォーマットを変更する方法はない。
+   </li>
+  </ul>
+  </p>
+
+  <p><a name="sect10.5"></a></p>
+  <!--<h3>10.5<tt>&nbsp;&nbsp;</tt>An Example</h3>-->
+  <h3>10.5<tt>&nbsp;&nbsp;</tt>例</h3>
+  <!--
+  <p> As a complete example, consider a tree datatype:<tt><br />
+   <br />
+   &nbsp;&nbsp;data&nbsp;Tree&nbsp;a&nbsp;=&nbsp;Leaf&nbsp;a&nbsp;|&nbsp;Tree&nbsp;a&nbsp;:^:&nbsp;Tree&nbsp;a<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;deriving&nbsp;(Eq,&nbsp;Ord,&nbsp;Read,&nbsp;Show)<br />
+   <br />
+   </tt>Automatic derivation of instance declarations for <tt>Bounded</tt>
+   and <tt>Enum</tt> are not possible, as <tt>Tree</tt> is not an
+   enumeration or single-constructor datatype. The complete instance
+   declarations for <tt>Tree</tt> are shown in Figure <a
+   href="derived.html#tree-inst">10.1</a>, Note the implicit use of default
+   class method definitions---for example, only <tt>&lt;=</tt> is defined
+   for <tt>Ord</tt>, with the other class methods (<tt>&lt;</tt>,
+   <tt>&gt;</tt>, <tt>&gt;=</tt>, <tt>max</tt>, and <tt>min</tt>) being
+   defined by the defaults given in the class declaration shown in Figure
+   <a href="basic.html#standard-classes">6.1</a> (page ).</p>
+  -->
+  <p>
+   完全な例として木のデータ構造を考えよ。
+   <tt><br />
+   <br />
+   &nbsp;&nbsp;data&nbsp;Tree&nbsp;a&nbsp;=&nbsp;Leaf&nbsp;a&nbsp;|&nbsp;Tree&nbsp;a&nbsp;:^:&nbsp;Tree&nbsp;a<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;deriving&nbsp;(Eq,&nbsp;Ord,&nbsp;Read,&nbsp;Show)<br />
+   <br />
+   </tt>
+   <tt>Bounded</tt> および <tt>Enum</tt> に対する自動のインスタンス
+   宣言の導出は不可能である。それは <tt>Tree</tt> は列挙型でもなければ
+   単一構成子のデータ型でもないからである。<tt>Tree</tt> に対する完全な
+   インスタンス宣言は図 <a href="derived.html#tree-inst">10.1</a> である。
+   デフォルトのクラスメソッド定義を暗黙のうちに使っていることに注意せよ。
+   たとえば、<tt>&lt;=</tt> のみが <tt>Ord</tt> に対して定義されており、
+   その他のクラスメソッド(<tt>&lt;</tt>、<tt>&gt;</tt>、<tt>&gt;=</tt>、
+   <tt>max</tt> および <tt>min</tt>) は
+   図 <a href="basic.html#standard-classes">6.1</a> に示したクラス
+   宣言中で与えられたデフォルトによって定義されている。
+  </p>
+  <p>
+  <table border="2" cellpadding="3">
+   <tr>
+    <td>
+     <div align="center">
+      <table border="2" cellpadding="3">
+       <tr>
+        <td> <tt><br />
+         infixr&nbsp;5&nbsp;:^:<br />
+         data&nbsp;Tree&nbsp;a&nbsp;=&nbsp;&nbsp;Leaf&nbsp;a&nbsp;&nbsp;|&nbsp;&nbsp;Tree&nbsp;a&nbsp;:^:&nbsp;Tree&nbsp;a<br />
+         <br />
+         instance&nbsp;(Eq&nbsp;a)&nbsp;=&gt;&nbsp;Eq&nbsp;(Tree&nbsp;a)&nbsp;where<br />
+         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Leaf&nbsp;m&nbsp;==&nbsp;Leaf&nbsp;n&nbsp;&nbsp;=&nbsp;&nbsp;m==n<br />
+         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u:^:v&nbsp;&nbsp;==&nbsp;x:^:y&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;u==x&nbsp;&amp;&amp;&nbsp;v==y<br />
+         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_&nbsp;==&nbsp;_&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;False<br />
+         <br />
+         instance&nbsp;(Ord&nbsp;a)&nbsp;=&gt;&nbsp;Ord&nbsp;(Tree&nbsp;a)&nbsp;where<br />
+         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Leaf&nbsp;m&nbsp;&lt;=&nbsp;Leaf&nbsp;n&nbsp;&nbsp;=&nbsp;&nbsp;m&lt;=n<br />
+         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Leaf&nbsp;m&nbsp;&lt;=&nbsp;x:^:y&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;True<br />
+         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u:^:v&nbsp;&nbsp;&lt;=&nbsp;Leaf&nbsp;n&nbsp;&nbsp;=&nbsp;&nbsp;False<br />
+         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u:^:v&nbsp;&nbsp;&lt;=&nbsp;x:^:y&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;u&lt;x&nbsp;||&nbsp;u==x&nbsp;&amp;&amp;&nbsp;v&lt;=y<br />
+         <br />
+         instance&nbsp;(Show&nbsp;a)&nbsp;=&gt;&nbsp;Show&nbsp;(Tree&nbsp;a)&nbsp;where<br />
+         <br />
+         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;showsPrec&nbsp;d&nbsp;(Leaf&nbsp;m)&nbsp;=&nbsp;showParen&nbsp;(d&nbsp;&gt;&nbsp;app_prec)&nbsp;showStr<br />
+         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where<br />
+         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;showStr&nbsp;=&nbsp;showString&nbsp;"Leaf&nbsp;"&nbsp;.&nbsp;showsPrec&nbsp;(app_prec+1)&nbsp;m<br />
+         <br />
+         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;showsPrec&nbsp;d&nbsp;(u&nbsp;:^:&nbsp;v)&nbsp;=&nbsp;showParen&nbsp;(d&nbsp;&gt;&nbsp;up_prec)&nbsp;showStr<br />
+         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where<br />
+         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;showStr&nbsp;=&nbsp;showsPrec&nbsp;(up_prec+1)&nbsp;u&nbsp;.&nbsp;<br />
+         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;showString&nbsp;"&nbsp;:^:&nbsp;"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;showsPrec&nbsp;(up_prec+1)&nbsp;v<br />
+         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;Note:&nbsp;right-associativity&nbsp;of&nbsp;:^:&nbsp;ignored<br />
+         <br />
+         instance&nbsp;(Read&nbsp;a)&nbsp;=&gt;&nbsp;Read&nbsp;(Tree&nbsp;a)&nbsp;where<br />
+         <br />
+         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;readsPrec&nbsp;d&nbsp;r&nbsp;=&nbsp;&nbsp;readParen&nbsp;(d&nbsp;&gt;&nbsp;up_prec)<br />
+         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(\r&nbsp;-&gt;&nbsp;[(u:^:v,w)&nbsp;|<br />
+         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(u,s)&nbsp;&lt;-&nbsp;readsPrec&nbsp;(up_prec+1)&nbsp;r,<br />
+         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(":^:",t)&nbsp;&lt;-&nbsp;lex&nbsp;s,<br />
+         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(v,w)&nbsp;&lt;-&nbsp;readsPrec&nbsp;(up_prec+1)&nbsp;t])&nbsp;r<br />
+         <br />
+         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;++&nbsp;readParen&nbsp;(d&nbsp;&gt;&nbsp;app_prec)<br />
+         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(\r&nbsp;-&gt;&nbsp;[(Leaf&nbsp;m,t)&nbsp;|<br />
+         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;("Leaf",s)&nbsp;&lt;-&nbsp;lex&nbsp;r,<br />
+         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(m,t)&nbsp;&lt;-&nbsp;readsPrec&nbsp;(app_prec+1)&nbsp;s])&nbsp;r<br />
+         <br />
+         up_prec&nbsp;&nbsp;=&nbsp;5&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;Precedence&nbsp;of&nbsp;:^:<br />
+         app_prec&nbsp;=&nbsp;10&nbsp;&nbsp;&nbsp;--&nbsp;Application&nbsp;has&nbsp;precedence&nbsp;one&nbsp;more&nbsp;than<br />
+         --&nbsp;the&nbsp;most&nbsp;tightly-binding&nbsp;operator<br />
+         </tt></td>
+       </tr>
+      </table>
+     </div>
+
+     <div align="center">
+      <h4>Figure 10.1</h4>
+     </div>
+
+     <div align="center">
+      <!--<h3>Example of Derived Instances</h3>-->
+      <h3>導出インスタンスの例</h3>
+     </div>
+     <a name="tree-inst"></a></td>
+   </tr>
+  </table>
+  </p>
+  <hr />
+  <p><i>The Haskell 98 Report</i><br />
+   <a href="index.html">top</a> | <a href="literate.html">back</a> | <a
+   href="pragmas.html">next</a> | <a href="index98.html">contents</a> | <a
+   href="prelude-index.html">function index</a> <br />
+   <font size="2">December 2002</font></p>
+ </body>
+</html>

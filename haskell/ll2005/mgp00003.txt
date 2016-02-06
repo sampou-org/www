@@ -1,0 +1,14 @@
+
+Haskell この一年： GHC
+
+Glasgow Haskell Compiler
+GHC が事実上の標準実装
+2004 10月 6.2.2
+2005  3月 6.4
+runghc: コマンドラインインタープリタ
+GADT: 一般化代数データ型
+STM: 並行スレッド間通信
+Cabal: パッケージツール
+C--: バックエンド
+etc.
+

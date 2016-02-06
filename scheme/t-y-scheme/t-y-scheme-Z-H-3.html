@@ -1,0 +1,258 @@
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--
+
+Generated from t-y-scheme.tex by tex2page, v 20060531
+(running on Gauche 0.8.7, unix), 
+(c) Dorai Sitaram, 
+http://www.ccs.neu.edu/~dorai/tex2page/tex2page-doc.html
+
+-->
+<head>
+<title>
+独習 Scheme 三週間 Teach Yourself Scheme in Fixnum Days
+</title>
+<link rel="stylesheet" type="text/css" href="t-y-scheme-Z-S.css" title=default>
+<meta name=robots content="noindex,follow">
+<meta name=description content="A practical
+introduction to the programming language Scheme">
+
+<meta name=author content="Dorai Sitaram">
+
+<link rev=made href="mailto:ds26@gte.com">
+</head>
+<body>
+<div id=slidecontent>
+<div align=right class=navigation>[Go to <span><a href="t-y-scheme.html">first</a>, <a href="t-y-scheme-Z-H-2.html">previous</a></span><span>, <a href="t-y-scheme-Z-H-4.html">next</a></span> page<span>; &nbsp;&nbsp;</span><span><a href="t-y-scheme-Z-H-1.html#node_toc_start">contents</a></span><span><span>; &nbsp;&nbsp;</span><a href="t-y-scheme-Z-H-25.html#node_index_start">index</a></span>]</div>
+<p></p>
+<a name="node_chap_1"></a>
+<h1 class=chapter>
+<div class=chapterheading><a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_1">Chapter 1</a></div><br>
+<a href="t-y-scheme-Z-H-1.html#node_toc_node_chap_1">Schemeに入力しよう</a></h1>
+<p></p>
+<p>
+<a name="node_idx_8"></a><a name="node_idx_10"></a><a name="node_idx_12"></a></p>
+<p>
+規範的な最初のプログラムはコンソール上に
+<code class=scheme><span class=selfeval>&quot;Hello, World!&quot;</span></code>と出すプログラムです。
+お気に入りのエディタを使って<code class=verbatim>hello.scm</code>という
+名前のファイルを以下の内容でつくりましょう。</p>
+<p>
+</p>
+<pre class=scheme><span class=comment>;最初のプログラム</span>
+
+(<span class=keyword>begin</span>
+  (<span class=variable>display</span> <span class=selfeval>&quot;Hello, World!&quot;</span>)
+  (<span class=variable>newline</span>))
+</pre><p></p>
+<p>
+</p>
+
+<p class=noindent><a name="node_idx_14"></a>最初の一行はコメントです。Schemeはセミコロンを見るとそれと
+その行のそれ以降を無視します。</p>
+<p>
+</p>
+<p>
+<a name="node_idx_16"></a><a name="node_idx_18"></a><a name="node_idx_20"></a><a name="node_idx_22"></a></p>
+<p>
+<code class=scheme><span class=keyword>begin</span></code>-<em>フォーム</em>は<em>サブフォーム</em>のならびを導入する
+Schemeのやりかたです。この場合には、ふたつのサブフォームがあります。
+最初のものは、その引数(文字列&quot;Hello, World!&quot;)をコンソール(あるいは
+&#8220;標準出力&#8221;)に出力する<code class=scheme><span class=variable>display</span></code>手続きを呼んでいます。
+つづいて、改行復帰を出力する<code class=scheme><span class=variable>newline</span></code>手続きを呼んでいます。</p>
+<p>
+</p>
+<p>
+<a name="node_idx_24"></a><a name="node_idx_26"></a></p>
+<p>
+このプログラムを走らせるには、まず、Schemeをスタートさせます。
+ＯＳのコマンドラインでSchemeの実行ファイル名を入力するという
+よくある方法です。たとえば、MzScheme [<a href="t-y-scheme.hlog">cite{mzscheme}</a>]の場合は、</p>
+<p>
+</p>
+<pre class=verbatim>mzscheme&nbsp;
+</pre><p></p>
+<p>
+</p>
+
+<p class=noindent>とＯＳのプロンプトから入力します。</p>
+<p>
+</p>
+<p>
+<a name="node_idx_28"></a><a name="node_idx_30"></a><a name="node_idx_32"></a><a name="node_idx_34"></a></p>
+<p>
+これで、Schemeのリスナーが起動します。Schemeのリスナーは
+入力を読み(<em>read</em>)、それを評価(<em>eval</em>uate)し、結果の値
+(もし、あれば)を印字(<em>print</em>)し、次の入力を待ちます。そのため、
+このことをよく、<em>read-eval-print ループ</em>といいます。
+これはＯＳのコマンドラインとあまり違いがないことに注目してください。
+ＯＳのコマンドラインは、コマンドを読み、それを実行し、そして次を
+待ちます。ＯＳと同じように、Schemeのリスナーは独自のプロンプトを
+表示します。よくあるのは、<code class=verbatim>&gt;</code> ですが、別のもののときもあります。</p>
+<p>
+<a name="node_idx_36"></a></p>
+<p>
+リスナーのプロンプトが出ているところで、ファイル<code class=verbatim>hello.scm</code>を
+<em>ロード</em>してみよう。これは次のようにタイプすればできます。</p>
+<p>
+</p>
+<pre class=scheme>(<span class=variable>load</span> <span class=selfeval>&quot;hello.scm&quot;</span>)
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>今度はShemeは<code class=verbatim>hello.scm</code>の内容を実行し、<code class=verbatim>Hello, World!</code>を
+出力したのち改行するでしょう。その後、リスナーはまたプロンプトを
+表示して、さらなる入力を待ちます。</p>
+<p>
+</p>
+<p>
+こんな風に熱心なリスナーですから、必ずしも、ファイルにプログラムを書いて、
+それをロードするということをする必要はありません。
+ときには、ちょっと試してみたいという気分のときには
+単純に式を直接リスナーのプロンプトから入力して何ば起こるかみること
+も簡単にできます。たとえば、次のフォーム</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>begin</span> (<span class=variable>display</span> <span class=selfeval>&quot;Hello, World!&quot;</span>)
+       (<span class=variable>newline</span>))
+</pre><p></p>
+<p>
+</p>
+
+<p class=noindent>Schemeのプロンプトから入力すると、以下のようになります。</p>
+<p>
+</p>
+<pre class=verbatim>Hello, World!&nbsp;
+</pre><p></p>
+<p>
+</p>
+<p>
+実は、単に<code class=scheme><span class=selfeval>&quot;Hello, World!&quot;</span></code>というフォームをリスナーに入力するだけで
+以下のような文字列を結果として得ることができるのです。</p>
+<p>
+</p>
+<pre class=scheme><span class=selfeval>&quot;Hello, World!&quot;</span>
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>なぜなら、これがリスナーが<code class=scheme><span class=selfeval>&quot;Hello, World!&quot;</span></code>を評価した結果
+だからです。</p>
+<p>
+</p>
+<p>
+ふたつめのやり方では、結果が二重引用符に囲まれているということとは
+別に、最後の二つのプログラムには大きな違いがあります。
+最初のもの(つまり<code class=scheme><span class=keyword>begin</span></code>を使っているもの)は評価して何かを得ている
+わけではありません。<code class=verbatim>Hello, World!</code>という表示は<code class=scheme><span class=variable>display</span></code>と
+<code class=scheme><span class=variable>newline</span></code>標準出力に書き込む手続きによってつくられた<em>副作用</em>です。
+ふたつめのプログラムでは、フォーム<code class=scheme><span class=selfeval>&quot;Hello, World&quot;</span></code>が評価の結果で、
+この場合は同じフォームの文字列になっています。</p>
+<p>
+</p>
+<p>
+これ以降、評価を表すのには、<code class=scheme><span style="color: teal"><tt><strong>=&gt;</strong></tt></span> </code> という記法をつかうことにします。
+それゆえ、</p>
+<p>
+</p>
+<pre class=scheme><span class=variable>E</span> <span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=variable>v</span>
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>はフォーム<code class=scheme><span class=variable>E</span></code>が評価されて結果として値<code class=scheme><span class=variable>v</span></code>になることを示します。
+たとえば、</p>
+<p>
+</p>
+<pre class=scheme>(<span class=keyword>begin</span>
+  (<span class=variable>display</span> <span class=selfeval>&quot;Hello, World!&quot;</span>)
+  (<span class=variable>newline</span>))
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span> 
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>(すなわち、無あるいは空)。しかし、副作用により</p>
+<p>
+</p>
+<pre class=verbatim>Hello, World!&nbsp;
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>と標準出力に書き込まれます。
+一方、</p>
+<p>
+</p>
+<pre class=scheme><span class=selfeval>&quot;Hello, World!&quot;</span>
+<span style="color: teal"><tt><strong>=&gt;</strong></tt></span>  <span class=selfeval>&quot;Hello, World!&quot;</span>
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>です。どちらの場合にも、リスナーから抜けることはありません。
+抜けるには、</p>
+<p>
+<a name="node_idx_38"></a></p>
+<pre class=scheme>(<span class=variable>exit</span>)
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>と入力するとＯＳのコマンドライン(これは先にみたように一種のリスナー)
+にもどります。</p>
+<p>
+</p>
+<p>
+リスナーはプログラムやプログラムの断片を対話的にテスト
+するのに便利です。しかし、それでなければならない、
+というわけではありません。</p>
+<p>
+</p>
+<pre class=verbatim>mzscheme -r hello.scm&nbsp;
+</pre><p></p>
+<p>
+</p>
+<p>
+</p>
+
+<p class=noindent>とするとリスナーを扱わなくても、挨拶がつくられます。
+挨拶のあと、<code class=verbatim>mzscheme</code>はＯＳにもどります。
+これは、</p>
+<p>
+</p>
+<pre class=verbatim>echo Hello, World!&nbsp;
+</pre><p></p>
+<p>
+</p>
+<p>
+とやるのとほぼ同じです。<code class=verbatim>hello.scm</code>をＯＳのコマンド
+(シェルスクリプトあるいはバッチファイル)とみなすこともできますが、
+それは&nbsp;<a href="t-y-scheme-Z-H-18.html#node_chap_16">16</a>章まで待ってください。</p>
+<p>
+</p>
+<p>
+</p>
+<div class=smallskip></div>
+<p style="margin-top: 0pt; margin-bottom: 0pt">
+<div align=right class=navigation>[Go to <span><a href="t-y-scheme.html">first</a>, <a href="t-y-scheme-Z-H-2.html">previous</a></span><span>, <a href="t-y-scheme-Z-H-4.html">next</a></span> page<span>; &nbsp;&nbsp;</span><span><a href="t-y-scheme-Z-H-1.html#node_toc_start">contents</a></span><span><span>; &nbsp;&nbsp;</span><a href="t-y-scheme-Z-H-25.html#node_index_start">index</a></span>]</div>
+</p>
+<p></p>
+</div>
+</body>
+</html>

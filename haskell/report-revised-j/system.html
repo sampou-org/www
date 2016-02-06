@@ -1,0 +1,154 @@
+<html>
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
+  <title>The Haskell 98 Library Report: System functions</title>
+ </head>
+ <body bgcolor="#ffffff">
+  <p><i>The Haskell 98 Report</i><br />
+   <a href="index.html">top</a> | <a href="directory.html">back</a> | <a
+   href="time.html">next</a> | <a href="index98.html">contents</a> | <a
+   href="prelude-index.html">function index</a> <br />
+  </p>
+  <hr />
+  <p> <a name="sect23"></a></p>
+  <!--<h2>23<tt>&nbsp;&nbsp;</tt>System Functions</h2>-->
+  <h2>23<tt>&nbsp;&nbsp;</tt>システム関数</h2>
+  <p>
+  <table border="2" cellpadding="3">
+   <tr>
+    <td> <tt><br />
+     module&nbsp;System&nbsp;(&nbsp;<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;ExitCode(ExitSuccess,ExitFailure),<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;getArgs,&nbsp;getProgName,&nbsp;getEnv,&nbsp;system,&nbsp;exitWith,&nbsp;exitFailure<br />
+     &nbsp;&nbsp;)&nbsp;where<br />
+     <br />
+     data&nbsp;ExitCode&nbsp;=&nbsp;ExitSuccess&nbsp;|&nbsp;ExitFailure&nbsp;Int&nbsp;<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;deriving&nbsp;(Eq,&nbsp;Ord,&nbsp;Read,&nbsp;Show)<br />
+     <br />
+     getArgs&nbsp; ::&nbsp;IO&nbsp;[String]<br />
+     getProgName&nbsp; ::&nbsp;IO&nbsp;String<br />
+     getEnv&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+     ::&nbsp;String&nbsp;-&gt;&nbsp;IO&nbsp;String<br />
+     system&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+     ::&nbsp;String&nbsp;-&gt;&nbsp;IO&nbsp;ExitCode<br />
+     exitWith&nbsp;&nbsp;&nbsp;
+     ::&nbsp;ExitCode&nbsp;-&gt;&nbsp;IO&nbsp;a<br />
+     exitFailure ::&nbsp;IO&nbsp;a<br />
+     </tt></td>
+   </tr>
+  </table>
+  </p>
+  <!--
+  <p> This library describes the interaction of the program with the
+   operating system.</p>
+  -->
+  <p>
+   このライブラリはプログラムとオペレーティングシステムのインタラクショ
+   ンを記述するものである。 
+  </p>
+  <!--
+  <p> Any <tt>System</tt> operation could raise an
+   <tt>isIllegalOperation</tt>, as described in Section <a
+   href="io.html#IOError">21.1</a>; all other permissible errors are
+   described below. Note that, in particular, if an implementation does not
+   support an operation it must raise an <tt>isIllegalOperation</tt>.</p>
+  -->
+  <p>
+   すべての <tt>System</tt> 操作は <a href="io.html#IOError">21.1</a> 節
+   で述べたように <tt>isIllegalOperationError</tt> を発生しうる。それ以
+   外のすべての許されるエラーは以下に記述する。実装が操作をサポートしな
+   い場合には、<tt>isIllegalOperationError</tt> を発生させなければならな
+   いことに特に注意すること。 
+  </p>
+  <!--
+  <p> The <tt>ExitCode</tt> type defines the exit codes that a program can
+   return. <tt>ExitSuccess</tt> indicates successful termination; and
+   <tt>ExitFailure </tt><i>code</i> indicates program failure with value
+   <i>code</i>. The exact interpretation of <i>code</i> is operating-system
+   dependent. In particular, some values of <i>code</i> may be prohibited
+   (for instance, 0 on a POSIX-compliant system).</p>
+  -->
+  <p>
+   <tt>ExitCode</tt> 型はプログラムが返すことのできる脱出コードを定義す
+   る。<tt>ExitSuccess</tt> は成功裏に終了したことを示す。
+   <tt>ExitFailure </tt><i>code</i> はプログラムが値 <i>code</i> ととも
+   に失敗したことを示す。<i>code</i> の正確な解釈はオペレーティングシス
+   テム依存である。特に <i>code</i> の値のいくつかは禁じられている。(た
+   とえば、 0 は POSIX 準拠のシステムでは禁じられている。)
+  </p>
+  <!--
+  <p> Computation <tt>getArgs</tt> returns a list of the program's command
+   line arguments (not including the program name). Computation
+   <tt>getProgName</tt> returns the name of the program as it was invoked.
+   Computation <tt>getEnv</tt> <i>var</i> returns the value of the
+   environment variable <i>var</i>. If variable <i>var</i> is undefined,
+   the <tt>isDoesNotExistError</tt> exception is raised. Computation
+   <tt>system</tt> <i>cmd</i> returns the exit code produced when the
+   operating system processes the command <i>cmd</i>.</p>
+  -->
+  <p>
+   <tt>getArgs</tt> 計算はプログラムのコマンドライン引数のリスト(プログ
+   ラム名は含まない)を返す。<tt>getProgName</tt> 計算は起動されたプログ
+   ラムの名前を返す。<tt>getEnv</tt> <i>var</i> は環境変数 <i>var</i> の
+   値を返す。もし、変数 <i>var</i> が定義されていなければ、
+   <tt>isDoesNotExistError</tt> 例外を発生する。<tt>system</tt>
+   <i>cmd</i> 計算はオペレーティングシステムのプロセスが<i>cmd</i> を実
+   行したときの終了コードを返す。
+  </p>
+  <!--
+  <p> Computation <tt>exitWith</tt> <i>code</i> terminates the program,
+   returning <i>code </i>to the program's caller. Before the program
+   terminates, any open or semi-closed handles are first closed. The caller
+   may interpret the return code as it wishes, but the program should
+   return <tt>ExitSuccess</tt> to mean normal completion, and
+   <tt>ExitFailure&nbsp;</tt><i>n</i> to mean that the program encountered
+   a problem from which it could not recover. The value
+   <tt>exitFailure</tt> is equal to
+   <tt>exitWith&nbsp;(ExitFailure&nbsp;</tt><i>exitfail</i><tt>)</tt>,
+   where <i>exitfail</i> is implementation-dependent. <tt>exitWith</tt>
+   bypasses the error handling in the I/O monad and cannot be intercepted
+   by <tt>catch</tt>.</p>
+  -->
+  <p>
+   <tt>exitWith</tt> <i>code</i> はプログラムを終了してそのプログラムの
+   呼び出し元に <i>code</i> を返す。プログラムを終了する前に先ずオープン
+   あるいはセミクローズ状態のハンドルをクローズする。呼び出し側は好きな
+   ようにリターンコードを解釈することが可能であるが、プログラムは通常に
+   完了した場合には<tt>ExitSuccess</tt> を返さなくてはならない。また、
+   <tt>ExitFailure&nbsp;</tt><i>n</i> はプログラムが修復不可能な問題に出
+   くわしたことを意味しなければならない。<tt>exitFailure</tt> の値は
+   <tt>exitWith&nbsp;(ExitFailure&nbsp;</tt><i>exitfail</i><tt>)</tt> の
+   値に等しく、<i>exitfail</i> は実装依存である。<tt>exitWith</tt> は
+   I/O モナド中のエラーハンドリングをバイパスし、<tt>catch</tt> による捕
+   捉は不可能である。
+  </p>
+  <!--
+  <p> If a program terminates as a result of calling <tt>error</tt> or
+   because its value is otherwise determined to be <i>_|_</i>, then it is
+   treated identically to the computation <tt>exitFailure</tt>. Otherwise,
+   if any program <i>p</i> terminates without calling <tt>exitWith</tt>
+   explicitly, it is treated identically to the computation <tt><br />
+   (</tt><i>p</i><tt>&nbsp;&gt;&gt;&nbsp;exitWith&nbsp;ExitSuccess)&nbsp;`catch`&nbsp;\&nbsp;_&nbsp;-&gt;&nbsp;exitFailure
+   <br />
+   </tt>
+  </p>
+  -->
+  <p>
+   プログラムが <tt>error</tt> を呼んだ結果あるいは値が <i>_|_</i> になっ
+   てプログラムが終了した場合には <tt>exitFailure</tt> 計算と同等の扱い
+   となる。そうではない場合、プログラム <i>p</i> が明示的に
+   <tt>exitWith</tt> を呼ぶことなく終了した場合、その扱いは以下の計算と
+   同じである。
+   <tt><br />
+   (</tt><i>p</i><tt>&nbsp;&gt;&gt;&nbsp;exitWith&nbsp;ExitSuccess)&nbsp;`catch`&nbsp;\&nbsp;_&nbsp;-&gt;&nbsp;exitFailure
+   <br />
+   </tt>
+  </p>
+  <hr />
+  <p><i>The Haskell 98 Report</i><br />
+   <a href="index.html">top</a> | <a href="directory.html">back</a> | <a
+   href="time.html">next</a> | <a href="index98.html">contents</a> | <a
+   href="prelude-index.html">function index</a> <br />
+   <font size="2">December 2002</font></p>
+ </body>
+</html>

@@ -1,0 +1,811 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<!--<title lang="en">Haskell code examples</title>-->
+<title lang="ja">Haskell のコード例</title>
+</head>
+<body>
+<!--
+<table lang="en" width="100%">
+ <tr>
+  <td align="left" width="33%">Prev:
+   <a href="analogy.html">Appendix I - A physical analogy for monads</a></td>
+  <td align="center" width="33%">TOC:
+   <a href="index.html">Contents</a></td>
+  <td align="right" width="33%"></td>
+ </tr>
+</table>
+-->
+<table lang="ja" width="100%">
+ <tr>
+  <td align="left" width="33%">Prev:
+   <a href="analogy.html">付録 I - モナドの物理的なアナロジー</a></td>
+  <td align="center" width="33%">TOC:
+   <a href="index.html">目次</a></td>
+  <td align="right" width="33%"></td>
+ </tr>
+</table>
+
+<!--<h1 lang="en">Haskell code examples</h1>-->
+<h1 lang="ja">Haskell のコード例</h1>
+<!--
+<p lang="en">
+This appendix contains a list of all of the code
+<a href="../examples/">examples</a> supplied with the tutorial.
+</p>
+-->
+<p lang="ja">
+ここにあるのは、このチュートリアルで用意された、すべてのコード
+<a href="../examples/">例</a>のリストです。
+</p>
+
+<a name="example1">
+<!--<h2 lang="en"><a href="../examples/example1.hs">Example 1</a></h2>-->
+<h2 lang="ja"><a href="../examples/example1.hs">例 1</a></h2>
+</a>
+<!--
+<p lang="en">
+This example is discussed in the section:
+<a href="meet.html#example1">Meet the monads</a>.
+</p>
+-->
+<p lang="ja">
+この例は
+<a href="meet.html#example1">モナドに触れる</a>
+の節で議論されているものです。
+</p>
+<!--
+<p lang="en">
+The example code introduces the monad concept without using
+Haskell typeclasses.  It shows how a monadic combinator can be used to
+simplify the construction of computations from sequences of
+computations which may not return a result. 
+</p>
+-->
+<p lang="ja">
+コード例では Haskell の型クラスを使わずにモナドの概念を導入します。
+モナドの結合子が結果を返さないかもしれない一連の計算の組み立てを
+どのように単純化するかを示しています。
+</p>
+
+<a name="example2">
+<!--<h2 lang="en"><a href="../examples/example2.hs">Example 2</a></h2>-->
+<h2 lang="ja"><a href="../examples/example2.hs">例 2</a></h2>
+</a>
+<!--
+<p lang="en">
+This example is discussed in the section:
+<a href="class.html#example2">Doing it with class</a>.
+</p>
+-->
+<p lang="ja">
+この例は
+<a href="class.html#example2">クラスで使う</a>
+の節で議論されています。
+</p>
+<!--
+<p lang="en">
+The example code builds on the first example, and shows how
+do-notation can be used with an instance of the <code>Monad</code> class
+(in this case, <code>Maybe</code> is the monad used).
+</p>
+-->
+<p lang="ja">
+コード例は、最初のコードをもとに構築されており、do 記法が
+<code>Monad</code> クラスのインスタンス(ここでは <code>Maybe</code>
+モナドが使われている)でどのように使われているかを示しています。
+</p>
+
+<a name="example3">
+<!--<h2 lang="en"><a href="../examples/example3.hs">Example 3</a></h2>-->
+<h2 lang="ja"><a href="../examples/example3.hs">例 3</a></h2>
+</a>
+<!--
+<p lang="en">
+This example is discussed in the section:
+<a href="monadfns.html#example3">Monad support in Haskell</a>.
+</p>
+-->
+<p lang="ja">
+この例は
+<a href="monadfns.html#example3">Haskell におけるモナドのサポート</a>
+の節で議論されています。
+</p>
+<!--
+<p lang="en">
+The example code builds on the first two examples, and shows a
+somewhat atypical &mdash; but very powerful &mdash; use of 
+the <code>foldM</code> function outside of a do-block.
+</p>
+-->
+<p lang="ja">
+コード例は、最初の 2つの例を元に構築されています。
+そして、いくらか典型的 &mdash; ではありますが大変強力な &mdash;
+do ブロックの外での <code>foldM</code> 関数の使い方を示すものです。
+</p>
+
+<a name="example4">
+<!--<h2 lang="en"><a href="../examples/example4.hs">Example 4</a></h2>-->
+<h2 lang="ja"><a href="../examples/example4.hs">例 4</a></h2>
+</a>
+<!--
+<p lang="en">
+This example is discussed in the section:
+<a href="monadfns.html#example4">Monad support in Haskell</a>.
+</p>
+-->
+<p lang="ja">
+この例は
+<a href="monadfns.html#example4">Haskell におけるモナドのサポート</a>
+の節で議論されています。
+</p>
+<!--
+<p lang="en">
+The example code shows a more typical use of the <code>foldM</code> function
+within a do-block.  It combines dictionary values read from different files 
+into a single dictionary using the <code>foldM</code> function within
+the IO monad.
+</p>
+-->
+<p lang="ja">
+コード例では、より典型的な <code>foldM</code> 関数の do ブロック内での
+使い方が示されています。ここでは、IO モナド内で <code>foldM</code> 関数
+を使って、別々のファイルから読み込まれた辞書の値を合成しています。
+</p>
+
+<a name="example5">
+<!--<h2 lang="en"><a href="../examples/example5.hs">Example 5</a></h2>-->
+<h2 lang="ja"><a href="../examples/example5.hs">例 5</a></h2>
+</a>
+<!--
+<p lang="en">
+This example is discussed in the section:
+<a href="monadfns.html#example5">Monad support in Haskell</a>.
+</p>
+-->
+<p lang="ja">
+この例は
+<a href="monadfns.html#example5">Haskell におけるモナドのサポート</a>
+の節で議論されています。
+</p>
+<!--
+<p lang="en">
+The example code shows the use of the <code>filterM</code> function
+within a do-block.  It prints the subset of its arguments that
+specify directories and ignores non-directory arguments.
+</p>
+-->
+<p lang="ja">
+コード例では、<code>filterM</code> 関数の do ブロック内での使用が
+示されています。ディレクトリを指定する引数のサブセットを印字し、
+ディレクトリではない引数は無視するようになっています。
+</p>
+
+<a name="example6">
+<!--<h2 lang="en"><a href="../examples/example6.hs">Example 6</a></h2>-->
+<h2 lang="ja"><a href="../examples/example6.hs">例 6</a></h2>
+</a>
+<!--
+<p lang="en">
+This example is discussed in the section:
+<a href="monadfns.html#example6">Monad support in Haskell</a>.
+</p>
+-->
+<p lang="ja">
+この例は
+<a href="monadfns.html#example6">Haskell におけるモナドのサポート</a>
+の節で議論されています。
+</p>
+<!--
+<p lang="en">
+The example code shows the use of the <code>liftM</code> function
+within a do-block.  It looks up a name in a list and uses a lifted
+String manipulation function to modify it within the Maybe monad.
+</p>
+-->
+<p lang="ja">
+コードは、do ブロック内の <code>liftM</code> 関数の使用例です。
+リストにある名前を検索し、もちあげられた String 処理関数を使って、
+Maybe モナド内で名前を変更します。
+</p>
+
+<a name="example7">
+<!--<h2 lang="en"><a href="../examples/example7.hs">Example 7</a></h2>-->
+<h2 lang="ja"><a href="../examples/example7.hs">例 7</a></h2>
+</a>
+<!--
+<p lang="en">
+This example is discussed in the section:
+<a href="monadfns.html#example7">Monad support in Haskell</a>.
+</p>
+-->
+<p lang="ja">
+この例は
+<a href="monadfns.html#example7">Haskell におけるモナドのサポート</a>
+の節で議論されています。
+</p>
+<!--
+<p lang="en">
+The example code shows a higher-order application of <code>liftM2</code>.
+It folds lifted operations within the List monad to produce lists
+of all combinations of elements combined with the lifted operator.
+</p>
+-->
+<p lang="ja">
+コードは <code>liftM2</code> の高階適用の例です。List モナド内で
+もちあげられた操作を畳み込み、そのもちあげられた操作子で要素を組合せた
+すべての組合せのリストを生成します。
+</p>
+
+<a name="example8">
+<!--<h2 lang="en"><a href="../examples/example8.hs">Example 8</a></h2>-->
+<h2 lang="ja"><a href="../examples/example8.hs">例 8</a></h2>
+</a>
+<!--
+<p lang="en">
+This example is discussed in the section:
+<a href="monadfns.html#example8">Monad support in Haskell</a>.
+</p>
+-->
+<p lang="ja">
+この例は
+<a href="monadfns.html#example8">Haskell におけるモナドのサポート</a>
+の節で議論されています。
+</p>
+<!--
+<p lang="en">
+The example code shows a higher-order application of <code>ap</code>.
+It folds <code>ap</code> through a list of <code>Maybe&nbsp;(a->a)</code>
+functions to process sequences of commands.
+</p>
+-->
+<p lang="ja">
+コード例は <code>ap</code> の高階適用の例です。これは、
+<code>Maybe&nbsp;(a->a)</code> という関数のリストを <code>ap</code>
+で畳み込んで、コマンド列を処理します。
+</p>
+
+<a name="example9">
+<!--<h2 lang="en"><a href="../examples/example9.hs">Example 9</a></h2>-->
+<h2 lang="ja"><a href="../examples/example9.hs">例 9</a></h2>
+</a>
+<!--
+<p lang="en">
+This example is discussed in the section:
+<a href="monadfns.html#example9">Monad support in Haskell</a>.
+</p>
+-->
+<p lang="ja">
+この例は
+<a href="monadfns.html#example9">Haskell におけるモナドのサポート</a>
+の節で議論されています。
+</p>
+<!--
+<p lang="en">
+The example code shows the use of <code>msum</code> in the Maybe monad
+to select the first variable match in a stack of binding environments.
+</p>
+-->
+<p lang="en">
+コード例は Maybe モナドで <code>msum</code> を使い、束縛環境のスタック
+から最初にマッチする変数を選ぶ例です。
+</p>
+
+<a name="example10">
+<!--<h2 lang="en"><a href="../examples/example10.hs">Example 10</a></h2>-->
+<h2 lang="ja"><a href="../examples/example10.hs">例 10</a></h2>
+</a>
+<!--
+<p lang="en">
+This example is discussed in the section:
+<a href="monadfns.html#example10">Monad support in Haskell</a>.
+</p>
+-->
+<p lang="ja">
+この例は
+<a href="monadfns.html#example10">Haskell におけるモナドのサポート</a>
+の節で議論されています。
+</p>
+<!--
+<p lang="en">
+The example code shows the use of <code>guard</code> in the Maybe monad
+to select only the records from a list that satisfy a predicate
+(equivalent to <code>filter</code>).
+</p>
+-->
+<p lang="ja">
+コードは、Maybe モナドの <code>guard</code> を使って、リストから
+述語を満すレコードだけを選択する( <code>filter</code> と同等)例です。
+</p>
+
+<a name="example11">
+<!--<h2 lang="en"><a href="../examples/example11.hs">Example 11</a></h2>-->
+<h2 lang="ja"><a href="../examples/example11.hs">例 11</a></h2>
+</a>
+<!--
+<p lang="en">
+This example is discussed in the section:
+<a href="maybemonad.html#example">The Maybe monad</a>.
+</p>
+-->
+<p lang="ja">
+この例は
+<a href="maybemonad.html#example">Maybe モナド</a>
+の節で議論されています。
+</p>
+<!--
+<p lang="en">
+The example code shows how to use the <code>Maybe</code> monad
+to build complex queries from simpler queries that may fail to
+return a result.  The specific example used is looking up
+mail preferences for someone based on either their full name
+or a nickname. 
+</p>
+-->
+<p lang="ja">
+コード例は、どのようにして <code>Maybe</code> モナドを使って、
+結果を返すのに失敗するかもしれない単純な問合せから、複雑な
+問合せを構築するかを示しています。ここでの例は、フルネームまたは
+ニックネームに基いたメールプリファレンスの検索です。
+</p>
+
+<a name="example12"><h2>
+<!--<h2 lang="en"><a href="../examples/example12.hs">Example 12</a></h2>-->
+<h2 lang="ja"><a href="../examples/example12.hs">例 12</a></h2>
+</a>
+<!--
+<p lang="en">
+This example is discussed in the section:
+<a href="errormonad.html#example">The Error monad</a>.
+</p>
+-->
+<p lang="ja">
+この例は、
+<a href="errormonad.html#example">Error モナド</a>
+の節で議論されています。
+</p>
+<!--
+<p lang="en">
+The example code demonstrates the use of the <code>Either</code> 
+type constructor as an <code>Error</code> monad with a custom
+error type.  The example parses hexadecimal digits and uses the
+exception handling mechanism of the <code>Error</code> monad to
+provide informative error messages in the event of a parse failure.
+</p>
+-->
+<p lang="ja">
+コード例は、<code>Either</code> タイプ構築子をカスタムエラーの型の
+<code>Error</code> モナドとして使うデモになっています。
+例では、16進数をパースして、<code>Error</code> モナドの例外処理機構
+を使って、パースが失敗したイベントの中にわかりやすいエラーメッセージ
+を用意します。
+</p>
+
+<a name="example13">
+<!--<h2 lang="en"><a href="../examples/example13.hs">Example 13</a></h2>-->
+<h2 lang="ja"><a href="../examples/example13.hs">例 13</a></h2>
+</a>
+<!--
+<p lang="en">
+This example is discussed in the section
+<a href="listmonad.html#example">The List monad</a>.
+</p>
+-->
+<p lang="ja">
+この例は
+<a href="listmonad.html#example">List モナド</a>
+の節で議論されています。
+</p>
+<!--
+<p lang="en">
+The example code uses the built-in list type constructor as a
+monad for non-deterministic computation.
+The example demonstrates parsing an ambiguous grammar
+consisting of integers, hex values, and words.
+</p>
+-->
+<p lang="ja">
+コードは、組み込みのリスト型構築子を非決定性計算のモナドとして使う例です。
+これは、整数、16進値、単語からなる曖昧な文法をパースする例です。
+</p>
+
+<a name="example14">
+<!--<h2 lang="en"><a href="../examples/example14.hs">Example 14</a></h2>-->
+<h2 lang="ja"><a href="../examples/example14.hs">例 14</a></h2>
+</a>
+<!--
+<p lang="en">
+This example is discussed in the section:
+<a href="iomonad.html#example">The IO monad</a>.
+</p>
+-->
+<p lang="ja">
+この例は、
+<a href="iomonad.html#example">IO モナド</a>
+の節で議論されています。
+</p>
+<!--
+<p lang="en">
+The example code implements a simple version of the standard
+Unix command "tr".  The example demonstrates use of the IO monad
+including implicit <code>fail</code> calls due to pattern matching
+failures and the use of <code>catcherror</code>.
+</p>
+-->
+<p lang="ja">
+コードは Unix コマンドの "tr" の簡単な実装例です。これは、
+パターンマッチング失敗に起因する暗黙の <code>fail</code> 呼出しを
+含む IO モナドと <code>catcherror</code> を使う例になっています。
+</p>
+
+<a name="example15">
+<!--<h2 lang="en"><a href="../examples/example15.hs">Example 15</a></h2>-->
+<h2 lang="ja"><a href="../examples/example15.hs">例 15</a></h2>
+</a>
+<!--
+<p lang="en">
+This example is discussed in the section:
+<a href="statemonad.html#example">The State monad</a>.
+</p>
+-->
+<p lang="ja">
+この例は、
+<a href="statemonad.html#example">State モナド</a>
+の節で議論されています。
+</p>
+<!--
+<p lang="en">
+The example code shows how the State monad can be used instead
+of explicitly passing state.  The example uses the State monad
+to manage the random number generator state while building a
+compound data value requiring multiple calls to the random
+number generator.
+</p>
+-->
+<p lang="ja">
+コードは、明示的に状態を渡すかわりに State モナドをどのように使うか
+をしめした例です。例では、State モナドを使い、乱数生成器を複数回
+呼出す必要のある複合したデータの値を構築しながら、乱数生成器の
+状態を管理しする例です。
+</p>
+
+<a name="example16"><h2>
+<!--<h2 lang="en"><a href="../examples/example16.hs">Example 16</a></h2>-->
+<h2 lang="ja"><a href="../examples/example16.hs">例 16</a></h2>
+</a>
+<!--
+<p lang="en">
+This example is discussed in the section:
+<a href="readermonad.html#example">The Reader monad</a>.
+</p>
+-->
+<p lang="ja">
+この例は、
+<a href="readermonad.html#example">Reader モナド</a>
+の節で議論されています。
+</p>
+<!--
+<p lang="en">
+The example code shows how the Reader monad can be used to
+simplify computations involving a shared environment.
+The example uses the Reader monad to implement a simple
+template substitution system.  The example code demonstrates
+the use of the Parsec monadic parser combinator library. 
+</p>
+-->
+<p lang="ja">
+コードは、Reader モナドを使ってどのように共有環境を含む計算を簡単に
+するかの例になっています。この例では Reader モナドを使って、単純な
+テンプレート置換システムを実装します。コードは Parsec のモナドパーサ
+結合子ライブラリの使い方の例になっています。
+</p>
+
+<a name="example17">
+<!--<h2 lang="en"><a href="../examples/example17.hs">Example 17</a></h2>-->
+<h2 lang="ja"><a href="../examples/example17.hs">例 17</a></h2>
+</a>
+<!--
+<p lang="en">
+This example is discussed in the section:
+<a href="writermonad.html#example">The Writer monad</a>.
+</p>
+-->
+<p lang="ja">
+この例は
+<a href="writermonad.html#example">Writer モナド</a>
+の節で議論されています。
+</p>
+<!--
+<p lang="en">
+The example code shows how the Writer monad can be used to
+implement logging.  The example implements a very simple
+firewall simulator and uses the Writer monad to log the
+firewall activity.
+</p>
+-->
+<p lang="ja">
+コードは Writer モナドを使っていかにログ取りを実装するかの例です。
+例では、非常に簡単なファイアウォールシミュレータを実装し、Writer
+モナドを使って、ファイアウォールの活動状況を記録します。
+</p>
+
+<a name="example18">
+<!--<h2 lang="en"><a href="../examples/example18.hs">Example 18</a></h2>-->
+<h2 lang="ja"><a href="../examples/example18.hs">例 18</a></h2>
+</a>
+<!--
+<p lang="en">
+This example is discussed in the section:
+<a href="contmonad.html#example">The Continuation monad</a>.
+</p>
+-->
+<p lang="ja">
+この例は
+<a href="contmonad.html#example">Continuation モナド</a>
+の節で議論されています。
+</p>
+<!--
+<p lang="en">
+The example code shows how the Continuation monad's
+escape continuations work.  The example computes
+a complex transformation of a number.
+</p>
+-->
+<p lang="ja">
+コードは Continuation モナドの脱出継続がどのように働くかを示した例です。
+例では、複雑な数字の変換を計算しています。
+</p>
+
+<a name="example19">
+<!--<h2 lang="en"><a href="../examples/example19.hs">Example 19</a></h2>-->
+<h2 lang="ja"><a href="../examples/example19.hs">例 19</a></h2>
+</a>
+<!--
+<p lang="en">
+This example is discussed in the section:
+<a href="hardway.html#example1">Combining monads the hard way</a>.
+</p>
+-->
+<p lang="ja">
+この例は、
+<a href="hardway.html#example1">モナドの合成は難しい</a>
+の節で議論されています。
+</p>
+<!--
+<p lang="en">
+The example code shows how the Continuation monad can be
+nested within the IO monad given a suitable computational
+structure.  The example is a slight modification of example 18.
+</p>
+-->
+<p lang="en">
+コードは Continuation モナドがいかに IO モナド内でネストし、適切な
+計算構造を与えるかを示す例です。この例は、例 18 を少し変更した
+ものになっています。
+</p>
+
+<a name="example20">
+<!--<h2 lang="en"><a href="../examples/example20.hs">Example 20</a></h2>-->
+<h2 lang="ja"><a href="../examples/example20.hs">例 20</a></h2>
+</a>
+<!--
+<p lang="en">
+This example is discussed in the section:
+<a href="hardway.html#example2">Combining monads the hard way</a>.
+</p>
+-->
+<p lang="ja">
+この例は、
+<a href="hardway.html#example2">モナドの合成は難しい</a>
+の節で議論されています。
+</p>
+<!--
+<p lang="en">
+The example code shows how the Continuation monad and IO
+monad can be used simultaneously, but without using
+monad transformers.  The example builds on examples 18 and 19.
+</p>
+-->
+<p lang="ja">
+コードは、モナド変換子を使わないで、いかに Continuation モナドと
+IO モナドを同時に使うかの例になっています。この例は、例 18 と
+例 19 を元に構築されています。
+</p>
+
+<a name="example21">
+<!--<h2 lang="en"><a href="../examples/example21.hs">Example 21</a></h2>-->
+<h2 lang="ja"><a href="../examples/example21.hs">例 21</a></h2>
+</a>
+<!--
+<p lang="en">
+This example is discussed in the section:
+<a href="transformers.html#example">Monad transformers</a>.
+</p>
+-->
+<p lang="en">
+この例は、
+<a href="transformers.html#example">モナド変換子</a>
+の節で議論されています。
+</p>
+<!--
+<p lang="en">
+The example code shows how the transformer version of the
+Continuation monad can be used to create a combined monad
+for using continuations and doing I/O.
+The example builds on examples 18, 19 and 20.
+</p>
+-->
+<p lang="ja">
+コードは、いかにして Continuation モナドの変換子版を使って、
+継続を使い、入出力を実行する合成モナドを作るかを示す例に
+なっています。これ例は、例 18、19、20 を元に構築されています。
+</p>
+
+<a name="example22">
+<!--<h2 lang="en"><a href="../examples/example22.hs">Example 22</a></h2>-->
+<h2 lang="ja"><a href="../examples/example22.hs">例 22</a></h2>
+</a>
+<!--
+<p lang="en">
+This example is discussed in the section:
+<a href="standardxformers.html#example1">Standard monad transformers</a>.
+</p>
+-->
+<p lang="ja">
+この例は
+<a href="standardxformers.html#example1">標準モナド変換子</a>
+の節で議論されています。
+</p>
+<!--
+<p lang="en">
+The example code shows how the transformer version of the
+Writer monad can be used to create a combined monad
+for logging and doing I/O.
+The example adds timestamps to the log entries of the
+firewall simulator from example 17.
+</p>
+-->
+<p lang="ja">
+コードは、いかに Writer モナドの変換子版をつかって、ログとりと入出力の
+実行をする合成モナドを作るかを示す例です。この例では、例 17 のファイア
+ウォールシミュレータのログエントリにタイムスタンプを追加します。
+</p>
+
+<a name="example23">
+<!--<h2 lang="en"><a href="../examples/example23.hs">Example 23</a></h2>-->
+<h2 lang="ja"><a href="../examples/example23.hs">例 23</a></h2>
+</a>
+<!--
+<p lang="en">
+This example is discussed in the section:
+<a href="standardxformers.html#example2">Standard monad transformers</a>.
+</p>
+-->
+<p lang="ja">
+この例は
+<a href="standardxformers.html#example2">標準モナド変換子</a>
+の節で議論されています。
+</p>
+<!--
+<p lang="en">
+The example code shows how the transformer version of the
+Reader monad can be used to create a monad that combines
+a shared environment with I/O.  The example converts the template
+system of example 16 to use files as templates.
+</p>
+-->
+<p lang="ja">
+コードは、Reader モナドの変換子版を使って、いかに共有環境と入出力を合成
+するモナドを作るかという例になっています。例では、例 16 のテンプレート
+システムを使って、テンプレートとしてファイルを使います。
+</p>
+
+<a name="example24">
+<!--<h2 lang="en"><a href="../examples/example24.hs">Example 24</a></h2>-->
+<h2 lang="ja"><a href="../examples/example24.hs">例 24</a></h2>
+</a>
+<!--
+<p lang="en">
+This example is discussed in the section:
+<a href="standardxformers.html#example3">Standard monad transformers</a>.
+</p>
+-->
+<p lang="ja">
+この例は、
+<a href="standardxformers.html#example3">標準モナド変換子</a>
+の節で議論されています。
+</p>
+<!--
+<p lang="en">
+The example code uses the <code>StateT</code> transformer on the List
+monad to create a combined monad for doing non-deterministic stateful
+computations.  The example uses the combined monad to solve a logic
+problem.
+</p>
+-->
+<p lang="ja">
+コードは、<code>StateT</code> 変換子を Listモナド上で使い、状態のある
+非決定性計算を実行する合成モナドを作る方法の例になっています。例では
+この合成モナドを使って論理問題を解きます。
+</p>
+
+<a name="example25">
+<!--<h2 lang="en"><a href="../examples/example25.hs">Example 25</a></h2>-->
+<h2 lang="ja"><a href="../examples/example25.hs">例 25</a></h2>
+</a>
+<!--
+<p lang="en">
+This example is discussed in the section:
+<a href="stacking.html#example">An example with multiple monad transformers</a>.
+</p>
+-->
+<p lang="ja">
+この例は、
+<a href="stacking.html#example">複数の変換子を使う例</a>
+の節で議論されています。
+</p>
+<!--
+<p lang="en">
+The example code uses the <code>StateT</code> and <code>WriterT</code>
+transformers on the List monad to create a combined monad for doing
+non-deterministic stateful computations with logging.  The example uses the
+combined monad to solve the N-queens problem.
+</p>
+-->
+<p lang="ja">
+コードは <code>StateT</code> と <code>WriterT</code> の変換子を
+Listモナド上で使い、ログとりをする状態のある非決定性計算を行う
+合成モナドを作りだす例になっています。この例では、その合成モナドを
+使い、N-クィーン問題を解きます。
+</p>
+
+<a name="example26">
+<!--<h2 lang="en"><a href="../examples/example26.hs">Example 26</a></h2>-->
+<h2 lang="ja"><a href="../examples/example26.hs">例 26</a></h2>
+</a>
+<!--
+<p lang="en">
+This example is discussed in the section:
+<a href="stacking.html#lifting">Heavy lifting</a>.
+</p>
+-->
+<p lang="ja">
+この例は、
+<a href="stacking.html#lifting">多段もちあげ</a>
+の節で議論されています。
+</p>
+<!--
+<p lang="en">
+The example code demonstrates the use of the <code>lift</code> function
+and the necessity of managing its use in complex transformer stacks.
+</p>
+-->
+<p lang="ja">
+コードは、<code>lift</code> 関数の使用法とそれを複雑な変換子
+スタックで使うさいの管理の必要性を例示したものです。
+</p>
+
+<hr align="center" size="1" width="80%">
+
+<!--
+<table lang="en" width="100%">
+ <tr>
+  <td align="left" width="33%">Prev:
+   <a href="analogy.html">Appendix I - A physical analogy for monads</a></td>
+  <td align="center" width="33%">TOC:
+   <a href="index.html">Contents</a></td>
+  <td align="right" width="33%"></td>
+ </tr>
+</table>
+-->
+<table lang="ja" width="100%">
+ <tr>
+  <td align="left" width="33%">Prev:
+   <a href="analogy.html">付録 I - モナドの物理的なアナロジー</a></td>
+  <td align="center" width="33%">TOC:
+   <a href="index.html">目次</a></td>
+  <td align="right" width="33%"></td>
+ </tr>
+</table>
+</body>
+</html>		

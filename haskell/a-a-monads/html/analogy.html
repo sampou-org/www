@@ -1,0 +1,493 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<!--<title lang="en">A physical analogy for monads</title>-->
+<title lang="ja">モナドの物理的なアナロジー</title>
+</head>
+<body>
+<!--
+<table lang="en" width="100%">
+ <tr>
+  <td align="left" width="33%">Prev:
+   <a href="beyond.html">Continuing Exploration</a></td>
+  <td align="center" width="33%">TOC:
+   <a href="index.html">Contents</a></td>
+  <td align="right" width="33%">Next:
+   <a href="examples.html">Appendix II - Haskell code examples</a></td>
+ </tr>
+</table>
+-->
+<table lang="ja" width="100%">
+ <tr>
+  <td align="left" width="33%">Prev:
+   <a href="beyond.html">さらなる探究</a></td>
+  <td align="center" width="33%">TOC:
+   <a href="index.html">目次</a></td>
+  <td align="right" width="33%">Next:
+   <a href="examples.html">付録 II - Haskell のコード例</a></td>
+ </tr>
+</table>
+
+<!--<h1 lang="en">A physical analogy for monads</h1>-->
+<h1 lang="ja">モナドの物理的なアナロジー</h1>
+<!--
+<p lang="en">
+Because monads are such abstract entities, it is sometimes useful to
+think about a physical system that is analogous to a monad instead of
+thinking about monads directly.  In this way, we can use our physical
+intuition and experiences to gain insights that we can relate back to
+the abstract world of computational monads.
+</p>
+-->
+<p lang="ja">
+モナドは非常に抽象的なエンティティなので、ときには、モナドそのもの
+について直接考えるより、モナドのアナロジーとしての具体的なシステムを
+考えるのが有用です。この方法では、物理的な直観と経験を利用して、
+計算モナドの抽象的世界を再考するための洞察を得られます。
+</p>
+<!--
+<p lang="en">
+The particular physical analogy developed here is that of a mechanized
+assembly line.  It is not a perfect fit for monads &mdash; especially with some
+of the higher-order aspects of monadic computation &mdash; but I believe it
+could be helpful to gain the initial understanding of how a monad works.
+</p>
+-->
+<p lang="ja">
+ここで展開する特殊な物理的なアナロジーは機械化された組み立てラインです。
+これは、モナドに完璧に合致するものではありません。&mdash; 殊にモナド
+計算の高階性ある局面の幾つかでは。&mdash; しかし、初期段階では、モナドが
+どのように機能するかを理解するには十分役立ちます。
+</p>
+<!--
+<p lang="en">
+Begin by thinking about a Haskell program as a conveyor belt.  Input goes on
+end of the conveyor belt and is carried to a succession of work areas.  At each
+work area, some operation is performed on the item on the conveyor belt and the
+result is carried by the conveyor belt to the next work area.  Finally, the conveyor
+belt carries the final product to the end of the assembly line to be output.
+</p>
+-->
+<p lang="ja">
+Haskell のプログラムをベルトコンベヤと考えることから始めましょう。
+入力はコンベヤの端に載せられ、一連のワークエリアへと運ばれます。
+各ワークエリアにおいて、ベルトコンベヤ上の物品になんらかの操作が
+加えられ、そしてその結果はまたベルトコンベヤで、次のワークエリアに
+運ばれます。最終的にはベルトコンベヤは最終品を組み立てラインの端まで
+はこびこれを出力します。
+</p>
+<!--
+<p lang="en">
+In this assembly line model, our physical monad is a system of machines that
+controls how successive work areas on the assembly line combine their functionality
+to create the overall product.
+</p>
+-->
+<p lang="ja">
+この組み立てラインモデルでは、モナドの物理的なモデルは、組み立てライン
+上で、連続したワークエリアが、それぞれの機能を合成して、製品全体を
+つくりだすのを制御する機械システムということになります。
+</p>
+<!--
+<p lang="en">
+Our monad consists of three parts:
+</p>
+<ol lang="en">
+ <li> Trays that hold work products as they move along the conveyor
+      belt.
+ <li> Loader machines that can put any object into a tray.
+ <li> Combiner machines that can take a tray with an object and produce
+      a tray with a new object. These combiner machines are attached to
+      worker machines that actualy produce the new objects. 
+</ol>
+-->
+<p lang="ja">
+モナドは以下の3つの部分からなりたちます。
+</p>
+<ol lang="ja">
+ <li>ベルトコンベヤとともに移動する作りかけの製品を載せるトレー
+ <li>トレーに任意のオブジェクトを載せるローダ(loader)マシン
+ <li>対象の載ったトレーをひとつとり、新しいオブジェクトの載った新しいトレーを
+     作る合成(combiner)マシン。これらの合成マシンは、実際に新しい
+     オブジェクトを生成するワーカ(worker)マシンに取り付けられています。
+</ol>
+<!--
+<p lang="en">We use the monad by setting up our assembly line as a loader machine which
+puts materials into trays at the beginning of the assembly line.  The conveyor
+belt then carries these trays to each work area, where a combiner machine takes
+the tray and may decide based on its contents whether to run them through a
+worker machine, as shown in Figure A-1.
+</p>
+-->
+<p lang="ja">
+組み立てラインを、最初に材料をトレーに入れるローダマシンとして
+セットアップしてモナドを使います。そして、ベルトコンベヤは、それらのトレー
+を各ワークエリアへと運びます。ここで、合成マシンはトレーを取り上げ、その
+内容にもとづいてワーカマシンに送るかどうかを決定します。これを示している
+のは図 A-1 です。
+</p>
+
+<!--
+<table lang="en"width="478" border="1">
+<tr><td>
+<img src="figureA-1.png" width="478" height="200" border="0" hspace="0" vspace="0">
+</td></tr>
+<tr bgcolor="#cc9999"><td>
+Figure A-1.  An assembly line using a monad architecture.
+</td></tr>
+</table>
+-->
+<table lang="ja"width="478" border="1">
+<tr><td>
+<img src="figureA-1.png" width="478" height="200" border="0" hspace="0" vspace="0">
+</td></tr>
+<tr bgcolor="#cc9999"><td>
+図 A-1 モナドアーキテクチャを使った組み立てライン
+</td></tr>
+</table>
+<!--
+<p lang="en">
+The important thing to notice about the monadic assembly line is that it
+separates out the work of combining the output of the worker machines from
+the actual work done by the worker machines.  Once they are separated, we
+can vary them independently.  So the same combiner machines could be used
+on an assembly line to make airplanes and an assembly line to make
+chopsticks.  Likewise, the same worker machines could be used with
+different combiners to alter the way the final product is produced.
+</p>
+-->
+<p lang="ja">
+モナドの組み立てラインに関して注意すべき要点は、ワーカマシンの出力
+を合成する仕事を、ワーカマシンで実際に行われる仕事から分離しているという
+ことです。それらを分離してしまえば、独立して変更することができます。
+それゆえ、同じ合成マシンをひとつの組み立てラインで飛行機を作らせることも
+箸をつくらせることもできます。 同様に、ワーカマシンについても、おなじ
+もので、合成マシンを取り換えて、生産される最終製品を変更することが
+できます。
+</p>
+<!--
+<p lang="en">
+Lets take the example of an assembly line to make chopsticks, and see how
+it is handled in our physical analogy and how me might represent it as
+a program in Haskell.  We will have three worker machines.  The first
+takes small pieces of wood as input and outputs a tray containing a pair
+of roughly shaped chopsticks.  The second takes a pair of roughly shaped
+chopsticks and outputs a tray containing a pair of smooth, polished chopsticks
+with the name of the restaurant printed on them.  The third takes
+a pair of polished chopsticks and outputs a tray containing a finished pair
+of chopsticks in a printed paper wrapper.  We could represent this in
+Haskell as:
+</p>
+-->
+<p lang="ja">
+箸を作る組み立てラインの例を見て、それが物理的なアナロジーではどのように
+動いているのか、それをどのように、Haskell のコードで表現するかを
+見ましょう。
+3 つのワーカマシンを作ることになります。最初のものは、木材の小片を入力と
+してとり、出力のトレーには、おおまかに箸の形をしたもののペアが載ります。
+2 つめのワーカは、そのおおまかに箸の形をしたもののペアを取り、出力トレー
+には滑かなになり、磨かれて、レストランの名前が印刷された箸が一膳載ります。
+三番目のワーカは磨かれた箸を一膳とり、出力トレーには、印刷済みの紙で
+包装された箸が一膳載ります。これを、Haskell で書くと次のようになります。
+</p>
+<!--
+<table lang="en" bgcolor="#bbaa55" width="100%"><tr><td><pre>
+-- the basic types we are dealing with
+type Wood = ...
+type Chopsticks = ...
+data Wrapper x = Wrapper x
+
+-- NOTE: the Tray type comes from the Tray monad
+
+-- worker function 1: makes roughly shaped chopsticks
+makeChopsticks :: Wood -> Tray Chopsticks
+makeChopsticks w = ...
+
+-- worker function 2: polishes chopsticks
+polishChopsticks :: Chopsticks -> Tray Chopsticks
+polishChopsticks c = ...
+
+-- worker function 3: wraps chopsticks
+wrapChopsticks :: Chopsticks -> Tray Wrapper Chopsticks
+wrapChopsticks c = ...
+</pre></td></tr></table>
+-->
+<table lang="ja" bgcolor="#bbaa55" width="100%"><tr><td><pre>
+-- 処理する基本のタイプ
+type Wood = ...
+type Chopsticks = ...
+data Wrapper x = Wrapper x
+
+-- 註: Tray 型は、Tray モナドからきています。
+
+-- ワーカ関数 1: 箸の概形を作る
+makeChopsticks :: Wood -> Tray Chopsticks
+makeChopsticks w = ...
+
+-- ワーカ関数 2: 箸を磨く
+polishChopsticks :: Chopsticks -> Tray Chopsticks
+polishChopsticks c = ...
+
+-- ワーカ関数 3: 箸を包装する
+wrapChopsticks :: Chopsticks -> Tray Wrapper Chopsticks
+wrapChopsticks c = ...
+</pre></td></tr></table>
+<!--
+<p lamg="en">
+It is clear that the worker machines contain all of the functionality needed
+to produce chopsticks.  What is missing is the specification of the trays,
+loader, and combiner machines that collectively make up the Tray monad.
+Our trays should either be empty or contain a single item.  Our loader
+machine would simply take an item and place it in a tray on the conveyor
+belt.  The combiner machine would take each input tray and pass along empty trays
+while feeding the contents of non-empty trays to its worker machine.
+In Haskell, we would define the <code>Tray</code> monad as:
+</p>
+-->
+<p lamg="ja">
+これらのワーカマシンが箸を作るのに必要な機能をすべて持っていることは
+明らかです。抜けているのは Tray モナド全体を構成するトレー、ローダ、
+合成マシンの仕様です。トレーは空っぽであるか、もしくは、一つの品物が
+載っているかのどちらかでなければなりません。ローダマシンは、単純に、
+ひとつの品物をとり、それをベルトコンベヤに載せるだけです。合成マシンは
+入力トレーをひとつずつとり、空でないトレーの内容を付属のワーカマシン
+フィードするあいだ空になったトレーを先へ送っておきます。Haskell では
+<code>Tray</code> モナドを次のように定義します。
+</p>
+<!--
+<table lang="en" bgcolor="#bbaa55" width="100%"><tr><td><pre>
+-- trays are either empty or contain a single item 
+data Tray x = Empty | Contains x
+
+-- Tray is a monad
+instance Monad Tray where
+    Empty        >>= _      = Empty
+    (Contains x) >>= worker = worker x
+    return                  = Contains
+    fail _                  = Empty    
+</pre></td></tr></table>
+-->
+<table lang="ja" bgcolor="#bbaa55" width="100%"><tr><td><pre>
+-- トレーは空かもしくは品物が一つだけ載っていなければならない
+data Tray x = Empty | Contains x
+
+-- Tray はモナド
+instance Monad Tray where
+    Empty        >>= _      = Empty
+    (Contains x) >>= worker = worker x
+    return                  = Contains
+    fail _                  = Empty    
+</pre></td></tr></table>
+<!--
+<p lang="en">
+<img src="info.png" align="left"></img>
+You may recognize the <code>Tray</code> monad as a disguised version of the
+<code>Maybe</code> monad that is a standard part of Haskell 98 library.
+<br clear="all"></p>
+-->
+<p lang="ja">
+<img src="info.png" align="left"></img>
+<code>Tray</code> モナドが Haskell 98 の標準ライブラリの
+<code>Maybe</code> モナドの変装したものだということは分るでしょう。
+<br clear="all"></p>
+<!--
+<p lang="en">
+All that remains is to sequence the worker machines
+together using the loader and combiner machines to make a complete assembly
+line, as shown in Figure A-2.
+</p>
+-->
+<p lang="ja">
+のこるは、ローダマシンと合成マシンを使って、ワーカマシンを一列に並べ、
+完全な組み立てラインを作るだけです。それは図 A-2 です。
+</p>
+<!--
+<table lang="en" width="478" border="1">
+<tr><td>
+<img src="figureA-2.png" width="478" height="200" border="0" hspace="0" vspace="0">
+</td></tr>
+<tr bgcolor="#cc9999"><td>
+Figure A-2.  A complete assembly line for making chopsticks using a monadic approach.
+</td></tr>
+</table>
+-->
+<table lang="ja" width="478" border="1">
+<tr><td>
+<img src="figureA-2.png" width="478" height="200" border="0" hspace="0" vspace="0">
+</td></tr>
+<tr bgcolor="#cc9999"><td>
+図 A-2 完成した、モナドアプローチを使って箸を作るための組み立てライン
+</td></tr>
+</table>
+<!--
+<p lang="en">
+In Haskell, the sequencing can be done using the standard monadic functions:
+</p>
+-->
+<p lang="ja">
+Haskell では直列化は標準のモナド関数で行うことができます。
+</p>
+<table bgcolor="#bbaa55" width="100%"><tr><td><pre>
+assemblyLine :: Wood -> Tray Wrapped Chopsticks
+assemblyLine w = (return w) >>= makeChopsticks >>= polishChopsticks >>= wrapChopsticks
+</pre></td></tr></table>
+<!--
+<p lang="en">
+or using the built in Haskell "do" notation for monads: 
+</p>
+-->
+<p lang="ja">
+あるいは、Haskell 組込みのモナドの do 記法を使って以下のように行えます。
+</p>
+<table bgcolor="#bbaa55" width="100%"><tr><td><pre>
+assemblyLine :: Wood -> Tray Wrapped Chopsticks
+assemblyLine w = do c   <- makeChopsticks w
+                    c'  <- polishChopsticks c
+                    c'' <- wrapChopsticks c'
+                    return c''
+</pre></td></tr></table>
+<!--
+<p lang="en">
+So far, you have seen how monads are like a framework for building assembly lines,
+but you probably haven't been overawed by their utility.  To see why we might want
+to build our assembly line using the monadic approach, consider what would happen
+if we wanted to change the manufacturing process.
+</p>
+-->
+<p lang="ja">
+ここまでで、モナドが組み立てラインを構築するフレームワークのようなものだ
+ということが判ったと思います。しかし、そのユーティリティについては
+ちょっと気をのまれるような感じがしたのではないかと思います。
+なぜ、組み立てラインをモナドのアプローチで構築しようとするのかを
+理解するためには、もし、工場のプロセスを変更したいと思ったとき、何が
+おこるかを、よく考えてみてください。
+</p>
+<!--
+<p lang="en">
+Right now, when a worker machine malfunctions, it uses the <code>fail</code>
+routine to produce an empty tray.  The <code>fail</code> routine takes an argument
+describing the failure, but our <code>Tray</code> type ignores this and simply
+produces an empty tray.  This empty tray travels down the assembly
+line and the combiner machines allow it to bypass the remaining worker machines.
+It eventually reaches the end of the assembly line, where it is brought to
+you, the quality control engineer.  It is your job to figure out which machine
+failed, but all you have to go on is an empty tray.   
+</p>
+-->
+<p lang="ja">
+さて、ワーカマシンのどれかが上手く機能しないとき、<code>fail</code>
+ルーチンをつかって、空のトレーを作ることにしましょう。
+<code>fail</code> ルーチンは失敗を説明する引数をひとつとります。
+しかし、<code>Tray</code> 型はこれおを無視し、単に空のトレーを作ります。
+この空のトレーは組み立てライン先まで進んでいきます。そして、
+合成マシンはこれを残りのワーカマシンがバイパスするようにします。
+最後はこの空のトレーは組み立てラインの最後に到達し、そこで、品質管理
+エンジニアのもとに運ばれることになります。どのマシンが不調なのかを
+探すのはそのエンジニアの仕事です。しかし、あるのは空のトレーです。
+</p>
+<!--
+<p lang="en">
+You realize that your job would be much easier if you took advantage of the
+failure messages that are currently ignored by the <code>fail</code> routine
+in your <code>Tray</code> monad.  Because your assembly line is organized around
+a monadic approach, it is easy for you to add this functionality to your assembly
+line without changing your worker machines.
+</p>
+-->
+<p lang="ja">
+<code>Tray</code> モナドの今の <code>fail</code> ルーチンが無視している
+失敗メッセージを上手く使えれば、この仕事がずっとやりやすくなるということ
+がわかりますよね。組み立てラインはモナドのアプローチで組織化してあるので
+ワーカマシンを変更することなく、この機能を追加するのは簡単です。
+</p>
+<!--
+<p lang="en">
+To make the change, you simply create a new tray type that can never be empty.
+It will always either contain an item or it will contain a failure report
+describing the exact reason there is no item in the tray.  
+</p>
+-->
+<p lang="ja">
+この変更を行うには、単には、空にはならない、新しいトレーのタイプを
+作ればいいだけです。常に、品物が載っているか、品物が載っていない
+ちゃんとした理由のレポートがあるかのどちらかにします。
+</p>
+<!--
+<table lang="en" bgcolor="#bbaa55" width="100%"><tr><td><pre>
+-- tray2s either contain a single item or contain a failure report 
+data Tray2 x = Contains x | Failed String
+
+-- Tray2 is a monad
+instance Monad Tray2 where
+    (Failed reason) >>= _      = Failed reason
+    (Contains x)    >>= worker = worker x
+    return                     = Contains
+    fail reason                = Failed reason
+</pre></td></tr></table>
+-->
+<table lang="ja" bgcolor="#bbaa55" width="100%"><tr><td><pre>
+-- Tray2 は一つの品物か、失敗したときのレポートのどちらかを載せます
+data Tray2 x = Contains x | Failed String
+
+-- Tray2 はモナド
+instance Monad Tray2 where
+    (Failed reason) >>= _      = Failed reason
+    (Contains x)    >>= worker = worker x
+    return                     = Contains
+    fail reason                = Failed reason
+</pre></td></tr></table>
+<!--
+<p lang="en">
+<img src="info.png" align="left"></img>
+You may recognize the <code>Tray2</code> monad as a disguised version of
+the <code>Error</code> monad that is a standard part of the Haskell 98
+libraries.<br clear="all">
+</p>
+-->
+<p lang="ja">
+<img src="info.png" align="left"></img>
+<code>Tray2</code> モナドが Haskell 98 の標準ライブラリの
+<code>Error</code> モナドの変装したものだということは分るでしょう。
+<br clear="all">
+</p>
+<!--
+<p lang="en">
+Replacing the <code>Tray</code> monad with the <code>Tray2</code> monad
+instantly upgrades your assembly line.  Now when a failure occurs, the
+tray that is brought to the quality control engineer contains a failure
+report detailing the exact cause of the failure! 
+</p>
+-->
+<p lang="ja">
+組み立て<code>Tray</code> モナドを <code>Tray2</code> モナドに置き換える
+だけで組み立てラインあっというまにアップグレードできます。今度は、
+不具合が起きれば、品質管理エンジニアのところに運ばれて来たトレーには
+不具合発生の原因についての詳細なレポートが載っています。
+</p>
+
+<hr align="center" size="1" width="80%">
+
+<!--
+<table lang="en" width="100%">
+ <tr>
+  <td align="left" width="33%">Prev:
+   <a href="beyond.html">Continuing Exploration</a></td>
+  <td align="center" width="33%">TOC:
+   <a href="index.html">Contents</a></td>
+  <td align="right" width="33%">Next:
+   <a href="examples.html">Appendix II - Haskell code examples</a></td>
+ </tr>
+</table>
+-->
+<table lang="ja" width="100%">
+ <tr>
+  <td align="left" width="33%">Prev:
+   <a href="beyond.html">さらなる探究</a></td>
+  <td align="center" width="33%">TOC:
+   <a href="index.html">目次</a></td>
+  <td align="right" width="33%">Next:
+   <a href="examples.html">付録 II - Haskell のコード例</a></td>
+ </tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,369 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<!--<title lang="en">The Continuation monad</title>-->
+<title lang="ja">Continuation モナド</title>
+</head>
+<body>
+<!--
+<table lang="en" width="100%">
+ <tr>
+  <td align="left" width="33%">Prev: <a href="writermonad.html">The Writer monad</a></td>
+  <td align="center" width="33%">TOC: <a href="index.html">Contents</a></td>
+  <td align="right" width="33%">Next: <a href="introIII.html">Part III - Introduction</a></td>
+ </tr>
+</table>	
+-->
+<table lang="ja" width="100%">
+ <tr>
+  <td align="left" width="33%">Prev:
+   <a href="writermonad.html">Writer モナド</a></td>
+  <td align="center" width="33%">TOC: 
+   <a href="index.html">目次</a></td>
+  <td align="right" width="33%">Next: 
+   <a href="introIII.html">Part III - イントロダクション</a></td>
+ </tr>
+</table>	
+
+<!--<h1 lang="en">The Continuation monad</h1>-->
+<h1 lang="ja">Continuationモナド</h1>
+
+<!--
+<ul lang="en">
+  <li><a href="#overview">Overview</a></li>
+  <li><a href="#motivation">Motivation</a></li>
+  <li><a href="#definition">Definition</a></li>
+  <li><a href="#example">Example</a></li>
+</ul>
+-->
+<ul lang="ja">
+  <li><a href="#overview">概観</a></li>
+  <li><a href="#motivation">動機</a></li>
+  <li><a href="#definition">定義</a></li>
+  <li><a href="#example">例</a></li>
+</ul>
+
+<hr align="center" size="1" width="80%">
+
+<a name="overview">
+<!--<h2 lang="en">Overview</h2>-->
+<h2 lang="ja">概観</h2></a>
+<!--
+<table lang="en" width="100%" cellpadding="3">
+  <tr>
+    <th align="left">Computation type:</th>
+    <td>Computations which can be interrupted and resumed.</td>
+  </tr>
+  <tr>
+    <th align="left">Binding strategy:</th>
+    <td>Binding a function to a monadic value creates a new continuation which
+    uses the function as the continuation of the monadic computation.
+    </td>
+  </tr>
+  <tr>
+    <th align="left">Useful for:</th>
+    <td>Complex control structures, error handling and creating co-routines.
+    </td>
+  </tr>
+  <tr>
+    <th align="left">Zero and plus:</th>
+    <td>None.</td>
+  </tr>
+  <tr>
+    <th align="left">Example type:</th>
+    <td><a href="http://www.haskell.org/ghc/docs/latest/html/base/Control.Monad.Cont.html">Cont r a</a></td>
+  </tr>
+</table>
+-->
+<table lang="ja" width="100%" cellpadding="3">
+  <tr>
+    <th align="left">計算のタイプ:</th>
+    <td>中断，再開が可能な計算</td>
+  </tr>
+  <tr>
+    <th align="left">束縛の戦略:</th>
+    <td>関数をモナド値に束縛すると新しい継続が生成され，その継続は
+     その関数をそのモナド計算の継続として使います．
+    </td>
+  </tr>
+  <tr>
+    <th align="left">利用場面:</th>
+    <td>複雑な制御機構，エラー処理，コルーチンの生成
+    </td>
+  </tr>
+  <tr>
+    <th align="left">ゼロおよびプラス:</th>
+    <td>なし</td>
+  </tr>
+  <tr>
+    <th align="left">型の例:</th>
+    <td><a href="http://www.haskell.org/ghc/docs/latest/html/base/Control.Monad.Cont.html">Cont r a</a></td>
+  </tr>
+</table>
+
+<a name="motivation">
+<!--<h2 lang="en">Motivation</h2>-->
+<h2 lang="ja">動機</h2>
+</a>
+<!--
+<p lang="en">
+<img src="warn.png" align="left"></img>
+Abuse of the Continuation monad can produce code that is
+impossible to understand and maintain.
+</p>
+-->
+<p lang="ja">
+<img src="warn.png" align="left"></img>
+Continuation モナドの濫用は理解や保守が不可能なコードをつくり出す
+可能性があります．
+</p>
+<!--
+<p lang="en">
+Before using the Continuation monad, be sure that you have a firm
+understanding of continuation-passing style (<abbr>CPS</abbr>) and
+that continuations represent the best solution to your particular
+design problem.  Many algorithms which require continuations
+in other languages do not require them in Haskell, due to Haskell's
+lazy semantics.
+</p>
+-->
+<p lang="ja">
+Continuation モナドを使う前に継続渡しスタイル(<abbr>CPS</abbr>)について
+確実に理解しているか，自身の設計課題について継続が最良のソリューション
+なのかを確認してください．他の言語では継続が要求されるような多くの
+アルゴリズムにおいて，Haskell では遅延評価意味論のおかげで，継続を
+必要としません．
+</p>
+<!--
+<p lang="en">
+Continuations represent the <em>future</em> of a computation, as a
+function from an intermediate result to the final result.  In
+continuation-passing style, computations are built up from sequences
+of nested continuations, terminated by a final continuation
+(often <code>id</code>) which produces the final result.
+Since continuations are functions which represent the future of
+a computation, manipulation of the continuation functions can achieve
+complex manipulations of the future of the computation, such as
+interrupting a computation in the middle, aborting a portion of
+a computation, restarting a computation and interleaving execution
+of computations.  The Continuation monad adapts CPS to the
+structure of a monad.
+</p>
+-->
+<p lang="ja">
+継続は計算の<em>この先(future)</em>を表現しており，これは
+中間結果から最終結果への関数として表現されます．継続渡しスタイル
+では，計算は入れ子になった継続のならびから構築され，最終結果
+を生成する最終継続(多くの場合 <code>id</code>)で終了します．
+継続は計算のこの先を表現する関数ですから，継続関数を操作することで
+複雑な計算のこの先を操作することができます．たとえば，途中での
+計算への割込みや，計算の一部の中断，復帰，計算の交互実行などです．
+Continutation モナドは CPS をモナドの構造に適合させたものです．
+</p>
+
+<a name="definition">
+<!--<h2 lang="en">Definition</h2>-->
+<h2 lang="ja">定義</h2>
+</a>
+<!--
+<table lang="en" bgcolor="#bbaa55" width="100%"><tr><td><pre>
+newtype Cont r a = Cont { runCont :: ((a -> r) -> r) } -- r is the final result type of the whole computation 
+  
+instance Monad (Cont r) where 
+    return a       = Cont $ \k -> k a                       -- i.e. return a = \k -> k a 
+    (Cont c) >>= f = Cont $ \k -> c (\a -> runCont (f a) k) -- i.e. c >>= f = \k -> c (\a -> f a k) 
+</pre></td></tr></table>
+-->
+<table lang="ja" bgcolor="#bbaa55" width="100%"><tr><td><pre>
+newtype Cont r a = Cont { runCont :: ((a -> r) -> r) } -- r は計算全体の最終の型
+  
+instance Monad (Cont r) where 
+    return a       = Cont $ \k -> k a                       -- i.e. return a = \k -> k a 
+    (Cont c) >>= f = Cont $ \k -> c (\a -> runCont (f a) k) -- i.e. c >>= f = \k -> c (\a -> f a k) 
+</pre></td></tr></table>
+<!--
+<p lang="en">
+The Continuation monad represents computations in continuation-passing style.
+<code>Cont r a</code> is a CPS computation that produces an intermediate
+result of type <code>a</code> within a CPS computation whose final result
+type is <code>r</code>.
+</p>
+-->
+<p lang="ja">
+Continuation モナドは継続渡しスタイルの計算を表現しています．
+<code>Cont r a</code> は最終の型が <code>r</code> で，CPS 内部の中間の型
+<code>a</code> を生成する CPS 計算です．
+</p>
+<!--
+<p lang="en">The <code>return</code> function simply creates a continuation which passes the
+value on.  The <code>>>=</code> operator adds the bound function into the continuation
+chain.
+</p>
+-->
+<p lang="ja"><code>return</code> 関数は単純に値を次へ渡すだけの継続を
+生成します．<code>>>=</code> 演算子は継続連鎖のなかに束縛された関数を
+追加します．
+</p>
+ 
+<table bgcolor="#bbaa55" width="100%"><tr><td><pre>
+class (Monad m) => MonadCont m where 
+    callCC :: ((a -> m b) -> m a) -> m a 
+ 
+instance MonadCont (Cont r) where 
+    callCC f = Cont $ \k -> runCont (f (\a -> Cont $ \_ -> k a)) k
+</pre></td></tr></table>
+<!--
+<p lang="en">
+The <code>MonadCont</code> class provides the <code>callCC</code> function,
+which provides an <dfn>escape</dfn> continuation mechanism for use
+with Continuation monads.  Escape continuations allow you to abort the
+current computation and return a value immediately.  They achieve a similar
+effect to <code>throwError</code> and </code>catchError</code> within
+an <code>Error</code> monad.
+</p>
+-->
+<p lang="ja">
+<code>MonadCont</code> クラスは <code>callCC</code> 関数を提供します．
+この関数は，Continuation モナド用の<dfn>脱出</dfn>継続機構を
+提供するものです．脱出継続は現在の計算を中断し，即座に値を返します．
+これにより，<code>Error</code> モナドでの <code>throwError</code> および
+</code>catchError</code> に類似した効果が得られます．
+</p>
+<!--
+<p lang="en">
+<code>callCC</code> calls a function with the current continuation as its
+argument (hence the name).  The standard idiom used with <code>callCC</code>
+is to provide a lambda-expression to name the continuation.  Then calling
+the named continuation anywhere within its scope will escape from the computation,
+even if it is many layers deep within nested computations.
+</p>
+-->
+<p lang="ja">
+<code>callCC</code> は現在の継続(Current Continuation)を引数として関数を
+呼びます(それゆえ，CallCCという名があります)．
+<code>callCC</code> を使うときの標準的なイディオムは，λ式を与えて
+継続に名前をつけるというものです．そうすると，その名前のついた継続を
+スコープ内のあらゆる場所から呼ぶことで，それが入れ子の計算のどんなに
+深いところからでも，脱出できます．
+</p>
+<!--
+<p lang="en">
+In addition to the escape mechanism provided by <code>callCC</code>,
+the Continuation monad can be used to implement other, more powerful
+continuation manipulations.  These other mechanisms have fairly
+specialized uses, however &mdash; and abuse of them can easily create
+fiendishly obfuscated code &mdash; so they will not be covered here.
+</p>
+-->
+<p lang="ja">
+<code>callCC</code> によって提供される脱出機構以外にも，Continuation
+モナドでは別のより強力な継続の操作を実装できます．しかしながら，
+これらの機構は使用法がかなり特殊で，濫用すると簡単コードがわかりにくい
+ものになってしまします．それで，ここではこれらをとりあげることは
+しません．
+</p>
+
+<a name="example">
+<!--<h2 lang="en">Example</h2>-->
+<h2 lang="ja">例</h2>
+</a>
+<!--
+<p lang="en">
+This example gives a taste of how escape continuations work.
+The example function uses escape continuations to perform a
+complicated transformation on an integer.
+</p>
+-->
+<p lang="en">
+この例は脱出継続の機能の感覚を示すものです．
+例の関数は，脱出継続を使って，整数上の複雑な変換を実行するものです．
+</p>
+<!--
+<table lang="en" bgcolor="#bbaa55" width="100%">
+<tr bgcolor="#aabb55">
+<th align="left">Code available in <a href="../examples/example18.hs">example18.hs</a></th>
+</tr>
+<tr><td><pre>
+{- We use the continuation monad to perform "escapes" from code blocks.
+   This function implements a complicated control structure to process
+   numbers:
+
+   Input (n)       Output                       List Shown
+   =========       ======                       ==========
+   0-9             n                            none
+   10-199          number of digits in (n/2)    digits of (n/2)
+   200-19999       n                            digits of (n/2)
+   20000-1999999   (n/2) backwards              none
+   >= 2000000      sum of digits of (n/2)       digits of (n/2)
+-}  
+fun :: Int -> String
+fun n = (`runCont` id) $ do
+        str <- callCC $ \exit1 -> do                        -- define "exit1"
+          when (n < 10) (exit1 (show n))
+          let ns = map digitToInt (show (n `div` 2))
+          n' <- callCC $ \exit2 -> do                       -- define "exit2"
+            when ((length ns) < 3) (exit2 (length ns))
+            when ((length ns) < 5) (exit2 n)
+            when ((length ns) < 7) $ do let ns' = map intToDigit (reverse ns)
+                                        exit1 (dropWhile (=='0') ns')  --escape 2 levels
+            return $ sum ns
+          return $ "(ns = " ++ (show ns) ++ ") " ++ (show n')
+        return $ "Answer: " ++ str
+</pre></td></tr></table>
+-->
+<table lang="ja" bgcolor="#bbaa55" width="100%">
+<tr bgcolor="#aabb55">
+<th align="left"><a href="../examples/example18.hs">example18.hs</a>
+で使えるコード
+</th>
+</tr>
+<tr><td><pre>
+{- Continuation モナドを使って，コードブロックからの「脱出」を行います
+   この関数は以下のような処理の複雑な制御構造を実装します
+
+   Input (n)       Output                       List Shown
+   =========       ======                       ==========
+   0-9             n                            none
+   10-199          number of digits in (n/2)    digits of (n/2)
+   200-19999       n                            digits of (n/2)
+   20000-1999999   (n/2) backwards              none
+   >= 2000000      sum of digits of (n/2)       digits of (n/2)
+-}  
+fun :: Int -> String
+fun n = (`runCont` id) $ do
+        str <- callCC $ \exit1 -> do                        -- "exit1" を定義
+          when (n < 10) (exit1 (show n))
+          let ns = map digitToInt (show (n `div` 2))
+          n' <- callCC $ \exit2 -> do                       -- "exit2" を定義
+            when ((length ns) < 3) (exit2 (length ns))
+            when ((length ns) < 5) (exit2 n)
+            when ((length ns) < 7) $ do let ns' = map intToDigit (reverse ns)
+                                        exit1 (dropWhile (=='0') ns')  --escape 2 levels
+            return $ sum ns
+          return $ "(ns = " ++ (show ns) ++ ") " ++ (show n')
+        return $ "Answer: " ++ str
+</pre></td></tr></table>
+
+<hr align="center" size="1" width="80%">
+
+<!--
+<table lang="en" width="100%">
+ <tr>
+  <td align="left" width="33%">Prev: <a href="writermonad.html">The Writer monad</a></td>
+  <td align="center" width="33%">TOC: <a href="index.html">Contents</a></td>
+  <td align="right" width="33%">Next: <a href="introIII.html">Part III - Introduction</a></td>
+ </tr>
+</table>	
+-->
+<table lang="ja" width="100%">
+ <tr>
+  <td align="left" width="33%">Prev:
+   <a href="writermonad.html">Writer モナド</a></td>
+  <td align="center" width="33%">TOC: 
+   <a href="index.html">目次</a></td>
+  <td align="right" width="33%">Next: 
+   <a href="introIII.html">Part III - イントロダクション</a></td>
+ </tr>
+</table>	
+
+</body>

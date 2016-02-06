@@ -1,0 +1,460 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd-->
+<html xmlns="http://www.w3.org/1999/xhtml"
+>
+<head>
+<title></title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)" />
+<meta name="originator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)" />
+<!-- 2,html,xhtml -->
+<meta name="src" content="haskell.tex" />
+<meta name="date" content="2010-07-15 09:50:00" />
+<link rel="stylesheet" type="text/css" href="haskell.css" />
+</head><body
+>
+<p class="noindent">
+<div class="center"
+>
+ <p class="noindent">
+ <p class="noindent">  <span
+class="ptmb7t-x-x-172">Haskell 2010</span><br /><br />
+<span
+class="ptmb7t-x-x-172">言語報告書</span><br /><br />
+</div>
+<div class="center"
+>
+ <p class="noindent">
+ <p class="noindent"> <span
+class="ptmr7t-x-x-120">Simon Marlow</span><br />
+<span
+class="ptmr7t-x-x-120">(editor)</span></div>
+<div class="center"
+>
+ <p class="noindent">
+ <p class="noindent"> <span
+class="ptmri7t-">Copyright notice.</span></div>
+ <p class="noindent"> The authors and publisher intend this Report to belong to the entire Haskell community, and grant permission to
+copy and distribute it for any purpose, provided that it is reproduced in its entirety, including this Notice. Modified
+versions of this Report may also be copied and distributed for any purpose, provided that the modified
+version is clearly presented as such, and that it does not claim to be a definition of the language Haskell
+2010.
+ <p class="noindent">
+ <p class="noindent">
+<div class="tableofcontents">
+<span class="likechapterToc" ><a
+href="haskellli1.html#x2-1000" id="QQ2-2-1">目次</a></span>
+<br /><span class="likechapterToc" ><a
+href="haskellli2.html#x3-2000" id="QQ2-3-2">緒言</a></span>
+<br />&#x00A0;<span class="likesectionToc" ><a
+href="haskellli2.html#x3-3000" id="QQ2-3-3">目標</a></span>
+<br />&#x00A0;<span class="likesectionToc" ><a
+href="haskellli2.html#x3-4000" id="QQ2-3-4">Haskell 2010: 言語とライブラリ</a></span>
+<br />&#x00A0;<span class="likesectionToc" ><a
+href="haskellli2.html#x3-5000" id="QQ2-3-5">Haskell 98 への拡張</a></span>
+<br />&#x00A0;<span class="likesectionToc" ><a
+href="haskellli2.html#x3-6000" id="QQ2-3-6">Haskell の情報源</a></span>
+<br />&#x00A0;<span class="likesectionToc" ><a
+href="haskellli2.html#x3-7000" id="QQ2-3-7">言語の構築</a></span>
+<br /><span class="partToc" >I&#x00A0;&#x00A0;<a
+href="haskellpa1.html#x5-8000I" id="QQ2-5-8">Haskell 2010 言語</a></span>
+<br /><span class="chapterToc" >1 <a
+href="haskellch1.html#x6-90001" id="QQ2-6-9">イントロダクション</a></span>
+<br />&#x00A0;<span class="sectionToc" >1.1 <a
+href="haskellch1.html#x6-100001.1" id="QQ2-6-10">プログラムの構造</a></span>
+<br />&#x00A0;<span class="sectionToc" >1.2 <a
+href="haskellch1.html#x6-110001.2" id="QQ2-6-11">Haskell カーネル</a></span>
+<br />&#x00A0;<span class="sectionToc" >1.3 <a
+href="haskellch1.html#x6-120001.3" id="QQ2-6-12">値および型</a></span>
+<br />&#x00A0;<span class="sectionToc" >1.4 <a
+href="haskellch1.html#x6-130001.4" id="QQ2-6-13">名前空間</a></span>
+<br /><span class="chapterToc" >2 <a
+href="haskellch2.html#x7-140002" id="QQ2-7-14">字句構造</a></span>
+<br />&#x00A0;<span class="sectionToc" >2.1 <a
+href="haskellch2.html#x7-150002.1" id="QQ2-7-15">表記規約</a></span>
+<br />&#x00A0;<span class="sectionToc" >2.2 <a
+href="haskellch2.html#x7-160002.2" id="QQ2-7-16">プログラムの字句構造</a></span>
+<br />&#x00A0;<span class="sectionToc" >2.3 <a
+href="haskellch2.html#x7-170002.3" id="QQ2-7-17">コメント</a></span>
+<br />&#x00A0;<span class="sectionToc" >2.4 <a
+href="haskellch2.html#x7-180002.4" id="QQ2-7-18">識別子および演算子</a></span>
+<br />&#x00A0;<span class="sectionToc" >2.5 <a
+href="haskellch2.html#x7-190002.5" id="QQ2-7-19">数値リテラル</a></span>
+<br />&#x00A0;<span class="sectionToc" >2.6 <a
+href="haskellch2.html#x7-200002.6" id="QQ2-7-20">文字リテラルおよび文字列リテラル</a></span>
+<br />&#x00A0;<span class="sectionToc" >2.7 <a
+href="haskellch2.html#x7-210002.7" id="QQ2-7-21">レイアウト</a></span>
+<br /><span class="chapterToc" >3 <a
+href="haskellch3.html#x8-220003" id="QQ2-8-24">式</a></span>
+<br />&#x00A0;<span class="sectionToc" >3.1 <a
+href="haskellch3.html#x8-230003.1" id="QQ2-8-25">エラー</a></span>
+<br />&#x00A0;<span class="sectionToc" >3.2 <a
+href="haskellch3.html#x8-240003.2" id="QQ2-8-26">変数，構成子，演算子，リテラル</a></span>
+<br />&#x00A0;<span class="sectionToc" >3.3 <a
+href="haskellch3.html#x8-260003.3" id="QQ2-8-28">カリー化された適用およびλ抽象</a></span>
+<br />&#x00A0;<span class="sectionToc" >3.4 <a
+href="haskellch3.html#x8-280003.4" id="QQ2-8-30">演算子の適用</a></span>
+<br />&#x00A0;<span class="sectionToc" >3.5 <a
+href="haskellch3.html#x8-300003.5" id="QQ2-8-32">セクション</a></span>
+<br />&#x00A0;<span class="sectionToc" >3.6 <a
+href="haskellch3.html#x8-320003.6" id="QQ2-8-34">条件式</a></span>
+<br />&#x00A0;<span class="sectionToc" >3.7 <a
+href="haskellch3.html#x8-340003.7" id="QQ2-8-36">リスト</a></span>
+<br />&#x00A0;<span class="sectionToc" >3.8 <a
+href="haskellch3.html#x8-360003.8" id="QQ2-8-38">タプル</a></span>
+<br />&#x00A0;<span class="sectionToc" >3.9 <a
+href="haskellch3.html#x8-380003.9" id="QQ2-8-40">ユニット式および括弧に囲まれた式</a></span>
+<br />&#x00A0;<span class="sectionToc" >3.10 <a
+href="haskellch3.html#x8-400003.10" id="QQ2-8-42">等差数列</a></span>
+<br />&#x00A0;<span class="sectionToc" >3.11 <a
+href="haskellch3.html#x8-420003.11" id="QQ2-8-44">リスト内包表記</a></span>
+<br />&#x00A0;<span class="sectionToc" >3.12 <a
+href="haskellch3.html#x8-440003.12" id="QQ2-8-46">let 式</a></span>
+<br />&#x00A0;<span class="sectionToc" >3.13 <a
+href="haskellch3.html#x8-460003.13" id="QQ2-8-48">case 式</a></span>
+<br />&#x00A0;<span class="sectionToc" >3.14 <a
+href="haskellch3.html#x8-470003.14" id="QQ2-8-49">do 式</a></span>
+<br />&#x00A0;<span class="sectionToc" >3.15 <a
+href="haskellch3.html#x8-490003.15" id="QQ2-8-51">フィールドラベル付きデータ型</a></span>
+<br />&#x00A0;<span class="sectionToc" >3.16 <a
+href="haskellch3.html#x8-560003.16" id="QQ2-8-58">式の型シグネチャ</a></span>
+<br />&#x00A0;<span class="sectionToc" >3.17 <a
+href="haskellch3.html#x8-580003.17" id="QQ2-8-60">パターン照合</a></span>
+<br /><span class="chapterToc" >4 <a
+href="haskellch4.html#x10-620004" id="QQ2-10-67">宣言と束縛</a></span>
+<br />&#x00A0;<span class="sectionToc" >4.1 <a
+href="haskellch4.html#x10-630004.1" id="QQ2-10-68">型およびクラスの概要</a></span>
+<br />&#x00A0;<span class="sectionToc" >4.2 <a
+href="haskellch4.html#x10-680004.2" id="QQ2-10-73">ユーザ定義のデータ型</a></span>
+<br />&#x00A0;<span class="sectionToc" >4.3 <a
+href="haskellch4.html#x10-750004.3" id="QQ2-10-80">型クラスおよび多重定義</a></span>
+<br />&#x00A0;<span class="sectionToc" >4.4 <a
+href="haskellch4.html#x10-800004.4" id="QQ2-10-85">入れ子になった宣言</a></span>
+<br />&#x00A0;<span class="sectionToc" >4.5 <a
+href="haskellch4.html#x10-880004.5" id="QQ2-10-94">関数束縛およびパターン束縛の静的意味論</a></span>
+<br />&#x00A0;<span class="sectionToc" >4.6 <a
+href="haskellch4.html#x10-970004.6" id="QQ2-10-103">カインド推論</a></span>
+<br /><span class="chapterToc" >5 <a
+href="haskellch5.html#x11-980005" id="QQ2-11-104">モジュール</a></span>
+<br />&#x00A0;<span class="sectionToc" >5.1 <a
+href="haskellch5.html#x11-990005.1" id="QQ2-11-105">モジュールの構造</a></span>
+<br />&#x00A0;<span class="sectionToc" >5.2 <a
+href="haskellch5.html#x11-1000005.2" id="QQ2-11-106">エクスポートリスト</a></span>
+<br />&#x00A0;<span class="sectionToc" >5.3 <a
+href="haskellch5.html#x11-1010005.3" id="QQ2-11-107">インポート宣言</a></span>
+<br />&#x00A0;<span class="sectionToc" >5.4 <a
+href="haskellch5.html#x11-1060005.4" id="QQ2-11-112">インスタンス宣言のインポートおよびエクスポート</a></span>
+<br />&#x00A0;<span class="sectionToc" >5.5 <a
+href="haskellch5.html#x11-1070005.5" id="QQ2-11-113">名前衝突および閉包性</a></span>
+<br />&#x00A0;<span class="sectionToc" >5.6 <a
+href="haskellch5.html#x11-1110005.6" id="QQ2-11-117">標準プレリュード</a></span>
+<br />&#x00A0;<span class="sectionToc" >5.7 <a
+href="haskellch5.html#x11-1140005.7" id="QQ2-11-120">分割コンパイル</a></span>
+<br />&#x00A0;<span class="sectionToc" >5.8 <a
+href="haskellch5.html#x11-1150005.8" id="QQ2-11-121">抽象データ型</a></span>
+<br /><span class="chapterToc" >6 <a
+href="haskellch6.html#x13-1160006" id="QQ2-13-122">定義済みの型およびクラス</a></span>
+<br />&#x00A0;<span class="sectionToc" >6.1 <a
+href="haskellch6.html#x13-1170006.1" id="QQ2-13-123">Haskell の標準型</a></span>
+<br />&#x00A0;<span class="sectionToc" >6.2 <a
+href="haskellch6.html#x13-1260006.2" id="QQ2-13-132">正格評価</a></span>
+<br />&#x00A0;<span class="sectionToc" >6.3 <a
+href="haskellch6.html#x13-1270006.3" id="QQ2-13-133">Haskell の標準クラス</a></span>
+<br />&#x00A0;<span class="sectionToc" >6.4 <a
+href="haskellch6.html#x13-1350006.4" id="QQ2-13-142">数値</a></span>
+<br /><span class="chapterToc" >7 <a
+href="haskellch7.html#x14-1420007" id="QQ2-14-152">基本入出力</a></span>
+<br />&#x00A0;<span class="sectionToc" >7.1 <a
+href="haskellch7.html#x14-1430007.1" id="QQ2-14-153">標準 I/O 関数</a></span>
+<br />&#x00A0;<span class="sectionToc" >7.2 <a
+href="haskellch7.html#x14-1470007.2" id="QQ2-14-157">I/O 操作の直列化</a></span>
+<br />&#x00A0;<span class="sectionToc" >7.3 <a
+href="haskellch7.html#x14-1480007.3" id="QQ2-14-158">I/O モナドにおける例外処理</a></span>
+<br /><span class="chapterToc" >8 <a
+href="haskellch8.html#x15-1490008" id="QQ2-15-159">外部関数インターフェイス</a></span>
+<br />&#x00A0;<span class="sectionToc" >8.1 <a
+href="haskellch8.html#x15-1500008.1" id="QQ2-15-160">外部言語</a></span>
+<br />&#x00A0;<span class="sectionToc" >8.2 <a
+href="haskellch8.html#x15-1510008.2" id="QQ2-15-161">コンテキスト</a></span>
+<br />&#x00A0;<span class="sectionToc" >8.3 <a
+href="haskellch8.html#x15-1530008.3" id="QQ2-15-163">字句構造</a></span>
+<br />&#x00A0;<span class="sectionToc" >8.4 <a
+href="haskellch8.html#x15-1540008.4" id="QQ2-15-164">外部宣言</a></span>
+<br />&#x00A0;<span class="sectionToc" >8.5 <a
+href="haskellch8.html#x15-1610008.5" id="QQ2-15-172">外部実体の仕様</a></span>
+<br />&#x00A0;<span class="sectionToc" >8.6 <a
+href="haskellch8.html#x15-1690008.6" id="QQ2-15-180"> マーシャリング</a></span>
+<br />&#x00A0;<span class="sectionToc" >8.7 <a
+href="haskellch8.html#x15-1700008.7" id="QQ2-15-181">外部Ｃインターフェイス</a></span>
+<br /><span class="chapterToc" >9 <a
+href="haskellch9.html#x16-1710009" id="QQ2-16-184">標準プレリュード</a></span>
+<br />&#x00A0;<span class="sectionToc" >9.1 <a
+href="haskellch9.html#x16-1720009.1" id="QQ2-16-185">プレリュード <span
+class="pcrr7t-">PreludeList</span></a></span>
+<br />&#x00A0;<span class="sectionToc" >9.2 <a
+href="haskellch9.html#x16-1730009.2" id="QQ2-16-186">プレリュード <span
+class="pcrr7t-">PreludeText</span></a></span>
+<br />&#x00A0;<span class="sectionToc" >9.3 <a
+href="haskellch9.html#x16-1740009.3" id="QQ2-16-187">プレリュード <span
+class="pcrr7t-">PreludeIO</span></a></span>
+<br /><span class="chapterToc" >10 <a
+href="haskellch10.html#x17-17500010" id="QQ2-17-188">構文リファレンス</a></span>
+<br />&#x00A0;<span class="sectionToc" >10.1 <a
+href="haskellch10.html#x17-17600010.1" id="QQ2-17-189">表記規約</a></span>
+<br />&#x00A0;<span class="sectionToc" >10.2 <a
+href="haskellch10.html#x17-17700010.2" id="QQ2-17-190">字句構文</a></span>
+<br />&#x00A0;<span class="sectionToc" >10.3 <a
+href="haskellch10.html#x17-17800010.3" id="QQ2-17-191">レイアウト</a></span>
+<br />&#x00A0;<span class="sectionToc" >10.4 <a
+href="haskellch10.html#x17-17900010.4" id="QQ2-17-192">文藝的コメント</a></span>
+<br />&#x00A0;<span class="sectionToc" >10.5 <a
+href="haskellch10.html#x17-18000010.5" id="QQ2-17-193">文脈自由構文</a></span>
+<br />&#x00A0;<span class="sectionToc" >10.6 <a
+href="haskellch10.html#x17-18100010.6" id="QQ2-17-194">結合性の解決</a></span>
+<br /><span class="chapterToc" >11 <a
+href="haskellch11.html#x18-18200011" id="QQ2-18-195">導出されるインスタンスの仕様</a></span>
+<br />&#x00A0;<span class="sectionToc" >11.1 <a
+href="haskellch11.html#x18-18300011.1" id="QQ2-18-196"><span
+class="pcrr7t-">Eq</span> および <span
+class="pcrr7t-">Ord</span> クラスの導出インスタンス</a></span>
+<br />&#x00A0;<span class="sectionToc" >11.2 <a
+href="haskellch11.html#x18-18400011.2" id="QQ2-18-197"><span
+class="pcrr7t-">Enum</span> クラスの導出インスタンス</a></span>
+<br />&#x00A0;<span class="sectionToc" >11.3 <a
+href="haskellch11.html#x18-18500011.3" id="QQ2-18-198"><span
+class="pcrr7t-">Bounded</span> クラスの導出インスタンス</a></span>
+<br />&#x00A0;<span class="sectionToc" >11.4 <a
+href="haskellch11.html#x18-18600011.4" id="QQ2-18-199"><span
+class="pcrr7t-">Read</span> および <span
+class="pcrr7t-">Show</span> クラスの導出インスタンス</a></span>
+<br />&#x00A0;<span class="sectionToc" >11.5 <a
+href="haskellch11.html#x18-18700011.5" id="QQ2-18-200">一例</a></span>
+<br /><span class="chapterToc" >12 <a
+href="haskellch12.html#x19-18800012" id="QQ2-19-202">コンパイラプラグマ</a></span>
+<br />&#x00A0;<span class="sectionToc" >12.1 <a
+href="haskellch12.html#x19-18900012.1" id="QQ2-19-203">インライン展開</a></span>
+<br />&#x00A0;<span class="sectionToc" >12.2 <a
+href="haskellch12.html#x19-19000012.2" id="QQ2-19-204">特殊化</a></span>
+<br />&#x00A0;<span class="sectionToc" >12.3 <a
+href="haskellch12.html#x19-19100012.3" id="QQ2-19-205">言語拡張</a></span>
+<br /><span class="partToc" >II&#x00A0;&#x00A0;<a
+href="haskellpa2.html#x20-192000II" id="QQ2-20-206">Haskell 2010 ライブラリ</a></span>
+<br /><span class="chapterToc" >13 <a
+href="haskellch13.html#x21-19300013" id="QQ2-21-207"><span
+class="pcrr7t-">Control.Monad</span></a></span>
+<br />&#x00A0;<span class="sectionToc" >13.1 <a
+href="haskellch13.html#x21-19400013.1" id="QQ2-21-208">Functor クラスおよび Monad クラス </a></span>
+<br />&#x00A0;<span class="sectionToc" >13.2 <a
+href="haskellch13.html#x21-19500013.2" id="QQ2-21-209">関数 </a></span>
+<br /><span class="chapterToc" >14 <a
+href="haskellch14.html#x22-20100014" id="QQ2-22-215"><span
+class="pcrr7t-">Data.Array</span></a></span>
+<br />&#x00A0;<span class="sectionToc" >14.1 <a
+href="haskellch14.html#x22-20200014.1" id="QQ2-22-216">不可変非正格配列 </a></span>
+<br />&#x00A0;<span class="sectionToc" >14.2 <a
+href="haskellch14.html#x22-20300014.2" id="QQ2-22-217">配列の構成 </a></span>
+<br />&#x00A0;<span class="sectionToc" >14.3 <a
+href="haskellch14.html#x22-20400014.3" id="QQ2-22-218">配列のアクセス </a></span>
+<br />&#x00A0;<span class="sectionToc" >14.4 <a
+href="haskellch14.html#x22-20500014.4" id="QQ2-22-219">配列の漸次更新 </a></span>
+<br />&#x00A0;<span class="sectionToc" >14.5 <a
+href="haskellch14.html#x22-20600014.5" id="QQ2-22-220">導出された配列 </a></span>
+<br />&#x00A0;<span class="sectionToc" >14.6 <a
+href="haskellch14.html#x22-20700014.6" id="QQ2-22-221">仕様 </a></span>
+<br /><span class="chapterToc" >15 <a
+href="haskellch15.html#x23-20800015" id="QQ2-23-222"><span
+class="pcrr7t-">Data.Bits</span></a></span>
+<br /><span class="chapterToc" >16 <a
+href="haskellch16.html#x24-20900016" id="QQ2-24-223"><span
+class="pcrr7t-">Data.Char</span></a></span>
+<br />&#x00A0;<span class="sectionToc" >16.1 <a
+href="haskellch16.html#x24-21000016.1" id="QQ2-24-224">文字および文字列 </a></span>
+<br />&#x00A0;<span class="sectionToc" >16.2 <a
+href="haskellch16.html#x24-21100016.2" id="QQ2-24-225">文字の分類 </a></span>
+<br />&#x00A0;<span class="sectionToc" >16.3 <a
+href="haskellch16.html#x24-21400016.3" id="QQ2-24-228">大文字小文字変換 </a></span>
+<br />&#x00A0;<span class="sectionToc" >16.4 <a
+href="haskellch16.html#x24-21500016.4" id="QQ2-24-229">十進表記文字 </a></span>
+<br />&#x00A0;<span class="sectionToc" >16.5 <a
+href="haskellch16.html#x24-21600016.5" id="QQ2-24-230">数値表現 </a></span>
+<br />&#x00A0;<span class="sectionToc" >16.6 <a
+href="haskellch16.html#x24-21700016.6" id="QQ2-24-231">文字列表現 </a></span>
+<br /><span class="chapterToc" >17 <a
+href="haskellch17.html#x25-21800017" id="QQ2-25-232"><span
+class="pcrr7t-">Data.Complex</span></a></span>
+<br />&#x00A0;<span class="sectionToc" >17.1 <a
+href="haskellch17.html#x25-21900017.1" id="QQ2-25-233">直交形式 </a></span>
+<br />&#x00A0;<span class="sectionToc" >17.2 <a
+href="haskellch17.html#x25-22000017.2" id="QQ2-25-234">極形式 </a></span>
+<br />&#x00A0;<span class="sectionToc" >17.3 <a
+href="haskellch17.html#x25-22100017.3" id="QQ2-25-235">共役 </a></span>
+<br />&#x00A0;<span class="sectionToc" >17.4 <a
+href="haskellch17.html#x25-22200017.4" id="QQ2-25-236">仕様 </a></span>
+<br /><span class="chapterToc" >18 <a
+href="haskellch18.html#x26-22300018" id="QQ2-26-237"><span
+class="pcrr7t-">Data.Int</span></a></span>
+<br />&#x00A0;<span class="sectionToc" >18.1 <a
+href="haskellch18.html#x26-22400018.1" id="QQ2-26-238">符号付き整数型 </a></span>
+<br /><span class="chapterToc" >19 <a
+href="haskellch19.html#x27-22500019" id="QQ2-27-239"><span
+class="pcrr7t-">Data.Ix</span></a></span>
+<br />&#x00A0;<span class="sectionToc" >19.1 <a
+href="haskellch19.html#x27-22600019.1" id="QQ2-27-240"><span
+class="pcrr7t-">Ix </span>クラス </a></span>
+<br />&#x00A0;<span class="sectionToc" >19.2 <a
+href="haskellch19.html#x27-22700019.2" id="QQ2-27-241"><span
+class="pcrr7t-">Ix </span>クラスインスタンスの導出</a></span>
+<br /><span class="chapterToc" >20 <a
+href="haskellch20.html#x28-22800020" id="QQ2-28-242"><span
+class="pcrr7t-">Data.List</span></a></span>
+<br />&#x00A0;<span class="sectionToc" >20.1 <a
+href="haskellch20.html#x28-22900020.1" id="QQ2-28-243">基本関数 </a></span>
+<br />&#x00A0;<span class="sectionToc" >20.2 <a
+href="haskellch20.html#x28-23000020.2" id="QQ2-28-244">リストの変換 </a></span>
+<br />&#x00A0;<span class="sectionToc" >20.3 <a
+href="haskellch20.html#x28-23100020.3" id="QQ2-28-245">リストの簡約（畳み込み）</a></span>
+<br />&#x00A0;<span class="sectionToc" >20.4 <a
+href="haskellch20.html#x28-23300020.4" id="QQ2-28-247">リストの構築 </a></span>
+<br />&#x00A0;<span class="sectionToc" >20.5 <a
+href="haskellch20.html#x28-23800020.5" id="QQ2-28-252">部分リスト </a></span>
+<br />&#x00A0;<span class="sectionToc" >20.6 <a
+href="haskellch20.html#x28-24100020.6" id="QQ2-28-255">リストの検索 </a></span>
+<br />&#x00A0;<span class="sectionToc" >20.7 <a
+href="haskellch20.html#x28-24400020.7" id="QQ2-28-258">リストのインデックス付け </a></span>
+<br />&#x00A0;<span class="sectionToc" >20.8 <a
+href="haskellch20.html#x28-24500020.8" id="QQ2-28-259">リストの結合と分解 </a></span>
+<br />&#x00A0;<span class="sectionToc" >20.9 <a
+href="haskellch20.html#x28-24600020.9" id="QQ2-28-260">特殊なリスト </a></span>
+<br />&#x00A0;<span class="sectionToc" >20.10 <a
+href="haskellch20.html#x28-25000020.10" id="QQ2-28-264">一般化された関数 </a></span>
+<br /><span class="chapterToc" >21 <a
+href="haskellch21.html#x29-25500021" id="QQ2-29-269"><span
+class="pcrr7t-">Data.Maybe</span></a></span>
+<br />&#x00A0;<span class="sectionToc" >21.1 <a
+href="haskellch21.html#x29-25600021.1" id="QQ2-29-270"><span
+class="pcrr7t-">Maybe </span>型と演算 </a></span>
+<br />&#x00A0;<span class="sectionToc" >21.2 <a
+href="haskellch21.html#x29-25700021.2" id="QQ2-29-271">仕様 </a></span>
+<br /><span class="chapterToc" >22 <a
+href="haskellch22.html#x30-25800022" id="QQ2-30-272"><span
+class="pcrr7t-">Data.Ratio</span></a></span>
+<br />&#x00A0;<span class="sectionToc" >22.1 <a
+href="haskellch22.html#x30-25900022.1" id="QQ2-30-273">仕様 </a></span>
+<br /><span class="chapterToc" >23 <a
+href="haskellch23.html#x31-26000023" id="QQ2-31-274"><span
+class="pcrr7t-">Data.Word</span></a></span>
+<br />&#x00A0;<span class="sectionToc" >23.1 <a
+href="haskellch23.html#x31-26100023.1" id="QQ2-31-275">符号なし整数型</a></span>
+<br /><span class="chapterToc" >24 <a
+href="haskellch24.html#x32-26200024" id="QQ2-32-276"><span
+class="pcrr7t-">Foreign</span></a></span>
+<br /><span class="chapterToc" >25 <a
+href="haskellch25.html#x33-26300025" id="QQ2-33-277"><span
+class="pcrr7t-">Foreign.C</span></a></span>
+<br /><span class="chapterToc" >26 <a
+href="haskellch26.html#x34-26400026" id="QQ2-34-278"><span
+class="pcrr7t-">Foreign.C.Error</span></a></span>
+<br />&#x00A0;<span class="sectionToc" >26.1 <a
+href="haskellch26.html#x34-26500026.1" id="QQ2-34-279"><span
+class="pcrr7t-">errno </span>値のHaskellにおける表現 </a></span>
+<br /><span class="chapterToc" >27 <a
+href="haskellch27.html#x35-26900027" id="QQ2-35-283"><span
+class="pcrr7t-">Foreign.C.String</span></a></span>
+<br />&#x00A0;<span class="sectionToc" >27.1 <a
+href="haskellch27.html#x35-27000027.1" id="QQ2-35-284">Ｃ文字列</a></span>
+<br />&#x00A0;<span class="sectionToc" >27.2 <a
+href="haskellch27.html#x35-27300027.2" id="QQ2-35-287">Ｃワイド文字列</a></span>
+<br /><span class="chapterToc" >28 <a
+href="haskellch28.html#x36-27400028" id="QQ2-36-288"><span
+class="pcrr7t-">Foreign.C.Types</span></a></span>
+<br />&#x00A0;<span class="sectionToc" >28.1 <a
+href="haskellch28.html#x36-27500028.1" id="QQ2-36-289">Ｃの型の表現</a></span>
+<br /><span class="chapterToc" >29 <a
+href="haskellch29.html#x37-28000029" id="QQ2-37-294"><span
+class="pcrr7t-">Foreign.ForeignPtr</span></a></span>
+<br />&#x00A0;<span class="sectionToc" >29.1 <a
+href="haskellch29.html#x37-28100029.1" id="QQ2-37-295">ファイナライズされるデータポインタ</a></span>
+<br /><span class="chapterToc" >30 <a
+href="haskellch30.html#x38-28500030" id="QQ2-38-299"><span
+class="pcrr7t-">Foreign.Marshal</span></a></span>
+<br /><span class="chapterToc" >31 <a
+href="haskellch31.html#x39-28600031" id="QQ2-39-300"><span
+class="pcrr7t-">Foreign.Marshal.Alloc</span></a></span>
+<br />&#x00A0;<span class="sectionToc" >31.1 <a
+href="haskellch31.html#x39-28700031.1" id="QQ2-39-301">メモリアロケーション</a></span>
+<br /><span class="chapterToc" >32 <a
+href="haskellch32.html#x40-29000032" id="QQ2-40-304"><span
+class="pcrr7t-">Foreign.Marshal.Array</span></a></span>
+<br />&#x00A0;<span class="sectionToc" >32.1 <a
+href="haskellch32.html#x40-29100032.1" id="QQ2-40-305">配列のマーシャリング</a></span>
+<br /><span class="chapterToc" >33 <a
+href="haskellch33.html#x41-29800033" id="QQ2-41-312"><span
+class="pcrr7t-">Foreign.Marshal.Error</span></a></span>
+<br /><span class="chapterToc" >34 <a
+href="haskellch34.html#x42-29900034" id="QQ2-42-313"><span
+class="pcrr7t-">Foreign.Marshal.Utils</span></a></span>
+<br />&#x00A0;<span class="sectionToc" >34.1 <a
+href="haskellch34.html#x42-30000034.1" id="QQ2-42-314">一般的なマーシャリングユーティリティ</a></span>
+<br /><span class="chapterToc" >35 <a
+href="haskellch35.html#x43-30600035" id="QQ2-43-320"><span
+class="pcrr7t-">Foreign.Ptr</span></a></span>
+<br />&#x00A0;<span class="sectionToc" >35.1 <a
+href="haskellch35.html#x43-30700035.1" id="QQ2-43-321">データポインタ</a></span>
+<br />&#x00A0;<span class="sectionToc" >35.2 <a
+href="haskellch35.html#x43-30800035.2" id="QQ2-43-322">関数ポインタ</a></span>
+<br />&#x00A0;<span class="sectionToc" >35.3 <a
+href="haskellch35.html#x43-30900035.3" id="QQ2-43-323">情報落ちのない整数とポインタの間の変換</a></span>
+<br /><span class="chapterToc" >36 <a
+href="haskellch36.html#x44-31000036" id="QQ2-44-324"><span
+class="pcrr7t-">Foreign.StablePtr</span></a></span>
+<br />&#x00A0;<span class="sectionToc" >36.1 <a
+href="haskellch36.html#x44-31100036.1" id="QQ2-44-325">Haskellの値への不変ポインタ</a></span>
+<br /><span class="chapterToc" >37 <a
+href="haskellch37.html#x45-31300037" id="QQ2-45-327"><span
+class="pcrr7t-">Foreign.Storable</span></a></span>
+<br /><span class="chapterToc" >38 <a
+href="haskellch38.html#x46-31400038" id="QQ2-46-328"><span
+class="pcrr7t-">Numeric</span></a></span>
+<br />&#x00A0;<span class="sectionToc" >38.1 <a
+href="haskellch38.html#x46-31500038.1" id="QQ2-46-329">表示</a></span>
+<br />&#x00A0;<span class="sectionToc" >38.2 <a
+href="haskellch38.html#x46-31600038.2" id="QQ2-46-330">読み込み</a></span>
+<br />&#x00A0;<span class="sectionToc" >38.3 <a
+href="haskellch38.html#x46-31700038.3" id="QQ2-46-331">その他</a></span>
+<br /><span class="chapterToc" >39 <a
+href="haskellch39.html#x47-31800039" id="QQ2-47-332"><span
+class="pcrr7t-">System.Environment</span></a></span>
+<br /><span class="chapterToc" >40 <a
+href="haskellch40.html#x48-31900040" id="QQ2-48-333"><span
+class="pcrr7t-">System.Exit</span></a></span>
+<br /><span class="chapterToc" >41 <a
+href="haskellch41.html#x49-32000041" id="QQ2-49-334"><span
+class="pcrr7t-">System.IO</span></a></span>
+<br />&#x00A0;<span class="sectionToc" >41.1 <a
+href="haskellch41.html#x49-32100041.1" id="QQ2-49-335">IO モナド</a></span>
+<br />&#x00A0;<span class="sectionToc" >41.2 <a
+href="haskellch41.html#x49-32200041.2" id="QQ2-49-336">ファイルとハンドル</a></span>
+<br />&#x00A0;<span class="sectionToc" >41.3 <a
+href="haskellch41.html#x49-32400041.3" id="QQ2-49-338">ファイルのオープンおよびクローズ</a></span>
+<br />&#x00A0;<span class="sectionToc" >41.4 <a
+href="haskellch41.html#x49-32900041.4" id="QQ2-49-343">ハンドルの操作</a></span>
+<br />&#x00A0;<span class="sectionToc" >41.5 <a
+href="haskellch41.html#x49-33700041.5" id="QQ2-49-351">テキストの入出力</a></span>
+<br /><span class="chapterToc" >42 <a
+href="haskellch42.html#x50-34100042" id="QQ2-50-355"><span
+class="pcrr7t-">System.IO.Error</span></a></span>
+<br />&#x00A0;<span class="sectionToc" >42.1 <a
+href="haskellch42.html#x50-34200042.1" id="QQ2-50-356">I/O エラー</a></span>
+<br />&#x00A0;<span class="sectionToc" >42.2 <a
+href="haskellch42.html#x50-34500042.2" id="QQ2-50-359">I/O エラーの型</a></span>
+<br />&#x00A0;<span class="sectionToc" >42.3 <a
+href="haskellch42.html#x50-34600042.3" id="QQ2-50-360">I/O エラーの投出と捕捉</a></span>
+<br /><span class="likechapterToc" ><a
+href="haskellli3.html#x51-34700042.3" id="QQ2-51-361">Bibliography</a></span>
+</div>
+ <p class="noindent">
+ <p class="noindent">
+ <p class="noindent">
+</body> </html>

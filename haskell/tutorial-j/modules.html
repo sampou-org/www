@@ -1,0 +1,222 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>A Gentle Introduction to Haskell: Modules</title>
+</head>
+<body bgcolor="#ffffff">
+<i>やさしい Haskell 入門 (バージョン 98 )</i><br>
+<a href="numbers.html">back</a>
+<a href="pitfalls.html">next</a>
+<a href="index.html">top</a>
+<hr>
+<a name="tut-modules"></a>
+<a name="sect11"></a>
+<h2>11<tt>&nbsp;&nbsp;</tt>モジュール</h2>
+<p>
+Haskell のプログラムは<em>モジュール</em> ( <i>module</i> )の集合です。
+Haskell のモジュールは名前空間の制御と抽象データ型の生成というふたつの目
+的のためにあります。
+</p>
+<p>
+トップレベルのモジュールはこれまで議論したさまざまな宣言をすべて含みます。
+結合性宣言、データ宣言と型宣言、クラス宣言とインスタンス宣言、型シグネチャ、
+関数定義、それに、パターン束縛です。インポート宣言(これから簡単に説明し
+ます)が最初にこなければならないことをのぞけば、宣言はどのような順序で出
+現してもかまいまっせん。(トップレベルのスコープは相互再帰的です。)
+</p>
+<p>
+Haskell のモジュールは比較的保守的にできています。モジュールの名前空間は
+平坦です。また、モジュールは「第一級」の対象ではありません。モジュールの
+名前は英数字で、最初の文字は大文字でなければなりません。Haskell のモジュー
+ルと(典型的に)サポートされているファイルシステムの間には正式な結び付きは
+ありません。とくに、モジュール名とファイル名とは正式には結びつきません。
+また、ふたつ以上のモジュールを一つのファイルに含むことができます。(ひと
+つのモジュールを複数のファイルに分ることもできます。) もちろん、特定の実
+装でモジュールとファイル名が関連するような習慣を採用するのがふつうでしょ
+う。
+</p>
+<p>
+技術的な観点では、モジュールというのは <tt>module</tt> というキーワード
+ではじまるひとつの大きな宣言ということができます。つぎのは 
+<tt>Tree</tt> というモジュールの例です。
+<tt><br>
+<br>
+module&nbsp;Tree&nbsp;(&nbsp;Tree(Leaf,Branch),&nbsp;fringe&nbsp;)&nbsp;where<br>
+<br>
+data&nbsp;Tree&nbsp;a&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;Leaf&nbsp;a&nbsp;|&nbsp;Branch&nbsp;(Tree&nbsp;a)&nbsp;(Tree&nbsp;a)&nbsp;<br>
+<br>
+fringe&nbsp;::&nbsp;Tree&nbsp;a&nbsp;-&gt;&nbsp;[a]<br>
+fringe&nbsp;(Leaf&nbsp;x)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;[x]<br>
+fringe&nbsp;(Branch&nbsp;left&nbsp;right)&nbsp;=&nbsp;fringe&nbsp;left&nbsp;++&nbsp;fringe&nbsp;right<br>
+<br>
+</tt>
+この <tt>Tree</tt> 型と <tt>fringe</tt> 関数は 
+<a href="goodies.html#tut-recursive-types">2.2.1</a> 節で例としてとりあ
+げましたので、もうおなじみのはずですね。[ <tt>where</tt> というキーワー
+ドがあるので、レイアウトがモジュールのトップレベルで有効になります。それ
+ゆえ、宣言はすべておなじカラム位置(典型的には第一カラム)に配置されます。
+また、モジュール名はこの型の名前とおなじですが、これは許されていることに
+注意してください。]
+</p>
+<p>
+このモジュールは明示的に <tt>Tree</tt>、 <tt>Leaf</tt>、 <tt>Branch</tt>、
+および <tt>fringe</tt> を<em>エクスポート</em>しています。もし、この 
+<tt>module</tt> キーワードのあとに続く、エクスポートリストがなければ、こ
+のモジュールのトップレベルで束縛されている名前はすべてエクスポートされま
+す。(上の例では、すべてが明示的にエクスポートされています。ですから効果
+としてはエクスポートリストがない場合とおなじです。) 型の名前とその構築子
+は、<tt>Tree(Leaf,Branch)</tt> のようにひとつのグループにまとめられます。
+これを簡略して、<tt>Tree(..)</tt> のように書くこともできます。構築子のサ
+ブセットをエクスポートすることも可能です。エクスポートリストのなかの名前
+は当該のエクスポートモジュールの局所名である必要はありません。スコープ内
+の名前であればこのエクスポートリストに入れることができます。
+</p>
+<p>
+これで、<tt>Tree</tt> モジュールはなにか別のモジュールに<em>インポート
+</em>することができます。
+<tt><br>
+<br>
+module&nbsp;Main&nbsp;(main)&nbsp;where<br>
+import&nbsp;Tree&nbsp;(&nbsp;Tree(Leaf,Branch),&nbsp;fringe&nbsp;)<br>
+<br>
+main&nbsp;=&nbsp;print&nbsp;(fringe&nbsp;(Branch&nbsp;(Leaf&nbsp;1)&nbsp;(Leaf&nbsp;2)))<br>
+<br>
+</tt>
+インポートされたりエクスポートされたりするモジュールのさまざまな項目のこ
+とを <em>エンティティ</em> と呼びます。インポート宣言における明示的なイ
+ンポートリストを省略すると <tt>Tree</tt> モジュールからエクスポートされ
+たすべてのエンティティがインポートされることに注目してください。
+</p>
+<a name="sect11.1"></a>
+<h3>11.1<tt>&nbsp;&nbsp;</tt>修飾された名前</h3>
+<p>
+モジュールの名前空間に直接インポートされた名前はあきらかな問題をはらんで
+います。もし、インポートされた複数のモジュールが同じ名前の別のエンティティ
+を含んでいたらどうなるでしょう。Haskell ではこのもんだいを<em>修飾された
+名前</em> ( <i>qualified name</i> ) を使うことで解決します。インポート宣
+言で、<tt>qualified</tt> キーワードをつかい、インポートされた名前がイン
+ポートされたモジュール名を接頭辞として使うようにします。これらの接頭辞の
+あとに 「 <tt>.</tt> 」文字を空白をいれずに続けます。[接頭辞は字句構文の
+一部です。すなわち、<tt>A.x</tt> および <tt>A&nbsp;.&nbsp;x</tt> は全く
+別ものです。前者は修飾された名前であり、後者は中置関数の 「 <tt>.</tt> 
+」です。] たとえば、先程の <tt>Tree</tt> モジュールを使ってみましょう。
+<tt><br>
+<br>
+module&nbsp;Fringe(fringe)&nbsp;where<br>
+import&nbsp;Tree(Tree(..))<br>
+<br>
+fringe&nbsp;::&nbsp;Tree&nbsp;a&nbsp;-&gt;&nbsp;[a]&nbsp;&nbsp;&nbsp;--&nbsp;A&nbsp;different&nbsp;definition&nbsp;of&nbsp;fringe<br>
+fringe&nbsp;(Leaf&nbsp;x)&nbsp;=&nbsp;[x]<br>
+fringe&nbsp;(Branch&nbsp;x&nbsp;y)&nbsp;=&nbsp;fringe&nbsp;x<br>
+<br>
+module&nbsp;Main&nbsp;where<br>
+import&nbsp;Tree&nbsp;(&nbsp;Tree(Leaf,Branch),&nbsp;fringe&nbsp;)<br>
+import&nbsp;qualified&nbsp;Fringe&nbsp;(&nbsp;fringe&nbsp;)&nbsp;&nbsp;<br>
+<br>
+main&nbsp;=&nbsp;do&nbsp;print&nbsp;(fringe&nbsp;(Branch&nbsp;(Leaf&nbsp;1)&nbsp;(Leaf&nbsp;2)))<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;(Fringe.fringe&nbsp;(Branch&nbsp;(Leaf&nbsp;1)&nbsp;(Leaf&nbsp;2)))<br>
+<br>
+</tt>
+Haskell のプログラマのなかにはすべてのインポートされた名前について、それ
+ぞれの由来がはっきりわかるように、修飾子をつかうことを好むひともいるでしょ
+う。一方、みじかい名前を好むので、修飾子は必要最小限にしようとするプログ
+ラマもいることでしょう。
+</p>
+<p>
+修飾子はおなじ名前をもつ別のエンティティ間の衝突を解決するために使用しま
+す。しかし、ふたつ以上のモジュールから同じエンティティがインポートされた場
+合どうなるでしょう。幸いこのような名前のぶつかりは許されています。ひとつ
+のエンティティが別の経路でインポートされても衝突はおこしません。コンパイ
+ラが別のモジュールからのエンティティが実際に同じものかどうかを判別します。
+</p>
+<a name="tut-ADTs"></a>
+<a name="sect11.2"></a>
+<h3>11.2<tt>&nbsp;&nbsp;</tt>抽象データ型</h3>
+<p>
+名前空間の制御のほかに、モジュールは Haskell で抽象データ型 
+( ADT ) を構築する唯一の方法です。たとえば、ADT の特徴は、<em>表現型
+</em> ( <i>representation type</i> ) が<em>隠蔽</em>されるということです
+が、これは ADT 上のすべての演算がその表現型には依存せずに、抽象レベルで
+実行されるということです。例をあげましょう。<tt>Tree</tt> 型は単純なので
+ふつは抽象型にはしませんが、これに対応する ADT は次のような演算をふくみ
+ます。
+<tt><br>
+<br>
+data&nbsp;Tree&nbsp;a&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;just&nbsp;the&nbsp;type&nbsp;name&nbsp;<br>
+leaf&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;a&nbsp;-&gt;&nbsp;Tree&nbsp;a<br>
+branch&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;Tree&nbsp;a&nbsp;-&gt;&nbsp;Tree&nbsp;a&nbsp;-&gt;&nbsp;Tree&nbsp;a<br>
+cell&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;Tree&nbsp;a&nbsp;-&gt;&nbsp;a<br>
+left,&nbsp;right&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;Tree&nbsp;a&nbsp;-&gt;&nbsp;Tree&nbsp;a<br>
+isLeaf&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;Tree&nbsp;a&nbsp;-&gt;&nbsp;Bool<br>
+<br>
+</tt>
+モジュールはこれを支援します。
+<tt><br>
+<br>
+module&nbsp;TreeADT&nbsp;(Tree,&nbsp;leaf,&nbsp;branch,&nbsp;cell,&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;left,&nbsp;right,&nbsp;isLeaf)&nbsp;where<br>
+<br>
+data&nbsp;Tree&nbsp;a&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;Leaf&nbsp;a&nbsp;|&nbsp;Branch&nbsp;(Tree&nbsp;a)&nbsp;(Tree&nbsp;a)&nbsp;<br>
+<br>
+leaf&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;Leaf<br>
+branch&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;Branch<br>
+cell&nbsp;&nbsp;(Leaf&nbsp;a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;a<br>
+left&nbsp;&nbsp;(Branch&nbsp;l&nbsp;r)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;l<br>
+right&nbsp;(Branch&nbsp;l&nbsp;r)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;r<br>
+isLeaf&nbsp;&nbsp;&nbsp;(Leaf&nbsp;_)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;True<br>
+isLeaf&nbsp;&nbsp;&nbsp;_&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;False<br>
+<br>
+</tt>
+エクスポートリストに <tt>Tree</tt> という型名のみ(すなわち構築子がないと
+いうこと)があらわれていることに注目してください。ということは、
+<tt>Leaf</tt> や <tt>Branch</tt> はエクスポートされないということです。
+そして、木を構成したり、構成要素をとりだしたりする唯一の方法は、いくつか
+の(抽象)演算をつかうことです。もちろん、この情報の隠蔽の利点はあとで表現
+型をこの型の利用者に影響をあたえることなく、<em>変更</em>できるというこ
+とです。
+</p>
+<a name="tut-rules"></a>
+<a name="sect11.3"></a>
+<h3>11.3<tt>&nbsp;&nbsp;</tt>そのほかの特徴</h3>
+<p>
+ここで、このモジュールシステムのその他の側面について手短に説明しましょう。
+詳細についてはレポートを参照してください。
+<ul>
+ <li><tt>import</tt> 宣言では、その宣言内で <tt>hiding</tt> 節を用いるこ
+     とで選択的にエンティティを隠蔽できる。これは明示的に他の目的で使い
+     たい名前を排除するのに便利である。そのモジュールの他のなまえに修飾
+     子をつけなくてもいいので。</li>
+ <li><tt>import</tt> 宣言には、<tt>as</tt> 節をおくことができる。これ
+     により、インポートされるモジュールの名前とは別の修飾子を指定するこ
+     とができる。これにより、長いモジュールに由来する修飾子名を短くし
+     たり、すべての修飾子を変更することなく、モジュール名の変更をおこな
+     うことが簡単にできる。</li>
+ <li>プログラムは暗黙のうちに <tt>Prelude</tt> モジュールをインポートす
+     る。明示的なプレリュードのインポートは、すべてのプレリュード名の暗
+     黙のインポートを上書きする。それゆえ、
+     <tt><br><br>import&nbsp;Prelude&nbsp;hiding&nbsp;length<br><br></tt>
+     は標準プレリュードからは <tt>length</tt> をインポートせず、この
+     <tt>length</tt> の名前は別の方法で定義することができる。</li>
+ <li>インスタンス宣言はインポートやエクスポートリストのなかで明示的に名
+     前がつくわけではない。すべてのモジュールはそれぞれ、そのなかのすべて
+     のインスタンス宣言をエクスポートし、すべてのインポートはそれぞれ、
+     すべてのインスタンス宣言をスコープないに持ち込む。</li>
+ <li>クラスのメソッドは括弧でくくったデータ構築子のあとにクラス名をつづ
+     けるか、普通の変数とおなじように名前をつけることができる。</li>
+</ul>
+Haskell のモジュールシステムは比較的保守的なものですが、値のインポートと
+エクスポートに関しては多くのルールがあります。多くは明白なものです。たと
+えば、同じ名前をもつ別のエンティティをスコープ内にインポートすることは違
+反です。いくつかのルールはこれほどは明白なものではありません。例をあげる
+と、ひとつの型やクラスに対して、そのプログラム内のどこかで型やクラスを
+組合せるためのふたつ以上のインスタンス宣言というものは存在できません。詳
+細についてはレポートを読んでください。
+(<a href="../report-j/modules.html#modules">&sect;5</a>)
+</p>
+<hr>
+<i>A Gentle Introduction to Haskell, Version 98</i><br>
+<a href="numbers.html">back</a>
+<a href="pitfalls.html">next</a>
+<a href="index.html">top</a>
+</body>
+</html>

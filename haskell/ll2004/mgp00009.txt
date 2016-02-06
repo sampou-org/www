@@ -1,0 +1,14 @@
+
+Haskell のこの一年
+
+Haskell 98 の仕様
+2003年1月の改訂版以来変っていない
+Haskell 98 の仕様は、Haskell の処理系が満すべき条件を規定する。この仕様を満したプログラムコードが処理できるのであれば、どのような拡張もこれを妨げない。
+Haskell 98 Foreign Function Interface 1.0
+Haskell Hierarchical Module Name Extension
+現時点では、仕様として公開されたものは candidate
+GHC および Hugs ではすでに実装されている
+GHC が事実上の標準実装
+2003  3月 6.0 (Template Haskell)
+2003 12月 6.2 (Windows版 .NET対応)
+

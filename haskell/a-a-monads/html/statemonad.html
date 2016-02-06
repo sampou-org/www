@@ -1,0 +1,364 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<!--<title lang="en">The State monad</title>-->
+<title lang="ja">The State monad</title>
+</head>
+<body>
+<!--
+<table lang="en" width="100%">
+ <tr>
+  <td align="left" width="33%">Prev:
+   <a href="iomonad.html">The IO monad</a></td>
+  <td align="center" width="33%">TOC:
+   <a href="index.html">Contents</a></td>
+  <td align="right" width="33%">Next:
+   <a href="readermonad.html">The Reader monad</a></td>
+ </tr>
+</table>	
+-->
+<table lang="ja" width="100%">
+ <tr>
+  <td align="left" width="33%">Prev:
+   <a href="iomonad.html">IO モナド</a></td>
+  <td align="center" width="33%">TOC:
+   <a href="index.html">目次</a></td>
+  <td align="right" width="33%">Next:
+   <a href="readermonad.html">Reader モナド</a></td>
+ </tr>
+</table>	
+
+<!--<h1 lang="en">The State monad</h1>-->
+<h1 lang="ja">State モナド</h1>
+
+<!--
+<ul lang="en">
+  <li><a href="#overview">Overview</a></li>
+  <li><a href="#motivation">Motivation</a></li>
+  <li><a href="#definition">Definition</a></li>
+  <li><a href="#example">Example</a></li>
+</ul>
+-->
+<ul lang="ja">
+  <li><a href="#overview">概観</a></li>
+  <li><a href="#motivation">動機</a></li>
+  <li><a href="#definition">定義</a></li>
+  <li><a href="#example">例</a></li>
+</ul>
+
+<hr align="center" size="1" width="80%">
+
+<a name="overview">
+<!--<h2 lang="en">Overview</h2>-->
+<h2 lang="ja">概観</h2></a>
+<!--
+<table lang="en" width="100%" cellpadding="3">
+  <tr>
+    <th align="left">Computation type:</th>
+    <td>Computations which maintain state.</td>
+  </tr>
+  <tr>
+    <th align="left">Binding strategy:</th>
+    <td>Binding threads a state parameter through the sequence of
+    bound functions so that the same state value is never used twice,
+    giving the illusion of in-place update.
+    </td>
+  </tr>
+  <tr>
+    <th align="left">Useful for:</th>
+    <td>Building computations from sequences of operations that require a
+    shared state.
+    </td>
+  </tr>
+  <tr>
+    <th align="left">Zero and plus:</th>
+    <td>None.</td>
+  </tr>
+  <tr>
+    <th align="left">Example type:</th>
+    <td><a href="http://www.haskell.org/ghc/docs/latest/html/base/Control.Monad.State.html">State st a</a></td>
+  </tr>
+</table>
+-->
+<table lang="ja" width="100%" cellpadding="3">
+  <tr>
+    <th align="left">計算のタイプ:</th>
+    <td>状態を保持する計算</td>
+  </tr>
+  <tr>
+    <th align="left">束縛の戦略:</th>
+    <td>束縛は状態パラメータを束縛された関数を通じて一本に繋いぎ、同一の
+     状態値が2度使われることのないようにすることで、その場での更新を
+     行っているように見えます。
+    </td>
+  </tr>
+  <tr>
+    <th align="left">利用場面:</th>
+    <td>状態を共有する必要のある一連の操作から計算を構築する
+    </td>
+  </tr>
+  <tr>
+    <th align="left">ゼロおよびプラス:</th>
+    <td>なし</td>
+  </tr>
+  <tr>
+    <th align="left">型の例:</th>
+    <td><a href="http://www.haskell.org/ghc/docs/latest/html/base/Control.Monad.State.html">State st a</a></td>
+  </tr>
+</table>
+
+<a name="motivation">
+<!--<h2 lang="en">Motivation</h2>-->
+<h2 lang="ja">動機</h2>
+</a>
+<!--
+<p lang="en">
+A pure functional language cannot update values in place because it
+violates referential transparency.  A common idiom to simulate such
+stateful computations is to "thread" a state parameter through a
+sequence of functions:
+</p>
+-->
+<p lang="ja">
+純粋な関数型言語では値をその場で更新することはできません。それが
+参照透明性を破壊するからです。このような状態をもつ(stateful)計算
+をシミュレートするのによく使うイディオムは、一連の関数を通して、
+状態パラメータを「一本に繋ぐ」ことです。
+</p>
+
+<table bgcolor="#bbaa55" width="100%"><tr><td><pre>
+data MyType = MT Int Bool Char Int deriving Show
+
+makeRandomValue :: StdGen -> (MyType, StdGen)
+makeRandomValue g = let (n,g1) = randomR (1,100) g
+                        (b,g2) = random g1
+                        (c,g3) = randomR ('a','z') g2 
+                        (m,g4) = randomR (-n,n) g3
+                    in (MT n b c m, g4)
+</pre></td></tr></table>
+<!--
+<p lang="en">
+This approach works, but such code can be error-prone, messy and difficult
+to maintain.  The State monad hides the threading of the state parameter
+inside the binding operation, simultaneously making the code easier to
+write, easier to read and easier to modify.
+</p>
+-->
+<p lang="ja">
+このアプローチは上手くいきますが、このようなコードは乱雑で、
+保守しにくく、間違いの温床になります。State モナドは状態パラメータを
+一本に繋ぐ部分を束縛操作の内側に隠すと同時に、コードを書きやすく、
+読みやすく、変更しやすいものにします。
+</p>
+
+<a name="definition">
+<!--<h2 lang="en">Definition</h2>-->
+<h2 lang="ja">定義</h2>
+</a>
+<!--
+<p lang="en">The definition shown here uses multi-parameter type classes
+and funDeps, which are not standard Haskell 98.  It is not necessary
+to fully understand these details to make use of the State monad.
+</p>
+-->
+<p lang="ja">
+ここで示した定義では Haskell 98 の標準にはない、複数パラメータ型クラスお
+よび funDeps が使われています。この State モナドを利用するのに、これの
+詳細を完全に理解する必要はありません。
+</p>
+
+<table bgcolor="#bbaa55" width="100%"><tr><td><pre>
+newtype State s a = State { runState :: (s -> (a,s)) } 
+ 
+instance Monad (State s) where 
+    return a        = State $ \s -> (a,s)
+    (State x) >>= f = State $ \s -> let (v,s') = x s in runState (f v) s' 
+</pre></td></tr></table>
+
+<!--
+<p lang="en">
+Values in the State monad are represented as transition functions from an
+initial state to a (value,newState) pair and a new type definition
+is provided to describe this construct: <code>State s a</code>
+is the type of a value of type <code>a</code> inside the State monad with state
+of type <code>s</code>.
+</p>
+-->
+<p lang="ja">
+State モナド内の値は、ある初期値から、(value,newState) のペアへの
+遷移関数として表現されます。また新しい型の定義は次のような構成に
+なっています。すなわち、<code>State s a</code> は、型 <code>s</code>
+の状態をもつ、State モナド内で型 <code>a</code> となる値の型です。
+</p>
+<!--
+<p lang="en">
+The type constructor <code>State s</code> is an instance of the
+<code>Monad</code> class.  The <code>return</code> function simply
+creates a state transition function which sets the value but leaves
+the state unchanged.  The binding operator creates a state
+transition function that applies its right-hand argument to the
+value and new state from its left-hand argument.
+</p>
+-->
+<p lang="ja">
+型構築子 <code>State s</code> は <code>Monad</code> クラスのインスタンス
+です。<code>return</code> 関数は単純に状態遷移関数を生成します。
+この関数は値をセットしますが、状態は変更しません。束縛演算子は、
+右側の引数を左側に引数から来た値と新しい状態に適用します。
+</p>
+ 
+<table bgcolor="#bbaa55" width="100%"><tr><td><pre>
+class MonadState m s | m -> s where 
+    get :: m s
+    put :: s -> m ()
+
+instance MonadState (State s) s where 
+    get   = State $ \s -> (s,s) 
+    put s = State $ \_ -> ((),s) 
+</pre></td></tr></table>
+
+<!--
+<p lang="en">
+The <code>MonadState</code> class provides a standard but very simple
+interface for State monads.  The <code>get</code> function retrieves
+the state by copying it as the value.  The <code>put</code> function
+sets the state of the monad and does not yield a value.
+</p>
+-->
+<p lang="ja">
+<code>MonadState</code> クラスは標準で提供されていますが、たいへん
+単純な State モナドへのインタフェースを提供します。<code>get</code>
+関数はそれをその値として複写することで状態を取り出す関数です。
+<code>put</code> 関数はモナドの状態をセットするだけで、値を作らない
+関数です。
+</p>
+<!--
+<p lang="en">
+There are many additional functions provide which perform more
+complex computations built on top of <code>get</code> and </code>put</code>.
+The most useful one is <code>gets</code> which retrieves a function
+of the state.  The others are listed in the 
+<a href="http://www.haskell.org/ghc/docs/latest/html/base/Control.Monad.State.html">
+documentation</a> for the State monad library.
+</p>
+-->
+<p lang="ja">
+ほかにも、<code>get</code> および </code>put</code> を使って複雑な計算を
+実行する関数が多数提供されています。最も便利なもののひとつに、
+状態の関数を取り出す <code>gets</code> という関数があります。そのほかは
+State モナドライブラリの<a href="http://www.haskell.org/ghc/docs/latest/html/base/Control.Monad.State.html">
+説明書</a>にあります。
+</p>
+
+<a name="example">
+<!--<h2 lang="en">Example</h2>-->
+<h2 lang="ja">例</h2>
+</a>
+<!--
+<p lang="en">A simple application of the State monad is to thread the random generator state
+through multiple calls to the generation function.
+</p>
+-->
+<p lang="ja">State モナドの単純なアプリケーションは、乱数生成器の
+状態を生成器への複数の呼び出しを通じて一本に繋ぐことです。
+</p>
+<!--
+<table lang="en" bgcolor="#bbaa55" width="100%">
+<tr bgcolor="#aabb55">
+<th align="left">Code available in <a href="../examples/example15.hs">example15.hs</a></th>
+</tr>
+<tr><td><pre>
+data MyType = MT Int Bool Char Int deriving Show
+
+{- Using the State monad, we can define a function that returns
+   a random value and updates the random generator state at
+   the same time.
+-}
+getAny :: (Random a) => State StdGen a
+getAny = do g      <- get
+            (x,g') <- return $ random g
+            put g'
+            return x
+
+-- similar to getAny, but it bounds the random value returned
+getOne :: (Random a) => (a,a) -> State StdGen a
+getOne bounds = do g      <- get
+                   (x,g') <- return $ randomR bounds g
+                   put g'
+                   return x
+
+{- Using the State monad with StdGen as the state, we can build
+   random complex types without manually threading the
+   random generator states through the code.
+-}   
+makeRandomValueST :: StdGen -> (MyType, StdGen)
+makeRandomValueST = runState (do n <- getOne (1,100)
+                                 b <- getAny
+                                 c <- getOne ('a','z')
+                                 m <- getOne (-n,n)
+                                 return (MT n b c m))
+</pre></td></tr></table>
+-->
+<table lang="ja" bgcolor="#bbaa55" width="100%">
+ <tr bgcolor="#aabb55">
+  <th align="left"><a href="../examples/example15.hs">example15.hs</a>
+   で使えるコード
+  </th>
+ </tr>
+ <tr><td><pre>
+data MyType = MT Int Bool Char Int deriving Show
+
+{- Stateモナドを使うと、乱数を返し、同時に乱数発生器の状態を
+   更新する関数を定義することができます。
+-}
+getAny :: (Random a) => State StdGen a
+getAny = do g      <- get
+            (x,g') <- return $ random g
+            put g'
+            return x
+
+-- getAny と同じですが、こちらは返る乱数の範囲を制限します
+getOne :: (Random a) => (a,a) -> State StdGen a
+getOne bounds = do g      <- get
+                   (x,g') <- return $ randomR bounds g
+                   put g'
+                   return x
+
+{- StdGen を状態として State モナドを使うと、コードを通じて、
+   乱数発生器の状態を一本に繋ぐのを手でおこなうことなく、乱雑な
+   複合型を構築できます
+-}   
+makeRandomValueST :: StdGen -> (MyType, StdGen)
+makeRandomValueST = runState (do n <- getOne (1,100)
+                                 b <- getAny
+                                 c <- getOne ('a','z')
+                                 m <- getOne (-n,n)
+                                 return (MT n b c m))
+</pre></td></tr></table>
+
+<hr align="center" size="1" width="80%">
+
+<!--
+<table lang="en" width="100%">
+ <tr>
+  <td align="left" width="33%">Prev:
+   <a href="iomonad.html">The IO monad</a></td>
+  <td align="center" width="33%">TOC:
+   <a href="index.html">Contents</a></td>
+  <td align="right" width="33%">Next:
+   <a href="readermonad.html">The Reader monad</a></td>
+ </tr>
+</table>	
+-->
+<table lang="ja" width="100%">
+ <tr>
+  <td align="left" width="33%">Prev:
+   <a href="iomonad.html">IO モナド</a></td>
+  <td align="center" width="33%">TOC:
+   <a href="index.html">目次</a></td>
+  <td align="right" width="33%">Next:
+   <a href="readermonad.html">Reader モナド</a></td>
+ </tr>
+</table>	
+
+</body>

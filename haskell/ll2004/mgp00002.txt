@@ -1,0 +1,13 @@
+
+Haskell とは
+
+Purely Functional 純粋関数型
+「関数型」: 関数が First-Class (計算対象)
+「純粋」: 参照透明性が保存されている
+Non-Strict 非正格
+「必要呼び」あるいは「怠け者評価」と呼ばれる評価機構
+Typefull 強い静的型付け機構
+「多相型」：Polymorphic Type
+「型推論」：Type Inference
+「データ型クラス」および「型構築子クラス」
+

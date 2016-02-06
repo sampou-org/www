@@ -1,0 +1,123 @@
+<html>
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
+  <title>The Haskell 98 Report: Compiler Pragmas</title>
+ </head>
+ <body bgcolor="#ffffff">
+  <p><i>The Haskell 98 Report</i><br />
+   <a href="index.html">top</a> | <a href="derived.html">back</a> | <a
+   href="ratio.html">next</a> | <a href="index98.html">contents</a> | <a
+   href="prelude-index.html">function index</a> <br />
+  </p>
+  <hr />
+  <p><a name="pragmas"></a><a name="sect11"></a></p>
+  <!--<h2>11<tt>&nbsp;&nbsp;</tt>Compiler Pragmas</h2>-->
+  <h2>11<tt>&nbsp;&nbsp;</tt>プラグマ</h2>
+  <!--
+  <p> Some compiler implementations support compiler <i>pragmas</i>, which
+   are used to give additional instructions or hints to the compiler, but
+   which do not form part of the Haskell language proper and do not change
+   a program's semantics. This chapter summarizes this existing practice.
+   An implementation is not required to respect any pragma, but the pragma
+   should be ignored if an implementation is not prepared to handle it.
+   Lexically, pragmas appear as comments, except that the enclosing syntax
+   is <tt>{-#</tt> <tt>#-}</tt>.</p>
+  -->
+  <p>
+   <em>プラグマ</em>をサポートしたコンパイラがいくつかある。プラグマは
+   付加的指令やヒントをコンパイラに与えるために使用される。しかし、
+   これは Haskell 言語そのものの正式な部分ではなく、プログラムの意味を
+   変えるものではない。この節ではこの既存の仕組みを要約する。実装は
+   いかなるプラグマも考慮する必要はない。しかし、実装はこれを処理する
+   ようになっていないのなら、プラグマを無視しなければならない。
+   字句としてはプラグマはコメントと看倣される。ただし、囲む構文が
+   <tt>{-#</tt> <tt>#-}</tt> であるときは例外である。
+  </p>
+  <p> <a name="sect11.1"></a></p>
+  <!--<h3>11.1<tt>&nbsp;&nbsp;</tt>Inlining</h3>-->
+  <h3>11.1<tt>&nbsp;&nbsp;</tt>インライン展開</h3>
+  <p>
+  <table cellspacing="0" cellspacing="0">
+   <tr>
+    <td width="100"> decl</td>
+    <td width="20"> <tt>-&gt;</tt></td>
+    <td width="250"> <tt>{-#</tt> <tt>INLINE</tt> qvars <tt>#-} </tt></td>
+   </tr>
+   <tr>
+    <td> decl</td>
+    <td> <tt>-&gt;</tt></td>
+    <td> <tt>{-#</tt> <tt>NOINLINE</tt> qvars <tt>#-} </tt></td>
+   </tr>
+  </table>
+  </p>
+  <!--
+  <p> The <tt>INLINE</tt> pragma instructs the compiler to inline the
+   specified variables at their use sites. Compilers will often
+   automatically inline simple expressions. This may be prevented by the
+   <tt>NOINLINE</tt> pragma.</p>
+  -->
+  <p>
+   <tt>INLINE</tt> プラグマは指定した変数をそれらが使われている場所で
+   インライン展開するように、コンパイラに指示する。コンパイラはしばしば
+   自動的に単純な式をインライン展開する。これは <tt>NOINLINE</tt>
+   プラグマで抑制することができる。
+  </p>
+
+  <p> <a name="sect11.2"></a></p>
+  <!--<h3>11.2<tt>&nbsp;&nbsp;</tt>Specialization</h3>-->
+  <h3>11.2<tt>&nbsp;&nbsp;</tt>特化</h3>
+  <p>
+  <table cellspacing="0" cellspacing="0">
+   <tr>
+    <td width="100"> decl</td>
+    <td width="20"> <tt>-&gt;</tt></td>
+    <td width="250"> <tt>{-#</tt> <tt>SPECIALIZE</tt> spec<sub>1</sub>
+     <tt>,</tt> ... <tt>,</tt> spec<sub>k</sub> <tt>#-}</tt></td>
+    <td> (k&gt;=1)</td>
+   </tr>
+   <tr>
+    <td> spec</td>
+    <td> <tt>-&gt;</tt></td>
+    <td> vars :: type</td>
+   </tr>
+  </table>
+  </p>
+  <!--
+  <p>Specialization is used to avoid inefficiencies involved in dispatching
+   overloaded functions. For example, in <tt><br />
+   <br />
+   factorial&nbsp;::&nbsp;Num&nbsp;a&nbsp;=&gt;&nbsp;a&nbsp;-&gt;&nbsp;a<br />
+   factorial&nbsp;0&nbsp;=&nbsp;0<br />
+   factorial&nbsp;n&nbsp;=&nbsp;n&nbsp;*&nbsp;factorial&nbsp;(n-1)<br />
+   {-#&nbsp;SPECIALIZE&nbsp;factorial&nbsp;::&nbsp;Int&nbsp;-&gt;&nbsp;Int,<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;factorial&nbsp;::&nbsp;Integer&nbsp;-&gt;&nbsp;Integer&nbsp;#-}<br />
+   <br />
+   </tt>calls to <tt>factorial</tt> in which the compiler can detect that
+   the parameter is either <tt>Int</tt> or <tt>Integer</tt> will use
+   specialized versions of <tt>factorial</tt> which do not involve
+   overloaded numeric operations.</p>
+  -->
+  <p>
+   特化は多重定義された関数のディスパッチにある非効率を回避するために
+   使用される。たとえば、
+   <tt><br />
+   <br />
+   factorial&nbsp;::&nbsp;Num&nbsp;a&nbsp;=&gt;&nbsp;a&nbsp;-&gt;&nbsp;a<br />
+   factorial&nbsp;0&nbsp;=&nbsp;0<br />
+   factorial&nbsp;n&nbsp;=&nbsp;n&nbsp;*&nbsp;factorial&nbsp;(n-1)<br />
+   {-#&nbsp;SPECIALIZE&nbsp;factorial&nbsp;::&nbsp;Int&nbsp;-&gt;&nbsp;Int,<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;factorial&nbsp;::&nbsp;Integer&nbsp;-&gt;&nbsp;Integer&nbsp;#-}<br />
+   <br />
+   </tt>
+   において、パラメータが <tt>Int</tt> または <tt>Interger</tt> であるこ
+   とをコンパイラが検出できる <tt>factorial</tt> の呼出しは多重定義され
+   た数値演算を含まない、<tt>factorial</tt> の特化バージョンである。
+  </p>
+  <hr />
+  <p><i>The Haskell 98 Report</i><br />
+   <a href="index.html">top</a> | <a href="derived.html">back</a> | <a
+   href="ratio.html">next</a> | <a href="index98.html">contents</a> | <a
+   href="prelude-index.html">function index</a> <br />
+   <font size="2">December 2002</font></p>
+ </body>
+</html>

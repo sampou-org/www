@@ -1,0 +1,496 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>A Gentle Introduction to Haskell: Standard Classes</title>
+</head>
+<body bgcolor="#ffffff">
+<p>
+<i>やさしい Haskell 入門 ( バージョン 98 )</i><br>
+<a href="io.html">back</a>
+<a href="monads.html">next</a>
+<a href="index.html">top</a>
+</p>
+<hr>
+<p>
+<a name="sect8"></a>
+<h2>8<tt>&nbsp;&nbsp;</tt>Haskell の標準クラス</h2>
+</p>
+<p>
+このセクションでは、Haskell の定義済標準型クラスを紹介しましょう。これら
+のクラスは、あまり関心のないメソッドについては省略したかたちで、すでに簡
+単に紹介しました。Haskell レポートにはより完全な解説があります。一部のク
+ラスについては Haskell の標準ライブラリの一部になっています。これらのク
+ラスについては Haskell ライブラリレポートに記述されています。
+</p>
+<p>
+<a name="sect8.1"></a>
+<h3>8.1<tt>&nbsp;&nbsp;</tt>同値クラスと順序クラス</h3>
+</p>
+<p>
+<tt>Eq</tt> クラスと <tt>Ord</tt> クラスについては既に議論しています。
+プレリュードにある <tt>Ord</tt> クラスの定義は、以前に定義した単純なもの
+よりも、いささか複雑です。特に、<tt>compare</tt> メソッドは、以下のよう
+になっています。
+<tt><br>
+<br>
+data&nbsp;Ordering&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;EQ&nbsp;|&nbsp;LT&nbsp;|&nbsp;GT&nbsp;<br>
+compare&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;Ord&nbsp;a&nbsp;=&gt;&nbsp;a&nbsp;-&gt;&nbsp;a&nbsp;-&gt;&nbsp;Ordering<br>
+<br>
+</tt>
+<tt>compare</tt> メソッドがあれば、このクラスの他のすべてのメソッドは(デ
+フォルトメソッドで)定義できます。 <tt>Ord</tt> のインスタンスを生成する
+にはこの方法が一番すぐれています。
+</p>
+<p>
+<a name="tut-enum-classes"></a>
+<a name="sect8.2"></a>
+<h3>8.2<tt>&nbsp;&nbsp;</tt>列挙クラス</h3>
+</p>
+<p>
+<tt>Enum</tt> クラスには数列表現の糖衣構文の底流にある一連の演算がありま
+す。たとえば、数列式 <tt>[1,3..]</tt> は 
+<tt>enumFromThen&nbsp;1&nbsp;3</tt> を表わしています。(形式的な変換につ
+いては <a href="../report-j/exps.html#arithmetic-sequences">&sect;3.10</a> 
+を参照してください。) これで、<tt>Enum</tt> のインスタンスの型であればど
+の型に対しても、この数列式を用いてリストの生成ができることがわかります。
+<tt>Enum</tt> のインスタンスにはほとんどの数値型が含まれているばかりでは
+なく、<tt>Char</tt> 型も含まれており、<tt>['a'..'z']</tt> はアルファベッ
+ト順にならべた、小文字のリストを表わします。さらに、<tt>Color</tt> のよ
+うな、ユーザ定義の列挙型を <tt>Enum</tt> のインスタンスとして宣言できま
+す。それは次のようになります。
+</p>
+<p>
+<tt>[Red&nbsp;..&nbsp;Violet]</tt>    =&gt;    <tt>[Red,&nbsp;Green,&nbsp;Blue,&nbsp;Indigo,&nbsp;Violet]
+</tt>
+</p>
+<p>
+ここで、注意すべきことは、このような列は、算術的であるということです。す
+なわち、各値の増分はそれが数値であろうとなかろうと、一定であるということ
+です。<tt>Enum</tt> のほとんどのインスタンスは固定長の整数上に写像するこ
+とが可能です。この目的のために、<tt>fromEnum</tt> や <tt>toEnum</tt> が
+用意されており、<tt>Int</tt> と <tt>Enum</tt> のインスタンスの間での変換
+をおこないます。
+</p>
+<p>
+<a name="tut-text-class"></a>
+<a name="sect8.3"></a>
+<h3>8.3<tt>&nbsp;&nbsp;</tt>Read クラスと Show クラス</h3>
+</p>
+<p>
+<tt>Show</tt> クラスのインスタンスは文字列への変換(典型的目的は I/O )が
+可能な型です。<tt>Read</tt> クラスには、その値を表現する文字列を構文解析
+する演算が用意されています。<tt>Show</tt> クラスの最も単純な関数は 
+<tt>show</tt> です。
+<tt><br>
+<br>
+show&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;(Show&nbsp;a)&nbsp;=&gt;&nbsp;a&nbsp;-&gt;&nbsp;String<br>
+<br>
+</tt>
+<tt>show</tt> は当然、対応する型のあらゆる値をとり、その表現として、文字
+列(文字のリスト)を返します。たとえば、<tt>show&nbsp;(2+2)</tt> は 
+<tt>"4"</tt> を返します。このように正しく動作するものについてはいいので
+すが、それぞれの型のいろいろな値について、もっと、複雑な表現が必要になり
+ます。たとえば、
+<tt><br>
+<br>
+"The&nbsp;sum&nbsp;of&nbsp;"&nbsp;++&nbsp;show&nbsp;x&nbsp;++&nbsp;"&nbsp;and&nbsp;"&nbsp;++&nbsp;show&nbsp;y&nbsp;++&nbsp;"&nbsp;is&nbsp;"&nbsp;++&nbsp;show&nbsp;(x+y)&nbsp;++&nbsp;"."<br>
+<br>
+</tt>
+のような場合、それぞれの文字列を連結しているのでは、能率的ではありません。
+ことに、 <a href="goodies.html#tut-recursive-types">2.2.1</a> 節での二分
+木の文字列表現を考えてみましょう。入れ子になった部分木を表示するために適
+当なマークをつけてたり、左の枝と右の枝をわける印をつけたりします。
+<tt><br>
+<br>
+showTree&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;(Show&nbsp;a)&nbsp;=&gt;&nbsp;Tree&nbsp;a&nbsp;-&gt;&nbsp;String<br>
+showTree&nbsp;(Leaf&nbsp;x)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;show&nbsp;x<br>
+showTree&nbsp;(Branch&nbsp;l&nbsp;r)&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;"&lt;"&nbsp;++&nbsp;showTree&nbsp;l&nbsp;++&nbsp;"|"&nbsp;++&nbsp;showTree&nbsp;r&nbsp;++&nbsp;"&gt;"<br>
+<br>
+</tt>
+<tt>(++)</tt> は左側の引数の長さの線型で効く計算量をもちますので、
+<tt>showTree</tt> は木のサイズの 2 次で効く計算量になります。
+</p>
+<p>
+線型の複雑さを持つように、関数 <tt>shows</tt> を以下のように定義します。
+<tt><br>
+<br>
+shows&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;(Show&nbsp;a)&nbsp;=&gt;&nbsp;a&nbsp;-&gt;&nbsp;String&nbsp;-&gt;&nbsp;String<br>
+<br>
+</tt>
+この <tt>shows</tt> は印字可能な値と文字列をとり、前の部分にその値の文字
+列表現を連結した文字列を返します。ふたつめの引数は一種の文字列積算子
+になります。<tt>show</tt> は <tt>shows</tt> にナル積算子をあたえたものと
+して定義することができます。これは <tt>Show</tt> クラスの定義のなかの 
+<tt>show</tt> のデフォルトの定義となります。
+<tt><br>
+<br>
+show&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;shows&nbsp;x&nbsp;""<br>
+<br>
+</tt>
+<tt>shows</tt> を使って、<tt>showTree</tt> のより効率のよい定義をするこ
+とができます。このときも、文字列積算子引数をもたせます。
+<tt><br>
+<br>
+showsTree&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;(Show&nbsp;a)&nbsp;=&gt;&nbsp;Tree&nbsp;a&nbsp;-&gt;&nbsp;String&nbsp;-&gt;&nbsp;String<br>
+showsTree&nbsp;(Leaf&nbsp;x)&nbsp;s&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;shows&nbsp;x&nbsp;s<br>
+showsTree&nbsp;(Branch&nbsp;l&nbsp;r)&nbsp;s=&nbsp;&nbsp;'&lt;'&nbsp;:&nbsp;showsTree&nbsp;l&nbsp;('|'&nbsp;:&nbsp;showsTree&nbsp;r&nbsp;('&gt;'&nbsp;:&nbsp;s))<br>
+<br>
+</tt>
+この定義により効率の問題は解決しました。( <tt>showsTree</tt> の計算量は
+線型のオーダです。) しかし、この関数の表現をさらに改良することができます。
+まず、型シノニムをつくってみましょう。
+<tt><br>
+<br>
+type&nbsp;ShowS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;String&nbsp;-&gt;&nbsp;String<br>
+<br>
+</tt>
+この型は、なにかの文字列表現に積算子文字列を連ねた文字列を返す関数の型で
+す。つぎに、積算子をもちまわり、長い文字列の構築の右端での括弧の蓄積を
+回避するために、関数合成を使うことができます。
+<tt><br>
+<br>
+showsTree&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;(Show&nbsp;a)&nbsp;=&gt;&nbsp;Tree&nbsp;a&nbsp;-&gt;&nbsp;ShowS<br>
+showsTree&nbsp;(Leaf&nbsp;x)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;shows&nbsp;x<br>
+showsTree&nbsp;(Branch&nbsp;l&nbsp;r)&nbsp;&nbsp;=&nbsp;&nbsp;('&lt;':)&nbsp;.&nbsp;showsTree&nbsp;l&nbsp;.&nbsp;('|':)&nbsp;.&nbsp;showsTree&nbsp;r&nbsp;.&nbsp;('&gt;':)<br>
+<br>
+</tt>
+コードを整理することよりもさらに重要なことが、このプログラム変換によって
+あきらかになりました。それは、<em>オブジェクトレベル</em>での表現から
+<em>関数レベル</em>の表現への変換です。ここで、<tt>showsTree</tt> の型付
+けは、tree から <em>表示関数</em> への写像ということができます。
+<tt>('&lt;'&nbsp;:)</tt> あるいは <tt>("a&nbsp;string"&nbsp;++)</tt> の
+ような関数はプリミティブな表示関数で、関数合成を用いて、より複雑な関数を
+構築することができます。
+</p>
+<p>
+さて、tree を文字列に換えるはなしに戻りましょう。こんどは逆の問題を考えま
+す。基本のアイディアは、型 <tt>a</tt> に対する構文解析子です。型 
+<tt>a</tt> の構文解析子は文字列を引数としてとり、 
+<tt>(a,&nbsp;String)</tt> のリストを返す関数です[<a
+href="haskell-tutorial.html#$wadler:list-of-successes">9</a>]。プレリュー
+ドにはこのような関数の型シノニムが備えられています。
+<tt><br>
+<br>
+type&nbsp;ReadS&nbsp;a&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;String&nbsp;-&gt;&nbsp;[(a,String)]<br>
+<br>
+</tt>
+ふつうの状況では、パーザは単一の要素を含むリストを返します。この要素は、
+入力文字列から読み込んだ型 <tt>a</tt> の値と、そのあと構文解析される、残
+りの文字列の組です。もし、構文解析が不可能であれば、結果は空リストです。
+もし、2 つ以上の構文解析が可能であるなら(この場合は曖昧な構文ということ
+になります)、結果は、2 つ以上の組を含むリストになります。標準関数の 
+<tt>reads</tt> は <tt>Read</tt> のあらゆるインスタンスに対応する構文解析
+子関数です。
+<tt><br>
+<br>
+reads&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;(Read&nbsp;a)&nbsp;=&gt;&nbsp;ReadS&nbsp;a<br>
+<br>
+</tt>
+この関数を使って、<tt>showTree</tt> を使ってつくった、二分木の文字列表現
+を構文解析する関数を定義することができます。リストの内包表記はこのような
+構文解析関数を構築するのに便利なイディオムです。(モナドや構文解析結合子
+を使ったもっとエレガントな方法もあります。これらは、ほとんどの Haskell 
+システムとともに配布される標準の構文解析ライブラリの一部となっています。)
+<tt><br>
+<br>
+readsTree&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;(Read&nbsp;a)&nbsp;=&gt;&nbsp;ReadS&nbsp;(Tree&nbsp;a)<br>
+readsTree&nbsp;('&lt;':s)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;[(Branch&nbsp;l&nbsp;r,&nbsp;u)&nbsp;|&nbsp;(l,&nbsp;'|':t)&nbsp;&lt;-&nbsp;readsTree&nbsp;s,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(r,&nbsp;'&gt;':u)&nbsp;&lt;-&nbsp;readsTree&nbsp;t&nbsp;]<br>
+readsTree&nbsp;s&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;[(Leaf&nbsp;x,&nbsp;t)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;(x,t)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;-&nbsp;reads&nbsp;s]<br>
+<br>
+</tt>
+すこし、時間をかけてこの関数の定義を詳細にみていきましょう。考慮すべき状
+況がふたつあります。もし、構文解析の対象となる文字列の最初の文字が 
+<tt>'&lt;'</tt> の場合、これは、枝の表現にちがいありません。そうでなかっ
+た場合、これは葉の表現です。最初の場合は、開き三角括弧につづく入力文字列
+の残りの部分を <tt>s</tt> とすると、可能な構文解析はなんであれ、
+<tt>Branch&nbsp;l&nbsp;r</tt> となり、残りの文字列は、<tt>u</tt> となり、
+以下の条件に従います。
+<ol>
+ <li>木 <tt>l</tt> は文字列 <tt>s</tt> の最初から構文解析されたものとす
+     ることができる。</li> 
+ <li>( <tt>l</tt> の文字列表現に続く)残りの文字列は <tt>'|'</tt> で始ま
+     る。この文字列の先頭をのぞく部分を <tt>t</tt> とする。</li>
+ <li>木 <tt>r</tt> は文字列 <tt>t</tt> の最初から構文解析されたものとす
+     ることができる。</li>
+ <li>この構文解析の残りの文字列は <tt>'>'</tt> で始まる。この文字列の先
+     頭をのぞく部分は <tt>u</tt> である。</li>
+</ol>
+リスト内包表記のパターンマッチングの組み合わせによる表現力に注目してくだ
+さい。リスト内包表記されたメインの式であたえられている構文解析結果の形式
+は、まず、上にあげた 2 つの条件を最初の生成部 (<tt>(l,&nbsp;'|':t)</tt> 
+は、<tt>s</tt> の構文解析結果のリストから引出されています。) によって表
+現されています。のこりの条件は、2 つめの生成部によって表現されています。
+</p>
+<p>
+上の 2 つめの定義等式は葉の表現に対する構文解析は、この木の要素の表現を
+構文解析し、その結果に構築子 <tt>Leaf</tt> を適用して、値をうる、という
+意味です。
+</p>
+<p>
+信仰上、とりあえず、(色々な型があるなかで) <tt>Integer</tt> の 
+<tt>Read</tt> (および <tt>Show</tt>) インスタンスがあって、期待通りの振
+舞いをする <tt>reads</tt> が備わっていることを受容しましょう。つまりは以
+下のとおりです。
+</p>
+<p>
+<tt>(reads&nbsp;"5&nbsp;golden&nbsp;rings")&nbsp;::&nbsp;[(Integer,String)]</tt> 
+=&gt; <tt>[(5,&nbsp;"&nbsp;golden&nbsp;rings")]</tt> 
+</p>
+<p>
+これが理解できれば、次の評価を確認できるはずです。
+</p>
+<p>
+<table >
+ <tr>
+  <td><tt>readsTree&nbsp;"&lt;1|&lt;2|3&gt;&gt;"</tt></td>
+  <td align=center> =&gt; </td>
+  <td><tt>[(Branch&nbsp;(Leaf&nbsp;1)&nbsp;(Branch&nbsp;(Leaf&nbsp;2)&nbsp;(Leaf&nbsp;3)),&nbsp;"")]</tt></td>
+ </tr>
+ <tr>
+  <td><tt>readsTree&nbsp;"&lt;1|2"</tt></td>
+  <td align=center> =&gt; </td>
+  <td><tt>[]</tt></td>
+ </tr>
+</table>
+</p>
+<p>
+いま定義した <tt>readsTree</tt> には、2 つの欠点があります。
+ひとつは、この構文解析器はたいへん厳格にできていて、木の表現の文字列の要
+素の前や間に空白を許さないというもので、もうひとつは、区切の記号を構文解
+析する方法が葉の値の場合と部分木の場合ではすっかり違うということです。こ
+の統一性のなさが、この関数の定義を読みづらいものにしています。この 2 つ
+の問題をプレリュードで定義されている字句解析器を使って解決することができ
+ます。
+<tt><br>
+<br>
+lex&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;ReadS&nbsp;String<br>
+<br>
+</tt>
+<tt>lex</tt> は通常は、文字列の組の単一要素のリストを返します。その組は、
+入力の最初の字句と入力ののこりです。ここでの字句のルールは、Haskell 
+プログラムの字句のルールです。<tt>lex</tt> は空白をスキップします。もし、
+入力文字列が空あるいは空白およびコメントしか含まなければ、<tt>lex</tt> 
+は <tt>[("","")]</tt> を返します。もし、この意味で空ではなく、かつ、空白
+のつづく有効な字句ではじまっていない場合には、<tt>lex</tt> は 
+<tt>[]</tt> を返します。
+</p>
+<p>
+この字句解析器を使うと、木の構文解析器はこんなふうになります。
+<tt><br>
+<br>
+readsTree&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;(Read&nbsp;a)&nbsp;=&gt;&nbsp;ReadS&nbsp;(Tree&nbsp;a)<br>
+readsTree&nbsp;s&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;[(Branch&nbsp;l&nbsp;r,&nbsp;x)&nbsp;|&nbsp;("&lt;",&nbsp;t)&nbsp;&lt;-&nbsp;lex&nbsp;s,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(l,&nbsp;&nbsp;&nbsp;u)&nbsp;&lt;-&nbsp;readsTree&nbsp;t,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;("|",&nbsp;v)&nbsp;&lt;-&nbsp;lex&nbsp;u,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(r,&nbsp;&nbsp;&nbsp;w)&nbsp;&lt;-&nbsp;readsTree&nbsp;v,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;("&gt;",&nbsp;x)&nbsp;&lt;-&nbsp;lex&nbsp;w&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;++<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(Leaf&nbsp;x,&nbsp;t)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;(x,&nbsp;&nbsp;&nbsp;t)&nbsp;&lt;-&nbsp;reads&nbsp;s&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]<br>
+<br>
+</tt>
+</p>
+<p>
+さて、ここで、<tt>readsTree</tt> と <tt>showsTree</tt> を使って、
+<tt>Read</tt> のインスタンス
+<tt>(Read&nbsp;a)&nbsp;=&gt;&nbsp;Tree&nbsp;a</tt> と <tt>Show</tt> 
+のインスタンス <tt>(Show&nbsp;a)&nbsp;=&gt;&nbsp;Tree&nbsp;a</tt> を宣言
+してみましょう。こうすれば、木の構文解析と表示用にプレリュードにある総称
+的多重定義関数を利用することができます。さらに、構成要素に木を含むほかの
+多くの型の構文解析や表示ができるようになります。たとえば、
+<tt>[Tree&nbsp;Integer]</tt> のようなものです。ここでわかるように、
+<tt>readsTree</tt> と <tt>showsTree</tt> はほぼ、<tt>Show</tt> および 
+<tt>Read</tt> のメソッドの型を満しています。<tt>showsPrec</tt> と 
+<tt>readsPrec</tt> のメソッドは、<tt>shows</tt> と <tt>reads</tt> をパラ
+メータ化したものです。追加されたパラメータは、優先レベルです。これは、中
+置構築子が式に含まれている場合に正しく、括弧付けをおこなうために使用しま
+す。<tt>Tree</tt> のような型に対しては優先度は無視されます。
+<tt>Show</tt> と <tt>Read</tt> のインスタンスとしての <tt>Tree</tt> は以
+下のようになります。
+<tt><br>
+<br>
+instance&nbsp;Show&nbsp;a&nbsp;=&gt;&nbsp;Show&nbsp;(Tree&nbsp;a)&nbsp;where<br>
+&nbsp;&nbsp;&nbsp;&nbsp;showsPrec&nbsp;_&nbsp;x&nbsp;=&nbsp;showsTree&nbsp;x<br>
+<br>
+instance&nbsp;Real&nbsp;a&nbsp;=&gt;&nbsp;Read&nbsp;(Tree&nbsp;a)&nbsp;where<br>
+&nbsp;&nbsp;&nbsp;&nbsp;readsPrec&nbsp;_&nbsp;s&nbsp;=&nbsp;readsTree&nbsp;s<br>
+<br>
+</tt>
+また、<tt>Show</tt> のインスタンスは <tt>showTree</tt> を使って、次のよ
+うに定義することもできます。
+<tt><br>
+<br>
+instance&nbsp;Show&nbsp;a&nbsp;=&gt;&nbsp;Show&nbsp;(Tree&nbsp;a)&nbsp;where<br>
+&nbsp;&nbsp;&nbsp;show&nbsp;t&nbsp;=&nbsp;showTree&nbsp;t<br>
+<br>
+</tt>
+しかし、これは、<tt>ShowS</tt> バージョンよりも効率の面で劣ります。
+<tt>Show</tt> クラスでは <tt>showsPrec</tt> と <tt>show</tt> の両方につ
+いてデフォルトのメソッドを定義しており、ユーザはインスタンスひとつにつき、
+どちらかを定義すればいいようになっています。これらのデフォルトメソッドは
+相互再帰的になっていますので、インスタンス宣言のなかで、これらの関数のど
+ちらも定義しなかった場合、呼び出しの際にループを引き起こします。
+<tt>Num</tt> のようなクラスの場合でも、このような「相互ロック性のデフォ
+ルトメソッド」があります。
+</p>
+<p>
+<tt>Read</tt> および <tt>Show</tt> クラスの詳細に興味のあるむきは、レポー
+トの <a href="../report-j/derived.html#derived-appendix">&sect;D</a> を参
+照してください。
+</p>
+<p>
+<tt>(read&nbsp;.&nbsp;show)</tt> (これは恒等関数になるはず)をいくつかの
+木に適用することで <tt>Read</tt> および <tt>Show</tt> のインスタンスをテ
+ストすることができます。ここで、<tt>read</tt> は <tt>reads</tt> を特殊化
+したものです。
+<tt><br>
+<br>
+read&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&nbsp;(Read&nbsp;a)&nbsp;=&gt;&nbsp;String&nbsp;-&gt;&nbsp;a<br>
+<br>
+</tt>
+入力に対して、構文解析結果が唯一でない場合、あるいは、入力が、
+<tt>a</tt> の型のひとつの値に対して 2 つ以上の表現(あるいは、コメントや
+空白)を含むような場合には、この関数は失敗します。
+</p>
+<p>
+<a name="tut-derived-instances"></a>
+<a name="sect8.4"></a>
+<h3>8.4<tt>&nbsp;&nbsp;</tt>導出されたインスタンス</h3>
+</p>
+<p>
+<a href="classes.html#tut-type-classes">5</a> 節で紹介した木の 
+<tt>Eq</tt> インスタンスについて思いだしてください。このような宣言をいち
+いち書くのは単純ですが、面倒です。葉の要素の型が同値型であることを要求し
+ているのですから、2 つの葉は同値の要素をもつ場合、そして、その場合にかぎ
+り同値であり、ふたつの枝は、その左の部分木と右の部分木がそれぞれ等しい場
+合、かつ、その場合にかぎり等しいわけで、それ以外の場合、ふたつの木は同値
+ではありません。
+<tt><br>
+<br>
+instance&nbsp;&nbsp;(Eq&nbsp;a)&nbsp;=&gt;&nbsp;Eq&nbsp;(Tree&nbsp;a)&nbsp;&nbsp;where<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(Leaf&nbsp;x)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;==&nbsp;(Leaf&nbsp;y)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;x&nbsp;==&nbsp;y<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(Branch&nbsp;l&nbsp;r)&nbsp;==&nbsp;(Branch&nbsp;l'&nbsp;r')&nbsp;&nbsp;=&nbsp;&nbsp;l&nbsp;==&nbsp;l'&nbsp;&amp;&amp;&nbsp;r&nbsp;==&nbsp;r'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;_&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;==&nbsp;_&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;False<br>
+<br>
+</tt>
+</p>
+<p>
+幸い、この面倒な作業を、新しい型の同値演算子が必要になるたびに繰り返す必
+要はありません。<tt>Eq</tt> インスタンスは、データ宣言でそのように指定す
+れば、<em>自動的に導出されます。</em>
+<tt><br>
+<br>
+data&nbsp;&nbsp;Tree&nbsp;a&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;Leaf&nbsp;a&nbsp;|&nbsp;Branch&nbsp;(Tree&nbsp;a)&nbsp;(Tree&nbsp;a)&nbsp;&nbsp;deriving&nbsp;Eq<br>
+<br>
+</tt>
+<tt>deriving</tt> 節は暗黙のうちに、 
+<a href="classes.html#tut-type-classes">5</a> 節にあるように <tt>Eq</tt> 
+インスタンス宣言を生成します。<tt>Ord</tt>、<tt>Enum</tt>、<tt>Ix</tt>、
+<tt>Read</tt>、<tt>Show</tt> の各インスタンスも同様に <tt>deriving</tt> 
+節を使って生成することができます。
+[ここでは 2 つ以上のクラス名を指定することができます。その場合にはクラス
+の名前リストは括弧でかこまれ、名前はそれぞれコンマで区切る必要があります。] 
+</p>
+<p>
+<tt>Tree</tt> に対して導出された <tt>Ord</tt> インスタンスは <tt>Eq</tt> 
+の場合にくらべていくぶん複雑です。
+<tt><br>
+<br>
+instance&nbsp;&nbsp;(Ord&nbsp;a)&nbsp;=&gt;&nbsp;Ord&nbsp;(Tree&nbsp;a)&nbsp;&nbsp;where<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(Leaf&nbsp;_)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;=&nbsp;(Branch&nbsp;_)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;True<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(Leaf&nbsp;x)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;=&nbsp;(Leaf&nbsp;y)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;x&nbsp;&lt;=&nbsp;y<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(Branch&nbsp;_)&nbsp;&nbsp;&nbsp;&lt;=&nbsp;(Leaf&nbsp;_)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;False<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(Branch&nbsp;l&nbsp;r)&nbsp;&lt;=&nbsp;(Branch&nbsp;l'&nbsp;r')&nbsp;&nbsp;=&nbsp;&nbsp;l&nbsp;==&nbsp;l'&nbsp;&amp;&amp;&nbsp;r&nbsp;&lt;=&nbsp;r'&nbsp;||&nbsp;l&nbsp;&lt;=&nbsp;l'<br>
+<br>
+</tt>
+ここでは、<em>辞書順</em> を指定しています。構築子は、<tt>data</tt> 宣言
+中でその出現の順にならべられています。そして、構築子への引数は左から右へ
+と比較されていきます。組み込みのリスト型は意味論的には2つの構築子をもつ
+型と同じであることを思いだしてください。実際にこの完全な定義は
+<tt><br>
+<br>
+data&nbsp;[a]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;[]&nbsp;|&nbsp;a&nbsp;:&nbsp;[a]&nbsp;deriving&nbsp;(Eq,&nbsp;Ord)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;pseudo-code<br>
+<br>
+</tt>
+です。(リストは、<tt>Text</tt> インスタンスでもありますが、これは導出さ
+れません。) リストに対して導出された <tt>Eq</tt> および <tt>Ord</tt> の
+インスタンスはごくふつうのものです。特に、文字のリストとしての文字列は、
+その基になる <tt>Char</tt> 型の順序によって、ならべられます。先頭部分文
+字列はそれより長い文字列よりも小さいと判定します。たとえば、
+<tt>"cat"&nbsp;&lt;&nbsp;"catalog"</tt> です。
+</p>
+
+An intransitive (==)
+predicate, for example, could be disastrous, confusing readers of the program and confounding manual or
+automatic program transformations that rely on the (==) predicate's being an approximation to
+definitional equality. 
+
+
+<p>
+実際問題として、<tt>Eq</tt> および <tt>Ord</tt> のインスタンスは、ほとん
+どの場合、ユーザの定義ではなく、導出されます。
+実際、すこしばかり、どきどきしますが、同値関係と全順序関係という代数的
+な性質を維持するように注意しながら、独自の同値述語や順序述語を定義しなけ
+ればなりません。
+自動詞的な <tt>(==)</tt> 述語は、たとえば、大変苦痛で、プログラムを読
+むものを困惑させ、手動あるいは自動的な、<tt>(==)</tt> 述語が明白な同値性
+の近似であることに依存する、プログラム変換を困難なものにします。
+とはいうものの、導出されるものとはちがう <tt>Eq</tt> あるいは 
+<tt>Ord</tt> のインスタンスが必要な場合もあります。もっとも重要な例は、
+同じ抽象値をあらわす別の具体的な値となるような抽象型のインスタンスの例で
+す。
+</p>
+<p>
+列挙型は導出された <tt>Enum</tt> のインスタンスをもちます。ここで、この
+型の順序は <tt>data</tt> 宣言での構築子の出現順になります。たとえば、
+<tt><br>
+<br>
+data&nbsp;Day&nbsp;=&nbsp;Sunday&nbsp;|&nbsp;Monday&nbsp;|&nbsp;Tuesday&nbsp;|&nbsp;Wednesday<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Thursday&nbsp;|&nbsp;Friday&nbsp;|&nbsp;Saturday&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;deriving&nbsp;(Enum)<br>
+<br>
+</tt>
+このとき、この型に対して導出されたインスタンスを用いた単純な例は次のよう
+なものになります。
+</p>
+<p>
+<table >
+ <tr>
+  <td><tt>[Wednesday&nbsp;..&nbsp;Friday]</tt></td>
+  <td align=center>=&gt;</td>
+  <td><tt>[Wednesday,&nbsp;Thursday,&nbsp;Friday]</tt></td>
+ </tr>
+ <tr>
+  <td><tt>[Monday,&nbsp;Wednesday&nbsp;..]</tt></td>
+  <td align=center>=&gt;</td>
+  <td><tt>[Monday,&nbsp;Wednesday,&nbsp;Friday]</tt></td>
+ </tr>
+</table>
+</p>
+<p>
+その構成要素が <tt>Read</tt> (<tt>Show</tt>) のインスタンスであるような
+型なら、その型に対して <tt>Read</tt> (<tt>Show</tt>) のインスタンスであ
+ることを導出することが可能です。(標準の型のほとんどについては、
+<tt>Read</tt> および <tt>Show</tt> のインスタンスであることが、プレリュー
+ドのなかで示されています。 関数の型である <tt>(-&gt;)</tt> のような型の
+いくつかは、<tt>Show</tt> インスタンスではありますが、それに対応した 
+<tt>Read</tt> のインスタンスではありません。) 導出された <tt>Show</tt> 
+インスタンスで定義されるテキストでの表現は、対象となる型の Haskell での
+定数式の見かけと整合性があります。例えば、型 <tt>Day</tt> について 
+<tt>Show</tt> と <tt>Read</tt> をその <tt>deriving</tt> 節に加えると、
+</p>
+<p>
+<tt>show&nbsp;[Monday&nbsp;..&nbsp;Wednesday]</tt> =&gt;
+<tt>"[Monday,Tuesday,Wednesday]"</tt>
+</p>
+<p>
+を得ることができます。
+</p>
+<hr>
+<p>
+<i>A Gentle Introduction to Haskell, Version 98</i><br>
+<a href="io.html">back</a>
+<a href="monads.html">next</a>
+<a href="index.html">top</a>
+</p>
+</body>
+</html>

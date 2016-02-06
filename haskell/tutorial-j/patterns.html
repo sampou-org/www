@@ -1,0 +1,605 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>A Gentle Introduction to Haskell: Patterns</title>
+</head>
+<body bgcolor="#ffffff">
+<p>
+<i>やさしい Haskell 入門 ( Version 98 )</i><br>
+<a href="functions.html">back</a>
+<a href="classes.html">next</a>
+<a href="index.html">top</a>
+</p>
+<hr>
+<p>
+<a name="tut-pattern-matching"></a>
+<a name="sect4"></a>
+<h2>4<tt>&nbsp;&nbsp;</tt>Case 式とパターン照合</h2>
+</p>
+<p>
+パターン照合の例は前に <tt>length</tt> や <tt>fringe</tt> の関数の
+定義の際に示しました。この節ではパターン照合のプロセスを詳細に見て
+いきましょう(
+<a href="../report-j/exps.html#pattern-matching">&sect;3.17</a> )
+ ( Haskell におけるパターン照合は、たとえば Prolog のような、論理
+ プログラミング言語にみられるものとは違いがあります。とくに、Haskell の
+ 照合は「一方向」です。一方 Prolog の照合は(単一化による)「双方向」で、
+ その評価機構のなかで暗黙のバックトラックによるもです。)
+</p>
+<p>
+パターンは「第一級の対象」ではありません。いろいろな種類のパターンの固定
+的な集合があるだけです。すでに、<em>データ構築子</em>のパターンのいくつ
+かの例をしめしました。以前に定義した <tt>length</tt> と <tt>fringe</tt> 
+はこうしたパターンをつかって定義してあります。前者は「組み込み」の型(リ
+スト)の上での例で、後者は、「ユーザ定義」の型( <tt>Tree</tt> )の上での例
+です。照合はユーザ定義かどうかには関係なく、すべての型で使うことが
+できます。これには、タプル、文字列、数、文字などが含まれます。例をあげま
+しょう。ここに、「定数」のタプルに対して照合が成功する <tt>contrived</tt> 関
+数があります。
+<tt><br>
+<br>
+contrived&nbsp;::&nbsp;([a],&nbsp;Char,&nbsp;(Int,&nbsp;Float),&nbsp;String,&nbsp;Bool)&nbsp;-&gt;&nbsp;Bool<br>
+contrived&nbsp;&nbsp;&nbsp;&nbsp;([],&nbsp;&nbsp;'b',&nbsp;&nbsp;(1,&nbsp;&nbsp;&nbsp;2.0),&nbsp;&nbsp;&nbsp;"hi",&nbsp;&nbsp;&nbsp;True)&nbsp;=&nbsp;False<br>
+<br>
+</tt>
+この例で、<em>入れ子</em>になったパターン(入れ子の深さは任意)も使えるこ
+とがわかります。
+</p>
+<p>
+テクニカルないいまわしをすれば、<em>仮引数</em>( <i>formal
+parameters</i> ) (レポートでは<em>変数</em>( <i>variable</i> )と呼ばれて
+いるもの)もパターンです。つまり、<em>ある値にかならず照合が成功</em>します。
+この照合が成功する副作用として、仮引数は照合が成功した値に束縛されます。その
+わけは、ひとつの等式であれば、そのなかのパターンには、2つ以上の同じ仮引
+数が含まれてはいけないからです。(これは、<em>線型性</em>
+( <i>linearity</i> ) とよばれている性質です。<a
+href="../report-j/exps.html#pattern-matching">&sect;3.17</a>、<a
+href="../report-j/exps.html#lambda-abstractions">&sect;3.3</a>、<a
+href="../report-j/decls.html#function-bindings">&sect;4.4.2</a>)
+</p>
+<p>
+仮引数のような必ず照合が成功するようなパターンのことを<em>不可反駁</em>
+( <i>irrefutable</i> )パターンといいます。反対に<em>可反駁</em>
+( <i>refutable</i> )パターンは照合が成功しない可能性があります。上であげた 
+<tt>contrived</tt> の例はこの可反駁パターンの例です。不可反駁パターンに
+は 3 つの種類があります。そのうち 2 つを紹介しましょう。(のこりは、<a
+href="patterns.html#tut-lazy-patterns">4.4</a> 節までまってください。)
+</p>
+<p>
+<h3>アズパターン</h3> 
+</p>
+<p>
+場合によってはパターンに名前がついていれば、等式の右辺で使えて便利なこと
+があります。たとえば、リストの第一要素を複製する関数はつぎのように書けま
+す。
+<tt><br>
+<br>
+f&nbsp;(x:xs)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;x:x:xs<br>
+<br>
+</tt>
+(「<tt>:</tt>」は右結合性があることを思いだしてください。) <tt>x:xs</tt> 
+というパターンが左辺と右辺の両方にあります。可読性向上のためには 
+<tt>x:xs</tt> は一度だけ書くほうがよく、<em>アズパターン</em>
+( <i>as-pattern</i> )を使ってこれを達成します。(このパターンを使うもうひ
+とつの利点は、素朴な実装では、照合が成功した値を再利用せずに、<tt>x:xs</tt> 
+を再構築することになるからです。)
+<tt><br>
+<br>
+f&nbsp;s@(x:xs)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;x:s<br>
+<br>
+</tt>
+技術的な観点からいうと、アズパターンは照合に常に成功します。ただし、
+サブパターン(この場合は、<tt>x:xs</tt> )はもちろん照合が成功しないこともあり
+ます。
+</p>
+<p>
+<h3>ワイルドカード</h3>
+</p>
+<p>
+よくある状況をもうひとつ、それはとくに値を気にしない照合です。たと
+えば、<a href="goodies.html#tut-polymorphism">2.1</a> 節で定義した 
+<tt>head</tt> 関数や <tt>tail</tt> 関数は次のように書き換ることができま
+す。
+<tt><br>
+<br>
+head&nbsp;(x:_)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;x<br>
+tail&nbsp;(_:xs)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;xs<br>
+<br>
+</tt>
+この定義では、入力されたものの一部は気にしないということがはっきり「広告」
+されています。各ワイルドカードはそれぞれ独立にどんなものとも照合が成功しま
+す。しかし、仮引数の場合とちがい、それぞれは何にも束縛されません。というわ
+けで、ワイルドカードパターンはひとつの等式のなかに 1 つ以上あってもかま
+いません。
+</p>
+<p>
+<a name="tut-matching-semantics"></a>
+<a name="sect4.1"></a>
+<h3>4.1<tt>&nbsp;&nbsp;</tt>パターン照合の意味論</h3>
+</p>
+<p>
+これまで、個々のパターンがどのように照合に成功し、あるいは可反駁のものと、
+不可反駁のものがあるということを議論してきました。しかし、どのようにして、
+その処理全体がおこなわれるのでしょうか。どのような順序で照合がためされる
+のでしょうか。もし、どのパターンも成功しなかったらどうなるのでしょうか。
+この節ではこのことについて考えていきましょう。
+</p>
+<p>
+パターン照合は<em>失敗する</em>( <i>fail</i> )こともあるし、<em>成
+功する</em>( <i>succeed</i> )こともあるし、あるいは<em>発散する</em>
+( <i>diverge</i> )こともあります。成功した照合が、そのパターン中の仮引数
+を束縛します。発散は、パターンが必要とした値がエラー( _|_ )を含んでいた
+場合に起こります。照合の処理自体は「上から下へ、左から右へ」おこな
+われます。ひとつの等式のなかのどこでパターン照合が失敗しても、その等式
+全体に対するパターン照合が失敗したことになり、次の等式が試されます。す
+べての等式でパターン照合が失敗すると、その関数適用の値は _|_ になり、
+実行時エラーとなります。
+</p>
+<p>
+たとえば、<tt>[1,2]</tt> を <tt>[0,bot]</tt> に照合させようとすると、
+<tt>1</tt> は <tt>0</tt> と照合しませんので、この照合は失敗しま
+す。(以前に定義した <tt>bot</tt> は _|_ に束縛されていることを思い出して
+ください。) しかし、もし、<tt>[1,2]</tt> を <tt>[bot,0]</tt> にマッチさ
+せようとすると、<tt>1</tt> を <tt>bot</tt> へ照合させる際に発散がおこ
+ります。
+</p>
+<p>
+パターン照合のルールで唯一ひねくれているところは、トップレベルのパ
+ターンがブーリアン<em>ガード</em>部をもつこともあるということです。数の
+符号を抽象化する関数の例をみると、
+<tt><br>
+<br>
+sign&nbsp;x&nbsp;|&nbsp;&nbsp;x&nbsp;&gt;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;&nbsp;1<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;x&nbsp;==&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;&nbsp;0<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;x&nbsp;&lt;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;-1<br>
+<br>
+</tt>
+のようになります。ここで注意すべきは一連のガードが同じパターンを使ってい
+るということです。これらは上から下へ評価され、最初に <tt>True</tt> となっ
+たところで照合が成功します。
+</p>
+<p>
+<a name="sect4.2"></a>
+<h3>4.2<tt>&nbsp;&nbsp;</tt>例</h3>
+</p>
+<p>
+パターン照合のルールが、関数の意味に微妙に影響することがある。たと
+えば、つぎの <tt>take</tt> の定義
+<tt><br>
+<br>
+take&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;[]<br>
+take&nbsp;&nbsp;_&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;[]<br>
+take&nbsp;&nbsp;n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(x:xs)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;x&nbsp;:&nbsp;take&nbsp;(n-1)&nbsp;xs<br>
+<br>
+</tt>
+と、これとはちょっとだけちがう定義(最初の 2 つの等式の順序が逆のもの)
+<tt><br>
+<br>
+take1&nbsp;&nbsp;_&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;[]<br>
+take1&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;[]<br>
+take1&nbsp;&nbsp;n&nbsp;&nbsp;&nbsp;&nbsp;(x:xs)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;x&nbsp;:&nbsp;take1&nbsp;(n-1)&nbsp;xs<br>
+<br>
+</tt>
+を考えてみましょう。次の結果に注目してください。
+</p>
+<p>
+<table >
+ <tr>
+  <td><tt>take&nbsp;&nbsp;0&nbsp;bot</tt></td>
+  <td align=center>   =&gt;   </td>
+  <td><tt>[]</tt></td>
+ </tr>
+ <tr>
+  <td><tt>take1&nbsp;0&nbsp;bot</tt></td>
+  <td align=center>   =&gt;   </td>
+  <td>_|_</td>
+ </tr>
+ <tr>
+  <td><tt>take&nbsp;&nbsp;bot&nbsp;[]</tt>
+  </td><td align=center>   =&gt;   </td>
+  <td>_|_</td>
+ </tr>
+ <tr>
+  <td><tt>take1&nbsp;bot&nbsp;[]</tt></td>
+  <td align=center>   =&gt;   </td>
+  <td><tt>[]</tt></td>
+ </tr>
+</table>
+</p>
+<p>
+<tt>take</tt>は 2 番目の引数により重きをおいて定義され、一方、
+<tt>take1</tt> は 1 番目の引数により重きをおいて定義されていることがわか
+ります。この場合、どちらがよい定義であるかはむずかしいところです。ただ、
+実際の応用の場面では、意味の違いをひきおこすことがあるということを覚えて
+おいてください。 (標準プレリュードでは <tt>take</tt> の方の定義を採用し
+ています。)
+</p>
+<p>
+<a name="tut-case"></a>
+<a name="sect4.3"></a>
+<h3>4.3<tt>&nbsp;&nbsp;</tt>Case 式</h3>
+</p>
+<p>
+パターン照合を使うと値の構造的な性質に基づいた「ディスパッチ制御」
+をすることができます。しかしながら、多くの状況では、これを実現する必要が
+あるたびに<em>関数</em>を定義するなどということはやりたくはありません。
+しかし、これまでは、どのように関数定義のなかでパターン照合をおこなうか
+を示しただけでした。Haskell の <em>case 式</em>( <i>case expression</i>
+)はこの問題を解決してくれます。関数定義のなかでのパターン照合の意味は、
+実は case 式のより単純なものと考えられることが Haskell レポートに示され
+ています。次のような関数定義の形式を考えます。
+</p>
+<p>
+<table >
+ <tr>
+  <td>
+   <tt>f</tt><I> p</I><sub><I>11</I></sub><I> ... p</I><sub><I>1k</I></sub><I> </I><tt>=</tt><I> e</I><sub><I>1</I></sub>
+  </td>
+ </tr>
+ <tr>
+  <td><I>...</I></td>
+ </tr>
+ <tr>
+  <td><tt>f</tt><I> p</I><sub><I>n1</I></sub><I> ... p</I><sub><I>nk</I></sub><I> </I><tt>=</tt><I> e</I><sub><I>n</I></sub>
+  </td>
+ </tr>
+</table>
+</p>
+<p>
+ここで、各 <I>p</I><sub><I>ij</I></sub> はパターンです。この定義は意味論
+的には以下のものと同等です。
+</p>
+<p>
+<tt>f&nbsp;x1&nbsp;x2</tt><I> ... </I><tt>xk&nbsp;=&nbsp;case&nbsp;(x1,&nbsp;</tt><I>...</I><tt>,&nbsp;xk)&nbsp;of</tt>
+<table>
+ <tr>
+  <td>
+   <tt>(</tt><I>p</I><sub><I>11</I></sub><I>, ..., p</I><sub><I>1k</I></sub><tt>)&nbsp;-&gt;</tt><I> e</I><sub><I>1</I></sub>
+  </td>
+ </tr>
+ <tr>
+  <td><I>...</I></td>
+ </tr>
+ <tr>
+  <td>
+   <tt>(</tt><I>p</I><sub><I>n1</I></sub><I>, ..., p</I><sub><I>nk</I></sub><tt>)&nbsp;-&gt;</tt><I> e</I><sub><I>n</I></sub>
+  </td>
+ </tr>
+</table>
+</p>
+<p>
+ここで <tt>xi</tt> は新しい識別子です。(ガードを含む、より一般的な解釈に
+ついては <a
+href="../report-j/decls.html#function-bindings">&sect;4.4.2</a> を参照のこ
+と) 例をしめすと、まえにあげた <tt>take</tt> の定義は以下と同等です。
+<tt><br>
+<br>
+take&nbsp;m&nbsp;ys&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;case&nbsp;(m,ys)&nbsp;of<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(0,_)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;&nbsp;[]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(_,[])&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;&nbsp;[]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(n,x:xs)&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;&nbsp;x&nbsp;:&nbsp;take&nbsp;(n-1)&nbsp;xs<br>
+<br>
+</tt>
+</p>
+<p>
+型の正当性について以前には言及しませんでしたが、case 式の右辺あるいは一
+連の関数定義を含む等式の右辺はすべて同じ型でなければなりません。より正確
+にはそれらはすべて同じ主型を共有しなければなりません。
+</p>
+<p>
+<p>
+case 式のパターン照合のルールは関数定義でのパターン照合のルー
+ルとおなじです。それゆえ、ここで新しく学習することはなにもないのですが、
+case 式の利便性については注目してください。case 式のよく知られている特殊
+構文があります。それは <em>条件式</em>( <i>conditional expression</i> )
+です。Haskell では条件式はおなじみの形式をもちます。
+</p>
+<p>
+<tt>if</tt> e<sub>1</sub> <tt>then</tt> e<sub>2</sub> <tt>else</tt>
+e<sub>3</sub>
+</p>
+<p>
+これは以下の構文の簡略形です。
+</p>
+<p>
+<table >
+ <tr>
+  <td>
+   <tt>case</tt> e<sub>1</sub> <tt>of</tt>
+  </td>
+  <td>
+   <tt>True&nbsp;&nbsp;-&gt;</tt> e<sub>2</sub>
+  </td>
+ </tr>
+ <tr>
+  <td></td>
+  <td><tt>False&nbsp;-&gt;</tt> e<sub>3</sub></td>
+ </tr>
+</table>
+</p>
+<p>
+この展開を見ると e<sub>1</sub> が <tt>Bool</tt> 型でなければならず、
+e<sub>2</sub> や e<sub>3</sub> は同じ型(とはいえこちらは任意の型)でなけ
+ればならないことがはっきりとわかります。いいかえれば、
+<tt>if</tt>_<tt>then</tt>_<tt>else</tt>_ は関数であると見なせば、
+<tt>Bool-&gt;a-&gt;a-&gt;a</tt> という型をもっているといえます。
+</p>
+<p>
+<a name="tut-lazy-patterns"></a>
+<a name="sect4.4"></a>
+<h3>4.4<tt>&nbsp;&nbsp;</tt>遅延パターン</h3>
+</p>
+<p>
+Haskell ではもうひとつ別のパターンが許されています。それは<em>遅延パター
+ン</em>( <i>lazy pattern</i> )とよばれるもので、<tt>~</tt>pat という形式
+をとります。遅延パターンは<em>不可反駁</em>で、値 v の <tt>~</tt>pat に
+対する照合は pat が何であっても常に成功します。操作論の観点からいう
+と pat のなかの識別子が右辺で「利用」されるとすると、それは v が pat に
+マッチすると仮定した場合の値に束縛されるか、さもなければ、_|_ となります。
+</p>
+<p>
+遅延パターンは無限のデータ構造が再帰的に定義されているような場合に便利で
+す。例をあげましょう。無限リストは<em>シミュレーション</em>プログラムを
+書くのに大変つかいよいデータ構造です。こうした使い方をする無限リストを
+よく<em>ストリーム</em>といいます。サーバプロセス <tt>server</tt> と ク
+ライアントプロセス <tt>client</tt> との間のやりとりの簡単なケースを考え
+てみましょう。<tt>client</tt> は一連の<em>要求</em>を <tt>server</tt> に
+送り、<tt>server</tt> はおのおのの要求に対して、ある種の<em>応答</em>を
+返します。この状況をフィボナッチの例でやったように絵であらわすと、図 2 
+のようになります。( <tt>client</tt> は引数として初期メッセージもとること
+に注意してください。)
+</p>
+<p>
+<div align=center>
+<img src="fig2.gif" alt="Client Server Example"> 
+<h4>図 2</h4>
+</div>
+</p>
+<p>
+ストリームを使ってこのメッセージシーケンスをシミュレートすると、Haskell 
+のコードでは、
+<tt><br>
+<br>
+reqs&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;client&nbsp;init&nbsp;resps<br>
+resps&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;server&nbsp;reqs<br>
+<br>
+</tt>
+のようになります。これらの等式は上の図式をそのままコードに移しかえたもの
+です。
+</p>
+<p>
+さらに、サーバとクライアントの構造がどのようなものか、以下のように仮定し
+ましょう。
+<tt><br>
+<br>
+client&nbsp;init&nbsp;(resp:resps)&nbsp;=&nbsp;init&nbsp;:&nbsp;client&nbsp;(next&nbsp;resp)&nbsp;resps<br>
+server&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(req:reqs)&nbsp;&nbsp;&nbsp;=&nbsp;process&nbsp;req&nbsp;:&nbsp;server&nbsp;reqs<br>
+<br>
+</tt>
+ここで、<tt>next</tt> はサーバからの応答を与えられて、次の要求を決定する
+関数であり、<tt>process</tt> はクライアントからの要求を与えられて、それ
+にあった応答を返す関数であるとします。
+</p>
+<p>
+残念ながら、このプログラムには大きな問題があります。このプログラムはなに
+も出力しないのです。問題は、<tt>client</tt> が <tt>reqs</tt> と 
+<tt>resps</tt> の再帰的な設定のなかで使われているので、最初の要求を送信
+する前に応答リストと照合を試みようとすることなのです。つまり、パター
+ン照合がおこなわれるのが「早すぎる」のです。これを是正するひとつの
+方法は以下のように <tt>client</tt> を再定義することです。
+<tt><br>
+<br>
+client&nbsp;init&nbsp;resps&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;init&nbsp;:&nbsp;client&nbsp;(next&nbsp;(head&nbsp;resps))&nbsp;(tail&nbsp;resps)<br>
+<br>
+</tt>
+これで動作するようになりますが、この解決法は、その前の定義とおなじには読
+めません。もっとよい解決法は遅延パターンを使う方法です。
+<tt><br>
+<br>
+client&nbsp;init&nbsp;~(resp:resps)&nbsp;=&nbsp;init&nbsp;:&nbsp;client&nbsp;(next&nbsp;resp)&nbsp;resps<br>
+<br>
+</tt>
+遅延パターンは不可反駁なので、照合はただちに成功し、そのおかげで最
+初の要求が発信され、それから最初の応答が生成されます。これでエンジンが給
+油ずみになり、のこりは再帰の部分が面倒をみてくれます。
+</p>
+<p>
+この例は、以下のように定義を加えれば、実際に動作します。
+<tt><br>
+<br>
+init&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;0<br>
+next&nbsp;resp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;resp<br>
+process&nbsp;req&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;req+1<br>
+<br>
+</tt>
+実際に動作させてみると、
+</p>
+<p>
+<tt>take&nbsp;10&nbsp;reqs</tt>    =&gt;
+<tt>[0,1,2,3,4,5,6,7,8,9]</tt>
+</p>
+<p>
+のようになります。もうひとつの遅延パターンの例として、以前に定義したフィ
+ボナッチ数列を考えてみましょう。
+<tt><br>
+<br>
+fib&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1&nbsp;:&nbsp;1&nbsp;:&nbsp;[&nbsp;a+b&nbsp;|&nbsp;(a,b)&nbsp;&lt;-&nbsp;zip&nbsp;fib&nbsp;(tail&nbsp;fib)&nbsp;]<br>
+<br>
+</tt>
+これを、アズパターンを使って書換えるとすると
+<tt><br>
+<br>
+fib@(1:tfib)&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1&nbsp;:&nbsp;1&nbsp;:&nbsp;[&nbsp;a+b&nbsp;|&nbsp;(a,b)&nbsp;&lt;-&nbsp;zip&nbsp;fib&nbsp;tfib&nbsp;]<br>
+<br>
+</tt>
+このバージョンの <tt>fib</tt> の利点(小さいですが)は、左辺の 
+<tt>tfib</tt> で展開した形式を使用できるので、 <tt>tail</tt> を右辺で使
+わなくてよいということです。
+</p>
+<p>
+[この種の等式は<em>パターン束縛</em>( <i>pattern binding</i> )とよばれま
+す。その理由は、トップレベルにある等式で左辺全体がひとつのパターンになっ
+ているからです。すなわち、<tt>fib</tt> と <tt>tfib</tt> はともに宣言内で
+束縛されているということです。]
+</p>
+<p>
+さて、以前と同じ論法でいうとこのプログラムはなんの出力もないということを
+導くことができそうです。しかし、奇妙なことにこのプログラムは<em>出力が生
+成されます</em>。その理由は簡単です。Haskell ではパターン束縛は暗黙のう
+ちに <tt>~</tt> がパターンの前についているものとみなすからです。このことは、
+パターン束縛に期待される共通のふるまいのほとんどを反映しています。ある種
+の変則的な状況はこのチュートリアルの守備範囲を越えるので、ここでは説明し
+ません。このようにして、Haskell の遅延パターンは暗黙のうちに重要な役割を
+はたすことが理解できます。
+</p>
+<p>
+<a name="sect4.5"></a>
+<h3>4.5<tt>&nbsp;&nbsp;</tt>字句の有効範囲と入れ子形式</h3>
+</p>
+<p>
+ひとつの式のなかで入れ子の有効範囲をつくりたいことがよくあります。これは、
+その部分だけの局所的な束縛をつくりたいときです。ある種の「ブロック構造」
+の形式が欲しくなります。Haskell ではこれを実現するのに 2 つの方法が用意
+されています。
+</p>
+<p>
+<h3>let 式</h3>
+</p>
+<p>
+Haskell の<em>let 式</em>( <i>let expression</i> )は入れ子になった束縛の
+集まりが必要なときに役に立ちます。簡単な例を考えてみましょう。
+<tt><br>
+<br>
+let&nbsp;y&nbsp;&nbsp;&nbsp;=&nbsp;a*b<br>
+&nbsp;&nbsp;&nbsp;&nbsp;f&nbsp;x&nbsp;=&nbsp;(x+y)/y<br>
+in&nbsp;f&nbsp;c&nbsp;+&nbsp;f&nbsp;d<br>
+<br>
+</tt>
+<tt>let</tt> 式によってつくられる束縛の集りは、<em>相互再帰的</em>
+( <i>mutually recursive</i> )で、パターン束縛は遅延パターンとして扱われ
+ます( <tt>~</tt>が暗黙のうちについているということです)。ここで許される
+宣言は、<em>型シグネチャー</em>、<em>関数束縛</em>、<em>パターン束縛
+</em>のみです。
+</p>
+<p>
+<h3>where 節</h3> 
+</p>
+<p>
+ときには、いくつかのガードをもつ等式にまたがる有効範囲束縛があれば便利な
+こともあります。そんなときには <em>where 節</em>( <i>where clause</i> )
+が必要です。
+<tt><br>
+<br>
+f&nbsp;x&nbsp;y&nbsp;&nbsp;|&nbsp;&nbsp;y&gt;z&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;...<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;y==z&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;...<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;y&lt;z&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;...<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;z&nbsp;=&nbsp;x*x<br>
+<br>
+</tt>
+これは、<tt>let</tt> 式と同じようには使えないことに注意してください。
+<tt>where</tt> 節はそれが覆う式の上にしか有効範囲がありません。
+<tt>where</tt> 節は等式の集まりあるいは case 式のトップレベルでしか認め
+られていません。また、<tt>let</tt> 式での束縛の性質と制約が 
+<tt>where</tt> 節の束縛にも適用されます。
+</p>
+<p>
+入れ子の有効範囲のこれら 2 つの形式は非常によく似たものですが、
+<tt>let</tt> 式はひとつの<em>式</em>であり、一方、<tt>where</tt> 節は
+<em>式</em>ではないということを覚えてください。<tt>where</tt> 節は関数宣
+言および case 式の構文の一部です。
+</p>
+<p>
+<a name="tut-layout"></a>
+<a name="sect4.6"></a>
+<h3>4.6<tt>&nbsp;&nbsp;</tt>レイアウト</h3>
+</p>
+<p>
+読者のなかには、なぜ Haskell ではセミコロンあるいはそれにかわる終端記号
+を使わずにすんでいるのか不思議におもった方もいるでしょう。これらの記号は
+等式や宣言などの終端を示すものですが、それがなぜ必要ないのでしょうか。例
+をあげましょう。前の節の <tt>let</tt> 式を考えてみましょう。
+<tt><br>
+<br>
+let&nbsp;y&nbsp;&nbsp;&nbsp;=&nbsp;a*b<br>
+&nbsp;&nbsp;&nbsp;&nbsp;f&nbsp;x&nbsp;=&nbsp;(x+y)/y<br>
+in&nbsp;f&nbsp;c&nbsp;+&nbsp;f&nbsp;d<br>
+<br>
+</tt>
+構文解析はなぜ次のように解析したりしないのでしょうか。
+<tt><br>
+<br>
+let&nbsp;y&nbsp;&nbsp;&nbsp;=&nbsp;a*b&nbsp;f<br>
+&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;=&nbsp;(x+y)/y<br>
+in&nbsp;f&nbsp;c&nbsp;+&nbsp;f&nbsp;d<br>
+<br>
+</tt>
+</p>
+<p>
+答えは、Haskell は<em>レイアウト</em>( <i>layout</i> )と呼ばれる、二次元
+構文を用いているからです。レイアウトは「カラム位置にならべられた」宣言に
+依存しています。上の例で、<tt>y</tt> と <tt>f</tt> とは同一のカラム位置
+からはじまっていることに注目してください。レイアウトのルールの詳細は 
+Haskell レポート(<a
+href="../report-j/lexemes.html#lexemes-layout">&sect;1.5</a>,<a
+href="../report-j/syntax-iso.html#layout">&sect;B.3</a>)の方にまかせますが、
+実用上はこのレイアウトの使い方は直観的にわかります。ただ、覚えておいてほ
+しいことがふたつあります。
+</p>
+<p>
+まず第一は、キーワード <tt>where</tt>、<tt>let</tt>, あるいは 
+<tt>of</tt> につづく次の文字は、それぞれ、where 節、let 式、case 式のな
+かの宣言のはじまるカラム位置を決定するものであることです。(このルールは、
+クラス宣言やインスタンス宣言のなかの <tt>where</tt> にも適用されます。こ
+れについては <a href="classes.html#tut-type-classes">5</a> 節を参照して
+ください。) これにより、宣言部はキーワードと同じ行でも、次の行ででもはじ
+めることができます。( <tt>do</tt> キーワード、これについては後で議論しま
+すが、これもレイアウトを使います。)
+</p>
+<p>
+ふたつめは、開始カラムは直接囲われている節の開始カラムよりも右になければ
+ならないということです。(そうしなければ、曖昧になってしまいます。) 宣言
+の「終端」は束縛形式の開始カラムの位置あるいはそれよりも左側でなにかが開
+始されたときに起こります。( Haskell では慣習として、タブは 8 個のスペー
+スとして見なします。なので、エディタで 8 カラムタブ以外の表示を使ってい
+る場合には注意が必要です。)
+</p>
+<p>
+レイアウトは実際には<em>明示的な</em>グルーピング機構の簡略表記です。あ
+る種の状況ではグルーピング機構は大変役に立つので、これについては言及する
+価値があります。上の <tt>let</tt> の例は以下のものと同等です。
+<tt><br>
+<br>
+let&nbsp;{&nbsp;y&nbsp;&nbsp;&nbsp;=&nbsp;a*b<br>
+&nbsp;&nbsp;&nbsp;&nbsp;;&nbsp;f&nbsp;x&nbsp;=&nbsp;(x+y)/y<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+in&nbsp;f&nbsp;c&nbsp;+&nbsp;f&nbsp;d<br>
+<br>
+</tt>
+明示的な波括弧とセミコロンに注目してください。この明示的な表記方が便利な
+のは、ふたつ以上の宣言を 1 行におさめたいときです。たとえば、以下は正し
+い式です。
+<tt><br>
+<br>
+let&nbsp;y&nbsp;&nbsp;&nbsp;=&nbsp;a*b;&nbsp;&nbsp;z&nbsp;=&nbsp;a/b<br>
+&nbsp;&nbsp;&nbsp;&nbsp;f&nbsp;x&nbsp;=&nbsp;(x+y)/z<br>
+in&nbsp;f&nbsp;c&nbsp;+&nbsp;f&nbsp;d<br>
+<br>
+</tt>
+もうひとつのレイアウトを明示的な区切り子に展開する例については <a
+href="../report-j/lexemes.html#lexemes-layout">&sect;1.5</a> を参照してく
+ださい。
+</p>
+<p>
+レイアウトを利用すれば、宣言リストが構文的にごしゃごしゃするのが少なくな
+り、可読性がまします。使いかたを覚えるのは簡単ですので、どしどし使ってく
+ださい。
+</p>
+<hr>
+<p>
+<i>A Gentle Introduction to Haskell, Version 98</i><br>
+<a href="functions.html">back</a>
+<a href="classes.html">next</a>
+<a href="index.html">top</a>
+</p>
+</body>
+</html>
